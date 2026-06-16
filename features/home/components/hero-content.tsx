@@ -30,9 +30,9 @@ export default function HeroContent({
   mostRequested,
 }: HeroContentProps) {
   return (
-    <div className="order-2 flex flex-1 flex-col gap-6 py-4 lg:order-2 lg:py-8">
-      <div className="flex w-fit items-center gap-2 rounded-full  bg-brand/10 p-2 text-sm font-bold text-brand shadow-sm">
-        <div className="size-7 bg-brand rounded-full flex items-center justify-center">
+    <div className="order-2 flex min-w-0 flex-1 flex-col gap-6 py-4 lg:order-2 lg:py-8">
+      <div className="flex w-fit items-center gap-2 rounded-full bg-brand/10 p-2 text-sm font-bold text-brand shadow-sm">
+        <div className="flex size-7 items-center justify-center rounded-full bg-brand">
           <CustomIcon src="/icons/file.svg" size={20} className="text-white" />
         </div>
         <span>{badge}</span>
@@ -40,7 +40,7 @@ export default function HeroContent({
       </div>
 
       <div className="space-y-4">
-        <h1 className="max-w-md text-3xl font-bold leading-tight sm:text-xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[4rem] space-y-1">
+        <h1 className="max-w-xl space-y-1 text-3xl font-bold leading-tight sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[3.5rem]">
           <span className="block ">
             <span className="text-brand-secondary">{titleLine1Accent}</span>{" "}
             <span className="text-foreground">{titleLine1Main}</span>

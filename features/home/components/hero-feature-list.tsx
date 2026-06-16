@@ -4,18 +4,23 @@ type HeroFeatureListProps = {
   features: string[];
 };
 
-const images = [
+const featureLogos = [
   "/images/ejar.png",
   "/images/hesab.png",
   "/images/daman.png",
   "/images/tegara.png",
   "/images/najez.png",
 ];
+
 export default function HeroFeatureList({ features }: HeroFeatureListProps) {
   return (
     <ul className="space-y-4">
       {features.map((feature, index) => (
-        <HeroFeatureItem key={feature} label={feature} image={images[index]} />
+        <HeroFeatureItem
+          key={feature}
+          label={feature}
+          image={featureLogos[index]}
+        />
       ))}
     </ul>
   );

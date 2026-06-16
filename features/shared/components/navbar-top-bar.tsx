@@ -29,8 +29,8 @@ export default function NavbarTopBar({
 
   return (
     <div className="hidden w-full lg:block">
-      <div className=" flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2.5 text-sm ">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+      <div className=" flex  items-center justify-between  gap-y-2 py-2.5 text-sm ">
+        <div className="flex  items-center 2xl:gap-x-5 gap-x-2 gap-y-1">
           <Link href="/about" className={linkClassName}>
             {aboutUs}
           </Link>
@@ -42,7 +42,7 @@ export default function NavbarTopBar({
           </Link>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <div className="flex  items-center 2xl:gap-x-5 gap-x-2 gap-y-2">
           <span className="inline-flex items-center gap-1.5 text-brand-secondary font-bold">
             <CustomIcon
               src="/icons/lock.svg"

@@ -20,7 +20,7 @@ export default function HeroCtaButton({
     <button
       type="button"
       className={cn(
-        "group flex h-14 w-full items-center gap-3 rounded-full bg-brand px-2 2xl:ps-5 ps-3 pe-2 text-white transition-colors hover:bg-brand/90",
+        "group flex h-14 w-full min-w-0 items-center gap-2 rounded-full bg-brand px-2 ps-3 pe-2 text-white transition-colors hover:bg-brand/90 sm:gap-3 sm:ps-4 2xl:ps-5",
         featured &&
           "shadow-[0_0_24px_rgba(13,179,139,0.35)] ring-1 ring-brand-secondary/50"
       )}
@@ -29,7 +29,7 @@ export default function HeroCtaButton({
         <CustomIcon src={iconSrc} size={20} className="text-white" />
       </span>
 
-      <span className="flex-1 text-center text-sm font-semibold leading-tight ">
+      <span className="min-w-0 flex-1 text-center text-xs font-semibold leading-tight sm:text-sm">
         {label}
       </span>
 

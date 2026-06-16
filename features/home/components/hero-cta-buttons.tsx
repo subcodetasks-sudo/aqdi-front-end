@@ -12,7 +12,7 @@ export default function HeroCtaButtons({
   mostRequested,
 }: HeroCtaButtonsProps) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
       <div className="flex flex-1 flex-col items-center gap-2">
         <HeroCtaButton
           label={residentialCta}

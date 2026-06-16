@@ -1,13 +1,31 @@
-import { getTranslations } from "next-intl/server";
+"use client"
 
 import NavbarMain from "@/features/shared/components/navbar-main";
 import NavbarTopBar from "@/features/shared/components/navbar-top-bar";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function Navbar() {
-  const t = await getTranslations("navbar");
+export default  function Navbar() {
+  const t =  useTranslations("navbar");
+  const pathname = usePathname();
+const [scrolled, setScrolled] = useState(false);
+useEffect(() => {
+  if(typeof window !== "undefined") {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }
+}, []);
+
 
   return (
-    <header className="">
+    <header className={cn("m-2 lg:m-4  mb-0!   bg-brand-background-green   py-4 overflow-hidden sticky lg:top-4 top-2 z-50", scrolled && "rounded-3xl!",
+      pathname === "/" ? "rounded-t-3xl lg:rounded-t-[80px]" : "rounded-3xl"
+    )}>
         <div className="container">
 
       <NavbarTopBar

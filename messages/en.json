@@ -43,9 +43,203 @@
     "commercialCta": "Create commercial lease contract",
     "mostRequested": "Most requested",
     "downloadApp": "Download the app now",
+    "downloadOnThe": "Download On The",
     "googlePlay": "Google Play",
-    "appStore": "App Store",
+    "appStore": "Apple Store",
     "whatsapp": "Contact via WhatsApp",
     "visualAlt": "Aqadi app showing a successfully issued lease contract"
+  },
+  "trustedEntities": {
+    "badge": "Trusted and certified entities",
+    "titlePrefix": "Licensed by",
+    "titleAccent": "official authorities",
+    "description": "We operate under approved regulations to ensure the reliability and security of all transactions",
+    "viewLicense": "View license",
+    "entities": {
+      "business": {
+        "name": "Saudi Business Center",
+        "nameEn": "Saudi Business Center",
+        "description": "Certified and registered commercial record."
+      },
+      "rega": {
+        "name": "Real Estate General Authority",
+        "nameEn": "Real Estate General Authority",
+        "description": "Official license from the regulatory authority."
+      },
+      "ejar": {
+        "name": "EJAR Network",
+        "nameEn": "EJAR Network",
+        "description": "Officially documented and certified platform."
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "Use the Aqdi app to document your residential and commercial contracts easily and securely.",
+    "downloadLabel": "Download the app now",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store",
+    "items": {
+      "residential": {
+        "eyebrow": "Residential contract",
+        "titleLine1": "Documenting",
+        "titleLine2": "Residential Contract",
+        "description": "Document your residential lease electronically in minutes for buildings, villas, apartments, or rooms.",
+        "statsValue": "+8M",
+        "statsText": "Over 8 million documented contracts via Ejar"
+      },
+      "commercial": {
+        "eyebrow": "Commercial contract",
+        "titleLine1": "Documenting",
+        "titleLine2": "Commercial Contract",
+        "description": "Create a documented commercial lease for shops, offices, and showrooms with simple and officially approved steps.",
+        "statsValue": "+2M",
+        "statsText": "Over 2 million documented contracts via Ejar"
+      }
+    }
+  },
+  "advantages": {
+    "badge": "Our advantages",
+    "titlePrefix": "Why ",
+    "titleAccent": "Aqadi",
+    "titleSuffix": " !",
+    "description": "Your documented contract via the Ejar network and the Real Estate General Authority in minutes.",
+    "items": {
+      "trust": {
+        "title": "High trust",
+        "description": "A platform licensed by Ejar and REGA, guaranteeing officially documented and approved contracts."
+      },
+      "time": {
+        "title": "We save your time",
+        "description": "Complete your electronic contract in just minutes without visiting an office."
+      },
+      "support": {
+        "title": "Strong 24/7 support",
+        "description": "Instant support to help you create your contract and resolve any issue quickly."
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Pricing",
+    "titlePrefix": "Document ",
+    "titleAccent": "Your Contract",
+    "description": "Choose the contract package that fits your needs and start instantly.",
+    "benefitsTitle": "What you will get:",
+    "plans": [
+      {
+        "id": "commercial",
+        "icon": "/icons/bag.svg",
+        "title": "Commercial Contract Package",
+        "description": "Suitable for shops, hotels, and factories.",
+        "price": "349",
+        "period": "/ per year",
+        "features": [
+          "Your contract is issued in minutes",
+          "Compatible with Ministry of Commerce requirements",
+          "Compatible with Balady requirements",
+          "Compatible with Saudi Business Center requirements",
+          "Valid for lease or investment"
+        ],
+        "cta": "Order now"
+      },
+      {
+        "id": "residential",
+        "icon": "/icons/home.svg",
+        "title": "Residential Contract Package",
+        "description": "Suitable for buildings, apartments, villas, and rooms.",
+        "price": "249",
+        "period": "/ per year",
+        "features": [
+          "Your contract is issued in minutes",
+          "Suitable for Citizen Account requirements",
+          "Suitable for developed social security requirements",
+          "Enforcement deed",
+          "Valid for lease or investment"
+        ],
+        "cta": "Order now"
+      }
+    ]
+  },
+  "support": {
+    "eyebrow": "Direct Continuous Support",
+    "titleLine1": "For inquiries about",
+    "titleLine2": "contract documentation",
+    "titleLine3": "on WhatsApp!",
+    "description": "Our specialized team is ready to help with any question about documenting rental contracts. Contact us any time and we will respond within minutes.",
+    "cta": "Contact via WhatsApp",
+    "satisfaction": "⭐ 98% customer satisfaction",
+    "responseTime": "Reply within 5 minutes",
+    "imageAlt": "Aqadi WhatsApp support chat interface"
+  },
+  "appSection": {
+    "eyebrow": "Mobile App",
+    "titleLine1": "Document your contracts",
+    "titleLine2": "from your smartphone",
+    "description": "Download the Aqadi app and complete all your rental transactions from anywhere with an easy interface, instant notifications, and a seamless experience.",
+    "imageAlt": "A showcase of Aqadi mobile app screens"
+  },
+  "footer": {
+    "followUs": "Follow us on",
+    "securePayments": "Secure payment methods",
+    "paymentsAlt": "Secure payment methods: Mastercard, Visa, Apple Pay, mada, and stc pay",
+    "description": "A licensed electronic platform by Ejar network and REGA to document residential and commercial rental contracts easily and securely.",
+    "newsletterPlaceholder": "Type your email here...",
+    "quickLinks": {
+      "title": "Quick links",
+      "items": [
+        { "label": "About us", "href": "/about" },
+        { "label": "Blog", "href": "#" },
+        { "label": "FAQ", "href": "#" }
+      ]
+    },
+    "importantLinks": {
+      "title": "Important links",
+      "items": [
+        { "label": "Residential contract documentation", "href": "#" },
+        { "label": "Commercial contract documentation", "href": "#" },
+        { "label": "Contracts", "href": "#" }
+      ]
+    },
+    "licenses": {
+      "title": "Licenses",
+      "items": [
+        { "label": "Commercial Register: 7000000001" },
+        { "label": "Tax Number: 7000000006" }
+      ]
+    },
+    "support": {
+      "title": "Need help?",
+      "phone": "+966 51 001 00 001",
+      "weekdaysHours": "Monday to Friday from 9:00 AM to 6:00 PM",
+      "saturdayHours": "Saturday from 9:00 AM to 2:00 PM",
+      "email": "info@aqdi.sa"
+    },
+    "copyright": "All rights reserved Aqadi 2024 ©",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "termsHref": "#",
+    "privacyHref": "#"
+  },
+  "faq": {
+    "title": "Quick Questions (FAQ)",
+    "description": "Short and clear answers before you start.",
+    "items": [
+      {
+        "id": "official",
+        "question": "Are contracts officially approved?",
+        "answer": "Yes, all contracts are documented through the Ejar platform and compliant with official regulations."
+      },
+      {
+        "id": "platform",
+        "question": "What is Aqadi platform?",
+        "answer": "Aqadi is a licensed electronic platform by Ejar network and the Real Estate General Authority, enabling you to issue and document residential and commercial contracts in about 30 minutes."
+      },
+      {
+        "id": "support",
+        "question": "How can you contact support?",
+        "answer": "You can contact us directly via WhatsApp, and our support team responds within minutes all week."
+      }
+    ]
   }
 }

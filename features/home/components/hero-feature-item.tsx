@@ -3,19 +3,31 @@ import { FaCircleCheck } from "react-icons/fa6";
 
 type HeroFeatureItemProps = {
   label: string;
-  image: string;
+  image?: string;
 };
 
 export default function HeroFeatureItem({ label, image }: HeroFeatureItemProps) {
   return (
     <li className="flex items-center gap-3">
-      <FaCircleCheck className="size-4 text-brand-secondary shrink-0"   />
-      <span className=" font-semibold leading-snug text-black md:text-base text-sm">
+      <FaCircleCheck
+        className="size-4 shrink-0 text-brand-secondary"
+        aria-hidden="true"
+      />
+      <span className="min-w-0 shrink-0 text-sm font-semibold leading-snug text-black md:text-base">
         {label}
       </span>
-      {image && (
-        <Image src={image} alt={label} width={100} height={100} className="md:w-12 w-10 object-contain " />
-      )}
+      {image ? (
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center md:h-12 md:w-12">
+          <Image
+            src={image}
+            alt=""
+            width={48}
+            height={48}
+            className=" max-w-full object-contain"
+            aria-hidden="true"
+          />
+        </span>
+      ) : null}
     </li>
   );
 }
