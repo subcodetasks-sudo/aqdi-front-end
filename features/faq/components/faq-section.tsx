@@ -39,7 +39,7 @@ export default function FaqSection() {
             onValueChange={setOpenId}
             className=" space-y-4 "
           >
-            {items.map((item) => {
+            {items.slice(0, 3).map((item) => {
               const isOpen = openId === item.id;
 
               return (
