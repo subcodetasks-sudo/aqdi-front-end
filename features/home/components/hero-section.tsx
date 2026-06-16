@@ -1,20 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import * as motion from "motion/react-client";
 
 import HeroContent from "@/features/home/components/hero-content";
 import HeroVisual from "@/features/home/components/hero-visual";
 import HeroWhatsappButton from "@/features/home/components/hero-whatsapp-button";
-import Navbar from "@/features/shared/components/navbar";
 import MobileAppBtns from "@/features/shared/components/mobile-app-btns";
 import MobileAppLable from "@/features/shared/components/mobile-app-lable";
-import {
-  fadeInUp,
-  motionTransition,
-  motionViewport,
-  staggerContainer,
-  staggerImageItem,
-  staggerItem,
-} from "@/lib/motion-variants";
 
 export default async function HeroSection() {
   const t = await getTranslations("hero");

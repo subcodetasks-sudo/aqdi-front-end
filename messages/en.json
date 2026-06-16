@@ -179,6 +179,106 @@
     "description": "Download the Aqadi app and complete all your rental transactions from anywhere with an easy interface, instant notifications, and a seamless experience.",
     "imageAlt": "A showcase of Aqadi mobile app screens"
   },
+  "about": {
+    "whoWeAre": {
+      "eyebrow": "Who are we?",
+      "titleLine1": "We simplify managing",
+      "titleLine2": "rental contracts",
+      "description": "We provide integrated electronic solutions for managing residential and commercial rental contracts with simple, secure steps that protect all parties and save your time and effort."
+    },
+    "numbers": {
+      "badge": "Our story",
+      "title": "Numbers we are proud of",
+      "description": "We operate under the supervision and licensing of accredited government authorities to ensure the reliability and security of all transactions.",
+      "items": {
+        "satisfaction": {
+          "value": "+98%",
+          "label": "Customer satisfaction"
+        },
+        "experience": {
+          "value": "+4",
+          "label": "Years of experience"
+        },
+        "commercial": {
+          "value": "+2M",
+          "label": "Documented commercial contracts"
+        },
+        "residential": {
+          "value": "+8.3M",
+          "label": "Documented residential contracts"
+        }
+      }
+    },
+    "values": {
+      "title": "Everything you need to know",
+      "description": "You can use the \"Aqadi\" platform to document your residential and commercial contracts with ease.",
+      "vision": {
+        "eyebrow": "Vision",
+        "title": "Our vision..",
+        "description": "To be the first choice in the real estate facilities sector and contribute to achieving Saudi Vision 2030 goals.",
+        "imageAlt": "Image representing Aqadi vision"
+      },
+      "mission": {
+        "eyebrow": "Mission",
+        "title": "Our mission",
+        "description": "We provide trusted solutions focused on efficiency and effectiveness, while being a key factor in the success of our partners and employees.",
+        "imageAlt": "Image representing Aqadi mission"
+      }
+    },
+    "coreValues": {
+      "badge": "Our values",
+      "title": "Aqadi values",
+      "description": "Ejar aims to regulate the real estate rental sector in Saudi Arabia in a balanced way that protects the rights of all parties in the rental process.",
+      "items": [
+        {
+          "id": "transparency",
+          "icon": "/icons/folder-star.svg",
+          "eyebrow": "Transparency",
+          "title": "Towards clear and responsible management",
+          "description": "Providing clear and fully open information to the public to enhance citizen understanding."
+        },
+        {
+          "id": "trust",
+          "icon": "/icons/badge.svg",
+          "eyebrow": "Trust",
+          "title": "The foundation of our relationship with citizens",
+          "description": "Our platform relies on transparent and accurate information to serve you efficiently."
+        },
+        {
+          "id": "balance",
+          "icon": "/icons/like.svg",
+          "eyebrow": "Balance",
+          "title": "Effective service and clear vision",
+          "description": "Providing clear and fully open information to the public to enhance citizen understanding."
+        }
+      ]
+    },
+    "beneficiaries": {
+      "badge": "Beneficiary Customers",
+      "title": "Beneficiaries of (Ejar)",
+      "description": "Based on the partnership with Ejar for housing services, all parties in the process can register and use the electronic rental services network.",
+      "items": [
+        {
+          "id": "tenant",
+          "icon": "/icons/user.svg",
+          "title": "Tenant",
+          "description": "Citizens and residents benefiting from rental services."
+        },
+        {
+          "id": "lessor",
+          "icon": "/icons/user-check.svg",
+          "title": "Lessor",
+          "description": "Investors and owners of residential properties from individuals, entities, and endowments."
+        },
+        {
+          "id": "broker",
+          "icon": "/icons/user-edit.svg",
+          "title": "Real Estate Broker",
+          "description": "Real estate offices and brokerage companies."
+        }
+      ]
+    }
+  },
   "footer": {
     "followUs": "Follow us on",
     "securePayments": "Secure payment methods",
@@ -222,13 +322,14 @@
     "privacyHref": "#"
   },
   "faq": {
-    "title": "Quick Questions (FAQ)",
+    "badge": "FAQ",
+    "title": "Questions we hear often, answered",
     "description": "Short and clear answers before you start.",
     "items": [
       {
-        "id": "official",
-        "question": "Are contracts officially approved?",
-        "answer": "Yes, all contracts are documented through the Ejar platform and compliant with official regulations."
+        "id": "create-contract",
+        "question": "How to create a contract",
+        "answer": "You can create a documented electronic rental contract through Aqadi in simple steps: log in, enter both parties' and property details, then receive your contract documented via Ejar in just 30 minutes."
       },
       {
         "id": "platform",
@@ -236,9 +337,34 @@
         "answer": "Aqadi is a licensed electronic platform by Ejar network and the Real Estate General Authority, enabling you to issue and document residential and commercial contracts in about 30 minutes."
       },
       {
-        "id": "support",
-        "question": "How can you contact support?",
-        "answer": "You can contact us directly via WhatsApp, and our support team responds within minutes all week."
+        "id": "ejar-contract",
+        "question": "Is the electronic contract from Ejar?",
+        "answer": "Yes, all contracts created through Aqadi are directly linked to the official Ejar platform under the Ministry of Housing."
+      },
+      {
+        "id": "residential-fees",
+        "question": "What are the fees for a one-year residential contract?",
+        "answer": "The fee for a one-year residential contract is SAR 299 inclusive of VAT."
+      },
+      {
+        "id": "commercial-fees",
+        "question": "What are the fees for a one-year commercial contract?",
+        "answer": "The fee for a one-year commercial contract is SAR 499 inclusive of VAT."
+      },
+      {
+        "id": "after-payment",
+        "question": "After creating the contract and paying the fees, when is it documented?",
+        "answer": "The contract is documented instantly via Ejar after payment is completed and all parties give their electronic approval."
+      },
+      {
+        "id": "services",
+        "question": "What services does the Aqadi app and website offer?",
+        "answer": "Aqadi offers: creating residential and commercial rental contracts, documenting contracts via Ejar, renewing and terminating contracts, and fully managing properties and tenants."
+      },
+      {
+        "id": "licensed",
+        "question": "Is Aqadi Real Estate licensed by the relevant authorities?",
+        "answer": "Yes, Aqadi Real Estate is licensed by the Real Estate General Authority and accredited by the Ejar network under the Ministry of Housing."
       }
     ]
   }

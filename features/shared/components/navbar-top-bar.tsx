@@ -1,7 +1,10 @@
+"use client"
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type NavbarTopBarProps = {
   aboutUs: string;
@@ -25,19 +28,21 @@ export default function NavbarTopBar({
   endWith,
 }: NavbarTopBarProps) {
   const linkClassName =
-    "text-black font-bold transition-colors hover:text-brand";
+    "text-black font-bold transition-colors hover:text-brand " ;
+
+    const pathname = usePathname();
 
   return (
     <div className="hidden w-full lg:block">
       <div className=" flex  items-center justify-between  gap-y-2 py-2.5 text-sm ">
         <div className="flex  items-center 2xl:gap-x-5 gap-x-2 gap-y-1">
-          <Link href="/about" className={linkClassName}>
+          <Link href="/about" className={cn(linkClassName, pathname === "/about" ? "text-brand" : "")}>
             {aboutUs}
           </Link>
-          <Link href="/blog" className={linkClassName}>
+          <Link href="/blog" className={cn(linkClassName, pathname === "/blog" ? "text-brand" : "")}>
             {blog}
           </Link>
-          <Link href="/faq" className={linkClassName}>
+          <Link href="/faq" className={cn(linkClassName, pathname === "/faq" ? "text-brand" : "")}>
             {faq}
           </Link>
         </div>
