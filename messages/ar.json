@@ -284,7 +284,8 @@
     "securePayments": "طرق دفع آمنة",
     "paymentsAlt": "طرق الدفع الآمنة: ماستركارد، فيزا، آبل باي، مدى، وstc pay",
     "description": "منصة إلكترونية مرخصة من شبكة إيجار والهيئة العامة للعقار لتوثيق عقود الإيجار السكنية والتجارية بسهولة وأمان.",
-    "newsletterPlaceholder": "اكتب بريدك الإلكتروني هنا...",
+    "newsletterPlaceholder": "اكتب بريدك الإلكتروني هنا",
+    "newsletterSubmit": "اشترك في النشرة البريدية",
     "quickLinks": {
       "title": "روابط سريعة",
       "items": [
@@ -367,5 +368,82 @@
         "answer": "نعم، عقدي العقارية مرخصة من الهيئة العامة للعقار ومعتمدة من شبكة إيجار التابعة لوزارة الإسكان."
       }
     ]
+  },
+  "auth": {
+    "hero": {
+      "imageAlt": "تطبيق عقدي يعرض عقد إيجار موثق بنجاح"
+    },
+    "login": {
+      "back": "العودة للرئيسية",
+      "greeting": "مرحباً بعودتك !.",
+      "subtitle": "قم بإدخال البيانات لتسجيل حسابك الآن.",
+      "phoneLabel": "رقم الجوال",
+      "phonePlaceholder": "5x xxx xx xx",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
+      "forgotPassword": "هل نسيت كلمة المرور ؟",
+      "rememberMe": "تذكرني",
+      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "or": "أو",
+      "noAccount": "ليس لديك حساب !",
+      "createAccount": "إنشاء حساب جديد",
+      "validation": {
+        "phoneRequired": "رقم الجوال مطلوب",
+        "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+      }
+    },
+    "register": {
+      "back": "العودة لتسجيل الدخول",
+      "title": "إنشاء حساب جديد",
+      "fullNameLabel": "الاسم الأول و الأخير",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "phoneLabel": "رقم الجوال",
+      "phonePlaceholder": "5x xxx xx xx",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "example@email.com",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
+      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
+      "submit": "إنشئ حسابك الآن",
+      "or": "أو",
+      "hasAccount": "لديك حساب بالفعل !",
+      "signIn": "تسجيل الدخول",
+      "terms": {
+        "prefix": "أوافق على",
+        "termsLink": "الشروط والأحكام",
+        "and": "و",
+        "privacyLink": "سياسة الخصوصية",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      },
+      "validation": {
+        "fullNameRequired": "الاسم مطلوب",
+        "fullNameMin": "يرجى إدخال الاسم الكامل",
+        "phoneRequired": "رقم الجوال مطلوب",
+        "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح",
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "termsRequired": "يجب الموافقة على الشروط والأحكام"
+      }
+    },
+    "verifyOtp": {
+      "back": "العودة",
+      "title": "تأكيد رقم الجوال!",
+      "instruction": "أدخل الرمز المرسل إلى رقم الجوال الخاص بك،",
+      "defaultPhone": "+966563153879",
+      "otpLabel": "رمز التحقق OTP",
+      "submit": "تأكيد الرمز",
+      "notReceived": "لم تستلم الرمز؟",
+      "resend": "إعادة إرسال كود التحقق OTP",
+      "validation": {
+        "otpRequired": "رمز التحقق مطلوب",
+        "otpInvalid": "يرجى إدخال رمز تحقق مكون من 6 أرقام"
+      }
+    }
   }
 }

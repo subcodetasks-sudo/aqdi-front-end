@@ -171,14 +171,16 @@ export default function NavbarMobileSheet({
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-border/60 pt-4">
+          <Link href="/login">
           <Button
             variant="outline"
             className="h-12 w-full rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
             aria-label={profile}
           >
             <CustomIcon src="/icons/user.svg" size={16} />
-            <span className="leading-none">{profile}</span>
+            <span className="leading-none">تسجيل الدخول</span>
           </Button>
+          </Link>
 
           <Button className="group h-12 w-full gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
             <span>{cta}</span>

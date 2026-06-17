@@ -129,14 +129,11 @@
   }
 }
 
-
 @theme {
-
-
   --color-brand: #0d5a50;
   --color-brand-secondary: #0db38b;
   --color-brand-background: #f5f5f5;
-  --color-brand-background-green: #EAFFFC;
+  --color-brand-background-green: #eafffc;
 
   /* ====== Screens' sizes like bootstrap ====== */
   --breakpoint-sm: 576px;
@@ -173,5 +170,86 @@
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  .auth-phone-input {
+    /* --react-international-phone-height: 56px; */
+    --react-international-phone-border-radius: 9999px;
+    --react-international-phone-border-color: #d6d6d6;
+    --react-international-phone-background-color: #f7f7f7;
+    --react-international-phone-text-color: #9ca3af;
+    --react-international-phone-font-size: 12px;
+    /* --react-international-phone-country-selector-arrow-color: #6b7280; */
+  }
+
+  .auth-phone-input .react-international-phone-input-container {
+    overflow: hidden;
+    border: 1px solid #d6d6d6;
+    border-radius: 9999px;
+    background-color: #f7f7f7;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .auth-phone-input .react-international-phone-country-selector-button {
+    width: 100px;
+    border: 0;
+    margin: 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__button-content {
+    gap: 8px;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__flag-emoji {
+    margin: 0;
+  }
+/* 
+  .auth-phone-input .react-international-phone-country-selector-button::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 28px;
+    background-color: #d0d0d0;
+    margin-inline-start: 10px;
+  } */
+
+  .auth-phone-input .react-international-phone-input {
+    height: 60px;
+    border: 0;
+    margin: 0;
+    padding-inline: 18px;
+    border-radius: 0;
+    background-color: transparent;
+    color: #9ca3af;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .auth-phone-input .react-international-phone-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__dropdown-arrow {
+    margin-right: 0;
+  }
+
+  .auth-phone-input
+    .react-international-phone-input-container:has(.react-international-phone-input:focus) {
+    border-color: #bdbdbd;
+    box-shadow: 0 0 0 3px rgb(13 90 80 / 12%);
+  }
+
+  .auth-phone-input--invalid .react-international-phone-input-container {
+    border-color: oklch(0.577 0.245 27.325);
+    box-shadow: 0 0 0 3px oklch(0.577 0.245 27.325 / 0.12);
+  }
+
+  .auth-password-input::placeholder {
+    letter-spacing: 0.01em;
   }
 }

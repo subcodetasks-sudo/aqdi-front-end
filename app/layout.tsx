@@ -4,8 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { DirectionProvider } from "@/components/ui/direction";
 import Providers from "@/app/providers";
 import "./globals.css";
-import Footer from "@/features/footer/components/footer";
-import Navbar from "@/features/shared/components/navbar";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
@@ -45,9 +43,7 @@ export default async function RootLayout({
         <Providers>
           <DirectionProvider dir={direction} direction={direction}>
             <NextIntlClientProvider>
-              <Navbar />
               {children}
-              <Footer />
             </NextIntlClientProvider>
           </DirectionProvider>
         </Providers>

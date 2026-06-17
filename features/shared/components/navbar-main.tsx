@@ -84,7 +84,7 @@ export default function NavbarMain({
       <div
         className={cn(
           "flex items-center justify-between gap-4 lg:rounded-full rounded-2xl bg-white px-5 py-3",
-          "md:px-8 md:py-4"
+          "md:px-8 md:py-4",
         )}
       >
         <Link href="/" className="flex min-w-0 items-center gap-3">
@@ -97,8 +97,12 @@ export default function NavbarMain({
             aria-hidden="true"
           />
           <div className="min-w-0 space-y-1">
-            <p className="text-xl font-bold leading-tight text-brand">{brandName}</p>
-            <p className="truncate text-sm font-medium text-gray-600">{brandTagline}</p>
+            <p className="text-xl font-bold leading-tight text-brand">
+              {brandName}
+            </p>
+            <p className="truncate text-sm font-medium text-gray-600">
+              {brandTagline}
+            </p>
           </div>
         </Link>
 
@@ -112,13 +116,15 @@ export default function NavbarMain({
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button
-            variant="outline"
-            className="size-12 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
-            aria-label={profile}
-          >
-            <CustomIcon src="/icons/user.svg" size={16} />
-          </Button>
+          <Link href="/login">
+            <Button
+              variant="outline"
+              className="size-12 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
+              aria-label={profile}
+            >
+              <CustomIcon src="/icons/user.svg" size={16} />
+            </Button>
+          </Link>
 
           <Button className="group h-12 gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
             <span>{cta}</span>

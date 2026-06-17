@@ -14,7 +14,7 @@ const [scrolled, setScrolled] = useState(false);
 useEffect(() => {
   if(typeof window !== "undefined") {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 300);
+      setScrolled(window.scrollY > 100);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -37,6 +37,7 @@ useEffect(() => {
         officialLinks={t("topBar.officialLinks")}
         endWith={t("topBar.endWith")}
         whatsappService={t("topBar.whatsappService")}
+        scrolled={scrolled}
       />
       <NavbarMain
         aboutUs={t("topBar.aboutUs")}

@@ -12,11 +12,13 @@ export default async function HeroSection() {
 
   return (
     <section className="relative m-2 min-h-screen rounded-3xl bg-brand-background-green pb-2 lg:m-4 mt-0!  lg:rounded-[60px] 2xl:rounded-[80px] rounded-t-none! overflow-hidden">
-      <div
-        className="absolute inset-s-[-16%] top-1/2 flex -translate-y-1/2 -rotate-90 items-center gap-2 2xl:inset-s-[-7%] max-lg:hidden"
-      >
-        <MobileAppLable />
-        <MobileAppBtns />
+      <div className="absolute top-1/2 -translate-y-1/2 inset-s-[5%] z-10 max-lg:hidden">
+        <div className="flex size-0 items-center justify-center overflow-visible">
+          <div className="flex w-max  -rotate-90 items-center gap-2 whitespace-nowrap">
+            <MobileAppLable />
+            <MobileAppBtns />
+          </div>
+        </div>
       </div>
 
       <div className="container pb-10 pt-2">
@@ -39,7 +41,7 @@ export default async function HeroSection() {
           </div>
 
           <div
-            className="w-full shrink-0 lg:w-[50%] 2xl:w-[60%]"
+            className="w-full shrink-0 lg:w-[55%] "
           >
             <HeroVisual alt={t("visualAlt")} />
           </div>

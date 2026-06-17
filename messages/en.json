@@ -284,7 +284,8 @@
     "securePayments": "Secure payment methods",
     "paymentsAlt": "Secure payment methods: Mastercard, Visa, Apple Pay, mada, and stc pay",
     "description": "A licensed electronic platform by Ejar network and REGA to document residential and commercial rental contracts easily and securely.",
-    "newsletterPlaceholder": "Type your email here...",
+    "newsletterPlaceholder": "Type your email here",
+    "newsletterSubmit": "Subscribe to newsletter",
     "quickLinks": {
       "title": "Quick links",
       "items": [
@@ -367,5 +368,82 @@
         "answer": "Yes, Aqadi Real Estate is licensed by the Real Estate General Authority and accredited by the Ejar network under the Ministry of Housing."
       }
     ]
+  },
+  "auth": {
+    "hero": {
+      "imageAlt": "Aqadi app showing a successfully issued lease contract"
+    },
+    "login": {
+      "back": "Back to home",
+      "greeting": "Welcome back!",
+      "subtitle": "Enter your details to sign in to your account.",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5x xxx xx xx",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here ...",
+      "forgotPassword": "Forgot your password?",
+      "rememberMe": "Remember me",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Sign in",
+      "or": "OR",
+      "noAccount": "Don't have an account!",
+      "createAccount": "Create a new account",
+      "validation": {
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters"
+      }
+    },
+    "register": {
+      "back": "Back to sign in",
+      "title": "Create a new account",
+      "fullNameLabel": "First and last name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5x xxx xx xx",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example@email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here ...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Create your account now",
+      "or": "OR",
+      "hasAccount": "Already have an account!",
+      "signIn": "Sign in",
+      "terms": {
+        "prefix": "I agree to the",
+        "termsLink": "Terms and Conditions",
+        "and": "and",
+        "privacyLink": "Privacy Policy",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      },
+      "validation": {
+        "fullNameRequired": "Name is required",
+        "fullNameMin": "Please enter your full name",
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "termsRequired": "You must accept the terms and conditions"
+      }
+    },
+    "verifyOtp": {
+      "back": "Go back",
+      "title": "Verify your mobile number!",
+      "instruction": "Enter the code sent to your mobile number,",
+      "defaultPhone": "+966563153879",
+      "otpLabel": "OTP verification code",
+      "submit": "Confirm code",
+      "notReceived": "Didn't receive the code?",
+      "resend": "Resend OTP verification code",
+      "validation": {
+        "otpRequired": "Verification code is required",
+        "otpInvalid": "Please enter a valid 6-digit code"
+      }
+    }
   }
 }

@@ -7,7 +7,7 @@ export default async function MobileAppBtns() {
   const t = await getTranslations("hero");
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex  items-center gap-3">
       <MobileAppStoreButton
         href="https://apps.apple.com"
         variant="apple"

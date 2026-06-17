@@ -28,10 +28,13 @@ export default async function Footer() {
           paymentsAlt={t("paymentsAlt")}
         />
 
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-12">
-          <div className="space-y-5 lg:col-span-1">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-7 lg:gap-12">
+          <div className="space-y-5 lg:col-span-2">
             <FooterBrand description={t("description")} />
-            <FooterNewsletter placeholder={t("newsletterPlaceholder")} />
+            <FooterNewsletter
+              placeholder={t("newsletterPlaceholder")}
+              submitLabel={t("newsletterSubmit")}
+            />
           </div>
 
           <FooterLinksColumn title={t("quickLinks.title")} items={quickLinks} />

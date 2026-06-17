@@ -16,7 +16,7 @@ export default function FooterSupportColumn({
   email,
 }: FooterSupportColumnProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 lg:col-span-2">
       <h3 className="text-base font-bold text-brand">{title}</h3>
 
       <div className="space-y-3">

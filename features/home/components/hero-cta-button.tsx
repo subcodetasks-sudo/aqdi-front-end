@@ -29,7 +29,7 @@ export default function HeroCtaButton({
         <CustomIcon src={iconSrc} size={20} className="text-white" />
       </span>
 
-      <span className="min-w-0 flex-1 text-center text-xs font-semibold leading-tight sm:text-sm">
+      <span className="min-w-0 shrink-0 flex-1 text-center text-xs font-semibold leading-tight sm:text-sm">
         {label}
       </span>
 

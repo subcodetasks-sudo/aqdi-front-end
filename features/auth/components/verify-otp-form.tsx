@@ -1,0 +1,95 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowUpLeft, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import VerifyOtpInput from "@/features/auth/components/verify-otp-input";
+import { useOtpTimer } from "@/features/auth/hooks/use-otp-timer";
+import {
+  createVerifyOtpSchema,
+  type VerifyOtpFormValues,
+} from "@/features/auth/schemas/verify-otp-schema";
+import { cn } from "@/lib/utils";
+import AuthOrDivider from "./auth-or-divider";
+
+export default function VerifyOtpForm() {
+  const t = useTranslations("auth.verifyOtp");
+  const { formatted, isExpired, reset } = useOtpTimer(59);
+
+  const schema = createVerifyOtpSchema({
+    otpRequired: t("validation.otpRequired"),
+    otpInvalid: t("validation.otpInvalid"),
+  });
+
+  const form = useForm<VerifyOtpFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      otp: "",
+    },
+  });
+
+  const otpValue = form.watch("otp");
+  const isOtpComplete = otpValue.length === 6;
+
+  function onSubmit(values: VerifyOtpFormValues) {
+    console.log("OTP submitted:", values);
+  }
+
+  function handleResend() {
+    if (!isExpired) {
+      return;
+    }
+
+    reset();
+    form.reset({ otp: "" });
+    console.log("OTP resent");
+  }
+
+  return (
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-6"
+      noValidate
+    >
+      <VerifyOtpInput control={form.control} label={t("otpLabel")} />
+
+      <Button
+        type="submit"
+        disabled={form.formState.isSubmitting || !isOtpComplete}
+        className={cn(
+          "group h-12 w-full rounded-full text-base font-semibold",
+          isOtpComplete
+            ? "bg-brand text-white hover:bg-brand/90"
+            : "bg-[#e8e8e8] text-gray-500 hover:bg-[#e8e8e8]",
+        )}
+      >
+        {t("submit")}
+        <ArrowUpLeft
+          className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
+          aria-hidden="true"
+        />
+      </Button>
+
+      <div className="flex flex-col items-center gap-3">
+        <span className="inline-flex min-w-16 items-center justify-center rounded-full bg-black px-3 py-1 text-sm font-medium text-white">
+          {formatted}
+        </span>
+
+        <AuthOrDivider label={t("notReceived")} />
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!isExpired}
+          onClick={handleResend}
+          className="h-12 w-full rounded-full border-[#e5e5e5] bg-[#f3f3f3] text-sm font-medium text-foreground hover:bg-brand hover:text-white disabled:opacity-60"
+        >
+          {t("resend")}
+          <RefreshCw className="size-4" aria-hidden="true" />
+        </Button>
+      </div>
+    </form>
+  );
+}

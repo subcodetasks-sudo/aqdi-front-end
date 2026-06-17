@@ -15,6 +15,7 @@ type NavbarTopBarProps = {
   officialLinks: string;
   endWith: string;
   whatsappService: string;
+  scrolled: boolean;
 };
 
 export default function NavbarTopBar({
@@ -26,6 +27,7 @@ export default function NavbarTopBar({
   whatsappService,
   httpfor,
   endWith,
+  scrolled,
 }: NavbarTopBarProps) {
   const linkClassName =
     "text-black font-bold transition-colors hover:text-brand " ;
@@ -33,7 +35,12 @@ export default function NavbarTopBar({
     const pathname = usePathname();
 
   return (
-    <div className="hidden w-full lg:block">
+    <div
+      className={cn(
+        "hidden w-full overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out lg:block",
+        scrolled ? "max-h-0 opacity-0 pointer-events-none" : "max-h-20 opacity-100",
+      )}
+    >
       <div className=" flex  items-center justify-between  gap-y-2 py-2.5 text-sm ">
         <div className="flex  items-center 2xl:gap-x-5 gap-x-2 gap-y-1">
           <Link href="/about" className={cn(linkClassName, pathname === "/about" ? "text-brand" : "")}>
