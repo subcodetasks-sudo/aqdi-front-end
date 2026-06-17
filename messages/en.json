@@ -477,5 +477,38 @@
         "passwordsMismatch": "Passwords do not match"
       }
     }
+  },
+  "properties": {
+    "backLabel": "Back",
+    "pageTitle": "Add new property",
+    "badge": "Your certified contract from the Ejar network within 30 minutes",
+    "titleAccent": "Add",
+    "titleMain": "a new property ..",
+    "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
+    "cta": "Add new property",
+    "visualAlt": "Illustration of property data management and contract creation",
+    "downloadApp": "Download the app now"
+  },
+  "startWithAqdi": {
+    "dialog": {
+      "title": "Start with Aqadi",
+      "close": "Close",
+      "mainTitle": "Electronic rental contract from the Ejar platform",
+      "subtitle": "Now conclude your certified contract yourself through Ejar and the Real Estate General Authority.",
+      "ejarLogoAlt": "Ejar logo",
+      "aqdiLogoAlt": "Aqadi logo",
+      "divider": "Choose the contract type to continue",
+      "continue": "Continue",
+      "newContract": {
+        "title": "Create a rental contract",
+        "description": "Create a rental contract for a property not previously saved on the Aqadi platform.",
+        "imageAlt": "Create a new rental contract"
+      },
+      "estateContract": {
+        "title": "Choose a property and create a contract",
+        "description": "Choose one of your previously saved properties to simplify your rental process.",
+        "imageAlt": "Choose a saved property and create a contract"
+      }
+    }
   }
 }

@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/sheet";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import { cn } from "@/lib/utils";
+import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
+import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
 
 type NavItem = {
   href: string;
@@ -43,6 +45,7 @@ type NavbarMobileSheetProps = {
   cta: string;
   profile: string;
   menu: string;
+  dialogLabels: StartWithAqdiDialogLabels;
 };
 
 export default function NavbarMobileSheet({
@@ -63,6 +66,7 @@ export default function NavbarMobileSheet({
   cta,
   profile,
   menu,
+  dialogLabels,
 }: NavbarMobileSheetProps) {
   const pathname = usePathname();
 
@@ -85,7 +89,6 @@ export default function NavbarMobileSheet({
     <Sheet>
       <SheetTrigger asChild>
         <Button
-
           size="icon-lg"
           className="rounded-full  text-white bg-brand hover:border-brand/30  lg:hidden"
           aria-label={menu}
@@ -112,7 +115,9 @@ export default function NavbarMobileSheet({
             />
             <div className="min-w-0 space-y-1">
               <p className="text-xl font-bold text-brand">{brandName}</p>
-              <p className="truncate text-sm text-gray-600 font-medium">{brandTagline}</p>
+              <p className="truncate text-sm text-gray-600 font-medium">
+                {brandTagline}
+              </p>
             </div>
           </div>
           <SheetClose className="bg-brand text-white size-7 flex items-center justify-center rounded-full ">
@@ -121,7 +126,6 @@ export default function NavbarMobileSheet({
         </SheetHeader>
 
         <div className="flex flex-col gap-4 py-4">
-
           <nav aria-label="Main navigation" className="flex flex-col gap-4">
             {navItems.map((item) => (
               <SheetClose asChild key={item.href}>
@@ -129,7 +133,7 @@ export default function NavbarMobileSheet({
                   href={item.href}
                   className={cn(
                     "inline-flex items-center gap-2 font-bold transition-colors hover:text-brand text-base",
-                    pathname === item.href ? "text-brand" : "text-black"
+                    pathname === item.href ? "text-brand" : "text-black",
                   )}
                   {...(item.external
                     ? { target: "_blank", rel: "noopener noreferrer" }
@@ -167,30 +171,30 @@ export default function NavbarMobileSheet({
               </Link>
             </SheetClose>
           </div>
-
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-border/60 pt-4">
           <Link href="/login">
-          <Button
-            variant="outline"
-            className="h-12 w-full rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
-            aria-label={profile}
-          >
-            <CustomIcon src="/icons/user.svg" size={16} />
-            <span className="leading-none">تسجيل الدخول</span>
-          </Button>
+            <Button
+              variant="outline"
+              className="h-12 w-full rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
+              aria-label={profile}
+            >
+              <CustomIcon src="/icons/user.svg" size={16} />
+              <span className="leading-none">تسجيل الدخول</span>
+            </Button>
           </Link>
-
-          <Button className="group h-12 w-full gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
-            <span>{cta}</span>
-            <span className="flex size-7 items-center justify-center rounded-full bg-white text-brand">
-              <ArrowUpLeft
-                className="size-4 transition-transform duration-300 group-hover:-rotate-45"
-                aria-hidden="true"
-              />
-            </span>
-          </Button>
+          <StartWithAqdiDialog labels={dialogLabels}>
+            <Button className="group h-12 w-full gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
+              <span>{cta}</span>
+              <span className="flex size-7 items-center justify-center rounded-full bg-white text-brand">
+                <ArrowUpLeft
+                  className="size-4 transition-transform duration-300 group-hover:-rotate-45"
+                  aria-hidden="true"
+                />
+              </span>
+            </Button>
+          </StartWithAqdiDialog>
         </div>
       </SheetContent>
     </Sheet>

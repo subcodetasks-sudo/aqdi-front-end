@@ -1,5 +1,5 @@
 import Footer from "@/features/footer/components/footer";
-import Navbar from "@/features/shared/components/navbar";
+import NavbarShell from "@/features/shared/components/navbar-shell";
 
 export default function MainLayout({
   children,
@@ -8,7 +8,7 @@ export default function MainLayout({
 }>) {
   return (
     <>
-      <Navbar />
+      <NavbarShell />
       {children}
       <Footer />
     </>

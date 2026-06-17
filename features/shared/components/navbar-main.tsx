@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import NavbarMobileSheet from "@/features/shared/components/navbar-mobile-sheet";
 import NavbarNavLink from "@/features/shared/components/navbar-nav-link";
+import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
+import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
 
 type NavItem = {
   href: string;
@@ -34,6 +36,7 @@ type NavbarMainProps = {
   cta: string;
   profile: string;
   menu: string;
+  dialogLabels: StartWithAqdiDialogLabels;
 };
 
 export default function NavbarMain({
@@ -54,6 +57,7 @@ export default function NavbarMain({
   cta,
   profile,
   menu,
+  dialogLabels,
 }: NavbarMainProps) {
   const navItems: NavItem[] = [
     {
@@ -125,16 +129,17 @@ export default function NavbarMain({
               <CustomIcon src="/icons/user.svg" size={16} />
             </Button>
           </Link>
-
-          <Button className="group h-12 gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
-            <span>{cta}</span>
-            <span className="flex size-7 items-center justify-center rounded-full bg-white text-brand">
-              <ArrowUpLeft
-                className="size-4 transition-transform duration-300 group-hover:-rotate-45"
-                aria-hidden="true"
-              />
-            </span>
-          </Button>
+          <StartWithAqdiDialog labels={dialogLabels}>
+            <Button className="group h-12 gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
+              <span>{cta}</span>
+              <span className="flex size-7 items-center justify-center rounded-full bg-white text-brand">
+                <ArrowUpLeft
+                  className="size-4 transition-transform duration-300 group-hover:-rotate-45"
+                  aria-hidden="true"
+                />
+              </span>
+            </Button>
+          </StartWithAqdiDialog>
         </div>
 
         <NavbarMobileSheet
@@ -155,6 +160,7 @@ export default function NavbarMain({
           cta={cta}
           profile={profile}
           menu={menu}
+          dialogLabels={dialogLabels}
         />
       </div>
     </div>
