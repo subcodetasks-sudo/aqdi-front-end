@@ -173,7 +173,7 @@
   }
 
   .auth-phone-input {
-    /* --react-international-phone-height: 56px; */
+    --react-international-phone-height: 3.5rem;
     --react-international-phone-border-radius: 9999px;
     --react-international-phone-border-color: #d6d6d6;
     --react-international-phone-background-color: #f7f7f7;
@@ -192,6 +192,7 @@
 
   .auth-phone-input .react-international-phone-country-selector-button {
     width: 100px;
+    height: 3.5rem;
     border: 0;
     margin: 0;
     border-radius: 0;
@@ -218,7 +219,7 @@
   } */
 
   .auth-phone-input .react-international-phone-input {
-    height: 60px;
+    height: 3.5rem;
     border: 0;
     margin: 0;
     padding-inline: 18px;

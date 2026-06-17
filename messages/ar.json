@@ -444,6 +444,38 @@
         "otpRequired": "رمز التحقق مطلوب",
         "otpInvalid": "يرجى إدخال رمز تحقق مكون من 6 أرقام"
       }
+    },
+    "forgotPassword": {
+      "back": "العودة لتسجيل الدخول",
+      "title": "هل نسيت كلمة المرور !",
+      "subtitle": "قم بإدخال رقم الجوال المرتبط بالحساب ..",
+      "phoneLabel": "رقم الجوال",
+      "phonePlaceholder": "5x xxx xx xx",
+      "submit": "إرسال رمز التحقق",
+      "or": "أو",
+      "rememberedPassword": "تذكرت كلمة المرور؟",
+      "backToLogin": "العودة لتسجيل الدخول",
+      "validation": {
+        "phoneRequired": "رقم الجوال مطلوب",
+        "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح"
+      }
+    },
+    "resetPassword": {
+      "back": "العودة",
+      "title": "إعادة تعيين كلمة المرور !",
+      "subtitle": "اختر كلمة مرور قوية لضمان الأمان.",
+      "passwordLabel": "تعيين كلمة المرور الجديدة",
+      "passwordPlaceholder": "أدخل كلمة المرور الجديدة هنا...",
+      "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور الجديدة هنا...",
+      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
+      "submit": "حفظ كلمة المرور الجديدة",
+      "validation": {
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+        "passwordsMismatch": "كلمتا المرور غير متطابقتين"
+      }
     }
   }
 }

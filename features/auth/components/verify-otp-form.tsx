@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowUpLeft, RefreshCw } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
@@ -12,11 +13,18 @@ import {
   createVerifyOtpSchema,
   type VerifyOtpFormValues,
 } from "@/features/auth/schemas/verify-otp-schema";
+import { buildResetPasswordUrl } from "@/features/auth/utils/build-reset-password-url";
 import { cn } from "@/lib/utils";
 import AuthOrDivider from "./auth-or-divider";
 
-export default function VerifyOtpForm() {
+type VerifyOtpFormProps = {
+  phone?: string;
+  flow?: string;
+};
+
+export default function VerifyOtpForm({ phone, flow }: VerifyOtpFormProps) {
   const t = useTranslations("auth.verifyOtp");
+  const router = useRouter();
   const { formatted, isExpired, reset } = useOtpTimer(59);
 
   const schema = createVerifyOtpSchema({
@@ -35,7 +43,13 @@ export default function VerifyOtpForm() {
   const isOtpComplete = otpValue.length === 6;
 
   function onSubmit(values: VerifyOtpFormValues) {
-    console.log("OTP submitted:", values);
+    if (flow === "forgot-password") {
+      router.push(buildResetPasswordUrl(phone));
+      return;
+    }
+
+    console.log("OTP submitted:", { ...values, phone, flow });
+    router.push("/login");
   }
 
   function handleResend() {
@@ -45,7 +59,7 @@ export default function VerifyOtpForm() {
 
     reset();
     form.reset({ otp: "" });
-    console.log("OTP resent");
+    console.log("OTP resent:", { phone, flow });
   }
 
   return (

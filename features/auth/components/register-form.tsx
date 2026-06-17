@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowUpLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
@@ -15,9 +16,11 @@ import {
   createRegisterSchema,
   type RegisterFormValues,
 } from "@/features/auth/schemas/register-schema";
+import { buildVerifyOtpUrl } from "@/features/auth/utils/build-verify-otp-url";
 
 export default function RegisterForm() {
   const t = useTranslations("auth.register");
+  const router = useRouter();
 
   const schema = createRegisterSchema({
     fullNameRequired: t("validation.fullNameRequired"),
@@ -43,7 +46,7 @@ export default function RegisterForm() {
   });
 
   function onSubmit(values: RegisterFormValues) {
-    console.log("Register submitted:", values);
+    router.push(buildVerifyOtpUrl(values.phone, "register"));
   }
 
   return (

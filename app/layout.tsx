@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic} from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { DirectionProvider } from "@/components/ui/direction";
 import Providers from "@/app/providers";
 import "./globals.css";
@@ -30,7 +31,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = "ar";
+  const locale = await getLocale();
+  const messages = await getMessages();
   const direction = getDirection(locale);
 
   return (
@@ -42,7 +44,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <Providers>
           <DirectionProvider dir={direction} direction={direction}>
-            <NextIntlClientProvider>
+            <NextIntlClientProvider locale={locale} messages={messages}>
               {children}
             </NextIntlClientProvider>
           </DirectionProvider>

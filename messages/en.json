@@ -444,6 +444,38 @@
         "otpRequired": "Verification code is required",
         "otpInvalid": "Please enter a valid 6-digit code"
       }
+    },
+    "forgotPassword": {
+      "back": "Back to sign in",
+      "title": "Forgot your password!",
+      "subtitle": "Enter the mobile number linked to your account..",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5x xxx xx xx",
+      "submit": "Send verification code",
+      "or": "OR",
+      "rememberedPassword": "Remembered your password?",
+      "backToLogin": "Back to sign in",
+      "validation": {
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number"
+      }
+    },
+    "resetPassword": {
+      "back": "Go back",
+      "title": "Reset your password!",
+      "subtitle": "Choose a strong password to keep your account secure.",
+      "passwordLabel": "New password",
+      "passwordPlaceholder": "Enter your new password here...",
+      "confirmPasswordLabel": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm your new password here...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Save new password",
+      "validation": {
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "confirmPasswordRequired": "Password confirmation is required",
+        "passwordsMismatch": "Passwords do not match"
+      }
     }
   }
 }
