@@ -2,6 +2,7 @@ import { ArrowLeft, Check } from "lucide-react";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
 import Image from "next/image";
+import Link from "next/link";
 
 const featureLogos = [
   "/images/ejar.png",
@@ -11,8 +12,8 @@ const featureLogos = [
   "/images/najez.png",
 ];
 
-
 type PricingCardProps = {
+  id: string;
   icon: string;
   title: string;
   description: string;
@@ -24,6 +25,7 @@ type PricingCardProps = {
 };
 
 export default function PricingCard({
+  id,
   icon,
   title,
   description,
@@ -47,17 +49,20 @@ export default function PricingCard({
 
       <div className="mb-6 border-t border-[#e2e2e2] pt-5">
         <div className="flex items-end  gap-1.5 text-brand">
-          <span className="text-[2.8rem] font-extrabold leading-none">{price}
-          <CustomIcon src="/icons/ryal.svg" size={30} className="text-brand" />
+          <span className="text-[2.8rem] font-extrabold leading-none">
+            {price}
+            <CustomIcon
+              src="/icons/ryal.svg"
+              size={30}
+              className="text-brand"
+            />
           </span>
           <span className="pb-1 text-sm text-muted-foreground">{period}</span>
         </div>
       </div>
 
       <div className="mb-5 rounded-[1.55rem] bg-white p-6">
-        <p className="mb-3  text-base font-bold text-black">
-          {benefitsTitle}
-        </p>
+        <p className="mb-3  text-base font-bold text-black">{benefitsTitle}</p>
         <ul className="space-y-3.5">
           {features.map((feature, index) => (
             <li key={feature} className="flex items-center  gap-1.5">
@@ -65,19 +70,29 @@ export default function PricingCard({
                 <Check className="size-3" aria-hidden="true" />
               </span>
               <span className=" text-black font-medium">{feature}</span>
-              <Image src={featureLogos[index]} alt={feature} width={20} height={20} className="w-8 object-contain shrink-0" />
+              <Image
+                src={featureLogos[index]}
+                alt={feature}
+                width={20}
+                height={20}
+                className="w-8 object-contain shrink-0"
+              />
             </li>
           ))}
         </ul>
       </div>
-
-      <button
-        type="button"
-        className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-extrabold text-white transition hover:bg-brand/90"
-      >
-        <span>{cta}</span>
-        <ArrowLeft className="size-4 transition-transform duration-300 group-hover:rotate-45" aria-hidden="true" />
-      </button>
+      <Link href={`/create-contract?id=${id}`}>
+        <button
+          type="button"
+          className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-extrabold text-white transition hover:bg-brand/90"
+        >
+          <span>{cta}</span>
+          <ArrowLeft
+            className="size-4 transition-transform duration-300 group-hover:rotate-45"
+            aria-hidden="true"
+          />
+        </button>
+      </Link>
     </article>
   );
 }

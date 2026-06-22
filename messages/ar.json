@@ -489,6 +489,185 @@
     "visualAlt": "رسم توضيحي لإدارة بيانات العقار وإنشاء العقود",
     "downloadApp": "حمل التطبيق الآن"
   },
+  "createContract": {
+    "backLabel": "رجوع",
+    "pageTitleResidential": "انشاء عقد ايجار سكني",
+    "pageTitleCommercial": "انشاء عقد ايجار تجاري",
+    "stepper": {
+      "journey": "رحلتك الايجارية اصبحت أسهل.",
+      "ejarLogoAlt": "إيجار",
+      "steps": {
+        "intro": "عقدي",
+        "deed": "الصك",
+        "owner": "المالك",
+        "tenant": "المستأجر",
+        "finance": "المالية"
+      }
+    },
+    "intro": {
+      "title": "طلبات قبل أن نبدأ",
+      "subtitle": "لخدمتك بشكل سريع ، جهّز التالي :",
+      "requirements": [
+        "بيانات المؤجر والمستأجر.",
+        "صورة الصك وعنوان العقار.",
+        "بيانات الوحدة المؤجرة.",
+        "مبلغ الايجار.",
+        "نرسل لك مسودة العقد عبر واتساب للاطلاع",
+        "توثيق العقد في منصة إيجار"
+      ],
+      "priceLabel": "سعر العقد لمدة سنة :",
+      "currency": "ريال",
+      "viewAllPrices": "عرض جميع الأسعار",
+      "start": "لنبدأ",
+      "priceDialog": {
+        "title": "رسوم إنشاء وتوثيق عقد الإيجار :",
+        "close": "إغلاق",
+        "yearOrLess": "سنة فأقل: {price} ريال.",
+        "additionalYear": "عند رغبة العميل بإضافة سنة أخرى للعقد: {price} ريال لكل سنة إضافية",
+        "disclaimer": "الأسعار تشمل رسوم منصة إيجار والوسيط والتوثيق، ولا توجد أي رسوم أخرى."
+      }
+    },
+    "prices": {
+      "residential": "249",
+      "commercial": "349",
+      "additionalYear": "150"
+    },
+    "deed": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "phases": [
+        {
+          "title": "وثيقة الملكية",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح"
+        },
+        {
+          "title": "تفاصيل العقار",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        },
+        {
+          "title": "العنوان الوطني للعقار",
+          "subtitle": "إختر الطريقة المفضلة لك :"
+        }
+      ],
+      "deedType": {
+        "label": "حدد نوع الصك",
+        "placeholder": "إختر من هنا ..",
+        "clearSelection": "إزالة نوع الصك",
+        "types": {
+          "electronic-justice-ministry": "صك ملكيه الكتروني من وزراة العدل",
+          "electronic-real-estate-registry": "صك ملكيه الكتروني من السجل العقاري",
+          "paper": "صك ملكيه ورقي",
+          "deceased-owner": "صك ملكيه والمالك متوفي",
+          "waqf-owner": "صك ملكيه والمالك وقف",
+          "sale-paper": "ورقة مبايعه",
+          "economic-cities-authority": "وثيقة هيئة المدن الاقتصاديه",
+          "adverse-possession": "حجة استحكام",
+          "sublease-contract": "عقد ايجار من الباطن",
+          "lease-renewal": "تجديد عقد ايجار"
+        }
+      },
+      "deedImage": {
+        "label": "صورة الصك",
+        "clickHere": "إضغط هنا",
+        "chooseFile": "لاختيار صورة أو ملف",
+        "acceptedFormats": "png - jpeg - pdf",
+        "preview": "معاينة",
+        "delete": "حذف",
+        "previewTitle": "معاينة الملف",
+        "closePreview": "إغلاق"
+      },
+      "propertyDetails": {
+        "propertyType": {
+          "label": "نوع العقار !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "building": "عمارة",
+            "villa": "فيلا",
+            "land": "أرض",
+            "compound": "مجمع"
+          }
+        },
+        "propertyUse": {
+          "label": "إستخدام العقار !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "residential": "سكني",
+            "commercial": "تجاري",
+            "residential-commercial": "سكني، تجاري",
+            "industrial": "صناعي"
+          }
+        },
+        "propertyAge": {
+          "label": "عمر العقار تقريباً !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "1-year": "سنة واحدة",
+            "2-years": "سنتان",
+            "3-years": "3 سنوات",
+            "4-years": "4 سنوات",
+            "5-years": "5 سنوات",
+            "6-10-years": "6 - 10 سنوات",
+            "10-plus-years": "أكثر من 10 سنوات"
+          }
+        },
+        "floorCount": {
+          "label": "عدد طوابق العقار !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "1-floor": "طابق واحد",
+            "2-floors": "طابقين",
+            "3-floors": "3 طوابق",
+            "4-floors": "4 طوابق",
+            "5-plus-floors": "5 طوابق فأكثر"
+          }
+        },
+        "unitsPerFloor": {
+          "label": "عدد الوحدات في كل طابق !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "1-unit": "وحدة واحدة",
+            "2-units": "وحدتين",
+            "3-units": "3 وحدات",
+            "4-units": "4 وحدات",
+            "5-plus-units": "5 وحدات فأكثر"
+          }
+        },
+        "totalUnits": {
+          "label": "إجمالي الوحدات في العقار !",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "1-unit": "وحدة واحدة",
+            "2-units": "وحدتين",
+            "3-units": "3 وحدات",
+            "4-units": "4 وحدات",
+            "5-units": "5 وحدات",
+            "6-units": "6 وحدات",
+            "7-plus-units": "7 وحدات فأكثر"
+          }
+        }
+      },
+      "nationalAddress": {
+        "methods": ["الخريطة", "إرفاق صورة", "إدخال رابط"],
+        "mapTitle": "خريطة العنوان الوطني",
+        "link": {
+          "label": "اضافة رابط قوقل ماب للعقار",
+          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+        },
+        "photo": {
+          "label": "إرفاق صورة العنوان الوطني !",
+          "clickHere": "إضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "معاينة",
+          "delete": "حذف",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        }
+      }
+    }
+  },
   "startWithAqdi": {
     "dialog": {
       "title": "إبدأ مع عقدي",

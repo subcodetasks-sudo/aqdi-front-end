@@ -43,6 +43,7 @@ export default async function PricingSection() {
               benefitsTitle={t("benefitsTitle")}
               features={plan.features}
               cta={plan.cta}
+              id={plan.id}
             />
           ))}
         </div>
