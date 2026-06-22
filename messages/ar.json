@@ -543,10 +543,6 @@
           "subtitle": "قم بتعبئة بياناتك بشكل صحيح"
         },
         {
-          "title": "تفاصيل العقار",
-          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
-        },
-        {
           "title": "العنوان الوطني للعقار",
           "subtitle": "إختر الطريقة المفضلة لك :"
         }
@@ -578,76 +574,6 @@
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
       },
-      "propertyDetails": {
-        "propertyType": {
-          "label": "نوع العقار !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "building": "عمارة",
-            "villa": "فيلا",
-            "land": "أرض",
-            "compound": "مجمع"
-          }
-        },
-        "propertyUse": {
-          "label": "إستخدام العقار !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "residential": "سكني",
-            "commercial": "تجاري",
-            "residential-commercial": "سكني، تجاري",
-            "industrial": "صناعي"
-          }
-        },
-        "propertyAge": {
-          "label": "عمر العقار تقريباً !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "1-year": "سنة واحدة",
-            "2-years": "سنتان",
-            "3-years": "3 سنوات",
-            "4-years": "4 سنوات",
-            "5-years": "5 سنوات",
-            "6-10-years": "6 - 10 سنوات",
-            "10-plus-years": "أكثر من 10 سنوات"
-          }
-        },
-        "floorCount": {
-          "label": "عدد طوابق العقار !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "1-floor": "طابق واحد",
-            "2-floors": "طابقين",
-            "3-floors": "3 طوابق",
-            "4-floors": "4 طوابق",
-            "5-plus-floors": "5 طوابق فأكثر"
-          }
-        },
-        "unitsPerFloor": {
-          "label": "عدد الوحدات في كل طابق !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "1-unit": "وحدة واحدة",
-            "2-units": "وحدتين",
-            "3-units": "3 وحدات",
-            "4-units": "4 وحدات",
-            "5-plus-units": "5 وحدات فأكثر"
-          }
-        },
-        "totalUnits": {
-          "label": "إجمالي الوحدات في العقار !",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "1-unit": "وحدة واحدة",
-            "2-units": "وحدتين",
-            "3-units": "3 وحدات",
-            "4-units": "4 وحدات",
-            "5-units": "5 وحدات",
-            "6-units": "6 وحدات",
-            "7-plus-units": "7 وحدات فأكثر"
-          }
-        }
-      },
       "nationalAddress": {
         "methods": ["الخريطة", "إرفاق صورة", "إدخال رابط"],
         "mapTitle": "خريطة العنوان الوطني",
@@ -665,6 +591,255 @@
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
+      }
+    },
+    "owner": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "phases": [
+        {
+          "title": "بيانات مالك العقار",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        },
+        {
+          "title": "بيانات الوكيل",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        }
+      ],
+      "birthDate": {
+        "label": "تاريخ ميلاد المالك",
+        "hijri": "هجري",
+        "gregorian": "ميلادي",
+        "day": "اليوم !",
+        "month": "الشهر !",
+        "year": "السنة !",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "ownerData": {
+        "fullName": {
+          "label": "اسم مالك العقار الثلاثي",
+          "placeholder": "أكتب هنا ..."
+        },
+        "idNumber": {
+          "label": "رقم هوية المالك",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "phone": {
+          "label": "رقم جوال المالك",
+          "placeholder": "5x xxx xx xxx"
+        },
+        "hasAgent": {
+          "label": "هل يوجد وكيل للمالك",
+          "placeholder": "إختر من هنا ..",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        }
+      },
+      "agentData": {
+        "idNumber": {
+          "label": "رقم هوية وكيل المالك !",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
+        "phone": {
+          "label": "رقم جوال وكيل المالك !",
+          "placeholder": "5x xxx xx xxx"
+        },
+        "powerOfAttorney": {
+          "label": "إرفاق صورة الوكالة !",
+          "clickHere": "إضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "معاينة",
+          "delete": "حذف",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        }
+      }
+    },
+    "tenant": {
+      "cancelRequest": "إلغاء الطلب",
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة",
+        "saveLater": "حفظ وإكمال لاحقاً"
+      },
+      "phases": [
+        {
+          "title": "بيانات المستأجر",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        },
+        {
+          "title": "بيانات الوحدة المؤجرة",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        }
+      ],
+      "tenantStatus": {
+        "label": "صفة المستأجر / فرد - مؤسسة - شركة !",
+        "placeholder": "... إختر من هنا",
+        "options": {
+          "individual": "فرد",
+          "establishment-or-company": "مؤسسة أو شركة"
+        }
+      },
+      "birthDate": {
+        "label": "تاريخ ميلاد المستأجر :",
+        "hijri": "هجري",
+        "gregorian": "ميلادي",
+        "day": "اليوم !",
+        "month": "الشهر !",
+        "year": "السنة !",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "individualData": {
+        "idNumber": {
+          "label": "رقم هوية المستأجر !",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "phone": {
+          "label": "رقم جوال المستأجر !",
+          "placeholder": "5x xxx xx xxx"
+        }
+      },
+      "organizationData": {
+        "delegationType": {
+          "label": "نوع التفويض أو الوكالة !",
+          "placeholder": "... إختر من هنا",
+          "options": {
+            "owner-representative": "انا مالك السجل وممثله",
+            "agent-authorized": "انا وكيل او مفوض عن مالك السجل"
+          }
+        },
+        "unifiedRecordNumber": {
+          "label": "رقم السجل الموحد - المبتدئ برقم 7 !",
+          "placeholder": "7x xxx xx xxx"
+        },
+        "ownerIdNumber": {
+          "label": "رقم هوية مالك السجل !",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل :",
+        "ownerPhone": {
+          "label": "رقم جوال مالك السجل !",
+          "placeholder": "5x xxx xx xxx"
+        },
+        "powerOfAttorney": {
+          "label": "إرفاق صورة الوكالة !",
+          "clickHere": "إضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "معاينة",
+          "delete": "حذف",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        }
+      },
+      "rentedUnit": {
+        "selectPlaceholder": "... إختر من هنا",
+        "unitType": {
+          "label": "نوع الوحدة !",
+          "options": {
+            "apartment": "شقة",
+            "villa": "فيلا",
+            "floor": "دور",
+            "studio": "ستوديو",
+            "office": "مكتب",
+            "shop": "محل"
+          }
+        },
+        "unitUsage": {
+          "label": "استخدام الوحدة !",
+          "options": {
+            "residential": "سكني",
+            "commercial": "تجاري"
+          }
+        },
+        "totalArea": {
+          "label": "مساحة الوحدة الاجمالي !",
+          "placeholder": "أكتب هنا ..",
+          "suffix": "متر 2"
+        },
+        "floorNumber": {
+          "label": "رقم طابق الوحدة !"
+        },
+        "floorOptions": {
+          "ground": "أرضي"
+        },
+        "unitNumber": {
+          "label": "رقم الوحدة !",
+          "placeholder": "أكتب هنا .."
+        },
+        "roomsCount": {
+          "label": "عدد الغرف !"
+        },
+        "hallsCount": {
+          "label": "عدد الصالات !"
+        },
+        "majlisCount": {
+          "label": "عدد المجالس !"
+        },
+        "kitchensCount": {
+          "label": "عدد المطابخ !"
+        },
+        "bathroomsCount": {
+          "label": "عدد دورات المياه !"
+        },
+        "windowAcCount": {
+          "label": "مكيف شباك !"
+        },
+        "splitAcCount": {
+          "label": "مكيف سبيلت !"
+        },
+        "kitchenCabinetsInstalled": {
+          "label": "هل تم تركيب خزائن المطبخ !"
+        },
+        "furnished": {
+          "label": "مؤثث / مفروش !"
+        },
+        "furnishingType": {
+          "label": "نوع التأثيث ! :",
+          "new": "جديد",
+          "used": "مستخدم"
+        },
+        "addElectricityMeter": {
+          "label": "هل ترغب بإضافة عداد كهرباء.. ؟"
+        },
+        "electricityMeterNumber": {
+          "label": "رقم عداد الكهرباء ..",
+          "placeholder": "أكتب هنا .."
+        },
+        "addWaterMeter": {
+          "label": "هل ترغب بإضافة عداد المياه.. ؟"
+        },
+        "waterMeterNumber": {
+          "label": "رقم عداد المياه ..",
+          "placeholder": "أكتب هنا .."
+        }
+      },
+      "saveLaterDialog": {
+        "title": "حفظ العقد والإكمال لاحقاً",
+        "close": "إغلاق",
+        "successTitle": "تم حفظ العقد بنجاح ويمكنك إكماله لاحقاً في أي وقت !",
+        "successDescription": "للرجوع وإكمال العقد، توجه إلى قسم الطلبات داخل الموقع.",
+        "orderNumberLabel": "رقم طلبكم",
+        "copy": "نسخ",
+        "copied": "تم النسخ",
+        "copySuccess": "تم نسخ رقم الطلب",
+        "copyError": "تعذر نسخ رقم الطلب",
+        "retentionNotice": "نود التنويه أن العقود غير المكتملة يتم الاحتفاظ بها لمدة",
+        "retentionDays": "30 يوم فقط",
+        "orders": "الطلبات",
+        "ordersHref": "/requests",
+        "mainMenu": "القائمة الرئيسية",
+        "mainMenuHref": "/"
       }
     }
   },

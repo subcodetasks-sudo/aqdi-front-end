@@ -7,11 +7,6 @@ import {
   type DeedTypeId,
 } from "@/features/create-contract/types/deed-type";
 import { type NationalAddressMethodId } from "@/features/create-contract/types/national-address";
-import {
-  EMPTY_PROPERTY_DETAILS,
-  isPropertyDetailsComplete,
-  type PropertyDetailsState,
-} from "@/features/create-contract/types/property-details";
 
 function canContinueNationalAddress(
   method: NationalAddressMethodId,
@@ -35,8 +30,6 @@ export function useCreateContractDeedStep() {
     "",
   );
   const [deedFiles, setDeedFiles] = useState<File[]>([]);
-  const [propertyDetails, setPropertyDetails] =
-    useState<PropertyDetailsState>(EMPTY_PROPERTY_DETAILS);
   const [nationalAddressMethod, setNationalAddressMethod] =
     useState<NationalAddressMethodId>("map");
   const [nationalAddressPhotoFiles, setNationalAddressPhotoFiles] = useState<
@@ -48,15 +41,11 @@ export function useCreateContractDeedStep() {
   const canContinue =
     currentPhaseIndex === 0
       ? selectedDeedType !== "" && deedFiles.length > 0
-      : currentPhaseIndex === 1
-        ? isPropertyDetailsComplete(propertyDetails)
-        : currentPhaseIndex === 2
-          ? canContinueNationalAddress(
-              nationalAddressMethod,
-              nationalAddressPhotoFiles,
-              nationalAddressLinkUrl,
-            )
-          : true;
+      : canContinueNationalAddress(
+          nationalAddressMethod,
+          nationalAddressPhotoFiles,
+          nationalAddressLinkUrl,
+        );
 
   function setSelectedDeedType(value: DeedTypeId | "") {
     setSelectedDeedTypeState(value);
@@ -88,8 +77,6 @@ export function useCreateContractDeedStep() {
     setSelectedDeedType,
     deedFiles,
     setDeedFiles,
-    propertyDetails,
-    setPropertyDetails,
     nationalAddressMethod,
     setNationalAddressMethod: handleNationalAddressMethodChange,
     nationalAddressPhotoFiles,

@@ -2,6 +2,8 @@
 
 import CreateContractDeedStep from "@/features/create-contract/components/create-contract-deed-step";
 import CreateContractIntroStep from "@/features/create-contract/components/create-contract-intro-step";
+import CreateContractOwnerStep from "@/features/create-contract/components/create-contract-owner-step";
+import CreateContractTenantStep from "@/features/create-contract/components/create-contract-tenant-step";
 import CreateContractStepper from "@/features/create-contract/components/create-contract-stepper";
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -39,6 +41,22 @@ export default function CreateContractWizard({
       {currentStep === "deed" ? (
         <CreateContractDeedStep
           labels={labels.deed}
+          onBack={goBack}
+          onComplete={goNext}
+        />
+      ) : null}
+
+      {currentStep === "owner" ? (
+        <CreateContractOwnerStep
+          labels={labels.owner}
+          onBack={goBack}
+          onComplete={goNext}
+        />
+      ) : null}
+
+      {currentStep === "tenant" ? (
+        <CreateContractTenantStep
+          labels={labels.tenant}
           onBack={goBack}
           onComplete={goNext}
         />

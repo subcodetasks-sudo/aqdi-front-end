@@ -4,6 +4,14 @@ import CreateContractPageContent from "@/features/create-contract/components/cre
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
+import {
+  UNIT_TYPE_OPTIONS,
+  UNIT_USAGE_OPTIONS,
+} from "@/features/create-contract/types/rented-unit-step";
+import {
+  DELEGATION_TYPE_OPTIONS,
+  TENANT_STATUS_OPTIONS,
+} from "@/features/create-contract/types/tenant-step";
 
 type CreateContractPageProps = {
   searchParams: Promise<{ id?: string }>;
@@ -80,50 +88,6 @@ export default async function CreateContractPage({
         previewTitle: t("deed.deedImage.previewTitle"),
         closePreview: t("deed.deedImage.closePreview"),
       },
-      propertyDetails: {
-        propertyType: {
-          label: t("deed.propertyDetails.propertyType.label"),
-          placeholder: t("deed.propertyDetails.propertyType.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.propertyType.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["propertyType"]["options"],
-        },
-        propertyUse: {
-          label: t("deed.propertyDetails.propertyUse.label"),
-          placeholder: t("deed.propertyDetails.propertyUse.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.propertyUse.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["propertyUse"]["options"],
-        },
-        propertyAge: {
-          label: t("deed.propertyDetails.propertyAge.label"),
-          placeholder: t("deed.propertyDetails.propertyAge.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.propertyAge.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["propertyAge"]["options"],
-        },
-        floorCount: {
-          label: t("deed.propertyDetails.floorCount.label"),
-          placeholder: t("deed.propertyDetails.floorCount.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.floorCount.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["floorCount"]["options"],
-        },
-        unitsPerFloor: {
-          label: t("deed.propertyDetails.unitsPerFloor.label"),
-          placeholder: t("deed.propertyDetails.unitsPerFloor.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.unitsPerFloor.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["unitsPerFloor"]["options"],
-        },
-        totalUnits: {
-          label: t("deed.propertyDetails.totalUnits.label"),
-          placeholder: t("deed.propertyDetails.totalUnits.placeholder"),
-          options: t.raw(
-            "deed.propertyDetails.totalUnits.options",
-          ) as CreateContractLabels["deed"]["propertyDetails"]["totalUnits"]["options"],
-        },
-      },
       nationalAddress: {
         methods: t.raw("deed.nationalAddress.methods") as string[],
         mapTitle: t("deed.nationalAddress.mapTitle"),
@@ -141,6 +105,252 @@ export default async function CreateContractPage({
           previewTitle: t("deed.nationalAddress.photo.previewTitle"),
           closePreview: t("deed.nationalAddress.photo.closePreview"),
         },
+      },
+    },
+    owner: {
+      navigation: {
+        previous: t("owner.navigation.previous"),
+        continue: t("owner.navigation.continue"),
+      },
+      phases: t.raw("owner.phases") as CreateContractLabels["owner"]["phases"],
+      birthDate: {
+        label: t("owner.birthDate.label"),
+        hijri: t("owner.birthDate.hijri"),
+        gregorian: t("owner.birthDate.gregorian"),
+        day: t("owner.birthDate.day"),
+        month: t("owner.birthDate.month"),
+        year: t("owner.birthDate.year"),
+        dayPlaceholder: t("owner.birthDate.dayPlaceholder"),
+        monthPlaceholder: t("owner.birthDate.monthPlaceholder"),
+        yearPlaceholder: t("owner.birthDate.yearPlaceholder"),
+      },
+      ownerData: {
+        fullName: {
+          label: t("owner.ownerData.fullName.label"),
+          placeholder: t("owner.ownerData.fullName.placeholder"),
+        },
+        idNumber: {
+          label: t("owner.ownerData.idNumber.label"),
+          placeholder: t("owner.ownerData.idNumber.placeholder"),
+        },
+        phone: {
+          label: t("owner.ownerData.phone.label"),
+          placeholder: t("owner.ownerData.phone.placeholder"),
+        },
+        hasAgent: {
+          label: t("owner.ownerData.hasAgent.label"),
+          placeholder: t("owner.ownerData.hasAgent.placeholder"),
+          options: t.raw(
+            "owner.ownerData.hasAgent.options",
+          ) as CreateContractLabels["owner"]["ownerData"]["hasAgent"]["options"],
+        },
+      },
+      agentData: {
+        idNumber: {
+          label: t("owner.agentData.idNumber.label"),
+          placeholder: t("owner.agentData.idNumber.placeholder"),
+        },
+        birthDateLabel: t("owner.agentData.birthDateLabel"),
+        phone: {
+          label: t("owner.agentData.phone.label"),
+          placeholder: t("owner.agentData.phone.placeholder"),
+        },
+        powerOfAttorney: {
+          label: t("owner.agentData.powerOfAttorney.label"),
+          clickHere: t("owner.agentData.powerOfAttorney.clickHere"),
+          chooseFile: t("owner.agentData.powerOfAttorney.chooseFile"),
+          acceptedFormats: t("owner.agentData.powerOfAttorney.acceptedFormats"),
+          preview: t("owner.agentData.powerOfAttorney.preview"),
+          delete: t("owner.agentData.powerOfAttorney.delete"),
+          previewTitle: t("owner.agentData.powerOfAttorney.previewTitle"),
+          closePreview: t("owner.agentData.powerOfAttorney.closePreview"),
+        },
+      },
+    },
+    tenant: {
+      cancelRequest: t("tenant.cancelRequest"),
+      navigation: {
+        previous: t("tenant.navigation.previous"),
+        continue: t("tenant.navigation.continue"),
+        saveLater: t("tenant.navigation.saveLater"),
+      },
+      phases: t.raw("tenant.phases") as CreateContractLabels["tenant"]["phases"],
+      tenantStatus: {
+        label: t("tenant.tenantStatus.label"),
+        placeholder: t("tenant.tenantStatus.placeholder"),
+        options: Object.fromEntries(
+          TENANT_STATUS_OPTIONS.map((status) => [
+            status,
+            t(`tenant.tenantStatus.options.${status}`),
+          ]),
+        ) as CreateContractLabels["tenant"]["tenantStatus"]["options"],
+      },
+      birthDate: {
+        label: t("tenant.birthDate.label"),
+        hijri: t("tenant.birthDate.hijri"),
+        gregorian: t("tenant.birthDate.gregorian"),
+        day: t("tenant.birthDate.day"),
+        month: t("tenant.birthDate.month"),
+        year: t("tenant.birthDate.year"),
+        dayPlaceholder: t("tenant.birthDate.dayPlaceholder"),
+        monthPlaceholder: t("tenant.birthDate.monthPlaceholder"),
+        yearPlaceholder: t("tenant.birthDate.yearPlaceholder"),
+      },
+      individualData: {
+        idNumber: {
+          label: t("tenant.individualData.idNumber.label"),
+          placeholder: t("tenant.individualData.idNumber.placeholder"),
+        },
+        phone: {
+          label: t("tenant.individualData.phone.label"),
+          placeholder: t("tenant.individualData.phone.placeholder"),
+        },
+      },
+      organizationData: {
+        delegationType: {
+          label: t("tenant.organizationData.delegationType.label"),
+          placeholder: t("tenant.organizationData.delegationType.placeholder"),
+          options: Object.fromEntries(
+            DELEGATION_TYPE_OPTIONS.map((delegationType) => [
+              delegationType,
+              t(
+                `tenant.organizationData.delegationType.options.${delegationType}`,
+              ),
+            ]),
+          ) as CreateContractLabels["tenant"]["organizationData"]["delegationType"]["options"],
+        },
+        unifiedRecordNumber: {
+          label: t("tenant.organizationData.unifiedRecordNumber.label"),
+          placeholder: t(
+            "tenant.organizationData.unifiedRecordNumber.placeholder",
+          ),
+        },
+        ownerIdNumber: {
+          label: t("tenant.organizationData.ownerIdNumber.label"),
+          placeholder: t("tenant.organizationData.ownerIdNumber.placeholder"),
+        },
+        ownerBirthDateLabel: t(
+          "tenant.organizationData.ownerBirthDateLabel",
+        ),
+        ownerPhone: {
+          label: t("tenant.organizationData.ownerPhone.label"),
+          placeholder: t("tenant.organizationData.ownerPhone.placeholder"),
+        },
+        powerOfAttorney: {
+          label: t("tenant.organizationData.powerOfAttorney.label"),
+          clickHere: t("tenant.organizationData.powerOfAttorney.clickHere"),
+          chooseFile: t("tenant.organizationData.powerOfAttorney.chooseFile"),
+          acceptedFormats: t(
+            "tenant.organizationData.powerOfAttorney.acceptedFormats",
+          ),
+          preview: t("tenant.organizationData.powerOfAttorney.preview"),
+          delete: t("tenant.organizationData.powerOfAttorney.delete"),
+          previewTitle: t(
+            "tenant.organizationData.powerOfAttorney.previewTitle",
+          ),
+          closePreview: t(
+            "tenant.organizationData.powerOfAttorney.closePreview",
+          ),
+        },
+      },
+      rentedUnit: {
+        selectPlaceholder: t("tenant.rentedUnit.selectPlaceholder"),
+        unitType: {
+          label: t("tenant.rentedUnit.unitType.label"),
+          options: Object.fromEntries(
+            UNIT_TYPE_OPTIONS.map((unitType) => [
+              unitType,
+              t(`tenant.rentedUnit.unitType.options.${unitType}`),
+            ]),
+          ) as CreateContractLabels["tenant"]["rentedUnit"]["unitType"]["options"],
+        },
+        unitUsage: {
+          label: t("tenant.rentedUnit.unitUsage.label"),
+          options: Object.fromEntries(
+            UNIT_USAGE_OPTIONS.map((unitUsage) => [
+              unitUsage,
+              t(`tenant.rentedUnit.unitUsage.options.${unitUsage}`),
+            ]),
+          ) as CreateContractLabels["tenant"]["rentedUnit"]["unitUsage"]["options"],
+        },
+        totalArea: {
+          label: t("tenant.rentedUnit.totalArea.label"),
+          placeholder: t("tenant.rentedUnit.totalArea.placeholder"),
+          suffix: t("tenant.rentedUnit.totalArea.suffix"),
+        },
+        floorNumber: {
+          label: t("tenant.rentedUnit.floorNumber.label"),
+        },
+        floorOptions: {
+          ground: t("tenant.rentedUnit.floorOptions.ground"),
+        },
+        unitNumber: {
+          label: t("tenant.rentedUnit.unitNumber.label"),
+          placeholder: t("tenant.rentedUnit.unitNumber.placeholder"),
+        },
+        roomsCount: {
+          label: t("tenant.rentedUnit.roomsCount.label"),
+        },
+        hallsCount: {
+          label: t("tenant.rentedUnit.hallsCount.label"),
+        },
+        majlisCount: {
+          label: t("tenant.rentedUnit.majlisCount.label"),
+        },
+        kitchensCount: {
+          label: t("tenant.rentedUnit.kitchensCount.label"),
+        },
+        bathroomsCount: {
+          label: t("tenant.rentedUnit.bathroomsCount.label"),
+        },
+        windowAcCount: {
+          label: t("tenant.rentedUnit.windowAcCount.label"),
+        },
+        splitAcCount: {
+          label: t("tenant.rentedUnit.splitAcCount.label"),
+        },
+        kitchenCabinetsInstalled: {
+          label: t("tenant.rentedUnit.kitchenCabinetsInstalled.label"),
+        },
+        furnished: {
+          label: t("tenant.rentedUnit.furnished.label"),
+        },
+        furnishingType: {
+          label: t("tenant.rentedUnit.furnishingType.label"),
+          new: t("tenant.rentedUnit.furnishingType.new"),
+          used: t("tenant.rentedUnit.furnishingType.used"),
+        },
+        addElectricityMeter: {
+          label: t("tenant.rentedUnit.addElectricityMeter.label"),
+        },
+        electricityMeterNumber: {
+          label: t("tenant.rentedUnit.electricityMeterNumber.label"),
+          placeholder: t("tenant.rentedUnit.electricityMeterNumber.placeholder"),
+        },
+        addWaterMeter: {
+          label: t("tenant.rentedUnit.addWaterMeter.label"),
+        },
+        waterMeterNumber: {
+          label: t("tenant.rentedUnit.waterMeterNumber.label"),
+          placeholder: t("tenant.rentedUnit.waterMeterNumber.placeholder"),
+        },
+      },
+      saveLaterDialog: {
+        title: t("tenant.saveLaterDialog.title"),
+        close: t("tenant.saveLaterDialog.close"),
+        successTitle: t("tenant.saveLaterDialog.successTitle"),
+        successDescription: t("tenant.saveLaterDialog.successDescription"),
+        orderNumberLabel: t("tenant.saveLaterDialog.orderNumberLabel"),
+        copy: t("tenant.saveLaterDialog.copy"),
+        copied: t("tenant.saveLaterDialog.copied"),
+        copySuccess: t("tenant.saveLaterDialog.copySuccess"),
+        copyError: t("tenant.saveLaterDialog.copyError"),
+        retentionNotice: t("tenant.saveLaterDialog.retentionNotice"),
+        retentionDays: t("tenant.saveLaterDialog.retentionDays"),
+        orders: t("tenant.saveLaterDialog.orders"),
+        ordersHref: t("tenant.saveLaterDialog.ordersHref"),
+        mainMenu: t("tenant.saveLaterDialog.mainMenu"),
+        mainMenuHref: t("tenant.saveLaterDialog.mainMenuHref"),
       },
     },
     prices: {

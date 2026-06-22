@@ -2,7 +2,6 @@
 
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
-import CreateContractDeedPropertyDetails from "@/features/create-contract/components/create-contract-deed-property-details";
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
@@ -17,7 +16,7 @@ type CreateContractDeedStepProps = {
   onComplete: () => void;
 };
 
-const PHASE_ICONS = ["check", "building", "location"] as const;
+const PHASE_ICONS = ["check", "location"] as const;
 
 export default function CreateContractDeedStep({
   labels,
@@ -30,8 +29,6 @@ export default function CreateContractDeedStep({
     setSelectedDeedType,
     deedFiles,
     setDeedFiles,
-    propertyDetails,
-    setPropertyDetails,
     nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles,
@@ -101,14 +98,6 @@ export default function CreateContractDeedStep({
         ) : null}
 
         {currentPhaseIndex === 1 ? (
-          <CreateContractDeedPropertyDetails
-            labels={labels.propertyDetails}
-            value={propertyDetails}
-            onChange={setPropertyDetails}
-          />
-        ) : null}
-
-        {currentPhaseIndex === 2 ? (
           <CreateContractDeedNationalAddress
             labels={labels.nationalAddress}
             method={nationalAddressMethod}

@@ -112,8 +112,6 @@ export default function CreateContractIntroStep({
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
           <div className="rounded-2xl border border-brand-secondary/30 bg-brand-background-green px-5 py-4">
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm font-medium text-[#333333]">
@@ -130,6 +128,16 @@ export default function CreateContractIntroStep({
               </p>
             </div>
           </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+        <div className="flex justify-center">
+        <div
+          className="inline-flex items-center gap-1 text-sm font-medium text-brand "
+        >
+          {labels.viewAllPrices}
+          <ArrowUpLeft className="size-4" aria-hidden="true" />
+        </div>
+      </div>
         </DialogTrigger>
         <DialogContent
           showCloseButton={false}
@@ -179,15 +187,7 @@ export default function CreateContractIntroStep({
         </DialogContent>
       </Dialog>
 
-      <div className="flex justify-center">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
-        >
-          {labels.viewAllPrices}
-          <ArrowUpLeft className="size-4" aria-hidden="true" />
-        </Link>
-      </div>
+
 
       <Button
         type="button"

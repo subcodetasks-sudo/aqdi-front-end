@@ -13,4 +13,4 @@ export const DEED_TYPES = [
 
 export type DeedTypeId = (typeof DEED_TYPES)[number];
 
-export const DEED_STEP_PHASE_COUNT = 3;
+export const DEED_STEP_PHASE_COUNT = 2;

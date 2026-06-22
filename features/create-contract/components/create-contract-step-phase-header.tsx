@@ -1,11 +1,11 @@
-import { Building2, MapPin } from "lucide-react";
+import { Building2, IdCard, MapPin, User } from "lucide-react";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
 
 type CreateContractStepPhaseHeaderProps = {
   title: string;
   subtitle: string;
-  icon?: "check" | "building" | "location";
+  icon?: "check" | "building" | "location" | "id-card" | "user";
 };
 
 export default function CreateContractStepPhaseHeader({
@@ -20,6 +20,10 @@ export default function CreateContractStepPhaseHeader({
           <MapPin className="size-6 text-brand-secondary" aria-hidden="true" />
         ) : icon === "building" ? (
           <Building2 className="size-6 text-brand-secondary" aria-hidden="true" />
+        ) : icon === "id-card" ? (
+          <IdCard className="size-6 text-brand-secondary" aria-hidden="true" />
+        ) : icon === "user" ? (
+          <User className="size-6 text-brand-secondary" aria-hidden="true" />
         ) : (
           <CustomIcon
             src="/icons/check.svg"
