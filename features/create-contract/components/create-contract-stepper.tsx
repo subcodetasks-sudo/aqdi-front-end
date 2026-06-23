@@ -1,12 +1,16 @@
 import Image from "next/image";
 
-import { CREATE_CONTRACT_STEPS } from "@/features/create-contract/types/create-contract-step";
+import {
+  CREATE_CONTRACT_STEPPER_STEPS,
+  CREATE_CONTRACT_STEPS,
+} from "@/features/create-contract/types/create-contract-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { cn } from "@/lib/utils";
 
 type CreateContractStepperProps = {
   labels: CreateContractLabels["stepper"];
   currentStepIndex: number;
+  currentStep: (typeof CREATE_CONTRACT_STEPS)[number];
 };
 
 const stepPillClassName =
@@ -24,19 +28,25 @@ function getStepPillClassName(isActive: boolean) {
 export default function CreateContractStepper({
   labels,
   currentStepIndex,
+  currentStep,
 }: CreateContractStepperProps) {
-  const isEjarActive = currentStepIndex === CREATE_CONTRACT_STEPS.length;
+  const isPaymentStep = currentStep === "payment";
+  const isEjarActive = isPaymentStep;
 
   return (
     <div className="rounded-3xl bg-white p-4 shadow-sm md:p-5">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
-        {CREATE_CONTRACT_STEPS.map((step, index) => {
-          const isActive = index === currentStepIndex;
-          const label = labels.steps[step];
+        {CREATE_CONTRACT_STEPPER_STEPS.map((step) => {
+          const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
+          const isCompleted = isPaymentStep || stepIndex < currentStepIndex;
+          const isActive = stepIndex === currentStepIndex && !isPaymentStep;
 
           return (
-            <span key={step} className={getStepPillClassName(isActive)}>
-              {label}
+            <span
+              key={step}
+              className={getStepPillClassName(isActive || isCompleted)}
+            >
+              {labels.steps[step]}
             </span>
           );
         })}

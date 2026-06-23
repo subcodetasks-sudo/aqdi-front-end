@@ -5,6 +5,11 @@ import type { CreateContractLabels } from "@/features/create-contract/types/crea
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
 import {
+  CONTRACT_DURATION_OPTIONS,
+  PAYMENT_METHOD_OPTIONS,
+  TENANT_PERMISSION_OPTIONS,
+} from "@/features/create-contract/types/finance-step";
+import {
   UNIT_TYPE_OPTIONS,
   UNIT_USAGE_OPTIONS,
 } from "@/features/create-contract/types/rented-unit-step";
@@ -351,6 +356,106 @@ export default async function CreateContractPage({
         ordersHref: t("tenant.saveLaterDialog.ordersHref"),
         mainMenu: t("tenant.saveLaterDialog.mainMenu"),
         mainMenuHref: t("tenant.saveLaterDialog.mainMenuHref"),
+      },
+    },
+    finance: {
+      title: t("finance.title"),
+      subtitle: t("finance.subtitle"),
+      navigation: {
+        previous: t("finance.navigation.previous"),
+        continue: t("finance.navigation.continue"),
+      },
+      selectPlaceholder: t("finance.selectPlaceholder"),
+      contractStartDate: {
+        label: t("finance.contractStartDate.label"),
+        hijri: t("finance.contractStartDate.hijri"),
+        gregorian: t("finance.contractStartDate.gregorian"),
+        day: t("finance.contractStartDate.day"),
+        month: t("finance.contractStartDate.month"),
+        year: t("finance.contractStartDate.year"),
+        dayPlaceholder: t("finance.contractStartDate.dayPlaceholder"),
+        monthPlaceholder: t("finance.contractStartDate.monthPlaceholder"),
+        yearPlaceholder: t("finance.contractStartDate.yearPlaceholder"),
+      },
+      contractDuration: {
+        label: t("finance.contractDuration.label"),
+        options: Object.fromEntries(
+          CONTRACT_DURATION_OPTIONS.map((duration) => [
+            duration,
+            t(`finance.contractDuration.options.${duration}`),
+          ]),
+        ) as CreateContractLabels["finance"]["contractDuration"]["options"],
+      },
+      totalRentAmount: {
+        label: t("finance.totalRentAmount.label"),
+        placeholder: t("finance.totalRentAmount.placeholder"),
+      },
+      paymentMethod: {
+        label: t("finance.paymentMethod.label"),
+        options: Object.fromEntries(
+          PAYMENT_METHOD_OPTIONS.map((paymentMethod) => [
+            paymentMethod,
+            t(`finance.paymentMethod.options.${paymentMethod}`),
+          ]),
+        ) as CreateContractLabels["finance"]["paymentMethod"]["options"],
+      },
+      addTenantPermissions: {
+        label: t("finance.addTenantPermissions.label"),
+        edit: t("finance.addTenantPermissions.edit"),
+      },
+      addOtherConditions: {
+        label: t("finance.addOtherConditions.label"),
+        add: t("finance.addOtherConditions.add"),
+      },
+      tenantPermissionsDialog: {
+        title: t("finance.tenantPermissionsDialog.title"),
+        close: t("finance.tenantPermissionsDialog.close"),
+        heading: t("finance.tenantPermissionsDialog.heading"),
+        subtitle: t("finance.tenantPermissionsDialog.subtitle"),
+        continue: t("finance.tenantPermissionsDialog.continue"),
+        options: Object.fromEntries(
+          TENANT_PERMISSION_OPTIONS.map((permission) => [
+            permission,
+            t(`finance.tenantPermissionsDialog.options.${permission}`),
+          ]),
+        ) as CreateContractLabels["finance"]["tenantPermissionsDialog"]["options"],
+      },
+      otherConditionsDialog: {
+        title: t("finance.otherConditionsDialog.title"),
+        close: t("finance.otherConditionsDialog.close"),
+        heading: t("finance.otherConditionsDialog.heading"),
+        subtitle: t("finance.otherConditionsDialog.subtitle"),
+        termsLabel: t("finance.otherConditionsDialog.termsLabel"),
+        termsPlaceholder: t("finance.otherConditionsDialog.termsPlaceholder"),
+        save: t("finance.otherConditionsDialog.save"),
+      },
+    },
+    payment: {
+      title: t("payment.title"),
+      subtitle: t("payment.subtitle"),
+      navigation: {
+        previous: t("payment.navigation.previous"),
+        pay: t("payment.navigation.pay"),
+      },
+      summary: {
+        ejarFees: t("payment.summary.ejarFees"),
+        contractPeriodPrice: t("payment.summary.contractPeriodPrice"),
+        vat: t("payment.summary.vat"),
+        applicationFees: t("payment.summary.applicationFees"),
+        total: t("payment.summary.total"),
+        currency: t("payment.summary.currency"),
+        ejarLogoAlt: t("payment.summary.ejarLogoAlt"),
+      },
+      savePropertyData: {
+        label: t("payment.savePropertyData.label"),
+      },
+      disclaimer: {
+        prefix: t("payment.disclaimer.prefix"),
+        termsLink: t("payment.disclaimer.termsLink"),
+        and: t("payment.disclaimer.and"),
+        privacyLink: t("payment.disclaimer.privacyLink"),
+        termsHref: t("payment.disclaimer.termsHref"),
+        privacyHref: t("payment.disclaimer.privacyHref"),
       },
     },
     prices: {

@@ -841,6 +841,107 @@
         "mainMenu": "القائمة الرئيسية",
         "mainMenuHref": "/"
       }
+    },
+    "finance": {
+      "title": "البيانات المالية",
+      "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "selectPlaceholder": "... إختر من هنا",
+      "contractStartDate": {
+        "label": "تاريخ بداية العقد",
+        "hijri": "هجري",
+        "gregorian": "ميلادي",
+        "day": "اليوم !",
+        "month": "الشهر !",
+        "year": "السنة !",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "contractDuration": {
+        "label": "مدة العقد !",
+        "options": {
+          "one-year": "سنة واحدة",
+          "two-years": "سنتان",
+          "three-years": "ثلاث سنوات",
+          "four-years": "أربع سنوات",
+          "five-years": "خمس سنوات"
+        }
+      },
+      "totalRentAmount": {
+        "label": "مبلغ الايجار الاجمالي !",
+        "placeholder": "أكتب هنا .."
+      },
+      "paymentMethod": {
+        "label": "طريقة الدفعات !",
+        "options": {
+          "monthly": "شهري",
+          "quarterly": "ربع سنوي",
+          "semi-annual": "نصف سنوي",
+          "annual": "سنوي"
+        }
+      },
+      "addTenantPermissions": {
+        "label": "هل ترغب بإضافة صلاحيات للمستأجر... ؟",
+        "edit": "تعديل"
+      },
+      "addOtherConditions": {
+        "label": "هل ترغب بإضافة شروط أخرى... ؟",
+        "add": "إضافة +"
+      },
+      "tenantPermissionsDialog": {
+        "title": "صلاحيات المستأجر",
+        "close": "إغلاق",
+        "heading": "هل ترغب بإضافة صلاحيات للمستأجر...؟",
+        "subtitle": "يمكنك إضافة ما يلي :",
+        "continue": "متابعة",
+        "options": {
+          "sublease": "يحق للمستأجر التأجير من الباطن... ؟",
+          "modifications": "يحق للمستأجر إجراء التعديلات على الوحدة الايجارية... ؟",
+          "government-review": "يحق للمستأجر مراجعة الجهات الحكومية... ؟",
+          "renovations": "يحق للمستأجر إجراء الترميمات والتحسينات على الوحدة الايجارية ... ؟"
+        }
+      },
+      "otherConditionsDialog": {
+        "title": "شروط أخرى... ؟",
+        "close": "إغلاق",
+        "heading": "هل ترغب بإضافة شروط أخرى... ؟",
+        "subtitle": "يمكنك اضافة ما يلي :",
+        "termsLabel": "الشروط :",
+        "termsPlaceholder": "... أكتب هنا",
+        "save": "حفظ"
+      }
+    },
+    "payment": {
+      "title": "دفع المقابل المالي للعقد",
+      "subtitle": "تفاصيل المقابل المالي للعقد :",
+      "navigation": {
+        "previous": "السابق",
+        "pay": "الدفع وتوثيق العقد"
+      },
+      "summary": {
+        "ejarFees": "رسوم إيجار :",
+        "contractPeriodPrice": "سعر فترة العقد :",
+        "vat": "قيمة الضريبة :",
+        "applicationFees": "رسوم التطبيق :",
+        "total": "الاجمالي :",
+        "currency": "ر.س",
+        "ejarLogoAlt": "إيجار"
+      },
+      "savePropertyData": {
+        "label": "هل تود حفظ بيانات العقار - حتى تستطيع انشاء العقود مستقبلا بسرعة وسهولة"
+      },
+      "disclaimer": {
+        "prefix": "بالنقر فوق 'الدفع وتوثيق العقد'، فإنك توافق على",
+        "termsLink": "الشروط والأحكام",
+        "and": "و",
+        "privacyLink": "سياسة الخصوصية",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      }
     }
   },
   "startWithAqdi": {

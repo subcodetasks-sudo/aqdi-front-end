@@ -1,4 +1,9 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
+import type {
+  ContractDurationOption,
+  PaymentMethodOption,
+  TenantPermissionOption,
+} from "@/features/create-contract/types/finance-step";
 import type { HasAgentOption } from "@/features/create-contract/types/owner-step";
 import type {
   DelegationTypeOption,
@@ -273,6 +278,91 @@ export type CreateContractLabels = {
       ordersHref: string;
       mainMenu: string;
       mainMenuHref: string;
+    };
+  };
+  finance: {
+    title: string;
+    subtitle: string;
+    navigation: {
+      previous: string;
+      continue: string;
+    };
+    selectPlaceholder: string;
+    contractStartDate: {
+      label: string;
+      hijri: string;
+      gregorian: string;
+      day: string;
+      month: string;
+      year: string;
+      dayPlaceholder: string;
+      monthPlaceholder: string;
+      yearPlaceholder: string;
+    };
+    contractDuration: {
+      label: string;
+      options: Record<ContractDurationOption, string>;
+    };
+    totalRentAmount: {
+      label: string;
+      placeholder: string;
+    };
+    paymentMethod: {
+      label: string;
+      options: Record<PaymentMethodOption, string>;
+    };
+    addTenantPermissions: {
+      label: string;
+      edit: string;
+    };
+    addOtherConditions: {
+      label: string;
+      add: string;
+    };
+    tenantPermissionsDialog: {
+      title: string;
+      close: string;
+      heading: string;
+      subtitle: string;
+      continue: string;
+      options: Record<TenantPermissionOption, string>;
+    };
+    otherConditionsDialog: {
+      title: string;
+      close: string;
+      heading: string;
+      subtitle: string;
+      termsLabel: string;
+      termsPlaceholder: string;
+      save: string;
+    };
+  };
+  payment: {
+    title: string;
+    subtitle: string;
+    navigation: {
+      previous: string;
+      pay: string;
+    };
+    summary: {
+      ejarFees: string;
+      contractPeriodPrice: string;
+      vat: string;
+      applicationFees: string;
+      total: string;
+      currency: string;
+      ejarLogoAlt: string;
+    };
+    savePropertyData: {
+      label: string;
+    };
+    disclaimer: {
+      prefix: string;
+      termsLink: string;
+      and: string;
+      privacyLink: string;
+      termsHref: string;
+      privacyHref: string;
     };
   };
   prices: {

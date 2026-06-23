@@ -841,6 +841,107 @@
         "mainMenu": "Main menu",
         "mainMenuHref": "/"
       }
+    },
+    "finance": {
+      "title": "Financial Data",
+      "subtitle": "Fill in your data correctly:",
+      "navigation": {
+        "previous": "Previous",
+        "continue": "Continue"
+      },
+      "selectPlaceholder": "Choose from here...",
+      "contractStartDate": {
+        "label": "Contract start date",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "contractDuration": {
+        "label": "Contract duration",
+        "options": {
+          "one-year": "One year",
+          "two-years": "Two years",
+          "three-years": "Three years",
+          "four-years": "Four years",
+          "five-years": "Five years"
+        }
+      },
+      "totalRentAmount": {
+        "label": "Total rent amount",
+        "placeholder": "Type here..."
+      },
+      "paymentMethod": {
+        "label": "Payment method",
+        "options": {
+          "monthly": "Monthly",
+          "quarterly": "Quarterly",
+          "semi-annual": "Semi-annual",
+          "annual": "Annual"
+        }
+      },
+      "addTenantPermissions": {
+        "label": "Would you like to add tenant permissions...?",
+        "edit": "Edit"
+      },
+      "addOtherConditions": {
+        "label": "Would you like to add other conditions...?",
+        "add": "Add"
+      },
+      "tenantPermissionsDialog": {
+        "title": "Tenant permissions",
+        "close": "Close",
+        "heading": "Would you like to add permissions for the tenant...?",
+        "subtitle": "You can add the following:",
+        "continue": "Continue",
+        "options": {
+          "sublease": "The tenant has the right to sublease...?",
+          "modifications": "The tenant has the right to make modifications to the rental unit...?",
+          "government-review": "The tenant has the right to review government agencies...?",
+          "renovations": "The tenant has the right to carry out renovations and improvements to the rental unit...?"
+        }
+      },
+      "otherConditionsDialog": {
+        "title": "Other terms...?",
+        "close": "Close",
+        "heading": "Would you like to add other terms...?",
+        "subtitle": "You can add the following:",
+        "termsLabel": "Terms:",
+        "termsPlaceholder": "Write here...",
+        "save": "Save"
+      }
+    },
+    "payment": {
+      "title": "Pay the contract financial consideration",
+      "subtitle": "Contract financial consideration details:",
+      "navigation": {
+        "previous": "Previous",
+        "pay": "Pay and document the contract"
+      },
+      "summary": {
+        "ejarFees": "Ejar fees:",
+        "contractPeriodPrice": "Contract period price:",
+        "vat": "VAT:",
+        "applicationFees": "Application fees:",
+        "total": "Total:",
+        "currency": "SAR",
+        "ejarLogoAlt": "Ejar"
+      },
+      "savePropertyData": {
+        "label": "Would you like to save the property data so you can create contracts quickly and easily in the future?"
+      },
+      "disclaimer": {
+        "prefix": "By clicking 'Pay and document the contract', you agree to the",
+        "termsLink": "Terms and Conditions",
+        "and": "and",
+        "privacyLink": "Privacy Policy",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      }
     }
   },
   "startWithAqdi": {

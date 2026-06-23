@@ -1,11 +1,11 @@
-import { Building2, IdCard, MapPin, User } from "lucide-react";
+import { Building2, CircleDollarSign, IdCard, MapPin, User, Wallet } from "lucide-react";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
 
 type CreateContractStepPhaseHeaderProps = {
   title: string;
   subtitle: string;
-  icon?: "check" | "building" | "location" | "id-card" | "user";
+  icon?: "check" | "building" | "location" | "id-card" | "user" | "dollar" | "payment";
 };
 
 export default function CreateContractStepPhaseHeader({
@@ -24,6 +24,12 @@ export default function CreateContractStepPhaseHeader({
           <IdCard className="size-6 text-brand-secondary" aria-hidden="true" />
         ) : icon === "user" ? (
           <User className="size-6 text-brand-secondary" aria-hidden="true" />
+        ) : icon === "dollar" ? (
+          <span className="inline-flex size-10 items-center justify-center rounded-full bg-brand-secondary text-white">
+            <CircleDollarSign className="size-5" aria-hidden="true" />
+          </span>
+        ) : icon === "payment" ? (
+          <Wallet className="size-6 text-brand-secondary" aria-hidden="true" />
         ) : (
           <CustomIcon
             src="/icons/check.svg"

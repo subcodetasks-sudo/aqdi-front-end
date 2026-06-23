@@ -1,8 +1,10 @@
 "use client";
 
 import CreateContractDeedStep from "@/features/create-contract/components/create-contract-deed-step";
+import CreateContractFinanceStep from "@/features/create-contract/components/create-contract-finance-step";
 import CreateContractIntroStep from "@/features/create-contract/components/create-contract-intro-step";
 import CreateContractOwnerStep from "@/features/create-contract/components/create-contract-owner-step";
+import CreateContractPaymentStep from "@/features/create-contract/components/create-contract-payment-step";
 import CreateContractTenantStep from "@/features/create-contract/components/create-contract-tenant-step";
 import CreateContractStepper from "@/features/create-contract/components/create-contract-stepper";
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
@@ -26,6 +28,7 @@ export default function CreateContractWizard({
       <CreateContractStepper
         labels={labels.stepper}
         currentStepIndex={currentStepIndex}
+        currentStep={currentStep}
       />
 
       {currentStep === "intro" ? (
@@ -57,6 +60,23 @@ export default function CreateContractWizard({
       {currentStep === "tenant" ? (
         <CreateContractTenantStep
           labels={labels.tenant}
+          onBack={goBack}
+          onComplete={goNext}
+        />
+      ) : null}
+
+      {currentStep === "finance" ? (
+        <CreateContractFinanceStep
+          labels={labels.finance}
+          onBack={goBack}
+          onComplete={goNext}
+        />
+      ) : null}
+
+      {currentStep === "payment" ? (
+        <CreateContractPaymentStep
+          labels={labels.payment}
+          contractType={contractType}
           onBack={goBack}
           onComplete={goNext}
         />
