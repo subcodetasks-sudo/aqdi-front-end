@@ -1,0 +1,174 @@
+import { getTranslations } from "next-intl/server";
+
+import CreatePropertyPageContent from "@/features/create-property/components/create-property-page-content";
+import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import { PROPERTY_DEED_TYPES } from "@/features/create-property/types/deed-type";
+import { PROPERTY_HAS_AGENT_OPTIONS } from "@/features/create-property/types/owner-step";
+
+export default async function CreatePropertyPage() {
+  const t = await getTranslations("createProperty");
+
+  const labels: CreatePropertyLabels = {
+    backLabel: t("backLabel"),
+    pageTitle: t("pageTitle"),
+    stepper: {
+      steps: {
+        deed: t("stepper.steps.deed"),
+        address: t("stepper.steps.address"),
+        owner: t("stepper.steps.owner"),
+        review: t("stepper.steps.review"),
+      },
+    },
+    deed: {
+      navigation: {
+        previous: t("deed.navigation.previous"),
+        continue: t("deed.navigation.continue"),
+      },
+      title: t("deed.title"),
+      subtitle: t("deed.subtitle"),
+      deedType: {
+        label: t("deed.deedType.label"),
+        placeholder: t("deed.deedType.placeholder"),
+        clearSelection: t("deed.deedType.clearSelection"),
+        types: Object.fromEntries(
+          PROPERTY_DEED_TYPES.map((deedType) => [
+            deedType,
+            t(`deed.deedType.types.${deedType}`),
+          ]),
+        ) as CreatePropertyLabels["deed"]["deedType"]["types"],
+      },
+      deedImage: {
+        label: t("deed.deedImage.label"),
+        clickHere: t("deed.deedImage.clickHere"),
+        chooseFile: t("deed.deedImage.chooseFile"),
+        acceptedFormats: t("deed.deedImage.acceptedFormats"),
+        preview: t("deed.deedImage.preview"),
+        delete: t("deed.deedImage.delete"),
+        previewTitle: t("deed.deedImage.previewTitle"),
+        closePreview: t("deed.deedImage.closePreview"),
+      },
+    },
+    address: {
+      navigation: {
+        previous: t("address.navigation.previous"),
+        continue: t("address.navigation.continue"),
+      },
+      title: t("address.title"),
+      subtitle: t("address.subtitle"),
+      nationalAddress: {
+        methods: t.raw("address.nationalAddress.methods") as string[],
+        mapTitle: t("address.nationalAddress.mapTitle"),
+        link: {
+          label: t("address.nationalAddress.link.label"),
+          placeholder: t("address.nationalAddress.link.placeholder"),
+        },
+        photo: {
+          label: t("address.nationalAddress.photo.label"),
+          clickHere: t("address.nationalAddress.photo.clickHere"),
+          chooseFile: t("address.nationalAddress.photo.chooseFile"),
+          acceptedFormats: t("address.nationalAddress.photo.acceptedFormats"),
+          preview: t("address.nationalAddress.photo.preview"),
+          delete: t("address.nationalAddress.photo.delete"),
+          previewTitle: t("address.nationalAddress.photo.previewTitle"),
+          closePreview: t("address.nationalAddress.photo.closePreview"),
+        },
+      },
+    },
+    owner: {
+      navigation: {
+        previous: t("owner.navigation.previous"),
+        continue: t("owner.navigation.continue"),
+      },
+      phases: t.raw("owner.phases") as CreatePropertyLabels["owner"]["phases"],
+      birthDate: {
+        label: t("owner.birthDate.label"),
+        hijri: t("owner.birthDate.hijri"),
+        gregorian: t("owner.birthDate.gregorian"),
+        day: t("owner.birthDate.day"),
+        month: t("owner.birthDate.month"),
+        year: t("owner.birthDate.year"),
+        dayPlaceholder: t("owner.birthDate.dayPlaceholder"),
+        monthPlaceholder: t("owner.birthDate.monthPlaceholder"),
+        yearPlaceholder: t("owner.birthDate.yearPlaceholder"),
+      },
+      ownerData: {
+        fullName: {
+          label: t("owner.ownerData.fullName.label"),
+          placeholder: t("owner.ownerData.fullName.placeholder"),
+        },
+        idNumber: {
+          label: t("owner.ownerData.idNumber.label"),
+          placeholder: t("owner.ownerData.idNumber.placeholder"),
+        },
+        phone: {
+          label: t("owner.ownerData.phone.label"),
+          placeholder: t("owner.ownerData.phone.placeholder"),
+        },
+        hasAgent: {
+          label: t("owner.ownerData.hasAgent.label"),
+          placeholder: t("owner.ownerData.hasAgent.placeholder"),
+          options: Object.fromEntries(
+            PROPERTY_HAS_AGENT_OPTIONS.map((option) => [
+              option,
+              t(`owner.ownerData.hasAgent.options.${option}`),
+            ]),
+          ) as CreatePropertyLabels["owner"]["ownerData"]["hasAgent"]["options"],
+        },
+      },
+      agentData: {
+        idNumber: {
+          label: t("owner.agentData.idNumber.label"),
+          placeholder: t("owner.agentData.idNumber.placeholder"),
+        },
+        birthDateLabel: t("owner.agentData.birthDateLabel"),
+        phone: {
+          label: t("owner.agentData.phone.label"),
+          placeholder: t("owner.agentData.phone.placeholder"),
+        },
+        powerOfAttorney: {
+          label: t("owner.agentData.powerOfAttorney.label"),
+          clickHere: t("owner.agentData.powerOfAttorney.clickHere"),
+          chooseFile: t("owner.agentData.powerOfAttorney.chooseFile"),
+          acceptedFormats: t(
+            "owner.agentData.powerOfAttorney.acceptedFormats",
+          ),
+          preview: t("owner.agentData.powerOfAttorney.preview"),
+          delete: t("owner.agentData.powerOfAttorney.delete"),
+          previewTitle: t("owner.agentData.powerOfAttorney.previewTitle"),
+          closePreview: t("owner.agentData.powerOfAttorney.closePreview"),
+        },
+      },
+    },
+    review: {
+      navigation: {
+        previous: t("review.navigation.previous"),
+        continue: t("review.navigation.continue"),
+      },
+      title: t("review.title"),
+      subtitle: t("review.subtitle"),
+      propertyName: {
+        label: t("review.propertyName.label"),
+        placeholder: t("review.propertyName.placeholder"),
+        hint: t("review.propertyName.hint"),
+        example: t("review.propertyName.example"),
+      },
+    },
+    success: {
+      title: t("success.title"),
+      description: t("success.description"),
+      mainMenu: t("success.mainMenu"),
+      mainMenuHref: t("success.mainMenuHref"),
+      actions: {
+        viewProperty: t("success.actions.viewProperty"),
+        viewPropertyHref: t("success.actions.viewPropertyHref"),
+        addUnit: t("success.actions.addUnit"),
+        addUnitHref: t("success.actions.addUnitHref"),
+        createContract: t("success.actions.createContract"),
+        createContractHref: t("success.actions.createContractHref"),
+        ejarLogoAlt: t("success.actions.ejarLogoAlt"),
+      },
+    },
+  };
+
+  return <CreatePropertyPageContent labels={labels} />;
+}

@@ -489,6 +489,280 @@
     "visualAlt": "رسم توضيحي لإدارة بيانات العقار وإنشاء العقود",
     "downloadApp": "حمل التطبيق الآن"
   },
+  "createProperty": {
+    "backLabel": "رجوع",
+    "pageTitle": "إضافة عقار جديد",
+    "stepper": {
+      "steps": {
+        "deed": "وثيقة الملكية",
+        "address": "العنوان الوطني",
+        "owner": "بيانات المالك",
+        "review": "مراجعة البيانات"
+      }
+    },
+    "deed": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "title": "وثيقة الملكية",
+      "subtitle": "قم بتعبئة بياناتك بشكل صحيح !",
+      "deedType": {
+        "label": "حدد نوع الصك :",
+        "placeholder": "إختر من هنا ...",
+        "clearSelection": "إزالة نوع الصك",
+        "types": {
+          "electronic-justice-ministry": "صك ملكيه الكتروني من وزراة العدل",
+          "electronic-real-estate-registry": "صك ملكيه الكتروني من السجل العقاري",
+          "paper": "صك ملكيه ورقي",
+          "deceased-owner": "صك ملكيه والمالك متوفي",
+          "waqf-owner": "صك ملكيه والمالك وقف",
+          "sale-paper": "ورقة مبايعه",
+          "economic-cities-authority": "وثيقة هيئة المدن الاقتصاديه",
+          "adverse-possession": "حجة استحكام",
+          "sublease-contract": "عقد ايجار من الباطن",
+          "lease-renewal": "تجديد عقد ايجار"
+        }
+      },
+      "deedImage": {
+        "label": "صورة الصك",
+        "clickHere": "إضغط هنا",
+        "chooseFile": "لاختيار صورة أو ملف",
+        "acceptedFormats": "png - jpeg - pdf",
+        "preview": "معاينة",
+        "delete": "حذف",
+        "previewTitle": "معاينة الملف",
+        "closePreview": "إغلاق"
+      }
+    },
+    "address": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "title": "العنوان الوطني للعقار",
+      "subtitle": "إختر الطريقة المفضلة لك :",
+      "nationalAddress": {
+        "methods": ["الخريطة", "إرفاق صورة", "إدخال رابط"],
+        "mapTitle": "خريطة العنوان الوطني",
+        "link": {
+          "label": "اضافة رابط قوقل ماب للعقار",
+          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+        },
+        "photo": {
+          "label": "إرفاق صورة العنوان الوطني !",
+          "clickHere": "إضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "معاينة",
+          "delete": "حذف",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        }
+      }
+    },
+    "owner": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "phases": [
+        {
+          "title": "بيانات مالك العقار",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        },
+        {
+          "title": "بيانات الوكيل",
+          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
+        }
+      ],
+      "birthDate": {
+        "label": "تاريخ ميلاد المالك",
+        "hijri": "هجري",
+        "gregorian": "ميلادي",
+        "day": "اليوم !",
+        "month": "الشهر !",
+        "year": "السنة !",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "ownerData": {
+        "fullName": {
+          "label": "اسم مالك العقار الثلاثي",
+          "placeholder": "أكتب هنا ..."
+        },
+        "idNumber": {
+          "label": "رقم هوية المالك",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "phone": {
+          "label": "رقم جوال المالك",
+          "placeholder": "5x xxx xx xx"
+        },
+        "hasAgent": {
+          "label": "هل يوجد وكيل للمالك ؟",
+          "placeholder": "إختر من هنا ...",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        }
+      },
+      "agentData": {
+        "idNumber": {
+          "label": "رقم هوية وكيل المالك !",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
+        "phone": {
+          "label": "رقم جوال وكيل المالك !",
+          "placeholder": "5x xxx xx xxx"
+        },
+        "powerOfAttorney": {
+          "label": "إرفاق صورة الوكالة !",
+          "clickHere": "إضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "معاينة",
+          "delete": "حذف",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        }
+      }
+    },
+    "review": {
+      "navigation": {
+        "previous": "السابق",
+        "continue": "متابعة"
+      },
+      "title": "إسم العقار",
+      "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
+      "propertyName": {
+        "label": "إسم العقار !",
+        "placeholder": "... أكتب هنا",
+        "hint": "يرجى إضافة اسم للعقار ليسهل عليك الرجوع اليه او تميزه :",
+        "example": "مثلاً - استراحة اللؤلؤة - عمارتي بحي الريان... إلخ"
+      }
+    },
+    "success": {
+      "title": "تهانينا، تم حفظ بيانات العقار بنجاح !",
+      "description": "الآن تستطيع حفظ بيانات العقار وإعادة إنشاء العقود عليها بكل سهولة ودون الحاجة لتعبئة البيانات.",
+      "mainMenu": "العودة للقائمة الرئيسية",
+      "mainMenuHref": "/",
+      "actions": {
+        "viewProperty": "عرض وتعديل العقار",
+        "viewPropertyHref": "/properties",
+        "addUnit": "إضافة وحدة جديدة للعقار",
+        "addUnitHref": "/properties/create-unit",
+        "createContract": "إنشاء عقد إيجار على هذا العقار",
+        "createContractHref": "/create-contract",
+        "ejarLogoAlt": "إيجار"
+      }
+    }
+  },
+  "createUnit": {
+    "backLabel": "رجوع",
+    "pageTitle": "إنشاء وحدة سكنية جديدة",
+    "navigation": {
+      "previous": "السابق",
+      "continue": "متابعة"
+    },
+    "title": "بيانات الوحدة المؤجرة",
+    "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
+    "selectPlaceholder": "... إختر من هنا",
+    "unitType": {
+      "label": "نوع الوحدة !",
+      "options": {
+        "apartment": "شقة",
+        "villa": "فيلا",
+        "floor": "دور",
+        "studio": "ستوديو",
+        "office": "مكتب",
+        "shop": "محل"
+      }
+    },
+    "unitUsage": {
+      "label": "استخدام الوحدة !",
+      "options": {
+        "residential": "سكني",
+        "commercial": "تجاري"
+      }
+    },
+    "totalArea": {
+      "label": "مساحة الوحدة الاجمالي !",
+      "placeholder": "أكتب هنا ..",
+      "suffix": "متر 2"
+    },
+    "floorNumber": {
+      "label": "رقم طابق الوحدة !"
+    },
+    "floorOptions": {
+      "ground": "أرضي"
+    },
+    "unitNumber": {
+      "label": "رقم الوحدة !",
+      "placeholder": "أكتب هنا .."
+    },
+    "roomsCount": {
+      "label": "عدد الغرف !"
+    },
+    "hallsCount": {
+      "label": "عدد الصالات !"
+    },
+    "kitchensCount": {
+      "label": "عدد المطابخ !"
+    },
+    "bathroomsCount": {
+      "label": "عدد دورات المياه !"
+    },
+    "windowAcCount": {
+      "label": "مكيف شباك !"
+    },
+    "splitAcCount": {
+      "label": "مكيف سبيلت !"
+    },
+    "kitchenCabinetsInstalled": {
+      "label": "هل تم تركيب خزائن المطبخ !"
+    },
+    "furnished": {
+      "label": "مؤثث / مفروش !"
+    },
+    "furnishingType": {
+      "label": "نوع التأثيث ! :",
+      "new": "جديد",
+      "used": "مستخدم"
+    },
+    "addElectricityMeter": {
+      "label": "هل ترغب بإضافة عداد كهرباء.. ؟"
+    },
+    "electricityMeterNumber": {
+      "label": "رقم عداد الكهرباء ..",
+      "placeholder": "أكتب هنا .."
+    },
+    "addWaterMeter": {
+      "label": "هل ترغب بإضافة عداد المياه.. ؟"
+    },
+    "waterMeterNumber": {
+      "label": "رقم عداد المياه ..",
+      "placeholder": "أكتب هنا .."
+    },
+    "success": {
+      "title": "تهانينا، تم حفظ بيانات الوحدة بنجاح !",
+      "description": "تستطيع الآن إنشاء عقود الإيجار بكل سهولة ودون تعبئة بيانات العقار وللمالك",
+      "mainMenu": "العودة للقائمة الرئيسية",
+      "mainMenuHref": "/",
+      "actions": {
+        "viewProperty": "عرض وتعديل العقار",
+        "viewPropertyHref": "/properties",
+        "addUnit": "إضافة وحدة جديدة للعقار",
+        "addUnitHref": "/properties/create-unit",
+        "createContract": "إنشاء عقد إيجار على هذا العقار",
+        "createContractHref": "/create-contract",
+        "ejarLogoAlt": "إيجار"
+      }
+    }
+  },
   "createContract": {
     "backLabel": "رجوع",
     "pageTitleResidential": "انشاء عقد ايجار سكني",

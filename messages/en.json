@@ -489,6 +489,280 @@
     "visualAlt": "Illustration of property data management and contract creation",
     "downloadApp": "Download the app now"
   },
+  "createProperty": {
+    "backLabel": "Back",
+    "pageTitle": "Add new property",
+    "stepper": {
+      "steps": {
+        "deed": "Ownership document",
+        "address": "National address",
+        "owner": "Owner details",
+        "review": "Review data"
+      }
+    },
+    "deed": {
+      "navigation": {
+        "previous": "Previous",
+        "continue": "Continue"
+      },
+      "title": "Ownership document",
+      "subtitle": "Fill in your details correctly!",
+      "deedType": {
+        "label": "Select deed type:",
+        "placeholder": "Select from here...",
+        "clearSelection": "Clear deed type",
+        "types": {
+          "electronic-justice-ministry": "Electronic ownership deed from the Ministry of Justice",
+          "electronic-real-estate-registry": "Electronic ownership deed from the Real Estate Registry",
+          "paper": "Paper ownership deed",
+          "deceased-owner": "Ownership deed with deceased owner",
+          "waqf-owner": "Ownership deed with waqf owner",
+          "sale-paper": "Sale contract paper",
+          "economic-cities-authority": "Economic Cities Authority document",
+          "adverse-possession": "Adverse possession deed",
+          "sublease-contract": "Sublease contract",
+          "lease-renewal": "Lease renewal"
+        }
+      },
+      "deedImage": {
+        "label": "Deed image",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file",
+        "acceptedFormats": "png - jpeg - pdf",
+        "preview": "Preview",
+        "delete": "Delete",
+        "previewTitle": "File preview",
+        "closePreview": "Close"
+      }
+    },
+    "address": {
+      "navigation": {
+        "previous": "Previous",
+        "continue": "Continue"
+      },
+      "title": "National address for the property",
+      "subtitle": "Choose your preferred method:",
+      "nationalAddress": {
+        "methods": ["Map", "Attach image", "Enter link"],
+        "mapTitle": "National address map",
+        "link": {
+          "label": "Add Google Maps link for the property",
+          "placeholder": "Add Google Maps link for the property here..."
+        },
+        "photo": {
+          "label": "Attach national address image",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "Preview",
+          "delete": "Delete",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      }
+    },
+    "owner": {
+      "navigation": {
+        "previous": "Previous",
+        "continue": "Continue"
+      },
+      "phases": [
+        {
+          "title": "Property owner data",
+          "subtitle": "Fill in your details correctly:"
+        },
+        {
+          "title": "Agent data",
+          "subtitle": "Fill in your details correctly:"
+        }
+      ],
+      "birthDate": {
+        "label": "Owner's date of birth",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "ownerData": {
+        "fullName": {
+          "label": "Owner's full name",
+          "placeholder": "Type here..."
+        },
+        "idNumber": {
+          "label": "Owner's ID number",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "phone": {
+          "label": "Owner's mobile number",
+          "placeholder": "5x xxx xx xx"
+        },
+        "hasAgent": {
+          "label": "Is there an agent for the owner?",
+          "placeholder": "Select from here...",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        }
+      },
+      "agentData": {
+        "idNumber": {
+          "label": "Owner's agent ID number",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "birthDateLabel": "Owner's agent date of birth:",
+        "phone": {
+          "label": "Owner's agent mobile number",
+          "placeholder": "5x xxx xx xxx"
+        },
+        "powerOfAttorney": {
+          "label": "Attach power of attorney image",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "preview": "Preview",
+          "delete": "Delete",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      }
+    },
+    "review": {
+      "navigation": {
+        "previous": "Previous",
+        "continue": "Continue"
+      },
+      "title": "Property name",
+      "subtitle": "Fill in your details correctly:",
+      "propertyName": {
+        "label": "Property name",
+        "placeholder": "Write here...",
+        "hint": "Please add a name for the property to make it easier to find or distinguish:",
+        "example": "For example - Al-Lulu Rest House - My building in Al-Rayyan district... etc."
+      }
+    },
+    "success": {
+      "title": "Congratulations, property data saved successfully!",
+      "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
+      "mainMenu": "Return to main menu",
+      "mainMenuHref": "/",
+      "actions": {
+        "viewProperty": "View and edit property",
+        "viewPropertyHref": "/properties/create-unit",
+        "addUnit": "Add a new unit to the property",
+        "addUnitHref": "/properties",
+        "createContract": "Create a rental contract for this property",
+        "createContractHref": "/create-contract",
+        "ejarLogoAlt": "Ejar"
+      }
+    }
+  },
+  "createUnit": {
+    "backLabel": "Back",
+    "pageTitle": "Create a new residential unit",
+    "navigation": {
+      "previous": "Previous",
+      "continue": "Continue"
+    },
+    "title": "Leased unit data",
+    "subtitle": "Fill in your details correctly:",
+    "selectPlaceholder": "Choose from here...",
+    "unitType": {
+      "label": "Unit type",
+      "options": {
+        "apartment": "Apartment",
+        "villa": "Villa",
+        "floor": "Floor",
+        "studio": "Studio",
+        "office": "Office",
+        "shop": "Shop"
+      }
+    },
+    "unitUsage": {
+      "label": "Unit usage",
+      "options": {
+        "residential": "Residential",
+        "commercial": "Commercial"
+      }
+    },
+    "totalArea": {
+      "label": "Total unit area",
+      "placeholder": "Write here...",
+      "suffix": "m²"
+    },
+    "floorNumber": {
+      "label": "Unit floor number"
+    },
+    "floorOptions": {
+      "ground": "Ground floor"
+    },
+    "unitNumber": {
+      "label": "Unit number",
+      "placeholder": "Write here..."
+    },
+    "roomsCount": {
+      "label": "Number of rooms"
+    },
+    "hallsCount": {
+      "label": "Number of halls"
+    },
+    "kitchensCount": {
+      "label": "Number of kitchens"
+    },
+    "bathroomsCount": {
+      "label": "Number of bathrooms"
+    },
+    "windowAcCount": {
+      "label": "Window AC"
+    },
+    "splitAcCount": {
+      "label": "Split AC"
+    },
+    "kitchenCabinetsInstalled": {
+      "label": "Are kitchen cabinets installed?"
+    },
+    "furnished": {
+      "label": "Furnished?"
+    },
+    "furnishingType": {
+      "label": "Furnishing type:",
+      "new": "New",
+      "used": "Used"
+    },
+    "addElectricityMeter": {
+      "label": "Do you want to add an electricity meter?"
+    },
+    "electricityMeterNumber": {
+      "label": "Electricity meter number",
+      "placeholder": "Write here..."
+    },
+    "addWaterMeter": {
+      "label": "Do you want to add a water meter?"
+    },
+    "waterMeterNumber": {
+      "label": "Water meter number",
+      "placeholder": "Write here..."
+    },
+    "success": {
+      "title": "Congratulations, unit data saved successfully!",
+      "description": "You can now create rental contracts easily without filling in the property and owner data again.",
+      "mainMenu": "Return to main menu",
+      "mainMenuHref": "/",
+      "actions": {
+        "viewProperty": "View and edit property",
+        "viewPropertyHref": "/properties",
+        "addUnit": "Add a new unit to the property",
+        "addUnitHref": "/properties/create-unit",
+        "createContract": "Create a rental contract for this property",
+        "createContractHref": "/create-contract",
+        "ejarLogoAlt": "Ejar"
+      }
+    }
+  },
   "createContract": {
     "backLabel": "Back",
     "pageTitleResidential": "Create residential lease contract",
