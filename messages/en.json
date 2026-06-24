@@ -680,6 +680,96 @@
     "visualAlt": "Illustration of property data management and contract creation",
     "downloadApp": "Download the app now"
   },
+  "requests": {
+    "backLabel": "Back",
+    "pageTitle": "Requests",
+    "tabs": {
+      "residential": "Residential units",
+      "commercial": "Commercial units"
+    },
+    "card": {
+      "requestDateLabel": "Request date:",
+      "requestNumberLabel": "Your request number",
+      "inquiryDivider": "Have a question?",
+      "copyRequestNumber": "Copy request number",
+      "paymentSuccessful": "Payment successful",
+      "viewOrEdit": "View or edit request details",
+      "completePaymentHint": "Please complete payment of the contract value",
+      "completePayment": "Complete payment of contract value",
+      "helpCenter": "Help center",
+      "whenReceiveContract": "When will I receive my contract?",
+      "status": {
+        "completed": "Completed",
+        "incomplete": "Incomplete",
+        "inProgress": "In progress",
+        "returned": "Returned"
+      }
+    },
+    "residentialItems": [
+      {
+        "id": "residential-completed",
+        "title": "Residential lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "completed",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      },
+      {
+        "id": "residential-incomplete",
+        "title": "Residential lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "incomplete",
+        "paymentSuccessful": false,
+        "showViewEdit": true,
+        "actionType": "complete-payment"
+      },
+      {
+        "id": "residential-in-progress",
+        "title": "Residential lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "in-progress",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "dual-actions"
+      },
+      {
+        "id": "residential-returned",
+        "title": "Residential lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "returned",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      }
+    ],
+    "commercialItems": [
+      {
+        "id": "commercial-completed",
+        "title": "Commercial lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100088",
+        "status": "completed",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      },
+      {
+        "id": "commercial-in-progress",
+        "title": "Commercial lease contract",
+        "date": "01-01-2025",
+        "requestNumber": "#100089",
+        "status": "in-progress",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "dual-actions"
+      }
+    ]
+  },
   "createProperty": {
     "backLabel": "Back",
     "pageTitle": "Add new property",

@@ -680,6 +680,96 @@
     "visualAlt": "رسم توضيحي لإدارة بيانات العقار وإنشاء العقود",
     "downloadApp": "حمل التطبيق الآن"
   },
+  "requests": {
+    "backLabel": "رجوع",
+    "pageTitle": "الطلبات",
+    "tabs": {
+      "residential": "وحدات سكنية",
+      "commercial": "وحدات تجارية"
+    },
+    "card": {
+      "requestDateLabel": "تاريخ الطلب:",
+      "requestNumberLabel": "رقم طلبك",
+      "inquiryDivider": "لديك استفسار؟",
+      "copyRequestNumber": "نسخ رقم الطلب",
+      "paymentSuccessful": "تم الدفع بنجاح",
+      "viewOrEdit": "عرض أو تعديل تفاصيل الطلب",
+      "completePaymentHint": "يرجى اتمام دفع قيمة العقد",
+      "completePayment": "اتمام دفع قيمة العقد",
+      "helpCenter": "مركز المساعدة",
+      "whenReceiveContract": "متى أستلم عقدي؟",
+      "status": {
+        "completed": "مكتمل",
+        "incomplete": "غير مكتمل",
+        "inProgress": "قيد التنفيذ",
+        "returned": "مسترجع"
+      }
+    },
+    "residentialItems": [
+      {
+        "id": "residential-completed",
+        "title": "عقد إيجار سكني",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "completed",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      },
+      {
+        "id": "residential-incomplete",
+        "title": "عقد إيجار سكني",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "incomplete",
+        "paymentSuccessful": false,
+        "showViewEdit": true,
+        "actionType": "complete-payment"
+      },
+      {
+        "id": "residential-in-progress",
+        "title": "عقد إيجار سكني",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "in-progress",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "dual-actions"
+      },
+      {
+        "id": "residential-returned",
+        "title": "عقد إيجار سكني",
+        "date": "01-01-2025",
+        "requestNumber": "#100054",
+        "status": "returned",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      }
+    ],
+    "commercialItems": [
+      {
+        "id": "commercial-completed",
+        "title": "عقد إيجار تجاري",
+        "date": "01-01-2025",
+        "requestNumber": "#100088",
+        "status": "completed",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "help-center"
+      },
+      {
+        "id": "commercial-in-progress",
+        "title": "عقد إيجار تجاري",
+        "date": "01-01-2025",
+        "requestNumber": "#100089",
+        "status": "in-progress",
+        "paymentSuccessful": true,
+        "showViewEdit": false,
+        "actionType": "dual-actions"
+      }
+    ]
+  },
   "createProperty": {
     "backLabel": "رجوع",
     "pageTitle": "إضافة عقار جديد",
