@@ -770,6 +770,172 @@
       }
     ]
   },
+  "myProperties": {
+    "backLabel": "رجوع",
+    "pageTitle": "عقاراتي",
+    "addProperty": "إضافة عقار جديد",
+    "card": {
+      "requestDateLabel": "تاريخ الطلب:",
+      "deleteProperty": "حذف العقار",
+      "viewDeed": "عرض الصك",
+      "ejarLogoAlt": "شعار إيجار",
+      "deedDialog": {
+        "title": "صورة الصك",
+        "close": "إغلاق",
+        "imageAlt": "صورة صك الملكية"
+      },
+      "actions": {
+        "viewEdit": "عرض وتعديل العقار",
+        "viewUnits": "عرض وحدات العقار",
+        "addUnit": "إضافة وحدة جديدة للعقار",
+        "createContract": "إنشاء عقد إيجار على هذا العقار"
+      }
+    },
+    "items": [
+      {
+        "id": "property-1",
+        "title": "عمارة في حي النرجس",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-2",
+        "title": "عمارة في حي النرجس",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-3",
+        "title": "عمارة في حي النرجس",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-4",
+        "title": "عمارة في حي النرجس",
+        "date": "01-01-2025"
+      }
+    ]
+  },
+  "propertyUnits": {
+    "backLabel": "رجوع",
+    "pageTitle": "عرض وحدات العقار",
+    "tabs": {
+      "residential": "وحدات سكنية",
+      "commercial": "وحدات تجارية"
+    },
+    "card": {
+      "unitNumberLabel": "رقم الوحدة",
+      "editUnit": "تعديل الوحدة",
+      "deleteUnit": "حذف الوحدة",
+      "categoryResidential": "سكني",
+      "categoryCommercial": "تجاري",
+      "createResidentialContract": "إنشاء عقد سكني على هذه الوحدة",
+      "createCommercialContract": "إنشاء عقد تجاري على هذه الوحدة",
+      "orDivider": "أو",
+      "createNewResidentialUnit": "إنشاء وحدة سكنية جديدة",
+      "createNewCommercialUnit": "إنشاء وحدة تجارية جديدة",
+      "ejarLogoAlt": "شعار إيجار",
+      "fields": {
+        "unitType": "نوع الوحدة :",
+        "unitUse": "استخدام الوحدة :",
+        "floorNumber": "رقم الطابق :",
+        "unitArea": "مساحة الوحدة :",
+        "roomsCount": "عدد الغرف :",
+        "hallsCount": "عدد الصالات :",
+        "kitchensCount": "عدد المطابخ :",
+        "bathroomsCount": "عدد دورات المياه :",
+        "windowAcCount": "عدد المكيفات شباك :",
+        "splitAcCount": "عدد المكيفات سبلت :"
+      }
+    },
+    "residentialItems": [
+      {
+        "id": "unit-residential-1",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "عمارة",
+          "unitUse": "سكن عائلات",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      },
+      {
+        "id": "unit-residential-2",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "عمارة",
+          "unitUse": "سكن عائلات",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      },
+      {
+        "id": "unit-residential-3",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "عمارة",
+          "unitUse": "سكن عائلات",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      }
+    ],
+    "commercialItems": [
+      {
+        "id": "unit-commercial-1",
+        "unitNumber": "#200088",
+        "category": "commercial",
+        "details": {
+          "unitType": "محل تجاري",
+          "unitUse": "تجاري",
+          "floorNumber": "1",
+          "unitArea": "85",
+          "roomsCount": "2",
+          "hallsCount": "1",
+          "kitchensCount": "0",
+          "bathroomsCount": "1",
+          "windowAcCount": "2",
+          "splitAcCount": "1"
+        }
+      },
+      {
+        "id": "unit-commercial-2",
+        "unitNumber": "#200089",
+        "category": "commercial",
+        "details": {
+          "unitType": "مكتب",
+          "unitUse": "تجاري",
+          "floorNumber": "3",
+          "unitArea": "64",
+          "roomsCount": "3",
+          "hallsCount": "1",
+          "kitchensCount": "1",
+          "bathroomsCount": "2",
+          "windowAcCount": "0",
+          "splitAcCount": "2"
+        }
+      }
+    ]
+  },
   "createProperty": {
     "backLabel": "رجوع",
     "pageTitle": "إضافة عقار جديد",

@@ -770,6 +770,172 @@
       }
     ]
   },
+  "myProperties": {
+    "backLabel": "Back",
+    "pageTitle": "My Properties",
+    "addProperty": "Add new property",
+    "card": {
+      "requestDateLabel": "Request date:",
+      "deleteProperty": "Delete property",
+      "viewDeed": "View deed",
+      "ejarLogoAlt": "Ejar logo",
+      "deedDialog": {
+        "title": "Deed image",
+        "close": "Close",
+        "imageAlt": "Property deed document image"
+      },
+      "actions": {
+        "viewEdit": "View and edit property",
+        "viewUnits": "View property units",
+        "addUnit": "Add new unit to property",
+        "createContract": "Create rental contract for this property"
+      }
+    },
+    "items": [
+      {
+        "id": "property-1",
+        "title": "Building in Al Narjis district",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-2",
+        "title": "Building in Al Narjis district",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-3",
+        "title": "Building in Al Narjis district",
+        "date": "01-01-2025"
+      },
+      {
+        "id": "property-4",
+        "title": "Building in Al Narjis district",
+        "date": "01-01-2025"
+      }
+    ]
+  },
+  "propertyUnits": {
+    "backLabel": "Back",
+    "pageTitle": "View property units",
+    "tabs": {
+      "residential": "Residential units",
+      "commercial": "Commercial units"
+    },
+    "card": {
+      "unitNumberLabel": "Unit number",
+      "editUnit": "Edit unit",
+      "deleteUnit": "Delete unit",
+      "categoryResidential": "Residential",
+      "categoryCommercial": "Commercial",
+      "createResidentialContract": "Create a residential contract for this unit",
+      "createCommercialContract": "Create a commercial contract for this unit",
+      "orDivider": "or",
+      "createNewResidentialUnit": "Create a new residential unit",
+      "createNewCommercialUnit": "Create a new commercial unit",
+      "ejarLogoAlt": "Ejar logo",
+      "fields": {
+        "unitType": "Unit type:",
+        "unitUse": "Unit use:",
+        "floorNumber": "Floor number:",
+        "unitArea": "Unit area:",
+        "roomsCount": "Number of rooms:",
+        "hallsCount": "Number of halls:",
+        "kitchensCount": "Number of kitchens:",
+        "bathroomsCount": "Number of bathrooms:",
+        "windowAcCount": "Number of window ACs:",
+        "splitAcCount": "Number of split ACs:"
+      }
+    },
+    "residentialItems": [
+      {
+        "id": "unit-residential-1",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "Building",
+          "unitUse": "Family housing",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      },
+      {
+        "id": "unit-residential-2",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "Building",
+          "unitUse": "Family housing",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      },
+      {
+        "id": "unit-residential-3",
+        "unitNumber": "#100054",
+        "category": "residential",
+        "details": {
+          "unitType": "Building",
+          "unitUse": "Family housing",
+          "floorNumber": "2",
+          "unitArea": "122",
+          "roomsCount": "7",
+          "hallsCount": "4",
+          "kitchensCount": "2",
+          "bathroomsCount": "3",
+          "windowAcCount": "1",
+          "splitAcCount": "0"
+        }
+      }
+    ],
+    "commercialItems": [
+      {
+        "id": "unit-commercial-1",
+        "unitNumber": "#200088",
+        "category": "commercial",
+        "details": {
+          "unitType": "Retail shop",
+          "unitUse": "Commercial",
+          "floorNumber": "1",
+          "unitArea": "85",
+          "roomsCount": "2",
+          "hallsCount": "1",
+          "kitchensCount": "0",
+          "bathroomsCount": "1",
+          "windowAcCount": "2",
+          "splitAcCount": "1"
+        }
+      },
+      {
+        "id": "unit-commercial-2",
+        "unitNumber": "#200089",
+        "category": "commercial",
+        "details": {
+          "unitType": "Office",
+          "unitUse": "Commercial",
+          "floorNumber": "3",
+          "unitArea": "64",
+          "roomsCount": "3",
+          "hallsCount": "1",
+          "kitchensCount": "1",
+          "bathroomsCount": "2",
+          "windowAcCount": "0",
+          "splitAcCount": "2"
+        }
+      }
+    ]
+  },
   "createProperty": {
     "backLabel": "Back",
     "pageTitle": "Add new property",
