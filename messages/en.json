@@ -369,6 +369,197 @@
       }
     ]
   },
+  "blog": {
+    "latest": {
+      "badge": "Blog",
+      "title": "Latest articles and real estate tips",
+      "description": "Everything you need to manage your properties with confidence and professionalism",
+      "share": "Share",
+      "post": {
+        "featuredCategory": "Property management",
+        "featuredTitle": "The importance of managing property data in the digital age",
+        "listCategory": "A comprehensive guide to creating rental contracts",
+        "listTitle": "How to create a professional rental contract in minutes",
+        "description": "Everything you need to manage your properties with confidence and professionalism",
+        "date": "Tuesday, February 10, 2025",
+        "readTime": "5 minutes",
+        "views": "1.8K"
+      }
+    },
+    "listing": {
+      "tabs": {
+        "all": "All",
+        "propertyManagement": "Property management",
+        "contracts": "Contracts",
+        "realEstateMarket": "Real estate market"
+      },
+      "sidebar": {
+        "stats": {
+          "title": "Aqadi Blog",
+          "subtitle": "Your comprehensive real estate platform",
+          "description": "We share with you the latest articles and tips in real estate, asset management, and creating professional contracts.",
+          "statsHeading": "Ejar in numbers:",
+          "logoAlt": "Aqadi logo",
+          "activeUsers": "+5M",
+          "activeUsersLabel": "Active users",
+          "annualContracts": "+2M",
+          "annualContractsLabel": "Active contracts",
+          "leasedUnits": "+3M",
+          "leasedUnitsLabel": "Leased units"
+        },
+        "categories": {
+          "title": "Categories",
+          "items": [
+            {
+              "id": "property-management",
+              "label": "Property management",
+              "count": "12"
+            },
+            {
+              "id": "contracts",
+              "label": "Contracts",
+              "count": "34"
+            },
+            {
+              "id": "investment-tips",
+              "label": "Investment tips",
+              "count": "56"
+            },
+            {
+              "id": "real-estate-market",
+              "label": "Real estate market",
+              "count": "78"
+            },
+            {
+              "id": "legal",
+              "label": "Legal",
+              "count": "90"
+            }
+          ]
+        },
+        "tags": {
+          "title": "Popular tags",
+          "items": [
+            "#rental",
+            "#contracts",
+            "#law"
+          ]
+        },
+        "newsletter": {
+          "badge": "News",
+          "title": "Weekly newsletter",
+          "description": "The latest real estate articles and tips directly to your inbox.",
+          "placeholder": "Write your email here..",
+          "subscribe": "Subscribe now with Aqadi",
+          "submitEmailLabel": "Submit email"
+        }
+      },
+      "post": {
+        "listCategory": "A comprehensive guide to creating rental contracts",
+        "listTitle": "How to create a professional rental contract in minutes..",
+        "date": "Tuesday, February 10, 2025",
+        "readTime": "5 minutes",
+        "views": "1.8K",
+        "readMore": "Read more"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "detail": {
+      "shareArticle": "Share the article",
+      "shareOnX": "Share on X",
+      "shareOnLinkedin": "Share on LinkedIn",
+      "shareGeneric": "Share",
+      "post": {
+        "category": "A comprehensive guide to creating rental contracts",
+        "title": "How to create a professional rental contract in minutes..",
+        "date": "Tuesday, February 20, 2024",
+        "readTime": "6 minutes",
+        "views": "1.8K",
+        "imageAlt": "Two professionals reviewing a rental contract at a desk",
+        "sections": [
+          {
+            "type": "heading",
+            "content": "Latest articles and real estate tips"
+          },
+          {
+            "type": "paragraph",
+            "content": "In today's fast-moving real estate market, creating rental contracts professionally and quickly is essential for every owner and investor. Whether you manage one property or an entire portfolio, understanding contract fundamentals saves time and reduces legal risk."
+          },
+          {
+            "type": "heading",
+            "content": "Traditional challenges in property management"
+          },
+          {
+            "type": "paragraph",
+            "content": "Traditional property management relies on paperwork and manual follow-up, which leads to contract delays, difficulty tracking tenant data, and weak documentation of agreements. These challenges make it harder for owners to maintain operational efficiency."
+          },
+          {
+            "type": "heading",
+            "content": "What is digital property management?"
+          },
+          {
+            "type": "paragraph",
+            "content": "Digital property management means using electronic systems to store property, owner, and tenant data, and to create and document contracts through accredited platforms such as Ejar. This approach provides clearer visibility, faster decisions, and secure documentation for every step in the rental cycle."
+          },
+          {
+            "type": "quote",
+            "content": "Managers who adopt digital property management save up to 60% of the time spent on administrative tasks, reduce human error, and significantly improve tenant satisfaction."
+          }
+        ]
+      },
+      "comments": {
+        "title": "Comments",
+        "tags": ["#rental", "#contracts", "#law"],
+        "authorImageAlt": "Abdullah profile photo",
+        "likeAriaLabel": "Like comment",
+        "shareAriaLabel": "Share comment",
+        "form": {
+          "title": "Add your comment",
+          "placeholder": "Share your opinion or questions..",
+          "submit": "Send comment",
+          "submitAriaLabel": "Send comment"
+        },
+        "items": [
+          {
+            "id": "comment-1",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "I wish you would publish a detailed article about the best real estate management systems available in the Saudi market.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": true
+          },
+          {
+            "id": "comment-2",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "Simple and helpful explanation, especially the part about electronically documenting the contract. I was hesitant to move to digital management but this article clearly showed me the practical benefits.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": true
+          },
+          {
+            "id": "comment-3",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "Valuable and professionally structured content. I hope to see more practical examples of common contract clauses, but overall the article covers the fundamentals excellently.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": false
+          }
+        ]
+      }
+    }
+  },
   "auth": {
     "hero": {
       "imageAlt": "Aqadi app showing a successfully issued lease contract"
