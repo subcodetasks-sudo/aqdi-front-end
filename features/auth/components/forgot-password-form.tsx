@@ -1,10 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUpLeft } from "lucide-react";
+import { ArrowUpLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import ForgotPasswordFooter from "@/features/auth/components/forgot-password-footer";
@@ -13,6 +14,7 @@ import {
   createForgotPasswordSchema,
   type ForgotPasswordFormValues,
 } from "@/features/auth/schemas/forgot-password-schema";
+import { requestForgotPassword } from "@/features/auth/services/request-forgot-password";
 import { buildVerifyOtpUrl } from "@/features/auth/utils/build-verify-otp-url";
 
 export default function ForgotPasswordForm() {
@@ -31,8 +33,18 @@ export default function ForgotPasswordForm() {
     },
   });
 
-  function onSubmit(values: ForgotPasswordFormValues) {
-    router.push(buildVerifyOtpUrl(values.phone, "forgot-password"));
+  const { isSubmitting } = form.formState;
+
+  async function onSubmit(values: ForgotPasswordFormValues) {
+    const response = await requestForgotPassword(values);
+
+    if (!response.ok) {
+      toast.error(response.error || t("submitError"));
+      return;
+    }
+
+    toast.success(response.message || t("submitSuccess"));
+    router.push(buildVerifyOtpUrl(response.phone, "forgot-password"));
   }
 
   return (
@@ -49,14 +61,20 @@ export default function ForgotPasswordForm() {
 
       <Button
         type="submit"
-        disabled={form.formState.isSubmitting}
+        disabled={isSubmitting}
         className="group h-12 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand/90"
       >
-        {t("submit")}
-        <ArrowUpLeft
-          className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
-          aria-hidden="true"
-        />
+        {isSubmitting ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <>
+            {t("submit")}
+            <ArrowUpLeft
+              className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
+              aria-hidden="true"
+            />
+          </>
+        )}
       </Button>
 
       <ForgotPasswordFooter

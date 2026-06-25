@@ -1,13 +1,22 @@
-export function formatPhoneDisplay(phone: string) {
-  const cleaned = phone.replace(/\s/g, "");
+import { repairPhoneFromQueryParam } from "@/features/auth/utils/normalize-saudi-phone";
 
-  if (!cleaned.startsWith("+966")) {
-    return phone;
+export function formatPhoneDisplay(phone: string) {
+  const repaired = repairPhoneFromQueryParam(phone) ?? phone;
+  const digits = repaired.replace(/\D/g, "");
+
+  let localNumber: string | null = null;
+
+  if (digits.startsWith("00966") && digits.length >= 14) {
+    localNumber = digits.slice(5, 14);
+  } else if (digits.startsWith("966") && digits.length >= 12) {
+    localNumber = digits.slice(3, 12);
+  } else if (repaired.startsWith("+966")) {
+    localNumber = repaired.trim().replace(/\s/g, "").slice(4);
+  } else if (/^\d{8}$/.test(digits)) {
+    localNumber = `5${digits}`;
   }
 
-  const localNumber = cleaned.slice(4);
-
-  if (localNumber.length < 9) {
+  if (!localNumber || localNumber.length < 9) {
     return phone;
   }
 

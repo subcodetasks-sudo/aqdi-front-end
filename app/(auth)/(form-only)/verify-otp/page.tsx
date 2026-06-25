@@ -7,6 +7,7 @@ import {
   getVerifyOtpBackHref,
 } from "@/features/auth/utils/build-verify-otp-url";
 import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
+import { repairPhoneFromQueryParam } from "@/features/auth/utils/normalize-saudi-phone";
 
 type VerifyOtpPageProps = {
   searchParams: Promise<{
@@ -19,8 +20,9 @@ export default async function VerifyOtpPage({
   searchParams,
 }: VerifyOtpPageProps) {
   const t = await getTranslations("auth.verifyOtp");
-  const { phone, flow } = await searchParams;
-  const displayPhone = formatPhoneDisplay(phone ?? t("defaultPhone"));
+  const { phone: rawPhone, flow } = await searchParams;
+  const phone = repairPhoneFromQueryParam(rawPhone);
+  const displayPhone = formatPhoneDisplay(phone ?? rawPhone ?? t("defaultPhone"));
   const backHref = getVerifyOtpBackHref(flow);
 
   return (

@@ -5,6 +5,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { DirectionProvider } from "@/components/ui/direction";
 import Providers from "@/app/providers";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
@@ -46,6 +47,7 @@ export default async function RootLayout({
           <DirectionProvider dir={direction} direction={direction}>
             <NextIntlClientProvider locale={locale} messages={messages}>
               {children}
+              <Toaster position="top-center" />
             </NextIntlClientProvider>
           </DirectionProvider>
         </Providers>

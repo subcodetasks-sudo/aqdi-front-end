@@ -34,6 +34,9 @@ export default function RegisterPhoneField({
           <div dir="ltr">
             <PhoneInput
               defaultCountry="sa"
+              hideDropdown
+              disableCountryGuess
+              forceDialCode
               value={field.value}
               onChange={(phone) => field.onChange(phone)}
               onBlur={field.onBlur}

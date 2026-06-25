@@ -326,48 +326,9 @@
     "badge": "FAQ",
     "title": "Questions we hear often, answered",
     "description": "Short and clear answers before you start.",
-    "items": [
-      {
-        "id": "create-contract",
-        "question": "How to create a contract",
-        "answer": "You can create a documented electronic rental contract through Aqadi in simple steps: log in, enter both parties' and property details, then receive your contract documented via Ejar in just 30 minutes."
-      },
-      {
-        "id": "platform",
-        "question": "What is Aqadi platform?",
-        "answer": "Aqadi is a licensed electronic platform by Ejar network and the Real Estate General Authority, enabling you to issue and document residential and commercial contracts in about 30 minutes."
-      },
-      {
-        "id": "ejar-contract",
-        "question": "Is the electronic contract from Ejar?",
-        "answer": "Yes, all contracts created through Aqadi are directly linked to the official Ejar platform under the Ministry of Housing."
-      },
-      {
-        "id": "residential-fees",
-        "question": "What are the fees for a one-year residential contract?",
-        "answer": "The fee for a one-year residential contract is SAR 299 inclusive of VAT."
-      },
-      {
-        "id": "commercial-fees",
-        "question": "What are the fees for a one-year commercial contract?",
-        "answer": "The fee for a one-year commercial contract is SAR 499 inclusive of VAT."
-      },
-      {
-        "id": "after-payment",
-        "question": "After creating the contract and paying the fees, when is it documented?",
-        "answer": "The contract is documented instantly via Ejar after payment is completed and all parties give their electronic approval."
-      },
-      {
-        "id": "services",
-        "question": "What services does the Aqadi app and website offer?",
-        "answer": "Aqadi offers: creating residential and commercial rental contracts, documenting contracts via Ejar, renewing and terminating contracts, and fully managing properties and tenants."
-      },
-      {
-        "id": "licensed",
-        "question": "Is Aqadi Real Estate licensed by the relevant authorities?",
-        "answer": "Yes, Aqadi Real Estate is licensed by the Real Estate General Authority and accredited by the Ejar network under the Ministry of Housing."
-      }
-    ]
+    "loading": "Loading questions...",
+    "error": "Unable to load questions right now. Please try again later.",
+    "empty": "No questions are available at the moment."
   },
   "blog": {
     "latest": {
@@ -576,6 +537,8 @@
       "rememberMe": "Remember me",
       "togglePasswordVisibility": "Show or hide password",
       "submit": "Sign in",
+      "submitSuccess": "Signed in successfully",
+      "submitError": "Unable to sign in, please check your credentials",
       "or": "OR",
       "noAccount": "Don't have an account!",
       "createAccount": "Create a new account",
@@ -599,6 +562,8 @@
       "passwordPlaceholder": "Enter your password here ...",
       "togglePasswordVisibility": "Show or hide password",
       "submit": "Create your account now",
+      "submitSuccess": "Account created successfully",
+      "submitError": "Unable to create your account, please try again",
       "or": "OR",
       "hasAccount": "Already have an account!",
       "signIn": "Sign in",
@@ -629,11 +594,16 @@
       "defaultPhone": "+966563153879",
       "otpLabel": "OTP verification code",
       "submit": "Confirm code",
+      "submitSuccess": "Mobile number verified successfully",
+      "submitError": "Unable to verify the code, please try again",
+      "phoneMissing": "Mobile number is missing, please register again",
       "notReceived": "Didn't receive the code?",
       "resend": "Resend OTP verification code",
+      "resendSuccess": "A new verification code has been sent",
+      "resendError": "Unable to resend the verification code, please try again",
       "validation": {
         "otpRequired": "Verification code is required",
-        "otpInvalid": "Please enter a valid 6-digit code"
+        "otpInvalid": "Please enter a valid 4-digit code"
       }
     },
     "forgotPassword": {
@@ -643,6 +613,8 @@
       "phoneLabel": "Mobile number",
       "phonePlaceholder": "5x xxx xx xx",
       "submit": "Send verification code",
+      "submitSuccess": "A new password reset code has been sent to your registered mobile number",
+      "submitError": "Unable to send the verification code, please try again",
       "or": "OR",
       "rememberedPassword": "Remembered your password?",
       "backToLogin": "Back to sign in",
@@ -661,6 +633,9 @@
       "confirmPasswordPlaceholder": "Confirm your new password here...",
       "togglePasswordVisibility": "Show or hide password",
       "submit": "Save new password",
+      "submitSuccess": "Your password has been reset successfully",
+      "submitError": "Unable to reset your password, please try again",
+      "sessionMissing": "Verification session expired, please start again from forgot password",
       "validation": {
         "passwordRequired": "Password is required",
         "passwordMin": "Password must be at least 8 characters",

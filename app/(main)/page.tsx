@@ -1,6 +1,6 @@
 import AppSection from "@/features/app/components/app-section";
 import AdvantagesSection from "@/features/advantages/components/advantages-section";
-import FaqSection from "@/features/faq/components/faq-section";
+import FaqSectionBoundary from "@/features/faq/components/faq-section-boundary";
 import HeroSection from "@/features/home/components/hero-section";
 import TrustedEntitiesSection from "@/features/home/components/trusted-entities-section";
 import PricingSection from "@/features/pricing/components/pricing-section";
@@ -20,7 +20,7 @@ export default async function Home() {
   <PricingSection />
   <SupportSection />
   <AppSection />
-  <FaqSection />
+  <FaqSectionBoundary />
 </main>
   );
 }

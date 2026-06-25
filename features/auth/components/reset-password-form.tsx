@@ -1,10 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUpLeft } from "lucide-react";
+import { ArrowUpLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import ResetPasswordPasswordField from "@/features/auth/components/reset-password-password-field";
@@ -12,12 +13,14 @@ import {
   createResetPasswordSchema,
   type ResetPasswordFormValues,
 } from "@/features/auth/schemas/reset-password-schema";
+import { resetPassword } from "@/features/auth/services/reset-password";
 
 type ResetPasswordFormProps = {
   phone?: string;
+  code?: string;
 };
 
-export default function ResetPasswordForm({ phone }: ResetPasswordFormProps) {
+export default function ResetPasswordForm({ phone, code }: ResetPasswordFormProps) {
   const t = useTranslations("auth.resetPassword");
   const router = useRouter();
 
@@ -36,8 +39,27 @@ export default function ResetPasswordForm({ phone }: ResetPasswordFormProps) {
     },
   });
 
-  function onSubmit(values: ResetPasswordFormValues) {
-    console.log("Reset password submitted:", { ...values, phone });
+  const { isSubmitting } = form.formState;
+
+  async function onSubmit(values: ResetPasswordFormValues) {
+    if (!phone || !code) {
+      toast.error(t("sessionMissing"));
+      return;
+    }
+
+    const response = await resetPassword({
+      phone,
+      code,
+      password: values.password,
+      passwordConfirmation: values.confirmPassword,
+    });
+
+    if (!response.ok) {
+      toast.error(response.error || t("submitError"));
+      return;
+    }
+
+    toast.success(response.message || t("submitSuccess"));
     router.push("/login");
   }
 
@@ -66,14 +88,20 @@ export default function ResetPasswordForm({ phone }: ResetPasswordFormProps) {
 
       <Button
         type="submit"
-        disabled={form.formState.isSubmitting}
+        disabled={isSubmitting}
         className="group h-12 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand/90"
       >
-        {t("submit")}
-        <ArrowUpLeft
-          className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
-          aria-hidden="true"
-        />
+        {isSubmitting ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <>
+            {t("submit")}
+            <ArrowUpLeft
+              className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
+              aria-hidden="true"
+            />
+          </>
+        )}
       </Button>
     </form>
   );

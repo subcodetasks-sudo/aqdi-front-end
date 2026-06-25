@@ -1,8 +1,10 @@
+import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phone";
+
 type VerifyOtpFlow = "register" | "forgot-password";
 
 export function buildVerifyOtpUrl(phone: string, flow: VerifyOtpFlow) {
   const params = new URLSearchParams({
-    phone,
+    phone: getSaudiMobileForApi(phone),
     flow,
   });
 

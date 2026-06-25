@@ -43,7 +43,7 @@ export default function RegisterEmailField({
               aria-invalid={fieldState.invalid}
               placeholder={placeholder}
               autoComplete="email"
-              dir="ltr"
+              // dir="ltr"
               className={cn(
                 "auth-password-input h-14 rounded-full border-[#d6d6d6] bg-[#f7f7f7] pe-4 ps-12 text-start text-base placeholder:text-[#9ca3af] focus-visible:border-[#bdbdbd] focus-visible:ring-[3px] focus-visible:ring-brand/12 md:text-sm",
                 fieldState.invalid &&

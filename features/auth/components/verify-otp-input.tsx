@@ -28,22 +28,27 @@ export default function VerifyOtpInput({ control, label }: VerifyOtpInputProps) 
             <span className="text-destructive">*</span>
           </FieldLabel>
 
-          <InputOTP
-            dir="ltr"
-            id="otp"
-            maxLength={6}
-            value={field.value}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            containerClassName="justify-center"
-            className={cn(fieldState.invalid && "aria-invalid")}
-          >
-            <InputOTPGroup className="gap-2 border-0 shadow-none ring-0">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <VerifyOtpSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+          <div dir="ltr" className="w-full">
+            <InputOTP
+              dir="ltr"
+              id="otp"
+              maxLength={4}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              containerClassName="justify-center"
+              className={cn(fieldState.invalid && "aria-invalid")}
+            >
+              <InputOTPGroup
+                dir="ltr"
+                className="gap-2 border-0 shadow-none ring-0"
+              >
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <VerifyOtpSlot key={index} index={index} />
+                ))}
+              </InputOTPGroup>
+            </InputOTP>
+          </div>
 
           {fieldState.invalid ? (
             <FieldError errors={[fieldState.error]} />

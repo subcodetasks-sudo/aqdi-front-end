@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUpLeft } from "lucide-react";
+import { ArrowUpLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,9 +17,13 @@ import {
   createLoginSchema,
   type LoginFormValues,
 } from "@/features/auth/schemas/login-schema";
+import { loginUser } from "@/features/auth/services/login-user";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 
 export default function LoginForm() {
   const t = useTranslations("auth.login");
+  const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const schema = createLoginSchema({
     phoneRequired: t("validation.phoneRequired"),
@@ -35,8 +41,19 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values: LoginFormValues) {
-    console.log("Login submitted:", values);
+  const { isSubmitting } = form.formState;
+
+  async function onSubmit(values: LoginFormValues) {
+    const response = await loginUser(values);
+
+    if (!response.ok) {
+      toast.error(response.error || t("submitError"));
+      return;
+    }
+
+    setUser(response.user);
+    toast.success(response.message || t("submitSuccess"));
+    router.push("/");
   }
 
   return (
@@ -93,14 +110,20 @@ export default function LoginForm() {
 
       <Button
         type="submit"
-        disabled={form.formState.isSubmitting}
+        disabled={isSubmitting}
         className="group h-12 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand/90"
       >
-        {t("submit")}
-        <ArrowUpLeft
-          className="size-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300"
-          aria-hidden="true"
-        />
+        {isSubmitting ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <>
+            {t("submit")}
+            <ArrowUpLeft
+              className="size-4 -rotate-45 transition-transform duration-300 group-hover:rotate-0"
+              aria-hidden="true"
+            />
+          </>
+        )}
       </Button>
     </form>
   );

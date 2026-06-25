@@ -10,7 +10,7 @@ export function createVerifyOtpSchema(messages: VerifyOtpSchemaMessages) {
     otp: z
       .string()
       .min(1, messages.otpRequired)
-      .regex(/^\d{6}$/, messages.otpInvalid),
+      .regex(/^\d{4}$/, messages.otpInvalid),
   });
 }
 

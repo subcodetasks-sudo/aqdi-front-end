@@ -1,12 +1,11 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-import FaqPageSection from "@/features/faq/components/faq-page-section";
-import SupportSection from "@/features/support/components/support-section";
+import FaqSection from "@/features/faq/components/faq-section";
 import { faqKeys } from "@/features/faq/query-keys";
 import { getCommonQuestions } from "@/features/faq/services/get-common-questions";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
 
-export default async function FaqPage() {
+export default async function FaqSectionBoundary() {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -15,11 +14,8 @@ export default async function FaqPage() {
   });
 
   return (
-    <>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <FaqPageSection />
-      </HydrationBoundary>
-      <SupportSection />
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FaqSection />
+    </HydrationBoundary>
   );
 }
