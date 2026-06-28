@@ -27,7 +27,7 @@ export default function UserSheetSocialBar({
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-full bg-brand-background px-4 py-3">
+    <div className="flex  items-center justify-center gap-4 rounded-3xl bg-brand-background px-4 py-3">
       <p className="text-sm font-bold text-foreground">{followUs}</p>
 
       <div className="flex items-center gap-2">

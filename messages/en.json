@@ -49,7 +49,9 @@
       "sectionTitle": "Account Settings",
       "language": "Language",
       "notifications": "Turn off notifications",
-      "logout": "Log out"
+      "logout": "Log out",
+      "logoutSuccess": "Signed out successfully",
+      "logoutError": "Unable to sign out, please try again"
     },
     "social": {
       "followUs": "Follow us:",
@@ -679,6 +681,28 @@
         "passwordMin": "Password must be at least 8 characters",
         "confirmPasswordRequired": "Password confirmation is required",
         "passwordsMismatch": "Passwords do not match"
+      }
+    },
+    "profile": {
+      "back": "Back",
+      "avatarAlt": "User avatar",
+      "fullNameLabel": "First and last name",
+      "fullNamePlaceholder": "Enter your first and last name here...",
+      "phoneLabel": "Mobile number",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Save",
+      "submitSuccess": "Changes saved successfully",
+      "submitError": "Unable to save changes, please try again",
+      "passwordUpdateError": "Name was saved, but the password could not be updated",
+      "deleteAccount": "Delete account",
+      "deleteAccountUnavailable": "Account deletion is not available yet",
+      "validation": {
+        "fullNameRequired": "Name is required",
+        "fullNameMin": "Please enter your full name",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters"
       }
     }
   },

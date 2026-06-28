@@ -169,9 +169,9 @@ export default function NavbarMobileSheet({
               </Link>
             </SheetClose>
             <SheetClose asChild>
-              <Link href="/blog" className={topLinkClassName}>
+              <a href="https://blogs.aqdi.sa/" className={topLinkClassName}>
                 {blog}
-              </Link>
+              </a>
             </SheetClose>
             <SheetClose asChild>
               <Link href="/faq" className={topLinkClassName}>

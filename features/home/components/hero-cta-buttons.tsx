@@ -15,7 +15,7 @@ export default function HeroCtaButtons({
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
       <div className="flex flex-1 flex-col items-center gap-2">
-        <Link href="/create-contract?id=residential">
+        <Link href="/create-contract?id=residential" className="w-full">
           <HeroCtaButton
             label={residentialCta}
             iconSrc="/icons/housing.svg"

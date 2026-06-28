@@ -4,7 +4,7 @@ export default function AuthFormOnlyLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="relative flex min-h-screen items-center justify-center p-6">
+    <main className="relative flex min-h-screen items-center justify-center bg-brand-background p-6">
       {children}
     </main>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,8 @@ type UserSheetMenuRowProps = {
   trailing?: ReactNode;
   external?: boolean;
   className?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
 };
 
 export default function UserSheetMenuRow({
@@ -24,24 +26,35 @@ export default function UserSheetMenuRow({
   trailing,
   external = false,
   className,
+  isLoading = false,
+  disabled = false,
 }: UserSheetMenuRowProps) {
+  const isDisabled = disabled || isLoading;
+
   const rowClassName = cn(
     "flex w-full items-center gap-3 text-start transition-colors hover:text-brand",
+    isDisabled && "pointer-events-none opacity-60",
     className,
   );
 
   const content = (
     <>
-      <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-white text-brand">
+      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-brand">
         {icon}
       </span>
       <span className="flex-1 text-sm font-bold text-foreground">{label}</span>
-      {trailing ?? (
-        <ChevronLeft
-          className="size-5 shrink-0 text-muted-foreground"
-          aria-hidden="true"
-        />
-      )}
+      {trailing ??
+        (isLoading ? (
+          <Loader2
+            className="size-5 shrink-0 animate-spin text-muted-foreground"
+            aria-hidden="true"
+          />
+        ) : (
+          <ChevronLeft
+            className="size-5 shrink-0 text-muted-foreground"
+            aria-hidden="true"
+          />
+        ))}
     </>
   );
 
@@ -54,6 +67,7 @@ export default function UserSheetMenuRow({
       <Link
         href={href}
         className={rowClassName}
+        aria-disabled={isDisabled}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {content}
@@ -62,7 +76,12 @@ export default function UserSheetMenuRow({
   }
 
   return (
-    <button type="button" onClick={onClick} className={rowClassName}>
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={isDisabled}
+      className={rowClassName}
+    >
       {content}
     </button>
   );

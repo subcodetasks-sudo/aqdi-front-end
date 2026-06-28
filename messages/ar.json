@@ -49,7 +49,9 @@
       "sectionTitle": "اعدادات الحساب",
       "language": "اللغة",
       "notifications": "ايقاف الاشعارات",
-      "logout": "تسجيل الخروج"
+      "logout": "تسجيل الخروج",
+      "logoutSuccess": "تم تسجيل الخروج بنجاح",
+      "logoutError": "تعذر تسجيل الخروج، يرجى المحاولة مرة أخرى"
     },
     "social": {
       "followUs": "تابعنا :",
@@ -679,6 +681,28 @@
         "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
         "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
         "passwordsMismatch": "كلمتا المرور غير متطابقتين"
+      }
+    },
+    "profile": {
+      "back": "العودة",
+      "avatarAlt": "صورة المستخدم",
+      "fullNameLabel": "الاسم الأول و الاخير",
+      "fullNamePlaceholder": "أدخل الاسم الأول و الاخير هنا ...",
+      "phoneLabel": "رقم الجوال",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
+      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
+      "submit": "حفظ",
+      "submitSuccess": "تم حفظ التغييرات بنجاح",
+      "submitError": "تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى",
+      "passwordUpdateError": "تم حفظ الاسم، لكن تعذر تحديث كلمة المرور",
+      "deleteAccount": "حذف الحساب",
+      "deleteAccountUnavailable": "حذف الحساب غير متاح حالياً",
+      "validation": {
+        "fullNameRequired": "الاسم مطلوب",
+        "fullNameMin": "يرجى إدخال الاسم الكامل",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
       }
     }
   },

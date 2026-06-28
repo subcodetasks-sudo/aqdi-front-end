@@ -5,8 +5,6 @@ type RegisterSchemaMessages = {
   fullNameMin: string;
   phoneRequired: string;
   phoneInvalid: string;
-  emailRequired: string;
-  emailInvalid: string;
   passwordRequired: string;
   passwordMin: string;
   termsRequired: string;
@@ -25,10 +23,6 @@ export function createRegisterSchema(messages: RegisterSchemaMessages) {
         (value) => /^\+9665\d{8}$/.test(value.replace(/\s/g, "")),
         messages.phoneInvalid
       ),
-    email: z
-      .string()
-      .min(1, messages.emailRequired)
-      .email(messages.emailInvalid),
     password: z
       .string()
       .min(1, messages.passwordRequired)

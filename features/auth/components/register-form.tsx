@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import RegisterEmailField from "@/features/auth/components/register-email-field";
 import RegisterNameField from "@/features/auth/components/register-name-field";
 import RegisterPasswordField from "@/features/auth/components/register-password-field";
 import RegisterPhoneField from "@/features/auth/components/register-phone-field";
@@ -29,8 +28,6 @@ export default function RegisterForm() {
     fullNameMin: t("validation.fullNameMin"),
     phoneRequired: t("validation.phoneRequired"),
     phoneInvalid: t("validation.phoneInvalid"),
-    emailRequired: t("validation.emailRequired"),
-    emailInvalid: t("validation.emailInvalid"),
     passwordRequired: t("validation.passwordRequired"),
     passwordMin: t("validation.passwordMin"),
     termsRequired: t("validation.termsRequired"),
@@ -41,7 +38,6 @@ export default function RegisterForm() {
     defaultValues: {
       fullName: "",
       phone: "",
-      email: "",
       password: "",
       acceptTerms: false,
     },
@@ -76,12 +72,6 @@ export default function RegisterForm() {
         control={form.control}
         label={t("phoneLabel")}
         placeholder={t("phonePlaceholder")}
-      />
-
-      <RegisterEmailField
-        control={form.control}
-        label={t("emailLabel")}
-        placeholder={t("emailPlaceholder")}
       />
 
       <RegisterPasswordField

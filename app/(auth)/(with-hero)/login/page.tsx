@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
 import AuthBackButton from "@/features/auth/components/auth-back-button";
@@ -16,7 +17,9 @@ export default async function LoginPage() {
 
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-4 py-4">
         <LoginHeader greeting={t("greeting")} subtitle={t("subtitle")} />
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
         <LoginFooter
           orLabel={t("or")}
           noAccount={t("noAccount")}

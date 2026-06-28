@@ -172,6 +172,16 @@
     scrollbar-width: none; /* Firefox */
   }
 
+  .auth-phone-input--readonly .react-international-phone-input-container {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+  }
+
+  .auth-phone-input--readonly .react-international-phone-input {
+    color: #6b7280;
+    cursor: not-allowed;
+  }
+
   .auth-phone-input {
     --react-international-phone-height: 3.5rem;
     --react-international-phone-border-radius: 9999px;

@@ -13,15 +13,15 @@ export default function UserSheetHeader({
   closeLabel,
 }: UserSheetHeaderProps) {
   return (
-    <div className="flex items-center justify-between border-b border-border/60 pb-4">
+    <div className="flex items-center justify-between pb-4">
+
+      <h2 className="text-lg font-bold text-foreground">{title}</h2>
       <SheetClose
         className="inline-flex size-8 items-center justify-center rounded-full text-foreground transition-colors hover:text-brand"
         aria-label={closeLabel}
       >
         <X className="size-5" aria-hidden="true" />
       </SheetClose>
-
-      <h2 className="text-lg font-bold text-foreground">{title}</h2>
     </div>
   );
 }

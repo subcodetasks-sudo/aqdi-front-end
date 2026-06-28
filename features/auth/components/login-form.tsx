@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowUpLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -19,10 +19,12 @@ import {
 } from "@/features/auth/schemas/login-schema";
 import { loginUser } from "@/features/auth/services/login-user";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { getSafeCallbackUrl } from "@/lib/auth/auth-routes";
 
 export default function LoginForm() {
   const t = useTranslations("auth.login");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setUser = useAuthStore((state) => state.setUser);
 
   const schema = createLoginSchema({
@@ -53,7 +55,7 @@ export default function LoginForm() {
 
     setUser(response.user);
     toast.success(response.message || t("submitSuccess"));
-    router.push("/");
+    router.push(getSafeCallbackUrl(searchParams.get("callbackUrl")));
   }
 
   return (

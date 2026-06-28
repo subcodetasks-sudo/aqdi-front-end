@@ -2,10 +2,10 @@
 
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { Globe, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import {
   Sheet,
@@ -20,8 +20,8 @@ import UserSheetMenuRow from "@/features/auth/components/user-sheet-menu-row";
 import UserSheetProfileSection from "@/features/auth/components/user-sheet-profile-section";
 import UserSheetSectionCard from "@/features/auth/components/user-sheet-section-card";
 import UserSheetSocialBar from "@/features/auth/components/user-sheet-social-bar";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
-import UserSheetPolicyLinkIcon from "@/features/auth/components/user-sheet-policy-link-icon";
 
 type UserSheetProps = {
   children: ReactNode;
@@ -29,23 +29,28 @@ type UserSheetProps = {
 
 export default function UserSheet({ children }: UserSheetProps) {
   const t = useTranslations("userSheet");
-  const router = useRouter();
   const user = useAuthStore((state) => state.user);
-  const clearUser = useAuthStore((state) => state.clearUser);
+  const { logout, isLoading: isLoggingOut } = useLogout();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
-  function handleLogout() {
-    clearUser();
-    router.push("/login");
+  async function handleLogout() {
+    const response = await logout();
+
+    if (!response.ok) {
+      toast.error(response.error || t("accountSettings.logoutError"));
+      return;
+    }
+
+    toast.success(response.message || t("accountSettings.logoutSuccess"));
   }
 
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
-        side="right"
+        side="left"
         showCloseButton={false}
-        className="flex h-full w-full max-w-md flex-col gap-0 overflow-y-auto rounded-tl-[40px] p-4 sm:max-w-md"
+        className="flex h-full w-full max-w-md flex-col gap-0 overflow-y-auto rounded-tr-[40px] rounded-br-[40px] p-6 sm:max-w-md no-scrollbar"
       >
         <UserSheetHeader title={t("title")} closeLabel={t("close")} />
 
@@ -61,12 +66,12 @@ export default function UserSheet({ children }: UserSheetProps) {
           <UserSheetSectionCard title={t("policies.sectionTitle")}>
             <UserSheetMenuRow
               label={t("policies.terms")}
-              icon={<UserSheetPolicyLinkIcon />}
+              icon={<CustomIcon src="/icons/arrow-circle.svg" size={16} />}
               href={t("policies.termsHref")}
             />
             <UserSheetMenuRow
               label={t("policies.privacy")}
-              icon={<UserSheetPolicyLinkIcon />}
+              icon={<CustomIcon src="/icons/arrow-circle.svg" size={16} className="rotate-90" />}
               href={t("policies.privacyHref")}
             />
           </UserSheetSectionCard>
@@ -81,11 +86,11 @@ export default function UserSheet({ children }: UserSheetProps) {
           </UserSheetSectionCard>
 
           <UserSheetSectionCard title={t("accountSettings.sectionTitle")}>
-            <UserSheetMenuRow
+            {/* <UserSheetMenuRow
               label={t("accountSettings.language")}
               icon={<Globe className="size-4" aria-hidden="true" />}
               href="#"
-            />
+            /> */}
             <UserSheetMenuRow
               label={t("accountSettings.notifications")}
               icon={
@@ -97,6 +102,7 @@ export default function UserSheet({ children }: UserSheetProps) {
               }
               trailing={
                 <Switch
+                  dir="ltr"
                   checked={notificationsEnabled}
                   onCheckedChange={setNotificationsEnabled}
                   className="data-checked:bg-brand-secondary"
@@ -108,6 +114,7 @@ export default function UserSheet({ children }: UserSheetProps) {
               label={t("accountSettings.logout")}
               icon={<LogOut className="size-4" aria-hidden="true" />}
               onClick={handleLogout}
+              isLoading={isLoggingOut}
             />
           </UserSheetSectionCard>
 

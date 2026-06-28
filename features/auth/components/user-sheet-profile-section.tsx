@@ -6,6 +6,7 @@ import { ChevronLeft, User } from "lucide-react";
 import UserSheetSectionCard from "@/features/auth/components/user-sheet-section-card";
 import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
 import type { AuthUser } from "@/features/auth/types/auth-user";
+import CustomIcon from "@/features/shared/components/custom-icon";
 
 type UserSheetProfileSectionProps = {
   user: AuthUser;
@@ -24,7 +25,7 @@ export default function UserSheetProfileSection({
   return (
     <UserSheetSectionCard title={sectionTitle}>
       <Link
-        href="#"
+        href="/profile"
         className="flex w-full items-center gap-3 text-start transition-colors hover:text-brand"
       >
         <span className="relative inline-flex size-14 shrink-0 overflow-hidden rounded-full bg-white">
@@ -37,7 +38,7 @@ export default function UserSheetProfileSection({
             />
           ) : (
             <span className="flex size-full items-center justify-center bg-brand-background-green text-brand">
-              <User className="size-6" aria-hidden="true" />
+              <CustomIcon src="/icons/user.svg" size={16} />
             </span>
           )}
         </span>
@@ -46,7 +47,7 @@ export default function UserSheetProfileSection({
           <span className="block truncate text-base font-bold text-foreground">
             {displayName}
           </span>
-          <span className="mt-1 block truncate text-sm font-medium text-gray-500">
+          <span dir="ltr" className="text-right mt-1 block truncate text-sm font-medium text-gray-500">
             {displayPhone}
           </span>
         </span>

@@ -1,7 +1,9 @@
+
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { Smartphone } from "lucide-react";
 
 import UserSheetStoreButton from "@/features/auth/components/user-sheet-store-button";
+import MobileAppLable from "@/features/shared/components/mobile-app-lable";
 
 type UserSheetAppDownloadProps = {
   title: string;
@@ -18,10 +20,11 @@ export default function UserSheetAppDownload({
 }: UserSheetAppDownloadProps) {
   return (
     <section className="space-y-3">
-      <div className="flex items-center gap-2">
-        <Smartphone className="size-5 text-brand" aria-hidden="true" />
-        <h3 className="text-sm font-bold text-foreground">{title}</h3>
-      </div>
+    <div className="flex items-center justify-center gap-2">
+      <Smartphone className="size-4 shrink-0 text-foreground" aria-hidden="true" />
+      <p className="text-sm font-bold text-black">{title}</p>
+      <div className="h-[3px] w-6 bg-black" />
+    </div> 
 
       <div className="flex items-stretch gap-3">
         <UserSheetStoreButton
