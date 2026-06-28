@@ -22,7 +22,45 @@
     },
     "cta": "ابدأ مع عقدي",
     "profile": "الملف الشخصي",
-    "menu": "القائمة"
+    "menu": "القائمة",
+    "myAccount": "حسابي",
+    "notifications": "الاشعارات"
+  },
+  "userSheet": {
+    "title": "حسابي",
+    "close": "إغلاق",
+    "profile": {
+      "sectionTitle": "الملف الشخصي",
+      "avatarAlt": "صورة المستخدم"
+    },
+    "policies": {
+      "sectionTitle": "الأنظمة والسياسات",
+      "terms": "الشروط والاحكام",
+      "privacy": "سياسة الخصوصية",
+      "termsHref": "/terms",
+      "privacyHref": "/privacy"
+    },
+    "helpCenter": {
+      "sectionTitle": "مركز المساعدة",
+      "whatsapp": "تواصل معنا عبر الواتساب",
+      "whatsappHref": "https://wa.me/"
+    },
+    "accountSettings": {
+      "sectionTitle": "اعدادات الحساب",
+      "language": "اللغة",
+      "notifications": "ايقاف الاشعارات",
+      "logout": "تسجيل الخروج"
+    },
+    "social": {
+      "followUs": "تابعنا :",
+      "youtube": "YouTube",
+      "twitter": "X",
+      "tiktok": "TikTok"
+    },
+    "downloadApp": "حمّل التطبيق الآن",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store"
   },
   "hero": {
     "badge": "عقدك الموثق من شبكة إيجار خلال دقائق",

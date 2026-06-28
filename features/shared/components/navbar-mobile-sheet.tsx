@@ -19,6 +19,9 @@ import CustomIcon from "@/features/shared/components/custom-icon";
 import { cn } from "@/lib/utils";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import UserSheet from "@/features/auth/components/user-sheet";
+import { HiBars2 } from "react-icons/hi2";
 
 type NavItem = {
   href: string;
@@ -45,6 +48,8 @@ type NavbarMobileSheetProps = {
   cta: string;
   profile: string;
   menu: string;
+  myAccount: string;
+  notifications: string;
   dialogLabels: StartWithAqdiDialogLabels;
 };
 
@@ -66,6 +71,8 @@ export default function NavbarMobileSheet({
   cta,
   profile,
   menu,
+  myAccount,
+  notifications,
   dialogLabels,
 }: NavbarMobileSheetProps) {
   const pathname = usePathname();
@@ -85,6 +92,7 @@ export default function NavbarMobileSheet({
   const topLinkClassName =
     "text-base font-bold text-black transition-colors hover:text-brand";
 
+  const {user}= useAuthStore()
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -174,6 +182,7 @@ export default function NavbarMobileSheet({
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-border/60 pt-4">
+          {!user&&
           <Link href="/login">
             <Button
               variant="outline"
@@ -184,6 +193,35 @@ export default function NavbarMobileSheet({
               <span className="leading-none">تسجيل الدخول</span>
             </Button>
           </Link>
+          }
+          {user && (
+            <div className="flex w-full flex-col gap-3">
+              <UserSheet>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full gap-2 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
+                  aria-label={profile}
+                >
+                  <HiBars2 className="text-gray-600" size={16} />
+                  <span className="leading-none">{myAccount}</span>
+                </Button>
+              </UserSheet>
+              <SheetClose asChild>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full gap-2 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
+                  aria-label={notifications}
+                >
+                  <CustomIcon
+                    src="/icons/notification-bell.svg"
+                    size={16}
+                    className="text-gray-600"
+                  />
+                  <span className="leading-none">{notifications}</span>
+                </Button>
+              </SheetClose>
+            </div>
+          )}
           <StartWithAqdiDialog labels={dialogLabels}>
             <Button className="group h-12 w-full gap-3 rounded-full bg-brand px-5 pe-2 text-sm font-semibold text-white hover:bg-brand/90">
               <span>{cta}</span>

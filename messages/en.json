@@ -22,7 +22,45 @@
     },
     "cta": "Start with Aqadi",
     "profile": "Profile",
-    "menu": "Menu"
+    "menu": "Menu",
+    "myAccount": "My Account",
+    "notifications": "Notifications"
+  },
+  "userSheet": {
+    "title": "My Account",
+    "close": "Close",
+    "profile": {
+      "sectionTitle": "Personal Profile",
+      "avatarAlt": "User avatar"
+    },
+    "policies": {
+      "sectionTitle": "Policies and Regulations",
+      "terms": "Terms and Conditions",
+      "privacy": "Privacy Policy",
+      "termsHref": "/terms",
+      "privacyHref": "/privacy"
+    },
+    "helpCenter": {
+      "sectionTitle": "Help Center",
+      "whatsapp": "Contact us via WhatsApp",
+      "whatsappHref": "https://wa.me/"
+    },
+    "accountSettings": {
+      "sectionTitle": "Account Settings",
+      "language": "Language",
+      "notifications": "Turn off notifications",
+      "logout": "Log out"
+    },
+    "social": {
+      "followUs": "Follow us:",
+      "youtube": "YouTube",
+      "twitter": "X",
+      "tiktok": "TikTok"
+    },
+    "downloadApp": "Download the app now",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store"
   },
   "hero": {
     "badge": "Your documented contract via Ejar network in minutes",

@@ -62,6 +62,8 @@ useEffect(() => {
         cta={t("cta")}
         profile={t("profile")}
         menu={t("menu")}
+        myAccount={t("myAccount")}
+        notifications={t("notifications")}
         dialogLabels={dialogLabels}
       />
         </div>
