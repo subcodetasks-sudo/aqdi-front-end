@@ -1,30 +1,55 @@
 "use client";
 
+import { toast } from "sonner";
+
 import CreateUnitDataForm from "@/features/create-unit/components/create-unit-data-form";
 import CreateUnitStepNavigation from "@/features/create-unit/components/create-unit-step-navigation";
 import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
+import { useSubmitUnit } from "@/features/create-unit/hooks/use-submit-unit";
+import {
+  useUnitTypeOptions,
+  useUnitUsageOptions,
+} from "@/features/create-unit/hooks/use-unit-lookup-options";
 import { useCreateUnitStep } from "@/features/create-unit/hooks/use-create-unit-step";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 
 type CreateUnitStepProps = {
   labels: CreateUnitLabels;
+  propertyId: number | null;
+  contractType: PropertyContractType;
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreateUnitStep({
   labels,
+  propertyId,
+  contractType,
   onBack,
   onComplete,
 }: CreateUnitStepProps) {
   const { unitData, setUnitData, canContinue } = useCreateUnitStep();
+  const { isSubmitting, submitUnit } = useSubmitUnit(propertyId);
+  const unitTypesQuery = useUnitTypeOptions(contractType);
+  const unitUsageQuery = useUnitUsageOptions(contractType);
 
-  function handleContinue() {
-    if (!canContinue) {
+  const isLoadingOptions =
+    unitTypesQuery.isLoading || unitUsageQuery.isLoading;
+  const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
+
+  async function handleContinue() {
+    if (!canContinue || isSubmitting || isLoadingOptions || optionsError) {
       return;
     }
 
-    // TODO: integrate with unit creation API
+    const result = await submitUnit();
+
+    if (!result.ok) {
+      toast.error(result.error || labels.navigation.submitError);
+      return;
+    }
+
     onComplete();
   }
 
@@ -36,17 +61,37 @@ export default function CreateUnitStep({
           subtitle={labels.subtitle}
         />
 
-        <CreateUnitDataForm
-          labels={labels}
-          value={unitData}
-          onChange={setUnitData}
-        />
+        {optionsError ? (
+          <p className="text-sm text-red-500">
+            {optionsError instanceof Error
+              ? optionsError.message
+              : labels.navigation.submitError}
+          </p>
+        ) : null}
+
+        {isLoadingOptions ? (
+          <div className="space-y-3 py-4">
+            <div className="h-14 animate-pulse rounded-full bg-brand-background" />
+            <div className="h-14 animate-pulse rounded-full bg-brand-background" />
+          </div>
+        ) : (
+          <CreateUnitDataForm
+            labels={labels}
+            unitTypeOptions={unitTypesQuery.data ?? []}
+            unitUsageOptions={unitUsageQuery.data ?? []}
+            value={unitData}
+            onChange={setUnitData}
+          />
+        )}
       </div>
 
       <CreateUnitStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
+        canContinue={canContinue && !isLoadingOptions && !optionsError}
+        isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={handleContinue}
       />

@@ -91,7 +91,7 @@
   },
   "trustedEntities": {
     "badge": "جهات موثوقة ومعتمدة",
-    "titlePrefix": "مرخصون من الجهات" ,
+    "titlePrefix": "مرخصون من الجهات",
     "titleAccent": " الرسمية",
     "description": "نعمل وفق الأنظمة المعتمدة لضمان موثوقية وأمان جميع التعاملات",
     "viewLicense": "عرض الترخيص",
@@ -329,24 +329,46 @@
     "quickLinks": {
       "title": "روابط سريعة",
       "items": [
-        { "label": "من نحن", "href": "/about" },
-        { "label": "المدونة", "href": "#" },
-        { "label": "الأسئلة الشائعة", "href": "#" }
+        {
+          "label": "من نحن",
+          "href": "/about"
+        },
+        {
+          "label": "المدونة",
+          "href": "#"
+        },
+        {
+          "label": "الأسئلة الشائعة",
+          "href": "#"
+        }
       ]
     },
     "importantLinks": {
       "title": "روابط مهمة",
       "items": [
-        { "label": "توثيق عقد سكني", "href": "#" },
-        { "label": "توثيق عقد تجاري", "href": "#" },
-        { "label": "العقود", "href": "#" }
+        {
+          "label": "توثيق عقد سكني",
+          "href": "#"
+        },
+        {
+          "label": "توثيق عقد تجاري",
+          "href": "#"
+        },
+        {
+          "label": "العقود",
+          "href": "#"
+        }
       ]
     },
     "licenses": {
       "title": "التراخيص",
       "items": [
-        { "label": "السجل التجاري : 7000000001" },
-        { "label": "الرقم الضريبي : 7000000006" }
+        {
+          "label": "السجل التجاري : 7000000001"
+        },
+        {
+          "label": "الرقم الضريبي : 7000000006"
+        }
       ]
     },
     "support": {
@@ -513,7 +535,11 @@
       },
       "comments": {
         "title": "التعليقات",
-        "tags": ["#إيجار", "#عقود", "#قانون"],
+        "tags": [
+          "#إيجار",
+          "#عقود",
+          "#قانون"
+        ],
         "authorImageAlt": "صورة عبد الله",
         "likeAriaLabel": "إعجاب بالتعليق",
         "shareAriaLabel": "مشاركة التعليق",
@@ -715,7 +741,26 @@
     "description": "الآن تستطيع حفظ بيانات العقار وإعادة إنشاء العقود عليها بكل سهولة ودون الحاجة لتعبئة البيانات.",
     "cta": "إضافة عقار جديد",
     "visualAlt": "رسم توضيحي لإدارة بيانات العقار وإنشاء العقود",
-    "downloadApp": "حمل التطبيق الآن"
+    "downloadApp": "حمل التطبيق الآن",
+    "typeDialog": {
+      "title": "العقار",
+      "close": "إغلاق",
+      "mainTitle": "اختر نوع العقار",
+      "subtitle": "( اختر العقار الذي ترغب به ( سكني - تجاري )",
+      "iconAlt": "إضافة عقار",
+      "options": {
+        "residential": {
+          "title": "أنشئ عقارك السكني",
+          "description": "... عمارة، شقة، فيلا، غرفة",
+          "iconAlt": "عقار سكني"
+        },
+        "commercial": {
+          "title": "أنشئ عقارك التجاري",
+          "description": "... محل، سوق، فندق، مصنع",
+          "iconAlt": "عقار تجاري"
+        }
+      }
+    }
   },
   "requests": {
     "backLabel": "رجوع",
@@ -811,6 +856,11 @@
     "backLabel": "رجوع",
     "pageTitle": "عقاراتي",
     "addProperty": "إضافة عقار جديد",
+    "emptyState": "لا يوجد لديك عقارات حتى الآن.",
+    "contractTypes": {
+      "housing": "عقار سكني",
+      "commercial": "عقار تجاري"
+    },
     "card": {
       "requestDateLabel": "تاريخ الطلب:",
       "deleteProperty": "حذف العقار",
@@ -827,29 +877,7 @@
         "addUnit": "إضافة وحدة جديدة للعقار",
         "createContract": "إنشاء عقد إيجار على هذا العقار"
       }
-    },
-    "items": [
-      {
-        "id": "property-1",
-        "title": "عمارة في حي النرجس",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-2",
-        "title": "عمارة في حي النرجس",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-3",
-        "title": "عمارة في حي النرجس",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-4",
-        "title": "عمارة في حي النرجس",
-        "date": "01-01-2025"
-      }
-    ]
+    }
   },
   "propertyUnits": {
     "backLabel": "رجوع",
@@ -976,6 +1004,8 @@
   "createProperty": {
     "backLabel": "رجوع",
     "pageTitle": "إضافة عقار جديد",
+    "pageTitleResidential": "إضافة عقار سكني",
+    "pageTitleCommercial": "إضافة عقار تجاري",
     "stepper": {
       "steps": {
         "deed": "وثيقة الملكية",
@@ -996,16 +1026,14 @@
         "placeholder": "إختر من هنا ...",
         "clearSelection": "إزالة نوع الصك",
         "types": {
-          "electronic-justice-ministry": "صك ملكيه الكتروني من وزراة العدل",
-          "electronic-real-estate-registry": "صك ملكيه الكتروني من السجل العقاري",
-          "paper": "صك ملكيه ورقي",
-          "deceased-owner": "صك ملكيه والمالك متوفي",
-          "waqf-owner": "صك ملكيه والمالك وقف",
-          "sale-paper": "ورقة مبايعه",
-          "economic-cities-authority": "وثيقة هيئة المدن الاقتصاديه",
-          "adverse-possession": "حجة استحكام",
-          "sublease-contract": "عقد ايجار من الباطن",
-          "lease-renewal": "تجديد عقد ايجار"
+          "electronic_deed_from_the_ministry_of_justice": "صك ملكية الكتروني من وزارة العدل",
+          "electronic_tax_register": "صك ملكية الكتروني من السجل العقاري",
+          "old_handwritten": "صك ملكية ورقي",
+          "property_ownership_owner_are_deceased_endowment": "صك ملكية والمالك متوفي",
+          "property_ownership_owner_is_endowment": "صك ملكية والمالك وقف",
+          "sale_agreement": "ورقة مبايعة",
+          "economic_cities_authority_suspended": "وثيقة هيئة المدن الاقتصادية",
+          "strong_argument": "حجة استحكام"
         }
       },
       "deedImage": {
@@ -1022,13 +1050,21 @@
     "address": {
       "navigation": {
         "previous": "السابق",
-        "continue": "متابعة"
+        "continue": "متابعة",
+        "submitting": "جاري الحفظ...",
+        "submitError": "تعذر حفظ بيانات العقار. حاول مرة أخرى."
       },
       "title": "العنوان الوطني للعقار",
       "subtitle": "إختر الطريقة المفضلة لك :",
       "nationalAddress": {
-        "methods": ["الخريطة", "إرفاق صورة", "إدخال رابط"],
+        "methods": [
+          "الخريطة",
+          "إرفاق صورة",
+          "إدخال رابط"
+        ],
         "mapTitle": "خريطة العنوان الوطني",
+        "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
+        "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
@@ -1059,12 +1095,15 @@
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
           "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "iban": "رقم الآيبان للمالك",
+          "ibanInvalid": "رقم الآيبان يجب أن يكون سعوديًا صالحًا",
           "hasAgent": "هل يوجد وكيل للمالك",
           "powerOfAttorney": "إرفاق صورة الوكالة"
         },
         "fieldErrors": {
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل"
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
       },
       "phases": [
@@ -1101,6 +1140,10 @@
           "label": "رقم جوال المالك",
           "placeholder": "5x xxx xx xx"
         },
+        "iban": {
+          "label": "رقم الآيبان للمالك",
+          "placeholder": "SA00 0000 0000 0000 0000 0000"
+        },
         "hasAgent": {
           "label": "هل يوجد وكيل للمالك ؟",
           "placeholder": "إختر من هنا ...",
@@ -1135,7 +1178,9 @@
     "review": {
       "navigation": {
         "previous": "السابق",
-        "continue": "متابعة"
+        "continue": "متابعة",
+        "submitting": "جاري الحفظ...",
+        "submitError": "تعذر حفظ بيانات المالك. حاول مرة أخرى."
       },
       "title": "إسم العقار",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
@@ -1167,7 +1212,9 @@
     "pageTitle": "إنشاء وحدة سكنية جديدة",
     "navigation": {
       "previous": "السابق",
-      "continue": "متابعة"
+      "continue": "متابعة",
+      "submitting": "جاري الحفظ...",
+      "submitError": "تعذر إنشاء الوحدة. حاول مرة أخرى."
     },
     "title": "بيانات الوحدة المؤجرة",
     "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
@@ -1350,7 +1397,11 @@
         "closePreview": "إغلاق"
       },
       "nationalAddress": {
-        "methods": ["الخريطة", "إرفاق صورة", "إدخال رابط"],
+        "methods": [
+          "الخريطة",
+          "إرفاق صورة",
+          "إدخال رابط"
+        ],
         "mapTitle": "خريطة العنوان الوطني",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",

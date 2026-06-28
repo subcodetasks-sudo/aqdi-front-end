@@ -1,9 +1,12 @@
 "use client";
 
+import { toast } from "sonner";
+
 import CreatePropertyNameField from "@/features/create-property/components/create-property-name-field";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
 import { useCreatePropertyReviewStep } from "@/features/create-property/hooks/use-create-property-review-step";
+import { useSubmitPropertyStep2 } from "@/features/create-property/hooks/use-submit-property-step2";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 
 type CreatePropertyReviewStepProps = {
@@ -19,9 +22,17 @@ export default function CreatePropertyReviewStep({
 }: CreatePropertyReviewStepProps) {
   const { reviewData, setReviewData, canContinue } =
     useCreatePropertyReviewStep();
+  const { isSubmitting, submitStep2 } = useSubmitPropertyStep2();
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
+      return;
+    }
+
+    const result = await submitStep2();
+
+    if (!result.ok) {
+      toast.error(result.error || labels.navigation.submitError);
       return;
     }
 
@@ -51,8 +62,11 @@ export default function CreatePropertyReviewStep({
 
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
         canContinue={canContinue}
+        isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={handleContinue}
       />

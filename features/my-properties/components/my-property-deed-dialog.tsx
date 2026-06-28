@@ -11,16 +11,17 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { MY_PROPERTY_DEED_IMAGE } from "@/features/my-properties/data/my-property-deed-config";
 
 type MyPropertyDeedDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  deedImageUrl: string;
 };
 
 export default function MyPropertyDeedDialog({
   open,
   onOpenChange,
+  deedImageUrl,
 }: MyPropertyDeedDialogProps) {
   const t = useTranslations("myProperties.card.deedDialog");
 
@@ -48,13 +49,14 @@ export default function MyPropertyDeedDialog({
           </DialogClose>
         </div>
 
-        <div className="mt-5  rounded-2xl bg-white">
+        <div className="mt-5 rounded-2xl bg-white">
           <Image
-            src={MY_PROPERTY_DEED_IMAGE}
+            src={deedImageUrl}
             alt={t("imageAlt")}
             width={350}
             height={450}
-            className="h-auto w-full object-cover rounded-2xl"
+            unoptimized
+            className="h-auto w-full rounded-2xl object-cover"
           />
         </div>
       </DialogContent>

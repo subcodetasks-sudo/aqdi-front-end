@@ -8,6 +8,7 @@ type CreatePropertyStepNavigationProps = {
   previousLabel: string;
   continueLabel: string;
   canContinue: boolean;
+  isSubmitting?: boolean;
   onPrevious: () => void;
   onContinue: () => void;
 };
@@ -16,6 +17,7 @@ export default function CreatePropertyStepNavigation({
   previousLabel,
   continueLabel,
   canContinue,
+  isSubmitting = false,
   onPrevious,
   onContinue,
 }: CreatePropertyStepNavigationProps) {
@@ -24,6 +26,7 @@ export default function CreatePropertyStepNavigation({
       <Button
         type="button"
         onClick={onPrevious}
+        disabled={isSubmitting}
         className="h-12 shrink-0 rounded-xl bg-[#666666] px-5 text-sm font-semibold text-white hover:bg-[#555555]"
       >
         <ChevronLeft className="size-4 -rotate-180" aria-hidden="true" />
@@ -33,10 +36,10 @@ export default function CreatePropertyStepNavigation({
       <Button
         type="button"
         onClick={onContinue}
-        disabled={!canContinue}
+        disabled={!canContinue || isSubmitting}
         className={cn(
           "h-12 flex-1 rounded-xl text-base font-extrabold",
-          canContinue
+          canContinue && !isSubmitting
             ? "bg-linear-to-br from-brand-secondary via-brand to-brand text-white hover:opacity-90"
             : "bg-white text-[#bdbdbd] shadow-sm",
         )}

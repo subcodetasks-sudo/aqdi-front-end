@@ -1,19 +1,25 @@
 "use client";
 
+import { toast } from "sonner";
+
 import CreatePropertyNationalAddress from "@/features/create-property/components/create-property-national-address";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
 import { useCreatePropertyAddressStep } from "@/features/create-property/hooks/use-create-property-address-step";
+import { useSubmitPropertyStep1 } from "@/features/create-property/hooks/use-submit-property-step1";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import type { PropertyTypeId } from "@/features/properties/types/property-type";
 
 type CreatePropertyAddressStepProps = {
   labels: CreatePropertyLabels["address"];
+  propertyType: PropertyTypeId;
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreatePropertyAddressStep({
   labels,
+  propertyType,
   onBack,
   onComplete,
 }: CreatePropertyAddressStepProps) {
@@ -25,11 +31,20 @@ export default function CreatePropertyAddressStep({
     linkUrl,
     setLinkUrl,
     mapLocation,
+    setMapLocation,
     canContinue,
   } = useCreatePropertyAddressStep();
+  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1(propertyType);
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
+      return;
+    }
+
+    const result = await submitStep1();
+
+    if (!result.ok) {
+      toast.error(result.error || labels.navigation.submitError);
       return;
     }
 
@@ -54,13 +69,17 @@ export default function CreatePropertyAddressStep({
           linkUrl={linkUrl}
           onLinkUrlChange={setLinkUrl}
           mapLocation={mapLocation}
+          onMapLocationChange={setMapLocation}
         />
       </div>
 
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
         canContinue={canContinue}
+        isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={handleContinue}
       />

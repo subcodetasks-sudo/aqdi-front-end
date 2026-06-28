@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone, User } from "lucide-react";
+import { CreditCard, IdCard, Phone, User } from "lucide-react";
 
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
@@ -14,6 +14,7 @@ import {
   getIdNumberFieldError,
   getPhoneFieldError,
 } from "@/lib/validation/owner-step-validation";
+import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
 
 type CreatePropertyOwnerDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["ownerData"];
@@ -53,6 +54,10 @@ export default function CreatePropertyOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
+  const ibanError =
+    (value.iban ?? "").trim() && !isPropertyOwnerIbanComplete(value.iban)
+      ? validationLabels.iban
+      : undefined;
 
   return (
     <div className="space-y-5">
@@ -113,6 +118,19 @@ export default function CreatePropertyOwnerDataPhase({
           }
         />
       </div>
+
+      <CreatePropertyIconInputField
+        label={labels.iban.label}
+        placeholder={labels.iban.placeholder}
+        value={value.iban ?? ""}
+        onChange={(iban) =>
+          updateField("iban", iban.replace(/\s/g, "").toUpperCase().slice(0, 24))
+        }
+        icon={CreditCard}
+        dir="ltr"
+        maxLength={24}
+        errorMessage={ibanError}
+      />
     </div>
   );
 }

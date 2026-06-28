@@ -4,13 +4,24 @@ import CreatePropertyPageContent from "@/features/create-property/components/cre
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { PROPERTY_DEED_TYPES } from "@/features/create-property/types/deed-type";
 import { PROPERTY_HAS_AGENT_OPTIONS } from "@/features/create-property/types/owner-step";
+import { parsePropertyType } from "@/features/properties/types/property-type";
 
-export default async function CreatePropertyPage() {
+type CreatePropertyPageProps = {
+  searchParams: Promise<{ type?: string }>;
+};
+
+export default async function CreatePropertyPage({
+  searchParams,
+}: CreatePropertyPageProps) {
+  const { type } = await searchParams;
+  const propertyType = parsePropertyType(type);
   const t = await getTranslations("createProperty");
 
   const labels: CreatePropertyLabels = {
     backLabel: t("backLabel"),
     pageTitle: t("pageTitle"),
+    pageTitleResidential: t("pageTitleResidential"),
+    pageTitleCommercial: t("pageTitleCommercial"),
     stepper: {
       steps: {
         deed: t("stepper.steps.deed"),
@@ -52,12 +63,16 @@ export default async function CreatePropertyPage() {
       navigation: {
         previous: t("address.navigation.previous"),
         continue: t("address.navigation.continue"),
+        submitting: t("address.navigation.submitting"),
+        submitError: t("address.navigation.submitError"),
       },
       title: t("address.title"),
       subtitle: t("address.subtitle"),
       nationalAddress: {
         methods: t.raw("address.nationalAddress.methods") as string[],
         mapTitle: t("address.nationalAddress.mapTitle"),
+        mapHint: t("address.nationalAddress.mapHint"),
+        coordinatesLabel: t("address.nationalAddress.coordinatesLabel"),
         link: {
           label: t("address.nationalAddress.link.label"),
           placeholder: t("address.nationalAddress.link.placeholder"),
@@ -85,6 +100,7 @@ export default async function CreatePropertyPage() {
         fieldErrors: {
           idNumberLength: t("owner.validation.fieldErrors.idNumberLength"),
           phoneLength: t("owner.validation.fieldErrors.phoneLength"),
+          iban: t("owner.validation.fieldErrors.iban"),
         },
       },
       phases: t.raw("owner.phases") as CreatePropertyLabels["owner"]["phases"],
@@ -111,6 +127,10 @@ export default async function CreatePropertyPage() {
         phone: {
           label: t("owner.ownerData.phone.label"),
           placeholder: t("owner.ownerData.phone.placeholder"),
+        },
+        iban: {
+          label: t("owner.ownerData.iban.label"),
+          placeholder: t("owner.ownerData.iban.placeholder"),
         },
         hasAgent: {
           label: t("owner.ownerData.hasAgent.label"),
@@ -151,6 +171,8 @@ export default async function CreatePropertyPage() {
       navigation: {
         previous: t("review.navigation.previous"),
         continue: t("review.navigation.continue"),
+        submitting: t("review.navigation.submitting"),
+        submitError: t("review.navigation.submitError"),
       },
       title: t("review.title"),
       subtitle: t("review.subtitle"),
@@ -178,5 +200,7 @@ export default async function CreatePropertyPage() {
     },
   };
 
-  return <CreatePropertyPageContent labels={labels} />;
+  return (
+    <CreatePropertyPageContent labels={labels} propertyType={propertyType} />
+  );
 }

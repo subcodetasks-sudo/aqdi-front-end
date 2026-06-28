@@ -1,4 +1,4 @@
-import type { FurnishingTypeOption, UnitTypeOption, UnitUsageOption } from "@/features/create-unit/types/unit-data";
+import type { FurnishingTypeOption } from "@/features/create-unit/types/unit-data";
 
 export type CreateUnitLabels = {
   backLabel: string;
@@ -6,17 +6,17 @@ export type CreateUnitLabels = {
   navigation: {
     previous: string;
     continue: string;
+    submitting: string;
+    submitError: string;
   };
   title: string;
   subtitle: string;
   selectPlaceholder: string;
   unitType: {
     label: string;
-    options: Record<UnitTypeOption, string>;
   };
   unitUsage: {
     label: string;
-    options: Record<UnitUsageOption, string>;
   };
   totalArea: {
     label: string;

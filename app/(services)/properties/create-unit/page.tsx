@@ -3,11 +3,22 @@ import { getTranslations } from "next-intl/server";
 import CreateUnitPageContent from "@/features/create-unit/components/create-unit-page-content";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
 import {
-  UNIT_TYPE_OPTIONS,
-  UNIT_USAGE_OPTIONS,
-} from "@/features/create-unit/types/unit-data";
+  parseUnitContractType,
+  parseUnitPropertyId,
+} from "@/features/create-unit/utils/contract-type";
 
-export default async function CreateUnitPage() {
+type CreateUnitPageProps = {
+  searchParams: Promise<{
+    propertyId?: string;
+    contract_type?: string;
+    type?: string;
+  }>;
+};
+
+export default async function CreateUnitPage({ searchParams }: CreateUnitPageProps) {
+  const params = await searchParams;
+  const propertyId = parseUnitPropertyId(params.propertyId);
+  const contractType = parseUnitContractType(params.contract_type, params.type);
   const t = await getTranslations("createUnit");
 
   const labels: CreateUnitLabels = {
@@ -16,27 +27,17 @@ export default async function CreateUnitPage() {
     navigation: {
       previous: t("navigation.previous"),
       continue: t("navigation.continue"),
+      submitting: t("navigation.submitting"),
+      submitError: t("navigation.submitError"),
     },
     title: t("title"),
     subtitle: t("subtitle"),
     selectPlaceholder: t("selectPlaceholder"),
     unitType: {
       label: t("unitType.label"),
-      options: Object.fromEntries(
-        UNIT_TYPE_OPTIONS.map((unitType) => [
-          unitType,
-          t(`unitType.options.${unitType}`),
-        ]),
-      ) as CreateUnitLabels["unitType"]["options"],
     },
     unitUsage: {
       label: t("unitUsage.label"),
-      options: Object.fromEntries(
-        UNIT_USAGE_OPTIONS.map((unitUsage) => [
-          unitUsage,
-          t(`unitUsage.options.${unitUsage}`),
-        ]),
-      ) as CreateUnitLabels["unitUsage"]["options"],
     },
     totalArea: {
       label: t("totalArea.label"),
@@ -113,5 +114,11 @@ export default async function CreateUnitPage() {
     },
   };
 
-  return <CreateUnitPageContent labels={labels} />;
+  return (
+    <CreateUnitPageContent
+      labels={labels}
+      propertyId={propertyId}
+      contractType={contractType}
+    />
+  );
 }

@@ -5,16 +5,38 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { toPropertyContractType } from "@/features/create-property/utils/contract-type";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import type { PropertyTypeId } from "@/features/properties/types/property-type";
 
 type CreatePropertySuccessStepProps = {
   labels: CreatePropertyLabels["success"];
+  propertyType: PropertyTypeId;
+  propertyId: number;
 };
+
+function buildAddUnitHref(propertyId: number | null, propertyType: PropertyTypeId) {
+  if (!propertyId) {
+    return "/properties/create-unit";
+  }
+
+  const contractType = toPropertyContractType(propertyType);
+  const params = new URLSearchParams({
+    propertyId: String(propertyId),
+    contract_type: contractType,
+  });
+
+  return `/properties/create-unit?${params.toString()}`;
+}
 
 export default function CreatePropertySuccessStep({
   labels,
+  propertyType,
+  propertyId,
 }: CreatePropertySuccessStepProps) {
+  const addUnitHref = buildAddUnitHref(propertyId, propertyType);
+
   const actions = [
     {
       href: labels.actions.viewPropertyHref,
@@ -22,7 +44,7 @@ export default function CreatePropertySuccessStep({
       icon: <Building2 className="size-5 shrink-0" aria-hidden="true" />,
     },
     {
-      href: labels.actions.addUnitHref,
+      href: addUnitHref,
       label: labels.actions.addUnit,
       icon: <CirclePlus className="size-5 shrink-0" aria-hidden="true" />,
     },
@@ -42,7 +64,7 @@ export default function CreatePropertySuccessStep({
   ];
 
   return (
-    <div >
+    <div>
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-12">
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="relative flex items-center justify-center pb-2">
@@ -72,7 +94,7 @@ export default function CreatePropertySuccessStep({
         <div className="mt-8 space-y-3">
           {actions.map((action) => (
             <Button
-              key={action.href}
+              key={action.label}
               type="button"
               asChild
               variant="ghost"

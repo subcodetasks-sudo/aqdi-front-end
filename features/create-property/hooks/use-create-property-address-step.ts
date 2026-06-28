@@ -20,6 +20,7 @@ export function useCreatePropertyAddressStep() {
   const setAddressLinkUrl = useCreatePropertyDraftStore(
     (state) => state.setAddressLinkUrl,
   );
+  const setMapLocation = useCreatePropertyDraftStore((state) => state.setMapLocation);
 
   const canContinue = canContinueNationalAddress(method, photoFiles, linkUrl);
 
@@ -35,6 +36,7 @@ export function useCreatePropertyAddressStep() {
     linkUrl,
     setLinkUrl: setAddressLinkUrl,
     mapLocation,
+    setMapLocation,
     canContinue,
   };
 }

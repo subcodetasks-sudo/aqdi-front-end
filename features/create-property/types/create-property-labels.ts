@@ -4,6 +4,8 @@ import type { PropertyHasAgentOption } from "@/features/create-property/types/ow
 export type CreatePropertyLabels = {
   backLabel: string;
   pageTitle: string;
+  pageTitleResidential: string;
+  pageTitleCommercial: string;
   stepper: {
     steps: Record<CreatePropertyStepperStep, string>;
   };
@@ -35,12 +37,16 @@ export type CreatePropertyLabels = {
     navigation: {
       previous: string;
       continue: string;
+      submitting: string;
+      submitError: string;
     };
     title: string;
     subtitle: string;
     nationalAddress: {
       methods: string[];
       mapTitle: string;
+      mapHint: string;
+      coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
@@ -62,6 +68,8 @@ export type CreatePropertyLabels = {
         | "birthDate"
         | "phone"
         | "phoneLength"
+        | "iban"
+        | "ibanInvalid"
         | "hasAgent"
         | "powerOfAttorney",
         string
@@ -69,6 +77,7 @@ export type CreatePropertyLabels = {
       fieldErrors: {
         idNumberLength: string;
         phoneLength: string;
+        iban: string;
       };
     };
     phases: {
@@ -99,6 +108,10 @@ export type CreatePropertyLabels = {
         label: string;
         placeholder: string;
       };
+      iban: {
+        label: string;
+        placeholder: string;
+      };
       hasAgent: {
         label: string;
         placeholder: string;
@@ -122,6 +135,8 @@ export type CreatePropertyLabels = {
     navigation: {
       previous: string;
       continue: string;
+      submitting: string;
+      submitError: string;
     };
     title: string;
     subtitle: string;

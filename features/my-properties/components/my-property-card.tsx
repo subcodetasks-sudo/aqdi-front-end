@@ -5,7 +5,10 @@ import { useTranslations } from "next-intl";
 import MyPropertyActionButton from "@/features/my-properties/components/my-property-action-button";
 import MyPropertyDeleteButton from "@/features/my-properties/components/my-property-delete-button";
 import MyPropertyViewDeedButton from "@/features/my-properties/components/my-property-view-deed-button";
-import { MY_PROPERTY_ACTIONS_CONFIG } from "@/features/my-properties/data/my-property-actions-config";
+import {
+  MY_PROPERTY_ACTIONS_CONFIG,
+  buildPropertyActionHref,
+} from "@/features/my-properties/data/my-property-actions-config";
 import type { MyPropertyCardData } from "@/features/my-properties/types/property-card";
 
 type MyPropertyCardProps = {
@@ -36,7 +39,7 @@ export default function MyPropertyCard({ property }: MyPropertyCardProps) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <MyPropertyViewDeedButton />
+          <MyPropertyViewDeedButton deedImageUrl={property.deedImageUrl} />
           <MyPropertyDeleteButton />
         </div>
       </div>
@@ -45,7 +48,7 @@ export default function MyPropertyCard({ property }: MyPropertyCardProps) {
         {MY_PROPERTY_ACTIONS_CONFIG.map((action) => (
           <MyPropertyActionButton
             key={`${property.id}-${action.id}`}
-            href={action.href}
+            href={buildPropertyActionHref(action.id, property)}
             label={tActions(ACTION_TRANSLATION_KEYS[action.labelKey])}
             iconType={action.iconType}
             iconSrc={action.iconSrc}

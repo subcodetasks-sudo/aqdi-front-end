@@ -715,7 +715,26 @@
     "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
     "cta": "Add new property",
     "visualAlt": "Illustration of property data management and contract creation",
-    "downloadApp": "Download the app now"
+    "downloadApp": "Download the app now",
+    "typeDialog": {
+      "title": "Property",
+      "close": "Close",
+      "mainTitle": "Choose property type",
+      "subtitle": "( Choose the property you want: residential or commercial )",
+      "iconAlt": "Add property",
+      "options": {
+        "residential": {
+          "title": "Create your residential property",
+          "description": "... building, apartment, villa, room",
+          "iconAlt": "Residential property"
+        },
+        "commercial": {
+          "title": "Create your commercial property",
+          "description": "... shop, market, hotel, factory",
+          "iconAlt": "Commercial property"
+        }
+      }
+    }
   },
   "requests": {
     "backLabel": "Back",
@@ -811,6 +830,11 @@
     "backLabel": "Back",
     "pageTitle": "My Properties",
     "addProperty": "Add new property",
+    "emptyState": "You do not have any properties yet.",
+    "contractTypes": {
+      "housing": "Residential property",
+      "commercial": "Commercial property"
+    },
     "card": {
       "requestDateLabel": "Request date:",
       "deleteProperty": "Delete property",
@@ -827,29 +851,7 @@
         "addUnit": "Add new unit to property",
         "createContract": "Create rental contract for this property"
       }
-    },
-    "items": [
-      {
-        "id": "property-1",
-        "title": "Building in Al Narjis district",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-2",
-        "title": "Building in Al Narjis district",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-3",
-        "title": "Building in Al Narjis district",
-        "date": "01-01-2025"
-      },
-      {
-        "id": "property-4",
-        "title": "Building in Al Narjis district",
-        "date": "01-01-2025"
-      }
-    ]
+    }
   },
   "propertyUnits": {
     "backLabel": "Back",
@@ -976,6 +978,8 @@
   "createProperty": {
     "backLabel": "Back",
     "pageTitle": "Add new property",
+    "pageTitleResidential": "Add residential property",
+    "pageTitleCommercial": "Add commercial property",
     "stepper": {
       "steps": {
         "deed": "Ownership document",
@@ -996,16 +1000,14 @@
         "placeholder": "Select from here...",
         "clearSelection": "Clear deed type",
         "types": {
-          "electronic-justice-ministry": "Electronic ownership deed from the Ministry of Justice",
-          "electronic-real-estate-registry": "Electronic ownership deed from the Real Estate Registry",
-          "paper": "Paper ownership deed",
-          "deceased-owner": "Ownership deed with deceased owner",
-          "waqf-owner": "Ownership deed with waqf owner",
-          "sale-paper": "Sale contract paper",
-          "economic-cities-authority": "Economic Cities Authority document",
-          "adverse-possession": "Adverse possession deed",
-          "sublease-contract": "Sublease contract",
-          "lease-renewal": "Lease renewal"
+          "electronic_deed_from_the_ministry_of_justice": "Electronic ownership deed from the Ministry of Justice",
+          "electronic_tax_register": "Electronic ownership deed from the Real Estate Registry",
+          "old_handwritten": "Paper ownership deed",
+          "property_ownership_owner_are_deceased_endowment": "Ownership deed with deceased owner",
+          "property_ownership_owner_is_endowment": "Ownership deed with waqf owner",
+          "sale_agreement": "Sale agreement",
+          "economic_cities_authority_suspended": "Economic Cities Authority document",
+          "strong_argument": "Adverse possession deed"
         }
       },
       "deedImage": {
@@ -1022,13 +1024,17 @@
     "address": {
       "navigation": {
         "previous": "Previous",
-        "continue": "Continue"
+        "continue": "Continue",
+        "submitting": "Saving...",
+        "submitError": "Could not save property data. Please try again."
       },
       "title": "National address for the property",
       "subtitle": "Choose your preferred method:",
       "nationalAddress": {
         "methods": ["Map", "Attach image", "Enter link"],
         "mapTitle": "National address map",
+        "mapHint": "Click on the map to select the property location.",
+        "coordinatesLabel": "Selected coordinates",
         "link": {
           "label": "Add Google Maps link for the property",
           "placeholder": "Add Google Maps link for the property here..."
@@ -1059,12 +1065,15 @@
           "birthDate": "Owner's date of birth",
           "phone": "Owner's mobile number",
           "phoneLength": "Mobile number must be at least 9 digits",
+          "iban": "Owner's IBAN",
+          "ibanInvalid": "Owner's IBAN must be a valid Saudi IBAN",
           "hasAgent": "Is there an agent for the owner?",
           "powerOfAttorney": "Power of attorney attachment"
         },
         "fieldErrors": {
           "idNumberLength": "ID number must be 10 digits",
-          "phoneLength": "Mobile number must be at least 9 digits"
+          "phoneLength": "Mobile number must be at least 9 digits",
+          "iban": "IBAN must start with SA followed by 22 digits"
         }
       },
       "phases": [
@@ -1101,6 +1110,10 @@
           "label": "Owner's mobile number",
           "placeholder": "5x xxx xx xx"
         },
+        "iban": {
+          "label": "Owner's IBAN",
+          "placeholder": "SA00 0000 0000 0000 0000 0000"
+        },
         "hasAgent": {
           "label": "Is there an agent for the owner?",
           "placeholder": "Select from here...",
@@ -1135,7 +1148,9 @@
     "review": {
       "navigation": {
         "previous": "Previous",
-        "continue": "Continue"
+        "continue": "Continue",
+        "submitting": "Saving...",
+        "submitError": "Could not save owner data. Please try again."
       },
       "title": "Property name",
       "subtitle": "Fill in your details correctly:",
@@ -1167,7 +1182,9 @@
     "pageTitle": "Create a new residential unit",
     "navigation": {
       "previous": "Previous",
-      "continue": "Continue"
+      "continue": "Continue",
+      "submitting": "Saving...",
+      "submitError": "Could not create the unit. Please try again."
     },
     "title": "Leased unit data",
     "subtitle": "Fill in your details correctly:",

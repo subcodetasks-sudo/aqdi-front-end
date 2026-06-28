@@ -27,6 +27,7 @@ type CreatePropertyDeedImageUploadProps = {
   labels: CreatePropertyLabels["deed"]["deedImage"];
   value: File[];
   onChange: (files: File[]) => void;
+  multiple?: boolean;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -51,6 +52,10 @@ function isPdfFile(file: File) {
 
 function isImageFile(file: File) {
   return file.type.startsWith("image/");
+}
+
+function isAcceptedDeedFile(file: File) {
+  return isImageFile(file) || isPdfFile(file);
 }
 
 type DeedFileRowProps = {
@@ -119,10 +124,12 @@ export default function CreatePropertyDeedImageUpload({
   labels,
   value,
   onChange,
+  multiple = false,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const canUploadMore = multiple || value.length === 0;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -141,10 +148,19 @@ export default function CreatePropertyDeedImageUpload({
   }, [previewUrl]);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []);
+    const selectedFiles = Array.from(event.target.files ?? []).filter(
+      isAcceptedDeedFile,
+    );
 
-    if (files.length > 0) {
-      onChange([...value, ...files]);
+    if (selectedFiles.length === 0) {
+      event.target.value = "";
+      return;
+    }
+
+    if (multiple) {
+      onChange([...value, ...selectedFiles]);
+    } else {
+      onChange([selectedFiles[0]]);
     }
 
     event.target.value = "";
@@ -158,34 +174,36 @@ export default function CreatePropertyDeedImageUpload({
     <div className="space-y-3">
       <CreatePropertyFieldLabel label={labels.label} />
 
-      <label
-        htmlFor={inputId}
-        className={cn(
-          "flex h-14 w-full cursor-pointer items-center gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-2 ps-4",
-        )}
-      >
-        <input
-          ref={inputRef}
-          id={inputId}
-          type="file"
-          multiple
-          accept={ACCEPTED_FILE_TYPES}
-          className="sr-only"
-          onChange={handleFileChange}
-        />
+      {canUploadMore ? (
+        <label
+          htmlFor={inputId}
+          className={cn(
+            "flex h-14 w-full cursor-pointer items-center gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-2 ps-4",
+          )}
+        >
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="file"
+            multiple={multiple}
+            accept={ACCEPTED_FILE_TYPES}
+            className="sr-only"
+            onChange={handleFileChange}
+          />
 
-        <div className="min-w-0 flex-1 text-start">
-          <p className="text-sm leading-snug font-semibold">
-            <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
-            <span className="text-gray-600">{labels.chooseFile}</span>
-          </p>
-          <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
-        </div>
+          <div className="min-w-0 flex-1 text-start">
+            <p className="text-sm leading-snug font-semibold">
+              <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
+              <span className="text-gray-600">{labels.chooseFile}</span>
+            </p>
+            <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+          </div>
 
-        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
-          <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
-        </span>
-      </label>
+          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
+            <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
+          </span>
+        </label>
+      ) : null}
 
       {value.length > 0 ? (
         <div className="space-y-2">

@@ -12,7 +12,7 @@ export function useCreatePropertyDeedStep() {
   );
   const setDeedFiles = useCreatePropertyDraftStore((state) => state.setDeedFiles);
 
-  const canContinue = selectedDeedType !== "" && deedFiles.length > 0;
+  const canContinue = selectedDeedType !== "" && deedFiles.length === 1;
 
   return {
     selectedDeedType,

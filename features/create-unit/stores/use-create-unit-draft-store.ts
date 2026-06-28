@@ -21,6 +21,20 @@ type CreateUnitDraftStore = {
   resetDraft: () => void;
 };
 
+function normalizePersistedUnitData(
+  unitData: Partial<UnitDataState> & {
+    unitType?: string;
+    unitUsage?: string;
+  },
+): UnitDataState {
+  return {
+    ...EMPTY_UNIT_DATA,
+    ...unitData,
+    unitTypeId: unitData.unitTypeId ?? unitData.unitType ?? "",
+    unitUsageId: unitData.unitUsageId ?? unitData.unitUsage ?? "",
+  };
+}
+
 function createInitialUnitDraft() {
   return {
     currentStep: "form" as CreateUnitStep,
@@ -48,6 +62,13 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
     {
       name: "aqdi-create-unit-draft",
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (!state) {
+          return;
+        }
+
+        state.unitData = normalizePersistedUnitData(state.unitData);
+      },
     },
   ),
 );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import CreatePropertyAddressStep from "@/features/create-property/components/create-property-address-step";
@@ -10,35 +11,54 @@ import CreatePropertyStepper from "@/features/create-property/components/create-
 import CreatePropertySuccessStep from "@/features/create-property/components/create-property-success-step";
 import { useCreatePropertySteps } from "@/features/create-property/hooks/use-create-property-steps";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
-import {
-  CREATE_PROPERTY_STEPPER_STEPS,
-  type CreatePropertyStep,
-} from "@/features/create-property/types/create-property-step";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import type { PropertyTypeId } from "@/features/properties/types/property-type";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
 type CreatePropertyWizardProps = {
   labels: CreatePropertyLabels;
+  propertyType: PropertyTypeId;
 };
 
-function getStepperIndex(step: CreatePropertyStep) {
-  if (step === "success") {
-    return CREATE_PROPERTY_STEPPER_STEPS.length - 1;
-  }
-
-  const index = CREATE_PROPERTY_STEPPER_STEPS.indexOf(
-    step as (typeof CREATE_PROPERTY_STEPPER_STEPS)[number],
-  );
-
-  return index >= 0 ? index : 0;
-}
-
-export default function CreatePropertyWizard({ labels }: CreatePropertyWizardProps) {
+export default function CreatePropertyWizard({
+  labels,
+  propertyType,
+}: CreatePropertyWizardProps) {
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
+  const resetDraft = useCreatePropertyDraftStore((state) => state.resetDraft);
+  const setCurrentStep = useCreatePropertyDraftStore((state) => state.setCurrentStep);
   const hydrateFilesFromPersisted = useCreatePropertyDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
+  const [completedPropertyId, setCompletedPropertyId] = useState<number | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (currentStep === "success" && completedPropertyId === null) {
+      setCurrentStep("deed");
+    }
+  }, [completedPropertyId, currentStep, setCurrentStep]);
+
+  function handleReviewComplete() {
+    const propertyId = useCreatePropertyDraftStore.getState().propertyId;
+    resetDraft();
+    setCompletedPropertyId(propertyId);
+  }
+
+  if (completedPropertyId) {
+    return (
+      <div className="mx-auto w-full max-w-4xl space-y-4">
+        <CreatePropertySuccessStep
+          labels={labels.success}
+          propertyType={propertyType}
+          propertyId={completedPropertyId}
+        />
+      </div>
+    );
+  }
+
   const showStepper = currentStep !== "success";
 
   return (
@@ -61,6 +81,7 @@ export default function CreatePropertyWizard({ labels }: CreatePropertyWizardPro
       {currentStep === "address" ? (
         <CreatePropertyAddressStep
           labels={labels.address}
+          propertyType={propertyType}
           onBack={goBack}
           onComplete={goNext}
         />
@@ -78,12 +99,8 @@ export default function CreatePropertyWizard({ labels }: CreatePropertyWizardPro
         <CreatePropertyReviewStep
           labels={labels.review}
           onBack={goBack}
-          onComplete={goNext}
+          onComplete={handleReviewComplete}
         />
-      ) : null}
-
-      {currentStep === "success" ? (
-        <CreatePropertySuccessStep labels={labels.success} />
       ) : null}
     </div>
   );

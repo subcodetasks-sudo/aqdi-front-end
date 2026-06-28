@@ -7,9 +7,8 @@ import CreateUnitCheckboxOption, {
 import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-form-select";
 import CreateUnitIconInputField from "@/features/create-unit/components/create-unit-icon-input-field";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
+import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import {
-  UNIT_TYPE_OPTIONS,
-  UNIT_USAGE_OPTIONS,
   buildCountOptions,
   type UnitDataState,
 } from "@/features/create-unit/types/unit-data";
@@ -17,12 +16,23 @@ import { Hash } from "lucide-react";
 
 type CreateUnitDataFormProps = {
   labels: CreateUnitLabels;
+  unitTypeOptions: UnitLookupOption[];
+  unitUsageOptions: UnitLookupOption[];
   value: UnitDataState;
   onChange: (value: UnitDataState) => void;
 };
 
+function toSelectOptions(options: UnitLookupOption[]) {
+  return options.map((option) => ({
+    value: String(option.id),
+    label: option.name,
+  }));
+}
+
 export default function CreateUnitDataForm({
   labels,
+  unitTypeOptions,
+  unitUsageOptions,
   value,
   onChange,
 }: CreateUnitDataFormProps) {
@@ -32,16 +42,6 @@ export default function CreateUnitDataForm({
     { value: "ground", label: labels.floorOptions.ground },
     ...buildCountOptions(50).slice(1),
   ];
-
-  const unitTypeOptions = UNIT_TYPE_OPTIONS.map((unitType) => ({
-    value: unitType,
-    label: labels.unitType.options[unitType],
-  }));
-
-  const unitUsageOptions = UNIT_USAGE_OPTIONS.map((unitUsage) => ({
-    value: unitUsage,
-    label: labels.unitUsage.options[unitUsage],
-  }));
 
   function updateField<K extends keyof UnitDataState>(
     field: K,
@@ -59,21 +59,17 @@ export default function CreateUnitDataForm({
         <CreateUnitFormSelect
           label={labels.unitType.label}
           placeholder={labels.selectPlaceholder}
-          options={unitTypeOptions}
-          value={value.unitType}
-          onChange={(unitType) =>
-            updateField("unitType", unitType as UnitDataState["unitType"])
-          }
+          options={toSelectOptions(unitTypeOptions)}
+          value={value.unitTypeId}
+          onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
         />
 
         <CreateUnitFormSelect
           label={labels.unitUsage.label}
           placeholder={labels.selectPlaceholder}
-          options={unitUsageOptions}
-          value={value.unitUsage}
-          onChange={(unitUsage) =>
-            updateField("unitUsage", unitUsage as UnitDataState["unitUsage"])
-          }
+          options={toSelectOptions(unitUsageOptions)}
+          value={value.unitUsageId}
+          onChange={(unitUsageId) => updateField("unitUsageId", unitUsageId)}
         />
       </div>
 

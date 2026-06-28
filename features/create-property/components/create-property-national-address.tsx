@@ -1,8 +1,9 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import dynamic from "next/dynamic";
 import { useId } from "react";
 
+import { Input } from "@/components/ui/input";
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
@@ -11,7 +12,18 @@ import {
   type PropertyNationalAddressMapLocation,
   type PropertyNationalAddressMethodId,
 } from "@/features/create-property/types/national-address";
+import type { OsmMapLocation } from "@/features/shared/components/osm-location-picker-map";
 import { cn } from "@/lib/utils";
+
+const OsmLocationPickerMap = dynamic(
+  () => import("@/features/shared/components/osm-location-picker-map"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-72 animate-pulse rounded-3xl border border-[#e8e8e8] bg-brand-background md:h-80" />
+    ),
+  },
+);
 
 type CreatePropertyNationalAddressProps = {
   labels: CreatePropertyLabels["address"]["nationalAddress"];
@@ -22,19 +34,8 @@ type CreatePropertyNationalAddressProps = {
   linkUrl: string;
   onLinkUrlChange: (url: string) => void;
   mapLocation: PropertyNationalAddressMapLocation;
+  onMapLocationChange: (location: PropertyNationalAddressMapLocation) => void;
 };
-
-function getMapEmbedUrl(lat: number, lng: number) {
-  const delta = 0.02;
-  const bbox = [
-    lng - delta,
-    lat - delta,
-    lng + delta,
-    lat + delta,
-  ].join("%2C");
-
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
-}
 
 export default function CreatePropertyNationalAddress({
   labels,
@@ -45,9 +46,13 @@ export default function CreatePropertyNationalAddress({
   linkUrl,
   onLinkUrlChange,
   mapLocation,
+  onMapLocationChange,
 }: CreatePropertyNationalAddressProps) {
   const linkInputId = useId();
-  const { lat, lng } = mapLocation;
+
+  function handleMapLocationChange(location: OsmMapLocation) {
+    onMapLocationChange(location);
+  }
 
   return (
     <div className="space-y-4">
@@ -74,20 +79,13 @@ export default function CreatePropertyNationalAddress({
       </div>
 
       {method === "map" ? (
-        <div className="relative overflow-hidden rounded-3xl border border-[#e8e8e8]">
-          <iframe
-            title={labels.mapTitle}
-            src={getMapEmbedUrl(lat, lng)}
-            className="h-72 w-full border-0 md:h-80"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-
-          <span
-            className="pointer-events-none absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-secondary ring-4 ring-brand-secondary/25"
-            aria-hidden="true"
-          />
-        </div>
+        <OsmLocationPickerMap
+          value={mapLocation}
+          onChange={handleMapLocationChange}
+          mapTitle={labels.mapTitle}
+          hint={labels.mapHint}
+          coordinatesLabel={labels.coordinatesLabel}
+        />
       ) : null}
 
       {method === "photo" ? (

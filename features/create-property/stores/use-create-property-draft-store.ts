@@ -29,6 +29,7 @@ import {
 } from "@/features/create-property/types/review-step";
 
 type PropertyDraftStore = {
+  propertyId: number | null;
   currentStep: CreatePropertyStep;
   selectedDeedType: PropertyDeedTypeId | "";
   deedFiles: File[];
@@ -43,6 +44,7 @@ type PropertyDraftStore = {
   agentData: PropertyAgentDataState;
   agentPersistedFiles: PersistedFile[];
   reviewData: PropertyReviewDataState;
+  setPropertyId: (id: number | null) => void;
   setCurrentStep: (step: CreatePropertyStep) => void;
   goNextStep: () => void;
   goBackStep: () => void;
@@ -51,6 +53,7 @@ type PropertyDraftStore = {
   setAddressMethod: (method: PropertyNationalAddressMethodId) => void;
   setAddressPhotoFiles: (files: File[]) => Promise<void>;
   setAddressLinkUrl: (url: string) => void;
+  setMapLocation: (location: typeof DEFAULT_PROPERTY_NATIONAL_ADDRESS_LOCATION) => void;
   setOwnerPhaseIndex: (index: number) => void;
   setOwnerData: (data: PropertyOwnerDataState) => void;
   setAgentData: (data: PropertyAgentDataState) => void;
@@ -59,8 +62,23 @@ type PropertyDraftStore = {
   hydrateFilesFromPersisted: () => void;
 };
 
+function normalizePersistedOwnerData(
+  ownerData: Partial<PropertyOwnerDataState> | undefined,
+): PropertyOwnerDataState {
+  return {
+    ...EMPTY_PROPERTY_OWNER_DATA,
+    ...ownerData,
+    birthDate: {
+      ...EMPTY_PROPERTY_OWNER_DATA.birthDate,
+      ...ownerData?.birthDate,
+    },
+    iban: ownerData?.iban ?? "",
+  };
+}
+
 function createInitialPropertyDraft() {
   return {
+    propertyId: null as number | null,
     currentStep: "deed" as CreatePropertyStep,
     selectedDeedType: "" as PropertyDeedTypeId | "",
     deedFiles: [] as File[],
@@ -82,6 +100,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
   persist(
     (set, get) => ({
       ...createInitialPropertyDraft(),
+      setPropertyId: (id) => set({ propertyId: id }),
       setCurrentStep: (step) => set({ currentStep: step }),
       goNextStep: () => {
         const index = CREATE_PROPERTY_STEPS.indexOf(get().currentStep);
@@ -111,6 +130,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         set({ addressPhotoFiles: files, addressPhotoPersistedFiles });
       },
       setAddressLinkUrl: (url) => set({ addressLinkUrl: url }),
+      setMapLocation: (location) => set({ mapLocation: location }),
       setOwnerPhaseIndex: (index) => set({ ownerPhaseIndex: index }),
       setOwnerData: (data) =>
         set((state) => {
@@ -149,7 +169,9 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
       name: "aqdi-create-property-draft",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        currentStep: state.currentStep,
+        propertyId: state.propertyId,
+        currentStep:
+          state.currentStep === "success" ? "deed" : state.currentStep,
         selectedDeedType: state.selectedDeedType,
         deedPersistedFiles: state.deedPersistedFiles,
         addressMethod: state.addressMethod,
@@ -168,7 +190,17 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         reviewData: state.reviewData,
       }),
       onRehydrateStorage: () => (state) => {
-        state?.hydrateFilesFromPersisted();
+        if (!state) {
+          return;
+        }
+
+        state.ownerData = normalizePersistedOwnerData(state.ownerData);
+
+        if (state.currentStep === "success") {
+          state.currentStep = "deed";
+        }
+
+        state.hydrateFilesFromPersisted();
       },
     },
   ),
