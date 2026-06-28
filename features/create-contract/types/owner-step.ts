@@ -50,40 +50,13 @@ export const EMPTY_AGENT_DATA: AgentDataState = {
 
 export const OWNER_STEP_MAX_PHASE_COUNT = 2;
 
-function isBirthDateComplete(birthDate: BirthDateValue) {
-  return (
-    birthDate.day !== "" && birthDate.month !== "" && birthDate.year !== ""
-  );
-}
-
-function isPhoneComplete(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return digits.length >= 9;
-}
-
-function isIdNumberComplete(idNumber: string) {
-  const digits = idNumber.replace(/\D/g, "");
-  return digits.length === 10;
-}
-
-export function isOwnerDataComplete(ownerData: OwnerDataState) {
-  return (
-    ownerData.fullName.trim().length > 0 &&
-    isIdNumberComplete(ownerData.idNumber) &&
-    isBirthDateComplete(ownerData.birthDate) &&
-    isPhoneComplete(ownerData.phone) &&
-    ownerData.hasAgent !== ""
-  );
-}
-
-export function isAgentDataComplete(agentData: AgentDataState) {
-  return (
-    isIdNumberComplete(agentData.idNumber) &&
-    isBirthDateComplete(agentData.birthDate) &&
-    isPhoneComplete(agentData.phone) &&
-    agentData.powerOfAttorneyFiles.length > 0
-  );
-}
+export {
+  getAgentDataValidationIssues as getContractAgentValidationIssues,
+  getOwnerDataValidationIssues as getContractOwnerValidationIssues,
+  isAgentDataComplete,
+  isOwnerDataComplete,
+  type OwnerValidationIssue as ContractOwnerValidationIssue,
+} from "@/lib/validation/owner-step-validation";
 
 export function getOwnerStepPhaseCount(hasAgent: HasAgentOption | "") {
   return hasAgent === "yes" ? OWNER_STEP_MAX_PHASE_COUNT : 1;

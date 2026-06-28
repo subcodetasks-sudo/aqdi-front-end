@@ -51,44 +51,13 @@ export const EMPTY_PROPERTY_AGENT_DATA: PropertyAgentDataState = {
 
 export const PROPERTY_OWNER_STEP_MAX_PHASE_COUNT = 2;
 
-function isBirthDateComplete(birthDate: PropertyBirthDateValue) {
-  return (
-    birthDate.day !== "" && birthDate.month !== "" && birthDate.year !== ""
-  );
-}
-
-function isPhoneComplete(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return digits.length >= 9;
-}
-
-function isIdNumberComplete(idNumber: string) {
-  const digits = idNumber.replace(/\D/g, "");
-  return digits.length === 10;
-}
-
-export function isPropertyOwnerDataComplete(
-  ownerData: PropertyOwnerDataState,
-) {
-  return (
-    ownerData.fullName.trim().length > 0 &&
-    isIdNumberComplete(ownerData.idNumber) &&
-    isBirthDateComplete(ownerData.birthDate) &&
-    isPhoneComplete(ownerData.phone) &&
-    ownerData.hasAgent !== ""
-  );
-}
-
-export function isPropertyAgentDataComplete(
-  agentData: PropertyAgentDataState,
-) {
-  return (
-    isIdNumberComplete(agentData.idNumber) &&
-    isBirthDateComplete(agentData.birthDate) &&
-    isPhoneComplete(agentData.phone) &&
-    agentData.powerOfAttorneyFiles.length > 0
-  );
-}
+export {
+  getAgentDataValidationIssues as getPropertyAgentValidationIssues,
+  getOwnerDataValidationIssues as getPropertyOwnerValidationIssues,
+  isAgentDataComplete as isPropertyAgentDataComplete,
+  isOwnerDataComplete as isPropertyOwnerDataComplete,
+  type OwnerValidationIssue as PropertyOwnerValidationIssue,
+} from "@/lib/validation/owner-step-validation";
 
 export function getPropertyOwnerStepPhaseCount(
   hasAgent: PropertyHasAgentOption | "",

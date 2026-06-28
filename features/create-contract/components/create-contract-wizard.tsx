@@ -8,8 +8,10 @@ import CreateContractPaymentStep from "@/features/create-contract/components/cre
 import CreateContractTenantStep from "@/features/create-contract/components/create-contract-tenant-step";
 import CreateContractStepper from "@/features/create-contract/components/create-contract-stepper";
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
 type CreateContractWizardProps = {
   labels: CreateContractLabels;
@@ -22,9 +24,13 @@ export default function CreateContractWizard({
 }: CreateContractWizardProps) {
   const { currentStep, currentStepIndex, goNext, goBack } =
     useCreateContractSteps();
+  const hydrateFilesFromPersisted = useCreateContractDraftStore(
+    (state) => state.hydrateFilesFromPersisted,
+  );
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
+      <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       <CreateContractStepper
         labels={labels.stepper}
         currentStepIndex={currentStepIndex}

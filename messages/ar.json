@@ -1050,6 +1050,23 @@
         "previous": "السابق",
         "continue": "متابعة"
       },
+      "validation": {
+        "hintTitle": "يرجى إكمال الحقول التالية:",
+        "issues": {
+          "fullName": "اسم مالك العقار الثلاثي",
+          "idNumber": "رقم هوية المالك",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "birthDate": "تاريخ ميلاد المالك",
+          "phone": "رقم جوال المالك",
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "hasAgent": "هل يوجد وكيل للمالك",
+          "powerOfAttorney": "إرفاق صورة الوكالة"
+        },
+        "fieldErrors": {
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل"
+        }
+      },
       "phases": [
         {
           "title": "بيانات مالك العقار",
@@ -1355,6 +1372,23 @@
       "navigation": {
         "previous": "السابق",
         "continue": "متابعة"
+      },
+      "validation": {
+        "hintTitle": "يرجى إكمال الحقول التالية:",
+        "issues": {
+          "fullName": "اسم مالك العقار الثلاثي",
+          "idNumber": "رقم هوية المالك",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "birthDate": "تاريخ ميلاد المالك",
+          "phone": "رقم جوال المالك",
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "hasAgent": "هل يوجد وكيل للمالك",
+          "powerOfAttorney": "إرفاق صورة الوكالة"
+        },
+        "fieldErrors": {
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل"
+        }
       },
       "phases": [
         {

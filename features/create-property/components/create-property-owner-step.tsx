@@ -76,6 +76,7 @@ export default function CreatePropertyOwnerStep({
           <CreatePropertyOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}
+            validationLabels={labels.validation.fieldErrors}
             value={ownerData}
             onChange={setOwnerData}
           />

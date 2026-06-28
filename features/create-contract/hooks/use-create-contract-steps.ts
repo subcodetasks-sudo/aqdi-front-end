@@ -1,38 +1,19 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  CREATE_CONTRACT_STEPS,
-  type CreateContractStep,
-} from "@/features/create-contract/types/create-contract-step";
+import { CREATE_CONTRACT_STEPS } from "@/features/create-contract/types/create-contract-step";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 
 export function useCreateContractSteps() {
-  const [currentStep, setCurrentStep] =
-    useState<CreateContractStep>("intro");
+  const currentStep = useCreateContractDraftStore((state) => state.currentStep);
+  const goNextStep = useCreateContractDraftStore((state) => state.goNextStep);
+  const goBackStep = useCreateContractDraftStore((state) => state.goBackStep);
 
   const currentStepIndex = CREATE_CONTRACT_STEPS.indexOf(currentStep);
-
-  function goNext() {
-    const nextIndex = currentStepIndex + 1;
-
-    if (nextIndex < CREATE_CONTRACT_STEPS.length) {
-      setCurrentStep(CREATE_CONTRACT_STEPS[nextIndex]);
-    }
-  }
-
-  function goBack() {
-    const previousIndex = currentStepIndex - 1;
-
-    if (previousIndex >= 0) {
-      setCurrentStep(CREATE_CONTRACT_STEPS[previousIndex]);
-    }
-  }
 
   return {
     currentStep,
     currentStepIndex,
-    goNext,
-    goBack,
+    goNext: goNextStep,
+    goBack: goBackStep,
   };
 }

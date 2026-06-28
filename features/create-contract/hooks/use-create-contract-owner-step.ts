@@ -1,57 +1,47 @@
 "use client";
 
-import { useState } from "react";
-
 import {
-  EMPTY_AGENT_DATA,
-  EMPTY_OWNER_DATA,
   getOwnerStepPhaseCount,
   isAgentDataComplete,
   isOwnerDataComplete,
-  type AgentDataState,
-  type OwnerDataState,
 } from "@/features/create-contract/types/owner-step";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 
 export function useCreateContractOwnerStep() {
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
-  const [ownerData, setOwnerData] = useState<OwnerDataState>(EMPTY_OWNER_DATA);
-  const [agentData, setAgentData] = useState<AgentDataState>(EMPTY_AGENT_DATA);
+  const owner = useCreateContractDraftStore((state) => state.owner);
+  const setOwnerPhaseIndex = useCreateContractDraftStore(
+    (state) => state.setOwnerPhaseIndex,
+  );
+  const setOwnerData = useCreateContractDraftStore((state) => state.setOwnerData);
+  const setAgentData = useCreateContractDraftStore((state) => state.setAgentData);
 
-  const phaseCount = getOwnerStepPhaseCount(ownerData.hasAgent);
+  const phaseCount = getOwnerStepPhaseCount(owner.ownerData.hasAgent);
   const isLastPhase =
-    currentPhaseIndex === phaseCount - 1 ||
-    (currentPhaseIndex === 0 && ownerData.hasAgent === "no");
+    owner.currentPhaseIndex === phaseCount - 1 ||
+    (owner.currentPhaseIndex === 0 && owner.ownerData.hasAgent === "no");
 
   const canContinue =
-    currentPhaseIndex === 0
-      ? isOwnerDataComplete(ownerData)
-      : isAgentDataComplete(agentData);
+    owner.currentPhaseIndex === 0
+      ? isOwnerDataComplete(owner.ownerData)
+      : isAgentDataComplete(owner.agentData);
 
   function goToNextPhase() {
-    if (currentPhaseIndex < phaseCount - 1) {
-      setCurrentPhaseIndex((phase) => phase + 1);
+    if (owner.currentPhaseIndex < phaseCount - 1) {
+      setOwnerPhaseIndex(owner.currentPhaseIndex + 1);
     }
   }
 
   function goToPreviousPhase() {
-    if (currentPhaseIndex > 0) {
-      setCurrentPhaseIndex((phase) => phase - 1);
+    if (owner.currentPhaseIndex > 0) {
+      setOwnerPhaseIndex(owner.currentPhaseIndex - 1);
     }
-  }
-
-  function updateOwnerData(value: OwnerDataState) {
-    if (value.hasAgent === "no" && ownerData.hasAgent === "yes") {
-      setAgentData(EMPTY_AGENT_DATA);
-    }
-
-    setOwnerData(value);
   }
 
   return {
-    currentPhaseIndex,
-    ownerData,
-    setOwnerData: updateOwnerData,
-    agentData,
+    currentPhaseIndex: owner.currentPhaseIndex,
+    ownerData: owner.ownerData,
+    setOwnerData,
+    agentData: owner.agentData,
     setAgentData,
     phaseCount,
     isLastPhase,

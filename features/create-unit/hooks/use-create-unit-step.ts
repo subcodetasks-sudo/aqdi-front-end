@@ -1,15 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  EMPTY_UNIT_DATA,
-  isUnitDataComplete,
-  type UnitDataState,
-} from "@/features/create-unit/types/unit-data";
+import { isUnitDataComplete } from "@/features/create-unit/types/unit-data";
+import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 
 export function useCreateUnitStep() {
-  const [unitData, setUnitData] = useState<UnitDataState>(EMPTY_UNIT_DATA);
+  const unitData = useCreateUnitDraftStore((state) => state.unitData);
+  const setUnitData = useCreateUnitDraftStore((state) => state.setUnitData);
 
   const canContinue = isUnitDataComplete(unitData);
 

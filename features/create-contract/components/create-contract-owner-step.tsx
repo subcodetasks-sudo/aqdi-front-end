@@ -74,6 +74,7 @@ export default function CreateContractOwnerStep({
           <CreateContractOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}
+            validationLabels={labels.validation.fieldErrors}
             value={ownerData}
             onChange={setOwnerData}
           />

@@ -16,6 +16,7 @@ type CreateContractIconInputFieldProps = {
   dir?: "ltr" | "rtl";
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   maxLength?: number;
+  errorMessage?: string;
 };
 
 export default function CreateContractIconInputField({
@@ -28,6 +29,7 @@ export default function CreateContractIconInputField({
   dir,
   inputMode,
   maxLength,
+  errorMessage,
 }: CreateContractIconInputFieldProps) {
   const inputId = useId();
 
@@ -57,6 +59,10 @@ export default function CreateContractIconInputField({
           className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
         />
       </div>
+
+      {errorMessage ? (
+        <p className="mt-1.5 text-xs font-medium text-[#c62828]">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }

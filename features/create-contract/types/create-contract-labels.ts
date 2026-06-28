@@ -85,6 +85,24 @@ export type CreateContractLabels = {
       previous: string;
       continue: string;
     };
+    validation: {
+      hintTitle: string;
+      issues: Record<
+        | "fullName"
+        | "idNumber"
+        | "idNumberLength"
+        | "birthDate"
+        | "phone"
+        | "phoneLength"
+        | "hasAgent"
+        | "powerOfAttorney",
+        string
+      >;
+      fieldErrors: {
+        idNumberLength: string;
+        phoneLength: string;
+      };
+    };
     phases: {
       title: string;
       subtitle: string;

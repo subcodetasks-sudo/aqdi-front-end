@@ -79,6 +79,14 @@ export default async function CreatePropertyPage() {
         previous: t("owner.navigation.previous"),
         continue: t("owner.navigation.continue"),
       },
+      validation: {
+        hintTitle: t("owner.validation.hintTitle"),
+        issues: t.raw("owner.validation.issues") as CreatePropertyLabels["owner"]["validation"]["issues"],
+        fieldErrors: {
+          idNumberLength: t("owner.validation.fieldErrors.idNumberLength"),
+          phoneLength: t("owner.validation.fieldErrors.phoneLength"),
+        },
+      },
       phases: t.raw("owner.phases") as CreatePropertyLabels["owner"]["phases"],
       birthDate: {
         label: t("owner.birthDate.label"),

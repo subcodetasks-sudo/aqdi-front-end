@@ -10,10 +10,15 @@ import {
   PROPERTY_HAS_AGENT_OPTIONS,
   type PropertyOwnerDataState,
 } from "@/features/create-property/types/owner-step";
+import {
+  getIdNumberFieldError,
+  getPhoneFieldError,
+} from "@/lib/validation/owner-step-validation";
 
 type CreatePropertyOwnerDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["ownerData"];
   birthDateLabels: CreatePropertyLabels["owner"]["birthDate"];
+  validationLabels: CreatePropertyLabels["owner"]["validation"]["fieldErrors"];
   value: PropertyOwnerDataState;
   onChange: (value: PropertyOwnerDataState) => void;
 };
@@ -21,6 +26,7 @@ type CreatePropertyOwnerDataPhaseProps = {
 export default function CreatePropertyOwnerDataPhase({
   labels,
   birthDateLabels,
+  validationLabels,
   value,
   onChange,
 }: CreatePropertyOwnerDataPhaseProps) {
@@ -38,6 +44,15 @@ export default function CreatePropertyOwnerDataPhase({
     value: option,
     label: labels.hasAgent.options[option],
   }));
+
+  const idNumberError = getIdNumberFieldError(value.idNumber, {
+    required: validationLabels.idNumberLength,
+    length: validationLabels.idNumberLength,
+  });
+  const phoneError = getPhoneFieldError(value.phone, {
+    required: validationLabels.phoneLength,
+    length: validationLabels.phoneLength,
+  });
 
   return (
     <div className="space-y-5">
@@ -60,6 +75,7 @@ export default function CreatePropertyOwnerDataPhase({
         dir="ltr"
         inputMode="numeric"
         maxLength={10}
+        errorMessage={idNumberError}
       />
 
       <CreatePropertyBirthDateFields
@@ -81,6 +97,7 @@ export default function CreatePropertyOwnerDataPhase({
           dir="ltr"
           inputMode="tel"
           maxLength={10}
+          errorMessage={phoneError}
         />
 
         <CreatePropertyFormSelect

@@ -1,24 +1,18 @@
 "use client";
 
-import { useState } from "react";
-
-import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
+import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 
 export function useCreatePropertyDeedStep() {
-  const [selectedDeedType, setSelectedDeedTypeState] = useState<
-    PropertyDeedTypeId | ""
-  >("");
-  const [deedFiles, setDeedFiles] = useState<File[]>([]);
+  const selectedDeedType = useCreatePropertyDraftStore(
+    (state) => state.selectedDeedType,
+  );
+  const deedFiles = useCreatePropertyDraftStore((state) => state.deedFiles);
+  const setSelectedDeedType = useCreatePropertyDraftStore(
+    (state) => state.setSelectedDeedType,
+  );
+  const setDeedFiles = useCreatePropertyDraftStore((state) => state.setDeedFiles);
 
   const canContinue = selectedDeedType !== "" && deedFiles.length > 0;
-
-  function setSelectedDeedType(value: PropertyDeedTypeId | "") {
-    setSelectedDeedTypeState(value);
-
-    if (value === "") {
-      setDeedFiles([]);
-    }
-  }
 
   return {
     selectedDeedType,

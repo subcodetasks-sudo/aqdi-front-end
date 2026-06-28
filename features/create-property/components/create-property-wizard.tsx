@@ -9,11 +9,13 @@ import CreatePropertyReviewStep from "@/features/create-property/components/crea
 import CreatePropertyStepper from "@/features/create-property/components/create-property-stepper";
 import CreatePropertySuccessStep from "@/features/create-property/components/create-property-success-step";
 import { useCreatePropertySteps } from "@/features/create-property/hooks/use-create-property-steps";
+import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import {
   CREATE_PROPERTY_STEPPER_STEPS,
   type CreatePropertyStep,
 } from "@/features/create-property/types/create-property-step";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
 type CreatePropertyWizardProps = {
   labels: CreatePropertyLabels;
@@ -34,10 +36,14 @@ function getStepperIndex(step: CreatePropertyStep) {
 export default function CreatePropertyWizard({ labels }: CreatePropertyWizardProps) {
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
+  const hydrateFilesFromPersisted = useCreatePropertyDraftStore(
+    (state) => state.hydrateFilesFromPersisted,
+  );
   const showStepper = currentStep !== "success";
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
+      <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       {showStepper ? (
         <div className="rounded-3xl bg-white p-4 shadow-sm md:p-5">
           <CreatePropertyStepper labels={labels.stepper} />

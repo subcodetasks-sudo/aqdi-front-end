@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  EMPTY_PAYMENT_DATA,
-  type PaymentDataState,
-} from "@/features/create-contract/types/payment-step";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 
 export function useCreateContractPaymentStep() {
-  const [paymentData, setPaymentData] =
-    useState<PaymentDataState>(EMPTY_PAYMENT_DATA);
+  const paymentData = useCreateContractDraftStore((state) => state.paymentData);
+  const setPaymentData = useCreateContractDraftStore((state) => state.setPaymentData);
 
   return {
     paymentData,

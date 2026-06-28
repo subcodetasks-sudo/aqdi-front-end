@@ -1,23 +1,15 @@
 "use client";
 
-import { useState } from "react";
-
-import type { CreateUnitStep } from "@/features/create-unit/types/create-unit-step";
+import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 
 export function useCreateUnitSteps() {
-  const [currentStep, setCurrentStep] = useState<CreateUnitStep>("form");
-
-  function goNext() {
-    setCurrentStep((step) => (step === "form" ? "success" : step));
-  }
-
-  function goBack() {
-    setCurrentStep((step) => (step === "success" ? "form" : step));
-  }
+  const currentStep = useCreateUnitDraftStore((state) => state.currentStep);
+  const goNextStep = useCreateUnitDraftStore((state) => state.goNextStep);
+  const goBackStep = useCreateUnitDraftStore((state) => state.goBackStep);
 
   return {
     currentStep,
-    goNext,
-    goBack,
+    goNext: goNextStep,
+    goBack: goBackStep,
   };
 }

@@ -1050,6 +1050,23 @@
         "previous": "Previous",
         "continue": "Continue"
       },
+      "validation": {
+        "hintTitle": "Please complete the following fields:",
+        "issues": {
+          "fullName": "Owner's full name",
+          "idNumber": "Owner's ID number",
+          "idNumberLength": "ID number must be 10 digits",
+          "birthDate": "Owner's date of birth",
+          "phone": "Owner's mobile number",
+          "phoneLength": "Mobile number must be at least 9 digits",
+          "hasAgent": "Is there an agent for the owner?",
+          "powerOfAttorney": "Power of attorney attachment"
+        },
+        "fieldErrors": {
+          "idNumberLength": "ID number must be 10 digits",
+          "phoneLength": "Mobile number must be at least 9 digits"
+        }
+      },
       "phases": [
         {
           "title": "Property owner data",
@@ -1355,6 +1372,23 @@
       "navigation": {
         "previous": "Previous",
         "continue": "Continue"
+      },
+      "validation": {
+        "hintTitle": "Please complete the following fields:",
+        "issues": {
+          "fullName": "Owner's full name",
+          "idNumber": "Owner's ID number",
+          "idNumberLength": "ID number must be 10 digits",
+          "birthDate": "Owner's date of birth",
+          "phone": "Owner's mobile number",
+          "phoneLength": "Mobile number must be at least 9 digits",
+          "hasAgent": "Is there an agent for the owner?",
+          "powerOfAttorney": "Power of attorney attachment"
+        },
+        "fieldErrors": {
+          "idNumberLength": "ID number must be 10 digits",
+          "phoneLength": "Mobile number must be at least 9 digits"
+        }
       },
       "phases": [
         {

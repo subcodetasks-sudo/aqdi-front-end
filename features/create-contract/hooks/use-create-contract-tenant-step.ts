@@ -3,58 +3,47 @@
 import { useState } from "react";
 
 import {
-  EMPTY_RENTED_UNIT_DATA,
   isRentedUnitDataComplete,
   TENANT_STEP_PHASE_COUNT,
-  type RentedUnitDataState,
 } from "@/features/create-contract/types/rented-unit-step";
+import { isTenantDataComplete } from "@/features/create-contract/types/tenant-step";
 import {
-  EMPTY_INDIVIDUAL_TENANT_DATA,
-  EMPTY_ORGANIZATION_TENANT_DATA,
-  EMPTY_TENANT_DATA,
-  isOrganizationTenantStatus,
-  isTenantDataComplete,
-  type TenantDataState,
-  type TenantStatusOption,
-} from "@/features/create-contract/types/tenant-step";
+  updateContractTenantStatus,
+  useCreateContractDraftStore,
+} from "@/features/create-contract/stores/use-create-contract-draft-store";
+import type { TenantStatusOption } from "@/features/create-contract/types/tenant-step";
 
 export function useCreateContractTenantStep() {
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
-  const [tenantData, setTenantData] =
-    useState<TenantDataState>(EMPTY_TENANT_DATA);
-  const [rentedUnitData, setRentedUnitData] =
-    useState<RentedUnitDataState>(EMPTY_RENTED_UNIT_DATA);
+  const tenant = useCreateContractDraftStore((state) => state.tenant);
+  const setTenantPhaseIndex = useCreateContractDraftStore(
+    (state) => state.setTenantPhaseIndex,
+  );
+  const setTenantData = useCreateContractDraftStore((state) => state.setTenantData);
+  const setRentedUnitData = useCreateContractDraftStore(
+    (state) => state.setRentedUnitData,
+  );
   const [saveLaterOpen, setSaveLaterOpen] = useState(false);
 
-  const isLastPhase = currentPhaseIndex === TENANT_STEP_PHASE_COUNT - 1;
+  const isLastPhase = tenant.currentPhaseIndex === TENANT_STEP_PHASE_COUNT - 1;
 
   const canContinue =
-    currentPhaseIndex === 0
-      ? isTenantDataComplete(tenantData)
-      : isRentedUnitDataComplete(rentedUnitData);
+    tenant.currentPhaseIndex === 0
+      ? isTenantDataComplete(tenant.tenantData)
+      : isRentedUnitDataComplete(tenant.rentedUnitData);
 
   function updateStatus(status: TenantStatusOption | "") {
-    setTenantData({
-      status,
-      individual:
-        status === "individual"
-          ? tenantData.individual
-          : EMPTY_INDIVIDUAL_TENANT_DATA,
-      organization: isOrganizationTenantStatus(status)
-        ? tenantData.organization
-        : EMPTY_ORGANIZATION_TENANT_DATA,
-    });
+    setTenantData(updateContractTenantStatus(tenant.tenantData, status));
   }
 
   function goToNextPhase() {
-    if (currentPhaseIndex < TENANT_STEP_PHASE_COUNT - 1) {
-      setCurrentPhaseIndex((phase) => phase + 1);
+    if (tenant.currentPhaseIndex < TENANT_STEP_PHASE_COUNT - 1) {
+      setTenantPhaseIndex(tenant.currentPhaseIndex + 1);
     }
   }
 
   function goToPreviousPhase() {
-    if (currentPhaseIndex > 0) {
-      setCurrentPhaseIndex((phase) => phase - 1);
+    if (tenant.currentPhaseIndex > 0) {
+      setTenantPhaseIndex(tenant.currentPhaseIndex - 1);
     }
   }
 
@@ -63,10 +52,10 @@ export function useCreateContractTenantStep() {
   }
 
   return {
-    currentPhaseIndex,
-    tenantData,
+    currentPhaseIndex: tenant.currentPhaseIndex,
+    tenantData: tenant.tenantData,
     setTenantData,
-    rentedUnitData,
+    rentedUnitData: tenant.rentedUnitData,
     setRentedUnitData,
     updateStatus,
     canContinue,

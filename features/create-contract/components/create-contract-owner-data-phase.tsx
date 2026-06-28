@@ -8,10 +8,15 @@ import CreateContractIconInputField from "@/features/create-contract/components/
 import { HAS_AGENT_OPTIONS } from "@/features/create-contract/types/owner-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OwnerDataState } from "@/features/create-contract/types/owner-step";
+import {
+  getIdNumberFieldError,
+  getPhoneFieldError,
+} from "@/lib/validation/owner-step-validation";
 
 type CreateContractOwnerDataPhaseProps = {
   labels: CreateContractLabels["owner"]["ownerData"];
   birthDateLabels: CreateContractLabels["owner"]["birthDate"];
+  validationLabels: CreateContractLabels["owner"]["validation"]["fieldErrors"];
   value: OwnerDataState;
   onChange: (value: OwnerDataState) => void;
 };
@@ -19,6 +24,7 @@ type CreateContractOwnerDataPhaseProps = {
 export default function CreateContractOwnerDataPhase({
   labels,
   birthDateLabels,
+  validationLabels,
   value,
   onChange,
 }: CreateContractOwnerDataPhaseProps) {
@@ -36,6 +42,15 @@ export default function CreateContractOwnerDataPhase({
     value: option,
     label: labels.hasAgent.options[option],
   }));
+
+  const idNumberError = getIdNumberFieldError(value.idNumber, {
+    required: validationLabels.idNumberLength,
+    length: validationLabels.idNumberLength,
+  });
+  const phoneError = getPhoneFieldError(value.phone, {
+    required: validationLabels.phoneLength,
+    length: validationLabels.phoneLength,
+  });
 
   return (
     <div className="space-y-5">
@@ -58,6 +73,7 @@ export default function CreateContractOwnerDataPhase({
         dir="ltr"
         inputMode="numeric"
         maxLength={10}
+        errorMessage={idNumberError}
       />
 
       <CreateContractBirthDateFields
@@ -79,7 +95,7 @@ export default function CreateContractOwnerDataPhase({
           dir="ltr"
           inputMode="tel"
           maxLength={10}
-       
+          errorMessage={phoneError}
         />
 
         <CreateContractFormSelect

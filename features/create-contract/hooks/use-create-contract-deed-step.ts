@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  DEED_STEP_PHASE_COUNT,
-  type DeedTypeId,
-} from "@/features/create-contract/types/deed-type";
-import { type NationalAddressMethodId } from "@/features/create-contract/types/national-address";
+import { DEED_STEP_PHASE_COUNT } from "@/features/create-contract/types/deed-type";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 
 function canContinueNationalAddress(
-  method: NationalAddressMethodId,
+  method: "map" | "photo" | "link",
   photoFiles: File[],
   linkUrl: string,
 ) {
@@ -25,63 +20,57 @@ function canContinueNationalAddress(
 }
 
 export function useCreateContractDeedStep() {
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
-  const [selectedDeedType, setSelectedDeedTypeState] = useState<DeedTypeId | "">(
-    "",
+  const deed = useCreateContractDraftStore((state) => state.deed);
+  const setDeedPhaseIndex = useCreateContractDraftStore(
+    (state) => state.setDeedPhaseIndex,
   );
-  const [deedFiles, setDeedFiles] = useState<File[]>([]);
-  const [nationalAddressMethod, setNationalAddressMethod] =
-    useState<NationalAddressMethodId>("map");
-  const [nationalAddressPhotoFiles, setNationalAddressPhotoFiles] = useState<
-    File[]
-  >([]);
-  const [nationalAddressLinkUrl, setNationalAddressLinkUrl] = useState("");
+  const setSelectedDeedType = useCreateContractDraftStore(
+    (state) => state.setSelectedDeedType,
+  );
+  const setDeedFiles = useCreateContractDraftStore((state) => state.setDeedFiles);
+  const setNationalAddressMethod = useCreateContractDraftStore(
+    (state) => state.setNationalAddressMethod,
+  );
+  const setNationalAddressPhotoFiles = useCreateContractDraftStore(
+    (state) => state.setNationalAddressPhotoFiles,
+  );
+  const setNationalAddressLinkUrl = useCreateContractDraftStore(
+    (state) => state.setNationalAddressLinkUrl,
+  );
 
-  const isLastPhase = currentPhaseIndex === DEED_STEP_PHASE_COUNT - 1;
+  const isLastPhase = deed.currentPhaseIndex === DEED_STEP_PHASE_COUNT - 1;
   const canContinue =
-    currentPhaseIndex === 0
-      ? selectedDeedType !== "" && deedFiles.length > 0
+    deed.currentPhaseIndex === 0
+      ? deed.selectedDeedType !== "" && deed.deedFiles.length > 0
       : canContinueNationalAddress(
-          nationalAddressMethod,
-          nationalAddressPhotoFiles,
-          nationalAddressLinkUrl,
+          deed.nationalAddressMethod,
+          deed.nationalAddressPhotoFiles,
+          deed.nationalAddressLinkUrl,
         );
 
-  function setSelectedDeedType(value: DeedTypeId | "") {
-    setSelectedDeedTypeState(value);
-
-    if (value === "") {
-      setDeedFiles([]);
-    }
-  }
-
-  function handleNationalAddressMethodChange(method: NationalAddressMethodId) {
-    setNationalAddressMethod(method);
-  }
-
   function goToNextPhase() {
-    if (currentPhaseIndex < DEED_STEP_PHASE_COUNT - 1) {
-      setCurrentPhaseIndex((phase) => phase + 1);
+    if (deed.currentPhaseIndex < DEED_STEP_PHASE_COUNT - 1) {
+      setDeedPhaseIndex(deed.currentPhaseIndex + 1);
     }
   }
 
   function goToPreviousPhase() {
-    if (currentPhaseIndex > 0) {
-      setCurrentPhaseIndex((phase) => phase - 1);
+    if (deed.currentPhaseIndex > 0) {
+      setDeedPhaseIndex(deed.currentPhaseIndex - 1);
     }
   }
 
   return {
-    currentPhaseIndex,
-    selectedDeedType,
+    currentPhaseIndex: deed.currentPhaseIndex,
+    selectedDeedType: deed.selectedDeedType,
     setSelectedDeedType,
-    deedFiles,
+    deedFiles: deed.deedFiles,
     setDeedFiles,
-    nationalAddressMethod,
-    setNationalAddressMethod: handleNationalAddressMethodChange,
-    nationalAddressPhotoFiles,
+    nationalAddressMethod: deed.nationalAddressMethod,
+    setNationalAddressMethod,
+    nationalAddressPhotoFiles: deed.nationalAddressPhotoFiles,
     setNationalAddressPhotoFiles,
-    nationalAddressLinkUrl,
+    nationalAddressLinkUrl: deed.nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
     isLastPhase,
     canContinue,
