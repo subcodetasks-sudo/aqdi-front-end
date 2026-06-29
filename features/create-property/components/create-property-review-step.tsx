@@ -12,7 +12,7 @@ import type { CreatePropertyLabels } from "@/features/create-property/types/crea
 type CreatePropertyReviewStepProps = {
   labels: CreatePropertyLabels["review"];
   onBack: () => void;
-  onComplete: () => void;
+  onComplete: (propertyId: number) => void;
 };
 
 export default function CreatePropertyReviewStep({
@@ -36,7 +36,7 @@ export default function CreatePropertyReviewStep({
       return;
     }
 
-    onComplete();
+    onComplete(result.propertyId);
   }
 
   return (

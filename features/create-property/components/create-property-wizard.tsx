@@ -54,7 +54,7 @@ export default function CreatePropertyWizard({
     }
   }, [completedPropertyId, currentStep, setCurrentStep]);
 
-  function handleReviewComplete() {
+  function handleReviewComplete(propertyId: number) {
     const isEditMode = initialEditDraft !== null;
     resetDraft();
 
@@ -64,7 +64,7 @@ export default function CreatePropertyWizard({
       return;
     }
 
-    setCompletedPropertyId(useCreatePropertyDraftStore.getState().propertyId);
+    setCompletedPropertyId(propertyId);
   }
 
   if (completedPropertyId) {
