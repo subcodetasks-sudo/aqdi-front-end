@@ -1,5 +1,3 @@
-import type { PropertiesTypeDialogLabels } from "@/features/properties/types/properties-type-dialog-labels";
-
 export type MyPropertiesLabels = {
   backLabel: string;
   pageTitle: string;
@@ -9,5 +7,4 @@ export type MyPropertiesLabels = {
     housing: string;
     commercial: string;
   };
-  typeDialogLabels: PropertiesTypeDialogLabels;
 };

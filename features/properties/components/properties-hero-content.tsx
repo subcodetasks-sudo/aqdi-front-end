@@ -1,6 +1,8 @@
 import CustomIcon from "@/features/shared/components/custom-icon";
 import PropertiesAppDownload from "@/features/properties/components/properties-app-download";
 import PropertiesCtaButton from "@/features/properties/components/properties-cta-button";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type PropertiesHeroContentProps = {
   badge: string;
@@ -38,7 +40,18 @@ export default function PropertiesHeroContent({
       </div>
 
       <PropertiesCtaButton label={cta} />
-
+      <Button
+      asChild
+      className={
+        "h-12 w-full rounded-full bg-linear-to-l from-brand-secondary to-brand text-base font-semibold text-white hover:opacity-90"
+      }
+    >
+      <Link href="/properties/my-properties">
+        <CustomIcon src="/icons/arrow-r.svg" size={30} />
+        عقاراتي
+        <CustomIcon src="/icons/arrow-l.svg" size={30} />
+      </Link>
+    </Button>
       <PropertiesAppDownload  />
     </div>
   );
