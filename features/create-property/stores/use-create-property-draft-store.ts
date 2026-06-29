@@ -30,6 +30,10 @@ import {
 
 type PropertyDraftStore = {
   propertyId: number | null;
+  isEditMode: boolean;
+  existingDeedImageUrl: string | null;
+  existingAddressImageUrl: string | null;
+  hasExistingPowerOfAttorney: boolean;
   currentStep: CreatePropertyStep;
   selectedDeedType: PropertyDeedTypeId | "";
   deedFiles: File[];
@@ -60,6 +64,9 @@ type PropertyDraftStore = {
   setReviewData: (data: PropertyReviewDataState) => void;
   resetDraft: () => void;
   hydrateFilesFromPersisted: () => void;
+  initializeEditSession: (
+    data: import("@/features/create-property/utils/map-property-api-to-draft").PropertyEditDraftData,
+  ) => void;
 };
 
 function normalizePersistedOwnerData(
@@ -79,6 +86,10 @@ function normalizePersistedOwnerData(
 function createInitialPropertyDraft() {
   return {
     propertyId: null as number | null,
+    isEditMode: false,
+    existingDeedImageUrl: null as string | null,
+    existingAddressImageUrl: null as string | null,
+    hasExistingPowerOfAttorney: false,
     currentStep: "deed" as CreatePropertyStep,
     selectedDeedType: "" as PropertyDeedTypeId | "",
     deedFiles: [] as File[],
@@ -164,12 +175,36 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           },
         });
       },
+      initializeEditSession: (data) => {
+        localStorage.removeItem("aqdi-create-property-draft");
+        set({
+          ...createInitialPropertyDraft(),
+          propertyId: data.propertyId,
+          isEditMode: true,
+          existingDeedImageUrl: data.existingDeedImageUrl,
+          existingAddressImageUrl: data.existingAddressImageUrl,
+          hasExistingPowerOfAttorney: data.hasExistingPowerOfAttorney,
+          selectedDeedType: data.selectedDeedType,
+          addressMethod: data.addressMethod,
+          addressLinkUrl: data.addressLinkUrl,
+          mapLocation: data.mapLocation,
+          ownerData: data.ownerData,
+          agentData: data.agentData,
+          reviewData: data.reviewData,
+          ownerPhaseIndex: 0,
+          currentStep: "deed",
+        });
+      },
     }),
     {
       name: "aqdi-create-property-draft",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         propertyId: state.propertyId,
+        isEditMode: state.isEditMode,
+        existingDeedImageUrl: state.existingDeedImageUrl,
+        existingAddressImageUrl: state.existingAddressImageUrl,
+        hasExistingPowerOfAttorney: state.hasExistingPowerOfAttorney,
         currentStep:
           state.currentStep === "success" ? "deed" : state.currentStep,
         selectedDeedType: state.selectedDeedType,

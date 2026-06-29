@@ -17,16 +17,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteProperty } from "@/features/my-properties/services/delete-property";
+import { deleteUnit } from "@/features/property-units/services/delete-unit";
 
-type MyPropertyDeleteButtonProps = {
-  propertyId: number;
+type PropertyUnitDeleteButtonProps = {
+  unitId: number;
 };
 
-export default function MyPropertyDeleteButton({
-  propertyId,
-}: MyPropertyDeleteButtonProps) {
-  const t = useTranslations("myProperties.card");
+export default function PropertyUnitDeleteButton({
+  unitId,
+}: PropertyUnitDeleteButtonProps) {
+  const t = useTranslations("propertyUnits.card");
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -35,7 +35,7 @@ export default function MyPropertyDeleteButton({
     setIsDeleting(true);
 
     try {
-      const result = await deleteProperty(propertyId);
+      const result = await deleteUnit(unitId);
 
       if (!result.ok) {
         toast.error(result.error || t("deleteDialog.error"));
@@ -55,7 +55,7 @@ export default function MyPropertyDeleteButton({
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          aria-label={t("deleteProperty")}
+          aria-label={t("deleteUnit")}
           className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-[#e53935] transition-colors hover:bg-red-50"
         >
           <Trash2 className="size-4" aria-hidden="true" />
@@ -65,7 +65,7 @@ export default function MyPropertyDeleteButton({
       <AlertDialogContent className="rounded-3xl sm:max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="text-start">
             {t("deleteDialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>

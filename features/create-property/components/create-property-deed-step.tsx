@@ -23,6 +23,7 @@ export default function CreatePropertyDeedStep({
     setSelectedDeedType,
     deedFiles,
     setDeedFiles,
+    existingDeedImageUrl,
     canContinue,
   } = useCreatePropertyDeedStep();
 
@@ -54,6 +55,7 @@ export default function CreatePropertyDeedStep({
               labels={labels.deedImage}
               value={deedFiles}
               onChange={setDeedFiles}
+              existingFileUrl={existingDeedImageUrl}
             />
           ) : null}
         </div>

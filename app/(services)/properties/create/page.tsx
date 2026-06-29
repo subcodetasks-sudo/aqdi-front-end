@@ -4,17 +4,21 @@ import CreatePropertyPageContent from "@/features/create-property/components/cre
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { PROPERTY_DEED_TYPES } from "@/features/create-property/types/deed-type";
 import { PROPERTY_HAS_AGENT_OPTIONS } from "@/features/create-property/types/owner-step";
+import { mapPropertyApiToEditDraft } from "@/features/create-property/utils/map-property-api-to-draft";
+import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 import { parsePropertyType } from "@/features/properties/types/property-type";
+import { getPropertyUnits } from "@/features/property-units/services/get-property-units";
 
 type CreatePropertyPageProps = {
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; propertyId?: string }>;
 };
 
 export default async function CreatePropertyPage({
   searchParams,
 }: CreatePropertyPageProps) {
-  const { type } = await searchParams;
+  const { type, propertyId: propertyIdParam } = await searchParams;
   const propertyType = parsePropertyType(type);
+  const propertyId = parsePropertyId(propertyIdParam);
   const t = await getTranslations("createProperty");
 
   const labels: CreatePropertyLabels = {
@@ -22,6 +26,8 @@ export default async function CreatePropertyPage({
     pageTitle: t("pageTitle"),
     pageTitleResidential: t("pageTitleResidential"),
     pageTitleCommercial: t("pageTitleCommercial"),
+    editPageTitleResidential: t("editPageTitleResidential"),
+    editPageTitleCommercial: t("editPageTitleCommercial"),
     stepper: {
       steps: {
         deed: t("stepper.steps.deed"),
@@ -173,6 +179,7 @@ export default async function CreatePropertyPage({
         continue: t("review.navigation.continue"),
         submitting: t("review.navigation.submitting"),
         submitError: t("review.navigation.submitError"),
+        updateSuccess: t("review.navigation.updateSuccess"),
       },
       title: t("review.title"),
       subtitle: t("review.subtitle"),
@@ -200,7 +207,22 @@ export default async function CreatePropertyPage({
     },
   };
 
+  let initialEditDraft = null;
+
+  if (propertyId) {
+    try {
+      const property = await getPropertyUnits(propertyId);
+      initialEditDraft = mapPropertyApiToEditDraft(property);
+    } catch {
+      initialEditDraft = null;
+    }
+  }
+
   return (
-    <CreatePropertyPageContent labels={labels} propertyType={propertyType} />
+    <CreatePropertyPageContent
+      labels={labels}
+      propertyType={propertyType}
+      initialEditDraft={initialEditDraft}
+    />
   );
 }

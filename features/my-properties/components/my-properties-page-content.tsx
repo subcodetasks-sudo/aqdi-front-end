@@ -29,7 +29,9 @@ export default function MyPropertiesPageContent({
       )}
 
       <div className="mt-10 flex justify-center">
-        <MyPropertiesAddButton />
+        <MyPropertiesAddButton
+          label={labels.addProperty}
+        />
       </div>
     </section>
   );

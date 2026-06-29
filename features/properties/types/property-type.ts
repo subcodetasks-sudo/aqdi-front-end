@@ -1,4 +1,4 @@
-export type PropertyTypeId = "residential" | "commercial";
+export type PropertyTypeId = "residential" | "commercial" ;
 
 export const PROPERTY_TYPES = ["residential", "commercial"] as const;
 

@@ -8,18 +8,15 @@ import CreatePropertyStepPhaseHeader from "@/features/create-property/components
 import { useCreatePropertyAddressStep } from "@/features/create-property/hooks/use-create-property-address-step";
 import { useSubmitPropertyStep1 } from "@/features/create-property/hooks/use-submit-property-step1";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
-import type { PropertyTypeId } from "@/features/properties/types/property-type";
 
 type CreatePropertyAddressStepProps = {
   labels: CreatePropertyLabels["address"];
-  propertyType: PropertyTypeId;
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreatePropertyAddressStep({
   labels,
-  propertyType,
   onBack,
   onComplete,
 }: CreatePropertyAddressStepProps) {
@@ -32,9 +29,10 @@ export default function CreatePropertyAddressStep({
     setLinkUrl,
     mapLocation,
     setMapLocation,
+    existingAddressImageUrl,
     canContinue,
   } = useCreatePropertyAddressStep();
-  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1(propertyType);
+  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
 
   async function handleContinue() {
     if (!canContinue || isSubmitting) {
@@ -66,6 +64,7 @@ export default function CreatePropertyAddressStep({
           onMethodChange={setMethod}
           photoFiles={photoFiles}
           onPhotoFilesChange={setPhotoFiles}
+          existingPhotoUrl={existingAddressImageUrl}
           linkUrl={linkUrl}
           onLinkUrlChange={setLinkUrl}
           mapLocation={mapLocation}

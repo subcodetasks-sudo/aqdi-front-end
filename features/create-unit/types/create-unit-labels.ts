@@ -3,15 +3,27 @@ import type { FurnishingTypeOption } from "@/features/create-unit/types/unit-dat
 export type CreateUnitLabels = {
   backLabel: string;
   pageTitle: string;
+  editPageTitle: string;
   navigation: {
     previous: string;
     continue: string;
+    save: string;
     submitting: string;
     submitError: string;
+    updateSuccess: string;
   };
   title: string;
+  editTitle: string;
   subtitle: string;
+  editSubtitle: string;
   selectPlaceholder: string;
+  contractType: {
+    label: string;
+    options: {
+      housing: string;
+      commercial: string;
+    };
+  };
   unitType: {
     label: string;
   };

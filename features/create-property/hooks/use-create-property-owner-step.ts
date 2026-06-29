@@ -13,6 +13,10 @@ export function useCreatePropertyOwnerStep() {
   );
   const ownerData = useCreatePropertyDraftStore((state) => state.ownerData);
   const agentData = useCreatePropertyDraftStore((state) => state.agentData);
+  const isEditMode = useCreatePropertyDraftStore((state) => state.isEditMode);
+  const hasExistingPowerOfAttorney = useCreatePropertyDraftStore(
+    (state) => state.hasExistingPowerOfAttorney,
+  );
   const setOwnerPhaseIndex = useCreatePropertyDraftStore(
     (state) => state.setOwnerPhaseIndex,
   );
@@ -27,7 +31,9 @@ export function useCreatePropertyOwnerStep() {
   const canContinue =
     ownerPhaseIndex === 0
       ? isPropertyOwnerDataComplete(ownerData)
-      : isPropertyAgentDataComplete(agentData);
+      : isPropertyAgentDataComplete(agentData, {
+          allowExistingPowerOfAttorney: isEditMode && hasExistingPowerOfAttorney,
+        });
 
   function goToNextPhase() {
     if (ownerPhaseIndex < phaseCount - 1) {

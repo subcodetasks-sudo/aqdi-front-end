@@ -7,26 +7,39 @@ import { useTranslations } from "next-intl";
 import { MY_PROPERTY_EJAR_LOGO } from "@/features/my-properties/data/my-property-actions-config";
 import MyPropertyPlusIcon from "@/features/my-properties/components/my-property-plus-icon";
 import PropertyUnitCommercialPlusIcon from "@/features/property-units/components/property-unit-commercial-plus-icon";
-import type { PropertyUnitCategory } from "@/features/property-units/types/property-unit";
+import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
 
 type PropertyUnitCardFooterProps = {
-  category: PropertyUnitCategory;
+  unit: Pick<PropertyUnitCardData, "propertyId" | "contractType" | "category">;
 };
 
-export default function PropertyUnitCardFooter({
-  category,
-}: PropertyUnitCardFooterProps) {
+function buildCreateUnitHref(
+  propertyId: number,
+  contractType: PropertyUnitCardData["contractType"],
+) {
+  const params = new URLSearchParams({
+    propertyId: String(propertyId),
+    contract_type: contractType,
+  });
+
+  return `/properties/create-unit?${params.toString()}`;
+}
+
+export default function PropertyUnitCardFooter({ unit }: PropertyUnitCardFooterProps) {
   const t = useTranslations("propertyUnits.card");
 
   const contractLabel =
-    category === "residential"
+    unit.category === "residential"
       ? t("createResidentialContract")
       : t("createCommercialContract");
+
+  const createUnitHref = buildCreateUnitHref(unit.propertyId, unit.contractType);
+  const isResidential = unit.category === "residential";
 
   return (
     <div className="space-y-4 pt-2">
       <Link
-        href="/create-contract"
+        href={`/create-contract?propertyId=${unit.propertyId}`}
         className="flex h-14 w-full items-center justify-between rounded-[20px] bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90"
       >
         <span className="flex-1 text-center leading-6">{contractLabel}</span>
@@ -52,23 +65,23 @@ export default function PropertyUnitCardFooter({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      {isResidential ? (
         <Link
-          href="/properties/create-unit"
-          className="flex h-12 items-center justify-between rounded-full bg-[#f0f7f6] px-3 text-[11px] font-bold text-brand transition-colors hover:bg-[#e4f2ef] md:text-xs"
+          href={createUnitHref}
+          className="flex h-12 w-full items-center justify-between rounded-full bg-[#f0f7f6] px-4 text-xs font-bold text-brand transition-colors hover:bg-[#e4f2ef] md:text-sm"
         >
+          <span>{t("createNewResidentialUnit")}</span>
           <MyPropertyPlusIcon />
-          <span className="truncate ps-2">{t("createNewResidentialUnit")}</span>
         </Link>
-
+      ) : (
         <Link
-          href="/properties/create-unit"
-          className="flex h-12 items-center justify-between rounded-full bg-[#f5f5f5] px-3 text-[11px] font-bold text-foreground/80 transition-colors hover:bg-[#ececec] md:text-xs"
+          href={createUnitHref}
+          className="flex h-12 w-full items-center justify-between rounded-full bg-[#f0f7f6] px-4 text-xs font-bold text-brand transition-colors hover:bg-[#ececec] md:text-sm"
         >
-          <span className="truncate pe-2">{t("createNewCommercialUnit")}</span>
+          <span>{t("createNewCommercialUnit")}</span>
           <PropertyUnitCommercialPlusIcon />
         </Link>
-      </div>
+      )}
     </div>
   );
 }

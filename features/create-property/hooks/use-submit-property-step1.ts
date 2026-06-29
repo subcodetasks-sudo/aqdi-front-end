@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { submitPropertyStep1 } from "@/features/create-property/services/submit-property-step1";
+import { updatePropertyStep1 } from "@/features/create-property/services/update-property-step1";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
-import { toPropertyContractType } from "@/features/create-property/utils/contract-type";
-import type { PropertyTypeId } from "@/features/properties/types/property-type";
+import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 
-export function useSubmitPropertyStep1(propertyType: PropertyTypeId) {
+export function useSubmitPropertyStep1() {
+  const searchParams = useSearchParams();
+  const urlPropertyId = parsePropertyId(searchParams.get("propertyId") ?? undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const selectedDeedType = useCreatePropertyDraftStore(
     (state) => state.selectedDeedType,
@@ -20,21 +23,34 @@ export function useSubmitPropertyStep1(propertyType: PropertyTypeId) {
   const addressLinkUrl = useCreatePropertyDraftStore((state) => state.addressLinkUrl);
   const mapLocation = useCreatePropertyDraftStore((state) => state.mapLocation);
   const propertyId = useCreatePropertyDraftStore((state) => state.propertyId);
+  const existingDeedImageUrl = useCreatePropertyDraftStore(
+    (state) => state.existingDeedImageUrl,
+  );
   const setPropertyId = useCreatePropertyDraftStore((state) => state.setPropertyId);
+  const isEditMode = urlPropertyId !== null;
+  const editPropertyId = urlPropertyId ?? propertyId;
 
   async function submitStep1() {
-    if (selectedDeedType === "" || deedFiles.length === 0) {
+    const hasDeedImage = deedFiles.length === 1 || Boolean(existingDeedImageUrl);
+
+    if (selectedDeedType === "" || !hasDeedImage) {
       return {
         ok: false as const,
         error: "Deed data is incomplete",
       };
     }
 
+    if (isEditMode && !editPropertyId) {
+      return {
+        ok: false as const,
+        error: "Property ID is missing",
+      };
+    }
+
     setIsSubmitting(true);
 
     try {
-      const result = await submitPropertyStep1({
-        contractType: toPropertyContractType(propertyType),
+      const payload = {
         instrumentType: selectedDeedType,
         imageInstrument: deedFiles[0],
         addressMethod,
@@ -42,13 +58,24 @@ export function useSubmitPropertyStep1(propertyType: PropertyTypeId) {
         addressUrl: addressLinkUrl.trim() || undefined,
         latitude: mapLocation.lat,
         longitude: mapLocation.lng,
-      });
+      };
+
+      const result =
+        isEditMode && editPropertyId
+          ? await updatePropertyStep1({
+              ...payload,
+              propertyId: editPropertyId,
+            })
+          : await submitPropertyStep1({
+              ...payload,
+              imageInstrument: payload.imageInstrument!,
+            });
 
       if (!result.ok) {
         return result;
       }
 
-      setPropertyId(result.propertyId);
+      setPropertyId(isEditMode ? editPropertyId : result.propertyId);
       return result;
     } finally {
       setIsSubmitting(false);
@@ -56,7 +83,7 @@ export function useSubmitPropertyStep1(propertyType: PropertyTypeId) {
   }
 
   return {
-    propertyId,
+    propertyId: editPropertyId,
     isSubmitting,
     submitStep1,
   };

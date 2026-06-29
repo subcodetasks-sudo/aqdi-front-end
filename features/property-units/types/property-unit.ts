@@ -1,3 +1,5 @@
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+
 export type PropertyUnitTab = "residential" | "commercial";
 
 export type PropertyUnitCategory = "residential" | "commercial";
@@ -17,6 +19,9 @@ export type PropertyUnitDetails = {
 
 export type PropertyUnitCardData = {
   id: string;
+  unitId: number;
+  propertyId: number;
+  contractType: PropertyContractType;
   unitNumber: string;
   category: PropertyUnitCategory;
   details: PropertyUnitDetails;

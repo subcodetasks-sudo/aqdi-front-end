@@ -838,6 +838,15 @@
     "card": {
       "requestDateLabel": "Request date:",
       "deleteProperty": "Delete property",
+      "deleteDialog": {
+        "title": "Delete property",
+        "description": "Are you sure you want to delete this property? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "success": "Property deleted successfully",
+        "error": "Failed to delete property"
+      },
       "viewDeed": "View deed",
       "ejarLogoAlt": "Ejar logo",
       "deedDialog": {
@@ -856,6 +865,7 @@
   "propertyUnits": {
     "backLabel": "Back",
     "pageTitle": "View property units",
+    "emptyState": "No units found for this property.",
     "tabs": {
       "residential": "Residential units",
       "commercial": "Commercial units"
@@ -864,6 +874,15 @@
       "unitNumberLabel": "Unit number",
       "editUnit": "Edit unit",
       "deleteUnit": "Delete unit",
+      "deleteDialog": {
+        "title": "Delete unit",
+        "description": "Are you sure you want to delete this unit? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "success": "Unit deleted successfully",
+        "error": "Failed to delete unit"
+      },
       "categoryResidential": "Residential",
       "categoryCommercial": "Commercial",
       "createResidentialContract": "Create a residential contract for this unit",
@@ -884,102 +903,15 @@
         "windowAcCount": "Number of window ACs:",
         "splitAcCount": "Number of split ACs:"
       }
-    },
-    "residentialItems": [
-      {
-        "id": "unit-residential-1",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "Building",
-          "unitUse": "Family housing",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      },
-      {
-        "id": "unit-residential-2",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "Building",
-          "unitUse": "Family housing",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      },
-      {
-        "id": "unit-residential-3",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "Building",
-          "unitUse": "Family housing",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      }
-    ],
-    "commercialItems": [
-      {
-        "id": "unit-commercial-1",
-        "unitNumber": "#200088",
-        "category": "commercial",
-        "details": {
-          "unitType": "Retail shop",
-          "unitUse": "Commercial",
-          "floorNumber": "1",
-          "unitArea": "85",
-          "roomsCount": "2",
-          "hallsCount": "1",
-          "kitchensCount": "0",
-          "bathroomsCount": "1",
-          "windowAcCount": "2",
-          "splitAcCount": "1"
-        }
-      },
-      {
-        "id": "unit-commercial-2",
-        "unitNumber": "#200089",
-        "category": "commercial",
-        "details": {
-          "unitType": "Office",
-          "unitUse": "Commercial",
-          "floorNumber": "3",
-          "unitArea": "64",
-          "roomsCount": "3",
-          "hallsCount": "1",
-          "kitchensCount": "1",
-          "bathroomsCount": "2",
-          "windowAcCount": "0",
-          "splitAcCount": "2"
-        }
-      }
-    ]
+    }
   },
   "createProperty": {
     "backLabel": "Back",
     "pageTitle": "Add new property",
     "pageTitleResidential": "Add residential property",
     "pageTitleCommercial": "Add commercial property",
+    "editPageTitleResidential": "Edit residential property",
+    "editPageTitleCommercial": "Edit commercial property",
     "stepper": {
       "steps": {
         "deed": "Ownership document",
@@ -1150,7 +1082,8 @@
         "previous": "Previous",
         "continue": "Continue",
         "submitting": "Saving...",
-        "submitError": "Could not save owner data. Please try again."
+        "submitError": "Could not save owner data. Please try again.",
+        "updateSuccess": "Property updated successfully."
       },
       "title": "Property name",
       "subtitle": "Fill in your details correctly:",
@@ -1179,16 +1112,28 @@
   },
   "createUnit": {
     "backLabel": "Back",
-    "pageTitle": "Create a new residential unit",
+    "pageTitle": "Create a new unit",
+    "editPageTitle": "Edit unit",
     "navigation": {
       "previous": "Previous",
       "continue": "Continue",
+      "save": "Save changes",
       "submitting": "Saving...",
-      "submitError": "Could not create the unit. Please try again."
+      "submitError": "Could not save the unit. Please try again.",
+      "updateSuccess": "Unit updated successfully"
     },
     "title": "Leased unit data",
+    "editTitle": "Edit unit data",
     "subtitle": "Fill in your details correctly:",
+    "editSubtitle": "Update the unit details below:",
     "selectPlaceholder": "Choose from here...",
+    "contractType": {
+      "label": "Contract type",
+      "options": {
+        "housing": "Residential property",
+        "commercial": "Commercial property"
+      }
+    },
     "unitType": {
       "label": "Unit type",
       "options": {

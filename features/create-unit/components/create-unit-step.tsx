@@ -11,26 +11,28 @@ import {
   useUnitUsageOptions,
 } from "@/features/create-unit/hooks/use-unit-lookup-options";
 import { useCreateUnitStep } from "@/features/create-unit/hooks/use-create-unit-step";
+import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
-import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 
 type CreateUnitStepProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
-  contractType: PropertyContractType;
+  unitId: number | null;
   onBack: () => void;
-  onComplete: () => void;
+  onComplete: (message?: string) => void;
 };
 
 export default function CreateUnitStep({
   labels,
   propertyId,
-  contractType,
+  unitId,
   onBack,
   onComplete,
 }: CreateUnitStepProps) {
   const { unitData, setUnitData, canContinue } = useCreateUnitStep();
-  const { isSubmitting, submitUnit } = useSubmitUnit(propertyId);
+  const contractType = useCreateUnitDraftStore((state) => state.contractType);
+  const setContractType = useCreateUnitDraftStore((state) => state.setContractType);
+  const { isSubmitting, submitUnit } = useSubmitUnit(propertyId, unitId);
   const unitTypesQuery = useUnitTypeOptions(contractType);
   const unitUsageQuery = useUnitUsageOptions(contractType);
 
@@ -50,15 +52,15 @@ export default function CreateUnitStep({
       return;
     }
 
-    onComplete();
+    onComplete(result.message);
   }
 
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateUnitStepPhaseHeader
-          title={labels.title}
-          subtitle={labels.subtitle}
+          title={unitId ? labels.editTitle : labels.title}
+          subtitle={unitId ? labels.editSubtitle : labels.subtitle}
         />
 
         {optionsError ? (
@@ -77,6 +79,8 @@ export default function CreateUnitStep({
         ) : (
           <CreateUnitDataForm
             labels={labels}
+            contractType={contractType}
+            onContractTypeChange={setContractType}
             unitTypeOptions={unitTypesQuery.data ?? []}
             unitUsageOptions={unitUsageQuery.data ?? []}
             value={unitData}
@@ -88,7 +92,11 @@ export default function CreateUnitStep({
       <CreateUnitStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+          isSubmitting
+            ? labels.navigation.submitting
+            : unitId
+              ? labels.navigation.save
+              : labels.navigation.continue
         }
         canContinue={canContinue && !isLoadingOptions && !optionsError}
         isSubmitting={isSubmitting}

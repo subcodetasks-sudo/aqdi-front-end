@@ -32,7 +32,7 @@ export default function PropertyUnitCard({ unit }: PropertyUnitCardProps) {
         ))}
       </div>
 
-      <PropertyUnitCardFooter category={unit.category} />
+      <PropertyUnitCardFooter unit={unit} />
     </article>
   );
 }

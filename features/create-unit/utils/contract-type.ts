@@ -22,3 +22,7 @@ export function parseUnitPropertyId(value: string | undefined): number | null {
   const id = Number(value);
   return Number.isFinite(id) && id > 0 ? id : null;
 }
+
+export function parseUnitId(value: string | undefined): number | null {
+  return parseUnitPropertyId(value);
+}

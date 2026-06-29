@@ -864,6 +864,15 @@
     "card": {
       "requestDateLabel": "تاريخ الطلب:",
       "deleteProperty": "حذف العقار",
+      "deleteDialog": {
+        "title": "حذف العقار",
+        "description": "هل أنت متأكد من حذف هذا العقار؟ لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "confirm": "حذف",
+        "deleting": "جاري الحذف...",
+        "success": "تم حذف العقار بنجاح",
+        "error": "فشل حذف العقار"
+      },
       "viewDeed": "عرض الصك",
       "ejarLogoAlt": "شعار إيجار",
       "deedDialog": {
@@ -882,6 +891,7 @@
   "propertyUnits": {
     "backLabel": "رجوع",
     "pageTitle": "عرض وحدات العقار",
+    "emptyState": "لا توجد وحدات لهذا العقار.",
     "tabs": {
       "residential": "وحدات سكنية",
       "commercial": "وحدات تجارية"
@@ -890,6 +900,15 @@
       "unitNumberLabel": "رقم الوحدة",
       "editUnit": "تعديل الوحدة",
       "deleteUnit": "حذف الوحدة",
+      "deleteDialog": {
+        "title": "حذف الوحدة",
+        "description": "هل أنت متأكد من حذف هذه الوحدة؟ لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "confirm": "حذف",
+        "deleting": "جاري الحذف...",
+        "success": "تم حذف الوحدة بنجاح",
+        "error": "فشل حذف الوحدة"
+      },
       "categoryResidential": "سكني",
       "categoryCommercial": "تجاري",
       "createResidentialContract": "إنشاء عقد سكني على هذه الوحدة",
@@ -910,102 +929,15 @@
         "windowAcCount": "عدد المكيفات شباك :",
         "splitAcCount": "عدد المكيفات سبلت :"
       }
-    },
-    "residentialItems": [
-      {
-        "id": "unit-residential-1",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "عمارة",
-          "unitUse": "سكن عائلات",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      },
-      {
-        "id": "unit-residential-2",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "عمارة",
-          "unitUse": "سكن عائلات",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      },
-      {
-        "id": "unit-residential-3",
-        "unitNumber": "#100054",
-        "category": "residential",
-        "details": {
-          "unitType": "عمارة",
-          "unitUse": "سكن عائلات",
-          "floorNumber": "2",
-          "unitArea": "122",
-          "roomsCount": "7",
-          "hallsCount": "4",
-          "kitchensCount": "2",
-          "bathroomsCount": "3",
-          "windowAcCount": "1",
-          "splitAcCount": "0"
-        }
-      }
-    ],
-    "commercialItems": [
-      {
-        "id": "unit-commercial-1",
-        "unitNumber": "#200088",
-        "category": "commercial",
-        "details": {
-          "unitType": "محل تجاري",
-          "unitUse": "تجاري",
-          "floorNumber": "1",
-          "unitArea": "85",
-          "roomsCount": "2",
-          "hallsCount": "1",
-          "kitchensCount": "0",
-          "bathroomsCount": "1",
-          "windowAcCount": "2",
-          "splitAcCount": "1"
-        }
-      },
-      {
-        "id": "unit-commercial-2",
-        "unitNumber": "#200089",
-        "category": "commercial",
-        "details": {
-          "unitType": "مكتب",
-          "unitUse": "تجاري",
-          "floorNumber": "3",
-          "unitArea": "64",
-          "roomsCount": "3",
-          "hallsCount": "1",
-          "kitchensCount": "1",
-          "bathroomsCount": "2",
-          "windowAcCount": "0",
-          "splitAcCount": "2"
-        }
-      }
-    ]
+    }
   },
   "createProperty": {
     "backLabel": "رجوع",
     "pageTitle": "إضافة عقار جديد",
     "pageTitleResidential": "إضافة عقار سكني",
     "pageTitleCommercial": "إضافة عقار تجاري",
+    "editPageTitleResidential": "تعديل العقار السكني",
+    "editPageTitleCommercial": "تعديل العقار التجاري",
     "stepper": {
       "steps": {
         "deed": "وثيقة الملكية",
@@ -1180,7 +1112,8 @@
         "previous": "السابق",
         "continue": "متابعة",
         "submitting": "جاري الحفظ...",
-        "submitError": "تعذر حفظ بيانات المالك. حاول مرة أخرى."
+        "submitError": "تعذر حفظ بيانات المالك. حاول مرة أخرى.",
+        "updateSuccess": "تم تحديث العقار بنجاح."
       },
       "title": "إسم العقار",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
@@ -1209,16 +1142,28 @@
   },
   "createUnit": {
     "backLabel": "رجوع",
-    "pageTitle": "إنشاء وحدة سكنية جديدة",
+    "pageTitle": "إنشاء وحدة جديدة",
+    "editPageTitle": "تعديل الوحدة",
     "navigation": {
       "previous": "السابق",
       "continue": "متابعة",
+      "save": "حفظ التعديلات",
       "submitting": "جاري الحفظ...",
-      "submitError": "تعذر إنشاء الوحدة. حاول مرة أخرى."
+      "submitError": "تعذر حفظ الوحدة. حاول مرة أخرى.",
+      "updateSuccess": "تم تحديث الوحدة بنجاح"
     },
     "title": "بيانات الوحدة المؤجرة",
+    "editTitle": "تعديل بيانات الوحدة",
     "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
+    "editSubtitle": "قم بتحديث بيانات الوحدة أدناه:",
     "selectPlaceholder": "... إختر من هنا",
+    "contractType": {
+      "label": "نوع العقد",
+      "options": {
+        "housing": "عقار سكني",
+        "commercial": "عقار تجاري"
+      }
+    },
     "unitType": {
       "label": "نوع الوحدة !",
       "options": {

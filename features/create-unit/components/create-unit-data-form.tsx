@@ -12,10 +12,13 @@ import {
   buildCountOptions,
   type UnitDataState,
 } from "@/features/create-unit/types/unit-data";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import { Hash } from "lucide-react";
 
 type CreateUnitDataFormProps = {
   labels: CreateUnitLabels;
+  contractType: PropertyContractType;
+  onContractTypeChange: (contractType: PropertyContractType) => void;
   unitTypeOptions: UnitLookupOption[];
   unitUsageOptions: UnitLookupOption[];
   value: UnitDataState;
@@ -31,12 +34,19 @@ function toSelectOptions(options: UnitLookupOption[]) {
 
 export default function CreateUnitDataForm({
   labels,
+  contractType,
+  onContractTypeChange,
   unitTypeOptions,
   unitUsageOptions,
   value,
   onChange,
 }: CreateUnitDataFormProps) {
   const countOptions = buildCountOptions(20);
+
+  const contractTypeOptions = [
+    { value: "housing", label: labels.contractType.options.housing },
+    { value: "commercial", label: labels.contractType.options.commercial },
+  ] as const;
 
   const floorOptions = [
     { value: "ground", label: labels.floorOptions.ground },
@@ -55,6 +65,16 @@ export default function CreateUnitDataForm({
 
   return (
     <div className="space-y-5">
+      <CreateUnitFormSelect
+        label={labels.contractType.label}
+        placeholder={labels.selectPlaceholder}
+        options={[...contractTypeOptions]}
+        value={contractType}
+        onChange={(nextValue) =>
+          onContractTypeChange(nextValue as PropertyContractType)
+        }
+      />
+
       <div className="grid gap-3 md:grid-cols-2">
         <CreateUnitFormSelect
           label={labels.unitType.label}

@@ -31,6 +31,7 @@ type CreatePropertyNationalAddressProps = {
   onMethodChange: (method: PropertyNationalAddressMethodId) => void;
   photoFiles: File[];
   onPhotoFilesChange: (files: File[]) => void;
+  existingPhotoUrl?: string | null;
   linkUrl: string;
   onLinkUrlChange: (url: string) => void;
   mapLocation: PropertyNationalAddressMapLocation;
@@ -43,6 +44,7 @@ export default function CreatePropertyNationalAddress({
   onMethodChange,
   photoFiles,
   onPhotoFilesChange,
+  existingPhotoUrl = null,
   linkUrl,
   onLinkUrlChange,
   mapLocation,
@@ -93,6 +95,7 @@ export default function CreatePropertyNationalAddress({
           labels={labels.photo}
           value={photoFiles}
           onChange={onPhotoFilesChange}
+          existingFileUrl={existingPhotoUrl}
         />
       ) : null}
 

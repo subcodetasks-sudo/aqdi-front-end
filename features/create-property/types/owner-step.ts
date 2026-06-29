@@ -73,10 +73,15 @@ export function isPropertyOwnerDataComplete(ownerData: PropertyOwnerDataState) {
   );
 }
 
-export function isPropertyAgentDataComplete(agentData: PropertyAgentDataState) {
-  return (
-    isAgentDataComplete(agentData) && agentData.powerOfAttorneyFiles.length === 1
-  );
+export function isPropertyAgentDataComplete(
+  agentData: PropertyAgentDataState,
+  options?: { allowExistingPowerOfAttorney?: boolean },
+) {
+  const hasPowerOfAttorney =
+    agentData.powerOfAttorneyFiles.length === 1 ||
+    Boolean(options?.allowExistingPowerOfAttorney);
+
+  return isAgentDataComplete(agentData) && hasPowerOfAttorney;
 }
 
 export function getPropertyOwnerValidationIssues(

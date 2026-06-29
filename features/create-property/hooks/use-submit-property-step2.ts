@@ -1,21 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { submitPropertyStep2 } from "@/features/create-property/services/submit-property-step2";
+import { updatePropertyStep2 } from "@/features/create-property/services/update-property-step2";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import {
   isPropertyAgentDataComplete,
   isPropertyOwnerDataComplete,
 } from "@/features/create-property/types/owner-step";
 import { isPropertyReviewDataComplete } from "@/features/create-property/types/review-step";
+import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 
 export function useSubmitPropertyStep2() {
+  const searchParams = useSearchParams();
+  const urlPropertyId = parsePropertyId(searchParams.get("propertyId") ?? undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const propertyId = useCreatePropertyDraftStore((state) => state.propertyId);
+  const storePropertyId = useCreatePropertyDraftStore((state) => state.propertyId);
+  const hasExistingPowerOfAttorney = useCreatePropertyDraftStore(
+    (state) => state.hasExistingPowerOfAttorney,
+  );
   const ownerData = useCreatePropertyDraftStore((state) => state.ownerData);
   const agentData = useCreatePropertyDraftStore((state) => state.agentData);
   const reviewData = useCreatePropertyDraftStore((state) => state.reviewData);
+  const isEditMode = urlPropertyId !== null;
+  const propertyId = urlPropertyId ?? storePropertyId;
 
   async function submitStep2() {
     if (!propertyId) {
@@ -32,7 +42,12 @@ export function useSubmitPropertyStep2() {
       };
     }
 
-    if (ownerData.hasAgent === "yes" && !isPropertyAgentDataComplete(agentData)) {
+    if (
+      ownerData.hasAgent === "yes" &&
+      !isPropertyAgentDataComplete(agentData, {
+        allowExistingPowerOfAttorney: isEditMode && hasExistingPowerOfAttorney,
+      })
+    ) {
       return {
         ok: false as const,
         error: "Agent data is incomplete",
@@ -49,12 +64,16 @@ export function useSubmitPropertyStep2() {
     setIsSubmitting(true);
 
     try {
-      return await submitPropertyStep2({
+      const payload = {
         propertyId,
         propertyName: reviewData.propertyName,
         ownerData,
         agentData,
-      });
+      };
+
+      return isEditMode
+        ? await updatePropertyStep2(payload)
+        : await submitPropertyStep2(payload);
     } finally {
       setIsSubmitting(false);
     }

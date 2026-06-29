@@ -1,7 +1,7 @@
 function PropertyUnitCommercialPlusIcon() {
   return (
     <span
-      className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#d9d9d9]"
+      className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-secondary"
       aria-hidden="true"
     >
       <svg viewBox="0 0 12 12" className="size-3 fill-white">

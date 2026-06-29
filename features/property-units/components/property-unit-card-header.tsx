@@ -1,13 +1,17 @@
 "use client";
 
-import { Link2, Trash2 } from "lucide-react";
+import { Link2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import PropertyUnitDeleteButton from "@/features/property-units/components/property-unit-delete-button";
 import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
 
 type PropertyUnitCardHeaderProps = {
-  unit: Pick<PropertyUnitCardData, "unitNumber" | "category">;
+  unit: Pick<
+    PropertyUnitCardData,
+    "unitId" | "unitNumber" | "category" | "propertyId" | "contractType"
+  >;
 };
 
 export default function PropertyUnitCardHeader({
@@ -35,20 +39,14 @@ export default function PropertyUnitCardHeader({
         </span>
 
         <Link
-          href="/properties/create-unit"
+          href={`/properties/create-unit?propertyId=${unit.propertyId}&contract_type=${unit.contractType}&unitId=${unit.unitId}`}
           className="inline-flex items-center gap-1.5 rounded-full bg-[#f0f0f0] px-3 py-1.5 text-[11px] font-semibold text-foreground/80 transition-colors hover:bg-[#e8e8e8]"
         >
           <Link2 className="size-3.5" aria-hidden="true" />
           {t("editUnit")}
         </Link>
 
-        <button
-          type="button"
-          aria-label={t("deleteUnit")}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-[#e53935] transition-colors hover:bg-red-50"
-        >
-          <Trash2 className="size-4" aria-hidden="true" />
-        </button>
+        <PropertyUnitDeleteButton unitId={unit.unitId} />
       </div>
     </div>
   );

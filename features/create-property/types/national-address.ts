@@ -18,13 +18,14 @@ function canContinueNationalAddress(
   method: PropertyNationalAddressMethodId,
   photoFiles: File[],
   linkUrl: string,
+  options?: { hasExistingPhoto?: boolean },
 ) {
   if (method === "map") {
     return true;
   }
 
   if (method === "photo") {
-    return photoFiles.length > 0;
+    return photoFiles.length > 0 || Boolean(options?.hasExistingPhoto);
   }
 
   return linkUrl.trim().length > 0;

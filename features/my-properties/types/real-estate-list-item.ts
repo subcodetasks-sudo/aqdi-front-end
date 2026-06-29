@@ -4,6 +4,7 @@ export type RealEstateListItem = {
   instrument_type: string;
   contract_type: "housing" | "commercial";
   created_at: string;
+  name_real_estate: string | null;
   property_type_id: number | null;
   property_type_name: string | null;
   property_usages_id: number | null;

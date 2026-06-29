@@ -35,7 +35,10 @@ export function mapRealEstateToCard(
     contractType: item.contract_type,
     deedImageUrl: item.image_instrument,
     step: item.step,
-    title: item.property_type_name?.trim() || `${contractLabel} #${item.id}`,
+    title:
+      item.name_real_estate?.trim() ||
+      item.property_type_name?.trim() ||
+      `${contractLabel} #${item.id}`,
     date: formatPropertyDate(item.created_at),
   };
 }

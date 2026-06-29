@@ -6,6 +6,8 @@ export type CreatePropertyLabels = {
   pageTitle: string;
   pageTitleResidential: string;
   pageTitleCommercial: string;
+  editPageTitleResidential: string;
+  editPageTitleCommercial: string;
   stepper: {
     steps: Record<CreatePropertyStepperStep, string>;
   };
@@ -137,6 +139,7 @@ export type CreatePropertyLabels = {
       continue: string;
       submitting: string;
       submitError: string;
+      updateSuccess: string;
     };
     title: string;
     subtitle: string;

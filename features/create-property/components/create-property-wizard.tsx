@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import CreatePropertyAddressStep from "@/features/create-property/components/create-property-address-step";
 import CreatePropertyDeedStep from "@/features/create-property/components/create-property-deed-step";
@@ -13,21 +14,27 @@ import { useCreatePropertySteps } from "@/features/create-property/hooks/use-cre
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import type { PropertyTypeId } from "@/features/properties/types/property-type";
+import type { PropertyEditDraftData } from "@/features/create-property/utils/map-property-api-to-draft";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
 type CreatePropertyWizardProps = {
   labels: CreatePropertyLabels;
   propertyType: PropertyTypeId;
+  initialEditDraft: PropertyEditDraftData | null;
 };
 
 export default function CreatePropertyWizard({
   labels,
   propertyType,
+  initialEditDraft,
 }: CreatePropertyWizardProps) {
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
   const resetDraft = useCreatePropertyDraftStore((state) => state.resetDraft);
   const setCurrentStep = useCreatePropertyDraftStore((state) => state.setCurrentStep);
+  const initializeEditSession = useCreatePropertyDraftStore(
+    (state) => state.initializeEditSession,
+  );
   const hydrateFilesFromPersisted = useCreatePropertyDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
@@ -36,15 +43,28 @@ export default function CreatePropertyWizard({
   );
 
   useEffect(() => {
+    if (initialEditDraft) {
+      initializeEditSession(initialEditDraft);
+    }
+  }, [initialEditDraft, initializeEditSession]);
+
+  useEffect(() => {
     if (currentStep === "success" && completedPropertyId === null) {
       setCurrentStep("deed");
     }
   }, [completedPropertyId, currentStep, setCurrentStep]);
 
   function handleReviewComplete() {
-    const propertyId = useCreatePropertyDraftStore.getState().propertyId;
+    const isEditMode = initialEditDraft !== null;
     resetDraft();
-    setCompletedPropertyId(propertyId);
+
+    if (isEditMode) {
+      toast.success(labels.review.navigation.updateSuccess);
+      router.push("/properties/my-properties");
+      return;
+    }
+
+    setCompletedPropertyId(useCreatePropertyDraftStore.getState().propertyId);
   }
 
   if (completedPropertyId) {
@@ -63,7 +83,9 @@ export default function CreatePropertyWizard({
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
+      {initialEditDraft ? null : (
+        <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
+      )}
       {showStepper ? (
         <div className="rounded-3xl bg-white p-4 shadow-sm md:p-5">
           <CreatePropertyStepper labels={labels.stepper} />
@@ -81,7 +103,6 @@ export default function CreatePropertyWizard({
       {currentStep === "address" ? (
         <CreatePropertyAddressStep
           labels={labels.address}
-          propertyType={propertyType}
           onBack={goBack}
           onComplete={goNext}
         />

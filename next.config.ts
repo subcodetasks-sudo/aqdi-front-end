@@ -2,8 +2,11 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  serverActions: {
-    bodySizeLimit: "15mb",
+  experimental: {
+    serverActions: {
+      // 50 MB in bytes — avoids string parse issues at config load time
+      bodySizeLimit: 50 * 1024 * 1024,
+    },
   },
   images: {
     remotePatterns: [

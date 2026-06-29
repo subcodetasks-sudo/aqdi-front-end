@@ -28,6 +28,7 @@ type CreatePropertyDeedImageUploadProps = {
   value: File[];
   onChange: (files: File[]) => void;
   multiple?: boolean;
+  existingFileUrl?: string | null;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -56,6 +57,44 @@ function isImageFile(file: File) {
 
 function isAcceptedDeedFile(file: File) {
   return isImageFile(file) || isPdfFile(file);
+}
+
+type ExistingFileRowProps = {
+  fileUrl: string;
+  labels: CreatePropertyLabels["deed"]["deedImage"];
+};
+
+function ExistingFileRow({ fileUrl, labels }: ExistingFileRowProps) {
+  const fileName = fileUrl.split("/").pop() ?? labels.preview;
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-3 py-2">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
+          <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />
+        </span>
+
+        <div className="min-w-0 text-end">
+          <p className="truncate text-sm font-bold text-[#333333]">{fileName}</p>
+          <p className="text-xs text-[#bdbdbd]">{labels.preview}</p>
+        </div>
+
+        <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-white">
+          <Check className="size-3" aria-hidden="true" />
+        </span>
+      </div>
+
+      <a
+        href={fileUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-[#666666] shadow-sm"
+        aria-label={labels.preview}
+      >
+        <Eye className="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  );
 }
 
 type DeedFileRowProps = {
@@ -125,11 +164,13 @@ export default function CreatePropertyDeedImageUpload({
   value,
   onChange,
   multiple = false,
+  existingFileUrl = null,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const canUploadMore = multiple || value.length === 0;
+  const showExistingFile = Boolean(existingFileUrl) && value.length === 0;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -217,6 +258,8 @@ export default function CreatePropertyDeedImageUpload({
             />
           ))}
         </div>
+      ) : showExistingFile && existingFileUrl ? (
+        <ExistingFileRow fileUrl={existingFileUrl} labels={labels} />
       ) : null}
 
       <Dialog

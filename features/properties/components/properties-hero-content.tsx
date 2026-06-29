@@ -1,7 +1,6 @@
 import CustomIcon from "@/features/shared/components/custom-icon";
 import PropertiesAppDownload from "@/features/properties/components/properties-app-download";
 import PropertiesCtaButton from "@/features/properties/components/properties-cta-button";
-import type { PropertiesTypeDialogLabels } from "@/features/properties/types/properties-type-dialog-labels";
 
 type PropertiesHeroContentProps = {
   badge: string;
@@ -9,7 +8,6 @@ type PropertiesHeroContentProps = {
   titleMain: string;
   description: string;
   cta: string;
-  typeDialogLabels: PropertiesTypeDialogLabels;
 };
 
 export default function PropertiesHeroContent({
@@ -18,7 +16,6 @@ export default function PropertiesHeroContent({
   titleMain,
   description,
   cta,
-  typeDialogLabels,
 }: PropertiesHeroContentProps) {
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-6 lg:gap-8">
@@ -40,7 +37,7 @@ export default function PropertiesHeroContent({
         </p>
       </div>
 
-      <PropertiesCtaButton label={cta} typeDialogLabels={typeDialogLabels} />
+      <PropertiesCtaButton label={cta} />
 
       <PropertiesAppDownload  />
     </div>

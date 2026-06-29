@@ -6,10 +6,12 @@ export function useCreateUnitSteps() {
   const currentStep = useCreateUnitDraftStore((state) => state.currentStep);
   const goNextStep = useCreateUnitDraftStore((state) => state.goNextStep);
   const goBackStep = useCreateUnitDraftStore((state) => state.goBackStep);
+  const setCurrentStep = useCreateUnitDraftStore((state) => state.setCurrentStep);
 
   return {
     currentStep,
     goNext: goNextStep,
     goBack: goBackStep,
+    setCurrentStep,
   };
 }

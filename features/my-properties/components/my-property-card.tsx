@@ -25,6 +25,9 @@ const ACTION_TRANSLATION_KEYS = {
 export default function MyPropertyCard({ property }: MyPropertyCardProps) {
   const t = useTranslations("myProperties.card");
   const tActions = useTranslations("myProperties.card.actions");
+  
+
+  console.log(property);
 
   return (
     <article className="rounded-[40px] border border-[#ececec] bg-white p-6 shadow-sm md:p-8">
@@ -40,7 +43,7 @@ export default function MyPropertyCard({ property }: MyPropertyCardProps) {
 
         <div className="flex shrink-0 items-center gap-2">
           <MyPropertyViewDeedButton deedImageUrl={property.deedImageUrl} />
-          <MyPropertyDeleteButton />
+          <MyPropertyDeleteButton propertyId={property.propertyId} />
         </div>
       </div>
 

@@ -1,19 +1,8 @@
 "use server";
 
 import { apiFormDataRequest } from "@/lib/api/api-request";
-import type {
-  PropertyAgentDataState,
-  PropertyHasAgentOption,
-  PropertyOwnerDataState,
-} from "@/features/create-property/types/owner-step";
+import type { SubmitPropertyStep2Payload } from "@/features/create-property/services/submit-property-step2";
 import { appendPropertyStep2Fields } from "@/features/create-property/utils/build-property-step2-form-data";
-
-export type SubmitPropertyStep2Payload = {
-  propertyId: number;
-  propertyName: string;
-  ownerData: PropertyOwnerDataState;
-  agentData: PropertyAgentDataState;
-};
 
 type PropertyStep2ApiData = {
   id: number;
@@ -27,13 +16,13 @@ type PropertyStep2ApiResponse = {
   data?: PropertyStep2ApiData;
 };
 
-export async function submitPropertyStep2(payload: SubmitPropertyStep2Payload) {
+export async function updatePropertyStep2(payload: SubmitPropertyStep2Payload) {
   const formData = new FormData();
 
   appendPropertyStep2Fields(formData, payload);
 
   const response = await apiFormDataRequest<PropertyStep2ApiResponse>(
-    "/realstate/step2",
+    "/realstate/update/step2",
     formData,
   );
 

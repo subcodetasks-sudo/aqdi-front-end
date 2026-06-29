@@ -5,13 +5,14 @@ import { buildUnitApiPayload } from "@/features/create-unit/utils/build-unit-api
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 
-export type CreateUnitPayload = {
+export type UpdateUnitPayload = {
+  unitId: number;
   propertyId: number;
   contractType: PropertyContractType;
   unitData: UnitDataState;
 };
 
-type CreateUnitApiResponse = {
+type UpdateUnitApiResponse = {
   message: string;
   code: number;
   success: boolean;
@@ -20,16 +21,22 @@ type CreateUnitApiResponse = {
   };
 };
 
-export async function createUnit({
+export async function updateUnit({
+  unitId,
   propertyId,
   contractType,
   unitData,
-}: CreateUnitPayload) {
-  const response = await apiRequest<CreateUnitApiResponse>("/unit/create", {
-    method: "POST",
-    body: JSON.stringify(buildUnitApiPayload(propertyId, contractType, unitData)),
-    cache: "no-store",
-  });
+}: UpdateUnitPayload) {
+  const response = await apiRequest<UpdateUnitApiResponse>(
+    `/unit/update/${unitId}`,
+    {
+      method: "POST",
+      body: JSON.stringify(
+        buildUnitApiPayload(propertyId, contractType, unitData),
+      ),
+      cache: "no-store",
+    },
+  );
 
   if (!response.ok || !response.data?.success) {
     return {
@@ -40,7 +47,7 @@ export async function createUnit({
 
   return {
     ok: true as const,
-    unitId: response.data.data?.id,
+    unitId: response.data.data?.id ?? unitId,
     message: response.data.message,
   };
 }

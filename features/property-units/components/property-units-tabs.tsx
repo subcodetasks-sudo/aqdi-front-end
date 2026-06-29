@@ -2,20 +2,38 @@
 
 import PropertyUnitsGrid from "@/features/property-units/components/property-units-grid";
 import { usePropertyUnitsTabs } from "@/features/property-units/hooks/use-property-units-tabs";
+import type { PropertyUnitTab } from "@/features/property-units/types/property-unit";
+import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
 import type { PropertyUnitsLabels } from "@/features/property-units/types/property-units-labels";
 import { cn } from "@/lib/utils";
 
 type PropertyUnitsTabsProps = {
   labels: PropertyUnitsLabels;
+  propertyId: number | null;
+  initialTab: PropertyUnitTab;
+  residentialItems: PropertyUnitCardData[];
+  commercialItems: PropertyUnitCardData[];
 };
 
-export default function PropertyUnitsTabs({ labels }: PropertyUnitsTabsProps) {
-  const { activeTab, selectTab } = usePropertyUnitsTabs();
+export default function PropertyUnitsTabs({
+  labels,
+  propertyId,
+  initialTab,
+  residentialItems,
+  commercialItems,
+}: PropertyUnitsTabsProps) {
+  const { activeTab, selectTab } = usePropertyUnitsTabs(initialTab);
 
   const items =
-    activeTab === "residential"
-      ? labels.residentialItems
-      : labels.commercialItems;
+    activeTab === "residential" ? residentialItems : commercialItems;
+
+  if (!propertyId) {
+    return (
+      <p className="rounded-3xl border border-dashed border-[#e8e8e8] bg-white px-6 py-12 text-center text-sm text-muted-foreground">
+        {labels.emptyState}
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -48,7 +66,13 @@ export default function PropertyUnitsTabs({ labels }: PropertyUnitsTabsProps) {
         </div>
       </div>
 
-      <PropertyUnitsGrid items={items} />
+      {items.length > 0 ? (
+        <PropertyUnitsGrid items={items} />
+      ) : (
+        <p className="rounded-3xl border border-dashed border-[#e8e8e8] bg-white px-6 py-12 text-center text-sm text-muted-foreground">
+          {labels.emptyState}
+        </p>
+      )}
     </div>
   );
 }
