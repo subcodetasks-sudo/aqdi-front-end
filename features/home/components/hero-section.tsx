@@ -21,7 +21,7 @@ export default async function HeroSection() {
         </div>
       </div>
 
-      <div className="container pb-10 pt-2">
+      <div className="container pb-10 ">
         <div
           className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-8"
         >
@@ -41,7 +41,7 @@ export default async function HeroSection() {
           </div>
 
           <div
-            className="w-full shrink-0 lg:w-[55%] "
+            className="w-full shrink-0 lg:w-[50%] "
           >
             <HeroVisual alt={t("visualAlt")} />
           </div>
