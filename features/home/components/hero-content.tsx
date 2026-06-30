@@ -3,6 +3,7 @@ import { Rocket } from "lucide-react";
 import HeroCtaButtons from "@/features/home/components/hero-cta-buttons";
 import HeroFeatureList from "@/features/home/components/hero-feature-list";
 import CustomIcon from "@/features/shared/components/custom-icon";
+import HeroMarquee from "./hero-marquee";
 
 type HeroContentProps = {
   badge: string;
@@ -40,7 +41,7 @@ export default function HeroContent({
       </div>
 
       <div className="space-y-4">
-        <h1 className="max-w-xl space-y-1 text-3xl font-bold leading-tight sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[3.5rem]">
+        <h1 className="max-w-xl space-y-2 text-3xl font-bold  sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[3.5rem]">
           <span className="block ">
             <span className="text-brand-secondary">{titleLine1Accent}</span>{" "}
             <span className="text-foreground">{titleLine1Main}</span>
@@ -55,8 +56,8 @@ export default function HeroContent({
         </p>
       </div>
 
-      <HeroFeatureList features={features} />
-
+      {/* <HeroFeatureList features={features} /> */}
+<HeroMarquee />
       <HeroCtaButtons
         residentialCta={residentialCta}
         commercialCta={commercialCta}
