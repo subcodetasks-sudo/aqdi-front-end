@@ -11,6 +11,7 @@ export type CreateUnitLabels = {
     submitting: string;
     submitError: string;
     updateSuccess: string;
+    createSuccess: string;
   };
   title: string;
   editTitle: string;

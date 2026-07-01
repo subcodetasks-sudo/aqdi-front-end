@@ -4,6 +4,7 @@ import { ArrowUpLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
+import { resetCreatePropertyDraft } from "@/features/create-property/utils/reset-create-property-draft";
 import type { PropertyTypeId } from "@/features/properties/types/property-type";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export default function PropertiesTypeDialogOption({
   const router = useRouter();
 
   function handleClick() {
+    resetCreatePropertyDraft();
     onNavigate();
     router.push(href);
   }

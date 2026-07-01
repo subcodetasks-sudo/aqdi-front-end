@@ -13,8 +13,8 @@ export default function HeroCtaButtons({
   mostRequested,
 }: HeroCtaButtonsProps) {
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
-      <div className="flex flex-1 flex-col items-center gap-2">
+    <div className="flex items-start gap-3 sm:gap-4">
+      <div className="flex min-w-0 flex-1 flex-col items-center gap-2">
         <Link href="/create-contract?id=residential" className="w-full">
           <HeroCtaButton
             label={residentialCta}
@@ -29,12 +29,12 @@ export default function HeroCtaButtons({
         </p>
       </div>
 
-      <div className="flex-1">
-        <Link href="/create-contract?id=commercial">
-        <HeroCtaButton
-          label={commercialCta}
-          iconSrc="/icons/commercial.svg"
-        />
+      <div className="min-w-0 flex-1">
+        <Link href="/create-contract?id=commercial" className="w-full">
+          <HeroCtaButton
+            label={commercialCta}
+            iconSrc="/icons/commercial.svg"
+          />
         </Link>
       </div>
     </div>

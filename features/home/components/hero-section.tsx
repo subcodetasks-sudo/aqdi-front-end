@@ -41,7 +41,7 @@ export default async function HeroSection() {
           </div>
 
           <div
-            className="w-full shrink-0 lg:w-[50%] "
+            className="w-full shrink-0 lg:w-[50%] max-lg:hidden "
           >
             <HeroVisual alt={t("visualAlt")} />
           </div>

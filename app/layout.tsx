@@ -5,7 +5,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { DirectionProvider } from "@/components/ui/direction";
 import Providers from "@/app/providers";
 import "./globals.css";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",

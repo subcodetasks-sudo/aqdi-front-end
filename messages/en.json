@@ -1120,7 +1120,8 @@
       "save": "Save changes",
       "submitting": "Saving...",
       "submitError": "Could not save the unit. Please try again.",
-      "updateSuccess": "Unit updated successfully"
+      "updateSuccess": "Unit updated successfully",
+      "createSuccess": "Unit created successfully"
     },
     "title": "Leased unit data",
     "editTitle": "Edit unit data",

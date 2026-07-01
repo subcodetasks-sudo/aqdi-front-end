@@ -38,6 +38,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       submitting: t("navigation.submitting"),
       submitError: t("navigation.submitError"),
       updateSuccess: t("navigation.updateSuccess"),
+      createSuccess: t("navigation.createSuccess"),
     },
     title: t("title"),
     editTitle: t("editTitle"),

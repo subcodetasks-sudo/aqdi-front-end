@@ -63,6 +63,7 @@ type PropertyDraftStore = {
   setAgentData: (data: PropertyAgentDataState) => void;
   setReviewData: (data: PropertyReviewDataState) => void;
   resetDraft: () => void;
+  initializeNewSession: () => void;
   hydrateFilesFromPersisted: () => void;
   initializeEditSession: (
     data: import("@/features/create-property/utils/map-property-api-to-draft").PropertyEditDraftData,
@@ -164,6 +165,10 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
       },
       setReviewData: (data) => set({ reviewData: data }),
       resetDraft: () => set(createInitialPropertyDraft()),
+      initializeNewSession: () => {
+        localStorage.removeItem("aqdi-create-property-draft");
+        set(createInitialPropertyDraft());
+      },
       hydrateFilesFromPersisted: () => {
         const state = get();
         set({
