@@ -25,6 +25,11 @@ function buildCreateUnitHref(
   return `/properties/create-unit?${params.toString()}`;
 }
 
+function buildCreateContractHref(category: PropertyUnitCardData["category"]) {
+  const contractTypeId = category === "commercial" ? "commercial" : "residential";
+  return `/create-contract?id=${contractTypeId}`;
+}
+
 export default function PropertyUnitCardFooter({ unit }: PropertyUnitCardFooterProps) {
   const t = useTranslations("propertyUnits.card");
 
@@ -34,12 +39,13 @@ export default function PropertyUnitCardFooter({ unit }: PropertyUnitCardFooterP
       : t("createCommercialContract");
 
   const createUnitHref = buildCreateUnitHref(unit.propertyId, unit.contractType);
+  const createContractHref = buildCreateContractHref(unit.category);
   const isResidential = unit.category === "residential";
 
   return (
     <div className="space-y-4 pt-2">
       <Link
-        href={`/create-contract?propertyId=${unit.propertyId}`}
+        href={createContractHref}
         className="flex h-14 w-full items-center justify-between rounded-[20px] bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90"
       >
         <span className="flex-1 text-center leading-6">{contractLabel}</span>

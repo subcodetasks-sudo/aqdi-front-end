@@ -1,8 +1,6 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
 import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
@@ -12,18 +10,26 @@ import CreateContractTenantIndividualDataPhase from "@/features/create-contract/
 import CreateContractTenantOrganizationDataPhase from "@/features/create-contract/components/create-contract-tenant-organization-data-phase";
 import CreateContractTenantStatusSelect from "@/features/create-contract/components/create-contract-tenant-status-select";
 import { useCreateContractTenantStep } from "@/features/create-contract/hooks/use-create-contract-tenant-step";
+import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
+import { useSubmitContractStep4 } from "@/features/create-contract/hooks/use-submit-contract-step4";
+import { useSubmitContractStep5 } from "@/features/create-contract/hooks/use-submit-contract-step5";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { TENANT_STEP_PHASE_COUNT } from "@/features/create-contract/types/rented-unit-step";
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { toPropertyContractType } from "@/features/create-contract/types/contract-type";
 
 type CreateContractTenantStepProps = {
   labels: CreateContractLabels["tenant"];
+  contractType: ContractTypeId;
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreateContractTenantStep({
   labels,
+  contractType,
   onBack,
   onComplete,
 }: CreateContractTenantStepProps) {
@@ -42,8 +48,16 @@ export default function CreateContractTenantStep({
     goToNextPhase,
     goToPreviousPhase,
   } = useCreateContractTenantStep();
+  const { submitStep4, isSubmitting: isSubmittingStep4 } = useSubmitContractStep4();
+  const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
+  const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
+  const contractSession = useCreateContractDraftStore((state) => state.contractSession);
+  const apiContractType = toPropertyContractType(contractType);
+  const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
 
   const phase = labels.phases[currentPhaseIndex];
+  const isTenantDataPhase = currentPhaseIndex === 0;
+  const isRentedUnitPhase = currentPhaseIndex === 1;
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
@@ -54,9 +68,28 @@ export default function CreateContractTenantStep({
     goToPreviousPhase();
   }
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
       return;
+    }
+
+    if (isTenantDataPhase) {
+      const submitted = await submitStep4({ tenantData });
+
+      if (!submitted) {
+        return;
+      }
+    }
+
+    if (isRentedUnitPhase) {
+      const submitted = await submitStep5({
+        contractType: apiContractType,
+        rentedUnitData,
+      });
+
+      if (!submitted) {
+        return;
+      }
     }
 
     if (isLastPhase) {
@@ -67,6 +100,20 @@ export default function CreateContractTenantStep({
     goToNextPhase();
   }
 
+  async function handleSaveLater() {
+    if (isSavingDraft) {
+      return;
+    }
+
+    const result = await saveDraft();
+
+    if (!result) {
+      return;
+    }
+
+    openSaveLaterDialog();
+  }
+
   return (
     <div className="space-y-4">
       <CreateContractStepPhaseProgress
@@ -75,16 +122,12 @@ export default function CreateContractTenantStep({
       />
 
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        {currentPhaseIndex === 0 && tenantData.status === "" ? (
+        {currentPhaseIndex === 0 && tenantData.status === "" && contractSession ? (
           <div className="mb-4 flex justify-end">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-auto gap-2 rounded-xl bg-[#fff0f0] px-4 py-2 text-sm font-semibold text-red-500 hover:bg-[#ffe5e5] hover:text-red-600"
-            >
-              <Trash2 className="size-4" aria-hidden="true" />
-              {labels.cancelRequest}
-            </Button>
+            <CreateContractCancelRequestButton
+              contractId={contractSession.contractId}
+              label={labels.cancelRequest}
+            />
           </div>
         ) : null}
 
@@ -137,18 +180,22 @@ export default function CreateContractTenantStep({
 
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
         saveLaterLabel={
           currentPhaseIndex === 0 && tenantData.status === ""
-            ? labels.navigation.saveLater
+            ? isSavingDraft
+              ? labels.navigation.savingLater
+              : labels.navigation.saveLater
             : undefined
         }
-        canContinue={canContinue}
+        canContinue={canContinue && !isSubmitting}
         onPrevious={handlePrevious}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
         onSaveLater={
           currentPhaseIndex === 0 && tenantData.status === ""
-            ? openSaveLaterDialog
+            ? () => void handleSaveLater()
             : undefined
         }
       />
@@ -157,6 +204,7 @@ export default function CreateContractTenantStep({
         labels={labels.saveLaterDialog}
         open={saveLaterOpen}
         onOpenChange={setSaveLaterOpen}
+        orderNumber={contractSession?.uuid}
       />
     </div>
   );

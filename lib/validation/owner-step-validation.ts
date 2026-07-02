@@ -1,3 +1,5 @@
+import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
+
 export type OwnerBirthDateLike = {
   day: string;
   month: string;
@@ -9,6 +11,7 @@ export type OwnerDataLike = {
   idNumber: string;
   birthDate: OwnerBirthDateLike;
   phone: string;
+  iban?: string;
   hasAgent: string;
 };
 
@@ -26,6 +29,8 @@ export type OwnerValidationIssue =
   | "birthDate"
   | "phone"
   | "phoneLength"
+  | "iban"
+  | "ibanInvalid"
   | "hasAgent"
   | "powerOfAttorney";
 
@@ -46,12 +51,16 @@ function isIdNumberComplete(idNumber: string) {
 }
 
 export function isOwnerDataComplete(ownerData: OwnerDataLike) {
+  const hasValidIban =
+    ownerData.iban === undefined || isPropertyOwnerIbanComplete(ownerData.iban);
+
   return (
     ownerData.fullName.trim().length > 0 &&
     isIdNumberComplete(ownerData.idNumber) &&
     isBirthDateComplete(ownerData.birthDate) &&
     isPhoneComplete(ownerData.phone) &&
-    ownerData.hasAgent !== ""
+    ownerData.hasAgent !== "" &&
+    hasValidIban
   );
 }
 
@@ -93,6 +102,14 @@ export function getOwnerDataValidationIssues(
 
   if (ownerData.hasAgent === "") {
     issues.push("hasAgent");
+  }
+
+  if (ownerData.iban !== undefined) {
+    if (!ownerData.iban.trim()) {
+      issues.push("iban");
+    } else if (!isPropertyOwnerIbanComplete(ownerData.iban)) {
+      issues.push("ibanInvalid");
+    }
   }
 
   return issues;

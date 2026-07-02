@@ -4,15 +4,7 @@ import CreateContractPageContent from "@/features/create-contract/components/cre
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
-import {
-  CONTRACT_DURATION_OPTIONS,
-  PAYMENT_METHOD_OPTIONS,
-  TENANT_PERMISSION_OPTIONS,
-} from "@/features/create-contract/types/finance-step";
-import {
-  UNIT_TYPE_OPTIONS,
-  UNIT_USAGE_OPTIONS,
-} from "@/features/create-contract/types/rented-unit-step";
+import { PAYMENT_METHOD_OPTIONS } from "@/features/create-contract/types/finance-step";
 import {
   DELEGATION_TYPE_OPTIONS,
   TENANT_STATUS_OPTIONS,
@@ -54,6 +46,8 @@ export default async function CreateContractPage({
       currency: t("intro.currency"),
       viewAllPrices: t("intro.viewAllPrices"),
       start: t("intro.start"),
+      startContractLoading: t("intro.startContractLoading"),
+      startContractError: t("intro.startContractError"),
       priceDialog: {
         title: t("intro.priceDialog.title"),
         close: t("intro.priceDialog.close"),
@@ -70,7 +64,11 @@ export default async function CreateContractPage({
       navigation: {
         previous: t("deed.navigation.previous"),
         continue: t("deed.navigation.continue"),
+        submitting: t("deed.navigation.submitting"),
       },
+      submitError: t("deed.submitError"),
+      submitAddressError: t("deed.submitAddressError"),
+      missingContractSession: t("deed.missingContractSession"),
       phases: t.raw("deed.phases") as CreateContractLabels["deed"]["phases"],
       deedType: {
         label: t("deed.deedType.label"),
@@ -96,6 +94,8 @@ export default async function CreateContractPage({
       nationalAddress: {
         methods: t.raw("deed.nationalAddress.methods") as string[],
         mapTitle: t("deed.nationalAddress.mapTitle"),
+        mapHint: t("deed.nationalAddress.mapHint"),
+        coordinatesLabel: t("deed.nationalAddress.coordinatesLabel"),
         link: {
           label: t("deed.nationalAddress.link.label"),
           placeholder: t("deed.nationalAddress.link.placeholder"),
@@ -116,13 +116,17 @@ export default async function CreateContractPage({
       navigation: {
         previous: t("owner.navigation.previous"),
         continue: t("owner.navigation.continue"),
+        submitting: t("owner.navigation.submitting"),
       },
+      submitError: t("owner.submitError"),
+      missingContractSession: t("owner.missingContractSession"),
       validation: {
         hintTitle: t("owner.validation.hintTitle"),
         issues: t.raw("owner.validation.issues") as CreateContractLabels["owner"]["validation"]["issues"],
         fieldErrors: {
           idNumberLength: t("owner.validation.fieldErrors.idNumberLength"),
           phoneLength: t("owner.validation.fieldErrors.phoneLength"),
+          iban: t("owner.validation.fieldErrors.iban"),
         },
       },
       phases: t.raw("owner.phases") as CreateContractLabels["owner"]["phases"],
@@ -149,6 +153,10 @@ export default async function CreateContractPage({
         phone: {
           label: t("owner.ownerData.phone.label"),
           placeholder: t("owner.ownerData.phone.placeholder"),
+        },
+        iban: {
+          label: t("owner.ownerData.iban.label"),
+          placeholder: t("owner.ownerData.iban.placeholder"),
         },
         hasAgent: {
           label: t("owner.ownerData.hasAgent.label"),
@@ -182,10 +190,16 @@ export default async function CreateContractPage({
     },
     tenant: {
       cancelRequest: t("tenant.cancelRequest"),
+      submitError: t("tenant.submitError"),
+      submitUnitError: t("tenant.submitUnitError"),
+      missingContractSession: t("tenant.missingContractSession"),
+      saveLaterError: t("tenant.saveLaterError"),
       navigation: {
         previous: t("tenant.navigation.previous"),
         continue: t("tenant.navigation.continue"),
         saveLater: t("tenant.navigation.saveLater"),
+        savingLater: t("tenant.navigation.savingLater"),
+        submitting: t("tenant.navigation.submitting"),
       },
       phases: t.raw("tenant.phases") as CreateContractLabels["tenant"]["phases"],
       tenantStatus: {
@@ -232,6 +246,17 @@ export default async function CreateContractPage({
             ]),
           ) as CreateContractLabels["tenant"]["organizationData"]["delegationType"]["options"],
         },
+        region: {
+          label: t("tenant.organizationData.region.label"),
+          placeholder: t("tenant.organizationData.region.placeholder"),
+          loading: t("tenant.organizationData.region.loading"),
+        },
+        city: {
+          label: t("tenant.organizationData.city.label"),
+          placeholder: t("tenant.organizationData.city.placeholder"),
+          loading: t("tenant.organizationData.city.loading"),
+          selectRegionFirst: t("tenant.organizationData.city.selectRegionFirst"),
+        },
         unifiedRecordNumber: {
           label: t("tenant.organizationData.unifiedRecordNumber.label"),
           placeholder: t(
@@ -268,23 +293,12 @@ export default async function CreateContractPage({
       },
       rentedUnit: {
         selectPlaceholder: t("tenant.rentedUnit.selectPlaceholder"),
+        optionsError: t("tenant.rentedUnit.optionsError"),
         unitType: {
           label: t("tenant.rentedUnit.unitType.label"),
-          options: Object.fromEntries(
-            UNIT_TYPE_OPTIONS.map((unitType) => [
-              unitType,
-              t(`tenant.rentedUnit.unitType.options.${unitType}`),
-            ]),
-          ) as CreateContractLabels["tenant"]["rentedUnit"]["unitType"]["options"],
         },
         unitUsage: {
           label: t("tenant.rentedUnit.unitUsage.label"),
-          options: Object.fromEntries(
-            UNIT_USAGE_OPTIONS.map((unitUsage) => [
-              unitUsage,
-              t(`tenant.rentedUnit.unitUsage.options.${unitUsage}`),
-            ]),
-          ) as CreateContractLabels["tenant"]["rentedUnit"]["unitUsage"]["options"],
         },
         totalArea: {
           label: t("tenant.rentedUnit.totalArea.label"),
@@ -369,9 +383,12 @@ export default async function CreateContractPage({
     finance: {
       title: t("finance.title"),
       subtitle: t("finance.subtitle"),
+      submitError: t("finance.submitError"),
+      missingContractSession: t("finance.missingContractSession"),
       navigation: {
         previous: t("finance.navigation.previous"),
         continue: t("finance.navigation.continue"),
+        submitting: t("finance.navigation.submitting"),
       },
       selectPlaceholder: t("finance.selectPlaceholder"),
       contractStartDate: {
@@ -387,12 +404,8 @@ export default async function CreateContractPage({
       },
       contractDuration: {
         label: t("finance.contractDuration.label"),
-        options: Object.fromEntries(
-          CONTRACT_DURATION_OPTIONS.map((duration) => [
-            duration,
-            t(`finance.contractDuration.options.${duration}`),
-          ]),
-        ) as CreateContractLabels["finance"]["contractDuration"]["options"],
+        loading: t("finance.contractDuration.loading"),
+        optionsError: t("finance.contractDuration.optionsError"),
       },
       totalRentAmount: {
         label: t("finance.totalRentAmount.label"),
@@ -421,12 +434,7 @@ export default async function CreateContractPage({
         heading: t("finance.tenantPermissionsDialog.heading"),
         subtitle: t("finance.tenantPermissionsDialog.subtitle"),
         continue: t("finance.tenantPermissionsDialog.continue"),
-        options: Object.fromEntries(
-          TENANT_PERMISSION_OPTIONS.map((permission) => [
-            permission,
-            t(`finance.tenantPermissionsDialog.options.${permission}`),
-          ]),
-        ) as CreateContractLabels["finance"]["tenantPermissionsDialog"]["options"],
+        optionsError: t("finance.tenantPermissionsDialog.optionsError"),
       },
       otherConditionsDialog: {
         title: t("finance.otherConditionsDialog.title"),

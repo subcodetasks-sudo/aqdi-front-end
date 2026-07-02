@@ -11,6 +11,8 @@ export type RequestActionType =
 
 export type RequestCardData = {
   id: string;
+  contractId: number;
+  contractType: "residential" | "commercial";
   title: string;
   date: string;
   requestNumber: string;

@@ -7,6 +7,8 @@ import CreateContractStepNavigation from "@/features/create-contract/components/
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
 import { useCreateContractDeedStep } from "@/features/create-contract/hooks/use-create-contract-deed-step";
+import { useSubmitContractStep1 } from "@/features/create-contract/hooks/use-submit-contract-step1";
+import { useSubmitContractStep2 } from "@/features/create-contract/hooks/use-submit-contract-step2";
 import { DEED_STEP_PHASE_COUNT } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 
@@ -35,11 +37,16 @@ export default function CreateContractDeedStep({
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
+    mapLocation,
+    setMapLocation,
     isLastPhase,
     canContinue,
     goToNextPhase,
     goToPreviousPhase,
   } = useCreateContractDeedStep();
+  const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
+  const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
+  const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
 
   const phase = labels.phases[currentPhaseIndex];
 
@@ -52,12 +59,34 @@ export default function CreateContractDeedStep({
     goToPreviousPhase();
   }
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
       return;
     }
 
+    if (currentPhaseIndex === 0) {
+      if (!selectedDeedType) {
+        return;
+      }
+
+      const submitted = await submitStep1(selectedDeedType, deedFiles);
+
+      if (!submitted) {
+        return;
+      }
+    }
+
     if (isLastPhase) {
+      const submitted = await submitStep2({
+        addressMethod: nationalAddressMethod,
+        photoFiles: nationalAddressPhotoFiles,
+        linkUrl: nationalAddressLinkUrl,
+      });
+
+      if (!submitted) {
+        return;
+      }
+
       onComplete();
       return;
     }
@@ -106,16 +135,20 @@ export default function CreateContractDeedStep({
             onPhotoFilesChange={setNationalAddressPhotoFiles}
             linkUrl={nationalAddressLinkUrl}
             onLinkUrlChange={setNationalAddressLinkUrl}
+            mapLocation={mapLocation}
+            onMapLocationChange={setMapLocation}
           />
         ) : null}
       </div>
 
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
+        canContinue={canContinue && !isSubmitting}
         onPrevious={handlePrevious}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
       />
     </div>
   );

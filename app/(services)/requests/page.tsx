@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
 import RequestsPageContent from "@/features/requests/components/requests-page-content";
+import { getContracts } from "@/features/requests/services/get-contracts";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestLabels } from "@/features/requests/types/request-labels";
+import { mapContractToRequestCard } from "@/features/requests/utils/map-contract-to-request-card";
 
 export default async function RequestsPage() {
   const t = await getTranslations("requests");
@@ -10,9 +12,14 @@ export default async function RequestsPage() {
   const labels: RequestLabels = {
     backLabel: t("backLabel"),
     pageTitle: t("pageTitle"),
+    emptyState: t("emptyState"),
     tabs: {
       residential: t("tabs.residential"),
       commercial: t("tabs.commercial"),
+    },
+    contractTypes: {
+      housing: t("contractTypes.housing"),
+      commercial: t("contractTypes.commercial"),
     },
     card: {
       requestDateLabel: t("card.requestDateLabel"),
@@ -32,9 +39,31 @@ export default async function RequestsPage() {
         returned: t("card.status.returned"),
       },
     },
-    residentialItems: t.raw("residentialItems") as RequestCardData[],
-    commercialItems: t.raw("commercialItems") as RequestCardData[],
   };
 
-  return <RequestsPageContent labels={labels} />;
+  let residentialItems: RequestCardData[] = [];
+  let commercialItems: RequestCardData[] = [];
+
+  try {
+    const contracts = await getContracts();
+
+    residentialItems = contracts
+      .filter((contract) => contract.contract_type === "housing")
+      .map((contract) => mapContractToRequestCard(contract, labels.contractTypes));
+
+    commercialItems = contracts
+      .filter((contract) => contract.contract_type === "commercial")
+      .map((contract) => mapContractToRequestCard(contract, labels.contractTypes));
+  } catch {
+    residentialItems = [];
+    commercialItems = [];
+  }
+
+  return (
+    <RequestsPageContent
+      labels={labels}
+      residentialItems={residentialItems}
+      commercialItems={commercialItems}
+    />
+  );
 }

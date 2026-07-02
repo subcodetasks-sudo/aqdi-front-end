@@ -28,11 +28,11 @@ export const MY_PROPERTY_ACTIONS_CONFIG: MyPropertyActionConfig[] = [
     labelKey: "add-unit",
     iconType: "plus",
   },
-  {
-    id: "create-contract",
-    labelKey: "create-contract",
-    iconType: "ejar",
-  },
+  // {
+  //   id: "create-contract",
+  //   labelKey: "create-contract",
+  //   iconType: "ejar",
+  // },
 ];
 
 export function buildPropertyActionHref(

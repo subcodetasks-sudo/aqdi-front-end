@@ -2,6 +2,7 @@ import RequestCardActions from "@/features/requests/components/request-card-acti
 import RequestCardBadges from "@/features/requests/components/request-card-badges";
 import RequestCardDivider from "@/features/requests/components/request-card-divider";
 import RequestCopyIdButton from "@/features/requests/components/request-copy-id-button";
+import RequestDeleteButton from "@/features/requests/components/request-delete-button";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
 
@@ -23,7 +24,10 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
           </p>
         </div>
 
-        <RequestCardBadges card={card} labels={labels} />
+        <div className="flex flex-col items-end gap-2">
+          <RequestDeleteButton contractId={card.contractId} />
+          <RequestCardBadges card={card} labels={labels} />
+        </div>
       </div>
 
       <div className="mt-8 flex justify-start">
@@ -45,7 +49,7 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
 
       <RequestCardDivider text={labels.inquiryDivider} />
 
-      <RequestCardActions actionType={card.actionType} labels={labels} />
+      <RequestCardActions card={card} labels={labels} />
     </article>
   );
 }

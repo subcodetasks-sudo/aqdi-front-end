@@ -26,11 +26,15 @@ export default function CreateContractSaveLaterDialog({
   labels,
   open,
   onOpenChange,
-  orderNumber = "100054",
+  orderNumber,
 }: CreateContractSaveLaterDialogProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
+    if (!orderNumber) {
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(`#${orderNumber}`);
       setCopied(true);
@@ -87,7 +91,7 @@ export default function CreateContractSaveLaterDialog({
               </p>
 
               <p className="text-2xl font-extrabold text-[#333333]">
-                #{orderNumber}
+                #{orderNumber ?? "—"}
               </p>
             </div>
 

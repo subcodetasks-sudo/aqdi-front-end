@@ -6,13 +6,17 @@ import CreateContractRentedUnitAreaField from "@/features/create-contract/compon
 import CreateContractRentedUnitCheckboxOption, {
   CreateContractFurnishingTypeToggle,
 } from "@/features/create-contract/components/create-contract-rented-unit-checkbox-option";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import {
-  UNIT_TYPE_OPTIONS,
-  UNIT_USAGE_OPTIONS,
   buildCountOptions,
   type RentedUnitDataState,
 } from "@/features/create-contract/types/rented-unit-step";
+import {
+  useUnitTypeOptions,
+  useUnitUsageOptions,
+} from "@/features/create-unit/hooks/use-unit-lookup-options";
+import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import { Hash } from "lucide-react";
 
 type CreateContractRentedUnitDataPhaseProps = {
@@ -21,11 +25,29 @@ type CreateContractRentedUnitDataPhaseProps = {
   onChange: (value: RentedUnitDataState) => void;
 };
 
+function toSelectOptions(options: UnitLookupOption[]) {
+  return options.map((option) => ({
+    value: String(option.id),
+    label: option.name,
+  }));
+}
+
 export default function CreateContractRentedUnitDataPhase({
   labels,
   value,
   onChange,
 }: CreateContractRentedUnitDataPhaseProps) {
+  const contractType =
+    useCreateContractDraftStore((state) => state.contractSession?.contractType) ??
+    "housing";
+  const unitTypesQuery = useUnitTypeOptions(contractType);
+  const unitUsageQuery = useUnitUsageOptions(contractType);
+
+  const isLoadingOptions = unitTypesQuery.isLoading || unitUsageQuery.isLoading;
+  const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
+  const unitTypeOptions = toSelectOptions(unitTypesQuery.data ?? []);
+  const unitUsageOptions = toSelectOptions(unitUsageQuery.data ?? []);
+
   const countOptions = buildCountOptions(20).map((option) => ({
     ...option,
     label: option.label,
@@ -39,16 +61,6 @@ export default function CreateContractRentedUnitDataPhase({
     })),
   ];
 
-  const unitTypeOptions = UNIT_TYPE_OPTIONS.map((unitType) => ({
-    value: unitType,
-    label: labels.unitType.options[unitType],
-  }));
-
-  const unitUsageOptions = UNIT_USAGE_OPTIONS.map((unitUsage) => ({
-    value: unitUsage,
-    label: labels.unitUsage.options[unitUsage],
-  }));
-
   function updateField<K extends keyof RentedUnitDataState>(
     field: K,
     fieldValue: RentedUnitDataState[K],
@@ -59,6 +71,25 @@ export default function CreateContractRentedUnitDataPhase({
     });
   }
 
+  if (optionsError) {
+    return (
+      <p className="text-sm text-red-500">
+        {optionsError instanceof Error
+          ? optionsError.message
+          : labels.optionsError}
+      </p>
+    );
+  }
+
+  if (isLoadingOptions) {
+    return (
+      <div className="space-y-3 py-4">
+        <div className="h-14 animate-pulse rounded-full bg-brand-background" />
+        <div className="h-14 animate-pulse rounded-full bg-brand-background" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <div className="grid gap-3 md:grid-cols-2">
@@ -66,23 +97,16 @@ export default function CreateContractRentedUnitDataPhase({
           label={labels.unitType.label}
           placeholder={labels.selectPlaceholder}
           options={unitTypeOptions}
-          value={value.unitType}
-          onChange={(unitType) =>
-            updateField("unitType", unitType as RentedUnitDataState["unitType"])
-          }
+          value={value.unitTypeId}
+          onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
         />
 
         <CreateContractFormSelect
           label={labels.unitUsage.label}
           placeholder={labels.selectPlaceholder}
           options={unitUsageOptions}
-          value={value.unitUsage}
-          onChange={(unitUsage) =>
-            updateField(
-              "unitUsage",
-              unitUsage as RentedUnitDataState["unitUsage"],
-            )
-          }
+          value={value.unitUsageId}
+          onChange={(unitUsageId) => updateField("unitUsageId", unitUsageId)}
         />
       </div>
 

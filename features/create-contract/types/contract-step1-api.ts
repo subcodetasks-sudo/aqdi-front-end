@@ -1,0 +1,20 @@
+export type ContractStep1ApiData = {
+  id: number;
+  contract_id: number;
+  uuid: string;
+  contract_type: string;
+  contract_type_trans: string;
+  real_id: number | null;
+  real_units_id: number | null;
+  instrument_type: string;
+  instrument_type_trans: string;
+  image_instrument: string | null;
+  image_instrument_from_the_front: string | null;
+  image_instrument_from_the_back: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  lat: string | null;
+  lng: string | null;
+  address_url: string | null;
+  step: number;
+};

@@ -41,8 +41,9 @@ export default async function RootLayout({
       lang={locale}
       dir={direction}
       className={`${ibmPlexSansArabic.className} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Providers>
           <DirectionProvider dir={direction} direction={direction}>
             <NextIntlClientProvider locale={locale} messages={messages}>

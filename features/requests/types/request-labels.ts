@@ -22,11 +22,14 @@ export type RequestCardLabels = {
 export type RequestLabels = {
   backLabel: string;
   pageTitle: string;
+  emptyState: string;
   tabs: {
     residential: string;
     commercial: string;
   };
+  contractTypes: {
+    housing: string;
+    commercial: string;
+  };
   card: RequestCardLabels;
-  residentialItems: RequestCardData[];
-  commercialItems: RequestCardData[];
 };

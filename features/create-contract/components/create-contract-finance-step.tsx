@@ -5,17 +5,21 @@ import CreateContractOtherConditionsDialog from "@/features/create-contract/comp
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractTenantPermissionsDialog from "@/features/create-contract/components/create-contract-tenant-permissions-dialog";
+import { useSubmitContractStep6 } from "@/features/create-contract/hooks/use-submit-contract-step6";
 import { useCreateContractFinanceStep } from "@/features/create-contract/hooks/use-create-contract-finance-step";
+import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 
 type CreateContractFinanceStepProps = {
   labels: CreateContractLabels["finance"];
+  contractType: ContractTypeId;
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreateContractFinanceStep({
   labels,
+  contractType,
   onBack,
   onComplete,
 }: CreateContractFinanceStepProps) {
@@ -27,12 +31,19 @@ export default function CreateContractFinanceStep({
     setTenantPermissionsDialogOpen,
     otherConditionsDialogOpen,
     setOtherConditionsDialogOpen,
-    saveTenantPermissions,
+    saveTenantRoles,
     saveOtherConditions,
   } = useCreateContractFinanceStep();
+  const { submitStep6, isSubmitting } = useSubmitContractStep6();
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
+      return;
+    }
+
+    const submitted = await submitStep6({ financeData });
+
+    if (!submitted) {
       return;
     }
 
@@ -50,6 +61,7 @@ export default function CreateContractFinanceStep({
 
         <CreateContractFinanceDataPhase
           labels={labels}
+          contractType={contractType}
           value={financeData}
           onChange={setFinanceData}
           onOpenTenantPermissions={() => setTenantPermissionsDialogOpen(true)}
@@ -61,8 +73,8 @@ export default function CreateContractFinanceStep({
         labels={labels.tenantPermissionsDialog}
         open={tenantPermissionsDialogOpen}
         onOpenChange={setTenantPermissionsDialogOpen}
-        value={financeData.tenantPermissions}
-        onSave={saveTenantPermissions}
+        value={financeData.selectedTenantRoleIds}
+        onSave={saveTenantRoles}
       />
 
       <CreateContractOtherConditionsDialog
@@ -75,10 +87,12 @@ export default function CreateContractFinanceStep({
 
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
+        canContinue={canContinue && !isSubmitting}
         onPrevious={onBack}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
       />
     </div>
   );

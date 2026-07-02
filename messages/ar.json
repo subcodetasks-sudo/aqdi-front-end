@@ -765,9 +765,14 @@
   "requests": {
     "backLabel": "رجوع",
     "pageTitle": "الطلبات",
+    "emptyState": "لا توجد لديك طلبات حالياً.",
     "tabs": {
       "residential": "وحدات سكنية",
       "commercial": "وحدات تجارية"
+    },
+    "contractTypes": {
+      "housing": "عقد إيجار سكني",
+      "commercial": "عقد إيجار تجاري"
     },
     "card": {
       "requestDateLabel": "تاريخ الطلب:",
@@ -785,6 +790,16 @@
         "incomplete": "غير مكتمل",
         "inProgress": "قيد التنفيذ",
         "returned": "مسترجع"
+      },
+      "deleteRequest": "حذف الطلب",
+      "deleteDialog": {
+        "title": "حذف العقد",
+        "description": "هل أنت متأكد من حذف هذا العقد؟ لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "confirm": "حذف",
+        "deleting": "جاري الحذف...",
+        "success": "تم حذف العقد بنجاح",
+        "error": "فشل حذف العقد"
       }
     },
     "residentialItems": [
@@ -913,6 +928,8 @@
       "categoryCommercial": "تجاري",
       "createResidentialContract": "إنشاء عقد سكني على هذه الوحدة",
       "createCommercialContract": "إنشاء عقد تجاري على هذه الوحدة",
+      "startContractLoading": "جاري بدء العقد...",
+      "startContractError": "فشل بدء العقد",
       "orDivider": "أو",
       "createNewResidentialUnit": "إنشاء وحدة سكنية جديدة",
       "createNewCommercialUnit": "إنشاء وحدة تجارية جديدة",
@@ -1287,6 +1304,8 @@
       "currency": "ريال",
       "viewAllPrices": "عرض جميع الأسعار",
       "start": "لنبدأ",
+      "startContractLoading": "جاري بدء العقد...",
+      "startContractError": "فشل بدء العقد",
       "priceDialog": {
         "title": "رسوم إنشاء وتوثيق عقد الإيجار :",
         "close": "إغلاق",
@@ -1303,8 +1322,12 @@
     "deed": {
       "navigation": {
         "previous": "السابق",
-        "continue": "متابعة"
+        "continue": "متابعة",
+        "submitting": "جاري الحفظ..."
       },
+      "submitError": "فشل حفظ بيانات الصك",
+      "submitAddressError": "فشل حفظ بيانات العنوان",
+      "missingContractSession": "يرجى بدء العقد أولاً",
       "phases": [
         {
           "title": "وثيقة الملكية",
@@ -1349,6 +1372,8 @@
           "إدخال رابط"
         ],
         "mapTitle": "خريطة العنوان الوطني",
+        "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
+        "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
@@ -1368,8 +1393,11 @@
     "owner": {
       "navigation": {
         "previous": "السابق",
-        "continue": "متابعة"
+        "continue": "متابعة",
+        "submitting": "جاري الحفظ..."
       },
+      "submitError": "فشل حفظ بيانات المالك",
+      "missingContractSession": "يرجى بدء العقد أولاً",
       "validation": {
         "hintTitle": "يرجى إكمال الحقول التالية:",
         "issues": {
@@ -1379,12 +1407,15 @@
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
           "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "iban": "رقم الآيبان للمالك",
+          "ibanInvalid": "رقم الآيبان يجب أن يكون سعوديًا صالحًا",
           "hasAgent": "هل يوجد وكيل للمالك",
           "powerOfAttorney": "إرفاق صورة الوكالة"
         },
         "fieldErrors": {
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل"
+          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
       },
       "phases": [
@@ -1421,6 +1452,10 @@
           "label": "رقم جوال المالك",
           "placeholder": "5x xxx xx xxx"
         },
+        "iban": {
+          "label": "رقم الآيبان للمالك",
+          "placeholder": "SA00 0000 0000 0000 0000 0000"
+        },
         "hasAgent": {
           "label": "هل يوجد وكيل للمالك",
           "placeholder": "إختر من هنا ..",
@@ -1454,10 +1489,16 @@
     },
     "tenant": {
       "cancelRequest": "إلغاء الطلب",
+      "submitError": "فشل حفظ بيانات المستأجر",
+      "submitUnitError": "فشل حفظ بيانات الوحدة المؤجرة",
+      "missingContractSession": "يرجى بدء العقد أولاً",
+      "saveLaterError": "فشل حفظ مسودة العقد",
       "navigation": {
         "previous": "السابق",
         "continue": "متابعة",
-        "saveLater": "حفظ وإكمال لاحقاً"
+        "saveLater": "حفظ وإكمال لاحقاً",
+        "savingLater": "جاري الحفظ...",
+        "submitting": "جاري الحفظ..."
       },
       "phases": [
         {
@@ -1507,6 +1548,17 @@
             "agent-authorized": "انا وكيل او مفوض عن مالك السجل"
           }
         },
+        "region": {
+          "label": "منطقة الوكيل القانوني للمستأجر !",
+          "placeholder": "... إختر من هنا",
+          "loading": "جاري تحميل المناطق..."
+        },
+        "city": {
+          "label": "مدينة الوكيل القانوني للمستأجر !",
+          "placeholder": "... إختر من هنا",
+          "loading": "جاري تحميل المدن...",
+          "selectRegionFirst": "يرجى اختيار المنطقة أولاً"
+        },
         "unifiedRecordNumber": {
           "label": "رقم السجل الموحد - المبتدئ برقم 7 !",
           "placeholder": "7x xxx xx xxx"
@@ -1533,6 +1585,7 @@
       },
       "rentedUnit": {
         "selectPlaceholder": "... إختر من هنا",
+        "optionsError": "فشل تحميل خيارات الوحدة",
         "unitType": {
           "label": "نوع الوحدة !",
           "options": {
@@ -1634,9 +1687,12 @@
     "finance": {
       "title": "البيانات المالية",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
+      "submitError": "فشل حفظ البيانات المالية",
+      "missingContractSession": "يرجى بدء العقد أولاً",
       "navigation": {
         "previous": "السابق",
-        "continue": "متابعة"
+        "continue": "متابعة",
+        "submitting": "جاري الحفظ..."
       },
       "selectPlaceholder": "... إختر من هنا",
       "contractStartDate": {
@@ -1652,13 +1708,8 @@
       },
       "contractDuration": {
         "label": "مدة العقد !",
-        "options": {
-          "one-year": "سنة واحدة",
-          "two-years": "سنتان",
-          "three-years": "ثلاث سنوات",
-          "four-years": "أربع سنوات",
-          "five-years": "خمس سنوات"
-        }
+        "loading": "جاري تحميل مدد العقد...",
+        "optionsError": "فشل تحميل مدد العقد"
       },
       "totalRentAmount": {
         "label": "مبلغ الايجار الاجمالي !",
@@ -1687,12 +1738,7 @@
         "heading": "هل ترغب بإضافة صلاحيات للمستأجر...؟",
         "subtitle": "يمكنك إضافة ما يلي :",
         "continue": "متابعة",
-        "options": {
-          "sublease": "يحق للمستأجر التأجير من الباطن... ؟",
-          "modifications": "يحق للمستأجر إجراء التعديلات على الوحدة الايجارية... ؟",
-          "government-review": "يحق للمستأجر مراجعة الجهات الحكومية... ؟",
-          "renovations": "يحق للمستأجر إجراء الترميمات والتحسينات على الوحدة الايجارية ... ؟"
-        }
+        "optionsError": "فشل تحميل صلاحيات المستأجر"
       },
       "otherConditionsDialog": {
         "title": "شروط أخرى... ؟",

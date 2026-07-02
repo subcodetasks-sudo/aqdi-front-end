@@ -1,18 +1,10 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import type {
-  ContractDurationOption,
-  PaymentMethodOption,
-  TenantPermissionOption,
-} from "@/features/create-contract/types/finance-step";
+import type { PaymentMethodOption } from "@/features/create-contract/types/finance-step";
 import type { HasAgentOption } from "@/features/create-contract/types/owner-step";
 import type {
   DelegationTypeOption,
   TenantStatusOption,
 } from "@/features/create-contract/types/tenant-step";
-import type {
-  UnitTypeOption,
-  UnitUsageOption,
-} from "@/features/create-contract/types/rented-unit-step";
 
 export type CreateContractLabels = {
   backLabel: string;
@@ -37,6 +29,8 @@ export type CreateContractLabels = {
     currency: string;
     viewAllPrices: string;
     start: string;
+    startContractLoading: string;
+    startContractError: string;
     priceDialog: {
       title: string;
       close: string;
@@ -49,7 +43,11 @@ export type CreateContractLabels = {
     navigation: {
       previous: string;
       continue: string;
+      submitting: string;
     };
+    submitError: string;
+    submitAddressError: string;
+    missingContractSession: string;
     phases: {
       title: string;
       subtitle: string;
@@ -73,6 +71,8 @@ export type CreateContractLabels = {
     nationalAddress: {
       methods: string[];
       mapTitle: string;
+      mapHint: string;
+      coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
@@ -84,7 +84,10 @@ export type CreateContractLabels = {
     navigation: {
       previous: string;
       continue: string;
+      submitting: string;
     };
+    submitError: string;
+    missingContractSession: string;
     validation: {
       hintTitle: string;
       issues: Record<
@@ -94,6 +97,8 @@ export type CreateContractLabels = {
         | "birthDate"
         | "phone"
         | "phoneLength"
+        | "iban"
+        | "ibanInvalid"
         | "hasAgent"
         | "powerOfAttorney",
         string
@@ -101,6 +106,7 @@ export type CreateContractLabels = {
       fieldErrors: {
         idNumberLength: string;
         phoneLength: string;
+        iban: string;
       };
     };
     phases: {
@@ -131,6 +137,10 @@ export type CreateContractLabels = {
         label: string;
         placeholder: string;
       };
+      iban: {
+        label: string;
+        placeholder: string;
+      };
       hasAgent: {
         label: string;
         placeholder: string;
@@ -152,10 +162,16 @@ export type CreateContractLabels = {
   };
   tenant: {
     cancelRequest: string;
+    submitError: string;
+    submitUnitError: string;
+    missingContractSession: string;
+    saveLaterError: string;
     navigation: {
       previous: string;
       continue: string;
       saveLater: string;
+      savingLater: string;
+      submitting: string;
     };
     phases: {
       title: string;
@@ -193,6 +209,17 @@ export type CreateContractLabels = {
         placeholder: string;
         options: Record<DelegationTypeOption, string>;
       };
+      region: {
+        label: string;
+        placeholder: string;
+        loading: string;
+      };
+      city: {
+        label: string;
+        placeholder: string;
+        loading: string;
+        selectRegionFirst: string;
+      };
       unifiedRecordNumber: {
         label: string;
         placeholder: string;
@@ -210,13 +237,12 @@ export type CreateContractLabels = {
     };
     rentedUnit: {
       selectPlaceholder: string;
+      optionsError: string;
       unitType: {
         label: string;
-        options: Record<UnitTypeOption, string>;
       };
       unitUsage: {
         label: string;
-        options: Record<UnitUsageOption, string>;
       };
       totalArea: {
         label: string;
@@ -301,9 +327,12 @@ export type CreateContractLabels = {
   finance: {
     title: string;
     subtitle: string;
+    submitError: string;
+    missingContractSession: string;
     navigation: {
       previous: string;
       continue: string;
+      submitting: string;
     };
     selectPlaceholder: string;
     contractStartDate: {
@@ -319,7 +348,8 @@ export type CreateContractLabels = {
     };
     contractDuration: {
       label: string;
-      options: Record<ContractDurationOption, string>;
+      loading: string;
+      optionsError: string;
     };
     totalRentAmount: {
       label: string;
@@ -343,7 +373,7 @@ export type CreateContractLabels = {
       heading: string;
       subtitle: string;
       continue: string;
-      options: Record<TenantPermissionOption, string>;
+      optionsError: string;
     };
     otherConditionsDialog: {
       title: string;

@@ -2,20 +2,25 @@
 
 import RequestsGrid from "@/features/requests/components/requests-grid";
 import { useRequestsTabs } from "@/features/requests/hooks/use-requests-tabs";
+import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestLabels } from "@/features/requests/types/request-labels";
 import { cn } from "@/lib/utils";
 
 type RequestsUnitTabsProps = {
   labels: RequestLabels;
+  residentialItems: RequestCardData[];
+  commercialItems: RequestCardData[];
 };
 
-export default function RequestsUnitTabs({ labels }: RequestsUnitTabsProps) {
+export default function RequestsUnitTabs({
+  labels,
+  residentialItems,
+  commercialItems,
+}: RequestsUnitTabsProps) {
   const { activeTab, selectTab } = useRequestsTabs();
 
   const items =
-    activeTab === "residential"
-      ? labels.residentialItems
-      : labels.commercialItems;
+    activeTab === "residential" ? residentialItems : commercialItems;
 
   return (
     <div className="space-y-6">
@@ -48,7 +53,13 @@ export default function RequestsUnitTabs({ labels }: RequestsUnitTabsProps) {
         </div>
       </div>
 
-      <RequestsGrid items={items} labels={labels.card} />
+      {items.length === 0 ? (
+        <p className="rounded-3xl bg-white px-6 py-12 text-center text-sm text-muted-foreground shadow-sm">
+          {labels.emptyState}
+        </p>
+      ) : (
+        <RequestsGrid items={items} labels={labels.card} />
+      )}
     </div>
   );
 }

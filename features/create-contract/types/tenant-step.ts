@@ -31,6 +31,8 @@ export const EMPTY_INDIVIDUAL_TENANT_DATA: IndividualTenantData = {
 
 export type OrganizationTenantData = {
   delegationType: DelegationTypeOption | "";
+  regionId: number | "";
+  cityId: number | "";
   unifiedRecordNumber: string;
   ownerIdNumber: string;
   ownerBirthDate: BirthDateValue;
@@ -40,6 +42,8 @@ export type OrganizationTenantData = {
 
 export const EMPTY_ORGANIZATION_TENANT_DATA: OrganizationTenantData = {
   delegationType: "",
+  regionId: "",
+  cityId: "",
   unifiedRecordNumber: "",
   ownerIdNumber: "",
   ownerBirthDate: EMPTY_BIRTH_DATE,
@@ -95,6 +99,8 @@ function isIndividualTenantComplete(individual: IndividualTenantData) {
 function isOrganizationTenantComplete(organization: OrganizationTenantData) {
   const baseComplete =
     organization.delegationType !== "" &&
+    organization.regionId !== "" &&
+    organization.cityId !== "" &&
     isUnifiedRecordNumberComplete(organization.unifiedRecordNumber) &&
     isIdNumberComplete(organization.ownerIdNumber) &&
     isBirthDateComplete(organization.ownerBirthDate) &&

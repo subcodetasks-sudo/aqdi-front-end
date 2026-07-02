@@ -8,6 +8,7 @@ import CreateContractPaymentStep from "@/features/create-contract/components/cre
 import CreateContractTenantStep from "@/features/create-contract/components/create-contract-tenant-step";
 import CreateContractStepper from "@/features/create-contract/components/create-contract-stepper";
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
+import { useStartFreshContract } from "@/features/create-contract/hooks/use-start-fresh-contract";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -24,6 +25,7 @@ export default function CreateContractWizard({
 }: CreateContractWizardProps) {
   const { currentStep, currentStepIndex, goNext, goBack } =
     useCreateContractSteps();
+  const { handleStart, isStarting } = useStartFreshContract(contractType);
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
@@ -43,7 +45,8 @@ export default function CreateContractWizard({
           stepperLabels={labels.stepper}
           contractType={contractType}
           prices={labels.prices}
-          onStart={goNext}
+          onStart={handleStart}
+          isStarting={isStarting}
         />
       ) : null}
 
@@ -66,6 +69,7 @@ export default function CreateContractWizard({
       {currentStep === "tenant" ? (
         <CreateContractTenantStep
           labels={labels.tenant}
+          contractType={contractType}
           onBack={goBack}
           onComplete={goNext}
         />
@@ -74,6 +78,7 @@ export default function CreateContractWizard({
       {currentStep === "finance" ? (
         <CreateContractFinanceStep
           labels={labels.finance}
+          contractType={contractType}
           onBack={goBack}
           onComplete={goNext}
         />

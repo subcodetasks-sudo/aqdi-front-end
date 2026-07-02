@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone, User } from "lucide-react";
+import { CreditCard, IdCard, Phone, User } from "lucide-react";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
@@ -8,6 +8,7 @@ import CreateContractIconInputField from "@/features/create-contract/components/
 import { HAS_AGENT_OPTIONS } from "@/features/create-contract/types/owner-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OwnerDataState } from "@/features/create-contract/types/owner-step";
+import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
 import {
   getIdNumberFieldError,
   getPhoneFieldError,
@@ -51,6 +52,11 @@ export default function CreateContractOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
+  const ibanValue = value.iban ?? "";
+  const ibanError =
+    ibanValue.trim() && !isPropertyOwnerIbanComplete(ibanValue)
+      ? validationLabels.iban
+      : undefined;
 
   return (
     <div className="space-y-5">
@@ -108,6 +114,19 @@ export default function CreateContractOwnerDataPhase({
           }
         />
       </div>
+
+      <CreateContractIconInputField
+        label={labels.iban.label}
+        placeholder={labels.iban.placeholder}
+        value={ibanValue}
+        onChange={(iban) =>
+          updateField("iban", iban.replace(/\s/g, "").toUpperCase().slice(0, 24))
+        }
+        icon={CreditCard}
+        dir="ltr"
+        maxLength={24}
+        errorMessage={ibanError}
+      />
     </div>
   );
 }

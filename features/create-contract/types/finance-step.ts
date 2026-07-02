@@ -1,17 +1,6 @@
 import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
 import { EMPTY_BIRTH_DATE } from "@/features/create-contract/types/owner-step";
 
-export const CONTRACT_DURATION_OPTIONS = [
-  "one-year",
-  "two-years",
-  "three-years",
-  "four-years",
-  "five-years",
-] as const;
-
-export type ContractDurationOption =
-  (typeof CONTRACT_DURATION_OPTIONS)[number];
-
 export const PAYMENT_METHOD_OPTIONS = [
   "monthly",
   "quarterly",
@@ -21,44 +10,25 @@ export const PAYMENT_METHOD_OPTIONS = [
 
 export type PaymentMethodOption = (typeof PAYMENT_METHOD_OPTIONS)[number];
 
-export const TENANT_PERMISSION_OPTIONS = [
-  "sublease",
-  "modifications",
-  "government-review",
-  "renovations",
-] as const;
-
-export type TenantPermissionOption =
-  (typeof TENANT_PERMISSION_OPTIONS)[number];
-
-export type TenantPermissionsState = Record<TenantPermissionOption, boolean>;
-
-export const DEFAULT_TENANT_PERMISSIONS: TenantPermissionsState = {
-  sublease: false,
-  modifications: true,
-  "government-review": false,
-  renovations: false,
-};
-
 export type FinanceDataState = {
   contractStartDate: BirthDateValue;
-  contractDuration: ContractDurationOption | "";
+  contractPeriodId: number | "";
   totalRentAmount: string;
   paymentMethod: PaymentMethodOption | "";
   addTenantPermissions: boolean;
   addOtherConditions: boolean;
-  tenantPermissions: TenantPermissionsState;
+  selectedTenantRoleIds: number[];
   otherConditionsText: string;
 };
 
 export const EMPTY_FINANCE_DATA: FinanceDataState = {
-  contractStartDate: { ...EMPTY_BIRTH_DATE, calendarType: "gregorian" },
-  contractDuration: "",
+  contractStartDate: { ...EMPTY_BIRTH_DATE, calendarType: "hijri" },
+  contractPeriodId: "",
   totalRentAmount: "",
   paymentMethod: "",
-  addTenantPermissions: true,
+  addTenantPermissions: false,
   addOtherConditions: false,
-  tenantPermissions: { ...DEFAULT_TENANT_PERMISSIONS },
+  selectedTenantRoleIds: [],
   otherConditionsText: "",
 };
 
@@ -76,10 +46,29 @@ function isRentAmountComplete(totalRentAmount: string) {
 }
 
 export function isFinanceDataComplete(financeData: FinanceDataState) {
-  return (
+  const baseComplete =
     isContractStartDateComplete(financeData.contractStartDate) &&
-    financeData.contractDuration !== "" &&
+    financeData.contractPeriodId !== "" &&
     isRentAmountComplete(financeData.totalRentAmount) &&
-    financeData.paymentMethod !== ""
-  );
+    financeData.paymentMethod !== "";
+
+  if (!baseComplete) {
+    return false;
+  }
+
+  if (
+    financeData.addTenantPermissions &&
+    financeData.selectedTenantRoleIds.length === 0
+  ) {
+    return false;
+  }
+
+  if (
+    financeData.addOtherConditions &&
+    financeData.otherConditionsText.trim() === ""
+  ) {
+    return false;
+  }
+
+  return true;
 }

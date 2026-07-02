@@ -7,8 +7,8 @@ import { useState } from "react";
 export function useCreateContractFinanceStep() {
   const financeData = useCreateContractDraftStore((state) => state.financeData);
   const setFinanceData = useCreateContractDraftStore((state) => state.setFinanceData);
-  const saveTenantPermissions = useCreateContractDraftStore(
-    (state) => state.saveTenantPermissions,
+  const saveTenantRoles = useCreateContractDraftStore(
+    (state) => state.saveTenantRoles,
   );
   const saveOtherConditions = useCreateContractDraftStore(
     (state) => state.saveOtherConditions,
@@ -28,7 +28,7 @@ export function useCreateContractFinanceStep() {
     setTenantPermissionsDialogOpen,
     otherConditionsDialogOpen,
     setOtherConditionsDialogOpen,
-    saveTenantPermissions,
+    saveTenantRoles,
     saveOtherConditions,
   };
 }

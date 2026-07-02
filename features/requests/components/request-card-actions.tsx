@@ -1,35 +1,42 @@
 import { CircleHelp, CreditCard, Headphones } from "lucide-react";
+import Link from "next/link";
 
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
 
 type RequestCardActionsProps = {
-  actionType: RequestCardData["actionType"];
+  card: Pick<RequestCardData, "actionType" | "contractType">;
   labels: RequestCardLabels;
 };
 
+function getCreateContractHref(contractType: RequestCardData["contractType"]) {
+  return contractType === "commercial"
+    ? "/create-contract?id=commercial"
+    : "/create-contract?id=residential";
+}
+
 export default function RequestCardActions({
-  actionType,
+  card,
   labels,
 }: RequestCardActionsProps) {
-  if (actionType === "complete-payment") {
+  if (card.actionType === "complete-payment") {
     return (
       <div className="space-y-3">
         <p className="text-center text-xs font-medium text-muted-foreground">
           {labels.completePaymentHint}
         </p>
-        <button
-          type="button"
+        <Link
+          href={getCreateContractHref(card.contractType)}
           className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90"
         >
           <CreditCard className="size-4" aria-hidden="true" />
           {labels.completePayment}
-        </button>
+        </Link>
       </div>
     );
   }
 
-  if (actionType === "dual-actions") {
+  if (card.actionType === "dual-actions") {
     return (
       <div className="grid grid-cols-2 gap-3">
         <button

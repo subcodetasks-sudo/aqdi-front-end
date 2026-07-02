@@ -1,6 +1,7 @@
 "use client";
 
 import { DEED_STEP_PHASE_COUNT } from "@/features/create-contract/types/deed-type";
+import { DEFAULT_NATIONAL_ADDRESS_LOCATION } from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 
 function canContinueNationalAddress(
@@ -37,6 +38,7 @@ export function useCreateContractDeedStep() {
   const setNationalAddressLinkUrl = useCreateContractDraftStore(
     (state) => state.setNationalAddressLinkUrl,
   );
+  const setMapLocation = useCreateContractDraftStore((state) => state.setMapLocation);
 
   const isLastPhase = deed.currentPhaseIndex === DEED_STEP_PHASE_COUNT - 1;
   const canContinue =
@@ -72,6 +74,8 @@ export function useCreateContractDeedStep() {
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl: deed.nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
+    mapLocation: deed.mapLocation ?? DEFAULT_NATIONAL_ADDRESS_LOCATION,
+    setMapLocation,
     isLastPhase,
     canContinue,
     goToNextPhase,

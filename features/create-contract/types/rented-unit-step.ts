@@ -1,25 +1,10 @@
-export const UNIT_TYPE_OPTIONS = [
-  "apartment",
-  "villa",
-  "floor",
-  "studio",
-  "office",
-  "shop",
-] as const;
-
-export type UnitTypeOption = (typeof UNIT_TYPE_OPTIONS)[number];
-
-export const UNIT_USAGE_OPTIONS = ["residential", "commercial"] as const;
-
-export type UnitUsageOption = (typeof UNIT_USAGE_OPTIONS)[number];
-
 export const FURNISHING_TYPE_OPTIONS = ["new", "used"] as const;
 
 export type FurnishingTypeOption = (typeof FURNISHING_TYPE_OPTIONS)[number];
 
 export type RentedUnitDataState = {
-  unitType: UnitTypeOption | "";
-  unitUsage: UnitUsageOption | "";
+  unitTypeId: string;
+  unitUsageId: string;
   totalArea: string;
   floorNumber: string;
   unitNumber: string;
@@ -40,8 +25,8 @@ export type RentedUnitDataState = {
 };
 
 export const EMPTY_RENTED_UNIT_DATA: RentedUnitDataState = {
-  unitType: "",
-  unitUsage: "",
+  unitTypeId: "",
+  unitUsageId: "",
   totalArea: "",
   floorNumber: "",
   unitNumber: "",
@@ -79,8 +64,8 @@ function isPositiveNumber(value: string) {
 
 export function isRentedUnitDataComplete(rentedUnitData: RentedUnitDataState) {
   const baseComplete =
-    isSelectFilled(rentedUnitData.unitType) &&
-    isSelectFilled(rentedUnitData.unitUsage) &&
+    isSelectFilled(rentedUnitData.unitTypeId) &&
+    isSelectFilled(rentedUnitData.unitUsageId) &&
     isPositiveNumber(rentedUnitData.totalArea) &&
     isSelectFilled(rentedUnitData.floorNumber) &&
     rentedUnitData.unitNumber.trim() !== "" &&

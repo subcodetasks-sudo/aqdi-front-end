@@ -32,7 +32,8 @@ type CreateContractIntroStepProps = {
   stepperLabels: CreateContractLabels["stepper"];
   contractType: ContractTypeId;
   prices: CreateContractLabels["prices"];
-  onStart: () => void;
+  onStart: () => void | Promise<void>;
+  isStarting?: boolean;
 };
 
 const requirementIcons = [
@@ -50,6 +51,7 @@ export default function CreateContractIntroStep({
   contractType,
   prices,
   onStart,
+  isStarting = false,
 }: CreateContractIntroStepProps) {
   const price = prices[contractType];
   const [open, setOpen] = useState(false);
@@ -191,10 +193,11 @@ export default function CreateContractIntroStep({
 
       <Button
         type="button"
-        onClick={onStart}
-        className="h-12 w-full rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:bg-brand/90"
+        onClick={() => void onStart()}
+        disabled={isStarting}
+        className="h-12 w-full rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {labels.start}
+        {isStarting ? labels.startContractLoading : labels.start}
       </Button>
     </div>
   );

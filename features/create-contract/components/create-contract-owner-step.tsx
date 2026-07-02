@@ -6,6 +6,7 @@ import CreateContractStepNavigation from "@/features/create-contract/components/
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
 import { useCreateContractOwnerStep } from "@/features/create-contract/hooks/use-create-contract-owner-step";
+import { useSubmitContractStep3 } from "@/features/create-contract/hooks/use-submit-contract-step3";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 
 type CreateContractOwnerStepProps = {
@@ -31,6 +32,7 @@ export default function CreateContractOwnerStep({
     goToNextPhase,
     goToPreviousPhase,
   } = useCreateContractOwnerStep();
+  const { submitStep3, isSubmitting } = useSubmitContractStep3();
 
   const phase = labels.phases[currentPhaseIndex];
 
@@ -43,12 +45,18 @@ export default function CreateContractOwnerStep({
     goToPreviousPhase();
   }
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (!canContinue || isSubmitting) {
       return;
     }
 
     if (isLastPhase) {
+      const submitted = await submitStep3({ ownerData, agentData });
+
+      if (!submitted) {
+        return;
+      }
+
       onComplete();
       return;
     }
@@ -92,10 +100,12 @@ export default function CreateContractOwnerStep({
 
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
+        continueLabel={
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+        }
+        canContinue={canContinue && !isSubmitting}
         onPrevious={handlePrevious}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
       />
     </div>
   );

@@ -48,19 +48,19 @@ export default function CreatePropertySuccessStep({
       label: labels.actions.addUnit,
       icon: <CirclePlus className="size-5 shrink-0" aria-hidden="true" />,
     },
-    {
-      href: labels.actions.createContractHref,
-      label: labels.actions.createContract,
-      icon: (
-        <Image
-          src="/images/ejar.png"
-          alt={labels.actions.ejarLogoAlt}
-          width={40}
-          height={16}
-          className="h-4 w-auto shrink-0 object-contain"
-        />
-      ),
-    },
+    // {
+    //   href: labels.actions.createContractHref,
+    //   label: labels.actions.createContract,
+    //   icon: (
+    //     <Image
+    //       src="/images/ejar.png"
+    //       alt={labels.actions.ejarLogoAlt}
+    //       width={40}
+    //       height={16}
+    //       className="h-4 w-auto shrink-0 object-contain"
+    //     />
+    //   ),
+    // },
   ];
 
   return (

@@ -19,11 +19,7 @@ function parseArea(value: string) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-export function buildUnitApiPayload(
-  propertyId: number,
-  contractType: PropertyContractType,
-  unitData: UnitDataState,
-) {
+export function buildUnitFieldsPayload(unitData: UnitDataState) {
   const roomsCount = parseCount(unitData.roomsCount);
   const hallsCount = parseCount(unitData.hallsCount);
   const kitchensCount = parseCount(unitData.kitchensCount);
@@ -32,14 +28,12 @@ export function buildUnitApiPayload(
   const splitAcCount = parseCount(unitData.splitAcCount);
 
   return {
-    real_estates_units_id: propertyId,
-    contract_type: contractType,
     unit_type_id: Number(unitData.unitTypeId),
     unit_usage_id: Number(unitData.unitUsageId),
     unit_number: unitData.unitNumber.trim(),
     floor_number: parseFloorNumber(unitData.floorNumber),
     unit_area: parseArea(unitData.totalArea),
-    Services: [],
+    Services: [] as [],
     tootal_rooms: roomsCount,
     number_of_rooms: roomsCount,
     The_number_of_halls: hallsCount,
@@ -59,5 +53,17 @@ export function buildUnitApiPayload(
     type_furnished: unitData.furnished && unitData.furnishingType === "new",
     electricity_meter: unitData.addElectricityMeter,
     water_meter: unitData.addWaterMeter,
+  };
+}
+
+export function buildUnitApiPayload(
+  propertyId: number,
+  contractType: PropertyContractType,
+  unitData: UnitDataState,
+) {
+  return {
+    real_estates_units_id: propertyId,
+    contract_type: contractType,
+    ...buildUnitFieldsPayload(unitData),
   };
 }
