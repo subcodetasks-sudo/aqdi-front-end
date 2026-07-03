@@ -1764,6 +1764,24 @@
         "title": "Choose a property and create a contract",
         "description": "Choose one of your previously saved properties to simplify your rental process.",
         "imageAlt": "Choose a saved property and create a contract"
+      },
+      "contractTypeDialog": {
+        "title": "Contract",
+        "mainTitle": "Choose the rental contract type",
+        "subtitle": "Choose the contract you want (residential - commercial)",
+        "iconAlt": "Contract type",
+        "options": {
+          "residential": {
+            "title": "Create your residential contract",
+            "description": "Building, apartment, villa, room...",
+            "iconAlt": "Residential contract"
+          },
+          "commercial": {
+            "title": "Create your commercial contract",
+            "description": "Shop, market, hotel, factory...",
+            "iconAlt": "Commercial contract"
+          }
+        }
       }
     }
   }

@@ -58,6 +58,8 @@ export default async function RequestsPage() {
     residentialItems = [];
     commercialItems = [];
   }
+  console.log(residentialItems);
+  console.log(commercialItems);
 
   return (
     <RequestsPageContent

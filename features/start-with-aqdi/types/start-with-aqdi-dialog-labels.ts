@@ -1,3 +1,5 @@
+import type { PropertyTypeId } from "@/features/properties/types/property-type";
+
 export type StartWithAqdiDialogLabels = {
   title: string;
   close: string;
@@ -16,5 +18,19 @@ export type StartWithAqdiDialogLabels = {
     title: string;
     description: string;
     imageAlt: string;
+  };
+  contractTypeDialog: {
+    title: string;
+    mainTitle: string;
+    subtitle: string;
+    iconAlt: string;
+    options: Record<
+      PropertyTypeId,
+      {
+        title: string;
+        description: string;
+        iconAlt: string;
+      }
+    >;
   };
 };

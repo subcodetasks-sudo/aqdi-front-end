@@ -26,6 +26,28 @@ export default async function NavbarShell() {
           description: dialogT("estateContract.description"),
           imageAlt: dialogT("estateContract.imageAlt"),
         },
+        contractTypeDialog: {
+          title: dialogT("contractTypeDialog.title"),
+          mainTitle: dialogT("contractTypeDialog.mainTitle"),
+          subtitle: dialogT("contractTypeDialog.subtitle"),
+          iconAlt: dialogT("contractTypeDialog.iconAlt"),
+          options: {
+            residential: {
+              title: dialogT("contractTypeDialog.options.residential.title"),
+              description: dialogT(
+                "contractTypeDialog.options.residential.description",
+              ),
+              iconAlt: dialogT("contractTypeDialog.options.residential.iconAlt"),
+            },
+            commercial: {
+              title: dialogT("contractTypeDialog.options.commercial.title"),
+              description: dialogT(
+                "contractTypeDialog.options.commercial.description",
+              ),
+              iconAlt: dialogT("contractTypeDialog.options.commercial.iconAlt"),
+            },
+          },
+        },
       }}
     />
   );
