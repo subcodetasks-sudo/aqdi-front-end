@@ -1,8 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
-import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
@@ -14,6 +15,7 @@ import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-
 import { useSubmitContractStep4 } from "@/features/create-contract/hooks/use-submit-contract-step4";
 import { useSubmitContractStep5 } from "@/features/create-contract/hooks/use-submit-contract-step5";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
+import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import { TENANT_STEP_PHASE_COUNT } from "@/features/create-contract/types/rented-unit-step";
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -42,12 +44,10 @@ export default function CreateContractTenantStep({
     updateStatus,
     canContinue,
     isLastPhase,
-    saveLaterOpen,
-    setSaveLaterOpen,
-    openSaveLaterDialog,
     goToNextPhase,
     goToPreviousPhase,
   } = useCreateContractTenantStep();
+  const router = useRouter();
   const { submitStep4, isSubmitting: isSubmittingStep4 } = useSubmitContractStep4();
   const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
@@ -111,7 +111,9 @@ export default function CreateContractTenantStep({
       return;
     }
 
-    openSaveLaterDialog();
+    // Clear the local draft + localStorage and send the user back home.
+    resetCreateContractDraft();
+    router.push("/");
   }
 
   return (
@@ -198,13 +200,6 @@ export default function CreateContractTenantStep({
             ? () => void handleSaveLater()
             : undefined
         }
-      />
-
-      <CreateContractSaveLaterDialog
-        labels={labels.saveLaterDialog}
-        open={saveLaterOpen}
-        onOpenChange={setSaveLaterOpen}
-        orderNumber={contractSession?.uuid}
       />
     </div>
   );

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import CreateContractDeedStep from "@/features/create-contract/components/create-contract-deed-step";
 import CreateContractFinanceStep from "@/features/create-contract/components/create-contract-finance-step";
 import CreateContractIntroStep from "@/features/create-contract/components/create-contract-intro-step";
@@ -12,6 +14,7 @@ import { useStartFreshContract } from "@/features/create-contract/hooks/use-star
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
 type CreateContractWizardProps = {
@@ -29,6 +32,16 @@ export default function CreateContractWizard({
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
+
+  useEffect(() => {
+    return () => {
+      const { currentStep } = useCreateContractDraftStore.getState();
+
+      if (currentStep === "payment") {
+        resetCreateContractDraft();
+      }
+    };
+  }, []);
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">

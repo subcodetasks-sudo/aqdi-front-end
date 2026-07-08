@@ -1,9 +1,20 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations } from "next-intl/server";
 
 import CreateContractPageContent from "@/features/create-contract/components/create-contract-page-content";
+import {
+  contractPaperworkKeys,
+  contractServicesPricingKeys,
+} from "@/features/create-contract/query-keys";
+import { getPaperwork } from "@/features/create-contract/services/get-paperwork";
+import { getServicesPricing } from "@/features/create-contract/services/get-services-pricing";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
-import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import {
+  toPropertyContractType,
+  type ContractTypeId,
+} from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
+import { getQueryClient } from "@/lib/react-query/get-query-client";
 import { PAYMENT_METHOD_OPTIONS } from "@/features/create-contract/types/finance-step";
 import {
   DELEGATION_TYPE_OPTIONS,
@@ -22,6 +33,20 @@ export default async function CreateContractPage({
 
   const contractType: ContractTypeId =
     id === "residential" ? "residential" : "commercial";
+
+  const queryClient = getQueryClient();
+  const propertyContractType = toPropertyContractType(contractType);
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: contractPaperworkKeys.list(propertyContractType),
+      queryFn: () => getPaperwork(propertyContractType),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: contractServicesPricingKeys.list(propertyContractType),
+      queryFn: () => getServicesPricing(propertyContractType),
+    }),
+  ]);
 
   const labels: CreateContractLabels = {
     backLabel: t("backLabel"),
@@ -458,12 +483,30 @@ export default async function CreateContractPage({
         contractPeriodPrice: t("payment.summary.contractPeriodPrice"),
         vat: t("payment.summary.vat"),
         applicationFees: t("payment.summary.applicationFees"),
+        services: t("payment.summary.services"),
         total: t("payment.summary.total"),
         currency: t("payment.summary.currency"),
         ejarLogoAlt: t("payment.summary.ejarLogoAlt"),
       },
       savePropertyData: {
         label: t("payment.savePropertyData.label"),
+        dialog: {
+          title: t("payment.savePropertyData.dialog.title"),
+          close: t("payment.savePropertyData.dialog.close"),
+          heading: t("payment.savePropertyData.dialog.heading"),
+          subtitle: t("payment.savePropertyData.dialog.subtitle"),
+          nameLabel: t("payment.savePropertyData.dialog.nameLabel"),
+          namePlaceholder: t("payment.savePropertyData.dialog.namePlaceholder"),
+          nameHint: t("payment.savePropertyData.dialog.nameHint"),
+          nameExample: t("payment.savePropertyData.dialog.nameExample"),
+          save: t("payment.savePropertyData.dialog.save"),
+          saving: t("payment.savePropertyData.dialog.saving"),
+          submitError: t("payment.savePropertyData.dialog.submitError"),
+          submitSuccess: t("payment.savePropertyData.dialog.submitSuccess"),
+          missingContractSession: t(
+            "payment.savePropertyData.dialog.missingContractSession",
+          ),
+        },
       },
       disclaimer: {
         prefix: t("payment.disclaimer.prefix"),
@@ -482,6 +525,8 @@ export default async function CreateContractPage({
   };
 
   return (
-    <CreateContractPageContent labels={labels} contractType={contractType} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CreateContractPageContent labels={labels} contractType={contractType} />
+    </HydrationBoundary>
   );
 }

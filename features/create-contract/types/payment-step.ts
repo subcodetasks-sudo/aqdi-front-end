@@ -27,10 +27,12 @@ export const PAYMENT_BREAKDOWN: Record<ContractTypeId, PaymentBreakdown> = {
 
 export type PaymentDataState = {
   savePropertyData: boolean;
+  propertyName: string;
 };
 
 export const EMPTY_PAYMENT_DATA: PaymentDataState = {
   savePropertyData: false,
+  propertyName: "",
 };
 
 export function formatPaymentAmount(amount: number) {

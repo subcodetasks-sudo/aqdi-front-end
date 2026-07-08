@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, ChevronLeft, X } from "lucide-react";
+import { Building2, ChevronLeft, Lock, X } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -20,12 +20,14 @@ type CreateContractDeedTypeSelectProps = {
   labels: CreateContractLabels["deed"]["deedType"];
   value: DeedTypeId | "";
   onChange: (value: DeedTypeId | "") => void;
+  locked?: boolean;
 };
 
 export default function CreateContractDeedTypeSelect({
   labels,
   value,
   onChange,
+  locked = false,
 }: CreateContractDeedTypeSelectProps) {
   const [selectKey, setSelectKey] = useState(0);
   const [open, setOpen] = useState(false);
@@ -75,58 +77,70 @@ export default function CreateContractDeedTypeSelect({
           {value ? (
             <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-linear-to-r from-brand-secondary via-brand to-brand px-3 py-1.5 text-sm font-semibold text-white">
               <span className="truncate">{labels.types[value]}</span>
-              <button
-                type="button"
-                className="inline-flex shrink-0 items-center justify-center"
-                aria-label={labels.clearSelection}
-                onClick={handleClear}
-              >
-                <X className="size-3.5" aria-hidden="true" />
-              </button>
+              {locked ? null : (
+                <button
+                  type="button"
+                  className="inline-flex shrink-0 items-center justify-center"
+                  aria-label={labels.clearSelection}
+                  onClick={handleClear}
+                >
+                  <X className="size-3.5" aria-hidden="true" />
+                </button>
+              )}
             </span>
           ) : (
             <button
               type="button"
-              className="w-full text-start text-sm text-[#bdbdbd]"
+              className="w-full text-start text-sm text-[#bdbdbd] disabled:cursor-not-allowed"
               onClick={openSelect}
+              disabled={locked}
             >
               {labels.placeholder}
             </button>
           )}
         </div>
 
-        <Select
-          key={selectKey}
-          open={open}
-          onOpenChange={handleOpenChange}
-          value={value || undefined}
-          onValueChange={handleValueChange}
-        >
-          <SelectTrigger className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft className="size-5 -rotate-90 text-white!" aria-hidden="true" />
-          </SelectTrigger>
-
-          <SelectContent
-            position="popper"
-            align="end"
-            side="bottom"
-            className="max-h-72 rounded-2xl"
-            style={{
-              width: contentWidth,
-              minWidth: contentWidth,
-            }}
+        {locked ? (
+          <span
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[#e0e0e0] text-[#9a9a9a]"
+            aria-hidden="true"
           >
-            {DEED_TYPES.map((deedType) => (
-              <SelectItem
-                key={deedType}
-                value={deedType}
-                className="text-base!"
-              >
-                {labels.types[deedType]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <Lock className="size-4" />
+          </span>
+        ) : (
+          <Select
+            key={selectKey}
+            open={open}
+            onOpenChange={handleOpenChange}
+            value={value || undefined}
+            onValueChange={handleValueChange}
+          >
+            <SelectTrigger className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
+              <ChevronLeft className="size-5 -rotate-90 text-white!" aria-hidden="true" />
+            </SelectTrigger>
+
+            <SelectContent
+              position="popper"
+              align="end"
+              side="bottom"
+              className="max-h-72 rounded-2xl"
+              style={{
+                width: contentWidth,
+                minWidth: contentWidth,
+              }}
+            >
+              {DEED_TYPES.map((deedType) => (
+                <SelectItem
+                  key={deedType}
+                  value={deedType}
+                  className="text-base!"
+                >
+                  {labels.types[deedType]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
     </div>
   );

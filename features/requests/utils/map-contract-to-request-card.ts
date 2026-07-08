@@ -40,13 +40,20 @@ function resolveStatus(contract: ContractListItem): RequestStatus {
   return "in-progress";
 }
 
-function resolveActionType(status: RequestStatus): RequestActionType {
-  if (status === "completed" || status === "returned") {
-    return "help-center";
+function resolveActionType(
+  contract: ContractListItem,
+  status: RequestStatus,
+): RequestActionType {
+  if (!contract.is_completed && contract.step !== 7) {
+    return "none";
   }
 
-  if (status === "incomplete") {
-    return "complete-payment";
+  if (contract.step === 7) {
+    return contract.is_completed ? "dual-actions" : "complete-payment";
+  }
+
+  if (status === "completed" || status === "returned") {
+    return "help-center";
   }
 
   return "dual-actions";
@@ -64,14 +71,17 @@ export function mapContractToRequestCard(
     id: String(contract.id),
     contractId: contract.id,
     contractType,
+    uuid: contract.uuid,
     title:
       contract.name_real_estate?.trim() ||
       (contractType === "commercial" ? labels.commercial : labels.housing),
     date: formatContractDate(contract.created_at),
     requestNumber: `#${contract.uuid}`,
     status,
+    statusName: contract.contract_status_name?.trim() || null,
+    statusColor: contract.contract_status_color?.trim() || null,
     paymentSuccessful: contract.is_completed,
-    showViewEdit: !contract.is_completed,
-    actionType: resolveActionType(status),
+    showViewEdit: contract.step !== 7,
+    actionType: resolveActionType(contract, status),
   };
 }

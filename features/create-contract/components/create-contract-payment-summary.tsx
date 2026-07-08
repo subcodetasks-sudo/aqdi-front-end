@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+import { useContractFinancial } from "@/features/create-contract/hooks/use-contract-financial";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import {
@@ -62,11 +64,88 @@ function SummaryRow({ label, amount, icon }: SummaryRowProps) {
   );
 }
 
+function SummarySkeletonRow() {
+  return (
+    <div className="flex items-center justify-between gap-4 py-2">
+      <span className="h-4 w-32 animate-pulse rounded bg-[#e2e2e2]" />
+      <span className="h-4 w-16 animate-pulse rounded bg-[#e2e2e2]" />
+    </div>
+  );
+}
+
 export default function CreateContractPaymentSummary({
   labels,
   contractType,
 }: CreateContractPaymentSummaryProps) {
+  const contractId = useCreateContractDraftStore(
+    (state) =>
+      state.contractSession?.contractId ??
+      state.contractStep1Data?.contract_id ??
+      null,
+  );
+  const { data: financial, isLoading } = useContractFinancial(contractId);
+
   const breakdown = PAYMENT_BREAKDOWN[contractType];
+
+  if (isLoading) {
+    return (
+      <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
+        <SummarySkeletonRow />
+        <SummarySkeletonRow />
+        <SummarySkeletonRow />
+        <div className="border-t border-dashed border-[#d4d4d4] pt-3">
+          <SummarySkeletonRow />
+        </div>
+      </div>
+    );
+  }
+
+  if (financial) {
+    return (
+      <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
+        <SummaryRow
+          label={labels.contractPeriodPrice}
+          amount={financial.price_details.contract_period_price}
+        />
+
+        <SummaryRow
+          label={labels.applicationFees}
+          amount={financial.price_details.application_fees}
+        />
+
+        <SummaryRow label={labels.vat} amount={financial.price_details.tax} />
+
+        {financial.services.length > 0 ? (
+          <div className="space-y-3 border-t border-dashed border-[#d4d4d4] pt-3">
+            <span className="text-sm font-bold text-[#333333]">
+              {labels.services}
+            </span>
+            {financial.services.map((service, index) => (
+              <SummaryRow
+                key={`${service.service_name}-${index}`}
+                label={service.service_name}
+                amount={Number(service.service_price) || 0}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        <div className="border-t border-dashed border-[#d4d4d4] pt-3">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-base font-extrabold text-[#333333]">
+              {labels.total}
+            </span>
+            <PaymentAmount
+              amount={financial.total_price}
+              className="text-xl font-extrabold text-brand!"
+              iconClassName="text-brand"
+              iconSize={22}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">

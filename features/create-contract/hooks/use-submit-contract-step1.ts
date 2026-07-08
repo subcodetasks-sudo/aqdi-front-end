@@ -13,6 +13,9 @@ export function useSubmitContractStep1() {
   const t = useTranslations("createContract.deed");
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const contractStep1Data = useCreateContractDraftStore((state) => state.contractStep1Data);
+  const isExistingPropertyContract = useCreateContractDraftStore(
+    (state) => state.existingPropertyContext !== null,
+  );
   const setContractStep1Data = useCreateContractDraftStore(
     (state) => state.setContractStep1Data,
   );
@@ -32,7 +35,9 @@ export function useSubmitContractStep1() {
     }
 
     if (deedFiles.length === 0) {
-      return false;
+      // Existing-property contracts already have the deed data stored on the
+      // backend from /contract/start, so allow continuing without re-uploading.
+      return isExistingPropertyContract;
     }
 
     const instrumentType = mapDeedTypeToInstrumentType(selectedDeedType);

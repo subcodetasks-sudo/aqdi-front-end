@@ -7,6 +7,7 @@ export type RequestCardLabels = {
   copyRequestNumber: string;
   paymentSuccessful: string;
   viewOrEdit: string;
+  editError: string;
   completePaymentHint: string;
   completePayment: string;
   helpCenter: string;

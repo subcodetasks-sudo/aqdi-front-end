@@ -10,12 +10,14 @@ import {
   type PropertyUnitCardData,
   type PropertyUnitDetailField,
 } from "@/features/property-units/types/property-unit";
+import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 
 type PropertyUnitCardProps = {
   unit: PropertyUnitCardData;
+  property: PropertyWithUnitsApiData | null;
 };
 
-export default function PropertyUnitCard({ unit }: PropertyUnitCardProps) {
+export default function PropertyUnitCard({ unit, property }: PropertyUnitCardProps) {
   const tFields = useTranslations("propertyUnits.card.fields");
 
   return (
@@ -32,7 +34,7 @@ export default function PropertyUnitCard({ unit }: PropertyUnitCardProps) {
         ))}
       </div>
 
-      <PropertyUnitCardFooter unit={unit} />
+      <PropertyUnitCardFooter unit={unit} property={property} />
     </article>
   );
 }

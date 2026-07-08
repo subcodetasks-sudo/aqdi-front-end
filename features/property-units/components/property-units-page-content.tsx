@@ -1,6 +1,7 @@
 import PropertyUnitsHeader from "@/features/property-units/components/property-units-header";
 import PropertyUnitsTabs from "@/features/property-units/components/property-units-tabs";
 import type { PropertyUnitCardData, PropertyUnitTab } from "@/features/property-units/types/property-unit";
+import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 import type { PropertyUnitsLabels } from "@/features/property-units/types/property-units-labels";
 
 type PropertyUnitsPageContentProps = {
@@ -8,6 +9,7 @@ type PropertyUnitsPageContentProps = {
   propertyId: number | null;
   initialTab: PropertyUnitTab;
   propertyName: string | null;
+  property: PropertyWithUnitsApiData | null;
   residentialItems: PropertyUnitCardData[];
   commercialItems: PropertyUnitCardData[];
 };
@@ -17,6 +19,7 @@ export default function PropertyUnitsPageContent({
   propertyId,
   initialTab,
   propertyName,
+  property,
   residentialItems,
   commercialItems,
 }: PropertyUnitsPageContentProps) {
@@ -32,6 +35,7 @@ export default function PropertyUnitsPageContent({
         labels={labels}
         propertyId={propertyId}
         initialTab={initialTab}
+        property={property}
         residentialItems={residentialItems}
         commercialItems={commercialItems}
       />

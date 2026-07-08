@@ -15,6 +15,16 @@ const nextConfig: NextConfig = {
         hostname: "aqid.subcodeco.com",
         pathname: "/storage/**",
       },
+      {
+        protocol: "https",
+        hostname: "aqid.subcodeco.com",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "aqid.subcodeco.com",
+        pathname: "/images/**",
+      },
     ],
   },
 };

@@ -47,6 +47,7 @@ import type {
   ExistingPropertyContractSession,
   FreshContractSession,
 } from "@/features/create-contract/types/contract-session";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import type { ContractStep1ApiData } from "@/features/create-contract/types/contract-step1-api";
 import type { ContractStep2ApiData } from "@/features/create-contract/types/contract-step2-api";
 import type { ContractStep3ApiData } from "@/features/create-contract/types/contract-step3-api";
@@ -54,6 +55,18 @@ import type { ContractStep4ApiData } from "@/features/create-contract/types/cont
 import type { ContractStep5ApiData } from "@/features/create-contract/types/contract-step5-api";
 import type { ContractStep6ApiData } from "@/features/create-contract/types/contract-step6-api";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import { mapInstrumentTypeToDeedType } from "@/features/create-contract/utils/map-instrument-type-to-deed-type";
+import {
+  buildContractAgentData,
+  buildContractOwnerData,
+  buildRentedUnitData,
+} from "@/features/create-contract/utils/build-existing-contract-draft";
+import {
+  buildAgentDataFromStep3,
+  buildOwnerDataFromStep3,
+  mapBackendStepToWizardStep,
+} from "@/features/create-contract/utils/build-uncompleted-contract-draft";
+import type { UncompletedContractData } from "@/features/create-contract/types/uncompleted-contract";
 
 type DeedDraftState = {
   currentPhaseIndex: number;
@@ -129,6 +142,7 @@ type CreateContractDraftStore = {
     session: ExistingPropertyContractSession;
     context: ExistingPropertyContractContext;
   }) => void;
+  loadUncompletedContract: (data: UncompletedContractData) => void;
   resetDraft: () => void;
   hydrateFilesFromPersisted: () => void;
 };
@@ -144,6 +158,146 @@ const INITIAL_DEED: DeedDraftState = {
   nationalAddressLinkUrl: "",
   mapLocation: DEFAULT_NATIONAL_ADDRESS_LOCATION,
 };
+
+function parseMapLocation(
+  latitude: string | null,
+  longitude: string | null,
+): NationalAddressMapLocation {
+  const lat = Number(latitude);
+  const lng = Number(longitude);
+
+  if (Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0)) {
+    return { lat, lng };
+  }
+
+  return DEFAULT_NATIONAL_ADDRESS_LOCATION;
+}
+
+function buildDeedDraftFromProperty(
+  property: ExistingPropertyContractContext["property"],
+): DeedDraftState {
+  const nationalAddressMethod: NationalAddressMethodId = property.address_url
+    ? "link"
+    : property.image_address
+      ? "photo"
+      : "map";
+
+  return {
+    ...INITIAL_DEED,
+    selectedDeedType: mapInstrumentTypeToDeedType(property.instrument_type),
+    nationalAddressMethod,
+    nationalAddressLinkUrl: property.address_url ?? "",
+    mapLocation: parseMapLocation(property.latitude, property.longitude),
+  };
+}
+
+function buildDeedDraftFromUncompleted(
+  data: UncompletedContractData,
+): DeedDraftState {
+  const step1 = data.step1;
+  const step2 = data.step2;
+  const addressUrl = step2?.address_url ?? step1?.address_url ?? "";
+  const imageAddress = step2?.image_address ?? null;
+
+  const nationalAddressMethod: NationalAddressMethodId = addressUrl
+    ? "link"
+    : imageAddress
+      ? "photo"
+      : "map";
+
+  const latitude = step2?.latitude ?? step1?.latitude ?? null;
+  const longitude = step2?.longitude ?? step1?.longitude ?? null;
+
+  return {
+    ...INITIAL_DEED,
+    selectedDeedType: mapInstrumentTypeToDeedType(step1?.instrument_type),
+    nationalAddressMethod,
+    nationalAddressLinkUrl: addressUrl,
+    mapLocation: parseMapLocation(
+      latitude === null ? null : String(latitude),
+      longitude === null ? null : String(longitude),
+    ),
+  };
+}
+
+function buildStep1DataFromUncompleted(
+  data: UncompletedContractData,
+): ContractStep1ApiData | null {
+  const step1 = data.step1;
+
+  if (!step1) {
+    return null;
+  }
+
+  return {
+    id: step1.id,
+    contract_id: step1.contract_id,
+    uuid: step1.uuid,
+    contract_type: step1.contract_type,
+    contract_type_trans: step1.contract_type_trans,
+    real_id: step1.real_id,
+    real_units_id: step1.real_units_id,
+    instrument_type: step1.instrument_type,
+    instrument_type_trans: step1.instrument_type_trans,
+    image_instrument: step1.image_instrument,
+    image_instrument_from_the_front: null,
+    image_instrument_from_the_back: null,
+    latitude: step1.latitude === null ? null : String(step1.latitude),
+    longitude: step1.longitude === null ? null : String(step1.longitude),
+    lat: step1.lat === null ? null : String(step1.lat),
+    lng: step1.lng === null ? null : String(step1.lng),
+    address_url: step1.address_url,
+    step: step1.step,
+  };
+}
+
+function buildStep2DataFromUncompleted(
+  data: UncompletedContractData,
+): ContractStep2ApiData | null {
+  const step2 = data.step2;
+
+  if (!step2) {
+    return null;
+  }
+
+  return {
+    id: step2.id,
+    contract_id: data.contract_id,
+    uuid: step2.uuid,
+    latitude: step2.latitude,
+    longitude: step2.longitude,
+    lat: step2.latitude,
+    lng: step2.longitude,
+    address_url: step2.address_url,
+    image_address: step2.image_address,
+    step: step2.step,
+  };
+}
+
+function buildStep3DataFromUncompleted(
+  data: UncompletedContractData,
+): ContractStep3ApiData | null {
+  const step3 = data.step3;
+
+  if (!step3) {
+    return null;
+  }
+
+  return {
+    id: step3.id,
+    contract_id: data.contract_id,
+    uuid: step3.uuid,
+    name_owner: step3.name_owner,
+    property_owner_id_num: step3.property_owner_id_num,
+    type_dob_property_owner: step3.type_dob_property_owner,
+    property_owner_mobile: step3.property_owner_mobile,
+    property_owner_iban: step3.property_owner_iban,
+    add_legal_agent_of_owner: step3.add_legal_agent_of_owner,
+    id_num_of_property_owner_agent: step3.id_num_of_property_owner_agent,
+    mobile_of_property_owner_agent: step3.mobile_of_property_owner_agent,
+    step: step3.step,
+  };
+}
 
 const INITIAL_OWNER: OwnerDraftState = {
   currentPhaseIndex: 0,
@@ -355,12 +509,52 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       setContractStep4Data: (data) => set({ contractStep4Data: data }),
       setContractStep5Data: (data) => set({ contractStep5Data: data }),
       setContractStep6Data: (data) => set({ contractStep6Data: data }),
-      startExistingPropertyContractFlow: ({ session, context }) =>
+      startExistingPropertyContractFlow: ({ session, context }) => {
+        const base = createInitialState();
+
         set({
-          ...createInitialState(),
+          ...base,
+          currentStep: "deed",
           contractSession: session,
           existingPropertyContext: context,
-        }),
+          deed: buildDeedDraftFromProperty(context.property),
+          owner: {
+            ...base.owner,
+            ownerData: buildContractOwnerData(context.property),
+            agentData: buildContractAgentData(context.property),
+          },
+          tenant: {
+            ...base.tenant,
+            rentedUnitData: buildRentedUnitData(context.unit),
+          },
+        });
+      },
+      loadUncompletedContract: (data) => {
+        const base = createInitialState();
+        const contractType: PropertyContractType =
+          data.step1?.contract_type === "commercial" ? "commercial" : "housing";
+        const step3 = data.step3;
+
+        set({
+          ...base,
+          currentStep: mapBackendStepToWizardStep(data.step),
+          contractSession: {
+            contractId: data.contract_id,
+            uuid: data.uuid,
+            contractType,
+            isReal: false,
+          },
+          contractStep1Data: buildStep1DataFromUncompleted(data),
+          contractStep2Data: buildStep2DataFromUncompleted(data),
+          contractStep3Data: buildStep3DataFromUncompleted(data),
+          deed: buildDeedDraftFromUncompleted(data),
+          owner: {
+            ...base.owner,
+            ownerData: step3 ? buildOwnerDataFromStep3(step3) : base.owner.ownerData,
+            agentData: step3 ? buildAgentDataFromStep3(step3) : base.owner.agentData,
+          },
+        });
+      },
       resetDraft: () => set(createInitialState()),
       hydrateFilesFromPersisted: () => {
         const state = get();

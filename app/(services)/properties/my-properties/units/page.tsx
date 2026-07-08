@@ -9,6 +9,7 @@ import {
 import PropertyUnitsPageContent from "@/features/property-units/components/property-units-page-content";
 import { getPropertyUnits } from "@/features/property-units/services/get-property-units";
 import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
+import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 import type { PropertyUnitsLabels } from "@/features/property-units/types/property-units-labels";
 import { mapPropertyUnitsToCards } from "@/features/property-units/utils/map-property-units";
 
@@ -42,10 +43,11 @@ export default async function PropertyUnitsPage({
   let residentialItems: PropertyUnitCardData[] = [];
   let commercialItems: PropertyUnitCardData[] = [];
   let propertyName: string | null = null;
+  let property: PropertyWithUnitsApiData | null = null;
 
   if (propertyId) {
     try {
-      const property = await getPropertyUnits(propertyId);
+      property = await getPropertyUnits(propertyId);
       const fallbackContractType =
         property.contract_type === "commercial" ||
         property.contract_type === "housing"
@@ -81,6 +83,7 @@ export default async function PropertyUnitsPage({
     } catch {
       residentialItems = [];
       commercialItems = [];
+      property = null;
     }
   }
 
@@ -90,6 +93,7 @@ export default async function PropertyUnitsPage({
       propertyId={propertyId}
       initialTab={initialTab}
       propertyName={propertyName}
+      property={property}
       residentialItems={residentialItems}
       commercialItems={commercialItems}
     />

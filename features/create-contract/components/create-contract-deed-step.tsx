@@ -43,6 +43,10 @@ export default function CreateContractDeedStep({
     canContinue,
     goToNextPhase,
     goToPreviousPhase,
+    existingInstrumentImageUrl,
+    existingAddressImageUrl,
+    isInstrumentTypeLocked,
+    isDeedAlreadySubmitted,
   } = useCreateContractDeedStep();
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
@@ -65,15 +69,18 @@ export default function CreateContractDeedStep({
     }
 
     if (currentPhaseIndex === 0) {
-      if (!selectedDeedType) {
+      if (selectedDeedType && deedFiles.length > 0) {
+        const submitted = await submitStep1(selectedDeedType, deedFiles);
+
+        if (!submitted) {
+          return;
+        }
+      } else if (!isInstrumentTypeLocked && !isDeedAlreadySubmitted) {
         return;
       }
-
-      const submitted = await submitStep1(selectedDeedType, deedFiles);
-
-      if (!submitted) {
-        return;
-      }
+      // Locked existing-property contracts (from /contract/start) and resumed
+      // contracts already carry the deed data, so continue without resubmitting
+      // when no new file was chosen.
     }
 
     if (isLastPhase) {
@@ -114,13 +121,15 @@ export default function CreateContractDeedStep({
               labels={labels.deedType}
               value={selectedDeedType}
               onChange={setSelectedDeedType}
+              locked={isInstrumentTypeLocked}
             />
 
-            {selectedDeedType ? (
+            {selectedDeedType || existingInstrumentImageUrl ? (
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
                 value={deedFiles}
                 onChange={setDeedFiles}
+                existingImageUrl={existingInstrumentImageUrl}
               />
             ) : null}
           </div>
@@ -137,6 +146,7 @@ export default function CreateContractDeedStep({
             onLinkUrlChange={setNationalAddressLinkUrl}
             mapLocation={mapLocation}
             onMapLocationChange={setMapLocation}
+            existingPhotoUrl={existingAddressImageUrl}
           />
         ) : null}
       </div>

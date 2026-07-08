@@ -11,12 +11,17 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import CreateContractPaperworkIcon from "@/features/create-contract/components/create-contract-paperwork-icon";
 import CreateContractRequirementItem from "@/features/create-contract/components/create-contract-requirement-item";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
-import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import {
+  toPropertyContractType,
+  type ContractTypeId,
+} from "@/features/create-contract/types/contract-type";
+import { usePaperwork } from "@/features/create-contract/hooks/use-paperwork";
+import { useServicesPricing } from "@/features/create-contract/hooks/use-services-pricing";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import {
   Dialog,
@@ -56,6 +61,19 @@ export default function CreateContractIntroStep({
   const price = prices[contractType];
   const [open, setOpen] = useState(false);
 
+  const propertyContractType = toPropertyContractType(contractType);
+
+  const { data: paperwork, isLoading } = usePaperwork(propertyContractType);
+
+  const { data: servicesPricing, isLoading: isPricingLoading } =
+    useServicesPricing(propertyContractType);
+
+  const ejarRowText =
+    labels.requirements[labels.requirements.length - 1] ?? "";
+  const fallbackRequirements = labels.requirements.slice(0, -1);
+  const hasApiItems = Boolean(paperwork && paperwork.length > 0);
+  const hasPricingItems = Boolean(servicesPricing && servicesPricing.length > 0);
+
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
@@ -73,44 +91,48 @@ export default function CreateContractIntroStep({
         </div>
 
         <div>
-          {labels.requirements.map((text, index) => {
-            const isLastItem = index === labels.requirements.length - 1;
-
-            if (isLastItem) {
-              return (
+          {isLoading && !hasApiItems ? (
+            <div className="space-y-2 py-2">
+              {fallbackRequirements.map((_, index) => (
                 <div
-                  key={text}
-                  className="flex items-center  gap-3 border-b border-[#ececec] py-2 last:border-b-0"
+                  key={index}
+                  className="flex items-center gap-3 py-2"
                 >
-                  <span className="inline-flex size-8 shrink-0 items-center justify-center text-brand-secondary">
-                    <CustomIcon
-                      src="/icons/check.svg"
-                      size={20}
-                      className="text-brand-secondary"
-                    />
+                  <span className="size-8 shrink-0 animate-pulse rounded-full bg-[#ececec]" />
+                  <span className="h-4 flex-1 animate-pulse rounded bg-[#ececec]" />
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {hasApiItems
+            ? paperwork!.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-3 border-b border-[#ececec] py-2 last:border-b-0"
+                >
+                  <span className="inline-flex size-8 shrink-0 items-center justify-center">
+                    <CreateContractPaperworkIcon src={item.icon} />
                   </span>
 
-                  <p className="shrink-0 font-medium text-[#333333]">{text}</p>
-
-                  <Image
-                    src="/images/ejar.png"
-                    alt={stepperLabels.ejarLogoAlt}
-                    width={56}
-                    height={20}
-                    className="h-5 w-auto shrink-0 object-contain"
-                  />
+                  <p className="flex-1 font-medium text-[#333333]">
+                    {item.name}
+                  </p>
                 </div>
-              );
-            }
+              ))
+            : null}
 
-            return (
-              <CreateContractRequirementItem
-                key={text}
-                text={text}
-                icon={requirementIcons[index]}
-              />
-            );
-          })}
+          {!isLoading && !hasApiItems
+            ? fallbackRequirements.map((text, index) => (
+                <CreateContractRequirementItem
+                  key={text}
+                  text={text}
+                  icon={requirementIcons[index]}
+                />
+              ))
+            : null}
+
+
         </div>
       </div>
 
@@ -131,7 +153,7 @@ export default function CreateContractIntroStep({
             </div>
           </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger asChild className="cursor-pointer">
         <div className="flex justify-center">
         <div
           className="inline-flex items-center gap-1 text-sm font-medium text-brand "
@@ -163,12 +185,49 @@ export default function CreateContractIntroStep({
             </DialogClose>
           </div>
 
-          <ul className="mt-5 list-disc space-y-6 ps-5 text leading-relaxed text-[#333333]">
-            <li>{labels.priceDialog.yearOrLess}</li>
-            <li>{labels.priceDialog.additionalYear}</li>
-          </ul>
+          {isPricingLoading && !hasPricingItems ? (
+            <ul className="mt-5 space-y-3">
+              {[0, 1, 2].map((index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between gap-4 py-1"
+                >
+                  <span className="h-4 w-40 animate-pulse rounded bg-[#ececec]" />
+                  <span className="h-4 w-12 animate-pulse rounded bg-[#ececec]" />
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
-          <div className="mt-5 flex items-start gap-3 rounded-2xl border border-brand-secondary/30 bg-brand-background-green px-4 py-3">
+          {hasPricingItems ? (
+            <ul className="mt-5 space-y-3 leading-relaxed text-[#333333]">
+              {servicesPricing!.map((item, index) => (
+                <li
+                  key={`${item.name}-${index}`}
+                  className="flex items-center justify-between gap-4 border-b border-[#ececec] pb-3 last:border-b-0"
+                >
+                  <span className="text-sm font-medium">{item.name}</span>
+                  <span className="flex shrink-0 items-center gap-1 font-bold text-brand">
+                    {item.price}
+                    <CustomIcon
+                      src="/icons/ryal.svg"
+                      size={16}
+                      className="text-brand"
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          {!isPricingLoading && !hasPricingItems ? (
+            <ul className="mt-5 list-disc space-y-6 ps-5 text leading-relaxed text-[#333333]">
+              <li>{labels.priceDialog.yearOrLess}</li>
+              <li>{labels.priceDialog.additionalYear}</li>
+            </ul>
+          ) : null}
+
+          {/* <div className="mt-5 flex items-start gap-3 rounded-2xl border border-brand-secondary/30 bg-brand-background-green px-4 py-3">
             <Info
               className="size-5 shrink-0 text-brand-secondary"
               aria-hidden="true"
@@ -176,7 +235,7 @@ export default function CreateContractIntroStep({
             <p className="text-sm leading-relaxed text-[#333333]">
               {labels.priceDialog.disclaimer}
             </p>
-          </div>
+          </div> */}
 
           <DialogClose asChild>
             <Button

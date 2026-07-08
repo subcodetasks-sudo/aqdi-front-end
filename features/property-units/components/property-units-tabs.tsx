@@ -4,6 +4,7 @@ import PropertyUnitsGrid from "@/features/property-units/components/property-uni
 import { usePropertyUnitsTabs } from "@/features/property-units/hooks/use-property-units-tabs";
 import type { PropertyUnitTab } from "@/features/property-units/types/property-unit";
 import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
+import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 import type { PropertyUnitsLabels } from "@/features/property-units/types/property-units-labels";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ type PropertyUnitsTabsProps = {
   labels: PropertyUnitsLabels;
   propertyId: number | null;
   initialTab: PropertyUnitTab;
+  property: PropertyWithUnitsApiData | null;
   residentialItems: PropertyUnitCardData[];
   commercialItems: PropertyUnitCardData[];
 };
@@ -19,6 +21,7 @@ export default function PropertyUnitsTabs({
   labels,
   propertyId,
   initialTab,
+  property,
   residentialItems,
   commercialItems,
 }: PropertyUnitsTabsProps) {
@@ -67,7 +70,7 @@ export default function PropertyUnitsTabs({
       </div>
 
       {items.length > 0 ? (
-        <PropertyUnitsGrid items={items} />
+        <PropertyUnitsGrid items={items} property={property} />
       ) : (
         <p className="rounded-3xl border border-dashed border-[#e8e8e8] bg-white px-6 py-12 text-center text-sm text-muted-foreground">
           {labels.emptyState}

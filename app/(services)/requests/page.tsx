@@ -28,6 +28,7 @@ export default async function RequestsPage() {
       copyRequestNumber: t("card.copyRequestNumber"),
       paymentSuccessful: t("card.paymentSuccessful"),
       viewOrEdit: t("card.viewOrEdit"),
+      editError: t("card.editError"),
       completePaymentHint: t("card.completePaymentHint"),
       completePayment: t("card.completePayment"),
       helpCenter: t("card.helpCenter"),

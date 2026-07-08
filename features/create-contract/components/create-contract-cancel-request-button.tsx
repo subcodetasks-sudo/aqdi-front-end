@@ -1,7 +1,6 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -30,7 +29,6 @@ export default function CreateContractCancelRequestButton({
   label,
 }: CreateContractCancelRequestButtonProps) {
   const t = useTranslations("requests.card");
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -45,11 +43,11 @@ export default function CreateContractCancelRequestButton({
         return;
       }
 
-      resetCreateContractDraft();
       toast.success(result.message || t("deleteDialog.success"));
       setOpen(false);
-      router.push("/requests");
-      router.refresh();
+      // Clear the draft + localStorage and return to the intro step so the user
+      // can start a new contract.
+      resetCreateContractDraft();
     } finally {
       setIsDeleting(false);
     }

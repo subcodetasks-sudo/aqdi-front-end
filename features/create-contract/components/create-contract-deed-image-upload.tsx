@@ -27,6 +27,7 @@ type CreateContractDeedImageUploadProps = {
   labels: CreateContractLabels["deed"]["deedImage"];
   value: File[];
   onChange: (files: File[]) => void;
+  existingImageUrl?: string | null;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -114,14 +115,63 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
   );
 }
 
+function ExistingImageRow({
+  url,
+  labels,
+  onPreview,
+}: {
+  url: string;
+  labels: CreateContractLabels["deed"]["deedImage"];
+  onPreview: () => void;
+}) {
+  const fileName = url.split("/").pop() || url;
+  const extension = fileName.includes(".")
+    ? (fileName.split(".").pop()?.toLowerCase() ?? "")
+    : "";
+  const name = extension ? fileName.slice(0, -(extension.length + 1)) : fileName;
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-3 py-2">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
+          <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />
+        </span>
+
+        <div className="min-w-0 text-end">
+          <p className="truncate text-sm font-bold text-[#333333]">{name}</p>
+          <p className="text-xs text-[#bdbdbd]">{extension}</p>
+        </div>
+
+        <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-white">
+          <Check className="size-3" aria-hidden="true" />
+        </span>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          onClick={onPreview}
+          className="inline-flex size-9 items-center justify-center rounded-full bg-white text-[#666666] shadow-sm"
+          aria-label={labels.preview}
+        >
+          <Eye className="size-4" aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function CreateContractDeedImageUpload({
   labels,
   value,
   onChange,
+  existingImageUrl = null,
 }: CreateContractDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [previewExistingUrl, setPreviewExistingUrl] = useState<string | null>(null);
+  const showExistingImage = value.length === 0 && Boolean(existingImageUrl);
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -186,6 +236,14 @@ export default function CreateContractDeedImageUpload({
         </span>
       </label>
 
+      {showExistingImage && existingImageUrl ? (
+        <ExistingImageRow
+          url={existingImageUrl}
+          labels={labels}
+          onPreview={() => setPreviewExistingUrl(existingImageUrl)}
+        />
+      ) : null}
+
       {value.length > 0 ? (
         <div className="space-y-2">
           {value.map((file, index) => (
@@ -201,10 +259,11 @@ export default function CreateContractDeedImageUpload({
       ) : null}
 
       <Dialog
-        open={previewFile !== null}
+        open={previewFile !== null || previewExistingUrl !== null}
         onOpenChange={(open) => {
           if (!open) {
             setPreviewFile(null);
+            setPreviewExistingUrl(null);
           }
         }}
       >
@@ -231,7 +290,17 @@ export default function CreateContractDeedImageUpload({
           </div>
 
           <div className="max-h-[85vh] overflow-auto no-scrollbar bg-[#f7f7f7] p-4">
-            {previewFile && previewUrl ? (
+            {previewExistingUrl ? (
+              <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white">
+                <Image
+                  src={previewExistingUrl}
+                  alt={labels.previewTitle}
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            ) : previewFile && previewUrl ? (
               isPdfFile(previewFile) ? (
                 <iframe
                   src={previewUrl}

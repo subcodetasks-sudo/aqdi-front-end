@@ -397,12 +397,28 @@ export type CreateContractLabels = {
       contractPeriodPrice: string;
       vat: string;
       applicationFees: string;
+      services: string;
       total: string;
       currency: string;
       ejarLogoAlt: string;
     };
     savePropertyData: {
       label: string;
+      dialog: {
+        title: string;
+        close: string;
+        heading: string;
+        subtitle: string;
+        nameLabel: string;
+        namePlaceholder: string;
+        nameHint: string;
+        nameExample: string;
+        save: string;
+        saving: string;
+        submitError: string;
+        submitSuccess: string;
+        missingContractSession: string;
+      };
     };
     disclaimer: {
       prefix: string;

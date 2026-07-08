@@ -2,12 +2,15 @@
 
 import { Info } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
+import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
+import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
@@ -25,6 +28,44 @@ export default function CreateContractPaymentStep({
   onComplete,
 }: CreateContractPaymentStepProps) {
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
+  const { submitSaveProperty, isSaving } = useSaveProperty();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  function handleSwitchChange(checked: boolean) {
+    if (checked) {
+      setIsDialogOpen(true);
+      return;
+    }
+
+    setPaymentData({
+      ...paymentData,
+      savePropertyData: false,
+      propertyName: "",
+    });
+  }
+
+  function handleDialogOpenChange(open: boolean) {
+    setIsDialogOpen(open);
+  }
+
+  async function handleSaveProperty(propertyName: string) {
+    const result = await submitSaveProperty(propertyName, {
+      missingContractSession: labels.savePropertyData.dialog.missingContractSession,
+      submitError: labels.savePropertyData.dialog.submitError,
+      submitSuccess: labels.savePropertyData.dialog.submitSuccess,
+    });
+
+    if (!result.ok) {
+      return;
+    }
+
+    setPaymentData({
+      ...paymentData,
+      savePropertyData: true,
+      propertyName: result.propertyName,
+    });
+    setIsDialogOpen(false);
+  }
 
   return (
     <div className="space-y-4">
@@ -49,10 +90,9 @@ export default function CreateContractPaymentStep({
               <Switch
                 dir="ltr"
                 checked={paymentData.savePropertyData}
-                onCheckedChange={(savePropertyData) =>
-                  setPaymentData({ savePropertyData })
-                }
-                className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
+                onCheckedChange={handleSwitchChange}
+                disabled={isSaving || paymentData.savePropertyData}
+                className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] disabled:cursor-not-allowed disabled:opacity-100"
               />
             </label>
           </div>
@@ -82,6 +122,15 @@ export default function CreateContractPaymentStep({
           </div>
         </div>
       </div>
+
+      <CreateContractSavePropertyDialog
+        labels={labels.savePropertyData.dialog}
+        open={isDialogOpen}
+        onOpenChange={handleDialogOpenChange}
+        initialValue={paymentData.propertyName}
+        isSaving={isSaving}
+        onSave={handleSaveProperty}
+      />
 
       <CreateContractPaymentNavigation
         previousLabel={labels.navigation.previous}

@@ -35,6 +35,7 @@ type CreateContractDeedNationalAddressProps = {
   onLinkUrlChange: (url: string) => void;
   mapLocation: NationalAddressMapLocation;
   onMapLocationChange: (location: NationalAddressMapLocation) => void;
+  existingPhotoUrl?: string | null;
 };
 
 export default function CreateContractDeedNationalAddress({
@@ -47,6 +48,7 @@ export default function CreateContractDeedNationalAddress({
   onLinkUrlChange,
   mapLocation,
   onMapLocationChange,
+  existingPhotoUrl = null,
 }: CreateContractDeedNationalAddressProps) {
   const linkInputId = useId();
 
@@ -93,6 +95,7 @@ export default function CreateContractDeedNationalAddress({
           labels={labels.photo}
           value={photoFiles}
           onChange={onPhotoFilesChange}
+          existingImageUrl={existingPhotoUrl}
         />
       ) : null}
 

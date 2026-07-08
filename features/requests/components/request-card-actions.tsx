@@ -19,6 +19,10 @@ export default function RequestCardActions({
   card,
   labels,
 }: RequestCardActionsProps) {
+  if (card.actionType === "none") {
+    return null;
+  }
+
   if (card.actionType === "complete-payment") {
     return (
       <div className="space-y-3">

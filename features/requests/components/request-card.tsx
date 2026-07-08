@@ -47,7 +47,9 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
         </div>
       </div>
 
-      <RequestCardDivider text={labels.inquiryDivider} />
+      {card.actionType !== "none" ? (
+        <RequestCardDivider text={labels.inquiryDivider} />
+      ) : null}
 
       <RequestCardActions card={card} labels={labels} />
     </article>

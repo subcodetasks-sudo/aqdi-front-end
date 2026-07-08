@@ -755,6 +755,7 @@
       "copyRequestNumber": "Copy request number",
       "paymentSuccessful": "Payment successful",
       "viewOrEdit": "View or edit request details",
+      "editError": "Failed to load contract data",
       "completePaymentHint": "Please complete payment of the contract value",
       "completePayment": "Complete payment of contract value",
       "helpCenter": "Help center",
@@ -1728,12 +1729,28 @@
         "contractPeriodPrice": "Contract period price:",
         "vat": "VAT:",
         "applicationFees": "Application fees:",
+        "services": "Additional services:",
         "total": "Total:",
         "currency": "SAR",
         "ejarLogoAlt": "Ejar"
       },
       "savePropertyData": {
-        "label": "Would you like to save the property data so you can create contracts quickly and easily in the future?"
+        "label": "Would you like to save the property data so you can create contracts quickly and easily in the future?",
+        "dialog": {
+          "title": "Save property data",
+          "close": "Close",
+          "heading": "Property name",
+          "subtitle": "Add a name to save this property for future contracts:",
+          "nameLabel": "Property name",
+          "namePlaceholder": "Write here...",
+          "nameHint": "Please add a name for the property to make it easier to find or distinguish:",
+          "nameExample": "For example - Al-Lulu Rest House - My building in Al-Rayyan district... etc.",
+          "save": "Save property",
+          "saving": "Saving...",
+          "submitError": "Could not save property data. Please try again.",
+          "submitSuccess": "Property data saved successfully",
+          "missingContractSession": "Contract session is missing. Please restart the contract flow."
+        }
       },
       "disclaimer": {
         "prefix": "By clicking 'Pay and document the contract', you agree to the",

@@ -13,6 +13,7 @@ export type ContractListItem = {
   step: number;
   contract_status_id: number | null;
   contract_status_name: string | null;
+  contract_status_color: string | null;
   created_at: string;
   time_to_documentation_contract: string | null;
 };
