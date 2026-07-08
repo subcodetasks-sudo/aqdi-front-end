@@ -101,7 +101,7 @@ export function useSubmitPropertyStep1() {
       },
     });
 
-    if (!deedComplete) {
+    if (!deedComplete || selectedDeedType === "") {
       return {
         ok: false as const,
         error: "Deed data is incomplete",
