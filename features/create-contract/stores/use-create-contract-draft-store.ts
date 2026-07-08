@@ -279,8 +279,17 @@ function buildStep1DataFromUncompleted(
     instrument_type: step1.instrument_type,
     instrument_type_trans: step1.instrument_type_trans,
     image_instrument: step1.image_instrument,
-    image_instrument_from_the_front: null,
-    image_instrument_from_the_back: null,
+    image_instrument_from_the_front: step1.image_instrument_from_the_front,
+    image_instrument_from_the_back: step1.image_instrument_from_the_back,
+    Image_inheritance_certificate: step1.Image_inheritance_certificate,
+    copy_power_of_attorney_from_heirs_to_agent:
+      step1.copy_power_of_attorney_from_heirs_to_agent,
+    copy_of_the_endowment_registration_certificate:
+      step1.copy_of_the_endowment_registration_certificate,
+    copy_of_the_trusteeship_deed: step1.copy_of_the_trusteeship_deed,
+    is_multiple_trusteeship_deed_copy: step1.is_multiple_trusteeship_deed_copy,
+    copy_of_guardians_power_of_attorney_for_agent:
+      step1.copy_of_guardians_power_of_attorney_for_agent,
     latitude: step1.latitude === null ? null : String(step1.latitude),
     longitude: step1.longitude === null ? null : String(step1.longitude),
     lat: step1.lat === null ? null : String(step1.lat),
