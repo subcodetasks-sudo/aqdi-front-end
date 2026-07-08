@@ -32,12 +32,34 @@ type PropertyDraftStore = {
   propertyId: number | null;
   isEditMode: boolean;
   existingDeedImageUrl: string | null;
+  existingDeedFrontImageUrl: string | null;
+  existingDeedBackImageUrl: string | null;
+  existingInheritanceImageUrl: string | null;
+  existingHeirsPoaImageUrl: string | null;
+  existingEndowmentCertImageUrl: string | null;
+  existingTrusteeshipImageUrl: string | null;
+  existingGuardiansPoaImageUrl: string | null;
   existingAddressImageUrl: string | null;
   hasExistingPowerOfAttorney: boolean;
   currentStep: CreatePropertyStep;
   selectedDeedType: PropertyDeedTypeId | "";
   deedFiles: File[];
   deedPersistedFiles: PersistedFile[];
+  deedFrontFiles: File[];
+  deedFrontPersistedFiles: PersistedFile[];
+  deedBackFiles: File[];
+  deedBackPersistedFiles: PersistedFile[];
+  deedInheritanceFiles: File[];
+  deedInheritancePersistedFiles: PersistedFile[];
+  deedHeirsPoaFiles: File[];
+  deedHeirsPoaPersistedFiles: PersistedFile[];
+  deedEndowmentCertFiles: File[];
+  deedEndowmentCertPersistedFiles: PersistedFile[];
+  deedTrusteeshipFiles: File[];
+  deedTrusteeshipPersistedFiles: PersistedFile[];
+  isMultipleTrusteeshipDeedCopy: boolean;
+  deedGuardiansPoaFiles: File[];
+  deedGuardiansPoaPersistedFiles: PersistedFile[];
   addressMethod: PropertyNationalAddressMethodId;
   addressPhotoFiles: File[];
   addressPhotoPersistedFiles: PersistedFile[];
@@ -54,6 +76,14 @@ type PropertyDraftStore = {
   goBackStep: () => void;
   setSelectedDeedType: (value: PropertyDeedTypeId | "") => void;
   setDeedFiles: (files: File[]) => Promise<void>;
+  setDeedFrontFiles: (files: File[]) => Promise<void>;
+  setDeedBackFiles: (files: File[]) => Promise<void>;
+  setDeedInheritanceFiles: (files: File[]) => Promise<void>;
+  setDeedHeirsPoaFiles: (files: File[]) => Promise<void>;
+  setDeedEndowmentCertFiles: (files: File[]) => Promise<void>;
+  setDeedTrusteeshipFiles: (files: File[]) => Promise<void>;
+  setIsMultipleTrusteeshipDeedCopy: (value: boolean) => void;
+  setDeedGuardiansPoaFiles: (files: File[]) => Promise<void>;
   setAddressMethod: (method: PropertyNationalAddressMethodId) => void;
   setAddressPhotoFiles: (files: File[]) => Promise<void>;
   setAddressLinkUrl: (url: string) => void;
@@ -89,12 +119,34 @@ function createInitialPropertyDraft() {
     propertyId: null as number | null,
     isEditMode: false,
     existingDeedImageUrl: null as string | null,
+    existingDeedFrontImageUrl: null as string | null,
+    existingDeedBackImageUrl: null as string | null,
+    existingInheritanceImageUrl: null as string | null,
+    existingHeirsPoaImageUrl: null as string | null,
+    existingEndowmentCertImageUrl: null as string | null,
+    existingTrusteeshipImageUrl: null as string | null,
+    existingGuardiansPoaImageUrl: null as string | null,
     existingAddressImageUrl: null as string | null,
     hasExistingPowerOfAttorney: false,
     currentStep: "deed" as CreatePropertyStep,
     selectedDeedType: "" as PropertyDeedTypeId | "",
     deedFiles: [] as File[],
     deedPersistedFiles: [] as PersistedFile[],
+    deedFrontFiles: [] as File[],
+    deedFrontPersistedFiles: [] as PersistedFile[],
+    deedBackFiles: [] as File[],
+    deedBackPersistedFiles: [] as PersistedFile[],
+    deedInheritanceFiles: [] as File[],
+    deedInheritancePersistedFiles: [] as PersistedFile[],
+    deedHeirsPoaFiles: [] as File[],
+    deedHeirsPoaPersistedFiles: [] as PersistedFile[],
+    deedEndowmentCertFiles: [] as File[],
+    deedEndowmentCertPersistedFiles: [] as PersistedFile[],
+    deedTrusteeshipFiles: [] as File[],
+    deedTrusteeshipPersistedFiles: [] as PersistedFile[],
+    isMultipleTrusteeshipDeedCopy: false,
+    deedGuardiansPoaFiles: [] as File[],
+    deedGuardiansPoaPersistedFiles: [] as PersistedFile[],
     addressMethod: "map" as PropertyNationalAddressMethodId,
     addressPhotoFiles: [] as File[],
     addressPhotoPersistedFiles: [] as PersistedFile[],
@@ -131,10 +183,68 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           selectedDeedType: value,
           deedFiles: value === "" ? [] : state.deedFiles,
           deedPersistedFiles: value === "" ? [] : state.deedPersistedFiles,
+          deedFrontFiles: value === "" ? [] : state.deedFrontFiles,
+          deedFrontPersistedFiles:
+            value === "" ? [] : state.deedFrontPersistedFiles,
+          deedBackFiles: value === "" ? [] : state.deedBackFiles,
+          deedBackPersistedFiles: value === "" ? [] : state.deedBackPersistedFiles,
+          deedInheritanceFiles: value === "" ? [] : state.deedInheritanceFiles,
+          deedInheritancePersistedFiles:
+            value === "" ? [] : state.deedInheritancePersistedFiles,
+          deedHeirsPoaFiles: value === "" ? [] : state.deedHeirsPoaFiles,
+          deedHeirsPoaPersistedFiles:
+            value === "" ? [] : state.deedHeirsPoaPersistedFiles,
+          deedEndowmentCertFiles: value === "" ? [] : state.deedEndowmentCertFiles,
+          deedEndowmentCertPersistedFiles:
+            value === "" ? [] : state.deedEndowmentCertPersistedFiles,
+          deedTrusteeshipFiles: value === "" ? [] : state.deedTrusteeshipFiles,
+          deedTrusteeshipPersistedFiles:
+            value === "" ? [] : state.deedTrusteeshipPersistedFiles,
+          isMultipleTrusteeshipDeedCopy:
+            value === "" ? false : state.isMultipleTrusteeshipDeedCopy,
+          deedGuardiansPoaFiles: value === "" ? [] : state.deedGuardiansPoaFiles,
+          deedGuardiansPoaPersistedFiles:
+            value === "" ? [] : state.deedGuardiansPoaPersistedFiles,
         })),
       setDeedFiles: async (files) => {
         const deedPersistedFiles = await filesToPersisted(files);
         set({ deedFiles: files, deedPersistedFiles });
+      },
+      setDeedFrontFiles: async (files) => {
+        const deedFrontPersistedFiles = await filesToPersisted(files);
+        set({ deedFrontFiles: files, deedFrontPersistedFiles });
+      },
+      setDeedBackFiles: async (files) => {
+        const deedBackPersistedFiles = await filesToPersisted(files);
+        set({ deedBackFiles: files, deedBackPersistedFiles });
+      },
+      setDeedInheritanceFiles: async (files) => {
+        const deedInheritancePersistedFiles = await filesToPersisted(files);
+        set({ deedInheritanceFiles: files, deedInheritancePersistedFiles });
+      },
+      setDeedHeirsPoaFiles: async (files) => {
+        const deedHeirsPoaPersistedFiles = await filesToPersisted(files);
+        set({ deedHeirsPoaFiles: files, deedHeirsPoaPersistedFiles });
+      },
+      setDeedEndowmentCertFiles: async (files) => {
+        const deedEndowmentCertPersistedFiles = await filesToPersisted(files);
+        set({ deedEndowmentCertFiles: files, deedEndowmentCertPersistedFiles });
+      },
+      setDeedTrusteeshipFiles: async (files) => {
+        const deedTrusteeshipPersistedFiles = await filesToPersisted(files);
+        set({ deedTrusteeshipFiles: files, deedTrusteeshipPersistedFiles });
+      },
+      setIsMultipleTrusteeshipDeedCopy: (value) =>
+        set((state) => ({
+          isMultipleTrusteeshipDeedCopy: value,
+          deedGuardiansPoaFiles: value ? state.deedGuardiansPoaFiles : [],
+          deedGuardiansPoaPersistedFiles: value
+            ? state.deedGuardiansPoaPersistedFiles
+            : [],
+        })),
+      setDeedGuardiansPoaFiles: async (files) => {
+        const deedGuardiansPoaPersistedFiles = await filesToPersisted(files);
+        set({ deedGuardiansPoaFiles: files, deedGuardiansPoaPersistedFiles });
       },
       setAddressMethod: (method) => set({ addressMethod: method }),
       setAddressPhotoFiles: async (files) => {
@@ -173,6 +283,17 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         const state = get();
         set({
           deedFiles: persistedToFiles(state.deedPersistedFiles),
+          deedFrontFiles: persistedToFiles(state.deedFrontPersistedFiles),
+          deedBackFiles: persistedToFiles(state.deedBackPersistedFiles),
+          deedInheritanceFiles: persistedToFiles(state.deedInheritancePersistedFiles),
+          deedHeirsPoaFiles: persistedToFiles(state.deedHeirsPoaPersistedFiles),
+          deedEndowmentCertFiles: persistedToFiles(
+            state.deedEndowmentCertPersistedFiles,
+          ),
+          deedTrusteeshipFiles: persistedToFiles(state.deedTrusteeshipPersistedFiles),
+          deedGuardiansPoaFiles: persistedToFiles(
+            state.deedGuardiansPoaPersistedFiles,
+          ),
           addressPhotoFiles: persistedToFiles(state.addressPhotoPersistedFiles),
           agentData: {
             ...state.agentData,
@@ -187,9 +308,17 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           propertyId: data.propertyId,
           isEditMode: true,
           existingDeedImageUrl: data.existingDeedImageUrl,
+          existingDeedFrontImageUrl: data.existingDeedFrontImageUrl,
+          existingDeedBackImageUrl: data.existingDeedBackImageUrl,
+          existingInheritanceImageUrl: data.existingInheritanceImageUrl,
+          existingHeirsPoaImageUrl: data.existingHeirsPoaImageUrl,
+          existingEndowmentCertImageUrl: data.existingEndowmentCertImageUrl,
+          existingTrusteeshipImageUrl: data.existingTrusteeshipImageUrl,
+          existingGuardiansPoaImageUrl: data.existingGuardiansPoaImageUrl,
           existingAddressImageUrl: data.existingAddressImageUrl,
           hasExistingPowerOfAttorney: data.hasExistingPowerOfAttorney,
           selectedDeedType: data.selectedDeedType,
+          isMultipleTrusteeshipDeedCopy: data.isMultipleTrusteeshipDeedCopy,
           addressMethod: data.addressMethod,
           addressLinkUrl: data.addressLinkUrl,
           mapLocation: data.mapLocation,
@@ -208,12 +337,27 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         propertyId: state.propertyId,
         isEditMode: state.isEditMode,
         existingDeedImageUrl: state.existingDeedImageUrl,
+        existingDeedFrontImageUrl: state.existingDeedFrontImageUrl,
+        existingDeedBackImageUrl: state.existingDeedBackImageUrl,
+        existingInheritanceImageUrl: state.existingInheritanceImageUrl,
+        existingHeirsPoaImageUrl: state.existingHeirsPoaImageUrl,
+        existingEndowmentCertImageUrl: state.existingEndowmentCertImageUrl,
+        existingTrusteeshipImageUrl: state.existingTrusteeshipImageUrl,
+        existingGuardiansPoaImageUrl: state.existingGuardiansPoaImageUrl,
         existingAddressImageUrl: state.existingAddressImageUrl,
         hasExistingPowerOfAttorney: state.hasExistingPowerOfAttorney,
         currentStep:
           state.currentStep === "success" ? "deed" : state.currentStep,
         selectedDeedType: state.selectedDeedType,
         deedPersistedFiles: state.deedPersistedFiles,
+        deedFrontPersistedFiles: state.deedFrontPersistedFiles,
+        deedBackPersistedFiles: state.deedBackPersistedFiles,
+        deedInheritancePersistedFiles: state.deedInheritancePersistedFiles,
+        deedHeirsPoaPersistedFiles: state.deedHeirsPoaPersistedFiles,
+        deedEndowmentCertPersistedFiles: state.deedEndowmentCertPersistedFiles,
+        deedTrusteeshipPersistedFiles: state.deedTrusteeshipPersistedFiles,
+        isMultipleTrusteeshipDeedCopy: state.isMultipleTrusteeshipDeedCopy,
+        deedGuardiansPoaPersistedFiles: state.deedGuardiansPoaPersistedFiles,
         addressMethod: state.addressMethod,
         addressPhotoPersistedFiles: state.addressPhotoPersistedFiles,
         addressLinkUrl: state.addressLinkUrl,

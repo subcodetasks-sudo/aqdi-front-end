@@ -18,7 +18,15 @@ export type PropertyEditDraftData = {
   isEditMode: true;
   selectedDeedType: PropertyDeedTypeId | "";
   existingDeedImageUrl: string | null;
+  existingDeedFrontImageUrl: string | null;
+  existingDeedBackImageUrl: string | null;
+  existingInheritanceImageUrl: string | null;
+  existingHeirsPoaImageUrl: string | null;
+  existingEndowmentCertImageUrl: string | null;
+  existingTrusteeshipImageUrl: string | null;
+  existingGuardiansPoaImageUrl: string | null;
   existingAddressImageUrl: string | null;
+  isMultipleTrusteeshipDeedCopy: boolean;
   hasExistingPowerOfAttorney: boolean;
   addressMethod: PropertyNationalAddressMethodId;
   addressLinkUrl: string;
@@ -128,7 +136,27 @@ export function mapPropertyApiToEditDraft(
     isEditMode: true,
     selectedDeedType: mapInstrumentType(property.instrument_type),
     existingDeedImageUrl: resolveAssetUrl(property.image_instrument),
+    existingDeedFrontImageUrl: resolveAssetUrl(
+      property.image_instrument_from_the_front,
+    ),
+    existingDeedBackImageUrl: resolveAssetUrl(property.image_instrument_from_the_back),
+    existingInheritanceImageUrl: resolveAssetUrl(
+      property.Image_inheritance_certificate,
+    ),
+    existingHeirsPoaImageUrl: resolveAssetUrl(
+      property.copy_power_of_attorney_from_heirs_to_agent,
+    ),
+    existingEndowmentCertImageUrl: resolveAssetUrl(
+      property.copy_of_the_endowment_registration_certificate,
+    ),
+    existingTrusteeshipImageUrl: resolveAssetUrl(property.copy_of_the_trusteeship_deed),
+    existingGuardiansPoaImageUrl: resolveAssetUrl(
+      property.copy_of_guardians_power_of_attorney_for_agent,
+    ),
     existingAddressImageUrl: resolveAssetUrl(property.image_address),
+    isMultipleTrusteeshipDeedCopy: Boolean(
+      property.is_multiple_trusteeship_deed_copy,
+    ),
     hasExistingPowerOfAttorney: Boolean(property.copy_of_the_authorization_or_agency),
     addressMethod: resolveAddressMethod(property),
     addressLinkUrl: property.address_url?.trim() ?? "",

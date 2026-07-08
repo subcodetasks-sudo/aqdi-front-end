@@ -28,6 +28,7 @@ type CreatePropertyDeedImageUploadProps = {
   value: File[];
   onChange: (files: File[]) => void;
   multiple?: boolean;
+  fieldLabel?: string;
   existingFileUrl?: string | null;
 };
 
@@ -164,6 +165,7 @@ export default function CreatePropertyDeedImageUpload({
   value,
   onChange,
   multiple = false,
+  fieldLabel,
   existingFileUrl = null,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
@@ -213,7 +215,7 @@ export default function CreatePropertyDeedImageUpload({
 
   return (
     <div className="space-y-3">
-      <CreatePropertyFieldLabel label={labels.label} />
+      <CreatePropertyFieldLabel label={fieldLabel ?? labels.label} />
 
       {canUploadMore ? (
         <label

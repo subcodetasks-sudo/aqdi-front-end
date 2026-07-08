@@ -108,6 +108,13 @@ export default async function CreateContractPage({
       },
       deedImage: {
         label: t("deed.deedImage.label"),
+        frontLabel: t("deed.deedImage.frontLabel"),
+        backLabel: t("deed.deedImage.backLabel"),
+        inheritanceLabel: t("deed.deedImage.inheritanceLabel"),
+        heirsPoaLabel: t("deed.deedImage.heirsPoaLabel"),
+        endowmentCertLabel: t("deed.deedImage.endowmentCertLabel"),
+        trusteeshipLabel: t("deed.deedImage.trusteeshipLabel"),
+        guardiansPoaLabel: t("deed.deedImage.guardiansPoaLabel"),
         clickHere: t("deed.deedImage.clickHere"),
         chooseFile: t("deed.deedImage.chooseFile"),
         acceptedFormats: t("deed.deedImage.acceptedFormats"),
@@ -135,6 +142,9 @@ export default async function CreateContractPage({
           previewTitle: t("deed.nationalAddress.photo.previewTitle"),
           closePreview: t("deed.nationalAddress.photo.closePreview"),
         },
+      },
+      waqf: {
+        multipleTrusteesLabel: t("deed.waqf.multipleTrusteesLabel"),
       },
     },
     owner: {

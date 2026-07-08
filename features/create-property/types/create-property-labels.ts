@@ -26,6 +26,13 @@ export type CreatePropertyLabels = {
     };
     deedImage: {
       label: string;
+      frontLabel?: string;
+      backLabel?: string;
+      inheritanceLabel?: string;
+      heirsPoaLabel?: string;
+      endowmentCertLabel?: string;
+      trusteeshipLabel?: string;
+      guardiansPoaLabel?: string;
       clickHere: string;
       chooseFile: string;
       acceptedFormats: string;
@@ -33,6 +40,9 @@ export type CreatePropertyLabels = {
       delete: string;
       previewTitle: string;
       closePreview: string;
+    };
+    waqf: {
+      multipleTrusteesLabel: string;
     };
   };
   address: {

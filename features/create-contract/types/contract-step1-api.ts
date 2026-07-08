@@ -11,6 +11,12 @@ export type ContractStep1ApiData = {
   image_instrument: string | null;
   image_instrument_from_the_front: string | null;
   image_instrument_from_the_back: string | null;
+  Image_inheritance_certificate: string | null;
+  copy_power_of_attorney_from_heirs_to_agent: string | null;
+  copy_of_the_endowment_registration_certificate: string | null;
+  copy_of_the_trusteeship_deed: string | null;
+  is_multiple_trusteeship_deed_copy: boolean | number | null;
+  copy_of_guardians_power_of_attorney_for_agent: string | null;
   latitude: string | null;
   longitude: string | null;
   lat: string | null;

@@ -1,12 +1,11 @@
 "use server";
 
 import { apiFormDataRequest } from "@/lib/api/api-request";
-import type { SubmitPropertyStep1Payload } from "@/features/create-property/services/submit-property-step1";
+import type { PropertyStep1FormPayload } from "@/features/create-property/utils/build-property-step1-form-data";
 import { appendPropertyStep1Fields } from "@/features/create-property/utils/build-property-step1-form-data";
 
-export type UpdatePropertyStep1Payload = SubmitPropertyStep1Payload & {
+export type UpdatePropertyStep1Payload = PropertyStep1FormPayload & {
   propertyId: number;
-  imageInstrument?: File;
 };
 
 type PropertyStep1ApiData = {
@@ -24,16 +23,7 @@ type PropertyStep1ApiResponse = {
 export async function updatePropertyStep1(payload: UpdatePropertyStep1Payload) {
   const formData = new FormData();
 
-  appendPropertyStep1Fields(formData, {
-    propertyId: payload.propertyId,
-    instrumentType: payload.instrumentType,
-    imageInstrument: payload.imageInstrument,
-    addressMethod: payload.addressMethod,
-    imageAddress: payload.imageAddress,
-    addressUrl: payload.addressUrl,
-    latitude: payload.latitude,
-    longitude: payload.longitude,
-  });
+  appendPropertyStep1Fields(formData, payload);
 
   const response = await apiFormDataRequest<PropertyStep1ApiResponse>(
     "/realstate/update/step1",

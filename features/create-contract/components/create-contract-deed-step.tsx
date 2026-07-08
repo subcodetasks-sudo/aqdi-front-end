@@ -6,6 +6,7 @@ import CreateContractDeedTypeSelect from "@/features/create-contract/components/
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
+import { Switch } from "@/components/ui/switch";
 import { useCreateContractDeedStep } from "@/features/create-contract/hooks/use-create-contract-deed-step";
 import { useSubmitContractStep1 } from "@/features/create-contract/hooks/use-submit-contract-step1";
 import { useSubmitContractStep2 } from "@/features/create-contract/hooks/use-submit-contract-step2";
@@ -31,6 +32,25 @@ export default function CreateContractDeedStep({
     setSelectedDeedType,
     deedFiles,
     setDeedFiles,
+    deedFrontFiles,
+    setDeedFrontFiles,
+    deedBackFiles,
+    setDeedBackFiles,
+    deedInheritanceFiles,
+    setDeedInheritanceFiles,
+    deedHeirsPoaFiles,
+    setDeedHeirsPoaFiles,
+    deedEndowmentCertFiles,
+    setDeedEndowmentCertFiles,
+    deedTrusteeshipFiles,
+    setDeedTrusteeshipFiles,
+    isMultipleTrusteeshipDeedCopy,
+    setIsMultipleTrusteeshipDeedCopy,
+    deedGuardiansPoaFiles,
+    setDeedGuardiansPoaFiles,
+    needsFrontBack,
+    isDeceasedOwner,
+    isWaqfOwner,
     nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles,
@@ -44,6 +64,13 @@ export default function CreateContractDeedStep({
     goToNextPhase,
     goToPreviousPhase,
     existingInstrumentImageUrl,
+    existingInstrumentFrontImageUrl,
+    existingInstrumentBackImageUrl,
+    existingInheritanceImageUrl,
+    existingHeirsPoaImageUrl,
+    existingEndowmentCertImageUrl,
+    existingTrusteeshipImageUrl,
+    existingGuardiansPoaImageUrl,
     existingAddressImageUrl,
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
@@ -69,8 +96,42 @@ export default function CreateContractDeedStep({
     }
 
     if (currentPhaseIndex === 0) {
-      if (selectedDeedType && deedFiles.length > 0) {
-        const submitted = await submitStep1(selectedDeedType, deedFiles);
+      const hasNewFile = needsFrontBack
+        ? deedFrontFiles.length > 0 || deedBackFiles.length > 0
+        : isDeceasedOwner
+          ? deedFiles.length > 0 ||
+            deedInheritanceFiles.length > 0 ||
+            deedHeirsPoaFiles.length > 0
+          : isWaqfOwner
+            ? deedFiles.length > 0 ||
+              deedEndowmentCertFiles.length > 0 ||
+              deedTrusteeshipFiles.length > 0 ||
+              deedGuardiansPoaFiles.length > 0
+            : deedFiles.length > 0;
+
+      if (selectedDeedType && hasNewFile) {
+        const submitted = await submitStep1(
+          selectedDeedType,
+          needsFrontBack
+            ? { front: deedFrontFiles[0], back: deedBackFiles[0] }
+            : isDeceasedOwner
+              ? {
+                  instrument: deedFiles[0],
+                  inheritance: deedInheritanceFiles[0],
+                  heirsPoa: deedHeirsPoaFiles[0],
+                }
+              : isWaqfOwner
+                ? {
+                    instrument: deedFiles[0],
+                    endowmentCert: deedEndowmentCertFiles[0],
+                    trusteeship: deedTrusteeshipFiles[0],
+                    isMultipleTrusteeshipDeedCopy,
+                    guardiansPoa: isMultipleTrusteeshipDeedCopy
+                      ? deedGuardiansPoaFiles[0]
+                      : undefined,
+                  }
+                : { instrument: deedFiles[0] },
+        );
 
         if (!submitted) {
           return;
@@ -124,7 +185,108 @@ export default function CreateContractDeedStep({
               locked={isInstrumentTypeLocked}
             />
 
-            {selectedDeedType || existingInstrumentImageUrl ? (
+            {(selectedDeedType || existingInstrumentImageUrl) &&
+            needsFrontBack ? (
+              <div className="space-y-6">
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.frontLabel}
+                  single
+                  value={deedFrontFiles}
+                  onChange={setDeedFrontFiles}
+                  existingImageUrl={existingInstrumentFrontImageUrl}
+                />
+
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.backLabel}
+                  single
+                  value={deedBackFiles}
+                  onChange={setDeedBackFiles}
+                  existingImageUrl={existingInstrumentBackImageUrl}
+                />
+              </div>
+            ) : (selectedDeedType || existingInstrumentImageUrl) &&
+              isDeceasedOwner ? (
+              <div className="space-y-6">
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  single
+                  value={deedFiles}
+                  onChange={setDeedFiles}
+                  existingImageUrl={existingInstrumentImageUrl}
+                />
+
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.inheritanceLabel}
+                  single
+                  value={deedInheritanceFiles}
+                  onChange={setDeedInheritanceFiles}
+                  existingImageUrl={existingInheritanceImageUrl}
+                />
+
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.heirsPoaLabel}
+                  single
+                  value={deedHeirsPoaFiles}
+                  onChange={setDeedHeirsPoaFiles}
+                  existingImageUrl={existingHeirsPoaImageUrl}
+                />
+              </div>
+            ) : (selectedDeedType || existingInstrumentImageUrl) && isWaqfOwner ? (
+              <div className="space-y-6">
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  single
+                  value={deedFiles}
+                  onChange={setDeedFiles}
+                  existingImageUrl={existingInstrumentImageUrl}
+                />
+
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.endowmentCertLabel}
+                  single
+                  value={deedEndowmentCertFiles}
+                  onChange={setDeedEndowmentCertFiles}
+                  existingImageUrl={existingEndowmentCertImageUrl}
+                />
+
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.trusteeshipLabel}
+                  single
+                  value={deedTrusteeshipFiles}
+                  onChange={setDeedTrusteeshipFiles}
+                  existingImageUrl={existingTrusteeshipImageUrl}
+                />
+
+                <label className="flex cursor-pointer items-center justify-between gap-3">
+                  <span className="text-sm font-semibold text-brand">
+                    {labels.waqf.multipleTrusteesLabel}
+                  </span>
+                  <Switch
+                    dir="ltr"
+                    checked={isMultipleTrusteeshipDeedCopy}
+                    onCheckedChange={setIsMultipleTrusteeshipDeedCopy}
+                    className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
+                  />
+                </label>
+
+                {isMultipleTrusteeshipDeedCopy ? (
+                  <CreateContractDeedImageUpload
+                    labels={labels.deedImage}
+                    fieldLabel={labels.deedImage.guardiansPoaLabel}
+                    single
+                    value={deedGuardiansPoaFiles}
+                    onChange={setDeedGuardiansPoaFiles}
+                    existingImageUrl={existingGuardiansPoaImageUrl}
+                  />
+                ) : null}
+              </div>
+            ) : selectedDeedType || existingInstrumentImageUrl ? (
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
                 value={deedFiles}

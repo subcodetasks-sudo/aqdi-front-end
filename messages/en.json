@@ -962,6 +962,13 @@
       },
       "deedImage": {
         "label": "Deed image",
+        "frontLabel": "Deed image (front)",
+        "backLabel": "Deed image (back)",
+        "inheritanceLabel": "Inheritance certificate image",
+        "heirsPoaLabel": "Heirs' power of attorney to the agent",
+        "endowmentCertLabel": "Endowment registration certificate image",
+        "trusteeshipLabel": "Trusteeship deed image",
+        "guardiansPoaLabel": "Guardians' power of attorney to the agent",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
@@ -969,6 +976,9 @@
         "delete": "Delete",
         "previewTitle": "File preview",
         "closePreview": "Close"
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
       }
     },
     "address": {
@@ -1328,6 +1338,13 @@
       },
       "deedImage": {
         "label": "Deed image",
+        "frontLabel": "Deed image (front)",
+        "backLabel": "Deed image (back)",
+        "inheritanceLabel": "Inheritance certificate image",
+        "heirsPoaLabel": "Heirs' power of attorney to the agent",
+        "endowmentCertLabel": "Endowment registration certificate image",
+        "trusteeshipLabel": "Trusteeship deed image",
+        "guardiansPoaLabel": "Guardians' power of attorney to the agent",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1355,6 +1372,9 @@
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
       }
     },
     "owner": {

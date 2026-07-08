@@ -988,6 +988,13 @@
       },
       "deedImage": {
         "label": "صورة الصك",
+        "frontLabel": "صورة الصك من الأمام",
+        "backLabel": "صورة الصك من الخلف",
+        "inheritanceLabel": "صورة صك حصر الورثة",
+        "heirsPoaLabel": "صورة من وكالة الورثة للوكيل",
+        "endowmentCertLabel": "صورة من شهادة تسجيل الوقف",
+        "trusteeshipLabel": "صورة من صك النظارة",
+        "guardiansPoaLabel": "صورة من وكالة النظار للوكيل",
         "clickHere": "إضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
@@ -995,6 +1002,9 @@
         "delete": "حذف",
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
       }
     },
     "address": {
@@ -1358,6 +1368,13 @@
       },
       "deedImage": {
         "label": "صورة الصك",
+        "frontLabel": "صورة الصك من الأمام",
+        "backLabel": "صورة الصك من الخلف",
+        "inheritanceLabel": "صورة صك حصر الورثة",
+        "heirsPoaLabel": "صورة من وكالة الورثة للوكيل",
+        "endowmentCertLabel": "صورة من شهادة تسجيل الوقف",
+        "trusteeshipLabel": "صورة من صك النظارة",
+        "guardiansPoaLabel": "صورة من وكالة النظار للوكيل",
         "clickHere": "إضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1389,6 +1406,9 @@
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
       }
     },
     "owner": {

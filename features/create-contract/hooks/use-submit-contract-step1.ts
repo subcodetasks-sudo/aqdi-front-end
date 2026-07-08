@@ -23,7 +23,17 @@ export function useSubmitContractStep1() {
 
   async function submitStep1(
     selectedDeedType: DeedTypeId,
-    deedFiles: File[],
+    files: {
+      instrument?: File;
+      front?: File;
+      back?: File;
+      inheritance?: File;
+      heirsPoa?: File;
+      endowmentCert?: File;
+      trusteeship?: File;
+      isMultipleTrusteeshipDeedCopy?: boolean;
+      guardiansPoa?: File;
+    },
   ): Promise<boolean> {
     if (isSubmitting) {
       return false;
@@ -34,7 +44,18 @@ export function useSubmitContractStep1() {
       return false;
     }
 
-    if (deedFiles.length === 0) {
+    const hasNewFile = Boolean(
+      files.instrument ||
+        files.front ||
+        files.back ||
+        files.inheritance ||
+        files.heirsPoa ||
+        files.endowmentCert ||
+        files.trusteeship ||
+        files.guardiansPoa,
+    );
+
+    if (!hasNewFile) {
       // Existing-property contracts already have the deed data stored on the
       // backend from /contract/start, so allow continuing without re-uploading.
       return isExistingPropertyContract;
@@ -56,7 +77,15 @@ export function useSubmitContractStep1() {
       const result = await submitContractStep1({
         contractId: contractSession.contractId,
         instrumentType,
-        imageInstrument: deedFiles[0],
+        imageInstrument: files.instrument,
+        imageInstrumentFront: files.front,
+        imageInstrumentBack: files.back,
+        imageInheritanceCertificate: files.inheritance,
+        copyPowerOfAttorneyFromHeirsToAgent: files.heirsPoa,
+        copyOfTheEndowmentRegistrationCertificate: files.endowmentCert,
+        copyOfTheTrusteeshipDeed: files.trusteeship,
+        isMultipleTrusteeshipDeedCopy: files.isMultipleTrusteeshipDeedCopy,
+        copyOfGuardiansPowerOfAttorneyForAgent: files.guardiansPoa,
       });
 
       if (!result.ok) {

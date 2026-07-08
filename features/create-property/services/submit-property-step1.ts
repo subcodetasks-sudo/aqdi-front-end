@@ -1,19 +1,10 @@
 "use server";
 
 import { apiFormDataRequest } from "@/lib/api/api-request";
-import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
-import type { PropertyNationalAddressMethodId } from "@/features/create-property/types/national-address";
 import { appendPropertyStep1Fields } from "@/features/create-property/utils/build-property-step1-form-data";
+import type { PropertyStep1FormPayload } from "@/features/create-property/utils/build-property-step1-form-data";
 
-export type SubmitPropertyStep1Payload = {
-  instrumentType: PropertyDeedTypeId;
-  imageInstrument: File;
-  addressMethod: PropertyNationalAddressMethodId;
-  imageAddress?: File;
-  addressUrl?: string;
-  latitude: number;
-  longitude: number;
-};
+export type SubmitPropertyStep1Payload = Omit<PropertyStep1FormPayload, "propertyId">;
 
 type PropertyStep1ApiData = {
   id: number;

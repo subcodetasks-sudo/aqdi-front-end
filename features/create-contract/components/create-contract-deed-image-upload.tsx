@@ -28,6 +28,8 @@ type CreateContractDeedImageUploadProps = {
   value: File[];
   onChange: (files: File[]) => void;
   existingImageUrl?: string | null;
+  fieldLabel?: string;
+  single?: boolean;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -166,6 +168,8 @@ export default function CreateContractDeedImageUpload({
   value,
   onChange,
   existingImageUrl = null,
+  fieldLabel,
+  single = false,
 }: CreateContractDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -193,7 +197,7 @@ export default function CreateContractDeedImageUpload({
     const files = Array.from(event.target.files ?? []);
 
     if (files.length > 0) {
-      onChange([...value, ...files]);
+      onChange(single ? [files[0]] : [...value, ...files]);
     }
 
     event.target.value = "";
@@ -205,7 +209,7 @@ export default function CreateContractDeedImageUpload({
 
   return (
     <div className="space-y-3">
-      <CreateContractFieldLabel label={labels.label} />
+      <CreateContractFieldLabel label={fieldLabel ?? labels.label} />
 
       <label
         htmlFor={inputId}
@@ -217,7 +221,7 @@ export default function CreateContractDeedImageUpload({
           ref={inputRef}
           id={inputId}
           type="file"
-          multiple
+          multiple={!single}
           accept={ACCEPTED_FILE_TYPES}
           className="sr-only"
           onChange={handleFileChange}

@@ -60,6 +60,13 @@ export type CreateContractLabels = {
     };
     deedImage: {
       label: string;
+      frontLabel?: string;
+      backLabel?: string;
+      inheritanceLabel?: string;
+      heirsPoaLabel?: string;
+      endowmentCertLabel?: string;
+      trusteeshipLabel?: string;
+      guardiansPoaLabel?: string;
       clickHere: string;
       chooseFile: string;
       acceptedFormats: string;
@@ -78,6 +85,9 @@ export type CreateContractLabels = {
         placeholder: string;
       };
       photo: CreateContractLabels["deed"]["deedImage"];
+    };
+    waqf: {
+      multipleTrusteesLabel: string;
     };
   };
   owner: {

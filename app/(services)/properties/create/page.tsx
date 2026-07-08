@@ -56,6 +56,13 @@ export default async function CreatePropertyPage({
       },
       deedImage: {
         label: t("deed.deedImage.label"),
+        frontLabel: t("deed.deedImage.frontLabel"),
+        backLabel: t("deed.deedImage.backLabel"),
+        inheritanceLabel: t("deed.deedImage.inheritanceLabel"),
+        heirsPoaLabel: t("deed.deedImage.heirsPoaLabel"),
+        endowmentCertLabel: t("deed.deedImage.endowmentCertLabel"),
+        trusteeshipLabel: t("deed.deedImage.trusteeshipLabel"),
+        guardiansPoaLabel: t("deed.deedImage.guardiansPoaLabel"),
         clickHere: t("deed.deedImage.clickHere"),
         chooseFile: t("deed.deedImage.chooseFile"),
         acceptedFormats: t("deed.deedImage.acceptedFormats"),
@@ -63,6 +70,9 @@ export default async function CreatePropertyPage({
         delete: t("deed.deedImage.delete"),
         previewTitle: t("deed.deedImage.previewTitle"),
         closePreview: t("deed.deedImage.closePreview"),
+      },
+      waqf: {
+        multipleTrusteesLabel: t("deed.waqf.multipleTrusteesLabel"),
       },
     },
     address: {

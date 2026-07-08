@@ -1,6 +1,11 @@
 "use client";
 
-import { DEED_STEP_PHASE_COUNT } from "@/features/create-contract/types/deed-type";
+import {
+  DEED_STEP_PHASE_COUNT,
+  deedTypeIsDeceasedOwner,
+  deedTypeIsWaqfOwner,
+  deedTypeNeedsFrontBack,
+} from "@/features/create-contract/types/deed-type";
 import { DEFAULT_NATIONAL_ADDRESS_LOCATION } from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
@@ -27,6 +32,9 @@ export function useCreateContractDeedStep() {
   const existingPropertyContext = useCreateContractDraftStore(
     (state) => state.existingPropertyContext,
   );
+  const contractStep1Data = useCreateContractDraftStore(
+    (state) => state.contractStep1Data,
+  );
   const isDeedAlreadySubmitted = useCreateContractDraftStore(
     (state) => (state.contractStep1Data?.step ?? 0) >= 2,
   );
@@ -40,6 +48,30 @@ export function useCreateContractDeedStep() {
     (state) => state.setSelectedDeedType,
   );
   const setDeedFiles = useCreateContractDraftStore((state) => state.setDeedFiles);
+  const setDeedFrontFiles = useCreateContractDraftStore(
+    (state) => state.setDeedFrontFiles,
+  );
+  const setDeedBackFiles = useCreateContractDraftStore(
+    (state) => state.setDeedBackFiles,
+  );
+  const setDeedInheritanceFiles = useCreateContractDraftStore(
+    (state) => state.setDeedInheritanceFiles,
+  );
+  const setDeedHeirsPoaFiles = useCreateContractDraftStore(
+    (state) => state.setDeedHeirsPoaFiles,
+  );
+  const setDeedEndowmentCertFiles = useCreateContractDraftStore(
+    (state) => state.setDeedEndowmentCertFiles,
+  );
+  const setDeedTrusteeshipFiles = useCreateContractDraftStore(
+    (state) => state.setDeedTrusteeshipFiles,
+  );
+  const setIsMultipleTrusteeshipDeedCopy = useCreateContractDraftStore(
+    (state) => state.setIsMultipleTrusteeshipDeedCopy,
+  );
+  const setDeedGuardiansPoaFiles = useCreateContractDraftStore(
+    (state) => state.setDeedGuardiansPoaFiles,
+  );
   const setNationalAddressMethod = useCreateContractDraftStore(
     (state) => state.setNationalAddressMethod,
   );
@@ -54,10 +86,52 @@ export function useCreateContractDeedStep() {
   const existingInstrumentImageUrl = resolveContractAssetUrl(
     existingPropertyContext?.property.image_instrument,
   );
+  const existingInstrumentFrontImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.image_instrument_from_the_front,
+  );
+  const existingInstrumentBackImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.image_instrument_from_the_back,
+  );
+  const existingInheritanceImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.Image_inheritance_certificate,
+  );
+  const existingHeirsPoaImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.copy_power_of_attorney_from_heirs_to_agent,
+  );
+  const existingEndowmentCertImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.copy_of_the_endowment_registration_certificate,
+  );
+  const existingTrusteeshipImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.copy_of_the_trusteeship_deed,
+  );
+  const existingGuardiansPoaImageUrl = resolveContractAssetUrl(
+    contractStep1Data?.copy_of_guardians_power_of_attorney_for_agent,
+  );
   const existingAddressImageUrl = resolveContractAssetUrl(
     existingPropertyContext?.property.image_address,
   );
   const isInstrumentTypeLocked = existingPropertyContext !== null;
+  const needsFrontBack = deedTypeNeedsFrontBack(deed.selectedDeedType);
+  const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
+  const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
+  const isMultipleTrusteeshipDeedCopy = deed.isMultipleTrusteeshipDeedCopy;
+
+  const hasFrontImage =
+    deed.deedFrontFiles.length > 0 || existingInstrumentFrontImageUrl !== null;
+  const hasBackImage =
+    deed.deedBackFiles.length > 0 || existingInstrumentBackImageUrl !== null;
+  const hasSingleImage =
+    deed.deedFiles.length > 0 || existingInstrumentImageUrl !== null;
+  const hasInheritanceImage =
+    deed.deedInheritanceFiles.length > 0 || existingInheritanceImageUrl !== null;
+  const hasHeirsPoaImage =
+    deed.deedHeirsPoaFiles.length > 0 || existingHeirsPoaImageUrl !== null;
+  const hasEndowmentCertImage =
+    deed.deedEndowmentCertFiles.length > 0 || existingEndowmentCertImageUrl !== null;
+  const hasTrusteeshipImage =
+    deed.deedTrusteeshipFiles.length > 0 || existingTrusteeshipImageUrl !== null;
+  const hasGuardiansPoaImage =
+    deed.deedGuardiansPoaFiles.length > 0 || existingGuardiansPoaImageUrl !== null;
 
   const isLastPhase = deed.currentPhaseIndex === DEED_STEP_PHASE_COUNT - 1;
   const canContinue =
@@ -68,7 +142,16 @@ export function useCreateContractDeedStep() {
         isInstrumentTypeLocked ||
         isDeedAlreadySubmitted ||
         (deed.selectedDeedType !== "" &&
-          (deed.deedFiles.length > 0 || existingInstrumentImageUrl !== null))
+          (needsFrontBack
+            ? hasFrontImage && hasBackImage
+            : isDeceasedOwner
+              ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+              : isWaqfOwner
+                ? hasSingleImage &&
+                  hasEndowmentCertImage &&
+                  hasTrusteeshipImage &&
+                  (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
+                : hasSingleImage))
       : isInstrumentTypeLocked ||
         isAddressAlreadySubmitted ||
         canContinueNationalAddress(
@@ -96,6 +179,25 @@ export function useCreateContractDeedStep() {
     setSelectedDeedType,
     deedFiles: deed.deedFiles,
     setDeedFiles,
+    deedFrontFiles: deed.deedFrontFiles,
+    setDeedFrontFiles,
+    deedBackFiles: deed.deedBackFiles,
+    setDeedBackFiles,
+    deedInheritanceFiles: deed.deedInheritanceFiles,
+    setDeedInheritanceFiles,
+    deedHeirsPoaFiles: deed.deedHeirsPoaFiles,
+    setDeedHeirsPoaFiles,
+    deedEndowmentCertFiles: deed.deedEndowmentCertFiles,
+    setDeedEndowmentCertFiles,
+    deedTrusteeshipFiles: deed.deedTrusteeshipFiles,
+    setDeedTrusteeshipFiles,
+    isMultipleTrusteeshipDeedCopy,
+    setIsMultipleTrusteeshipDeedCopy,
+    deedGuardiansPoaFiles: deed.deedGuardiansPoaFiles,
+    setDeedGuardiansPoaFiles,
+    needsFrontBack,
+    isDeceasedOwner,
+    isWaqfOwner,
     nationalAddressMethod: deed.nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles: deed.nationalAddressPhotoFiles,
@@ -109,6 +211,13 @@ export function useCreateContractDeedStep() {
     goToNextPhase,
     goToPreviousPhase,
     existingInstrumentImageUrl,
+    existingInstrumentFrontImageUrl,
+    existingInstrumentBackImageUrl,
+    existingInheritanceImageUrl,
+    existingHeirsPoaImageUrl,
+    existingEndowmentCertImageUrl,
+    existingTrusteeshipImageUrl,
+    existingGuardiansPoaImageUrl,
     existingAddressImageUrl,
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
