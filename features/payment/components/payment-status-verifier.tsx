@@ -1,10 +1,14 @@
 "use client";
 
 import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import type { ContractPaymentStatusData } from "@/features/create-contract/types/contract-payment";
 import PaymentStatusContent from "@/features/payment/components/payment-status-content";
+import {
+  resolvePaymentStatusUi,
+  type PaymentStatusUiState,
+} from "@/features/payment/utils/resolve-payment-status-ui";
 import { BASE_URL } from "@/lib/api/constants";
 
 type PaymentStatusVerifierLabels = {
@@ -34,47 +38,16 @@ type PaymentStatusVerifierProps = {
   labels: PaymentStatusVerifierLabels;
 };
 
-type RawPaymentStatusResponse = {
-  message?: string;
-  success?: boolean;
-  data?: {
-    result: "success" | "error";
-    contract_uuid: string;
-    contract_id: number;
-    is_completed: boolean;
-    employee_paid_record: ContractPaymentStatusData["employeePaidRecord"];
-    payment: ContractPaymentStatusData["payment"];
-  };
-};
-
 type VerificationState =
   | { state: "loading" }
-  | {
-      state: "resolved";
-      variant: "success" | "error";
-      message: string;
-      statusData: ContractPaymentStatusData | null;
-      confirmedSuccess: boolean;
-    };
-
-function normalizeStatusData(
-  data: NonNullable<RawPaymentStatusResponse["data"]>,
-): ContractPaymentStatusData {
-  return {
-    result: data.result,
-    contractUuid: data.contract_uuid,
-    contractId: data.contract_id,
-    isCompleted: data.is_completed,
-    employeePaidRecord: data.employee_paid_record,
-    payment: data.payment,
-  };
-}
+  | ({ state: "resolved" } & PaymentStatusUiState);
 
 export default function PaymentStatusVerifier({
   contractUuid,
   status,
   labels,
 }: PaymentStatusVerifierProps) {
+  const router = useRouter();
   const [verification, setVerification] = useState<VerificationState>({
     state: "loading",
   });
@@ -97,39 +70,27 @@ export default function PaymentStatusVerifier({
           cache: "no-store",
         });
 
-        const payload = (await response.json().catch(() => null)) as
-          | RawPaymentStatusResponse
-          | null;
+        const payload = (await response.json().catch(() => null)) as Parameters<
+          typeof resolvePaymentStatusUi
+        >[0];
 
         if (!isMounted) {
           return;
         }
 
-        if (!response.ok || payload?.success === false) {
-          setVerification({
-            state: "resolved",
-            variant: "error",
-            message: payload?.message || labels.failedMessage,
-            statusData: payload?.data ? normalizeStatusData(payload.data) : null,
-            confirmedSuccess: false,
-          });
-          return;
-        }
-
-        const normalizedStatus = payload?.data ? normalizeStatusData(payload.data) : null;
-        const confirmedSuccess =
-          normalizedStatus?.payment?.status === "success" ||
-          normalizedStatus?.isCompleted === true;
+        const outcome = resolvePaymentStatusUi(payload, {
+          completedMessage: labels.completedMessage,
+          failedMessage: labels.failedMessage,
+        });
 
         setVerification({
           state: "resolved",
-          variant: confirmedSuccess ? "success" : "error",
-          message: confirmedSuccess
-            ? labels.completedMessage
-            : payload?.message || labels.failedMessage,
-          statusData: normalizedStatus,
-          confirmedSuccess,
+          ...outcome,
         });
+
+        if (outcome.isPaid) {
+          router.refresh();
+        }
       } catch {
         if (!isMounted) {
           return;
@@ -140,7 +101,7 @@ export default function PaymentStatusVerifier({
           variant: "error",
           message: labels.failedMessage,
           statusData: null,
-          confirmedSuccess: false,
+          isPaid: false,
         });
       }
     }
@@ -150,7 +111,13 @@ export default function PaymentStatusVerifier({
     return () => {
       isMounted = false;
     };
-  }, [contractUuid, labels.completedMessage, labels.failedMessage, status]);
+  }, [
+    contractUuid,
+    labels.completedMessage,
+    labels.failedMessage,
+    router,
+    status,
+  ]);
 
   if (verification.state === "loading") {
     return (
@@ -170,15 +137,17 @@ export default function PaymentStatusVerifier({
     );
   }
 
-  const isSuccess = verification.variant === "success";
+  const isPaid = verification.isPaid;
 
   return (
     <PaymentStatusContent
       variant={verification.variant}
       backLabel={labels.backLabel}
-      pageTitle={isSuccess ? labels.successPageTitle : labels.errorPageTitle}
-      title={isSuccess ? labels.successTitle : labels.errorTitle}
-      description={isSuccess ? labels.successDescription : labels.errorDescription}
+      pageTitle={isPaid ? labels.successPageTitle : labels.errorPageTitle}
+      title={isPaid ? labels.successTitle : labels.errorTitle}
+      description={
+        isPaid ? labels.successDescription : labels.errorDescription
+      }
       message={verification.message}
       contractNumberLabel={labels.contractNumberLabel}
       contractIdLabel={labels.contractIdLabel}
