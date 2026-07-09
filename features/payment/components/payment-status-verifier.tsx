@@ -124,7 +124,9 @@ export default function PaymentStatusVerifier({
         setVerification({
           state: "resolved",
           variant: confirmedSuccess ? "success" : "error",
-          message: confirmedSuccess ? labels.completedMessage : payload.message || labels.failedMessage,
+          message: confirmedSuccess
+            ? labels.completedMessage
+            : payload?.message || labels.failedMessage,
           statusData: normalizedStatus,
           confirmedSuccess,
         });
