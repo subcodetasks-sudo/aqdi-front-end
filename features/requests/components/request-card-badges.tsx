@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { BadgeCheck, Check } from "lucide-react";
 
 import RequestEditContractButton from "@/features/requests/components/request-edit-contract-button";
 import type { RequestCardData } from "@/features/requests/types/request";
@@ -56,7 +56,7 @@ export default function RequestCardBadges({
 
       {card.paymentSuccessful ? (
         <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-background-green px-3 py-1.5 text-[11px] font-semibold text-brand-secondary">
-          <Check className="size-3.5" aria-hidden="true" />
+          <BadgeCheck className="size-3.5" aria-hidden="true" />
           {labels.paymentSuccessful}
         </span>
       ) : null}
