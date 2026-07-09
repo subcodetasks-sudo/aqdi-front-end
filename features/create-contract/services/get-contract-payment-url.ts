@@ -6,7 +6,7 @@ import type {
 } from "@/features/create-contract/types/contract-payment";
 import { apiRequest } from "@/lib/api/api-request";
 
-function resolvePaymentUrl(data: ContractPaymentApiResponse | null) {
+function resolvePaymentUrl(data: ContractPaymentApiResponse | null | undefined) {
   if (!data) {
     return null;
   }
@@ -20,7 +20,9 @@ function resolvePaymentUrl(data: ContractPaymentApiResponse | null) {
   );
 }
 
-function resolvePaymentSuccessUrl(data: ContractPaymentApiResponse | null) {
+function resolvePaymentSuccessUrl(
+  data: ContractPaymentApiResponse | null | undefined,
+) {
   if (!data) {
     return null;
   }
@@ -28,7 +30,9 @@ function resolvePaymentSuccessUrl(data: ContractPaymentApiResponse | null) {
   return data.payment_success_url ?? data.data?.payment_success_url ?? null;
 }
 
-function resolvePaymentErrorUrl(data: ContractPaymentApiResponse | null) {
+function resolvePaymentErrorUrl(
+  data: ContractPaymentApiResponse | null | undefined,
+) {
   if (!data) {
     return null;
   }
