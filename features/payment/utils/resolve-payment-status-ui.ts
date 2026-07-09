@@ -20,9 +20,11 @@ type RawPaymentStatusPayload = {
   success?: boolean;
   data?: {
     result: "success" | "error";
+    resolved_result?: "success" | "error" | null;
     contract_uuid: string;
     contract_id: number;
     is_completed: boolean;
+    payment_confirmed?: boolean | null;
     employee_paid_record: ContractPaymentStatusData["employeePaidRecord"];
     payment: ContractPaymentStatusData["payment"];
   };
@@ -33,9 +35,11 @@ export function normalizePaymentStatusData(
 ): ContractPaymentStatusData {
   return {
     result: data.result,
+    resolvedResult: data.resolved_result ?? null,
     contractUuid: data.contract_uuid,
     contractId: data.contract_id,
     isCompleted: data.is_completed,
+    paymentConfirmed: data.payment_confirmed ?? null,
     employeePaidRecord: data.employee_paid_record,
     payment: data.payment,
   };

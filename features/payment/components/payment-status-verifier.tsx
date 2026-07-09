@@ -59,8 +59,29 @@ export default function PaymentStatusVerifier({
       setVerification({ state: "loading" });
 
       try {
-        const search = window.location.search;
-        const endpoint = `${BASE_URL}/status/${status}/${contractUuid}${search}`;
+        const searchParams = new URLSearchParams(window.location.search);
+        const verificationParams = new URLSearchParams();
+
+        const id = searchParams.get("id");
+        const invoiceId = searchParams.get("invoice_id");
+        const paymentStatus = searchParams.get("status");
+
+        if (id) {
+          verificationParams.set("id", id);
+        }
+
+        if (invoiceId) {
+          verificationParams.set("invoice_id", invoiceId);
+        }
+
+        if (paymentStatus) {
+          verificationParams.set("status", paymentStatus);
+        }
+
+        const query = verificationParams.toString();
+        const endpoint = `${BASE_URL}/status/${status}/${contractUuid}${
+          query ? `?${query}` : ""
+        }`;
 
         const response = await fetch(endpoint, {
           method: "GET",

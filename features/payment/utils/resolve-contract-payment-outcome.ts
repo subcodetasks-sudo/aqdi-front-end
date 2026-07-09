@@ -9,6 +9,18 @@ export function hasSuccessfulPayment(status: ContractPaymentStatusData | null) {
     return false;
   }
 
+  if (status.resolvedResult === "success") {
+    return true;
+  }
+
+  if (status.resolvedResult === "error") {
+    return false;
+  }
+
+  if (status.paymentConfirmed === true) {
+    return true;
+  }
+
   if (status.result === "success") {
     return true;
   }

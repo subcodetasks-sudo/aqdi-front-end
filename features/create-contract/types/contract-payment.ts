@@ -17,9 +17,11 @@ export type ContractEmployeePaidRecord = {
 
 export type ContractPaymentStatusData = {
   result: "success" | "error";
+  resolvedResult?: "success" | "error" | null;
   contractUuid: string;
   contractId: number;
   isCompleted: boolean;
+  paymentConfirmed?: boolean | null;
   employeePaidRecord: ContractEmployeePaidRecord | null;
   payment: ContractPaymentGatewayRecord | null;
 };
@@ -51,9 +53,11 @@ export type ContractPaymentStatusApiResponse = {
   success: boolean;
   data?: {
     result: "success" | "error";
+    resolved_result?: "success" | "error" | null;
     contract_uuid: string;
     contract_id: number;
     is_completed: boolean;
+    payment_confirmed?: boolean | null;
     employee_paid_record: unknown;
     payment: unknown;
   };
