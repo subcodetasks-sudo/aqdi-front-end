@@ -1,12 +1,39 @@
 "use server";
 
 import type {
+  ContractEmployeePaidRecord,
+  ContractPaymentGatewayRecord,
   ContractPaymentStatusApiResponse,
   ContractPaymentStatusData,
 } from "@/features/create-contract/types/contract-payment";
 import { apiRequest } from "@/lib/api/api-request";
 
 export type ContractPaymentStatusSource = "contract" | "admin";
+
+function asPaymentRecord(value: unknown): ContractPaymentGatewayRecord | null {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const status =
+    "status" in value && typeof value.status === "string" ? value.status : null;
+
+  return { status };
+}
+
+function asEmployeePaidRecord(value: unknown): ContractEmployeePaidRecord | null {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const isPaid =
+    "is_paid" in value &&
+    (typeof value.is_paid === "boolean" || typeof value.is_paid === "number")
+      ? value.is_paid
+      : null;
+
+  return { is_paid: isPaid };
+}
 
 function mapPaymentStatus(
   data: NonNullable<ContractPaymentStatusApiResponse["data"]>,
@@ -16,8 +43,8 @@ function mapPaymentStatus(
     contractUuid: data.contract_uuid,
     contractId: data.contract_id,
     isCompleted: data.is_completed,
-    employeePaidRecord: data.employee_paid_record,
-    payment: data.payment,
+    employeePaidRecord: asEmployeePaidRecord(data.employee_paid_record),
+    payment: asPaymentRecord(data.payment),
   };
 }
 
