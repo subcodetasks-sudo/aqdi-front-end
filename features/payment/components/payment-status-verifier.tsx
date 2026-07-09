@@ -4,8 +4,8 @@ import { LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import type { ContractPaymentStatusData } from "@/features/create-contract/types/contract-payment";
-import type { ContractPaymentStatusSource } from "@/features/create-contract/services/get-contract-payment-status";
 import PaymentStatusContent from "@/features/payment/components/payment-status-content";
+import { BASE_URL } from "@/lib/api/constants";
 
 type PaymentStatusVerifierLabels = {
   backLabel: string;
@@ -30,9 +30,21 @@ type PaymentStatusVerifierLabels = {
 
 type PaymentStatusVerifierProps = {
   contractUuid: string;
-  source: ContractPaymentStatusSource;
   status: "success" | "error";
   labels: PaymentStatusVerifierLabels;
+};
+
+type RawPaymentStatusResponse = {
+  message?: string;
+  success?: boolean;
+  data?: {
+    result: "success" | "error";
+    contract_uuid: string;
+    contract_id: number;
+    is_completed: boolean;
+    employee_paid_record: ContractPaymentStatusData["employeePaidRecord"];
+    payment: ContractPaymentStatusData["payment"];
+  };
 };
 
 type VerificationState =
@@ -45,9 +57,21 @@ type VerificationState =
       confirmedSuccess: boolean;
     };
 
+function normalizeStatusData(
+  data: NonNullable<RawPaymentStatusResponse["data"]>,
+): ContractPaymentStatusData {
+  return {
+    result: data.result,
+    contractUuid: data.contract_uuid,
+    contractId: data.contract_id,
+    isCompleted: data.is_completed,
+    employeePaidRecord: data.employee_paid_record,
+    payment: data.payment,
+  };
+}
+
 export default function PaymentStatusVerifier({
   contractUuid,
-  source,
   status,
   labels,
 }: PaymentStatusVerifierProps) {
@@ -62,46 +86,46 @@ export default function PaymentStatusVerifier({
       setVerification({ state: "loading" });
 
       try {
-        const response = await fetch(
-          `/api/payment-status/${source}/${status}/${contractUuid}`,
-          {
-            method: "GET",
-            cache: "no-store",
+        const search = window.location.search;
+        const endpoint = `${BASE_URL}/status/${status}/${contractUuid}${search}`;
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
           },
-        );
+          cache: "no-store",
+        });
 
         const payload = (await response.json().catch(() => null)) as
-          | {
-              ok: boolean;
-              error?: string;
-              message?: string;
-              confirmedSuccess?: boolean;
-              data?: ContractPaymentStatusData;
-            }
+          | RawPaymentStatusResponse
           | null;
 
         if (!isMounted) {
           return;
         }
 
-        if (!response.ok || !payload?.ok) {
+        if (!response.ok || payload?.success === false) {
           setVerification({
             state: "resolved",
             variant: "error",
-            message: payload?.error || labels.failedMessage,
-            statusData: payload?.data ?? null,
+            message: payload?.message || labels.failedMessage,
+            statusData: payload?.data ? normalizeStatusData(payload.data) : null,
             confirmedSuccess: false,
           });
           return;
         }
 
-        const confirmedSuccess = Boolean(payload.confirmedSuccess);
+        const normalizedStatus = payload?.data ? normalizeStatusData(payload.data) : null;
+        const confirmedSuccess =
+          normalizedStatus?.payment?.status === "success" ||
+          normalizedStatus?.isCompleted === true;
 
         setVerification({
           state: "resolved",
           variant: confirmedSuccess ? "success" : "error",
           message: confirmedSuccess ? labels.completedMessage : payload.message || labels.failedMessage,
-          statusData: payload.data ?? null,
+          statusData: normalizedStatus,
           confirmedSuccess,
         });
       } catch {
@@ -124,7 +148,7 @@ export default function PaymentStatusVerifier({
     return () => {
       isMounted = false;
     };
-  }, [contractUuid, labels.completedMessage, labels.failedMessage, source, status]);
+  }, [contractUuid, labels.completedMessage, labels.failedMessage, status]);
 
   if (verification.state === "loading") {
     return (
@@ -162,7 +186,6 @@ export default function PaymentStatusVerifier({
       retryPaymentLabel={labels.retryPaymentLabel}
       retryPaymentLoadingLabel={labels.retryPaymentLoadingLabel}
       retryPaymentErrorLabel={labels.retryPaymentErrorLabel}
-      source={source}
       status={verification.statusData}
     />
   );

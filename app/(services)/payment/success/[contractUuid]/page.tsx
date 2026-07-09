@@ -1,31 +1,20 @@
 import { getTranslations } from "next-intl/server";
 
-import type { ContractPaymentStatusSource } from "@/features/create-contract/services/get-contract-payment-status";
 import PaymentStatusVerifier from "@/features/payment/components/payment-status-verifier";
 
 type PaymentSuccessPageProps = {
   params: Promise<{
     contractUuid: string;
   }>;
-  searchParams: Promise<{
-    source?: string;
-  }>;
 };
 
-export default async function PaymentSuccessPage({
-  params,
-  searchParams,
-}: PaymentSuccessPageProps) {
+export default async function PaymentSuccessPage({ params }: PaymentSuccessPageProps) {
   const { contractUuid } = await params;
-  const { source } = await searchParams;
   const t = await getTranslations("paymentStatus");
-  const paymentSource: ContractPaymentStatusSource =
-    source === "admin" ? "admin" : "contract";
 
   return (
     <PaymentStatusVerifier
       contractUuid={contractUuid}
-      source={paymentSource}
       status="success"
       labels={{
         backLabel: t("backLabel"),
