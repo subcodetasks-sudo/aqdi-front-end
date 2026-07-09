@@ -3,6 +3,7 @@
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { Switch } from "@/components/ui/switch";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
@@ -11,6 +12,8 @@ import CreateContractSavePropertyDialog from "@/features/create-contract/compone
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
 import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
+import { useStartContractPayment } from "@/features/create-contract/hooks/use-start-contract-payment";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
@@ -18,17 +21,17 @@ type CreateContractPaymentStepProps = {
   labels: CreateContractLabels["payment"];
   contractType: ContractTypeId;
   onBack: () => void;
-  onComplete: () => void;
 };
 
 export default function CreateContractPaymentStep({
   labels,
   contractType,
   onBack,
-  onComplete,
 }: CreateContractPaymentStepProps) {
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
+  const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const { submitSaveProperty, isSaving } = useSaveProperty();
+  const { startPayment, isPaying } = useStartContractPayment();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   function handleSwitchChange(checked: boolean) {
@@ -65,6 +68,15 @@ export default function CreateContractPaymentStep({
       propertyName: result.propertyName,
     });
     setIsDialogOpen(false);
+  }
+
+  async function handlePay() {
+    if (!contractSession?.uuid) {
+      toast.error(labels.navigation.payError);
+      return;
+    }
+
+    await startPayment(contractSession.uuid, labels.navigation.payError);
   }
 
   return (
@@ -135,8 +147,10 @@ export default function CreateContractPaymentStep({
       <CreateContractPaymentNavigation
         previousLabel={labels.navigation.previous}
         payLabel={labels.navigation.pay}
+        payingLabel={labels.navigation.paying}
+        isPaying={isPaying}
         onPrevious={onBack}
-        onPay={onComplete}
+        onPay={() => void handlePay()}
       />
     </div>
   );

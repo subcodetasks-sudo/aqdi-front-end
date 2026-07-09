@@ -784,6 +784,8 @@
       "editError": "تعذر تحميل بيانات العقد",
       "completePaymentHint": "يرجى اتمام دفع قيمة العقد",
       "completePayment": "اتمام دفع قيمة العقد",
+      "completePaymentLoading": "جاري التوجيه للدفع...",
+      "completePaymentError": "تعذر بدء عملية الدفع. حاول مرة أخرى.",
       "helpCenter": "مركز المساعدة",
       "whenReceiveContract": "متى أستلم عقدي؟",
       "status": {
@@ -1776,7 +1778,9 @@
       "subtitle": "تفاصيل المقابل المالي للعقد :",
       "navigation": {
         "previous": "السابق",
-        "pay": "الدفع وتوثيق العقد"
+        "pay": "الدفع وتوثيق العقد",
+        "paying": "جاري التوجيه للدفع...",
+        "payError": "تعذر بدء عملية الدفع. حاول مرة أخرى."
       },
       "summary": {
         "ejarFees": "رسوم إيجار :",
@@ -1815,6 +1819,30 @@
         "privacyHref": "/privacy"
       }
     }
+  },
+  "paymentStatus": {
+    "backLabel": "رجوع",
+    "checkingTitle": "جاري التحقق من حالة الدفع",
+    "checkingDescription": "ننتظر تأكيد الباك إند لحالة الدفع وتحديث حالة العقد.",
+    "success": {
+      "pageTitle": "نتيجة الدفع",
+      "title": "تم الدفع بنجاح",
+      "description": "تم استلام دفعتك بنجاح"
+    },
+    "error": {
+      "pageTitle": "فشل الدفع",
+      "title": "فشلت عملية الدفع",
+      "description": "لم تتم عملية الدفع"
+    },
+    "contractNumberLabel": "رقم العقد",
+    "contractIdLabel": "معرّف العقد",
+    "backToRequests": "العودة إلى الطلبات",
+    "backToHome": "العودة للرئيسية",
+    "retryPayment": "إعادة محاولة الدفع",
+    "retryPaymentLoading": "جاري التوجيه للدفع...",
+    "retryPaymentError": "تعذر بدء عملية الدفع. حاول مرة أخرى.",
+    "completedMessage": "تم الدفع بنجاح وتم تحديث حالة العقد إلى مكتمل",
+    "failedMessage": "الدفع لم يكتمل"
   },
   "startWithAqdi": {
     "dialog": {

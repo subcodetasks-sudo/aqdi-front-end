@@ -31,6 +31,8 @@ export default async function RequestsPage() {
       editError: t("card.editError"),
       completePaymentHint: t("card.completePaymentHint"),
       completePayment: t("card.completePayment"),
+      completePaymentLoading: t("card.completePaymentLoading"),
+      completePaymentError: t("card.completePaymentError"),
       helpCenter: t("card.helpCenter"),
       whenReceiveContract: t("card.whenReceiveContract"),
       status: {

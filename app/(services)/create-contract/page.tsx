@@ -487,6 +487,8 @@ export default async function CreateContractPage({
       navigation: {
         previous: t("payment.navigation.previous"),
         pay: t("payment.navigation.pay"),
+        paying: t("payment.navigation.paying"),
+        payError: t("payment.navigation.payError"),
       },
       summary: {
         ejarFees: t("payment.summary.ejarFees"),

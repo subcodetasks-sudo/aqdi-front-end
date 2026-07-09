@@ -758,6 +758,8 @@
       "editError": "Failed to load contract data",
       "completePaymentHint": "Please complete payment of the contract value",
       "completePayment": "Complete payment of contract value",
+      "completePaymentLoading": "Redirecting to payment...",
+      "completePaymentError": "Failed to start payment. Please try again.",
       "helpCenter": "Help center",
       "whenReceiveContract": "When will I receive my contract?",
       "status": {
@@ -1742,7 +1744,9 @@
       "subtitle": "Contract financial consideration details:",
       "navigation": {
         "previous": "Previous",
-        "pay": "Pay and document the contract"
+        "pay": "Pay and document the contract",
+        "paying": "Redirecting to payment...",
+        "payError": "Failed to start payment. Please try again."
       },
       "summary": {
         "ejarFees": "Ejar fees:",
@@ -1781,6 +1785,30 @@
         "privacyHref": "/privacy"
       }
     }
+  },
+  "paymentStatus": {
+    "backLabel": "Back",
+    "checkingTitle": "Checking payment status",
+    "checkingDescription": "Waiting for the backend to confirm the payment and update the contract status.",
+    "success": {
+      "pageTitle": "Payment result",
+      "title": "Payment successful",
+      "description": "Your payment was received successfully"
+    },
+    "error": {
+      "pageTitle": "Payment failed",
+      "title": "Payment failed",
+      "description": "Your payment could not be completed"
+    },
+    "contractNumberLabel": "Contract number",
+    "contractIdLabel": "Contract ID",
+    "backToRequests": "Back to requests",
+    "backToHome": "Back to home",
+    "retryPayment": "Retry payment",
+    "retryPaymentLoading": "Redirecting to payment...",
+    "retryPaymentError": "Failed to start payment. Please try again.",
+    "completedMessage": "Payment succeeded and the contract status was updated to completed",
+    "failedMessage": "Payment was not completed"
   },
   "startWithAqdi": {
     "dialog": {

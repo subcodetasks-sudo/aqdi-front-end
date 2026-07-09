@@ -401,6 +401,8 @@ export type CreateContractLabels = {
     navigation: {
       previous: string;
       pay: string;
+      paying: string;
+      payError: string;
     };
     summary: {
       ejarFees: string;

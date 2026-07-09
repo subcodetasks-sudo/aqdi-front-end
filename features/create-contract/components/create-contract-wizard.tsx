@@ -26,8 +26,7 @@ export default function CreateContractWizard({
   labels,
   contractType,
 }: CreateContractWizardProps) {
-  const { currentStep, currentStepIndex, goNext, goBack } =
-    useCreateContractSteps();
+  const { currentStep, goNext, goBack } = useCreateContractSteps();
   const { handleStart, isStarting } = useStartFreshContract(contractType);
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
@@ -46,11 +45,7 @@ export default function CreateContractWizard({
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
-      <CreateContractStepper
-        labels={labels.stepper}
-        currentStepIndex={currentStepIndex}
-        currentStep={currentStep}
-      />
+      <CreateContractStepper labels={labels.stepper} />
 
       {currentStep === "intro" ? (
         <CreateContractIntroStep
@@ -102,7 +97,6 @@ export default function CreateContractWizard({
           labels={labels.payment}
           contractType={contractType}
           onBack={goBack}
-          onComplete={goNext}
         />
       ) : null}
     </div>

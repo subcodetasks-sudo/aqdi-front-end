@@ -6,6 +6,8 @@ import CustomIcon from "@/features/shared/components/custom-icon";
 type CreateContractPaymentNavigationProps = {
   previousLabel: string;
   payLabel: string;
+  payingLabel?: string;
+  isPaying?: boolean;
   onPrevious: () => void;
   onPay: () => void;
 };
@@ -13,6 +15,8 @@ type CreateContractPaymentNavigationProps = {
 export default function CreateContractPaymentNavigation({
   previousLabel,
   payLabel,
+  payingLabel,
+  isPaying = false,
   onPrevious,
   onPay,
 }: CreateContractPaymentNavigationProps) {
@@ -21,7 +25,8 @@ export default function CreateContractPaymentNavigation({
       <Button
         type="button"
         onClick={onPrevious}
-        className="h-12 shrink-0 rounded-xl bg-[#666666] px-5 text-sm font-semibold text-white hover:bg-[#555555]"
+        disabled={isPaying}
+        className="h-12 shrink-0 rounded-xl bg-[#666666] px-5 text-sm font-semibold text-white hover:bg-[#555555] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <ChevronLeft className="size-4 -rotate-180" aria-hidden="true" />
         {previousLabel}
@@ -30,10 +35,11 @@ export default function CreateContractPaymentNavigation({
       <Button
         type="button"
         onClick={onPay}
-        className="h-12 flex-1 rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:opacity-90"
+        disabled={isPaying}
+        className="h-12 flex-1 rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <CustomIcon src="/icons/arrow-r.svg" size={24} />
-        {payLabel}
+        {isPaying ? (payingLabel ?? payLabel) : payLabel}
         <CustomIcon src="/icons/arrow-l.svg" size={24} />
       </Button>
     </div>

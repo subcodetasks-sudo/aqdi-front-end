@@ -10,6 +10,8 @@ export type RequestCardLabels = {
   editError: string;
   completePaymentHint: string;
   completePayment: string;
+  completePaymentLoading: string;
+  completePaymentError: string;
   helpCenter: string;
   whenReceiveContract: string;
   status: {
