@@ -9,16 +9,22 @@ export function hasSuccessfulPayment(status: ContractPaymentStatusData | null) {
     return false;
   }
 
+  if (status.result === "success") {
+    return true;
+  }
+
   if (status.isCompleted) {
     return true;
   }
 
   if (
     isObjectLike(status.payment) &&
-    typeof status.payment.status === "string" &&
-    status.payment.status.toLowerCase() === "success"
+    typeof status.payment.status === "string"
   ) {
-    return true;
+    const paymentStatus = status.payment.status.toLowerCase();
+    if (paymentStatus === "success" || paymentStatus === "paid") {
+      return true;
+    }
   }
 
   if (

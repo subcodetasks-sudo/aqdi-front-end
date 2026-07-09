@@ -59,7 +59,7 @@ export function resolvePaymentStatusUi(
 
   return {
     variant: "error",
-    message: payload?.message?.trim() || labels.failedMessage,
+    message: labels.failedMessage,
     statusData,
     isPaid: false,
   };

@@ -74,6 +74,10 @@ export default function PaymentStatusVerifier({
           typeof resolvePaymentStatusUi
         >[0];
 
+        if (process.env.NODE_ENV !== "production") {
+          console.log("[payment-status]", endpoint, payload);
+        }
+
         if (!isMounted) {
           return;
         }
