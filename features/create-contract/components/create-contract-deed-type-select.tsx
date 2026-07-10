@@ -75,37 +75,41 @@ export default function CreateContractDeedTypeSelect({
       <div
         ref={containerRef}
         className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
-        onClick={handleContainerClick}
       >
-        <Building2 className="size-5 shrink-0 text-brand-secondary" />
+        <div
+          className="flex min-w-0 flex-1 items-center gap-2"
+          onClick={handleContainerClick}
+        >
+          <Building2 className="size-5 shrink-0 text-brand-secondary" />
 
-        <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
+          <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
 
-        <div className="flex min-w-0 flex-1 items-center px-1">
-          {value ? (
-            <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-linear-to-r from-brand-secondary via-brand to-brand px-3 py-1.5 text-sm font-semibold text-white">
-              <span className="truncate">{labels.types[value]}</span>
-              {locked ? null : (
-                <button
-                  type="button"
-                  className="inline-flex shrink-0 items-center justify-center"
-                  aria-label={labels.clearSelection}
-                  onClick={handleClear}
-                >
-                  <X className="size-3.5" aria-hidden="true" />
-                </button>
-              )}
-            </span>
-          ) : (
-            <button
-              type="button"
-              className="w-full text-start text-sm text-[#bdbdbd] disabled:cursor-not-allowed"
-              onClick={openSelect}
-              disabled={locked}
-            >
-              {labels.placeholder}
-            </button>
-          )}
+          <div className="flex min-w-0 flex-1 items-center px-1">
+            {value ? (
+              <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-linear-to-r from-brand-secondary via-brand to-brand px-3 py-1.5 text-sm font-semibold text-white">
+                <span className="truncate">{labels.types[value]}</span>
+                {locked ? null : (
+                  <button
+                    type="button"
+                    className="inline-flex shrink-0 items-center justify-center"
+                    aria-label={labels.clearSelection}
+                    onClick={handleClear}
+                  >
+                    <X className="size-3.5" aria-hidden="true" />
+                  </button>
+                )}
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="w-full text-start text-sm text-[#bdbdbd] disabled:cursor-not-allowed"
+                onClick={openSelect}
+                disabled={locked}
+              >
+                {labels.placeholder}
+              </button>
+            )}
+          </div>
         </div>
 
         {locked ? (
@@ -123,10 +127,7 @@ export default function CreateContractDeedTypeSelect({
             value={value || undefined}
             onValueChange={handleValueChange}
           >
-            <SelectTrigger
-              className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden"
-              onClick={(event) => event.stopPropagation()}
-            >
+            <SelectTrigger className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
               <ChevronLeft className="size-5 -rotate-90 text-white!" aria-hidden="true" />
             </SelectTrigger>
 

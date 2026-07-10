@@ -45,14 +45,7 @@ export default function RequestCardBadges({
 
   return (
     <div className="flex flex-col items-end gap-2">
-      {card.showViewEdit ? (
-        <RequestEditContractButton
-          uuid={card.uuid}
-          contractType={card.contractType}
-          label={labels.viewOrEdit}
-          errorLabel={labels.editError}
-        />
-      ) : null}
+
 
       {card.paymentSuccessful ? (
         <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-background-green px-3 py-1.5 text-[11px] font-semibold text-brand-secondary">
@@ -86,7 +79,16 @@ export default function RequestCardBadges({
           )}
           {statusLabel}
         </span>
+        
       )}
+            {card.showViewEdit ? (
+        <RequestEditContractButton
+          uuid={card.uuid}
+          contractType={card.contractType}
+          label={labels.viewOrEdit}
+          errorLabel={labels.editError}
+        />
+      ) : null}
     </div>
   );
 }

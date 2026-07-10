@@ -85,9 +85,9 @@ export default function CreateContractOwnerStep({
       return;
     }
 
-    // Clear the local draft + localStorage and send the user back home.
+    // Clear the local draft + localStorage and send the user to their requests.
     resetCreateContractDraft();
-    router.push("/");
+    router.push("/requests");
   }
 
   return (

@@ -54,28 +54,32 @@ export default function CreateContractFinanceDurationSelect({
       <div
         ref={containerRef}
         className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
-        onClick={openSelect}
       >
-        <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
-          <Calendar className="size-5" aria-hidden="true" />
-        </span>
+        <div
+          className="flex min-w-0 flex-1 items-center gap-2"
+          onClick={openSelect}
+        >
+          <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
+            <Calendar className="size-5" aria-hidden="true" />
+          </span>
 
-        <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
+          <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
 
-        <div className="flex min-w-0 flex-1 items-center px-2">
-          {value ? (
-            <span className="truncate text-sm font-semibold text-[#333333]">
-              {selectedLabel}
-            </span>
-          ) : (
-            <button
-              type="button"
-              className="w-full text-start text-sm text-[#bdbdbd]"
-              onClick={openSelect}
-            >
-              {placeholder}
-            </button>
-          )}
+          <div className="flex min-w-0 flex-1 items-center px-2">
+            {value ? (
+              <span className="truncate text-sm font-semibold text-[#333333]">
+                {selectedLabel}
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="w-full text-start text-sm text-[#bdbdbd]"
+                onClick={openSelect}
+              >
+                {placeholder}
+              </button>
+            )}
+          </div>
         </div>
 
         <Select
@@ -87,10 +91,7 @@ export default function CreateContractFinanceDurationSelect({
             setOpen(false);
           }}
         >
-          <SelectTrigger
-            className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
             <ChevronLeft
               className="size-5 -rotate-90 text-white!"
               aria-hidden="true"
