@@ -1,6 +1,9 @@
+"use client";
+
 import { ArrowLeft, Check } from "lucide-react";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
+import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -81,7 +84,10 @@ export default function PricingCard({
           ))}
         </ul>
       </div>
-      <Link href={`/create-contract?id=${id}`}>
+      <Link
+        href={`/create-contract?id=${id}`}
+        onClick={resetCreateContractDraft}
+      >
         <button
           type="button"
           className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-extrabold text-white transition hover:bg-brand/90"

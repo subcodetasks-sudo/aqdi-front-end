@@ -1,4 +1,7 @@
+"use client";
+
 import HeroCtaButton from "@/features/home/components/hero-cta-button";
+import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import Link from "next/link";
 
 type HeroCtaButtonsProps = {
@@ -15,7 +18,11 @@ export default function HeroCtaButtons({
   return (
     <div className="flex items-start gap-3 sm:gap-4">
       <div className="flex min-w-0 flex-1 flex-col items-center gap-2">
-        <Link href="/create-contract?id=residential" className="w-full">
+        <Link
+          href="/create-contract?id=residential"
+          className="w-full"
+          onClick={resetCreateContractDraft}
+        >
           <HeroCtaButton
             label={residentialCta}
             iconSrc="/icons/housing.svg"
@@ -30,7 +37,11 @@ export default function HeroCtaButtons({
       </div>
 
       <div className="min-w-0 flex-1">
-        <Link href="/create-contract?id=commercial" className="w-full">
+        <Link
+          href="/create-contract?id=commercial"
+          className="w-full"
+          onClick={resetCreateContractDraft}
+        >
           <HeroCtaButton
             label={commercialCta}
             iconSrc="/icons/commercial.svg"
