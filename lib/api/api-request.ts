@@ -1,6 +1,6 @@
 "use server";
 
-import { getToken } from "@/actions/auth";
+import { clearAuthToken, getToken } from "@/actions/auth";
 import { BASE_URL } from "@/lib/api/constants";
 import { compressFormDataImages } from "@/lib/api/image-utils";
 import { getErrorMessage } from "@/lib/api/get-error-message";
@@ -50,6 +50,10 @@ export async function apiRequest<T>(
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        await clearAuthToken();
+      }
+
       return {
         ok: false,
         status: response.status,
@@ -89,6 +93,10 @@ export async function apiFormDataRequest<T>(
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        await clearAuthToken();
+      }
+
       return {
         ok: false,
         status: response.status,
