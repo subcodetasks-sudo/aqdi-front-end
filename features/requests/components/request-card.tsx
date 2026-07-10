@@ -13,7 +13,7 @@ type RequestCardProps = {
 
 export default function RequestCard({ card, labels }: RequestCardProps) {
   return (
-    <article className="rounded-[32px] bg-white p-6 shadow-[0_2px_24px_rgba(0,0,0,0.04)]">
+    <article className="rounded-[32px] flex flex-col justify-between bg-white p-6 shadow-[0_2px_24px_rgba(0,0,0,0.04)]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 text-start">
           <h3 className="text-lg font-extrabold text-brand md:text-xl">

@@ -1,6 +1,5 @@
-import { BadgeCheck, Check } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 
-import RequestEditContractButton from "@/features/requests/components/request-edit-contract-button";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
 import { cn } from "@/lib/utils";
@@ -8,13 +7,7 @@ import { cn } from "@/lib/utils";
 type RequestCardBadgesProps = {
   card: Pick<
     RequestCardData,
-    | "status"
-    | "statusName"
-    | "statusColor"
-    | "paymentSuccessful"
-    | "showViewEdit"
-    | "uuid"
-    | "contractType"
+    "status" | "statusName" | "statusColor" | "paymentSuccessful"
   >;
   labels: RequestCardLabels;
 };
@@ -45,8 +38,6 @@ export default function RequestCardBadges({
 
   return (
     <div className="flex flex-col items-end gap-2">
-
-
       {card.paymentSuccessful ? (
         <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-background-green px-3 py-1.5 text-[11px] font-semibold text-brand-secondary">
           <BadgeCheck className="size-3.5" aria-hidden="true" />
@@ -79,16 +70,7 @@ export default function RequestCardBadges({
           )}
           {statusLabel}
         </span>
-        
       )}
-            {card.showViewEdit ? (
-        <RequestEditContractButton
-          uuid={card.uuid}
-          contractType={card.contractType}
-          label={labels.viewOrEdit}
-          errorLabel={labels.editError}
-        />
-      ) : null}
     </div>
   );
 }

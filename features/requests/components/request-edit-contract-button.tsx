@@ -55,9 +55,9 @@ export default function RequestEditContractButton({
       type="button"
       onClick={() => void handleClick()}
       disabled={isLoading}
-      className="inline-flex items-center gap-1.5 rounded-full bg-[#f0f0f0] px-3 py-1.5 text-[11px] font-semibold text-foreground/70 transition-colors hover:bg-[#e6e6e6] disabled:cursor-not-allowed disabled:opacity-60"
+      className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f0f0f0] px-4 text-sm font-bold text-foreground/70 transition-colors hover:bg-[#e6e6e6] disabled:cursor-not-allowed disabled:opacity-60"
     >
-      <Eye className="size-3.5" aria-hidden="true" />
+      <Eye className="size-4" aria-hidden="true" />
       {label}
     </button>
   );
