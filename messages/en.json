@@ -1380,13 +1380,17 @@
       }
     },
     "owner": {
+      "cancelRequest": "Cancel request",
       "navigation": {
         "previous": "Previous",
         "continue": "Continue",
+        "saveLater": "Save and complete later",
+        "savingLater": "Saving...",
         "submitting": "Saving..."
       },
       "submitError": "Failed to save owner data",
       "missingContractSession": "Please start the contract first",
+      "saveLaterError": "Failed to save contract draft",
       "validation": {
         "hintTitle": "Please complete the following fields:",
         "issues": {

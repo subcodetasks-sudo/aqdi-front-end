@@ -148,13 +148,17 @@ export default async function CreateContractPage({
       },
     },
     owner: {
+      cancelRequest: t("owner.cancelRequest"),
       navigation: {
         previous: t("owner.navigation.previous"),
         continue: t("owner.navigation.continue"),
+        saveLater: t("owner.navigation.saveLater"),
+        savingLater: t("owner.navigation.savingLater"),
         submitting: t("owner.navigation.submitting"),
       },
       submitError: t("owner.submitError"),
       missingContractSession: t("owner.missingContractSession"),
+      saveLaterError: t("owner.saveLaterError"),
       validation: {
         hintTitle: t("owner.validation.hintTitle"),
         issues: t.raw("owner.validation.issues") as CreateContractLabels["owner"]["validation"]["issues"],

@@ -91,13 +91,17 @@ export type CreateContractLabels = {
     };
   };
   owner: {
+    cancelRequest: string;
     navigation: {
       previous: string;
       continue: string;
+      saveLater: string;
+      savingLater: string;
       submitting: string;
     };
     submitError: string;
     missingContractSession: string;
+    saveLaterError: string;
     validation: {
       hintTitle: string;
       issues: Record<
