@@ -1365,7 +1365,7 @@
           "placeholder": "... Add Google Maps link for the property here"
         },
         "photo": {
-          "label": "Attach national address photo!",
+          "label": "Attach national address photo",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1460,16 +1460,16 @@
       },
       "agentData": {
         "idNumber": {
-          "label": "Owner agent ID number!",
+          "label": "Owner agent ID number",
           "placeholder": "1x xxx xx xxx"
         },
         "birthDateLabel": "Owner agent date of birth:",
         "phone": {
-          "label": "Owner agent mobile number!",
+          "label": "Owner agent mobile number",
           "placeholder": "5x xxx xx xxx"
         },
         "powerOfAttorney": {
-          "label": "Attach power of attorney photo!",
+          "label": "Attach power of attorney photo",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1504,7 +1504,7 @@
         }
       ],
       "tenantStatus": {
-        "label": "Tenant status / Individual - Establishment - Company!",
+        "label": "Tenant status / Individual - Establishment - Company",
         "placeholder": "Select from here...",
         "options": {
           "individual": "Individual",
@@ -1524,17 +1524,17 @@
       },
       "individualData": {
         "idNumber": {
-          "label": "Tenant ID number!",
+          "label": "Tenant ID number",
           "placeholder": "1x xxx xx xxx"
         },
         "phone": {
-          "label": "Tenant mobile number!",
+          "label": "Tenant mobile number",
           "placeholder": "5x xxx xx xxx"
         }
       },
       "organizationData": {
         "delegationType": {
-          "label": "Type of delegation or power of attorney!",
+          "label": "Type of delegation or power of attorney",
           "placeholder": "Select from here...",
           "options": {
             "owner-representative": "I am the registry owner and representative",
@@ -1542,31 +1542,31 @@
           }
         },
         "region": {
-          "label": "Region of the tenant legal agent!",
+          "label": "Region of the tenant legal agent",
           "placeholder": "Select from here...",
           "loading": "Loading regions..."
         },
         "city": {
-          "label": "City of the tenant legal agent!",
+          "label": "City of the tenant legal agent",
           "placeholder": "Select from here...",
           "loading": "Loading cities...",
           "selectRegionFirst": "Select a region first"
         },
         "unifiedRecordNumber": {
-          "label": "Unified registry number - starting with 7!",
+          "label": "Unified registry number - starting with 7",
           "placeholder": "7x xxx xx xxx"
         },
         "ownerIdNumber": {
-          "label": "Registry owner ID number!",
+          "label": "Registry owner ID number",
           "placeholder": "1x xxx xx xxx"
         },
         "ownerBirthDateLabel": "Registry owner date of birth:",
         "ownerPhone": {
-          "label": "Registry owner mobile number!",
+          "label": "Registry owner mobile number",
           "placeholder": "5x xxx xx xxx"
         },
         "powerOfAttorney": {
-          "label": "Attach power of attorney photo!",
+          "label": "Attach power of attorney photo",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1580,7 +1580,7 @@
         "selectPlaceholder": "Select from here...",
         "optionsError": "Failed to load unit options",
         "unitType": {
-          "label": "Unit type!",
+          "label": "Unit type",
           "options": {
             "apartment": "Apartment",
             "villa": "Villa",
@@ -1591,53 +1591,53 @@
           }
         },
         "unitUsage": {
-          "label": "Unit usage!",
+          "label": "Unit usage",
           "options": {
             "residential": "Residential",
             "commercial": "Commercial"
           }
         },
         "totalArea": {
-          "label": "Total unit area!",
+          "label": "Total unit area",
           "placeholder": "Write here...",
           "suffix": "m²"
         },
         "floorNumber": {
-          "label": "Unit floor number!"
+          "label": "Unit floor number"
         },
         "floorOptions": {
           "ground": "Ground"
         },
         "unitNumber": {
-          "label": "Unit number!",
+          "label": "Unit number",
           "placeholder": "Write here..."
         },
         "roomsCount": {
-          "label": "Number of rooms!"
+          "label": "Number of rooms"
         },
         "hallsCount": {
-          "label": "Number of halls!"
+          "label": "Number of halls"
         },
         "majlisCount": {
-          "label": "Number of majlis!"
+          "label": "Number of majlis"
         },
         "kitchensCount": {
-          "label": "Number of kitchens!"
+          "label": "Number of kitchens"
         },
         "bathroomsCount": {
-          "label": "Number of bathrooms!"
+          "label": "Number of bathrooms"
         },
         "windowAcCount": {
-          "label": "Window AC!"
+          "label": "Window AC"
         },
         "splitAcCount": {
-          "label": "Split AC!"
+          "label": "Split AC"
         },
         "kitchenCabinetsInstalled": {
-          "label": "Are kitchen cabinets installed!"
+          "label": "Are kitchen cabinets installed"
         },
         "furnished": {
-          "label": "Furnished!"
+          "label": "Furnished"
         },
         "furnishingType": {
           "label": "Furnishing type:",

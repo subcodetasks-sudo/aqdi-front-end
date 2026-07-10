@@ -1032,7 +1032,7 @@
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
         },
         "photo": {
-          "label": "إرفاق صورة العنوان الوطني !",
+          "label": "إرفاق صورة العنوان الوطني",
           "clickHere": "إضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1117,16 +1117,16 @@
       },
       "agentData": {
         "idNumber": {
-          "label": "رقم هوية وكيل المالك !",
+          "label": "رقم هوية وكيل المالك",
           "placeholder": "1x xxx xx xxx"
         },
         "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
         "phone": {
-          "label": "رقم جوال وكيل المالك !",
+          "label": "رقم جوال وكيل المالك",
           "placeholder": "5x xxx xx xxx"
         },
         "powerOfAttorney": {
-          "label": "إرفاق صورة الوكالة !",
+          "label": "إرفاق صورة الوكالة",
           "clickHere": "إضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1148,7 +1148,7 @@
       "title": "إسم العقار",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
       "propertyName": {
-        "label": "إسم العقار !",
+        "label": "إسم العقار",
         "placeholder": "... أكتب هنا",
         "hint": "يرجى إضافة اسم للعقار ليسهل عليك الرجوع اليه او تميزه :",
         "example": "مثلاً - استراحة اللؤلؤة - عمارتي بحي الريان... إلخ"
@@ -1196,7 +1196,7 @@
       }
     },
     "unitType": {
-      "label": "نوع الوحدة !",
+      "label": "نوع الوحدة",
       "options": {
         "apartment": "شقة",
         "villa": "فيلا",
@@ -1207,53 +1207,53 @@
       }
     },
     "unitUsage": {
-      "label": "استخدام الوحدة !",
+      "label": "استخدام الوحدة",
       "options": {
         "residential": "سكني",
         "commercial": "تجاري"
       }
     },
     "totalArea": {
-      "label": "مساحة الوحدة الاجمالي !",
+      "label": "مساحة الوحدة الاجمالي",
       "placeholder": "أكتب هنا ..",
       "suffix": "متر 2"
     },
     "floorNumber": {
-      "label": "رقم طابق الوحدة !"
+      "label": "رقم طابق الوحدة"
     },
     "floorOptions": {
       "ground": "أرضي"
     },
     "unitNumber": {
-      "label": "رقم الوحدة !",
+      "label": "رقم الوحدة",
       "placeholder": "أكتب هنا .."
     },
     "roomsCount": {
-      "label": "عدد الغرف !"
+      "label": "عدد الغرف"
     },
     "hallsCount": {
-      "label": "عدد الصالات !"
+      "label": "عدد الصالات"
     },
     "kitchensCount": {
-      "label": "عدد المطابخ !"
+      "label": "عدد المطابخ"
     },
     "bathroomsCount": {
-      "label": "عدد دورات المياه !"
+      "label": "عدد دورات المياه"
     },
     "windowAcCount": {
-      "label": "مكيف شباك !"
+      "label": "مكيف شباك"
     },
     "splitAcCount": {
-      "label": "مكيف سبيلت !"
+      "label": "مكيف سبيلت"
     },
     "kitchenCabinetsInstalled": {
-      "label": "هل تم تركيب خزائن المطبخ !"
+      "label": "هل تم تركيب خزائن المطبخ"
     },
     "furnished": {
-      "label": "مؤثث / مفروش !"
+      "label": "مؤثث / مفروش"
     },
     "furnishingType": {
-      "label": "نوع التأثيث ! :",
+      "label": "نوع التأثيث :",
       "new": "جديد",
       "used": "مستخدم"
     },
@@ -1292,7 +1292,7 @@
     "pageTitleResidential": "انشاء عقد ايجار سكني",
     "pageTitleCommercial": "انشاء عقد ايجار تجاري",
     "stepper": {
-      "journey": "رحلتك الايجارية اصبحت أسهل.",
+      "journey": "رحلتك الاجاريــة اصبحــت أسهل.",
       "ejarLogoAlt": "إيجار",
       "steps": {
         "intro": "عقدي",
@@ -1399,7 +1399,7 @@
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
         },
         "photo": {
-          "label": "إرفاق صورة العنوان الوطني !",
+          "label": "إرفاق صورة العنوان الوطني",
           "clickHere": "إضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1494,16 +1494,16 @@
       },
       "agentData": {
         "idNumber": {
-          "label": "رقم هوية وكيل المالك !",
+          "label": "رقم هوية وكيل المالك",
           "placeholder": "1x xxx xx xxx"
         },
         "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
         "phone": {
-          "label": "رقم جوال وكيل المالك !",
+          "label": "رقم جوال وكيل المالك",
           "placeholder": "5x xxx xx xxx"
         },
         "powerOfAttorney": {
-          "label": "إرفاق صورة الوكالة !",
+          "label": "إرفاق صورة الوكالة",
           "clickHere": "إضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1538,7 +1538,7 @@
         }
       ],
       "tenantStatus": {
-        "label": "صفة المستأجر / فرد - مؤسسة - شركة !",
+        "label": "صفة المستأجر / فرد - مؤسسة - شركة",
         "placeholder": "... إختر من هنا",
         "options": {
           "individual": "فرد",
@@ -1558,17 +1558,17 @@
       },
       "individualData": {
         "idNumber": {
-          "label": "رقم هوية المستأجر !",
+          "label": "رقم هوية المستأجر",
           "placeholder": "1x xxx xx xxx"
         },
         "phone": {
-          "label": "رقم جوال المستأجر !",
+          "label": "رقم جوال المستأجر",
           "placeholder": "5x xxx xx xxx"
         }
       },
       "organizationData": {
         "delegationType": {
-          "label": "نوع التفويض أو الوكالة !",
+          "label": "نوع التفويض أو الوكالة",
           "placeholder": "... إختر من هنا",
           "options": {
             "owner-representative": "انا مالك السجل وممثله",
@@ -1576,31 +1576,31 @@
           }
         },
         "region": {
-          "label": "منطقة الوكيل القانوني للمستأجر !",
+          "label": "منطقة الوكيل القانوني للمستأجر",
           "placeholder": "... إختر من هنا",
           "loading": "جاري تحميل المناطق..."
         },
         "city": {
-          "label": "مدينة الوكيل القانوني للمستأجر !",
+          "label": "مدينة الوكيل القانوني للمستأجر",
           "placeholder": "... إختر من هنا",
           "loading": "جاري تحميل المدن...",
           "selectRegionFirst": "يرجى اختيار المنطقة أولاً"
         },
         "unifiedRecordNumber": {
-          "label": "رقم السجل الموحد - المبتدئ برقم 7 !",
+          "label": "رقم السجل الموحد - المبتدئ برقم 7",
           "placeholder": "7x xxx xx xxx"
         },
         "ownerIdNumber": {
-          "label": "رقم هوية مالك السجل !",
+          "label": "رقم هوية مالك السجل",
           "placeholder": "1x xxx xx xxx"
         },
         "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل :",
         "ownerPhone": {
-          "label": "رقم جوال مالك السجل !",
+          "label": "رقم جوال مالك السجل",
           "placeholder": "5x xxx xx xxx"
         },
         "powerOfAttorney": {
-          "label": "إرفاق صورة الوكالة !",
+          "label": "إرفاق صورة الوكالة",
           "clickHere": "إضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
@@ -1614,7 +1614,7 @@
         "selectPlaceholder": "... إختر من هنا",
         "optionsError": "فشل تحميل خيارات الوحدة",
         "unitType": {
-          "label": "نوع الوحدة !",
+          "label": "نوع الوحدة",
           "options": {
             "apartment": "شقة",
             "villa": "فيلا",
@@ -1625,56 +1625,56 @@
           }
         },
         "unitUsage": {
-          "label": "استخدام الوحدة !",
+          "label": "استخدام الوحدة",
           "options": {
             "residential": "سكني",
             "commercial": "تجاري"
           }
         },
         "totalArea": {
-          "label": "مساحة الوحدة الاجمالي !",
+          "label": "مساحة الوحدة الاجمالي",
           "placeholder": "أكتب هنا ..",
           "suffix": "متر 2"
         },
         "floorNumber": {
-          "label": "رقم طابق الوحدة !"
+          "label": "رقم طابق الوحدة"
         },
         "floorOptions": {
           "ground": "أرضي"
         },
         "unitNumber": {
-          "label": "رقم الوحدة !",
+          "label": "رقم الوحدة",
           "placeholder": "أكتب هنا .."
         },
         "roomsCount": {
-          "label": "عدد الغرف !"
+          "label": "عدد الغرف"
         },
         "hallsCount": {
-          "label": "عدد الصالات !"
+          "label": "عدد الصالات"
         },
         "majlisCount": {
-          "label": "عدد المجالس !"
+          "label": "عدد المجالس"
         },
         "kitchensCount": {
-          "label": "عدد المطابخ !"
+          "label": "عدد المطابخ"
         },
         "bathroomsCount": {
-          "label": "عدد دورات المياه !"
+          "label": "عدد دورات المياه"
         },
         "windowAcCount": {
-          "label": "مكيف شباك !"
+          "label": "مكيف شباك"
         },
         "splitAcCount": {
-          "label": "مكيف سبيلت !"
+          "label": "مكيف سبيلت"
         },
         "kitchenCabinetsInstalled": {
-          "label": "هل تم تركيب خزائن المطبخ !"
+          "label": "هل تم تركيب خزائن المطبخ"
         },
         "furnished": {
-          "label": "مؤثث / مفروش !"
+          "label": "مؤثث / مفروش"
         },
         "furnishingType": {
-          "label": "نوع التأثيث ! :",
+          "label": "نوع التأثيث :",
           "new": "جديد",
           "used": "مستخدم"
         },
@@ -1734,16 +1734,16 @@
         "yearPlaceholder": "0000"
       },
       "contractDuration": {
-        "label": "مدة العقد !",
+        "label": "مدة العقد",
         "loading": "جاري تحميل مدد العقد...",
         "optionsError": "فشل تحميل مدد العقد"
       },
       "totalRentAmount": {
-        "label": "مبلغ الايجار الاجمالي !",
+        "label": "مبلغ الايجار الاجمالي",
         "placeholder": "أكتب هنا .."
       },
       "paymentMethod": {
-        "label": "طريقة الدفعات !",
+        "label": "طريقة الدفعات",
         "options": {
           "monthly": "شهري",
           "quarterly": "ربع سنوي",
