@@ -41,7 +41,7 @@ export default function CreateContractStepper({ labels }: CreateContractStepperP
   const isPaymentStep = currentStep === "payment";
 
   return (
-    <div className="rounded-3xl bg-white p-4 shadow-sm md:p-5">
+    <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
         {CREATE_CONTRACT_STEPPER_STEPS.map((step) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);

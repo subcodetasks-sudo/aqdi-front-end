@@ -1,7 +1,7 @@
 "use client";
 
 import { Building2, ChevronLeft, Lock, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 
 import {
   Select,
@@ -50,10 +50,17 @@ export default function CreateContractDeedTypeSelect({
     setOpen(true);
   }
 
-  function handleClear() {
+  function handleClear(event: MouseEvent) {
+    event.stopPropagation();
     onChange("");
     setOpen(false);
     setSelectKey((currentKey) => currentKey + 1);
+  }
+
+  function handleContainerClick() {
+    if (locked) return;
+
+    openSelect();
   }
 
   function handleValueChange(nextValue: string) {
@@ -68,6 +75,7 @@ export default function CreateContractDeedTypeSelect({
       <div
         ref={containerRef}
         className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        onClick={handleContainerClick}
       >
         <Building2 className="size-5 shrink-0 text-brand-secondary" />
 
@@ -115,7 +123,10 @@ export default function CreateContractDeedTypeSelect({
             value={value || undefined}
             onValueChange={handleValueChange}
           >
-            <SelectTrigger className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
+            <SelectTrigger
+              className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden"
+              onClick={(event) => event.stopPropagation()}
+            >
               <ChevronLeft className="size-5 -rotate-90 text-white!" aria-hidden="true" />
             </SelectTrigger>
 
