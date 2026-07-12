@@ -10,6 +10,8 @@ import type { TenantDataState } from "@/features/create-contract/types/tenant-st
 
 type SubmitContractStep4Input = {
   tenantData: TenantDataState;
+  isLeaseRenewal?: boolean;
+  notes?: string;
 };
 
 export function useSubmitContractStep4() {
@@ -24,6 +26,8 @@ export function useSubmitContractStep4() {
 
   async function submitStep4({
     tenantData,
+    isLeaseRenewal = false,
+    notes,
   }: SubmitContractStep4Input): Promise<boolean> {
     if (isSubmitting) {
       return false;
@@ -49,6 +53,8 @@ export function useSubmitContractStep4() {
       const result = await submitContractStep4({
         contractId,
         tenantData,
+        isLeaseRenewal,
+        notes,
       });
 
       if (!result.ok) {

@@ -3,6 +3,7 @@
 import {
   DEED_STEP_PHASE_COUNT,
   deedTypeIsDeceasedOwner,
+  deedTypeIsLeaseRenewal,
   deedTypeIsWaqfOwner,
   deedTypeNeedsFrontBack,
 } from "@/features/create-contract/types/deed-type";
@@ -100,6 +101,7 @@ export function useCreateContractDeedStep() {
     existingPropertyContext?.property.image_address,
   );
   const isInstrumentTypeLocked = existingPropertyContext !== null;
+  const isLeaseRenewal = deedTypeIsLeaseRenewal(deed.selectedDeedType);
   const needsFrontBack = deedTypeNeedsFrontBack(deed.selectedDeedType);
   const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
   const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
@@ -131,16 +133,17 @@ export function useCreateContractDeedStep() {
         isInstrumentTypeLocked ||
         isDeedAlreadySubmitted ||
         (deed.selectedDeedType !== "" &&
-          (needsFrontBack
-            ? hasFrontImage && hasBackImage
-            : isDeceasedOwner
-              ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
-              : isWaqfOwner
-                ? hasSingleImage &&
-                  hasEndowmentCertImage &&
-                  hasTrusteeshipImage &&
-                  (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-                : hasSingleImage))
+          (isLeaseRenewal ||
+            (needsFrontBack
+              ? hasFrontImage && hasBackImage
+              : isDeceasedOwner
+                ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+                : isWaqfOwner
+                  ? hasSingleImage &&
+                    hasEndowmentCertImage &&
+                    hasTrusteeshipImage &&
+                    (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
+                  : hasSingleImage)))
       : isInstrumentTypeLocked ||
         isAddressAlreadySubmitted ||
         canContinueNationalAddress(
@@ -215,5 +218,6 @@ export function useCreateContractDeedStep() {
     existingAddressImageUrl,
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
+    isLeaseRenewal,
   };
 }

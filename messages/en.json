@@ -26,6 +26,12 @@
     "myAccount": "My Account",
     "notifications": "Notifications"
   },
+  "instrumentTypePopup": {
+    "title": "Contract fees for {deedType}",
+    "clarification": "Clarification:",
+    "confirmContinue": "Confirm and continue",
+    "close": "Close"
+  },
   "userSheet": {
     "title": "My Account",
     "close": "Close",
@@ -1757,6 +1763,23 @@
         "waterMeterNumber": {
           "label": "Water meter number",
           "placeholder": "Write here..."
+        }
+      },
+      "leaseRenewal": {
+        "heading": "Would you like to add amendments?",
+        "subtitle": "Update your details quickly",
+        "addNotesToggle": "Add notes?",
+        "edit": "Edit",
+        "confirmContinue": "Confirm and continue",
+        "notesDialog": {
+          "title": "Required amendments...",
+          "close": "Close",
+          "heading": "Please write all required amendments.",
+          "subtitle": "You can add the following:",
+          "notesLabel": "Please write the required amendments",
+          "notesPlaceholder": "Write here...",
+          "stepIndicator": "2 of 2",
+          "save": "Save"
         }
       },
       "saveLaterDialog": {

@@ -349,6 +349,23 @@ export type CreateContractLabels = {
         placeholder: string;
       };
     };
+    leaseRenewal: {
+      heading: string;
+      subtitle: string;
+      addNotesToggle: string;
+      edit: string;
+      confirmContinue: string;
+      notesDialog: {
+        title: string;
+        close: string;
+        heading: string;
+        subtitle: string;
+        notesLabel: string;
+        notesPlaceholder: string;
+        stepIndicator: string;
+        save: string;
+      };
+    };
     saveLaterDialog: {
       title: string;
       close: string;

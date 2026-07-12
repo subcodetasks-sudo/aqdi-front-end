@@ -26,6 +26,12 @@
     "myAccount": "حسابي",
     "notifications": "الاشعارات"
   },
+  "instrumentTypePopup": {
+    "title": "رسوم عقد {deedType}",
+    "clarification": "توضيح :",
+    "confirmContinue": "تأكيد واستمرار",
+    "close": "إغلاق"
+  },
   "userSheet": {
     "title": "حسابي",
     "close": "إغلاق",
@@ -1783,6 +1789,23 @@
         "waterMeterNumber": {
           "label": "رقم عداد المياه ..",
           "placeholder": "أكتب هنا .."
+        }
+      },
+      "leaseRenewal": {
+        "heading": "هل ترغب بإضافة تعديلات",
+        "subtitle": "قم بتعديل بياناتك بشكل سريع",
+        "addNotesToggle": "إضافة ملاحظات ؟",
+        "edit": "تعديل",
+        "confirmContinue": "تأكيد واستمرار",
+        "notesDialog": {
+          "title": "التعديلات المطلوبة...",
+          "close": "إغلاق",
+          "heading": "الرجاء كتابة جميع التعديلات المطلوبة.",
+          "subtitle": "يمكنك إضافة ما يلي :",
+          "notesLabel": "يرجى كتابة التعديلات المطلوبة",
+          "notesPlaceholder": "أكتب هنا ...",
+          "stepIndicator": "2 من 2",
+          "save": "حفظ"
         }
       },
       "saveLaterDialog": {

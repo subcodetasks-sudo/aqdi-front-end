@@ -133,3 +133,36 @@ export function isTenantDataComplete(tenantData: TenantDataState) {
 
   return false;
 }
+
+export function isLeaseRenewalBirthDateComplete(birthDate: BirthDateValue) {
+  return isBirthDateComplete(birthDate);
+}
+
+export function isLeaseRenewalAmendmentsComplete({
+  addNotes,
+  notes,
+}: {
+  addNotes: boolean;
+  notes: string;
+}) {
+  if (addNotes && notes.trim().length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isLeaseRenewalTenantDataComplete({
+  birthDate,
+  addNotes,
+  notes,
+}: {
+  birthDate: BirthDateValue;
+  addNotes: boolean;
+  notes: string;
+}) {
+  return (
+    isLeaseRenewalBirthDateComplete(birthDate) &&
+    isLeaseRenewalAmendmentsComplete({ addNotes, notes })
+  );
+}

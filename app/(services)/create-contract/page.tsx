@@ -445,6 +445,23 @@ export default async function CreateContractPage({
           placeholder: t("tenant.rentedUnit.waterMeterNumber.placeholder"),
         },
       },
+      leaseRenewal: {
+        heading: t("tenant.leaseRenewal.heading"),
+        subtitle: t("tenant.leaseRenewal.subtitle"),
+        addNotesToggle: t("tenant.leaseRenewal.addNotesToggle"),
+        edit: t("tenant.leaseRenewal.edit"),
+        confirmContinue: t("tenant.leaseRenewal.confirmContinue"),
+        notesDialog: {
+          title: t("tenant.leaseRenewal.notesDialog.title"),
+          close: t("tenant.leaseRenewal.notesDialog.close"),
+          heading: t("tenant.leaseRenewal.notesDialog.heading"),
+          subtitle: t("tenant.leaseRenewal.notesDialog.subtitle"),
+          notesLabel: t("tenant.leaseRenewal.notesDialog.notesLabel"),
+          notesPlaceholder: t("tenant.leaseRenewal.notesDialog.notesPlaceholder"),
+          stepIndicator: t("tenant.leaseRenewal.notesDialog.stepIndicator"),
+          save: t("tenant.leaseRenewal.notesDialog.save"),
+        },
+      },
       saveLaterDialog: {
         title: t("tenant.saveLaterDialog.title"),
         close: t("tenant.saveLaterDialog.close"),

@@ -71,6 +71,7 @@ import {
   buildOwnerDataFromStep3,
   mapBackendStepToWizardStep,
 } from "@/features/create-contract/utils/build-uncompleted-contract-draft";
+import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
 import type { UncompletedContractData } from "@/features/create-contract/types/uncompleted-contract";
 
 type DeedDraftState = {
@@ -113,6 +114,8 @@ type TenantDraftState = {
   tenantData: TenantDataState;
   tenantPersistedFiles: PersistedFile[];
   rentedUnitData: RentedUnitDataState;
+  leaseRenewalAddNotes: boolean;
+  leaseRenewalNotes: string;
 };
 
 type CreateContractDraftStore = {
@@ -155,6 +158,8 @@ type CreateContractDraftStore = {
   setTenantPhaseIndex: (index: number) => void;
   setTenantData: (data: TenantDataState) => void;
   setRentedUnitData: (data: RentedUnitDataState) => void;
+  setLeaseRenewalAddNotes: (value: boolean) => void;
+  setLeaseRenewalNotes: (value: string) => void;
   setFinanceData: (
     data: FinanceDataState | ((current: FinanceDataState) => FinanceDataState),
   ) => void;
@@ -376,6 +381,8 @@ const INITIAL_TENANT: TenantDraftState = {
   tenantData: EMPTY_TENANT_DATA,
   tenantPersistedFiles: [],
   rentedUnitData: EMPTY_RENTED_UNIT_DATA,
+  leaseRenewalAddNotes: false,
+  leaseRenewalNotes: "",
 };
 
 function createInitialState() {
@@ -413,7 +420,20 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         }
       },
       goBackStep: () => {
-        const index = CREATE_CONTRACT_STEPS.indexOf(get().currentStep);
+        const state = get();
+
+        if (
+          state.currentStep === "tenant" &&
+          isLeaseRenewalContract({
+            selectedDeedType: state.deed.selectedDeedType,
+            instrumentType: state.contractStep1Data?.instrument_type,
+          })
+        ) {
+          set({ currentStep: "deed" });
+          return;
+        }
+
+        const index = CREATE_CONTRACT_STEPS.indexOf(state.currentStep);
         if (index > 0) {
           set({ currentStep: CREATE_CONTRACT_STEPS[index - 1] });
         }
@@ -624,6 +644,18 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       },
       setRentedUnitData: (data) =>
         set((state) => ({ tenant: { ...state.tenant, rentedUnitData: data } })),
+      setLeaseRenewalAddNotes: (value) =>
+        set((state) => ({
+          tenant: {
+            ...state.tenant,
+            leaseRenewalAddNotes: value,
+            leaseRenewalNotes: value ? state.tenant.leaseRenewalNotes : "",
+          },
+        })),
+      setLeaseRenewalNotes: (value) =>
+        set((state) => ({
+          tenant: { ...state.tenant, leaseRenewalNotes: value },
+        })),
       setFinanceData: (data) =>
         set((state) => ({
           financeData:

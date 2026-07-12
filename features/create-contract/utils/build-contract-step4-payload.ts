@@ -9,6 +9,8 @@ import {
 export type ContractStep4Payload = {
   contractId: number;
   tenantData: TenantDataState;
+  isLeaseRenewal?: boolean;
+  notes?: string;
 };
 
 type Step4JsonValue = string | number;
@@ -50,10 +52,27 @@ function appendTenantAgentFields(
 export function buildContractStep4Body({
   contractId,
   tenantData,
+  isLeaseRenewal = false,
+  notes,
 }: ContractStep4Payload) {
   const body: Record<string, Step4JsonValue> = {
     id: contractId,
   };
+
+  if (isLeaseRenewal) {
+    const birthDate = tenantData.individual.birthDate;
+
+    body.tenant_dob_day = parseDatePart(birthDate.day);
+    body.tenant_dob_month = parseDatePart(birthDate.month);
+    body.tenant_dob_year = Number(formatPropertyOwnerYear(birthDate.year));
+    body.type_tenant_dob = birthDate.calendarType;
+
+    if (notes?.trim()) {
+      body.notes = notes.trim();
+    }
+
+    return body;
+  }
 
   if (tenantData.status === "individual") {
     const { individual } = tenantData;

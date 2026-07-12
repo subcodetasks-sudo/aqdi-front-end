@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
+import CreateContractLeaseRenewalAmendmentsSection from "@/features/create-contract/components/create-contract-lease-renewal-amendments-section";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
@@ -12,7 +14,10 @@ import CreateContractStepPhaseProgress from "@/features/create-contract/componen
 import CreateContractTenantIndividualDataPhase from "@/features/create-contract/components/create-contract-tenant-individual-data-phase";
 import CreateContractTenantOrganizationDataPhase from "@/features/create-contract/components/create-contract-tenant-organization-data-phase";
 import CreateContractTenantStatusSelect from "@/features/create-contract/components/create-contract-tenant-status-select";
-import { useCreateContractTenantStep } from "@/features/create-contract/hooks/use-create-contract-tenant-step";
+import {
+  LEASE_RENEWAL_TENANT_PHASE_COUNT,
+  useCreateContractTenantStep,
+} from "@/features/create-contract/hooks/use-create-contract-tenant-step";
 import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
 import { useSubmitContractStep4 } from "@/features/create-contract/hooks/use-submit-contract-step4";
 import { useSubmitContractStep5 } from "@/features/create-contract/hooks/use-submit-contract-step5";
@@ -44,6 +49,11 @@ export default function CreateContractTenantStep({
     setTenantData,
     rentedUnitData,
     setRentedUnitData,
+    leaseRenewalAddNotes,
+    leaseRenewalNotes,
+    setLeaseRenewalAddNotes,
+    setLeaseRenewalNotes,
+    isLeaseRenewal,
     updateStatus,
     canContinue,
     isLastPhase,
@@ -61,6 +71,15 @@ export default function CreateContractTenantStep({
   const phase = labels.phases[currentPhaseIndex];
   const isTenantDataPhase = currentPhaseIndex === 0;
   const isRentedUnitPhase = currentPhaseIndex === 1;
+  const isLeaseRenewalBirthDatePhase = isLeaseRenewal && isTenantDataPhase;
+  const isLeaseRenewalAmendmentsPhase = isLeaseRenewal && isRentedUnitPhase;
+
+  const phaseTitle = isLeaseRenewalAmendmentsPhase
+    ? labels.leaseRenewal.heading
+    : phase.title;
+  const phaseSubtitle = isLeaseRenewalAmendmentsPhase
+    ? labels.leaseRenewal.subtitle
+    : phase.subtitle;
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
@@ -81,8 +100,31 @@ export default function CreateContractTenantStep({
       return;
     }
 
+    if (isLeaseRenewalBirthDatePhase) {
+      goToNextPhase();
+      return;
+    }
+
+    if (isLeaseRenewalAmendmentsPhase) {
+      const submitted = await submitStep4({
+        tenantData,
+        isLeaseRenewal: true,
+        notes: leaseRenewalAddNotes ? leaseRenewalNotes : undefined,
+      });
+
+      if (!submitted) {
+        return;
+      }
+
+      onComplete();
+      return;
+    }
+
     if (isTenantDataPhase) {
-      const submitted = await submitStep4({ tenantData });
+      const submitted = await submitStep4({
+        tenantData,
+        isLeaseRenewal: false,
+      });
 
       if (!submitted) {
         return;
@@ -126,12 +168,14 @@ export default function CreateContractTenantStep({
   return (
     <div className="space-y-4">
       <CreateContractStepPhaseProgress
-        totalPhases={TENANT_STEP_PHASE_COUNT}
+        totalPhases={
+          isLeaseRenewal ? LEASE_RENEWAL_TENANT_PHASE_COUNT : TENANT_STEP_PHASE_COUNT
+        }
         currentPhaseIndex={currentPhaseIndex}
       />
 
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        {currentPhaseIndex === 0 && tenantData.status === "" && contractSession ? (
+        {currentPhaseIndex === 0 && tenantData.status === "" && contractSession && !isLeaseRenewal ? (
           <div className="mb-4 flex justify-end">
             <CreateContractCancelRequestButton
               contractId={contractSession.contractId}
@@ -141,12 +185,41 @@ export default function CreateContractTenantStep({
         ) : null}
 
         <CreateContractStepPhaseHeader
-          title={phase.title}
-          subtitle={phase.subtitle}
+          title={phaseTitle}
+          subtitle={phaseSubtitle}
           icon={currentPhaseIndex === 0 ? "user" : "building"}
         />
 
-        {currentPhaseIndex === 0 ? (
+        {isLeaseRenewalBirthDatePhase ? (
+          <div className="rounded-3xl ">
+            <CreateContractBirthDateFields
+              labels={labels.birthDate}
+              value={tenantData.individual.birthDate}
+              onChange={(birthDate) =>
+                setTenantData({
+                  ...tenantData,
+                  status: "individual",
+                  individual: {
+                    ...tenantData.individual,
+                    birthDate,
+                  },
+                })
+              }
+            />
+          </div>
+        ) : null}
+
+        {isLeaseRenewalAmendmentsPhase ? (
+          <CreateContractLeaseRenewalAmendmentsSection
+            labels={labels.leaseRenewal}
+            addNotes={leaseRenewalAddNotes}
+            notes={leaseRenewalNotes}
+            onAddNotesChange={setLeaseRenewalAddNotes}
+            onNotesChange={setLeaseRenewalNotes}
+          />
+        ) : null}
+
+        {currentPhaseIndex === 0 && !isLeaseRenewal ? (
           <>
             <CreateContractTenantStatusSelect
               labels={labels.tenantStatus}
@@ -178,7 +251,7 @@ export default function CreateContractTenantStep({
           </>
         ) : null}
 
-        {currentPhaseIndex === 1 ? (
+        {isRentedUnitPhase && !isLeaseRenewal ? (
           <CreateContractRentedUnitDataPhase
             labels={labels.rentedUnit}
             value={rentedUnitData}
@@ -190,10 +263,14 @@ export default function CreateContractTenantStep({
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
+          isSubmitting
+            ? labels.navigation.submitting
+            : isLeaseRenewalAmendmentsPhase
+              ? labels.leaseRenewal.confirmContinue
+              : labels.navigation.continue
         }
         saveLaterLabel={
-          currentPhaseIndex === 0 && tenantData.status === ""
+          currentPhaseIndex === 0 && tenantData.status === "" && !isLeaseRenewal
             ? isSavingDraft
               ? labels.navigation.savingLater
               : labels.navigation.saveLater
@@ -203,7 +280,7 @@ export default function CreateContractTenantStep({
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
         onSaveLater={
-          currentPhaseIndex === 0 && tenantData.status === ""
+          currentPhaseIndex === 0 && tenantData.status === "" && !isLeaseRenewal
             ? () => void handleSaveLater()
             : undefined
         }

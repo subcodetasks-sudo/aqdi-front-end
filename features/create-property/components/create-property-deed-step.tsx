@@ -9,7 +9,10 @@ import CreatePropertyStepNavigation from "@/features/create-property/components/
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
 import { Switch } from "@/components/ui/switch";
 import { useCreatePropertyDeedStep } from "@/features/create-property/hooks/use-create-property-deed-step";
+import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
+import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
 
 type CreatePropertyDeedStepProps = {
   labels: CreatePropertyLabels["deed"];
@@ -57,6 +60,17 @@ export default function CreatePropertyDeedStep({
     existingGuardiansPoaImageUrl,
     canContinue,
   } = useCreatePropertyDeedStep();
+  const deedTypePopup = useInstrumentTypeDeedPopup("realestate");
+
+  function handleDeedTypeChange(value: PropertyDeedTypeId | "") {
+    setSelectedDeedType(value);
+
+    if (!value) {
+      return;
+    }
+
+    void deedTypePopup.showPopupFor(value, labels.deedType.types[value]);
+  }
 
   function handleContinue() {
     if (!canContinue) {
@@ -79,7 +93,7 @@ export default function CreatePropertyDeedStep({
           <CreatePropertyDeedTypeSelect
             labels={labels.deedType}
             value={selectedDeedType}
-            onChange={setSelectedDeedType}
+            onChange={handleDeedTypeChange}
           />
 
           {selectedDeedType && needsFrontBack ? (
@@ -188,6 +202,13 @@ export default function CreatePropertyDeedStep({
         continueLabel={labels.navigation.continue}
         onPrevious={onBack}
         onContinue={handleContinue}
+      />
+
+      <InstrumentTypePopupDialog
+        open={deedTypePopup.open}
+        onOpenChange={deedTypePopup.setOpen}
+        popup={deedTypePopup.popup}
+        deedTypeLabel={deedTypePopup.deedTypeLabel}
       />
     </div>
   );
