@@ -1,18 +1,18 @@
 "use client";
 
+import { ArrowLeft, Hand } from "lucide-react";
+
 import CreateContractContractStartDateFields from "@/features/create-contract/components/create-contract-contract-start-date-fields";
 import CreateContractFinanceDurationSelect from "@/features/create-contract/components/create-contract-finance-duration-select";
 import CreateContractFinanceToggleOption from "@/features/create-contract/components/create-contract-finance-toggle-option";
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractRentAmountField from "@/features/create-contract/components/create-contract-rent-amount-field";
 import { useContractPeriods } from "@/features/create-contract/hooks/use-contract-periods";
+import { usePaymentTypes } from "@/features/create-contract/hooks/use-payment-types";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { toPropertyContractType } from "@/features/create-contract/types/contract-type";
-import {
-  PAYMENT_METHOD_OPTIONS,
-  type FinanceDataState,
-} from "@/features/create-contract/types/finance-step";
+import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
 
 type CreateContractFinanceDataPhaseProps = {
   labels: CreateContractLabels["finance"];
@@ -33,6 +33,7 @@ export default function CreateContractFinanceDataPhase({
 }: CreateContractFinanceDataPhaseProps) {
   const apiContractType = toPropertyContractType(contractType);
   const contractPeriodsQuery = useContractPeriods(apiContractType);
+  const paymentTypesQuery = usePaymentTypes(apiContractType);
 
   const durationOptions = (contractPeriodsQuery.data ?? []).map((period) => ({
     value: String(period.id),
@@ -43,10 +44,14 @@ export default function CreateContractFinanceDataPhase({
     (period) => period.id === value.contractPeriodId,
   )?.note;
 
-  const paymentMethodOptions = PAYMENT_METHOD_OPTIONS.map((paymentMethod) => ({
-    value: paymentMethod,
-    label: labels.paymentMethod.options[paymentMethod],
+  const paymentTypeOptions = (paymentTypesQuery.data ?? []).map((paymentType) => ({
+    value: String(paymentType.id),
+    label: paymentType.name,
   }));
+
+  const selectedPaymentTypeNotes = (paymentTypesQuery.data ?? [])
+    .find((paymentType) => paymentType.id === value.paymentTypeId)
+    ?.notes?.trim();
 
   function updateField<K extends keyof FinanceDataState>(
     field: K,
@@ -103,17 +108,35 @@ export default function CreateContractFinanceDataPhase({
 
         <CreateContractFormSelect
           label={labels.paymentMethod.label}
-          placeholder={labels.selectPlaceholder}
-          options={paymentMethodOptions}
-          value={value.paymentMethod}
-          onChange={(paymentMethod) =>
-            updateField(
-              "paymentMethod",
-              paymentMethod as FinanceDataState["paymentMethod"],
-            )
+          placeholder={
+            paymentTypesQuery.isLoading
+              ? labels.paymentMethod.loading
+              : labels.selectPlaceholder
+          }
+          options={paymentTypeOptions}
+          value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
+          onChange={(paymentTypeId) =>
+            updateField("paymentTypeId", Number(paymentTypeId))
           }
         />
       </div>
+
+      {paymentTypesQuery.error ? (
+        <p className="text-sm text-destructive">
+          {labels.paymentMethod.optionsError}
+        </p>
+      ) : null}
+
+      {selectedPaymentTypeNotes ? (
+        <p className="flex items-center gap-1.5 text-sm text-[#555555]">
+          <Hand className="size-4 shrink-0 text-red-500" aria-hidden="true" />
+          <ArrowLeft
+            className="size-3.5 shrink-0 text-red-500"
+            aria-hidden="true"
+          />
+          <span>{selectedPaymentTypeNotes}</span>
+        </p>
+      ) : null}
 
       <div className="space-y-4 pt-2">
         <CreateContractFinanceToggleOption

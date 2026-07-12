@@ -4,9 +4,11 @@ import { getTranslations } from "next-intl/server";
 import CreateContractPageContent from "@/features/create-contract/components/create-contract-page-content";
 import {
   contractPaperworkKeys,
+  contractPaymentTypeKeys,
   contractServicesPricingKeys,
 } from "@/features/create-contract/query-keys";
 import { getPaperwork } from "@/features/create-contract/services/get-paperwork";
+import { getPaymentTypes } from "@/features/create-contract/services/get-payment-types";
 import { getServicesPricing } from "@/features/create-contract/services/get-services-pricing";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import {
@@ -15,7 +17,6 @@ import {
 } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
-import { PAYMENT_METHOD_OPTIONS } from "@/features/create-contract/types/finance-step";
 import {
   DELEGATION_TYPE_OPTIONS,
   TENANT_STATUS_OPTIONS,
@@ -45,6 +46,10 @@ export default async function CreateContractPage({
     queryClient.prefetchQuery({
       queryKey: contractServicesPricingKeys.list(propertyContractType),
       queryFn: () => getServicesPricing(propertyContractType),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: contractPaymentTypeKeys.list(propertyContractType),
+      queryFn: () => getPaymentTypes(propertyContractType),
     }),
   ]);
 
@@ -491,12 +496,8 @@ export default async function CreateContractPage({
       },
       paymentMethod: {
         label: t("finance.paymentMethod.label"),
-        options: Object.fromEntries(
-          PAYMENT_METHOD_OPTIONS.map((paymentMethod) => [
-            paymentMethod,
-            t(`finance.paymentMethod.options.${paymentMethod}`),
-          ]),
-        ) as CreateContractLabels["finance"]["paymentMethod"]["options"],
+        loading: t("finance.paymentMethod.loading"),
+        optionsError: t("finance.paymentMethod.optionsError"),
       },
       addTenantPermissions: {
         label: t("finance.addTenantPermissions.label"),

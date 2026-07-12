@@ -1810,12 +1810,8 @@
       },
       "paymentMethod": {
         "label": "Payment method",
-        "options": {
-          "monthly": "Monthly",
-          "quarterly": "Quarterly",
-          "semi-annual": "Semi-annual",
-          "annual": "Annual"
-        }
+        "loading": "Loading payment methods...",
+        "optionsError": "Failed to load payment methods"
       },
       "addTenantPermissions": {
         "label": "Would you like to add tenant permissions...?",

@@ -1,5 +1,4 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import type { PaymentMethodOption } from "@/features/create-contract/types/finance-step";
 import type { HasAgentOption } from "@/features/create-contract/types/owner-step";
 import type {
   DelegationTypeOption,
@@ -401,7 +400,8 @@ export type CreateContractLabels = {
     };
     paymentMethod: {
       label: string;
-      options: Record<PaymentMethodOption, string>;
+      loading: string;
+      optionsError: string;
     };
     addTenantPermissions: {
       label: string;

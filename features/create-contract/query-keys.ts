@@ -21,6 +21,12 @@ export const contractServicesPricingKeys = {
     [...contractServicesPricingKeys.all, contractType] as const,
 };
 
+export const contractPaymentTypeKeys = {
+  all: ["contract-payment-types"] as const,
+  list: (contractType: PropertyContractType) =>
+    [...contractPaymentTypeKeys.all, contractType] as const,
+};
+
 export const contractFinancialKeys = {
   all: ["contract-financial"] as const,
   detail: (contractId: number) =>

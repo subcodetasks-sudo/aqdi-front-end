@@ -1,20 +1,11 @@
 import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
 import { EMPTY_BIRTH_DATE } from "@/features/create-contract/types/owner-step";
 
-export const PAYMENT_METHOD_OPTIONS = [
-  "monthly",
-  "quarterly",
-  "semi-annual",
-  "annual",
-] as const;
-
-export type PaymentMethodOption = (typeof PAYMENT_METHOD_OPTIONS)[number];
-
 export type FinanceDataState = {
   contractStartDate: BirthDateValue;
   contractPeriodId: number | "";
   totalRentAmount: string;
-  paymentMethod: PaymentMethodOption | "";
+  paymentTypeId: number | "";
   addTenantPermissions: boolean;
   addOtherConditions: boolean;
   selectedTenantRoleIds: number[];
@@ -25,12 +16,37 @@ export const EMPTY_FINANCE_DATA: FinanceDataState = {
   contractStartDate: { ...EMPTY_BIRTH_DATE, calendarType: "hijri" },
   contractPeriodId: "",
   totalRentAmount: "",
-  paymentMethod: "",
+  paymentTypeId: "",
   addTenantPermissions: false,
   addOtherConditions: false,
   selectedTenantRoleIds: [],
   otherConditionsText: "",
 };
+
+const LEGACY_PAYMENT_METHOD_TO_TYPE_ID: Record<string, number> = {
+  monthly: 1,
+  quarterly: 2,
+  "semi-annual": 3,
+  annual: 4,
+};
+
+export function normalizeFinanceData(
+  financeData: Partial<FinanceDataState> & { paymentMethod?: string },
+): FinanceDataState {
+  let paymentTypeId = financeData.paymentTypeId ?? "";
+
+  if (paymentTypeId === "" && financeData.paymentMethod) {
+    paymentTypeId =
+      LEGACY_PAYMENT_METHOD_TO_TYPE_ID[financeData.paymentMethod] ?? "";
+  }
+
+  return {
+    ...EMPTY_FINANCE_DATA,
+    ...financeData,
+    paymentTypeId:
+      typeof paymentTypeId === "number" && paymentTypeId > 0 ? paymentTypeId : "",
+  };
+}
 
 function isContractStartDateComplete(contractStartDate: BirthDateValue) {
   return (
@@ -50,7 +66,7 @@ export function isFinanceDataComplete(financeData: FinanceDataState) {
     isContractStartDateComplete(financeData.contractStartDate) &&
     financeData.contractPeriodId !== "" &&
     isRentAmountComplete(financeData.totalRentAmount) &&
-    financeData.paymentMethod !== "";
+    financeData.paymentTypeId !== "";
 
   if (!baseComplete) {
     return false;

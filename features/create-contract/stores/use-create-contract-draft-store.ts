@@ -20,6 +20,7 @@ import {
 } from "@/features/shared/types/manual-national-address";
 import {
   EMPTY_FINANCE_DATA,
+  normalizeFinanceData,
   type FinanceDataState,
 } from "@/features/create-contract/types/finance-step";
 import {
@@ -887,18 +888,22 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
               ...(persistedTenant.rentedUnitData ?? {}),
             },
           },
-          financeData: {
+          financeData: normalizeFinanceData({
             ...initial.financeData,
             ...(persisted.financeData ?? {}),
             contractPeriodId:
               typeof persisted.financeData?.contractPeriodId === "number"
                 ? persisted.financeData.contractPeriodId
                 : "",
-          },
+          }),
           paymentData: { ...initial.paymentData, ...(persisted.paymentData ?? {}) },
         };
       },
       onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.financeData = normalizeFinanceData(state.financeData);
+        }
+
         state?.hydrateFilesFromPersisted();
       },
     },

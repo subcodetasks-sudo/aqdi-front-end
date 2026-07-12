@@ -1836,12 +1836,8 @@
       },
       "paymentMethod": {
         "label": "طريقة الدفعات",
-        "options": {
-          "monthly": "شهري",
-          "quarterly": "ربع سنوي",
-          "semi-annual": "نصف سنوي",
-          "annual": "سنوي"
-        }
+        "loading": "جاري تحميل طرق الدفع...",
+        "optionsError": "فشل تحميل طرق الدفع"
       },
       "addTenantPermissions": {
         "label": "هل ترغب بإضافة صلاحيات للمستأجر... ؟",
