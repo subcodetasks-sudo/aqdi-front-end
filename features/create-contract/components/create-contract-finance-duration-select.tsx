@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, ChevronLeft } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronLeft, Hand } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -16,6 +16,7 @@ type CreateContractFinanceDurationSelectProps = {
   placeholder: string;
   options: { value: string; label: string }[];
   value: string;
+  note?: string;
   onChange: (value: string) => void;
 };
 
@@ -24,6 +25,7 @@ export default function CreateContractFinanceDurationSelect({
   placeholder,
   options,
   value,
+  note,
   onChange,
 }: CreateContractFinanceDurationSelectProps) {
   const [open, setOpen] = useState(false);
@@ -120,6 +122,14 @@ export default function CreateContractFinanceDurationSelect({
           </SelectContent>
         </Select>
       </div>
+
+      {note ? (
+        <p className="mt-2 flex items-center gap-1.5 text-sm text-[#555555]">
+          <Hand className="size-4 shrink-0 text-red-500" aria-hidden="true" />
+          <ArrowLeft className="size-3.5 shrink-0 text-red-500" aria-hidden="true" />
+          <span>{note}</span>
+        </p>
+      ) : null}
     </div>
   );
 }
