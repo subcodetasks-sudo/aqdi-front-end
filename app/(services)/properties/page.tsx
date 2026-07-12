@@ -1,16 +1,17 @@
 import { getTranslations } from "next-intl/server";
 
-import PropertiesHeader from "@/features/properties/components/properties-header";
 import PropertiesHeroContent from "@/features/properties/components/properties-hero-content";
 import PropertiesVisual from "@/features/properties/components/properties-visual";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 
 export default async function PropertiesPage() {
   const t = await getTranslations("properties");
 
   return (
-    <section className="container py-8 lg:py-12">
-      <PropertiesHeader
+    <>
+      <ServicesPageBackConfig
         backLabel={t("backLabel")}
+        backHref="/"
         pageTitle={t("pageTitle")}
       />
 
@@ -24,6 +25,6 @@ export default async function PropertiesPage() {
         />
         <PropertiesVisual alt={t("visualAlt")} />
       </div>
-    </section>
+    </>
   );
 }

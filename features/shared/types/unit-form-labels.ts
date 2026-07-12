@@ -1,0 +1,52 @@
+export type UnitFormLabels = {
+  selectPlaceholder: string;
+  contractType?: {
+    label: string;
+    linkedLabel?: string;
+    options: {
+      housing: string;
+      commercial: string;
+    };
+  };
+  unitType: { label: string };
+  unitUsage: { label: string };
+  totalArea: {
+    label: string;
+    placeholder: string;
+    suffix: string;
+  };
+  floorNumber: { label: string };
+  floorOptions: { ground: string };
+  unitNumber: {
+    label: string;
+    placeholder: string;
+  };
+  additionalInfo: {
+    toggle: string;
+    writeHerePlaceholder: string;
+  };
+  roomsCount: { label: string };
+  hallsCount: { label: string };
+  majlisCount: { label: string };
+  kitchensCount: { label: string };
+  bathroomsCount: { label: string };
+  windowAcCount: { label: string };
+  splitAcCount: { label: string };
+  kitchenCabinetsInstalled: { label: string };
+  furnished: { label: string };
+  furnishingType: {
+    label: string;
+    new: string;
+    used: string;
+  };
+  addElectricityMeter: { label: string };
+  electricityMeterNumber: {
+    label: string;
+    placeholder: string;
+  };
+  addWaterMeter: { label: string };
+  waterMeterNumber: {
+    label: string;
+    placeholder: string;
+  };
+};

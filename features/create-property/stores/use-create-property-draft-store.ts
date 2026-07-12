@@ -14,6 +14,10 @@ import {
   type PropertyNationalAddressMethodId,
 } from "@/features/create-property/types/national-address";
 import {
+  EMPTY_MANUAL_NATIONAL_ADDRESS,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
+import {
   EMPTY_PROPERTY_AGENT_DATA,
   EMPTY_PROPERTY_OWNER_DATA,
   type PropertyAgentDataState,
@@ -64,6 +68,7 @@ type PropertyDraftStore = {
   addressPhotoFiles: File[];
   addressPhotoPersistedFiles: PersistedFile[];
   addressLinkUrl: string;
+  addressManual: ManualNationalAddressData;
   mapLocation: typeof DEFAULT_PROPERTY_NATIONAL_ADDRESS_LOCATION;
   ownerPhaseIndex: number;
   ownerData: PropertyOwnerDataState;
@@ -87,6 +92,7 @@ type PropertyDraftStore = {
   setAddressMethod: (method: PropertyNationalAddressMethodId) => void;
   setAddressPhotoFiles: (files: File[]) => Promise<void>;
   setAddressLinkUrl: (url: string) => void;
+  setAddressManual: (value: ManualNationalAddressData) => void;
   setMapLocation: (location: typeof DEFAULT_PROPERTY_NATIONAL_ADDRESS_LOCATION) => void;
   setOwnerPhaseIndex: (index: number) => void;
   setOwnerData: (data: PropertyOwnerDataState) => void;
@@ -151,6 +157,7 @@ function createInitialPropertyDraft() {
     addressPhotoFiles: [] as File[],
     addressPhotoPersistedFiles: [] as PersistedFile[],
     addressLinkUrl: "",
+    addressManual: { ...EMPTY_MANUAL_NATIONAL_ADDRESS },
     mapLocation: DEFAULT_PROPERTY_NATIONAL_ADDRESS_LOCATION,
     ownerPhaseIndex: 0,
     ownerData: { ...EMPTY_PROPERTY_OWNER_DATA },
@@ -252,6 +259,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         set({ addressPhotoFiles: files, addressPhotoPersistedFiles });
       },
       setAddressLinkUrl: (url) => set({ addressLinkUrl: url }),
+      setAddressManual: (value) => set({ addressManual: value }),
       setMapLocation: (location) => set({ mapLocation: location }),
       setOwnerPhaseIndex: (index) => set({ ownerPhaseIndex: index }),
       setOwnerData: (data) =>
@@ -321,6 +329,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           isMultipleTrusteeshipDeedCopy: data.isMultipleTrusteeshipDeedCopy,
           addressMethod: data.addressMethod,
           addressLinkUrl: data.addressLinkUrl,
+          addressManual: data.addressManual,
           mapLocation: data.mapLocation,
           ownerData: data.ownerData,
           agentData: data.agentData,
@@ -361,6 +370,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         addressMethod: state.addressMethod,
         addressPhotoPersistedFiles: state.addressPhotoPersistedFiles,
         addressLinkUrl: state.addressLinkUrl,
+        addressManual: state.addressManual,
         mapLocation: state.mapLocation,
         ownerPhaseIndex: state.ownerPhaseIndex,
         ownerData: state.ownerData,
@@ -379,6 +389,10 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         }
 
         state.ownerData = normalizePersistedOwnerData(state.ownerData);
+        state.addressManual = {
+          ...EMPTY_MANUAL_NATIONAL_ADDRESS,
+          ...state.addressManual,
+        };
 
         if (state.currentStep === "success") {
           state.currentStep = "deed";

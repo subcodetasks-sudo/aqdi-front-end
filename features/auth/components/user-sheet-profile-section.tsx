@@ -1,31 +1,33 @@
 "use client";
 
-import Link from "next/link";
-import { ChevronLeft, User } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 import UserSheetSectionCard from "@/features/auth/components/user-sheet-section-card";
-import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
 import type { AuthUser } from "@/features/auth/types/auth-user";
+import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
 import CustomIcon from "@/features/shared/components/custom-icon";
 
 type UserSheetProfileSectionProps = {
   user: AuthUser;
   sectionTitle: string;
   avatarAlt: string;
+  onEditProfile: () => void;
 };
 
 export default function UserSheetProfileSection({
   user,
   sectionTitle,
   avatarAlt,
+  onEditProfile,
 }: UserSheetProfileSectionProps) {
   const displayName = user.full_name || user.name;
   const displayPhone = formatPhoneDisplay(user.mobile || user.phone);
 
   return (
     <UserSheetSectionCard title={sectionTitle}>
-      <Link
-        href="/profile"
+      <button
+        type="button"
+        onClick={onEditProfile}
         className="flex w-full items-center gap-3 text-start transition-colors hover:text-brand"
       >
         <span className="relative inline-flex size-14 shrink-0 overflow-hidden rounded-full bg-white">
@@ -47,7 +49,10 @@ export default function UserSheetProfileSection({
           <span className="block truncate text-base font-bold text-foreground">
             {displayName}
           </span>
-          <span dir="ltr" className="text-right mt-1 block truncate text-sm font-medium text-gray-500">
+          <span
+            dir="ltr"
+            className="text-right mt-1 block truncate text-sm font-medium text-gray-500"
+          >
             {displayPhone}
           </span>
         </span>
@@ -56,7 +61,7 @@ export default function UserSheetProfileSection({
           className="size-5 shrink-0 text-muted-foreground"
           aria-hidden="true"
         />
-      </Link>
+      </button>
     </UserSheetSectionCard>
   );
 }

@@ -25,7 +25,7 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
         </div>
 
         <div className="flex flex-col items-end gap-2">
-          <RequestDeleteButton contractId={card.contractId} />
+          {/* <RequestDeleteButton contractId={card.contractId} /> */}
           <RequestCardBadges card={card} labels={labels} />
         </div>
       </div>

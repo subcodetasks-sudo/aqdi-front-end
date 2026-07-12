@@ -10,6 +10,7 @@ type NavbarNavLinkProps = {
   label: string;
   icon: ReactNode;
   external?: boolean;
+  isActive?: boolean;
 };
 
 export default function NavbarNavLink({
@@ -17,15 +18,17 @@ export default function NavbarNavLink({
   label,
   icon,
   external = false,
+  isActive,
 }: NavbarNavLinkProps) {
   const pathname = usePathname();
+  const active = isActive ?? pathname === href;
 
   return (
     <Link
       href={href}
       className={cn(
         "inline-flex items-center gap-2 font-bold text-black transition-colors hover:text-brand",
-        pathname === href ? "text-brand" : ""
+        active ? "text-brand" : ""
       )}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >

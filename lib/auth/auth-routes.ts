@@ -7,7 +7,6 @@ export const GUEST_ONLY_ROUTES = [
 ] as const;
 
 export const PROTECTED_ROUTE_PREFIXES = [
-  "/profile",
   "/properties",
   "/requests",
   "/create-contract",

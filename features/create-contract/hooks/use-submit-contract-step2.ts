@@ -10,11 +10,13 @@ import {
   DEFAULT_NATIONAL_ADDRESS_LOCATION,
   type NationalAddressMethodId,
 } from "@/features/create-contract/types/national-address";
+import type { ManualNationalAddressData } from "@/features/shared/types/manual-national-address";
 
 type SubmitContractStep2Input = {
   addressMethod: NationalAddressMethodId;
   photoFiles: File[];
   linkUrl: string;
+  manualAddress: ManualNationalAddressData;
 };
 
 export function useSubmitContractStep2() {
@@ -37,6 +39,7 @@ export function useSubmitContractStep2() {
     addressMethod,
     photoFiles,
     linkUrl,
+    manualAddress,
   }: SubmitContractStep2Input): Promise<boolean> {
     if (isSubmitting) {
       return false;
@@ -75,6 +78,7 @@ export function useSubmitContractStep2() {
         imageAddress: addressMethod === "photo" ? photoFiles[0] : undefined,
         addressUrl:
           addressMethod === "link" ? linkUrl.trim() || undefined : undefined,
+        manualAddress: addressMethod === "manual" ? manualAddress : undefined,
       });
 
       if (!result.ok) {

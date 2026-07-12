@@ -124,13 +124,57 @@ export default async function CreateContractPage({
         closePreview: t("deed.deedImage.closePreview"),
       },
       nationalAddress: {
-        methods: t.raw("deed.nationalAddress.methods") as string[],
+        methodSelect: {
+          label: t("deed.nationalAddress.methodSelect.label"),
+          placeholder: t("deed.nationalAddress.methodSelect.placeholder"),
+        },
+        methods: t.raw("deed.nationalAddress.methods") as Record<
+          "map" | "photo" | "link" | "manual",
+          string
+        >,
         mapTitle: t("deed.nationalAddress.mapTitle"),
         mapHint: t("deed.nationalAddress.mapHint"),
         coordinatesLabel: t("deed.nationalAddress.coordinatesLabel"),
         link: {
           label: t("deed.nationalAddress.link.label"),
           placeholder: t("deed.nationalAddress.link.placeholder"),
+        },
+        manual: {
+          place: {
+            label: t("deed.nationalAddress.manual.place.label"),
+            placeholder: t("deed.nationalAddress.manual.place.placeholder"),
+            loading: t("deed.nationalAddress.manual.place.loading"),
+          },
+          city: {
+            label: t("deed.nationalAddress.manual.city.label"),
+            placeholder: t("deed.nationalAddress.manual.city.placeholder"),
+            loading: t("deed.nationalAddress.manual.city.loading"),
+            selectPlaceFirst: t(
+              "deed.nationalAddress.manual.city.selectPlaceFirst",
+            ),
+          },
+          neighborhood: {
+            label: t("deed.nationalAddress.manual.neighborhood.label"),
+            placeholder: t("deed.nationalAddress.manual.neighborhood.placeholder"),
+          },
+          street: {
+            label: t("deed.nationalAddress.manual.street.label"),
+            placeholder: t("deed.nationalAddress.manual.street.placeholder"),
+          },
+          buildingNumber: {
+            label: t("deed.nationalAddress.manual.buildingNumber.label"),
+            placeholder: t(
+              "deed.nationalAddress.manual.buildingNumber.placeholder",
+            ),
+          },
+          postalCode: {
+            label: t("deed.nationalAddress.manual.postalCode.label"),
+            placeholder: t("deed.nationalAddress.manual.postalCode.placeholder"),
+          },
+          extraFigure: {
+            label: t("deed.nationalAddress.manual.extraFigure.label"),
+            placeholder: t("deed.nationalAddress.manual.extraFigure.placeholder"),
+          },
         },
         photo: {
           label: t("deed.nationalAddress.photo.label"),
@@ -285,17 +329,6 @@ export default async function CreateContractPage({
             ]),
           ) as CreateContractLabels["tenant"]["organizationData"]["delegationType"]["options"],
         },
-        region: {
-          label: t("tenant.organizationData.region.label"),
-          placeholder: t("tenant.organizationData.region.placeholder"),
-          loading: t("tenant.organizationData.region.loading"),
-        },
-        city: {
-          label: t("tenant.organizationData.city.label"),
-          placeholder: t("tenant.organizationData.city.placeholder"),
-          loading: t("tenant.organizationData.city.loading"),
-          selectRegionFirst: t("tenant.organizationData.city.selectRegionFirst"),
-        },
         unifiedRecordNumber: {
           label: t("tenant.organizationData.unifiedRecordNumber.label"),
           placeholder: t(
@@ -353,6 +386,12 @@ export default async function CreateContractPage({
         unitNumber: {
           label: t("tenant.rentedUnit.unitNumber.label"),
           placeholder: t("tenant.rentedUnit.unitNumber.placeholder"),
+        },
+        additionalInfo: {
+          toggle: t("tenant.rentedUnit.additionalInfo.toggle"),
+          writeHerePlaceholder: t(
+            "tenant.rentedUnit.additionalInfo.writeHerePlaceholder",
+          ),
         },
         roomsCount: {
           label: t("tenant.rentedUnit.roomsCount.label"),

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import CreatePropertyNameField from "@/features/create-property/components/create-property-name-field";
@@ -20,12 +21,18 @@ export default function CreatePropertyReviewStep({
   onBack,
   onComplete,
 }: CreatePropertyReviewStepProps) {
+  const tIncomplete = useTranslations("createProperty");
   const { reviewData, setReviewData, canContinue } =
     useCreatePropertyReviewStep();
   const { isSubmitting, submitStep2 } = useSubmitPropertyStep2();
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -65,7 +72,6 @@ export default function CreatePropertyReviewStep({
         continueLabel={
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
-        canContinue={canContinue}
         isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={handleContinue}

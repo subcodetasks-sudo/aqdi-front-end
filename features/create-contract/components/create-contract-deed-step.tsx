@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
@@ -26,6 +29,7 @@ export default function CreateContractDeedStep({
   onBack,
   onComplete,
 }: CreateContractDeedStepProps) {
+  const tIncomplete = useTranslations("createContract");
   const {
     currentPhaseIndex,
     selectedDeedType,
@@ -57,6 +61,8 @@ export default function CreateContractDeedStep({
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
+    nationalAddressManual,
+    setNationalAddressManual,
     mapLocation,
     setMapLocation,
     isLastPhase,
@@ -91,7 +97,12 @@ export default function CreateContractDeedStep({
   }
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -149,6 +160,7 @@ export default function CreateContractDeedStep({
         addressMethod: nationalAddressMethod,
         photoFiles: nationalAddressPhotoFiles,
         linkUrl: nationalAddressLinkUrl,
+        manualAddress: nationalAddressManual,
       });
 
       if (!submitted) {
@@ -306,6 +318,8 @@ export default function CreateContractDeedStep({
             onPhotoFilesChange={setNationalAddressPhotoFiles}
             linkUrl={nationalAddressLinkUrl}
             onLinkUrlChange={setNationalAddressLinkUrl}
+            manualAddress={nationalAddressManual}
+            onManualAddressChange={setNationalAddressManual}
             mapLocation={mapLocation}
             onMapLocationChange={setMapLocation}
             existingPhotoUrl={existingAddressImageUrl}
@@ -318,7 +332,7 @@ export default function CreateContractDeedStep({
         continueLabel={
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
-        canContinue={canContinue && !isSubmitting}
+        isSubmitting={isSubmitting}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
       />

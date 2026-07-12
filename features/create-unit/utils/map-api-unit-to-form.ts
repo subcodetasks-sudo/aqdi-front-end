@@ -6,7 +6,12 @@ function displayCount(value: string | number | null | undefined) {
     return "";
   }
 
-  return String(value);
+  const parsed = Number(String(value).replace(/\D/g, ""));
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return "";
+  }
+
+  return String(parsed).padStart(2, "0");
 }
 
 function mapFloorNumber(value: string | null | undefined) {
@@ -35,11 +40,12 @@ export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
   return {
     unitTypeId: unit.unit_type_id ? String(unit.unit_type_id) : "",
     unitUsageId: unit.unit_usage_id ? String(unit.unit_usage_id) : "",
-    totalArea: displayCount(unit.unit_area),
+    totalArea: unit.unit_area?.trim() ?? "",
     floorNumber: mapFloorNumber(unit.floor_number),
-    unitNumber: displayCount(unit.unit_number),
+    unitNumber: unit.unit_number?.trim() ?? "",
     roomsCount: mapRoomsCount(unit),
     hallsCount: displayCount(unit.The_number_of_halls),
+    majlisCount: "",
     kitchensCount: displayCount(unit.The_number_of_kitchens),
     bathroomsCount: mapBathroomsCount(unit),
     windowAcCount: displayCount(unit.window_ac),
@@ -52,8 +58,8 @@ export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
         : "used"
       : "",
     addElectricityMeter: Boolean(unit.electricity_meter),
-    electricityMeterNumber: displayCount(unit.electricity_meter_number),
+    electricityMeterNumber: unit.electricity_meter_number?.trim() ?? "",
     addWaterMeter: Boolean(unit.water_meter),
-    waterMeterNumber: displayCount(unit.water_meter_number),
+    waterMeterNumber: unit.water_meter_number?.trim() ?? "",
   };
 }

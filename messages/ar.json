@@ -596,7 +596,7 @@
       "greeting": "مرحباً بعودتك !.",
       "subtitle": "قم بإدخال البيانات لتسجيل حسابك الآن.",
       "phoneLabel": "رقم الجوال",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "passwordLabel": "كلمة المرور",
       "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
       "forgotPassword": "هل نسيت كلمة المرور ؟",
@@ -621,7 +621,7 @@
       "fullNameLabel": "الاسم الأول و الأخير",
       "fullNamePlaceholder": "أدخل اسمك الكامل",
       "phoneLabel": "رقم الجوال",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "example@email.com",
       "passwordLabel": "كلمة المرور",
@@ -677,7 +677,7 @@
       "title": "هل نسيت كلمة المرور !",
       "subtitle": "قم بإدخال رقم الجوال المرتبط بالحساب ..",
       "phoneLabel": "رقم الجوال",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "submit": "إرسال رمز التحقق",
       "submitSuccess": "تم إرسال كود إعادة تعيين كلمة المرور الجديدة على رقم الهاتف المسجل",
       "submitError": "تعذر إرسال رمز التحقق، يرجى المحاولة مرة أخرى",
@@ -711,6 +711,8 @@
     },
     "profile": {
       "back": "العودة",
+      "title": "تعديل الملف الشخصي",
+      "close": "إغلاق",
       "avatarAlt": "صورة المستخدم",
       "fullNameLabel": "الاسم الأول و الاخير",
       "fullNamePlaceholder": "أدخل الاسم الأول و الاخير هنا ...",
@@ -952,6 +954,7 @@
     }
   },
   "createProperty": {
+    "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
     "backLabel": "رجوع",
     "pageTitle": "إضافة عقار جديد",
     "pageTitleResidential": "إضافة عقار سكني",
@@ -1019,17 +1022,55 @@
       "title": "العنوان الوطني للعقار",
       "subtitle": "إختر الطريقة المفضلة لك :",
       "nationalAddress": {
-        "methods": [
-          "الخريطة",
-          "إرفاق صورة",
-          "إدخال رابط"
-        ],
+        "methodSelect": {
+          "label": "طريقة إدخال العنوان الوطني",
+          "placeholder": "إختر من هنا .."
+        },
+        "methods": {
+          "map": "خريطة العنوان",
+          "photo": "صورة العنوان",
+          "link": "رابط العنوان",
+          "manual": "ادخال تفاصيل العنوان"
+        },
         "mapTitle": "خريطة العنوان الوطني",
         "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
         "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+        },
+        "manual": {
+          "place": {
+            "label": "المنطقة",
+            "placeholder": "... إختر من هنا",
+            "loading": "جاري التحميل..."
+          },
+          "city": {
+            "label": "المدينة",
+            "placeholder": "... إختر من هنا",
+            "loading": "جاري التحميل...",
+            "selectPlaceFirst": "اختر المنطقة أولاً"
+          },
+          "neighborhood": {
+            "label": "الحي",
+            "placeholder": "... إختر من هنا"
+          },
+          "street": {
+            "label": "اسم الشارع",
+            "placeholder": "... إختر من هنا"
+          },
+          "buildingNumber": {
+            "label": "رقم المبنى",
+            "placeholder": "... إختر من هنا"
+          },
+          "postalCode": {
+            "label": "الرمز البريدي",
+            "placeholder": "... إختر من هنا"
+          },
+          "extraFigure": {
+            "label": "الرقم الإضافي",
+            "placeholder": "... إختر من هنا"
+          }
         },
         "photo": {
           "label": "إرفاق صورة العنوان الوطني",
@@ -1056,7 +1097,7 @@
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "رقم الآيبان للمالك",
           "ibanInvalid": "رقم الآيبان يجب أن يكون سعوديًا صالحًا",
           "hasAgent": "هل يوجد وكيل للمالك",
@@ -1064,7 +1105,7 @@
         },
         "fieldErrors": {
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
       },
@@ -1100,7 +1141,7 @@
         },
         "phone": {
           "label": "رقم جوال المالك",
-          "placeholder": "5x xxx xx xx"
+          "placeholder": "xxxxxxxx"
         },
         "iban": {
           "label": "رقم الآيبان للمالك",
@@ -1123,7 +1164,7 @@
         "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
         "phone": {
           "label": "رقم جوال وكيل المالك",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1189,10 +1230,11 @@
     "editSubtitle": "قم بتحديث بيانات الوحدة أدناه:",
     "selectPlaceholder": "... إختر من هنا",
     "contractType": {
-      "label": "نوع العقد",
+      "label": "نوع العقد المرتبط بالعقار",
+      "linkedLabel": "نوع العقد المرتبط بالعقار",
       "options": {
-        "housing": "عقار سكني",
-        "commercial": "عقار تجاري"
+        "housing": "سكني",
+        "commercial": "تجاري"
       }
     },
     "unitType": {
@@ -1228,11 +1270,18 @@
       "label": "رقم الوحدة",
       "placeholder": "أكتب هنا .."
     },
+    "additionalInfo": {
+      "toggle": "هل ترغب بإضافة معلومات إضافية ؟",
+      "writeHerePlaceholder": "أكتب هنا ..."
+    },
     "roomsCount": {
       "label": "عدد الغرف"
     },
     "hallsCount": {
       "label": "عدد الصالات"
+    },
+    "majlisCount": {
+      "label": "عدد المجالس"
     },
     "kitchensCount": {
       "label": "عدد المطابخ"
@@ -1288,6 +1337,7 @@
     }
   },
   "createContract": {
+    "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
     "backLabel": "رجوع",
     "pageTitleResidential": "انشاء عقد ايجار سكني",
     "pageTitleCommercial": "انشاء عقد ايجار تجاري",
@@ -1386,17 +1436,55 @@
         "closePreview": "إغلاق"
       },
       "nationalAddress": {
-        "methods": [
-          "الخريطة",
-          "إرفاق صورة",
-          "إدخال رابط"
-        ],
+        "methodSelect": {
+          "label": "طريقة إدخال العنوان الوطني",
+          "placeholder": "إختر من هنا .."
+        },
+        "methods": {
+          "map": "خريطة العنوان",
+          "photo": "صورة العنوان",
+          "link": "رابط العنوان",
+          "manual": "ادخال تفاصيل العنوان"
+        },
         "mapTitle": "خريطة العنوان الوطني",
         "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
         "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
           "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+        },
+        "manual": {
+          "place": {
+            "label": "المنطقة",
+            "placeholder": "... إختر من هنا",
+            "loading": "جاري التحميل..."
+          },
+          "city": {
+            "label": "المدينة",
+            "placeholder": "... إختر من هنا",
+            "loading": "جاري التحميل...",
+            "selectPlaceFirst": "اختر المنطقة أولاً"
+          },
+          "neighborhood": {
+            "label": "الحي",
+            "placeholder": "... إختر من هنا"
+          },
+          "street": {
+            "label": "اسم الشارع",
+            "placeholder": "... إختر من هنا"
+          },
+          "buildingNumber": {
+            "label": "رقم المبنى",
+            "placeholder": "... إختر من هنا"
+          },
+          "postalCode": {
+            "label": "الرمز البريدي",
+            "placeholder": "... إختر من هنا"
+          },
+          "extraFigure": {
+            "label": "الرقم الإضافي",
+            "placeholder": "... إختر من هنا"
+          }
         },
         "photo": {
           "label": "إرفاق صورة العنوان الوطني",
@@ -1433,7 +1521,7 @@
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "رقم الآيبان للمالك",
           "ibanInvalid": "رقم الآيبان يجب أن يكون سعوديًا صالحًا",
           "hasAgent": "هل يوجد وكيل للمالك",
@@ -1441,7 +1529,7 @@
         },
         "fieldErrors": {
           "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
-          "phoneLength": "رقم الجوال يجب أن يكون 9 أرقام على الأقل",
+          "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
       },
@@ -1477,7 +1565,7 @@
         },
         "phone": {
           "label": "رقم جوال المالك",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "iban": {
           "label": "رقم الآيبان للمالك",
@@ -1500,7 +1588,7 @@
         "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
         "phone": {
           "label": "رقم جوال وكيل المالك",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1563,7 +1651,7 @@
         },
         "phone": {
           "label": "رقم جوال المستأجر",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         }
       },
       "organizationData": {
@@ -1588,7 +1676,7 @@
         },
         "unifiedRecordNumber": {
           "label": "رقم السجل الموحد - المبتدئ برقم 7",
-          "placeholder": "7x xxx xx xxx"
+          "placeholder": "x xxx xx xxx"
         },
         "ownerIdNumber": {
           "label": "رقم هوية مالك السجل",
@@ -1597,7 +1685,7 @@
         "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل :",
         "ownerPhone": {
           "label": "رقم جوال مالك السجل",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1645,6 +1733,10 @@
         "unitNumber": {
           "label": "رقم الوحدة",
           "placeholder": "أكتب هنا .."
+        },
+        "additionalInfo": {
+          "toggle": "هل ترغب بإضافة معلومات إضافية ؟",
+          "writeHerePlaceholder": "أكتب هنا ..."
         },
         "roomsCount": {
           "label": "عدد الغرف"

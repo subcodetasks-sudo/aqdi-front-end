@@ -4,14 +4,11 @@ import { FlagImage } from "react-international-phone";
 
 import { Field, FieldLabel } from "@/components/ui/field";
 import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
-import { cn } from "@/lib/utils";
+
 type ProfilePhoneFieldProps = {
   label: string;
   value: string;
 };
-
-const profileFieldClassName =
-  "auth-password-input h-14 rounded-lg border-[#d6d6d6] bg-white text-base md:text-sm";
 
 export default function ProfilePhoneField({
   label,
@@ -28,14 +25,12 @@ export default function ProfilePhoneField({
       <div
         dir="ltr"
         aria-readonly="true"
-        className={cn(
-          profileFieldClassName,
-          "flex items-center overflow-hidden opacity-80",
-        )}
+        className="flex h-14 items-center overflow-hidden rounded-lg border border-[#d6d6d6] bg-white opacity-90"
       >
         <div className="flex h-full shrink-0 items-center border-e border-[#d6d6d6] px-4">
           <FlagImage iso2="sa" size="24px" aria-hidden="true" />
-        </div>        <span className="flex-1 px-4 font-medium text-foreground">
+        </div>
+        <span className="flex-1 px-4 text-base font-medium text-foreground md:text-sm">
           {displayPhone}
         </span>
       </div>

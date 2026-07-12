@@ -76,13 +76,50 @@ export type CreateContractLabels = {
       closePreview: string;
     };
     nationalAddress: {
-      methods: string[];
+      methodSelect: {
+        label: string;
+        placeholder: string;
+      };
+      methods: Record<"map" | "photo" | "link" | "manual", string>;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
+      };
+      manual: {
+        place: {
+          label: string;
+          placeholder: string;
+          loading: string;
+        };
+        city: {
+          label: string;
+          placeholder: string;
+          loading: string;
+          selectPlaceFirst: string;
+        };
+        neighborhood: {
+          label: string;
+          placeholder: string;
+        };
+        street: {
+          label: string;
+          placeholder: string;
+        };
+        buildingNumber: {
+          label: string;
+          placeholder: string;
+        };
+        postalCode: {
+          label: string;
+          placeholder: string;
+        };
+        extraFigure: {
+          label: string;
+          placeholder: string;
+        };
       };
       photo: CreateContractLabels["deed"]["deedImage"];
     };
@@ -223,17 +260,6 @@ export type CreateContractLabels = {
         placeholder: string;
         options: Record<DelegationTypeOption, string>;
       };
-      region: {
-        label: string;
-        placeholder: string;
-        loading: string;
-      };
-      city: {
-        label: string;
-        placeholder: string;
-        loading: string;
-        selectRegionFirst: string;
-      };
       unifiedRecordNumber: {
         label: string;
         placeholder: string;
@@ -272,6 +298,10 @@ export type CreateContractLabels = {
       unitNumber: {
         label: string;
         placeholder: string;
+      };
+      additionalInfo: {
+        toggle: string;
+        writeHerePlaceholder: string;
       };
       roomsCount: {
         label: string;

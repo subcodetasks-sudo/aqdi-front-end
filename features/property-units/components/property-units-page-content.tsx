@@ -1,5 +1,5 @@
-import PropertyUnitsHeader from "@/features/property-units/components/property-units-header";
 import PropertyUnitsTabs from "@/features/property-units/components/property-units-tabs";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { PropertyUnitCardData, PropertyUnitTab } from "@/features/property-units/types/property-unit";
 import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 import type { PropertyUnitsLabels } from "@/features/property-units/types/property-units-labels";
@@ -28,8 +28,12 @@ export default function PropertyUnitsPageContent({
     : labels.pageTitle;
 
   return (
-    <section className="container py-8 lg:py-10">
-      <PropertyUnitsHeader backLabel={labels.backLabel} pageTitle={pageTitle} />
+    <>
+      <ServicesPageBackConfig
+        backLabel={labels.backLabel}
+        backHref="/properties/my-properties"
+        pageTitle={pageTitle}
+      />
 
       <PropertyUnitsTabs
         labels={labels}
@@ -39,6 +43,6 @@ export default function PropertyUnitsPageContent({
         residentialItems={residentialItems}
         commercialItems={commercialItems}
       />
-    </section>
+    </>
   );
 }

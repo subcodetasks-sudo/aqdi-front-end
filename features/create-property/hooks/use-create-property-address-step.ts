@@ -10,6 +10,7 @@ export function useCreatePropertyAddressStep() {
   const method = useCreatePropertyDraftStore((state) => state.addressMethod);
   const photoFiles = useCreatePropertyDraftStore((state) => state.addressPhotoFiles);
   const linkUrl = useCreatePropertyDraftStore((state) => state.addressLinkUrl);
+  const manualAddress = useCreatePropertyDraftStore((state) => state.addressManual);
   const mapLocation = useCreatePropertyDraftStore((state) => state.mapLocation);
   const existingAddressImageUrl = useCreatePropertyDraftStore(
     (state) => state.existingAddressImageUrl,
@@ -23,10 +24,14 @@ export function useCreatePropertyAddressStep() {
   const setAddressLinkUrl = useCreatePropertyDraftStore(
     (state) => state.setAddressLinkUrl,
   );
+  const setAddressManual = useCreatePropertyDraftStore(
+    (state) => state.setAddressManual,
+  );
   const setMapLocation = useCreatePropertyDraftStore((state) => state.setMapLocation);
 
   const canContinue = canContinueNationalAddress(method, photoFiles, linkUrl, {
     hasExistingPhoto: Boolean(existingAddressImageUrl),
+    manualAddress,
   });
 
   function handleMethodChange(nextMethod: PropertyNationalAddressMethodId) {
@@ -40,6 +45,8 @@ export function useCreatePropertyAddressStep() {
     setPhotoFiles: setAddressPhotoFiles,
     linkUrl,
     setLinkUrl: setAddressLinkUrl,
+    manualAddress,
+    setManualAddress: setAddressManual,
     mapLocation,
     setMapLocation,
     existingAddressImageUrl,

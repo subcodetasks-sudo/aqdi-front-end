@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyDeedTypeSelect from "@/features/create-property/components/create-property-deed-type-select";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
@@ -19,6 +22,7 @@ export default function CreatePropertyDeedStep({
   onBack,
   onComplete,
 }: CreatePropertyDeedStepProps) {
+  const tIncomplete = useTranslations("createProperty");
   const {
     selectedDeedType,
     setSelectedDeedType,
@@ -56,6 +60,7 @@ export default function CreatePropertyDeedStep({
 
   function handleContinue() {
     if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -181,7 +186,6 @@ export default function CreatePropertyDeedStep({
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
         onPrevious={onBack}
         onContinue={handleContinue}
       />

@@ -6,26 +6,12 @@ import {
   deedTypeIsWaqfOwner,
   deedTypeNeedsFrontBack,
 } from "@/features/create-contract/types/deed-type";
-import { DEFAULT_NATIONAL_ADDRESS_LOCATION } from "@/features/create-contract/types/national-address";
+import {
+  canContinueNationalAddress,
+  DEFAULT_NATIONAL_ADDRESS_LOCATION,
+} from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
-
-function canContinueNationalAddress(
-  method: "map" | "photo" | "link",
-  photoFiles: File[],
-  linkUrl: string,
-  hasExistingAddressImage: boolean,
-) {
-  if (method === "map") {
-    return true;
-  }
-
-  if (method === "photo") {
-    return photoFiles.length > 0 || hasExistingAddressImage;
-  }
-
-  return linkUrl.trim().length > 0;
-}
 
 export function useCreateContractDeedStep() {
   const deed = useCreateContractDraftStore((state) => state.deed);
@@ -80,6 +66,9 @@ export function useCreateContractDeedStep() {
   );
   const setNationalAddressLinkUrl = useCreateContractDraftStore(
     (state) => state.setNationalAddressLinkUrl,
+  );
+  const setNationalAddressManual = useCreateContractDraftStore(
+    (state) => state.setNationalAddressManual,
   );
   const setMapLocation = useCreateContractDraftStore((state) => state.setMapLocation);
 
@@ -158,7 +147,10 @@ export function useCreateContractDeedStep() {
           deed.nationalAddressMethod,
           deed.nationalAddressPhotoFiles,
           deed.nationalAddressLinkUrl,
-          existingAddressImageUrl !== null,
+          {
+            hasExistingPhoto: existingAddressImageUrl !== null,
+            manualAddress: deed.nationalAddressManual,
+          },
         );
 
   function goToNextPhase() {
@@ -204,6 +196,8 @@ export function useCreateContractDeedStep() {
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl: deed.nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
+    nationalAddressManual: deed.nationalAddressManual,
+    setNationalAddressManual,
     mapLocation: deed.mapLocation ?? DEFAULT_NATIONAL_ADDRESS_LOCATION,
     setMapLocation,
     isLastPhase,

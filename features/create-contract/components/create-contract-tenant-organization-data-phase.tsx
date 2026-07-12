@@ -4,15 +4,13 @@ import { FilePenLine, IdCard, Phone } from "lucide-react";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
-import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractIconInputField from "@/features/create-contract/components/create-contract-icon-input-field";
+import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
 import CreateContractTenantDelegationTypeSelect from "@/features/create-contract/components/create-contract-tenant-delegation-type-select";
-import {
-  useCityOptions,
-  useRegionOptions,
-} from "@/features/create-contract/hooks/use-location-lookup-options";
+import CreateContractUnifiedRecordNumberField from "@/features/create-contract/components/create-contract-unified-record-number-field";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OrganizationTenantData } from "@/features/create-contract/types/tenant-step";
+import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractTenantOrganizationDataPhaseProps = {
   labels: CreateContractLabels["tenant"]["organizationData"];
@@ -27,20 +25,6 @@ export default function CreateContractTenantOrganizationDataPhase({
   value,
   onChange,
 }: CreateContractTenantOrganizationDataPhaseProps) {
-  const { data: regions = [], isLoading: isRegionsLoading } = useRegionOptions();
-  const { data: cities = [], isLoading: isCitiesLoading } = useCityOptions(
-    value.regionId,
-  );
-
-  const regionOptions = regions.map((region) => ({
-    value: String(region.id),
-    label: region.name,
-  }));
-  const cityOptions = cities.map((city) => ({
-    value: String(city.id),
-    label: city.name,
-  }));
-
   function updateField<K extends keyof OrganizationTenantData>(
     field: K,
     fieldValue: OrganizationTenantData[K],
@@ -74,54 +58,14 @@ export default function CreateContractTenantOrganizationDataPhase({
 
       {value.delegationType ? (
         <>
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-            <CreateContractFormSelect
-              label={labels.region.label}
-              placeholder={
-                isRegionsLoading ? labels.region.loading : labels.region.placeholder
-              }
-              options={regionOptions}
-              value={value.regionId === "" ? "" : String(value.regionId)}
-              onChange={(regionId) => {
-                onChange({
-                  ...value,
-                  regionId: regionId ? Number(regionId) : "",
-                  cityId: "",
-                });
-              }}
-            />
-
-            <CreateContractFormSelect
-              label={labels.city.label}
-              placeholder={
-                value.regionId === ""
-                  ? labels.city.selectRegionFirst
-                  : isCitiesLoading
-                    ? labels.city.loading
-                    : labels.city.placeholder
-              }
-              options={cityOptions}
-              value={value.cityId === "" ? "" : String(value.cityId)}
-              onChange={(cityId) =>
-                updateField("cityId", cityId ? Number(cityId) : "")
-              }
-            />
-          </div>
-
-          <CreateContractIconInputField
+          <CreateContractUnifiedRecordNumberField
             label={labels.unifiedRecordNumber.label}
             placeholder={labels.unifiedRecordNumber.placeholder}
             value={value.unifiedRecordNumber}
             onChange={(unifiedRecordNumber) =>
-              updateField(
-                "unifiedRecordNumber",
-                unifiedRecordNumber.replace(/\D/g, "").slice(0, 10),
-              )
+              updateField("unifiedRecordNumber", unifiedRecordNumber)
             }
             icon={FilePenLine}
-            dir="ltr"
-            inputMode="numeric"
-            maxLength={10}
           />
 
           <CreateContractIconInputField
@@ -151,21 +95,14 @@ export default function CreateContractTenantOrganizationDataPhase({
             }
           />
 
-          <CreateContractIconInputField
+          <CreateContractSaudiMobileField
             label={labels.ownerPhone.label}
             placeholder={labels.ownerPhone.placeholder}
             value={value.ownerPhone}
             onChange={(ownerPhone) =>
-              updateField(
-                "ownerPhone",
-                ownerPhone.replace(/\D/g, "").slice(0, 10),
-              )
+              updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
             }
             icon={Phone}
-            type="tel"
-            dir="ltr"
-            inputMode="tel"
-            maxLength={10}
           />
 
           {value.delegationType === "agent-authorized" ? (

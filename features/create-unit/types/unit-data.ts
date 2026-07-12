@@ -10,6 +10,7 @@ export type UnitDataState = {
   unitNumber: string;
   roomsCount: string;
   hallsCount: string;
+  majlisCount: string;
   kitchensCount: string;
   bathroomsCount: string;
   windowAcCount: string;
@@ -31,6 +32,7 @@ export const EMPTY_UNIT_DATA: UnitDataState = {
   unitNumber: "",
   roomsCount: "",
   hallsCount: "",
+  majlisCount: "",
   kitchensCount: "",
   bathroomsCount: "",
   windowAcCount: "",
@@ -59,39 +61,13 @@ function isPositiveNumber(value: string) {
 }
 
 export function isUnitDataComplete(unitData: UnitDataState) {
-  const baseComplete =
+  return (
     isSelectFilled(unitData.unitTypeId) &&
     isSelectFilled(unitData.unitUsageId) &&
     isPositiveNumber(unitData.totalArea) &&
     isSelectFilled(unitData.floorNumber) &&
-    unitData.unitNumber.trim() !== "" &&
-    isSelectFilled(unitData.roomsCount) &&
-    isSelectFilled(unitData.hallsCount) &&
-    isSelectFilled(unitData.kitchensCount) &&
-    isSelectFilled(unitData.bathroomsCount) &&
-    isSelectFilled(unitData.windowAcCount) &&
-    isSelectFilled(unitData.splitAcCount);
-
-  if (!baseComplete) {
-    return false;
-  }
-
-  if (unitData.furnished && unitData.furnishingType === "") {
-    return false;
-  }
-
-  if (
-    unitData.addElectricityMeter &&
-    unitData.electricityMeterNumber.trim() === ""
-  ) {
-    return false;
-  }
-
-  if (unitData.addWaterMeter && unitData.waterMeterNumber.trim() === "") {
-    return false;
-  }
-
-  return true;
+    unitData.unitNumber.trim() !== ""
+  );
 }
 
 export function buildCountOptions(max = 20) {

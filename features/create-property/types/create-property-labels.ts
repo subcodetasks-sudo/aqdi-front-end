@@ -55,13 +55,50 @@ export type CreatePropertyLabels = {
     title: string;
     subtitle: string;
     nationalAddress: {
-      methods: string[];
+      methodSelect: {
+        label: string;
+        placeholder: string;
+      };
+      methods: Record<"map" | "photo" | "link" | "manual", string>;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
+      };
+      manual: {
+        place: {
+          label: string;
+          placeholder: string;
+          loading: string;
+        };
+        city: {
+          label: string;
+          placeholder: string;
+          loading: string;
+          selectPlaceFirst: string;
+        };
+        neighborhood: {
+          label: string;
+          placeholder: string;
+        };
+        street: {
+          label: string;
+          placeholder: string;
+        };
+        buildingNumber: {
+          label: string;
+          placeholder: string;
+        };
+        postalCode: {
+          label: string;
+          placeholder: string;
+        };
+        extraFigure: {
+          label: string;
+          placeholder: string;
+        };
       };
       photo: CreatePropertyLabels["deed"]["deedImage"];
     };

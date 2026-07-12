@@ -43,7 +43,7 @@ export default function MyPropertyCard({ property }: MyPropertyCardProps) {
 
         <div className="flex shrink-0 items-center gap-2">
           <MyPropertyViewDeedButton deedImageUrl={property.deedImageUrl} />
-          <MyPropertyDeleteButton propertyId={property.propertyId} />
+          {/* <MyPropertyDeleteButton propertyId={property.propertyId} /> */}
         </div>
       </div>
 

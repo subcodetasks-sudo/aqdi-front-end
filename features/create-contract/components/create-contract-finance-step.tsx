@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 import CreateContractFinanceDataPhase from "@/features/create-contract/components/create-contract-finance-data-phase";
 import CreateContractOtherConditionsDialog from "@/features/create-contract/components/create-contract-other-conditions-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
@@ -23,6 +26,7 @@ export default function CreateContractFinanceStep({
   onBack,
   onComplete,
 }: CreateContractFinanceStepProps) {
+  const tIncomplete = useTranslations("createContract");
   const {
     financeData,
     setFinanceData,
@@ -37,7 +41,12 @@ export default function CreateContractFinanceStep({
   const { submitStep6, isSubmitting } = useSubmitContractStep6();
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -90,7 +99,7 @@ export default function CreateContractFinanceStep({
         continueLabel={
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
-        canContinue={canContinue && !isSubmitting}
+        isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={() => void handleContinue()}
       />

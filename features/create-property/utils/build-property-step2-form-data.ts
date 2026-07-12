@@ -30,7 +30,12 @@ export function appendPropertyStep2Fields(
   formData.append("id", String(payload.propertyId));
   formData.append("name_real_estate", payload.propertyName.trim());
   formData.append("type_dob_property_owner", ownerData.birthDate.calendarType);
-  formData.append("name_owner", ownerData.fullName.trim());
+
+  const ownerName = ownerData.fullName.trim();
+  if (ownerName) {
+    formData.append("name_owner", ownerName);
+  }
+
   formData.append(
     "property_owner_id_num",
     ownerData.idNumber.replace(/\D/g, ""),
@@ -51,10 +56,12 @@ export function appendPropertyStep2Fields(
     "property_owner_mobile",
     formatPropertyOwnerMobileForApi(ownerData.phone),
   );
-  formData.append(
-    "property_owner_iban",
-    normalizePropertyOwnerIban(ownerData.iban),
-  );
+
+  const ownerIban = normalizePropertyOwnerIban(ownerData.iban);
+  if (ownerIban) {
+    formData.append("property_owner_iban", ownerIban);
+  }
+
   appendAgentFlag(formData, ownerData.hasAgent);
 
   if (ownerData.hasAgent === "yes") {

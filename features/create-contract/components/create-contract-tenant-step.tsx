@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
@@ -35,6 +37,7 @@ export default function CreateContractTenantStep({
   onBack,
   onComplete,
 }: CreateContractTenantStepProps) {
+  const tIncomplete = useTranslations("createContract");
   const {
     currentPhaseIndex,
     tenantData,
@@ -69,7 +72,12 @@ export default function CreateContractTenantStep({
   }
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -111,9 +119,8 @@ export default function CreateContractTenantStep({
       return;
     }
 
-    // Clear the local draft + localStorage and send the user back home.
     resetCreateContractDraft();
-    router.push("/");
+    router.push("/requests");
   }
 
   return (
@@ -192,7 +199,7 @@ export default function CreateContractTenantStep({
               : labels.navigation.saveLater
             : undefined
         }
-        canContinue={canContinue && !isSubmitting}
+        isSubmitting={isSubmitting}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
         onSaveLater={

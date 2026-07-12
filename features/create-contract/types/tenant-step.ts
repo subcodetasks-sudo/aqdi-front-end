@@ -2,6 +2,11 @@ import {
   EMPTY_BIRTH_DATE,
   type BirthDateValue,
 } from "@/features/create-contract/types/owner-step";
+import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
+import {
+  isUnifiedRecordNumberPrefixOnly,
+  UNIFIED_RECORD_NUMBER_LENGTH,
+} from "@/lib/validation/format-unified-record-number-for-form";
 
 export const TENANT_STATUS_OPTIONS = [
   "individual",
@@ -26,13 +31,11 @@ export type IndividualTenantData = {
 export const EMPTY_INDIVIDUAL_TENANT_DATA: IndividualTenantData = {
   idNumber: "",
   birthDate: EMPTY_BIRTH_DATE,
-  phone: "",
+  phone: "05",
 };
 
 export type OrganizationTenantData = {
   delegationType: DelegationTypeOption | "";
-  regionId: number | "";
-  cityId: number | "";
   unifiedRecordNumber: string;
   ownerIdNumber: string;
   ownerBirthDate: BirthDateValue;
@@ -42,12 +45,10 @@ export type OrganizationTenantData = {
 
 export const EMPTY_ORGANIZATION_TENANT_DATA: OrganizationTenantData = {
   delegationType: "",
-  regionId: "",
-  cityId: "",
-  unifiedRecordNumber: "",
+  unifiedRecordNumber: "7",
   ownerIdNumber: "",
   ownerBirthDate: EMPTY_BIRTH_DATE,
-  ownerPhone: "",
+  ownerPhone: "05",
   powerOfAttorneyFiles: [],
 };
 
@@ -73,19 +74,21 @@ function isBirthDateComplete(birthDate: BirthDateValue) {
   );
 }
 
-function isPhoneComplete(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return digits.length >= 9;
-}
-
 function isIdNumberComplete(idNumber: string) {
   const digits = idNumber.replace(/\D/g, "");
   return digits.length === 10;
 }
 
 function isUnifiedRecordNumberComplete(unifiedRecordNumber: string) {
+  if (isUnifiedRecordNumberPrefixOnly(unifiedRecordNumber)) {
+    return false;
+  }
+
   const digits = unifiedRecordNumber.replace(/\D/g, "");
-  return digits.length === 10 && digits.startsWith("7");
+  return (
+    digits.length === UNIFIED_RECORD_NUMBER_LENGTH &&
+    digits.startsWith("7")
+  );
 }
 
 function isIndividualTenantComplete(individual: IndividualTenantData) {
@@ -99,8 +102,6 @@ function isIndividualTenantComplete(individual: IndividualTenantData) {
 function isOrganizationTenantComplete(organization: OrganizationTenantData) {
   const baseComplete =
     organization.delegationType !== "" &&
-    organization.regionId !== "" &&
-    organization.cityId !== "" &&
     isUnifiedRecordNumberComplete(organization.unifiedRecordNumber) &&
     isIdNumberComplete(organization.ownerIdNumber) &&
     isBirthDateComplete(organization.ownerBirthDate) &&

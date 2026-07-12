@@ -5,7 +5,6 @@ import {
   isOwnerDataComplete,
   type OwnerValidationIssue,
 } from "@/lib/validation/owner-step-validation";
-import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
 
 export const PROPERTY_HAS_AGENT_OPTIONS = ["yes", "no"] as const;
 
@@ -48,7 +47,7 @@ export const EMPTY_PROPERTY_OWNER_DATA: PropertyOwnerDataState = {
   fullName: "",
   idNumber: "",
   birthDate: EMPTY_PROPERTY_BIRTH_DATE,
-  phone: "",
+  phone: "05",
   iban: "",
   hasAgent: "",
 };
@@ -56,21 +55,16 @@ export const EMPTY_PROPERTY_OWNER_DATA: PropertyOwnerDataState = {
 export const EMPTY_PROPERTY_AGENT_DATA: PropertyAgentDataState = {
   idNumber: "",
   birthDate: { ...EMPTY_PROPERTY_BIRTH_DATE, calendarType: "gregorian" },
-  phone: "",
+  phone: "05",
   powerOfAttorneyFiles: [],
 };
 
 export const PROPERTY_OWNER_STEP_MAX_PHASE_COUNT = 2;
 
-export type PropertyOwnerValidationIssue =
-  | OwnerValidationIssue
-  | "iban"
-  | "ibanInvalid";
+export type PropertyOwnerValidationIssue = OwnerValidationIssue;
 
 export function isPropertyOwnerDataComplete(ownerData: PropertyOwnerDataState) {
-  return (
-    isOwnerDataComplete(ownerData) && isPropertyOwnerIbanComplete(ownerData.iban)
-  );
+  return isOwnerDataComplete(ownerData);
 }
 
 export function isPropertyAgentDataComplete(
@@ -87,18 +81,7 @@ export function isPropertyAgentDataComplete(
 export function getPropertyOwnerValidationIssues(
   ownerData: PropertyOwnerDataState,
 ): PropertyOwnerValidationIssue[] {
-  const issues = getOwnerDataValidationIssues(
-    ownerData,
-  ) as PropertyOwnerValidationIssue[];
-
-  const iban = ownerData.iban ?? "";
-  if (!iban.trim()) {
-    issues.push("iban");
-  } else if (!isPropertyOwnerIbanComplete(iban)) {
-    issues.push("ibanInvalid");
-  }
-
-  return issues;
+  return getOwnerDataValidationIssues(ownerData);
 }
 
 export function getPropertyAgentValidationIssues(

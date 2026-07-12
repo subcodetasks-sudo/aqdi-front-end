@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 import CreatePropertyAgentDataPhase from "@/features/create-property/components/create-property-agent-data-phase";
 import CreatePropertyOwnerDataPhase from "@/features/create-property/components/create-property-owner-data-phase";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
@@ -19,6 +22,7 @@ export default function CreatePropertyOwnerStep({
   onBack,
   onComplete,
 }: CreatePropertyOwnerStepProps) {
+  const t = useTranslations("createProperty");
   const {
     currentPhaseIndex,
     ownerData,
@@ -45,6 +49,7 @@ export default function CreatePropertyOwnerStep({
 
   function handleContinue() {
     if (!canContinue) {
+      toast.error(t("incompleteContinue"));
       return;
     }
 
@@ -95,7 +100,6 @@ export default function CreatePropertyOwnerStep({
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={labels.navigation.continue}
-        canContinue={canContinue}
         onPrevious={handlePrevious}
         onContinue={handleContinue}
       />

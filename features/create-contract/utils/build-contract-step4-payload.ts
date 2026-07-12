@@ -73,8 +73,6 @@ export function buildContractStep4Body({
     const { organization } = tenantData;
 
     body.tenant_entity = "institution";
-    body.region_of_the_tenant_legal_agent = organization.regionId as number;
-    body.city_of_the_tenant_legal_agent = organization.cityId as number;
     body.tenant_entity_unified_registry_number =
       organization.unifiedRecordNumber.replace(/\D/g, "");
     body.authorization_type = mapTenantDelegationToAuthorizationType(

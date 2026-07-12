@@ -15,6 +15,10 @@ import {
   type NationalAddressMapLocation,
 } from "@/features/create-contract/types/national-address";
 import {
+  EMPTY_MANUAL_NATIONAL_ADDRESS,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
+import {
   EMPTY_FINANCE_DATA,
   type FinanceDataState,
 } from "@/features/create-contract/types/finance-step";
@@ -92,6 +96,7 @@ type DeedDraftState = {
   nationalAddressPhotoFiles: File[];
   nationalAddressPhotoPersistedFiles: PersistedFile[];
   nationalAddressLinkUrl: string;
+  nationalAddressManual: ManualNationalAddressData;
   mapLocation: NationalAddressMapLocation;
 };
 
@@ -141,6 +146,7 @@ type CreateContractDraftStore = {
   setNationalAddressMethod: (method: NationalAddressMethodId) => void;
   setNationalAddressPhotoFiles: (files: File[]) => Promise<void>;
   setNationalAddressLinkUrl: (url: string) => void;
+  setNationalAddressManual: (value: ManualNationalAddressData) => void;
   setMapLocation: (location: NationalAddressMapLocation) => void;
   setOwnerPhaseIndex: (index: number) => void;
   setOwnerData: (data: OwnerDataState) => void;
@@ -194,6 +200,7 @@ const INITIAL_DEED: DeedDraftState = {
   nationalAddressPhotoFiles: [],
   nationalAddressPhotoPersistedFiles: [],
   nationalAddressLinkUrl: "",
+  nationalAddressManual: { ...EMPTY_MANUAL_NATIONAL_ADDRESS },
   mapLocation: DEFAULT_NATIONAL_ADDRESS_LOCATION,
 };
 
@@ -214,8 +221,11 @@ function parseMapLocation(
 function buildDeedDraftFromProperty(
   property: ExistingPropertyContractContext["property"],
 ): DeedDraftState {
-  const nationalAddressMethod: NationalAddressMethodId = property.address_url
-    ? "link"
+  const addressUrl = property.address_url?.trim() ?? "";
+  const nationalAddressMethod: NationalAddressMethodId = addressUrl
+    ? /^https?:\/\//i.test(addressUrl)
+      ? "link"
+      : "manual"
     : property.image_address
       ? "photo"
       : "map";
@@ -224,7 +234,7 @@ function buildDeedDraftFromProperty(
     ...INITIAL_DEED,
     selectedDeedType: mapInstrumentTypeToDeedType(property.instrument_type),
     nationalAddressMethod,
-    nationalAddressLinkUrl: property.address_url ?? "",
+    nationalAddressLinkUrl: addressUrl,
     mapLocation: parseMapLocation(property.latitude, property.longitude),
   };
 }
@@ -234,11 +244,17 @@ function buildDeedDraftFromUncompleted(
 ): DeedDraftState {
   const step1 = data.step1;
   const step2 = data.step2;
-  const addressUrl = step2?.address_url ?? step1?.address_url ?? "";
+  const addressUrl = (
+    step2?.address_url ??
+    step1?.address_url ??
+    ""
+  ).trim();
   const imageAddress = step2?.image_address ?? null;
 
   const nationalAddressMethod: NationalAddressMethodId = addressUrl
-    ? "link"
+    ? /^https?:\/\//i.test(addressUrl)
+      ? "link"
+      : "manual"
     : imageAddress
       ? "photo"
       : "map";
@@ -548,6 +564,10 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         set((state) => ({
           deed: { ...state.deed, nationalAddressLinkUrl: url },
         })),
+      setNationalAddressManual: (value) =>
+        set((state) => ({
+          deed: { ...state.deed, nationalAddressManual: value },
+        })),
       setMapLocation: (location) =>
         set((state) => {
           const hasLocationChanged =
@@ -782,6 +802,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           nationalAddressPhotoPersistedFiles:
             state.deed.nationalAddressPhotoPersistedFiles,
           nationalAddressLinkUrl: state.deed.nationalAddressLinkUrl,
+          nationalAddressManual: state.deed.nationalAddressManual,
           mapLocation: state.deed.mapLocation,
         },
         owner: {
@@ -802,8 +823,6 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             individual: state.tenant.tenantData.individual,
             organization: {
               delegationType: state.tenant.tenantData.organization.delegationType,
-              regionId: state.tenant.tenantData.organization.regionId,
-              cityId: state.tenant.tenantData.organization.cityId,
               unifiedRecordNumber:
                 state.tenant.tenantData.organization.unifiedRecordNumber,
               ownerIdNumber: state.tenant.tenantData.organization.ownerIdNumber,

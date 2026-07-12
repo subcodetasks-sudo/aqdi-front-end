@@ -39,6 +39,13 @@ export type PropertyWithUnitsApiData = {
   copy_of_guardians_power_of_attorney_for_agent: string | null;
   image_address: string | null;
   address_url: string | null;
+  property_place_id?: number | string | null;
+  property_city_id?: number | string | null;
+  neighborhood?: string | null;
+  street?: string | null;
+  building_number?: string | null;
+  postal_code?: string | null;
+  extra_figure?: string | null;
   latitude: string | null;
   longitude: string | null;
   name_owner: string | null;

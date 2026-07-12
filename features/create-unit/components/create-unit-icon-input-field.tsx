@@ -16,6 +16,8 @@ type CreateUnitIconInputFieldProps = {
   dir?: "ltr" | "rtl";
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   maxLength?: number;
+  required?: boolean;
+  hideLabel?: boolean;
 };
 
 export default function CreateUnitIconInputField({
@@ -28,12 +30,22 @@ export default function CreateUnitIconInputField({
   dir,
   inputMode,
   maxLength,
+  required = true,
+  hideLabel = false,
 }: CreateUnitIconInputFieldProps) {
   const inputId = useId();
 
   return (
     <div>
-      <CreateUnitFieldLabel label={label} />
+      {hideLabel ? null : (
+        required ? (
+          <CreateUnitFieldLabel label={label} />
+        ) : (
+          <label className="mb-2 block text-sm font-semibold text-brand">
+            {label}
+          </label>
+        )
+      )}
 
       <div
         dir={dir}

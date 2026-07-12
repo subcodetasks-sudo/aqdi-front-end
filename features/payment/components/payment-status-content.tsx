@@ -1,11 +1,11 @@
 import { AlertCircle, CircleCheck, FileText, Hash, Home, ListOrdered } from "lucide-react";
 import Link from "next/link";
 
-import AuthBackButton from "@/features/auth/components/auth-back-button";
 import { Button } from "@/components/ui/button";
 import type { ContractPaymentStatusSource } from "@/features/create-contract/services/get-contract-payment-status";
 import type { ContractPaymentStatusData } from "@/features/create-contract/types/contract-payment";
 import PaymentRetryButton from "@/features/payment/components/payment-retry-button";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import CustomIcon from "@/features/shared/components/custom-icon";
 
 type PaymentStatusContentProps = {
@@ -51,10 +51,12 @@ export default function PaymentStatusContent({
     : `#${contractNumber}`;
 
   return (
-    <section className="container py-8 lg:py-10">
-      <div className="mb-6 flex justify-start md:mb-8">
-        <AuthBackButton label={backLabel} title={pageTitle} href="/requests" />
-      </div>
+    <>
+      <ServicesPageBackConfig
+        backLabel={backLabel}
+        backHref="/requests"
+        pageTitle={pageTitle}
+      />
 
       <div className="mx-auto w-full max-w-2xl space-y-4">
         <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
@@ -199,6 +201,6 @@ export default function PaymentStatusContent({
           </div>
         </div>
       </div>
-    </section>
+    </>
   );
 }

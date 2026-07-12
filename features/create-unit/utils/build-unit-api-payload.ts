@@ -20,40 +20,65 @@ function parseArea(value: string) {
 }
 
 export function buildUnitFieldsPayload(unitData: UnitDataState) {
-  const roomsCount = parseCount(unitData.roomsCount);
-  const hallsCount = parseCount(unitData.hallsCount);
-  const kitchensCount = parseCount(unitData.kitchensCount);
-  const bathroomsCount = parseCount(unitData.bathroomsCount);
-  const windowAcCount = parseCount(unitData.windowAcCount);
-  const splitAcCount = parseCount(unitData.splitAcCount);
-
-  return {
+  const payload: Record<string, string | number | boolean | []> = {
     unit_type_id: Number(unitData.unitTypeId),
     unit_usage_id: Number(unitData.unitUsageId),
     unit_number: unitData.unitNumber.trim(),
     floor_number: parseFloorNumber(unitData.floorNumber),
     unit_area: parseArea(unitData.totalArea),
-    Services: [] as [],
-    tootal_rooms: roomsCount,
-    number_of_rooms: roomsCount,
-    The_number_of_halls: hallsCount,
-    The_number_of_kitchens: kitchensCount,
-    The_number_of_toilets: bathroomsCount,
-    The_number_of_the_toilet: bathroomsCount,
-    window_ac: windowAcCount,
-    split_ac: splitAcCount,
-    electricity_meter_number: unitData.addElectricityMeter
-      ? unitData.electricityMeterNumber.trim()
-      : "",
-    water_meter_number: unitData.addWaterMeter
-      ? unitData.waterMeterNumber.trim()
-      : "",
-    kitchen_tank: unitData.kitchenCabinetsInstalled,
-    furnished: unitData.furnished,
-    type_furnished: unitData.furnished && unitData.furnishingType === "new",
-    electricity_meter: unitData.addElectricityMeter,
-    water_meter: unitData.addWaterMeter,
+    Services: [],
   };
+
+  if (unitData.roomsCount !== "") {
+    const roomsCount = parseCount(unitData.roomsCount);
+    payload.tootal_rooms = roomsCount;
+    payload.number_of_rooms = roomsCount;
+  }
+
+  if (unitData.hallsCount !== "") {
+    payload.The_number_of_halls = parseCount(unitData.hallsCount);
+  }
+
+  if (unitData.kitchensCount !== "") {
+    payload.The_number_of_kitchens = parseCount(unitData.kitchensCount);
+  }
+
+  if (unitData.bathroomsCount !== "") {
+    const bathroomsCount = parseCount(unitData.bathroomsCount);
+    payload.The_number_of_toilets = bathroomsCount;
+    payload.The_number_of_the_toilet = bathroomsCount;
+  }
+
+  if (unitData.windowAcCount !== "") {
+    payload.window_ac = parseCount(unitData.windowAcCount);
+  }
+
+  if (unitData.splitAcCount !== "") {
+    payload.split_ac = parseCount(unitData.splitAcCount);
+  }
+
+  if (unitData.kitchenCabinetsInstalled) {
+    payload.kitchen_tank = true;
+  }
+
+  if (unitData.furnished && unitData.furnishingType !== "") {
+    payload.furnished = true;
+    payload.type_furnished = unitData.furnishingType === "new";
+  }
+
+  const electricityMeterNumber = unitData.electricityMeterNumber.trim();
+  if (unitData.addElectricityMeter && electricityMeterNumber !== "") {
+    payload.electricity_meter = true;
+    payload.electricity_meter_number = electricityMeterNumber;
+  }
+
+  const waterMeterNumber = unitData.waterMeterNumber.trim();
+  if (unitData.addWaterMeter && waterMeterNumber !== "") {
+    payload.water_meter = true;
+    payload.water_meter_number = waterMeterNumber;
+  }
+
+  return payload;
 }
 
 export function buildUnitApiPayload(

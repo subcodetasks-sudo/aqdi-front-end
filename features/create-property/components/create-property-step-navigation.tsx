@@ -2,12 +2,10 @@ import { ChevronLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import CustomIcon from "@/features/shared/components/custom-icon";
-import { cn } from "@/lib/utils";
 
 type CreatePropertyStepNavigationProps = {
   previousLabel: string;
   continueLabel: string;
-  canContinue: boolean;
   isSubmitting?: boolean;
   onPrevious: () => void;
   onContinue: () => void;
@@ -16,7 +14,6 @@ type CreatePropertyStepNavigationProps = {
 export default function CreatePropertyStepNavigation({
   previousLabel,
   continueLabel,
-  canContinue,
   isSubmitting = false,
   onPrevious,
   onContinue,
@@ -36,13 +33,8 @@ export default function CreatePropertyStepNavigation({
       <Button
         type="button"
         onClick={onContinue}
-        disabled={!canContinue || isSubmitting}
-        className={cn(
-          "h-12 flex-1 rounded-xl text-base font-extrabold",
-          canContinue && !isSubmitting
-            ? "bg-linear-to-br from-brand-secondary via-brand to-brand text-white hover:opacity-90"
-            : "bg-white text-[#bdbdbd] shadow-sm",
-        )}
+        disabled={isSubmitting}
+        className="h-12 flex-1 rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:opacity-90 disabled:opacity-70"
       >
         <CustomIcon src="/icons/arrow-r.svg" size={24} />
         {continueLabel}

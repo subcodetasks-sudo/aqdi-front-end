@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/lib/api/constants";
+import { formatSaudiMobileForForm } from "@/lib/validation/format-saudi-mobile-for-form";
 import {
   EMPTY_AGENT_DATA,
   EMPTY_BIRTH_DATE,
@@ -63,21 +64,20 @@ export function parseContractBirthDate(
 }
 
 export function formatContractPhoneForForm(phone: string | null) {
-  if (!phone) {
+  return formatSaudiMobileForForm(phone);
+}
+
+function toOptionalCount(value: string | number | null | undefined) {
+  if (value === null || value === undefined || value === "") {
     return "";
   }
 
-  const digits = phone.replace(/\D/g, "");
-
-  if (digits.startsWith("966")) {
-    return `+${digits}`;
+  const parsed = Number(String(value).replace(/\D/g, ""));
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return "";
   }
 
-  if (digits.startsWith("0")) {
-    return `+966${digits.slice(1)}`;
-  }
-
-  return digits.startsWith("+") ? phone : `+966${digits}`;
+  return String(parsed).padStart(2, "0");
 }
 
 function toStringValue(value: string | number | null | undefined) {
@@ -134,16 +134,22 @@ export function buildRentedUnitData(
     totalArea: toStringValue(unit.unit_area),
     floorNumber: toStringValue(unit.floor_number),
     unitNumber: toStringValue(unit.unit_number),
-    roomsCount: toStringValue(unit.number_of_rooms ?? unit.tootal_rooms),
-    hallsCount: toStringValue(unit.The_number_of_halls),
-    kitchensCount: toStringValue(unit.The_number_of_kitchens),
-    bathroomsCount: toStringValue(
+    roomsCount: toOptionalCount(unit.number_of_rooms ?? unit.tootal_rooms),
+    hallsCount: toOptionalCount(unit.The_number_of_halls),
+    majlisCount: "",
+    kitchensCount: toOptionalCount(unit.The_number_of_kitchens),
+    bathroomsCount: toOptionalCount(
       unit.The_number_of_toilets ?? unit.The_number_of_the_toilet,
     ),
-    windowAcCount: toStringValue(unit.window_ac),
-    splitAcCount: toStringValue(unit.split_ac),
+    windowAcCount: toOptionalCount(unit.window_ac),
+    splitAcCount: toOptionalCount(unit.split_ac),
     kitchenCabinetsInstalled: Boolean(unit.kitchen_tank),
     furnished: Boolean(unit.furnished),
+    furnishingType: Boolean(unit.furnished)
+      ? unit.type_furnished
+        ? "new"
+        : "used"
+      : "",
     addElectricityMeter: Boolean(unit.electricity_meter),
     electricityMeterNumber: toStringValue(unit.electricity_meter_number),
     addWaterMeter: Boolean(unit.water_meter),

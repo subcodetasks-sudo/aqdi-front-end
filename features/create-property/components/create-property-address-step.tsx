@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import CreatePropertyNationalAddress from "@/features/create-property/components/create-property-national-address";
@@ -20,6 +21,7 @@ export default function CreatePropertyAddressStep({
   onBack,
   onComplete,
 }: CreatePropertyAddressStepProps) {
+  const tIncomplete = useTranslations("createProperty");
   const {
     method,
     setMethod,
@@ -27,6 +29,8 @@ export default function CreatePropertyAddressStep({
     setPhotoFiles,
     linkUrl,
     setLinkUrl,
+    manualAddress,
+    setManualAddress,
     mapLocation,
     setMapLocation,
     existingAddressImageUrl,
@@ -35,7 +39,12 @@ export default function CreatePropertyAddressStep({
   const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
@@ -67,6 +76,8 @@ export default function CreatePropertyAddressStep({
           existingPhotoUrl={existingAddressImageUrl}
           linkUrl={linkUrl}
           onLinkUrlChange={setLinkUrl}
+          manualAddress={manualAddress}
+          onManualAddressChange={setManualAddress}
           mapLocation={mapLocation}
           onMapLocationChange={setMapLocation}
         />
@@ -77,7 +88,6 @@ export default function CreatePropertyAddressStep({
         continueLabel={
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
-        canContinue={canContinue}
         isSubmitting={isSubmitting}
         onPrevious={onBack}
         onContinue={handleContinue}

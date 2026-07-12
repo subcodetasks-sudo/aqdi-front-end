@@ -91,6 +91,7 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
         const sessionChanged =
           state.propertyId !== propertyId ||
           state.unitId !== nextUnitId ||
+          state.contractType !== contractType ||
           state.currentStep === "success";
 
         if (sessionChanged || options.unitData) {
