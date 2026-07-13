@@ -4,9 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { ContractPaymentStatusSource } from "@/features/create-contract/services/get-contract-payment-status";
 import type { ContractPaymentStatusData } from "@/features/create-contract/types/contract-payment";
+import PaymentContentActionButton from "@/features/payment/components/payment-content-button";
 import PaymentRetryButton from "@/features/payment/components/payment-retry-button";
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import CustomIcon from "@/features/shared/components/custom-icon";
+import {
+  parsePaymentContentButtons,
+  type PaymentContentItem,
+} from "@/features/payment/types/payment-content";
 
 type PaymentStatusContentProps = {
   variant: "success" | "error";
@@ -23,6 +28,7 @@ type PaymentStatusContentProps = {
   retryPaymentLabel: string;
   retryPaymentLoadingLabel: string;
   retryPaymentErrorLabel: string;
+  paymentContent?: PaymentContentItem | null;
   source?: ContractPaymentStatusSource;
   status?: ContractPaymentStatusData | null;
 };
@@ -42,6 +48,7 @@ export default function PaymentStatusContent({
   retryPaymentLabel,
   retryPaymentLoadingLabel,
   retryPaymentErrorLabel,
+  paymentContent = null,
   source = "contract",
   status,
 }: PaymentStatusContentProps) {
@@ -49,6 +56,9 @@ export default function PaymentStatusContent({
   const formattedContractNumber = contractNumber.startsWith("#")
     ? contractNumber
     : `#${contractNumber}`;
+  const apiButtons = parsePaymentContentButtons(paymentContent);
+  const mainText = paymentContent?.message?.trim() || description;
+  const subText = paymentContent?.message?.trim() ? message : "";
 
   return (
     <>
@@ -110,11 +120,13 @@ export default function PaymentStatusContent({
               </div>
 
               <h1 className="text-2xl font-extrabold leading-relaxed text-brand md:text-3xl">
-                {description}
+                {mainText}
               </h1>
-              <p className="mx-auto max-w-md text-sm leading-relaxed text-[#7f7f7f]">
-                {message}
-              </p>
+              {subText ? (
+                <p className="mx-auto max-w-md text-sm leading-relaxed text-[#7f7f7f]">
+                  {subText}
+                </p>
+              ) : null}
             </div>
           </div>
 
@@ -149,7 +161,7 @@ export default function PaymentStatusContent({
               </div>
             ) : null}
 
-            <div className="pt-2 space-y-3">
+            <div className="space-y-3 pt-2">
               {isSuccess ? (
                 <Button
                   asChild
@@ -197,6 +209,14 @@ export default function PaymentStatusContent({
                   </Link>
                 </Button>
               ) : null}
+
+              {apiButtons.map((button, index) => (
+                <PaymentContentActionButton
+                  key={`${button.href}-${button.text}`}
+                  button={button}
+                  variant={index === 0 ? "primary" : "secondary"}
+                />
+              ))}
             </div>
           </div>
         </div>

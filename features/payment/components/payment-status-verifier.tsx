@@ -9,6 +9,7 @@ import {
   resolvePaymentStatusUi,
   type PaymentStatusUiState,
 } from "@/features/payment/utils/resolve-payment-status-ui";
+import type { PaymentContentItem } from "@/features/payment/types/payment-content";
 import { BASE_URL } from "@/lib/api/constants";
 
 type PaymentStatusVerifierLabels = {
@@ -36,6 +37,7 @@ type PaymentStatusVerifierProps = {
   contractUuid: string;
   status: "success" | "error";
   labels: PaymentStatusVerifierLabels;
+  paymentContent?: PaymentContentItem | null;
 };
 
 type VerificationState =
@@ -46,6 +48,7 @@ export default function PaymentStatusVerifier({
   contractUuid,
   status,
   labels,
+  paymentContent = null,
 }: PaymentStatusVerifierProps) {
   const router = useRouter();
   const [verification, setVerification] = useState<VerificationState>({
@@ -182,6 +185,7 @@ export default function PaymentStatusVerifier({
       retryPaymentLabel={labels.retryPaymentLabel}
       retryPaymentLoadingLabel={labels.retryPaymentLoadingLabel}
       retryPaymentErrorLabel={labels.retryPaymentErrorLabel}
+      paymentContent={paymentContent}
       status={verification.statusData}
     />
   );

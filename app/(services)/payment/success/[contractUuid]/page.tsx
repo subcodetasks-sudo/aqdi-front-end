@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import PaymentStatusVerifier from "@/features/payment/components/payment-status-verifier";
+import { getPaymentContent } from "@/features/payment/services/get-payment-content";
 
 type PaymentSuccessPageProps = {
   params: Promise<{
@@ -11,11 +12,13 @@ type PaymentSuccessPageProps = {
 export default async function PaymentSuccessPage({ params }: PaymentSuccessPageProps) {
   const { contractUuid } = await params;
   const t = await getTranslations("paymentStatus");
+  const paymentContent = await getPaymentContent("success");
 
   return (
     <PaymentStatusVerifier
       contractUuid={contractUuid}
       status="success"
+      paymentContent={paymentContent}
       labels={{
         backLabel: t("backLabel"),
         successPageTitle: t("success.pageTitle"),
