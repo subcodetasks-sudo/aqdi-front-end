@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 import { ArrowUpLeft, Menu, X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HiBars2 } from "react-icons/hi2";
 
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,8 @@ import {
   isPropertiesNavActive,
   usePropertiesNavHref,
 } from "@/features/shared/hooks/use-properties-nav-href";
+import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
+import { scrollToSection } from "@/features/shared/utils/scroll-to-section";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
 import { cn } from "@/lib/utils";
@@ -31,6 +34,7 @@ type NavItem = {
   label: string;
   iconSrc: string;
   external?: boolean;
+  scrollToSectionId?: string;
   isActive?: boolean;
 };
 
@@ -75,6 +79,7 @@ export default function NavbarMobileSheet({
   dialogLabels,
 }: NavbarMobileSheetProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const propertiesHref = usePropertiesNavHref();
   const { user } = useAuthStore();
 
@@ -88,15 +93,35 @@ export default function NavbarMobileSheet({
     },
     { href: "/requests", label: requests, iconSrc: "/icons/bag.svg" },
     {
-      href: "/app",
+      href: `/#${APP_SECTION_ID}`,
       label: downloadApp,
       iconSrc: "/icons/app.svg",
-      external: true,
+      scrollToSectionId: APP_SECTION_ID,
     },
   ];
 
   const topLinkClassName =
     "text-base font-bold text-black transition-colors hover:text-brand";
+
+  function handleNavItemClick(
+    event: MouseEvent<HTMLAnchorElement>,
+    scrollToSectionId?: string,
+  ) {
+    if (!scrollToSectionId) {
+      return;
+    }
+
+    if (scrollToSection(scrollToSectionId)) {
+      event.preventDefault();
+      window.history.replaceState(null, "", `#${scrollToSectionId}`);
+      return;
+    }
+
+    if (pathname !== "/") {
+      event.preventDefault();
+      router.push(`/#${APP_SECTION_ID}`);
+    }
+  }
 
   return (
     <Sheet>
@@ -147,6 +172,9 @@ export default function NavbarMobileSheet({
                 <SheetClose asChild key={item.label}>
                   <Link
                     href={item.href}
+                    onClick={(event) =>
+                      handleNavItemClick(event, item.scrollToSectionId)
+                    }
                     className={cn(
                       "inline-flex items-center gap-2 font-bold transition-colors hover:text-brand text-base",
                       active ? "text-brand" : "text-black",
@@ -159,7 +187,7 @@ export default function NavbarMobileSheet({
                       <CustomIcon src={item.iconSrc} size={16} />
                     </span>
                     <span className="leading-none">{item.label}</span>
-                    {item.external ? (
+                    {item.external || item.scrollToSectionId ? (
                       <ArrowUpLeft
                         className="size-4 text-brand-secondary"
                         aria-hidden="true"

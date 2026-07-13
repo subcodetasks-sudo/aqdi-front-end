@@ -589,6 +589,37 @@ export default async function CreateContractPage({
         termsHref: t("payment.disclaimer.termsHref"),
         privacyHref: t("payment.disclaimer.privacyHref"),
       },
+      methodDialog: {
+        title: t("payment.methodDialog.title"),
+        question: t("payment.methodDialog.question"),
+        submitting: t("payment.methodDialog.submitting"),
+        draft: {
+          title: t("payment.methodDialog.draft.title"),
+          description: t("payment.methodDialog.draft.description"),
+        },
+        payNow: {
+          title: t("payment.methodDialog.payNow.title"),
+          description: t("payment.methodDialog.payNow.description"),
+        },
+        missingContractSession: t("payment.methodDialog.missingContractSession"),
+        draftError: t("payment.methodDialog.draftError"),
+      },
+      draftSuccessDialog: {
+        title: t("payment.draftSuccessDialog.title"),
+        paymentStatusLabel: t("payment.draftSuccessDialog.paymentStatusLabel"),
+        paymentStatusDescription: t(
+          "payment.draftSuccessDialog.paymentStatusDescription",
+        ),
+        orderNumberLabel: t("payment.draftSuccessDialog.orderNumberLabel"),
+        copy: t("payment.draftSuccessDialog.copy"),
+        copySuccess: t("payment.draftSuccessDialog.copySuccess"),
+        copyError: t("payment.draftSuccessDialog.copyError"),
+        preparationDescription: t(
+          "payment.draftSuccessDialog.preparationDescription",
+        ),
+        whatsappCta: t("payment.draftSuccessDialog.whatsappCta"),
+        whatsappHref: t("payment.draftSuccessDialog.whatsappHref"),
+      },
     },
     prices: {
       residential: t("prices.residential"),

@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
-import { getToken } from "firebase/messaging";
-import { getFirebaseMessaging } from "../services/firebase-client";
 
-export const useFcm = (vapidKey: string) => {
+import { getFcmToken } from "@/features/notifications/services/get-fcm-token";
+
+export const useFcm = () => {
   const [token, setToken] = useState<string | null>(null);
   const [notificationPermission, setNotificationPermission] = useState<
     NotificationPermission | "unsupported"
@@ -21,22 +21,15 @@ export const useFcm = (vapidKey: string) => {
 
     setIsLoading(true);
     try {
-      const permission = await Notification.requestPermission();
-      setNotificationPermission(permission);
-
-      if (permission === "granted") {
-        const messagingInstance = getFirebaseMessaging();
-        if (messagingInstance) {
-          const deviceToken = await getToken(messagingInstance, { vapidKey });
-          setToken(deviceToken);
-        }
-      }
+      const deviceToken = await getFcmToken({ requestPermission: true });
+      setNotificationPermission(Notification.permission);
+      setToken(deviceToken);
     } catch (error) {
       console.error("Failed to request notification permission:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [vapidKey]);
+  }, []);
 
   return {
     token,

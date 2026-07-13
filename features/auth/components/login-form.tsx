@@ -19,6 +19,7 @@ import {
 } from "@/features/auth/schemas/login-schema";
 import { loginUser } from "@/features/auth/services/login-user";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { getFcmToken } from "@/features/notifications/services/get-fcm-token";
 import { getSafeCallbackUrl } from "@/lib/auth/auth-routes";
 
 export default function LoginForm() {
@@ -46,7 +47,9 @@ export default function LoginForm() {
   const { isSubmitting } = form.formState;
 
   async function onSubmit(values: LoginFormValues) {
-    const response = await loginUser(values);
+    const fcmToken = await getFcmToken({ requestPermission: true });
+    const response = await loginUser({ ...values, fcmToken });
+console.log("fcmToken", fcmToken);
 
     if (!response.ok) {
       toast.error(response.error || t("submitError"));

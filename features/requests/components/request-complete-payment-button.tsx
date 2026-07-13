@@ -1,51 +1,54 @@
 "use client";
 
 import { CreditCard } from "lucide-react";
-import { useState } from "react";
 
-import { useStartContractPayment } from "@/features/create-contract/hooks/use-start-contract-payment";
+import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
+import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
+import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 
 type RequestCompletePaymentButtonProps = {
+  contractId: number;
   contractUuid: string;
   label: string;
   payingLabel: string;
-  errorLabel: string;
+  paymentFlowLabels: ContractPaymentMethodLabels;
 };
 
 export default function RequestCompletePaymentButton({
+  contractId,
   contractUuid,
   label,
   payingLabel,
-  errorLabel,
+  paymentFlowLabels,
 }: RequestCompletePaymentButtonProps) {
-  const { startPayment, isPaying } = useStartContractPayment();
-  const [isLoading, setIsLoading] = useState(false);
-
-  async function handleClick() {
-    if (isLoading || isPaying) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      await startPayment(contractUuid, errorLabel);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const isDisabled = isLoading || isPaying;
+  const paymentFlow = useContractPaymentMethodFlow(
+    contractId,
+    contractUuid,
+    paymentFlowLabels,
+  );
 
   return (
-    <button
-      type="button"
-      onClick={() => void handleClick()}
-      disabled={isDisabled}
-      className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      <CreditCard className="size-4" aria-hidden="true" />
-      {isDisabled ? payingLabel : label}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={paymentFlow.openMethodDialog}
+        disabled={paymentFlow.isSubmitting}
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <CreditCard className="size-4" aria-hidden="true" />
+        {paymentFlow.isSubmitting ? payingLabel : label}
+      </button>
+
+      <ContractPaymentMethodFlowDialogs
+        labels={paymentFlowLabels}
+        isMethodDialogOpen={paymentFlow.isMethodDialogOpen}
+        onMethodDialogOpenChange={paymentFlow.setIsMethodDialogOpen}
+        isDraftSuccessDialogOpen={paymentFlow.isDraftSuccessDialogOpen}
+        onDraftSuccessDialogOpenChange={paymentFlow.setIsDraftSuccessDialogOpen}
+        draftOrderUuid={paymentFlow.draftOrderUuid}
+        isSubmitting={paymentFlow.isSubmitting}
+        onSelect={paymentFlow.handlePaymentMethodSelect}
+      />
+    </>
   );
 }

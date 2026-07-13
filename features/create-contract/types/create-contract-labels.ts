@@ -491,6 +491,33 @@ export type CreateContractLabels = {
       termsHref: string;
       privacyHref: string;
     };
+    methodDialog: {
+      title: string;
+      question: string;
+      submitting: string;
+      draft: {
+        title: string;
+        description: string;
+      };
+      payNow: {
+        title: string;
+        description: string;
+      };
+      missingContractSession: string;
+      draftError: string;
+    };
+    draftSuccessDialog: {
+      title: string;
+      paymentStatusLabel: string;
+      paymentStatusDescription: string;
+      orderNumberLabel: string;
+      copy: string;
+      copySuccess: string;
+      copyError: string;
+      preparationDescription: string;
+      whatsappCta: string;
+      whatsappHref: string;
+    };
   };
   prices: {
     residential: string;

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
+import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
 import MobileAppBtns from "@/features/shared/components/mobile-app-btns";
 import MobileAppLable from "@/features/shared/components/mobile-app-lable";
 
@@ -8,7 +9,7 @@ export default async function AppSection() {
   const t = await getTranslations("appSection");
 
   return (
-    <section className="py-16 md:py-20">
+    <section id={APP_SECTION_ID} className="scroll-mt-36 py-16 md:py-20">
       <div className="container space-y-10 md:space-y-12">
         <header className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
           <p className="text-sm font-bold text-brand">{t("eyebrow")}</p>

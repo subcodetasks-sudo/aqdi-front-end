@@ -2,13 +2,14 @@ import { CircleHelp, Headphones } from "lucide-react";
 
 import RequestCompletePaymentButton from "@/features/requests/components/request-complete-payment-button";
 import RequestEditContractButton from "@/features/requests/components/request-edit-contract-button";
+import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
 
 type RequestCardActionsProps = {
   card: Pick<
     RequestCardData,
-    "actionType" | "uuid" | "contractType" | "showViewEdit"
+    "actionType" | "uuid" | "contractId" | "contractType" | "showViewEdit"
   >;
   labels: RequestCardLabels;
 };
@@ -38,10 +39,11 @@ export default function RequestCardActions({
           {labels.completePaymentHint}
         </p>
         <RequestCompletePaymentButton
+          contractId={card.contractId}
           contractUuid={card.uuid}
           label={labels.completePayment}
           payingLabel={labels.completePaymentLoading}
-          errorLabel={labels.completePaymentError}
+          paymentFlowLabels={labels.paymentFlow}
         />
       </div>
     );

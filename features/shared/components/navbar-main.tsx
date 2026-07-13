@@ -16,6 +16,7 @@ import {
   isPropertiesNavActive,
   usePropertiesNavHref,
 } from "@/features/shared/hooks/use-properties-nav-href";
+import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ type NavItem = {
   label: string;
   icon: ReactNode;
   external?: boolean;
+  scrollToSectionId?: string;
   isActive?: boolean;
 };
 
@@ -95,10 +97,10 @@ export default function NavbarMain({
       icon: <CustomIcon src="/icons/bag.svg" size={16} />,
     },
     {
-      href: "/app",
+      href: `/#${APP_SECTION_ID}`,
       label: downloadApp,
       icon: <CustomIcon src="/icons/app.svg" size={16} />,
-      external: true,
+      scrollToSectionId: APP_SECTION_ID,
     },
   ];
 

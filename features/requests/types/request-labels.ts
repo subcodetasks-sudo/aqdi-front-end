@@ -1,3 +1,4 @@
+import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { RequestCardData } from "@/features/requests/types/request";
 
 export type RequestCardLabels = {
@@ -11,7 +12,7 @@ export type RequestCardLabels = {
   completePaymentHint: string;
   completePayment: string;
   completePaymentLoading: string;
-  completePaymentError: string;
+  paymentFlow: ContractPaymentMethodLabels;
   helpCenter: string;
   whenReceiveContract: string;
   status: {

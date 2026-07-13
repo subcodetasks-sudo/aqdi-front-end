@@ -9,6 +9,7 @@ type LoginUserPayload = {
   phone: string;
   password: string;
   rememberMe: boolean;
+  fcmToken?: string | null;
 };
 
 export async function loginUser(payload: LoginUserPayload) {
@@ -17,6 +18,7 @@ export async function loginUser(payload: LoginUserPayload) {
     body: JSON.stringify({
       mobile: getSaudiMobileForApi(payload.phone),
       password: payload.password,
+      ...(payload.fcmToken ? { fcm_token: payload.fcmToken } : {}),
     }),
     cache: "no-store",
   });

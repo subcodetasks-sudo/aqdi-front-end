@@ -1,43 +1,97 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getMessaging,
+  isSupported,
   onMessage,
-  Messaging,
-  MessagePayload,
+  type Messaging,
+  type MessagePayload,
 } from "firebase/messaging";
+import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { getAnalytics, isSupported as isAnalyticsSupported, type Analytics } from "firebase/analytics";
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-};
+import {
+  getFirebaseClientConfig,
+  isFirebaseConfigured,
+} from "@/features/notifications/services/firebase-config";
 
-// Initialize Firebase only once
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-
+let app: FirebaseApp | null = null;
+let analytics: Analytics | null = null;
 let messaging: Messaging | null = null;
+let messagingSupport: boolean | null = null;
 
-// Singleton pattern for Messaging, only in the browser
-export const getFirebaseMessaging = (): Messaging | null => {
-  if (typeof window !== "undefined" && !messaging) {
-    messaging = getMessaging(app);
+function getFirebaseApp() {
+  if (!isFirebaseConfigured()) {
+    return null;
   }
-  return messaging;
-};
 
-// Helper for listening to messages in the foreground
+  if (!app) {
+    app =
+      getApps().length === 0 ? initializeApp(getFirebaseClientConfig()) : getApp();
+  }
+
+  return app;
+}
+
+export async function initFirebaseAnalytics() {
+  if (typeof window === "undefined" || analytics) {
+    return analytics;
+  }
+
+  const firebaseApp = getFirebaseApp();
+  if (!firebaseApp) {
+    return null;
+  }
+
+  const supported = await isAnalyticsSupported();
+  if (!supported) {
+    return null;
+  }
+
+  analytics = getAnalytics(firebaseApp);
+  return analytics;
+}
+
+async function isMessagingSupported() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (messagingSupport === null) {
+    messagingSupport = await isSupported();
+  }
+
+  return messagingSupport;
+}
+
+export async function getFirebaseMessagingAsync(): Promise<Messaging | null> {
+  if (typeof window === "undefined" || messaging) {
+    return messaging;
+  }
+
+  const supported = await isMessagingSupported();
+  if (!supported) {
+    return null;
+  }
+
+  const firebaseApp = getFirebaseApp();
+  if (!firebaseApp) {
+    return null;
+  }
+
+  messaging = getMessaging(firebaseApp);
+  return messaging;
+}
+
+export const getFirebaseMessaging = (): Messaging | null => messaging;
+
 export const onForegroundMessage = (
-  callback: (payload: MessagePayload) => void
+  callback: (payload: MessagePayload) => void,
 ) => {
   const messagingInstance = getFirebaseMessaging();
   if (messagingInstance) {
     return onMessage(messagingInstance, (payload: MessagePayload) => {
-      console.log("Foreground message received:", payload);
       callback(payload);
     });
   }
+
   return () => {};
 };

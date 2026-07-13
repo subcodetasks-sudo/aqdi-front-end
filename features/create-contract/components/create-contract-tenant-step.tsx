@@ -157,7 +157,13 @@ export default function CreateContractTenantStep({
 
     const result = await saveDraft();
 
-    if (!result) {
+    if (!result.ok) {
+      if (result.error === "missingContractSession") {
+        toast.error(labels.missingContractSession);
+        return;
+      }
+
+      toast.error(result.error || labels.saveLaterError);
       return;
     }
 

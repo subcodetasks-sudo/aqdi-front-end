@@ -1906,6 +1906,33 @@
         "privacyLink": "Privacy Policy",
         "termsHref": "/terms",
         "privacyHref": "/privacy"
+      },
+      "methodDialog": {
+        "title": "Choose how to receive the contract",
+        "question": "Choose receipt type?",
+        "submitting": "Processing...",
+        "draft": {
+          "title": "I want to receive the contract draft first",
+          "description": "We will send the contract draft via WhatsApp before payment"
+        },
+        "payNow": {
+          "title": "I want to pay now",
+          "description": "We will send the contract draft via WhatsApp after payment"
+        },
+        "missingContractSession": "Contract session is missing. Please restart the contract flow.",
+        "draftError": "Could not save the contract draft. Please try again."
+      },
+      "draftSuccessDialog": {
+        "title": "Congratulations, your request was received successfully!",
+        "paymentStatusLabel": "Payment status: Incomplete",
+        "paymentStatusDescription": "The client wishes to receive the contract draft first, then complete payment",
+        "orderNumberLabel": "Your order number",
+        "copy": "Copy",
+        "copySuccess": "Order number copied",
+        "copyError": "Could not copy the order number",
+        "preparationDescription": "Our team will prepare the contract draft and send it to you via WhatsApp for review",
+        "whatsappCta": "Aqdi team is happy to hear from you",
+        "whatsappHref": "https://wa.me/"
       }
     }
   },
