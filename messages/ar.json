@@ -1033,7 +1033,6 @@
           "placeholder": "إختر من هنا .."
         },
         "methods": {
-          "map": "خريطة العنوان",
           "photo": "صورة العنوان",
           "link": "رابط العنوان",
           "manual": "ادخال تفاصيل العنوان"
@@ -1447,7 +1446,6 @@
           "placeholder": "إختر من هنا .."
         },
         "methods": {
-          "map": "خريطة العنوان",
           "photo": "صورة العنوان",
           "link": "رابط العنوان",
           "manual": "ادخال تفاصيل العنوان"
@@ -1875,7 +1873,15 @@
       "contractDuration": {
         "label": "مدة العقد",
         "loading": "جاري تحميل مدد العقد...",
-        "optionsError": "فشل تحميل مدد العقد"
+        "optionsError": "فشل تحميل مدد العقد",
+        "otherOption": "أخرى",
+        "custom": {
+          "yearOption": "'{'count'}' سنة",
+          "monthOption": "+ '{'count'}' شهر",
+          "monthOptionZero": "بدون أشهر",
+          "loadingPreview": "جاري حساب رسوم التوثيق...",
+          "previewError": "فشل تحميل معاينة رسوم التوثيق"
+        }
       },
       "totalRentAmount": {
         "label": "مبلغ الايجار الاجمالي",
@@ -1927,6 +1933,7 @@
         "vat": "قيمة الضريبة :",
         "applicationFees": "رسوم التطبيق :",
         "services": "الخدمات الإضافية :",
+        "docFee": "رسوم التوثيق :",
         "total": "الاجمالي :",
         "currency": "ر.س",
         "ejarLogoAlt": "إيجار"
@@ -2001,7 +2008,10 @@
       "description": "لم تتم عملية الدفع"
     },
     "contractNumberLabel": "رقم العقد",
-    "contractIdLabel": "معرّف العقد",
+    "contractTypeLabel": "نوع العقد",
+    "paidAmountLabel": "المبلغ المدفوع",
+    "housingContractTypeLabel": "سكني",
+    "commercialContractTypeLabel": "تجاري",
     "backToRequests": "العودة إلى الطلبات",
     "backToHome": "العودة للرئيسية",
     "retryPayment": "إعادة محاولة الدفع",

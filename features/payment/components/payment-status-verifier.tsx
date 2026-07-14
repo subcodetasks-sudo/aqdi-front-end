@@ -21,7 +21,10 @@ type PaymentStatusVerifierLabels = {
   errorTitle: string;
   errorDescription: string;
   contractNumberLabel: string;
-  contractIdLabel: string;
+  contractTypeLabel: string;
+  paidAmountLabel: string;
+  housingContractTypeLabel: string;
+  commercialContractTypeLabel: string;
   backToRequestsLabel: string;
   backToHomeLabel: string;
   retryPaymentLabel: string;
@@ -178,7 +181,10 @@ export default function PaymentStatusVerifier({
       }
       message={verification.message}
       contractNumberLabel={labels.contractNumberLabel}
-      contractIdLabel={labels.contractIdLabel}
+      contractTypeLabel={labels.contractTypeLabel}
+      paidAmountLabel={labels.paidAmountLabel}
+      housingContractTypeLabel={labels.housingContractTypeLabel}
+      commercialContractTypeLabel={labels.commercialContractTypeLabel}
       contractNumber={contractUuid}
       backToRequestsLabel={labels.backToRequestsLabel}
       backToHomeLabel={labels.backToHomeLabel}

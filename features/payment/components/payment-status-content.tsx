@@ -1,9 +1,10 @@
-import { AlertCircle, CircleCheck, FileText, Hash, Home, ListOrdered } from "lucide-react";
+import { AlertCircle, CircleCheck, FileText, Hash, Home, ListOrdered, Wallet } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import type { ContractPaymentStatusSource } from "@/features/create-contract/services/get-contract-payment-status";
 import type { ContractPaymentStatusData } from "@/features/create-contract/types/contract-payment";
+import { formatPaymentAmount } from "@/features/create-contract/types/payment-step";
 import PaymentContentActionButton from "@/features/payment/components/payment-content-button";
 import PaymentRetryButton from "@/features/payment/components/payment-retry-button";
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
@@ -21,7 +22,10 @@ type PaymentStatusContentProps = {
   description: string;
   message: string;
   contractNumberLabel: string;
-  contractIdLabel: string;
+  contractTypeLabel: string;
+  paidAmountLabel: string;
+  housingContractTypeLabel: string;
+  commercialContractTypeLabel: string;
   contractNumber: string;
   backToRequestsLabel: string;
   backToHomeLabel: string;
@@ -33,6 +37,32 @@ type PaymentStatusContentProps = {
   status?: ContractPaymentStatusData | null;
 };
 
+function resolveContractTypeDisplay(
+  status: ContractPaymentStatusData | null | undefined,
+  labels: {
+    housing: string;
+    commercial: string;
+  },
+) {
+  if (!status) {
+    return null;
+  }
+
+  if (status.contractTypeTrans) {
+    return status.contractTypeTrans;
+  }
+
+  const type = status.contractType?.toLowerCase();
+  if (type === "housing" || type === "residential") {
+    return labels.housing;
+  }
+  if (type === "commercial") {
+    return labels.commercial;
+  }
+
+  return status.contractType;
+}
+
 export default function PaymentStatusContent({
   variant,
   backLabel,
@@ -41,7 +71,10 @@ export default function PaymentStatusContent({
   description,
   message,
   contractNumberLabel,
-  contractIdLabel,
+  contractTypeLabel,
+  paidAmountLabel,
+  housingContractTypeLabel,
+  commercialContractTypeLabel,
   contractNumber,
   backToRequestsLabel,
   backToHomeLabel,
@@ -59,6 +92,11 @@ export default function PaymentStatusContent({
   const apiButtons = parsePaymentContentButtons(paymentContent);
   const mainText = paymentContent?.message?.trim() || description;
   const subText = paymentContent?.message?.trim() ? message : "";
+  const contractTypeDisplay = resolveContractTypeDisplay(status, {
+    housing: housingContractTypeLabel,
+    commercial: commercialContractTypeLabel,
+  });
+  const paidAmount = status?.paidAmount;
 
   return (
     <>
@@ -145,16 +183,37 @@ export default function PaymentStatusContent({
               </div>
             </div>
 
-            {status?.contractId ? (
+            {contractTypeDisplay ? (
               <div className="rounded-2xl border border-[#ececec] bg-brand-background p-4">
                 <div className="flex items-start gap-3">
                   <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-brand">
                     <FileText className="size-4" aria-hidden="true" />
                   </span>
                   <div className="min-w-0 text-start">
-                    <p className="text-xs text-muted-foreground">{contractIdLabel}</p>
+                    <p className="text-xs text-muted-foreground">{contractTypeLabel}</p>
                     <p className="mt-1 text-lg font-extrabold text-foreground">
-                      {status.contractId}
+                      {contractTypeDisplay}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {paidAmount != null ? (
+              <div className="rounded-2xl border border-[#ececec] bg-brand-background p-4">
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-brand">
+                    <Wallet className="size-4" aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0 text-start">
+                    <p className="text-xs text-muted-foreground">{paidAmountLabel}</p>
+                    <p className="mt-1 inline-flex items-center gap-1.5 text-lg font-extrabold text-foreground">
+                      <span>{formatPaymentAmount(paidAmount)}</span>
+                      <CustomIcon
+                        src="/icons/ryal.svg"
+                        size={16}
+                        className="shrink-0 text-foreground"
+                      />
                     </p>
                   </div>
                 </div>

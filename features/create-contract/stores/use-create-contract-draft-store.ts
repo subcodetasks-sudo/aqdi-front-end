@@ -67,6 +67,9 @@ import {
   buildRentedUnitData,
 } from "@/features/create-contract/utils/build-existing-contract-draft";
 import {
+  buildFinanceDataFromStep6,
+} from "@/features/create-contract/utils/build-finance-data-from-step6";
+import {
   buildAgentDataFromStep3,
   buildOwnerDataFromStep3,
   mapBackendStepToWizardStep,
@@ -94,7 +97,7 @@ type DeedDraftState = {
   isMultipleTrusteeshipDeedCopy: boolean;
   deedGuardiansPoaFiles: File[];
   deedGuardiansPoaPersistedFiles: PersistedFile[];
-  nationalAddressMethod: NationalAddressMethodId;
+  nationalAddressMethod: NationalAddressMethodId | "";
   nationalAddressPhotoFiles: File[];
   nationalAddressPhotoPersistedFiles: PersistedFile[];
   nationalAddressLinkUrl: string;
@@ -202,7 +205,7 @@ const INITIAL_DEED: DeedDraftState = {
   isMultipleTrusteeshipDeedCopy: false,
   deedGuardiansPoaFiles: [],
   deedGuardiansPoaPersistedFiles: [],
-  nationalAddressMethod: "map",
+  nationalAddressMethod: "" as NationalAddressMethodId | "",
   nationalAddressPhotoFiles: [],
   nationalAddressPhotoPersistedFiles: [],
   nationalAddressLinkUrl: "",
@@ -228,13 +231,13 @@ function buildDeedDraftFromProperty(
   property: ExistingPropertyContractContext["property"],
 ): DeedDraftState {
   const addressUrl = property.address_url?.trim() ?? "";
-  const nationalAddressMethod: NationalAddressMethodId = addressUrl
+  const nationalAddressMethod: NationalAddressMethodId | "" = addressUrl
     ? /^https?:\/\//i.test(addressUrl)
       ? "link"
       : "manual"
     : property.image_address
       ? "photo"
-      : "map";
+      : "";
 
   return {
     ...INITIAL_DEED,
@@ -257,13 +260,13 @@ function buildDeedDraftFromUncompleted(
   ).trim();
   const imageAddress = step2?.image_address ?? null;
 
-  const nationalAddressMethod: NationalAddressMethodId = addressUrl
+  const nationalAddressMethod: NationalAddressMethodId | "" = addressUrl
     ? /^https?:\/\//i.test(addressUrl)
       ? "link"
       : "manual"
     : imageAddress
       ? "photo"
-      : "map";
+      : "";
 
   const latitude = step2?.latitude ?? step1?.latitude ?? null;
   const longitude = step2?.longitude ?? step1?.longitude ?? null;
@@ -709,7 +712,11 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       setContractStep3Data: (data) => set({ contractStep3Data: data }),
       setContractStep4Data: (data) => set({ contractStep4Data: data }),
       setContractStep5Data: (data) => set({ contractStep5Data: data }),
-      setContractStep6Data: (data) => set({ contractStep6Data: data }),
+      setContractStep6Data: (data) =>
+        set((state) => ({
+          contractStep6Data: data,
+          financeData: buildFinanceDataFromStep6(data, state.financeData),
+        })),
       startExistingPropertyContractFlow: ({ session, context }) => {
         const base = createInitialState();
 
@@ -735,6 +742,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         const contractType: PropertyContractType =
           data.step1?.contract_type === "commercial" ? "commercial" : "housing";
         const step3 = data.step3;
+        const step6 = data.step6 ?? null;
 
         set({
           ...base,
@@ -748,12 +756,31 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           contractStep1Data: buildStep1DataFromUncompleted(data),
           contractStep2Data: buildStep2DataFromUncompleted(data),
           contractStep3Data: buildStep3DataFromUncompleted(data),
+          contractStep6Data: step6
+            ? {
+                id: step6.id ?? data.contract_id,
+                contract_id: step6.contract_id ?? data.contract_id,
+                uuid: step6.uuid ?? data.uuid,
+                contract_term_in_years: step6.contract_term_in_years ?? null,
+                annual_rent_amount_for_the_unit:
+                  step6.annual_rent_amount_for_the_unit ?? null,
+                payment_type_id: step6.payment_type_id ?? null,
+                duration_preset: step6.duration_preset ?? null,
+                duration_years: step6.duration_years ?? null,
+                duration_months: step6.duration_months ?? null,
+                total_months: step6.total_months ?? null,
+                doc_fee: step6.doc_fee ?? null,
+                doc_fee_lines: step6.doc_fee_lines ?? null,
+                step: step6.step ?? data.step,
+              }
+            : null,
           deed: buildDeedDraftFromUncompleted(data),
           owner: {
             ...base.owner,
             ownerData: step3 ? buildOwnerDataFromStep3(step3) : base.owner.ownerData,
             agentData: step3 ? buildAgentDataFromStep3(step3) : base.owner.agentData,
           },
+          financeData: buildFinanceDataFromStep6(step6, base.financeData),
         });
       },
       resetDraft: () => set(createInitialState()),

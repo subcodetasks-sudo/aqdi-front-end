@@ -68,8 +68,6 @@ export default function CreateContractDeedStep({
     setNationalAddressLinkUrl,
     nationalAddressManual,
     setNationalAddressManual,
-    mapLocation,
-    setMapLocation,
     isLastPhase,
     canContinue,
     goToNextPhase,
@@ -356,8 +354,6 @@ export default function CreateContractDeedStep({
             onLinkUrlChange={setNationalAddressLinkUrl}
             manualAddress={nationalAddressManual}
             onManualAddressChange={setNationalAddressManual}
-            mapLocation={mapLocation}
-            onMapLocationChange={setMapLocation}
             existingPhotoUrl={existingAddressImageUrl}
           />
         ) : null}

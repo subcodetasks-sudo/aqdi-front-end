@@ -79,7 +79,7 @@ export type CreateContractLabels = {
         label: string;
         placeholder: string;
       };
-      methods: Record<"map" | "photo" | "link" | "manual", string>;
+      methods: Record<"photo" | "link" | "manual", string>;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
@@ -434,6 +434,14 @@ export type CreateContractLabels = {
       label: string;
       loading: string;
       optionsError: string;
+      otherOption: string;
+      custom: {
+        yearOption: string;
+        monthOption: string;
+        monthOptionZero: string;
+        loadingPreview: string;
+        previewError: string;
+      };
     };
     totalRentAmount: {
       label: string;
@@ -485,6 +493,7 @@ export type CreateContractLabels = {
       vat: string;
       applicationFees: string;
       services: string;
+      docFee: string;
       total: string;
       currency: string;
       ejarLogoAlt: string;

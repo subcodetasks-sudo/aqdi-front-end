@@ -29,6 +29,16 @@ export const contractPaymentTypeKeys = {
 
 export const contractFinancialKeys = {
   all: ["contract-financial"] as const,
-  detail: (contractId: number) =>
-    [...contractFinancialKeys.all, contractId] as const,
+  detail: (contractKey: string | number) =>
+    [...contractFinancialKeys.all, contractKey] as const,
+};
+
+export const contractDocFeeKeys = {
+  all: ["contract-doc-fee"] as const,
+  preview: (params: {
+    contractId: number | null;
+    contractType: string;
+    years: number;
+    months: number;
+  }) => [...contractDocFeeKeys.all, "preview", params] as const,
 };

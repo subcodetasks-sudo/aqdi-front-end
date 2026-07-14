@@ -138,7 +138,7 @@ function resolveAddressMethod(
     return "photo";
   }
 
-  return "map";
+  return "photo";
 }
 
 function formatPhoneForForm(phone: string | null) {

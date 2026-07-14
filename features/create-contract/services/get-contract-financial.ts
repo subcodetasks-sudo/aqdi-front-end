@@ -7,10 +7,10 @@ import type {
 import { apiRequest } from "@/lib/api/api-request";
 
 export async function getContractFinancial(
-  contractId: number,
+  contractKey: string | number,
 ): Promise<ContractFinancialData> {
   const response = await apiRequest<ContractFinancialApiResponse>(
-    `/financial/${contractId}`,
+    `/financial/${contractKey}`,
     {
       method: "GET",
       cache: "no-store",

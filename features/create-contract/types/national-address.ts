@@ -4,7 +4,6 @@ import {
 } from "@/features/shared/types/manual-national-address";
 
 export const NATIONAL_ADDRESS_METHODS = [
-  "map",
   "photo",
   "link",
   "manual",
@@ -23,7 +22,7 @@ export const DEFAULT_NATIONAL_ADDRESS_LOCATION: NationalAddressMapLocation = {
 };
 
 export function canContinueNationalAddress(
-  method: NationalAddressMethodId,
+  method: NationalAddressMethodId | "",
   photoFiles: File[],
   linkUrl: string,
   options?: {
@@ -31,10 +30,6 @@ export function canContinueNationalAddress(
     manualAddress?: ManualNationalAddressData;
   },
 ) {
-  if (method === "map") {
-    return true;
-  }
-
   if (method === "photo") {
     return photoFiles.length > 0 || Boolean(options?.hasExistingPhoto);
   }

@@ -13,6 +13,9 @@ export type ContractFinancialData = {
   price_details: ContractFinancialPriceDetails;
   services: ContractFinancialService[];
   total_price: number;
+  doc_fee?: number | null;
+  doc_fee_lines?: string[] | null;
+  duration_preset?: string | null;
 };
 
 export type ContractFinancialApiResponse = {

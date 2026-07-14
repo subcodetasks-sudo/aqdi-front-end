@@ -64,7 +64,7 @@ type PropertyDraftStore = {
   isMultipleTrusteeshipDeedCopy: boolean;
   deedGuardiansPoaFiles: File[];
   deedGuardiansPoaPersistedFiles: PersistedFile[];
-  addressMethod: PropertyNationalAddressMethodId;
+  addressMethod: PropertyNationalAddressMethodId | "";
   addressPhotoFiles: File[];
   addressPhotoPersistedFiles: PersistedFile[];
   addressLinkUrl: string;
@@ -153,7 +153,7 @@ function createInitialPropertyDraft() {
     isMultipleTrusteeshipDeedCopy: false,
     deedGuardiansPoaFiles: [] as File[],
     deedGuardiansPoaPersistedFiles: [] as PersistedFile[],
-    addressMethod: "map" as PropertyNationalAddressMethodId,
+    addressMethod: "" as PropertyNationalAddressMethodId | "",
     addressPhotoFiles: [] as File[],
     addressPhotoPersistedFiles: [] as PersistedFile[],
     addressLinkUrl: "",

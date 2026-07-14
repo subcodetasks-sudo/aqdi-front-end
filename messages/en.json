@@ -1007,7 +1007,6 @@
           "placeholder": "Choose from here.."
         },
         "methods": {
-          "map": "Address map",
           "photo": "Address photo",
           "link": "Address link",
           "manual": "Enter address details"
@@ -1421,7 +1420,6 @@
           "placeholder": "Choose from here.."
         },
         "methods": {
-          "map": "Address map",
           "photo": "Address photo",
           "link": "Address link",
           "manual": "Enter address details"
@@ -1849,7 +1847,15 @@
       "contractDuration": {
         "label": "Contract duration",
         "loading": "Loading contract periods...",
-        "optionsError": "Failed to load contract periods"
+        "optionsError": "Failed to load contract periods",
+        "otherOption": "Other",
+        "custom": {
+          "yearOption": "'{'count'}' year(s)",
+          "monthOption": "+ '{'count'}' month(s)",
+          "monthOptionZero": "No months",
+          "loadingPreview": "Calculating documentation fees...",
+          "previewError": "Failed to load documentation fee preview"
+        }
       },
       "totalRentAmount": {
         "label": "Total rent amount",
@@ -1901,6 +1907,7 @@
         "vat": "VAT:",
         "applicationFees": "Application fees:",
         "services": "Additional services:",
+        "docFee": "Documentation fees:",
         "total": "Total:",
         "currency": "SAR",
         "ejarLogoAlt": "Ejar"
@@ -1975,7 +1982,10 @@
       "description": "Your payment could not be completed"
     },
     "contractNumberLabel": "Contract number",
-    "contractIdLabel": "Contract ID",
+    "contractTypeLabel": "Contract type",
+    "paidAmountLabel": "Paid amount",
+    "housingContractTypeLabel": "Residential",
+    "commercialContractTypeLabel": "Commercial",
     "backToRequests": "Back to requests",
     "backToHome": "Back to home",
     "retryPayment": "Retry payment",

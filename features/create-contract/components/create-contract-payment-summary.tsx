@@ -77,15 +77,23 @@ export default function CreateContractPaymentSummary({
   labels,
   contractType,
 }: CreateContractPaymentSummaryProps) {
-  const contractId = useCreateContractDraftStore(
+  const contractKey = useCreateContractDraftStore(
     (state) =>
+      state.contractSession?.uuid ??
+      state.contractStep1Data?.uuid ??
       state.contractSession?.contractId ??
       state.contractStep1Data?.contract_id ??
       null,
   );
-  const { data: financial, isLoading } = useContractFinancial(contractId);
+  const { data: financial, isLoading } = useContractFinancial(contractKey);
 
   const breakdown = PAYMENT_BREAKDOWN[contractType];
+  const docFeeLines = Array.isArray(financial?.doc_fee_lines)
+    ? financial.doc_fee_lines.filter((line) => line.trim() !== "")
+    : [];
+  const docFeeAmount =
+    typeof financial?.doc_fee === "number" ? financial.doc_fee : null;
+  const isCustomDuration = financial?.duration_preset === "other";
 
   if (isLoading) {
     return (
@@ -114,6 +122,18 @@ export default function CreateContractPaymentSummary({
         />
 
         <SummaryRow label={labels.vat} amount={financial.price_details.tax} />
+
+        {isCustomDuration && docFeeAmount !== null ? (
+          <SummaryRow label={labels.docFee} amount={docFeeAmount} />
+        ) : null}
+
+        {isCustomDuration && docFeeLines.length > 0 ? (
+          <div className="rounded-xl border border-[#d9eadf] bg-[#f3faf5] px-4 py-3 text-sm leading-7 text-[#333333]">
+            {docFeeLines.map((line, index) => (
+              <p key={`${line}-${index}`}>{line}</p>
+            ))}
+          </div>
+        ) : null}
 
         {financial.services.length > 0 ? (
           <div className="space-y-3 border-t border-dashed border-[#d4d4d4] pt-3">

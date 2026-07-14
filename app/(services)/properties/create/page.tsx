@@ -100,7 +100,7 @@ export default async function CreatePropertyPage({
           placeholder: t("address.nationalAddress.methodSelect.placeholder"),
         },
         methods: t.raw("address.nationalAddress.methods") as Record<
-          "map" | "photo" | "link" | "manual",
+          "photo" | "link" | "manual",
           string
         >,
         mapTitle: t("address.nationalAddress.mapTitle"),

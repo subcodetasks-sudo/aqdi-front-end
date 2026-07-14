@@ -31,8 +31,6 @@ export default function CreatePropertyAddressStep({
     setLinkUrl,
     manualAddress,
     setManualAddress,
-    mapLocation,
-    setMapLocation,
     existingAddressImageUrl,
     canContinue,
   } = useCreatePropertyAddressStep();
@@ -78,8 +76,6 @@ export default function CreatePropertyAddressStep({
           onLinkUrlChange={setLinkUrl}
           manualAddress={manualAddress}
           onManualAddressChange={setManualAddress}
-          mapLocation={mapLocation}
-          onMapLocationChange={setMapLocation}
         />
       </div>
 

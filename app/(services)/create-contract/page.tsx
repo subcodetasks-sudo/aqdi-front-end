@@ -145,7 +145,7 @@ export default async function CreateContractPage({
           placeholder: t("deed.nationalAddress.methodSelect.placeholder"),
         },
         methods: t.raw("deed.nationalAddress.methods") as Record<
-          "map" | "photo" | "link" | "manual",
+          "photo" | "link" | "manual",
           string
         >,
         mapTitle: t("deed.nationalAddress.mapTitle"),
@@ -549,6 +549,14 @@ export default async function CreateContractPage({
         label: t("finance.contractDuration.label"),
         loading: t("finance.contractDuration.loading"),
         optionsError: t("finance.contractDuration.optionsError"),
+        otherOption: t("finance.contractDuration.otherOption"),
+        custom: {
+          yearOption: t("finance.contractDuration.custom.yearOption"),
+          monthOption: t("finance.contractDuration.custom.monthOption"),
+          monthOptionZero: t("finance.contractDuration.custom.monthOptionZero"),
+          loadingPreview: t("finance.contractDuration.custom.loadingPreview"),
+          previewError: t("finance.contractDuration.custom.previewError"),
+        },
       },
       totalRentAmount: {
         label: t("finance.totalRentAmount.label"),
@@ -600,6 +608,7 @@ export default async function CreateContractPage({
         vat: t("payment.summary.vat"),
         applicationFees: t("payment.summary.applicationFees"),
         services: t("payment.summary.services"),
+        docFee: t("payment.summary.docFee"),
         total: t("payment.summary.total"),
         currency: t("payment.summary.currency"),
         ejarLogoAlt: t("payment.summary.ejarLogoAlt"),

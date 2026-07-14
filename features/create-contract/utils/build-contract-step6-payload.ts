@@ -9,23 +9,24 @@ export type ContractStep6Payload = {
   financeData: FinanceDataState;
 };
 
-function parseRentAmount(value: string) {
-  const digits = value.replace(/\D/g, "");
-  return digits ? Number(digits) : 0;
-}
-
 export function buildContractStep6Body({
   contractId,
   financeData,
 }: ContractStep6Payload) {
   const { contractStartDate } = financeData;
 
-  if (financeData.contractPeriodId === "") {
-    throw new Error("Contract period is required");
-  }
-
   if (financeData.paymentTypeId === "") {
     throw new Error("Payment type is required");
+  }
+
+  const hasPresetDuration = financeData.contractPeriodId !== "";
+  const hasCustomDuration =
+    financeData.isCustomDuration &&
+    typeof financeData.customDurationYears === "number" &&
+    typeof financeData.customDurationMonths === "number";
+
+  if (!hasPresetDuration && !hasCustomDuration) {
+    throw new Error("Contract duration is required");
   }
 
   const body: Record<string, string | number | boolean | number[]> = {
@@ -36,13 +37,19 @@ export function buildContractStep6Body({
       contractStartDate.month,
     ),
     contract_starting_date_year: formatPropertyOwnerYear(contractStartDate.year),
-    contract_term_in_years: financeData.contractPeriodId,
-    annual_rent_amount_for_the_unit: parseRentAmount(financeData.totalRentAmount),
     payment_type_id: financeData.paymentTypeId,
     conditions: financeData.addOtherConditions,
     tenant_roles: financeData.addTenantPermissions,
     additional_terms: financeData.addOtherConditions,
   };
+
+  if (financeData.isCustomDuration && hasCustomDuration) {
+    body.duration_preset = "other";
+    body.duration_years = financeData.customDurationYears;
+    body.duration_months = financeData.customDurationMonths;
+  } else {
+    body.contract_term_in_years = financeData.contractPeriodId as number;
+  }
 
   if (financeData.addTenantPermissions && financeData.selectedTenantRoleIds.length > 0) {
     if (financeData.selectedTenantRoleIds.length === 1) {
