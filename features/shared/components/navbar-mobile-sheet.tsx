@@ -86,10 +86,10 @@ export default function NavbarMobileSheet({
   const navItems: NavItem[] = [
     { href: "/", label: home, iconSrc: "/icons/home.svg" },
     {
-      href: propertiesHref,
+      href: "/properties/my-properties",
       label: myProperties,
       iconSrc: "/icons/lable.svg",
-      isActive: isPropertiesNavActive(pathname),
+      isActive: pathname === "/properties/my-properties",
     },
     { href: "/requests", label: requests, iconSrc: "/icons/bag.svg" },
     {

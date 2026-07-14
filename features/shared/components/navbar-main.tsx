@@ -86,10 +86,10 @@ export default function NavbarMain({
       icon: <CustomIcon src="/icons/home.svg" size={16} />,
     },
     {
-      href: propertiesHref,
+      href: "/properties/my-properties",
       label: myProperties,
       icon: <CustomIcon src="/icons/lable.svg" size={16} />,
-      isActive: isPropertiesNavActive(pathname),
+      isActive: pathname === "/properties/my-properties",
     },
     {
       href: "/requests",

@@ -46,11 +46,11 @@ export default function PropertiesHeroContent({
         "h-12 w-full rounded-full bg-linear-to-l from-brand-secondary to-brand text-base font-semibold text-white hover:opacity-90"
       }
     >
-      <Link href="/properties/my-properties">
+      {/* <Link href="/properties/my-properties">
         <CustomIcon src="/icons/arrow-r.svg" size={30} />
         عقاراتي
         <CustomIcon src="/icons/arrow-l.svg" size={30} />
-      </Link>
+      </Link> */}
     </Button>
       <PropertiesAppDownload  />
     </div>
