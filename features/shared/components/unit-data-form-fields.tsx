@@ -7,6 +7,7 @@ import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-
 import CreateUnitIconInputField from "@/features/create-unit/components/create-unit-icon-input-field";
 import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
+import MeterRegistrationOptions from "@/features/shared/components/meter-registration-options";
 import UnitAdditionalInfoSection from "@/features/shared/components/unit-form/unit-additional-info-section";
 import UnitOptionalCheckboxField from "@/features/shared/components/unit-form/unit-optional-checkbox-field";
 import UnitOptionalCountField from "@/features/shared/components/unit-form/unit-optional-count-field";
@@ -22,6 +23,8 @@ type UnitDataFormFieldsProps = {
   onChange: (value: UnitDataState) => void;
   contractType?: PropertyContractType;
   onContractTypeChange?: (contractType: PropertyContractType) => void;
+  electricityMeterFee?: number;
+  waterMeterFee?: number;
 };
 
 function toSelectOptions(options: UnitLookupOption[]) {
@@ -77,6 +80,8 @@ export default function UnitDataFormFields({
   onChange,
   contractType,
   onContractTypeChange,
+  electricityMeterFee = 0,
+  waterMeterFee = 0,
 }: UnitDataFormFieldsProps) {
   const floorOptions = [
     { value: "ground", label: labels.floorOptions.ground },
@@ -310,24 +315,43 @@ export default function UnitDataFormFields({
               electricityMeterNumber: addElectricityMeter
                 ? value.electricityMeterNumber
                 : "",
+              electricityMeterRegistration: addElectricityMeter
+                ? value.electricityMeterRegistration
+                : "",
             })
           }
         >
-          <CreateUnitIconInputField
-            label={labels.electricityMeterNumber.label}
-            placeholder={
-              labels.additionalInfo.writeHerePlaceholder ||
-              labels.electricityMeterNumber.placeholder
-            }
-            value={value.electricityMeterNumber}
-            onChange={(electricityMeterNumber) =>
-              updateField("electricityMeterNumber", electricityMeterNumber)
-            }
-            icon={Hash}
-            dir="ltr"
-            required={false}
-            hideLabel
-          />
+          <div className="space-y-3">
+            <CreateUnitIconInputField
+              label={labels.electricityMeterNumber.label}
+              placeholder={
+                labels.additionalInfo.writeHerePlaceholder ||
+                labels.electricityMeterNumber.placeholder
+              }
+              value={value.electricityMeterNumber}
+              onChange={(electricityMeterNumber) =>
+                updateField("electricityMeterNumber", electricityMeterNumber)
+              }
+              icon={Hash}
+              dir="ltr"
+              required={false}
+              hideLabel
+            />
+
+            {labels.meterRegistration ? (
+              <MeterRegistrationOptions
+                labels={labels.meterRegistration}
+                fee={electricityMeterFee}
+                value={value.electricityMeterRegistration}
+                onChange={(electricityMeterRegistration) =>
+                  updateField(
+                    "electricityMeterRegistration",
+                    electricityMeterRegistration,
+                  )
+                }
+              />
+            ) : null}
+          </div>
         </UnitOptionalCheckboxField>
 
         <UnitOptionalCheckboxField
@@ -338,24 +362,40 @@ export default function UnitDataFormFields({
               ...value,
               addWaterMeter,
               waterMeterNumber: addWaterMeter ? value.waterMeterNumber : "",
+              waterMeterRegistration: addWaterMeter
+                ? value.waterMeterRegistration
+                : "",
             })
           }
         >
-          <CreateUnitIconInputField
-            label={labels.waterMeterNumber.label}
-            placeholder={
-              labels.additionalInfo.writeHerePlaceholder ||
-              labels.waterMeterNumber.placeholder
-            }
-            value={value.waterMeterNumber}
-            onChange={(waterMeterNumber) =>
-              updateField("waterMeterNumber", waterMeterNumber)
-            }
-            icon={Hash}
-            dir="ltr"
-            required={false}
-            hideLabel
-          />
+          <div className="space-y-3">
+            <CreateUnitIconInputField
+              label={labels.waterMeterNumber.label}
+              placeholder={
+                labels.additionalInfo.writeHerePlaceholder ||
+                labels.waterMeterNumber.placeholder
+              }
+              value={value.waterMeterNumber}
+              onChange={(waterMeterNumber) =>
+                updateField("waterMeterNumber", waterMeterNumber)
+              }
+              icon={Hash}
+              dir="ltr"
+              required={false}
+              hideLabel
+            />
+
+            {labels.meterRegistration ? (
+              <MeterRegistrationOptions
+                labels={labels.meterRegistration}
+                fee={waterMeterFee}
+                value={value.waterMeterRegistration}
+                onChange={(waterMeterRegistration) =>
+                  updateField("waterMeterRegistration", waterMeterRegistration)
+                }
+              />
+            ) : null}
+          </div>
         </UnitOptionalCheckboxField>
       </UnitAdditionalInfoSection>
     </div>

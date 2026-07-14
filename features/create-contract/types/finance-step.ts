@@ -1,5 +1,5 @@
 import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
-import { EMPTY_BIRTH_DATE } from "@/features/create-contract/types/owner-step";
+import { getTodayContractStartDate } from "@/features/create-contract/utils/get-today-contract-start-date";
 
 export type FinanceDataState = {
   contractStartDate: BirthDateValue;
@@ -12,16 +12,20 @@ export type FinanceDataState = {
   otherConditionsText: string;
 };
 
-export const EMPTY_FINANCE_DATA: FinanceDataState = {
-  contractStartDate: { ...EMPTY_BIRTH_DATE, calendarType: "hijri" },
-  contractPeriodId: "",
-  totalRentAmount: "",
-  paymentTypeId: "",
-  addTenantPermissions: false,
-  addOtherConditions: false,
-  selectedTenantRoleIds: [],
-  otherConditionsText: "",
-};
+export function createEmptyFinanceData(): FinanceDataState {
+  return {
+    contractStartDate: getTodayContractStartDate("hijri"),
+    contractPeriodId: "",
+    totalRentAmount: "",
+    paymentTypeId: "",
+    addTenantPermissions: false,
+    addOtherConditions: false,
+    selectedTenantRoleIds: [],
+    otherConditionsText: "",
+  };
+}
+
+export const EMPTY_FINANCE_DATA: FinanceDataState = createEmptyFinanceData();
 
 const LEGACY_PAYMENT_METHOD_TO_TYPE_ID: Record<string, number> = {
   monthly: 1,
@@ -29,6 +33,23 @@ const LEGACY_PAYMENT_METHOD_TO_TYPE_ID: Record<string, number> = {
   "semi-annual": 3,
   annual: 4,
 };
+
+function resolveContractStartDate(
+  contractStartDate: BirthDateValue | undefined,
+): BirthDateValue {
+  const calendarType = contractStartDate?.calendarType ?? "hijri";
+
+  if (
+    !contractStartDate ||
+    (contractStartDate.day === "" &&
+      contractStartDate.month === "" &&
+      contractStartDate.year === "")
+  ) {
+    return getTodayContractStartDate(calendarType);
+  }
+
+  return contractStartDate;
+}
 
 export function normalizeFinanceData(
   financeData: Partial<FinanceDataState> & { paymentMethod?: string },
@@ -41,8 +62,9 @@ export function normalizeFinanceData(
   }
 
   return {
-    ...EMPTY_FINANCE_DATA,
+    ...createEmptyFinanceData(),
     ...financeData,
+    contractStartDate: resolveContractStartDate(financeData.contractStartDate),
     paymentTypeId:
       typeof paymentTypeId === "number" && paymentTypeId > 0 ? paymentTypeId : "",
   };

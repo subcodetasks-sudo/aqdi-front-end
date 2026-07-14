@@ -5,6 +5,7 @@ import type {
   BirthDateValue,
   CalendarType,
 } from "@/features/create-contract/types/owner-step";
+import { getTodayContractStartDate } from "@/features/create-contract/utils/get-today-contract-start-date";
 import { cn } from "@/lib/utils";
 
 type ContractStartDateLabels = {
@@ -66,7 +67,7 @@ export default function CreateContractContractStartDateFields({
       ...value,
       [field]: fieldValue,
       ...(field === "calendarType"
-        ? { day: "", month: "", year: "" }
+        ? getTodayContractStartDate(fieldValue as CalendarType)
         : {}),
     });
   }

@@ -49,4 +49,28 @@ export type UnitFormLabels = {
     label: string;
     placeholder: string;
   };
+  meterRegistration?: {
+    title: string;
+    currency: string;
+    tenant: {
+      title: string;
+      subtitle: string;
+      feeBadge: string;
+      feeFooter: string;
+    };
+    owner: {
+      title: string;
+      subtitle: string;
+      noFee: string;
+    };
+    notice: {
+      beforeFee: string;
+      feeAmount: string;
+      afterFee: string;
+      nonRefundable: string;
+      afterNonRefundable: string;
+      lessThanMonth: string;
+      afterLessThanMonth: string;
+    };
+  };
 };

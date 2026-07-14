@@ -72,10 +72,22 @@ export function buildUnitFieldsPayload(unitData: UnitDataState) {
     payload.electricity_meter_number = electricityMeterNumber;
   }
 
+  if (
+    unitData.addElectricityMeter &&
+    unitData.electricityMeterRegistration !== ""
+  ) {
+    payload.electricity_meter_ownership =
+      unitData.electricityMeterRegistration;
+  }
+
   const waterMeterNumber = unitData.waterMeterNumber.trim();
   if (unitData.addWaterMeter && waterMeterNumber !== "") {
     payload.water_meter = true;
     payload.water_meter_number = waterMeterNumber;
+  }
+
+  if (unitData.addWaterMeter && unitData.waterMeterRegistration !== "") {
+    payload.water_meter_ownership = unitData.waterMeterRegistration;
   }
 
   return payload;

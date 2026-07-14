@@ -1789,6 +1789,30 @@
         "waterMeterNumber": {
           "label": "رقم عداد المياه ..",
           "placeholder": "أكتب هنا .."
+        },
+        "meterRegistration": {
+          "title": "بعد توثيق العقد، العداد يكون:",
+          "currency": "ر.س",
+          "tenant": {
+            "title": "ينتقل باسم المستأجر",
+            "subtitle": "الفواتير تصدر باسم المستأجر",
+            "feeBadge": "رسوم نقل '{'fee'}' '{'currency'}'",
+            "feeFooter": "+ '{'fee'}' '{'currency'}' رسوم نقل"
+          },
+          "owner": {
+            "title": "يبقى باسم المالك",
+            "subtitle": "الفواتير تصدر باسم المالك",
+            "noFee": "بدون رسوم"
+          },
+          "notice": {
+            "beforeFee": "رسوم نقل ملكية العداد",
+            "feeAmount": "'{'fee'}' ريالاً",
+            "afterFee": "مقابل نقل العداد باسم المستأجر، وهي",
+            "nonRefundable": "غير مستردة",
+            "afterNonRefundable": "في حال وجود سبب يعيق نقل العداد. تُضاف إلى إجمالي الطلب. وفي حال كانت فترة العقد",
+            "lessThanMonth": "أقل من شهر",
+            "afterLessThanMonth": "لا يُقبل نقل العداد باسم المستأجر."
+          }
         }
       },
       "leaseRenewal": {

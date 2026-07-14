@@ -16,6 +16,9 @@ import {
   type ContractTypeId,
 } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
+import { meterFeeSettingsKeys, settingContractsKeys } from "@/features/shared/query-keys";
+import { getMeterFeeSettings } from "@/features/shared/services/get-meter-fee-settings";
+import { getSettingContracts } from "@/features/shared/services/get-setting-contracts";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
 import {
   DELEGATION_TYPE_OPTIONS,
@@ -50,6 +53,14 @@ export default async function CreateContractPage({
     queryClient.prefetchQuery({
       queryKey: contractPaymentTypeKeys.list(propertyContractType),
       queryFn: () => getPaymentTypes(propertyContractType),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: settingContractsKeys.list(),
+      queryFn: () => getSettingContracts(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: meterFeeSettingsKeys.detail(),
+      queryFn: () => getMeterFeeSettings(),
     }),
   ]);
 
@@ -443,6 +454,38 @@ export default async function CreateContractPage({
         waterMeterNumber: {
           label: t("tenant.rentedUnit.waterMeterNumber.label"),
           placeholder: t("tenant.rentedUnit.waterMeterNumber.placeholder"),
+        },
+        meterRegistration: {
+          title: t("tenant.rentedUnit.meterRegistration.title"),
+          currency: t("tenant.rentedUnit.meterRegistration.currency"),
+          tenant: {
+            title: t("tenant.rentedUnit.meterRegistration.tenant.title"),
+            subtitle: t("tenant.rentedUnit.meterRegistration.tenant.subtitle"),
+            feeBadge: t("tenant.rentedUnit.meterRegistration.tenant.feeBadge"),
+            feeFooter: t("tenant.rentedUnit.meterRegistration.tenant.feeFooter"),
+          },
+          owner: {
+            title: t("tenant.rentedUnit.meterRegistration.owner.title"),
+            subtitle: t("tenant.rentedUnit.meterRegistration.owner.subtitle"),
+            noFee: t("tenant.rentedUnit.meterRegistration.owner.noFee"),
+          },
+          notice: {
+            beforeFee: t("tenant.rentedUnit.meterRegistration.notice.beforeFee"),
+            feeAmount: t("tenant.rentedUnit.meterRegistration.notice.feeAmount"),
+            afterFee: t("tenant.rentedUnit.meterRegistration.notice.afterFee"),
+            nonRefundable: t(
+              "tenant.rentedUnit.meterRegistration.notice.nonRefundable",
+            ),
+            afterNonRefundable: t(
+              "tenant.rentedUnit.meterRegistration.notice.afterNonRefundable",
+            ),
+            lessThanMonth: t(
+              "tenant.rentedUnit.meterRegistration.notice.lessThanMonth",
+            ),
+            afterLessThanMonth: t(
+              "tenant.rentedUnit.meterRegistration.notice.afterLessThanMonth",
+            ),
+          },
         },
       },
       leaseRenewal: {

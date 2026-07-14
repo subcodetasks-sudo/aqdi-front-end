@@ -59,7 +59,9 @@ export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
       : "",
     addElectricityMeter: Boolean(unit.electricity_meter),
     electricityMeterNumber: unit.electricity_meter_number?.trim() ?? "",
+    electricityMeterRegistration: "",
     addWaterMeter: Boolean(unit.water_meter),
     waterMeterNumber: unit.water_meter_number?.trim() ?? "",
+    waterMeterRegistration: "",
   };
 }

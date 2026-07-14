@@ -19,7 +19,7 @@ import {
   type ManualNationalAddressData,
 } from "@/features/shared/types/manual-national-address";
 import {
-  EMPTY_FINANCE_DATA,
+  createEmptyFinanceData,
   normalizeFinanceData,
   type FinanceDataState,
 } from "@/features/create-contract/types/finance-step";
@@ -403,7 +403,7 @@ function createInitialState() {
       tenantData: { ...EMPTY_TENANT_DATA, individual: { ...EMPTY_TENANT_DATA.individual }, organization: { ...EMPTY_TENANT_DATA.organization } },
       rentedUnitData: { ...EMPTY_RENTED_UNIT_DATA },
     },
-    financeData: { ...EMPTY_FINANCE_DATA },
+    financeData: createEmptyFinanceData(),
     paymentData: { ...EMPTY_PAYMENT_DATA },
   };
 }

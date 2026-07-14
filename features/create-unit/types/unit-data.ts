@@ -2,6 +2,11 @@ export const FURNISHING_TYPE_OPTIONS = ["new", "used"] as const;
 
 export type FurnishingTypeOption = (typeof FURNISHING_TYPE_OPTIONS)[number];
 
+export const METER_REGISTRATION_PARTIES = ["owner", "tenant"] as const;
+
+export type MeterRegistrationParty =
+  (typeof METER_REGISTRATION_PARTIES)[number];
+
 export type UnitDataState = {
   unitTypeId: string;
   unitUsageId: string;
@@ -20,8 +25,10 @@ export type UnitDataState = {
   furnishingType: FurnishingTypeOption | "";
   addElectricityMeter: boolean;
   electricityMeterNumber: string;
+  electricityMeterRegistration: MeterRegistrationParty | "";
   addWaterMeter: boolean;
   waterMeterNumber: string;
+  waterMeterRegistration: MeterRegistrationParty | "";
 };
 
 export const EMPTY_UNIT_DATA: UnitDataState = {
@@ -42,8 +49,10 @@ export const EMPTY_UNIT_DATA: UnitDataState = {
   furnishingType: "",
   addElectricityMeter: false,
   electricityMeterNumber: "",
+  electricityMeterRegistration: "",
   addWaterMeter: false,
   waterMeterNumber: "",
+  waterMeterRegistration: "",
 };
 
 function isSelectFilled(value: string) {
@@ -60,14 +69,37 @@ function isPositiveNumber(value: string) {
   return Number.isFinite(number) && number > 0;
 }
 
-export function isUnitDataComplete(unitData: UnitDataState) {
-  return (
+export function isUnitDataComplete(
+  unitData: UnitDataState,
+  options?: { requireMeterRegistration?: boolean },
+) {
+  const baseComplete =
     isSelectFilled(unitData.unitTypeId) &&
     isSelectFilled(unitData.unitUsageId) &&
     isPositiveNumber(unitData.totalArea) &&
     isSelectFilled(unitData.floorNumber) &&
-    unitData.unitNumber.trim() !== ""
-  );
+    unitData.unitNumber.trim() !== "";
+
+  if (!baseComplete) {
+    return false;
+  }
+
+  if (!options?.requireMeterRegistration) {
+    return true;
+  }
+
+  if (
+    unitData.addElectricityMeter &&
+    unitData.electricityMeterRegistration === ""
+  ) {
+    return false;
+  }
+
+  if (unitData.addWaterMeter && unitData.waterMeterRegistration === "") {
+    return false;
+  }
+
+  return true;
 }
 
 export function buildCountOptions(max = 20) {

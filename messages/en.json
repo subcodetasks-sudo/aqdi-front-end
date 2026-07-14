@@ -1763,6 +1763,30 @@
         "waterMeterNumber": {
           "label": "Water meter number",
           "placeholder": "Write here..."
+        },
+        "meterRegistration": {
+          "title": "After documenting the contract, the meter will be:",
+          "currency": "SAR",
+          "tenant": {
+            "title": "Transferred to the tenant's name",
+            "subtitle": "Bills are issued in the tenant's name",
+            "feeBadge": "Transfer fee '{'fee'}' '{'currency'}'",
+            "feeFooter": "+ '{'fee'}' '{'currency'}' transfer fee"
+          },
+          "owner": {
+            "title": "Remains in the owner's name",
+            "subtitle": "Bills are issued in the owner's name",
+            "noFee": "No fees"
+          },
+          "notice": {
+            "beforeFee": "Meter ownership transfer fee is",
+            "feeAmount": "'{'fee'}' SAR",
+            "afterFee": "for transferring the meter to the tenant's name, and it is",
+            "nonRefundable": "non-refundable",
+            "afterNonRefundable": "if there is a reason preventing the transfer. It is added to the total request. If the contract period is",
+            "lessThanMonth": "less than a month",
+            "afterLessThanMonth": "transferring the meter to the tenant's name is not accepted."
+          }
         }
       },
       "leaseRenewal": {

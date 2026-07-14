@@ -152,7 +152,9 @@ export function buildRentedUnitData(
       : "",
     addElectricityMeter: Boolean(unit.electricity_meter),
     electricityMeterNumber: toStringValue(unit.electricity_meter_number),
+    electricityMeterRegistration: "",
     addWaterMeter: Boolean(unit.water_meter),
     waterMeterNumber: toStringValue(unit.water_meter_number),
+    waterMeterRegistration: "",
   };
 }
