@@ -28,8 +28,8 @@ useEffect(() => {
 
 
   return (
-    <header className={cn("m-2 lg:m-4  mb-0!   bg-brand-background-green   py-4 overflow-hidden sticky lg:top-4 top-2 z-50", scrolled && "rounded-none! top-0 lg:top-0 m-0! ",
-      pathname === "/" ? "rounded-t-3xl lg:rounded-t-[80px]" : "rounded-3xl"
+    <header className={cn("   bg-brand-background-green   py-4 overflow-hidden sticky top-0 z-50", scrolled && "rounded-none! top-0 lg:top-0 m-0! ",
+       
     )}>
         <div className="container">
 
