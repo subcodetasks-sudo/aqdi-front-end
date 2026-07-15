@@ -109,6 +109,13 @@ export function useSubmitPropertyStep1() {
       };
     }
 
+    if (!addressMethod) {
+      return {
+        ok: false as const,
+        error: "National address method is required",
+      };
+    }
+
     if (isEditMode && !editPropertyId) {
       return {
         ok: false as const,
