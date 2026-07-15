@@ -1,7 +1,4 @@
-import { Rocket } from "lucide-react";
-
 import HeroCtaButtons from "@/features/home/components/hero-cta-buttons";
-import HeroFeatureList from "@/features/home/components/hero-feature-list";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import HeroMarquee from "./hero-marquee";
 
@@ -25,7 +22,7 @@ export default function HeroContent({
   titleLine2Main,
   titleLine2Accent,
   description,
-  features,
+  features: _features,
   residentialCta,
   commercialCta,
   mostRequested,
@@ -41,23 +38,34 @@ export default function HeroContent({
       </div>
 
       <div className="space-y-4">
-        <h1 className="max-w-xl space-y-2 text-3xl font-bold  sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[3.5rem]">
-          <span className="block ">
-            <span className="text-brand-secondary">{titleLine1Accent}</span>{" "}
-            <span className="text-foreground">{titleLine1Main}</span>
-          </span>
+        <h1 className="max-w-xl space-y-2 text-3xl font-bold sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15] 2xl:text-[3.5rem]">
           <span className="block">
-            <span className="text-foreground">{titleLine2Main}</span>{" "}
-            <span className="text-brand-secondary">{titleLine2Accent}</span>
+            {titleLine1Accent ? (
+              <span className="text-brand-secondary">{titleLine1Accent}</span>
+            ) : null}
+            {titleLine1Accent && titleLine1Main ? " " : null}
+            {titleLine1Main ? (
+              <span className="text-foreground">{titleLine1Main}</span>
+            ) : null}
           </span>
+          {(titleLine2Main || titleLine2Accent) && (
+            <span className="block">
+              {titleLine2Main ? (
+                <span className="text-foreground">{titleLine2Main}</span>
+              ) : null}
+              {titleLine2Main && titleLine2Accent ? " " : null}
+              {titleLine2Accent ? (
+                <span className="text-brand-secondary">{titleLine2Accent}</span>
+              ) : null}
+            </span>
+          )}
         </h1>
         <p className="max-w-xl text-base leading-relaxed text-black">
           {description}
         </p>
       </div>
 
-      {/* <HeroFeatureList features={features} /> */}
-<HeroMarquee />
+      <HeroMarquee />
       <HeroCtaButtons
         residentialCta={residentialCta}
         commercialCta={commercialCta}

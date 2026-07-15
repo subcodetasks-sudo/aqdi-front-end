@@ -1,7 +1,9 @@
 "use client";
 
 import { Info } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
@@ -28,6 +30,7 @@ export default function CreateContractPaymentStep({
   contractType,
   onBack,
 }: CreateContractPaymentStepProps) {
+  const tFooter = useTranslations("footer");
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const { submitSaveProperty, isSaving } = useSaveProperty();
@@ -131,6 +134,16 @@ export default function CreateContractPaymentStep({
               </Link>
               .
             </p>
+          </div>
+
+          <div className="flex justify-center pt-2">
+            <Image
+              src="/images/payments.png"
+              alt={tFooter("paymentsAlt")}
+              width={280}
+              height={40}
+              className="h-auto w-full max-w-[280px] object-contain"
+            />
           </div>
         </div>
       </div>

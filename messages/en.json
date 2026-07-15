@@ -1,4 +1,11 @@
 {
+  "site": {
+    "metaTitle": "Aqadi | Electronic Rental Contract Documentation",
+    "metaDescription": "Aqadi helps you document residential and commercial rental contracts electronically through the Ejar network — quickly, securely, and in a way that protects all parties.",
+    "homeTitle": "Home",
+    "aboutTitle": "About us",
+    "aboutDescription": "Learn about Aqadi, our vision, mission, and values for documenting electronic rental contracts."
+  },
   "navbar": {
     "topBar": {
       "aboutUs": "About us",
