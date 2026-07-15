@@ -186,6 +186,11 @@ export default function CreateContractDeedStep({
     }
 
     if (isLastPhase) {
+      if (!nationalAddressMethod) {
+        toast.error(tIncomplete("incompleteContinue"));
+        return;
+      }
+
       const submitted = await submitStep2({
         addressMethod: nationalAddressMethod,
         photoFiles: nationalAddressPhotoFiles,
