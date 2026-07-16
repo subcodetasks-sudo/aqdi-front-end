@@ -1,4 +1,13 @@
-export const PROPERTY_NATIONAL_ADDRESS_METHODS = ["map", "photo", "link"] as const;
+import {
+  isManualNationalAddressComplete,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
+
+export const PROPERTY_NATIONAL_ADDRESS_METHODS = [
+  "photo",
+  "link",
+  "manual",
+] as const;
 
 export type PropertyNationalAddressMethodId =
   (typeof PROPERTY_NATIONAL_ADDRESS_METHODS)[number];
@@ -14,21 +23,28 @@ export const DEFAULT_PROPERTY_NATIONAL_ADDRESS_LOCATION: PropertyNationalAddress
     lng: 46.6753,
   };
 
-function canContinueNationalAddress(
-  method: PropertyNationalAddressMethodId,
+export function canContinueNationalAddress(
+  method: PropertyNationalAddressMethodId | "",
   photoFiles: File[],
   linkUrl: string,
-  options?: { hasExistingPhoto?: boolean },
+  options?: {
+    hasExistingPhoto?: boolean;
+    manualAddress?: ManualNationalAddressData;
+  },
 ) {
-  if (method === "map") {
-    return true;
-  }
-
   if (method === "photo") {
     return photoFiles.length > 0 || Boolean(options?.hasExistingPhoto);
   }
 
-  return linkUrl.trim().length > 0;
-}
+  if (method === "link") {
+    return linkUrl.trim().length > 0;
+  }
 
-export { canContinueNationalAddress };
+  if (method === "manual") {
+    return options?.manualAddress
+      ? isManualNationalAddressComplete(options.manualAddress)
+      : false;
+  }
+
+  return false;
+}

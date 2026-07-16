@@ -14,6 +14,7 @@ type CreateUnitWizardProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
   contractType: PropertyContractType;
+  contractTypeLocked: boolean;
   unitId: number | null;
   initialUnitData: UnitDataState | null;
 };
@@ -22,6 +23,7 @@ export default function CreateUnitWizard({
   labels,
   propertyId,
   contractType,
+  contractTypeLocked,
   unitId,
   initialUnitData,
 }: CreateUnitWizardProps) {
@@ -69,6 +71,7 @@ export default function CreateUnitWizard({
       <CreateUnitStep
         labels={labels}
         propertyId={propertyId}
+        contractTypeLocked={contractTypeLocked}
         unitId={unitId}
         onBack={() => router.back()}
         onComplete={handleComplete}

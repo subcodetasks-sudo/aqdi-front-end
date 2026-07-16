@@ -5,7 +5,6 @@ import {
   isOwnerDataComplete as isBaseOwnerDataComplete,
   type OwnerValidationIssue as ContractOwnerValidationIssue,
 } from "@/lib/validation/owner-step-validation";
-import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
 
 export const HAS_AGENT_OPTIONS = ["yes", "no"] as const;
 
@@ -47,7 +46,7 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
   fullName: "",
   idNumber: "",
   birthDate: EMPTY_BIRTH_DATE,
-  phone: "",
+  phone: "05",
   iban: "",
   hasAgent: "",
 };
@@ -55,16 +54,14 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
 export const EMPTY_AGENT_DATA: AgentDataState = {
   idNumber: "",
   birthDate: { ...EMPTY_BIRTH_DATE, calendarType: "gregorian" },
-  phone: "",
+  phone: "05",
   powerOfAttorneyFiles: [],
 };
 
 export const OWNER_STEP_MAX_PHASE_COUNT = 2;
 
 export function isOwnerDataComplete(ownerData: OwnerDataState) {
-  return (
-    isBaseOwnerDataComplete(ownerData) && isPropertyOwnerIbanComplete(ownerData.iban)
-  );
+  return isBaseOwnerDataComplete(ownerData);
 }
 
 export {

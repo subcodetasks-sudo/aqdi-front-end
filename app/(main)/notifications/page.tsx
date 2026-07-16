@@ -4,20 +4,24 @@ import { useFcm } from "@/features/notifications/hooks/use-fcm";
 import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 import { useEffect, useState } from "react";
 import { onForegroundMessage } from "@/features/notifications/services/firebase-client";
+import { showAppNotification } from "@/features/notifications/services/show-app-notification";
 import { Button } from "@/components/ui/button";
 
 export default function NotificationsTestPage() {
-  // VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-  const VAPID_KEY = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY ?? "";
-
   const { token, notificationPermission, requestPermission, isLoading } =
-    useFcm(VAPID_KEY);
+    useFcm();
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     // Listen for foreground messages
     const unsubscribe = onForegroundMessage((payload) => {
-      console.log("Foreground message received in Test Page:", payload);
+      const title =
+        payload.notification?.title || payload.data?.title || "إشعار جديد";
+      const body =
+        payload.notification?.body || payload.data?.body || "";
+      const icon = payload.notification?.icon || payload.data?.icon;
+
+      showAppNotification({ title, body, icon });
       setUnreadCount((prev) => prev + 1);
     });
 

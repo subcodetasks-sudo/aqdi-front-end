@@ -1,5 +1,4 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import type { PaymentMethodOption } from "@/features/create-contract/types/finance-step";
 import type { HasAgentOption } from "@/features/create-contract/types/owner-step";
 import type {
   DelegationTypeOption,
@@ -76,13 +75,50 @@ export type CreateContractLabels = {
       closePreview: string;
     };
     nationalAddress: {
-      methods: string[];
+      methodSelect: {
+        label: string;
+        placeholder: string;
+      };
+      methods: Record<"photo" | "link" | "manual", string>;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
+      };
+      manual: {
+        place: {
+          label: string;
+          placeholder: string;
+          loading: string;
+        };
+        city: {
+          label: string;
+          placeholder: string;
+          loading: string;
+          selectPlaceFirst: string;
+        };
+        neighborhood: {
+          label: string;
+          placeholder: string;
+        };
+        street: {
+          label: string;
+          placeholder: string;
+        };
+        buildingNumber: {
+          label: string;
+          placeholder: string;
+        };
+        postalCode: {
+          label: string;
+          placeholder: string;
+        };
+        extraFigure: {
+          label: string;
+          placeholder: string;
+        };
       };
       photo: CreateContractLabels["deed"]["deedImage"];
     };
@@ -223,17 +259,6 @@ export type CreateContractLabels = {
         placeholder: string;
         options: Record<DelegationTypeOption, string>;
       };
-      region: {
-        label: string;
-        placeholder: string;
-        loading: string;
-      };
-      city: {
-        label: string;
-        placeholder: string;
-        loading: string;
-        selectRegionFirst: string;
-      };
       unifiedRecordNumber: {
         label: string;
         placeholder: string;
@@ -272,6 +297,10 @@ export type CreateContractLabels = {
       unitNumber: {
         label: string;
         placeholder: string;
+      };
+      additionalInfo: {
+        toggle: string;
+        writeHerePlaceholder: string;
       };
       roomsCount: {
         label: string;
@@ -319,6 +348,47 @@ export type CreateContractLabels = {
         label: string;
         placeholder: string;
       };
+      meterRegistration: {
+        title: string;
+        currency: string;
+        tenant: {
+          title: string;
+          subtitle: string;
+          feeBadge: string;
+          feeFooter: string;
+        };
+        owner: {
+          title: string;
+          subtitle: string;
+          noFee: string;
+        };
+        notice: {
+          beforeFee: string;
+          feeAmount: string;
+          afterFee: string;
+          nonRefundable: string;
+          afterNonRefundable: string;
+          lessThanMonth: string;
+          afterLessThanMonth: string;
+        };
+      };
+    };
+    leaseRenewal: {
+      heading: string;
+      subtitle: string;
+      addNotesToggle: string;
+      edit: string;
+      confirmContinue: string;
+      notesDialog: {
+        title: string;
+        close: string;
+        heading: string;
+        subtitle: string;
+        notesLabel: string;
+        notesPlaceholder: string;
+        stepIndicator: string;
+        save: string;
+      };
     };
     saveLaterDialog: {
       title: string;
@@ -364,6 +434,14 @@ export type CreateContractLabels = {
       label: string;
       loading: string;
       optionsError: string;
+      otherOption: string;
+      custom: {
+        yearOption: string;
+        monthOption: string;
+        monthOptionZero: string;
+        loadingPreview: string;
+        previewError: string;
+      };
     };
     totalRentAmount: {
       label: string;
@@ -371,7 +449,8 @@ export type CreateContractLabels = {
     };
     paymentMethod: {
       label: string;
-      options: Record<PaymentMethodOption, string>;
+      loading: string;
+      optionsError: string;
     };
     addTenantPermissions: {
       label: string;
@@ -418,6 +497,7 @@ export type CreateContractLabels = {
       meterFeesTotal: string;
       services: string;
       servicesTotal: string;
+      docFee: string;
       total: string;
       currency: string;
       ejarLogoAlt: string;
@@ -447,6 +527,33 @@ export type CreateContractLabels = {
       privacyLink: string;
       termsHref: string;
       privacyHref: string;
+    };
+    methodDialog: {
+      title: string;
+      question: string;
+      submitting: string;
+      draft: {
+        title: string;
+        description: string;
+      };
+      payNow: {
+        title: string;
+        description: string;
+      };
+      missingContractSession: string;
+      draftError: string;
+    };
+    draftSuccessDialog: {
+      title: string;
+      paymentStatusLabel: string;
+      paymentStatusDescription: string;
+      orderNumberLabel: string;
+      copy: string;
+      copySuccess: string;
+      copyError: string;
+      preparationDescription: string;
+      whatsappCta: string;
+      whatsappHref: string;
     };
   };
   prices: {

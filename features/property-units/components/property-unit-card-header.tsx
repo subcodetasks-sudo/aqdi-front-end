@@ -46,7 +46,7 @@ export default function PropertyUnitCardHeader({
           {t("editUnit")}
         </Link>
 
-        <PropertyUnitDeleteButton unitId={unit.unitId} />
+        {/* <PropertyUnitDeleteButton unitId={unit.unitId} /> */}
       </div>
     </div>
   );

@@ -1,18 +1,19 @@
 "use client";
 
-import { CreditCard, IdCard, Phone, User } from "lucide-react";
+import { IdCard, Phone } from "lucide-react";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractIconInputField from "@/features/create-contract/components/create-contract-icon-input-field";
+import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
 import { HAS_AGENT_OPTIONS } from "@/features/create-contract/types/owner-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OwnerDataState } from "@/features/create-contract/types/owner-step";
-import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
 import {
   getIdNumberFieldError,
   getPhoneFieldError,
 } from "@/lib/validation/owner-step-validation";
+import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractOwnerDataPhaseProps = {
   labels: CreateContractLabels["owner"]["ownerData"];
@@ -52,22 +53,9 @@ export default function CreateContractOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
-  const ibanValue = value.iban ?? "";
-  const ibanError =
-    ibanValue.trim() && !isPropertyOwnerIbanComplete(ibanValue)
-      ? validationLabels.iban
-      : undefined;
 
   return (
     <div className="space-y-5">
-      <CreateContractIconInputField
-        label={labels.fullName.label}
-        placeholder={labels.fullName.placeholder}
-        value={value.fullName}
-        onChange={(fullName) => updateField("fullName", fullName)}
-        icon={User}
-      />
-
       <CreateContractIconInputField
         label={labels.idNumber.label}
         placeholder={labels.idNumber.placeholder}
@@ -88,19 +76,15 @@ export default function CreateContractOwnerDataPhase({
         onChange={(birthDate) => updateField("birthDate", birthDate)}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <CreateContractIconInputField
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <CreateContractSaudiMobileField
           label={labels.phone.label}
           placeholder={labels.phone.placeholder}
           value={value.phone}
           onChange={(phone) =>
-            updateField("phone", phone.replace(/\D/g, "").slice(0, 10))
+            updateField("phone", toSaudiMobileInputValue(phone))
           }
           icon={Phone}
-          type="tel"
-          dir="ltr"
-          inputMode="tel"
-          maxLength={10}
           errorMessage={phoneError}
         />
 
@@ -114,19 +98,6 @@ export default function CreateContractOwnerDataPhase({
           }
         />
       </div>
-
-      <CreateContractIconInputField
-        label={labels.iban.label}
-        placeholder={labels.iban.placeholder}
-        value={ibanValue}
-        onChange={(iban) =>
-          updateField("iban", iban.replace(/\s/g, "").toUpperCase().slice(0, 24))
-        }
-        icon={CreditCard}
-        dir="ltr"
-        maxLength={24}
-        errorMessage={ibanError}
-      />
     </div>
   );
 }

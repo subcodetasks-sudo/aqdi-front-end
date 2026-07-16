@@ -1,4 +1,4 @@
-import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
+import { isSaudiMobilePrefixOnly } from "@/lib/validation/format-saudi-mobile-for-form";
 
 export type OwnerBirthDateLike = {
   day: string;
@@ -40,9 +40,10 @@ function isBirthDateComplete(birthDate: OwnerBirthDateLike) {
   );
 }
 
-function isPhoneComplete(phone: string) {
+/** Saudi mobile as entered by the user: 05xxxxxxxx (10 digits). */
+export function isPhoneComplete(phone: string) {
   const digits = phone.replace(/\D/g, "");
-  return digits.length >= 9;
+  return /^05\d{8}$/.test(digits);
 }
 
 function isIdNumberComplete(idNumber: string) {
@@ -51,16 +52,11 @@ function isIdNumberComplete(idNumber: string) {
 }
 
 export function isOwnerDataComplete(ownerData: OwnerDataLike) {
-  const hasValidIban =
-    ownerData.iban === undefined || isPropertyOwnerIbanComplete(ownerData.iban);
-
   return (
-    ownerData.fullName.trim().length > 0 &&
     isIdNumberComplete(ownerData.idNumber) &&
     isBirthDateComplete(ownerData.birthDate) &&
     isPhoneComplete(ownerData.phone) &&
-    ownerData.hasAgent !== "" &&
-    hasValidIban
+    ownerData.hasAgent !== ""
   );
 }
 
@@ -78,10 +74,6 @@ export function getOwnerDataValidationIssues(
 ): OwnerValidationIssue[] {
   const issues: OwnerValidationIssue[] = [];
 
-  if (ownerData.fullName.trim().length === 0) {
-    issues.push("fullName");
-  }
-
   const idDigits = ownerData.idNumber.replace(/\D/g, "");
   if (idDigits.length === 0) {
     issues.push("idNumber");
@@ -93,23 +85,14 @@ export function getOwnerDataValidationIssues(
     issues.push("birthDate");
   }
 
-  const phoneDigits = ownerData.phone.replace(/\D/g, "");
-  if (phoneDigits.length === 0) {
+  if (isSaudiMobilePrefixOnly(ownerData.phone)) {
     issues.push("phone");
-  } else if (phoneDigits.length < 9) {
+  } else if (!isPhoneComplete(ownerData.phone)) {
     issues.push("phoneLength");
   }
 
   if (ownerData.hasAgent === "") {
     issues.push("hasAgent");
-  }
-
-  if (ownerData.iban !== undefined) {
-    if (!ownerData.iban.trim()) {
-      issues.push("iban");
-    } else if (!isPropertyOwnerIbanComplete(ownerData.iban)) {
-      issues.push("ibanInvalid");
-    }
   }
 
   return issues;
@@ -131,10 +114,9 @@ export function getAgentDataValidationIssues(
     issues.push("birthDate");
   }
 
-  const phoneDigits = agentData.phone.replace(/\D/g, "");
-  if (phoneDigits.length === 0) {
+  if (isSaudiMobilePrefixOnly(agentData.phone)) {
     issues.push("phone");
-  } else if (phoneDigits.length < 9) {
+  } else if (!isPhoneComplete(agentData.phone)) {
     issues.push("phoneLength");
   }
 
@@ -163,11 +145,10 @@ export function getPhoneFieldError(
   phone: string,
   messages: { required: string; length: string },
 ) {
-  const digits = phone.replace(/\D/g, "");
-  if (digits.length === 0) {
+  if (isSaudiMobilePrefixOnly(phone)) {
     return undefined;
   }
-  if (digits.length < 9) {
+  if (!isPhoneComplete(phone)) {
     return messages.length;
   }
   return undefined;

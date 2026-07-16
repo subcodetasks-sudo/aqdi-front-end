@@ -1,18 +1,20 @@
 "use client";
 
 import { Info } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { toast } from "sonner";
 
 import { Switch } from "@/components/ui/switch";
+import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
+import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
 import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
-import { useStartContractPayment } from "@/features/create-contract/hooks/use-start-contract-payment";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -28,15 +30,25 @@ export default function CreateContractPaymentStep({
   contractType,
   onBack,
 }: CreateContractPaymentStepProps) {
+  const tFooter = useTranslations("footer");
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const { submitSaveProperty, isSaving } = useSaveProperty();
-  const { startPayment, isPaying } = useStartContractPayment();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
+
+  const paymentFlow = useContractPaymentMethodFlow(
+    contractSession?.contractId,
+    contractSession?.uuid,
+    {
+      methodDialog: labels.methodDialog,
+      draftSuccessDialog: labels.draftSuccessDialog,
+      payError: labels.navigation.payError,
+    },
+  );
 
   function handleSwitchChange(checked: boolean) {
     if (checked) {
-      setIsDialogOpen(true);
+      setIsPropertyDialogOpen(true);
       return;
     }
 
@@ -47,8 +59,8 @@ export default function CreateContractPaymentStep({
     });
   }
 
-  function handleDialogOpenChange(open: boolean) {
-    setIsDialogOpen(open);
+  function handlePropertyDialogOpenChange(open: boolean) {
+    setIsPropertyDialogOpen(open);
   }
 
   async function handleSaveProperty(propertyName: string) {
@@ -67,16 +79,7 @@ export default function CreateContractPaymentStep({
       savePropertyData: true,
       propertyName: result.propertyName,
     });
-    setIsDialogOpen(false);
-  }
-
-  async function handlePay() {
-    if (!contractSession?.uuid) {
-      toast.error(labels.navigation.payError);
-      return;
-    }
-
-    await startPayment(contractSession.uuid, labels.navigation.payError);
+    setIsPropertyDialogOpen(false);
   }
 
   return (
@@ -132,25 +135,50 @@ export default function CreateContractPaymentStep({
               .
             </p>
           </div>
+
+          <div className="flex justify-center pt-2">
+            <Image
+              src="/images/payments.png"
+              alt={tFooter("paymentsAlt")}
+              width={280}
+              height={40}
+              className="h-auto w-full max-w-[280px] object-contain"
+            />
+          </div>
         </div>
       </div>
 
       <CreateContractSavePropertyDialog
         labels={labels.savePropertyData.dialog}
-        open={isDialogOpen}
-        onOpenChange={handleDialogOpenChange}
+        open={isPropertyDialogOpen}
+        onOpenChange={handlePropertyDialogOpenChange}
         initialValue={paymentData.propertyName}
         isSaving={isSaving}
         onSave={handleSaveProperty}
+      />
+
+      <ContractPaymentMethodFlowDialogs
+        labels={{
+          methodDialog: labels.methodDialog,
+          draftSuccessDialog: labels.draftSuccessDialog,
+          payError: labels.navigation.payError,
+        }}
+        isMethodDialogOpen={paymentFlow.isMethodDialogOpen}
+        onMethodDialogOpenChange={paymentFlow.setIsMethodDialogOpen}
+        isDraftSuccessDialogOpen={paymentFlow.isDraftSuccessDialogOpen}
+        onDraftSuccessDialogOpenChange={paymentFlow.setIsDraftSuccessDialogOpen}
+        draftOrderUuid={paymentFlow.draftOrderUuid}
+        isSubmitting={paymentFlow.isSubmitting}
+        onSelect={paymentFlow.handlePaymentMethodSelect}
       />
 
       <CreateContractPaymentNavigation
         previousLabel={labels.navigation.previous}
         payLabel={labels.navigation.pay}
         payingLabel={labels.navigation.paying}
-        isPaying={isPaying}
+        isPaying={paymentFlow.isSubmitting}
         onPrevious={onBack}
-        onPay={() => void handlePay()}
+        onPay={paymentFlow.openMethodDialog}
       />
     </div>
   );

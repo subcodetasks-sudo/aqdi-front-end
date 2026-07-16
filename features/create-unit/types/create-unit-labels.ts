@@ -20,6 +20,7 @@ export type CreateUnitLabels = {
   selectPlaceholder: string;
   contractType: {
     label: string;
+    linkedLabel: string;
     options: {
       housing: string;
       commercial: string;
@@ -46,10 +47,17 @@ export type CreateUnitLabels = {
     label: string;
     placeholder: string;
   };
+  additionalInfo: {
+    toggle: string;
+    writeHerePlaceholder: string;
+  };
   roomsCount: {
     label: string;
   };
   hallsCount: {
+    label: string;
+  };
+  majlisCount: {
     label: string;
   };
   kitchensCount: {

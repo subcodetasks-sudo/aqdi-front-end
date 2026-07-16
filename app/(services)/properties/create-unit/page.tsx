@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import CreateUnitPageContent from "@/features/create-unit/components/create-unit-page-content";
 import { mapApiUnitToUnitData } from "@/features/create-unit/utils/map-api-unit-to-form";
+import { resolveCreateUnitContractType } from "@/features/create-unit/utils/resolve-create-unit-contract-type";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 import {
@@ -24,8 +25,35 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
   const params = await searchParams;
   const propertyId = parseUnitPropertyId(params.propertyId);
   const unitId = parseUnitId(params.unitId);
-  const contractType = parseUnitContractType(params.contract_type, params.type);
+  let contractType = parseUnitContractType(params.contract_type, params.type);
+  let contractTypeLocked = false;
   const t = await getTranslations("createUnit");
+
+  let initialUnitData: UnitDataState | null = null;
+
+  if (propertyId) {
+    try {
+      const property = await getPropertyUnits(propertyId);
+      const unit = unitId
+        ? property.units?.find((item) => item.id === unitId) ?? null
+        : null;
+
+      if (unit) {
+        initialUnitData = mapApiUnitToUnitData(unit);
+      }
+
+      const resolvedContractType = resolveCreateUnitContractType({
+        contractType,
+        unitId,
+        unit,
+      });
+
+      contractType = resolvedContractType.contractType;
+      contractTypeLocked = resolvedContractType.contractTypeLocked;
+    } catch {
+      initialUnitData = null;
+    }
+  }
 
   const labels: CreateUnitLabels = {
     backLabel: t("backLabel"),
@@ -66,11 +94,18 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       label: t("unitNumber.label"),
       placeholder: t("unitNumber.placeholder"),
     },
+    additionalInfo: {
+      toggle: t("additionalInfo.toggle"),
+      writeHerePlaceholder: t("additionalInfo.writeHerePlaceholder"),
+    },
     roomsCount: {
       label: t("roomsCount.label"),
     },
     hallsCount: {
       label: t("hallsCount.label"),
+    },
+    majlisCount: {
+      label: t("majlisCount.label"),
     },
     kitchensCount: {
       label: t("kitchensCount.label"),
@@ -126,6 +161,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     },
     contractType: {
       label: t("contractType.label"),
+      linkedLabel: t("contractType.linkedLabel"),
       options: {
         housing: t("contractType.options.housing"),
         commercial: t("contractType.options.commercial"),
@@ -133,26 +169,12 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     },
   };
 
-  let initialUnitData: UnitDataState | null = null;
-
-  if (propertyId && unitId) {
-    try {
-      const property = await getPropertyUnits(propertyId);
-      const unit = property.units?.find((item) => item.id === unitId);
-
-      if (unit) {
-        initialUnitData = mapApiUnitToUnitData(unit);
-      }
-    } catch {
-      initialUnitData = null;
-    }
-  }
-
   return (
     <CreateUnitPageContent
       labels={labels}
       propertyId={propertyId}
       contractType={contractType}
+      contractTypeLocked={contractTypeLocked}
       unitId={unitId}
       initialUnitData={initialUnitData}
     />

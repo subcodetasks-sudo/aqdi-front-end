@@ -1,26 +1,24 @@
-/* global self */
-// Firebase Messaging Service Worker
-// Handles background push notifications
+/* global self, importScripts, firebase */
+// Keep in sync with NEXT_PUBLIC_FIREBASE_* env vars.
 
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+importScripts("https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.11.0/firebase-messaging-compat.js",
+);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFsOu-MlO2a9cmsQUS6li9PSMZnIcvLLs",
-  authDomain: "base-3c8d1.firebaseapp.com",
-  projectId: "base-3c8d1",
-  storageBucket: "base-3c8d1.firebasestorage.app",
-  messagingSenderId: "688944977102",
-  appId: "1:688944977102:web:d8fc2e39ac88f4eee5ec9f",
-  measurementId: "G-6XZ6MTCSV2",
-};
+firebase.initializeApp({
+  apiKey: "AIzaSyBGg6G-3NZb6-M-6gcjsLEY6IjIN3ixJII",
+  authDomain: "aqdi-3d3ee.firebaseapp.com",
+  projectId: "aqdi-3d3ee",
+  storageBucket: "aqdi-3d3ee.firebasestorage.app",
+  messagingSenderId: "834427823859",
+  appId: "1:834427823859:web:9ad86ee9158753eac5f986",
+  measurementId: "G-73D838TV0M",
+});
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+const messaging = firebase.messaging();
 
-onBackgroundMessage(messaging, (payload) => {
-  console.log("[Service Worker] Received background message:", payload);
-
+messaging.onBackgroundMessage((payload) => {
   const notificationTitle =
     payload.data?.title || payload.notification?.title || "New Message";
   const notificationOptions = {

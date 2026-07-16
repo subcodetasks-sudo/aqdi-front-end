@@ -2,6 +2,11 @@ export const FURNISHING_TYPE_OPTIONS = ["new", "used"] as const;
 
 export type FurnishingTypeOption = (typeof FURNISHING_TYPE_OPTIONS)[number];
 
+export const METER_REGISTRATION_PARTIES = ["owner", "tenant"] as const;
+
+export type MeterRegistrationParty =
+  (typeof METER_REGISTRATION_PARTIES)[number];
+
 export type UnitDataState = {
   unitTypeId: string;
   unitUsageId: string;
@@ -10,6 +15,7 @@ export type UnitDataState = {
   unitNumber: string;
   roomsCount: string;
   hallsCount: string;
+  majlisCount: string;
   kitchensCount: string;
   bathroomsCount: string;
   windowAcCount: string;
@@ -19,8 +25,10 @@ export type UnitDataState = {
   furnishingType: FurnishingTypeOption | "";
   addElectricityMeter: boolean;
   electricityMeterNumber: string;
+  electricityMeterRegistration: MeterRegistrationParty | "";
   addWaterMeter: boolean;
   waterMeterNumber: string;
+  waterMeterRegistration: MeterRegistrationParty | "";
 };
 
 export const EMPTY_UNIT_DATA: UnitDataState = {
@@ -31,6 +39,7 @@ export const EMPTY_UNIT_DATA: UnitDataState = {
   unitNumber: "",
   roomsCount: "",
   hallsCount: "",
+  majlisCount: "",
   kitchensCount: "",
   bathroomsCount: "",
   windowAcCount: "",
@@ -40,8 +49,10 @@ export const EMPTY_UNIT_DATA: UnitDataState = {
   furnishingType: "",
   addElectricityMeter: false,
   electricityMeterNumber: "",
+  electricityMeterRegistration: "",
   addWaterMeter: false,
   waterMeterNumber: "",
+  waterMeterRegistration: "",
 };
 
 function isSelectFilled(value: string) {
@@ -58,36 +69,33 @@ function isPositiveNumber(value: string) {
   return Number.isFinite(number) && number > 0;
 }
 
-export function isUnitDataComplete(unitData: UnitDataState) {
+export function isUnitDataComplete(
+  unitData: UnitDataState,
+  options?: { requireMeterRegistration?: boolean },
+) {
   const baseComplete =
     isSelectFilled(unitData.unitTypeId) &&
     isSelectFilled(unitData.unitUsageId) &&
     isPositiveNumber(unitData.totalArea) &&
     isSelectFilled(unitData.floorNumber) &&
-    unitData.unitNumber.trim() !== "" &&
-    isSelectFilled(unitData.roomsCount) &&
-    isSelectFilled(unitData.hallsCount) &&
-    isSelectFilled(unitData.kitchensCount) &&
-    isSelectFilled(unitData.bathroomsCount) &&
-    isSelectFilled(unitData.windowAcCount) &&
-    isSelectFilled(unitData.splitAcCount);
+    unitData.unitNumber.trim() !== "";
 
   if (!baseComplete) {
     return false;
   }
 
-  if (unitData.furnished && unitData.furnishingType === "") {
-    return false;
+  if (!options?.requireMeterRegistration) {
+    return true;
   }
 
   if (
     unitData.addElectricityMeter &&
-    unitData.electricityMeterNumber.trim() === ""
+    unitData.electricityMeterRegistration === ""
   ) {
     return false;
   }
 
-  if (unitData.addWaterMeter && unitData.waterMeterNumber.trim() === "") {
+  if (unitData.addWaterMeter && unitData.waterMeterRegistration === "") {
     return false;
   }
 

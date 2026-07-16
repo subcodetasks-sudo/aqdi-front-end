@@ -17,14 +17,15 @@ export default function AboutValuesItem({
   imageAlt,
   reverse = false,
 }: AboutValuesItemProps) {
+  const remote =
+    imageSrc.startsWith("http://") || imageSrc.startsWith("https://");
+
   return (
     <article
       className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-14 ${
         reverse ? "lg:[&>*:first-child]:order-2" : ""
       }`}
     >
-
-
       <div className="space-y-4 text-center lg:text-start">
         <p className="text-sm font-semibold text-brand">{eyebrow}</p>
         <h3 className="text-4xl font-extrabold leading-tight text-brand md:text-5xl">
@@ -41,7 +42,8 @@ export default function AboutValuesItem({
           alt={imageAlt}
           width={1024}
           height={768}
-          className="h-auto w-full object-cover"
+          className="h-auto w-full object-contain"
+          unoptimized={remote}
         />
       </div>
     </article>

@@ -1,7 +1,7 @@
 "use client";
 
-import CreateContractHeader from "@/features/create-contract/components/create-contract-header";
 import CreateContractWizard from "@/features/create-contract/components/create-contract-wizard";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
@@ -20,16 +20,16 @@ export default function CreateContractPageContent({
       : labels.pageTitleCommercial;
 
   return (
-    <section className="space-y-8">
-      <section className="container pt-8 lg:pt-12 ">
-        <CreateContractHeader
-          backLabel={labels.backLabel}
-          pageTitle={pageTitle}
-        />
-      </section>
-      <section className="container pb-8 lg:pb-12 lg:max-w-2xl mx-auto">
+    <>
+      <ServicesPageBackConfig
+        backLabel={labels.backLabel}
+        pageTitle={pageTitle}
+        useRouterBack
+      />
+
+      <div className="mx-auto max-w-2xl">
         <CreateContractWizard labels={labels} contractType={contractType} />
-      </section>
-    </section>
+      </div>
+    </>
   );
 }

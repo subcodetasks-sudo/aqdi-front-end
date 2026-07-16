@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import PaymentStatusVerifier from "@/features/payment/components/payment-status-verifier";
+import { getPaymentContent } from "@/features/payment/services/get-payment-content";
 
 type PaymentErrorPageProps = {
   params: Promise<{
@@ -11,11 +12,13 @@ type PaymentErrorPageProps = {
 export default async function PaymentErrorPage({ params }: PaymentErrorPageProps) {
   const { contractUuid } = await params;
   const t = await getTranslations("paymentStatus");
+  const paymentContent = await getPaymentContent("failed");
 
   return (
     <PaymentStatusVerifier
       contractUuid={contractUuid}
       status="error"
+      paymentContent={paymentContent}
       labels={{
         backLabel: t("backLabel"),
         successPageTitle: t("success.pageTitle"),
@@ -25,7 +28,10 @@ export default async function PaymentErrorPage({ params }: PaymentErrorPageProps
         errorTitle: t("error.title"),
         errorDescription: t("error.description"),
         contractNumberLabel: t("contractNumberLabel"),
-        contractIdLabel: t("contractIdLabel"),
+        contractTypeLabel: t("contractTypeLabel"),
+        paidAmountLabel: t("paidAmountLabel"),
+        housingContractTypeLabel: t("housingContractTypeLabel"),
+        commercialContractTypeLabel: t("commercialContractTypeLabel"),
         backToRequestsLabel: t("backToRequests"),
         backToHomeLabel: t("backToHome"),
         retryPaymentLabel: t("retryPayment"),

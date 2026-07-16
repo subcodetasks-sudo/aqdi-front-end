@@ -3,12 +3,16 @@ import { FaWhatsapp } from "react-icons/fa";
 
 type HeroWhatsappButtonProps = {
   label: string;
+  href?: string;
 };
 
-export default function HeroWhatsappButton({ label }: HeroWhatsappButtonProps) {
+export default function HeroWhatsappButton({
+  label,
+  href = "https://wa.me/",
+}: HeroWhatsappButtonProps) {
   return (
     <Link
-      href="https://wa.me/"
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}

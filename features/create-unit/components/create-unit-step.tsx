@@ -17,6 +17,7 @@ import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-
 type CreateUnitStepProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
+  contractTypeLocked: boolean;
   unitId: number | null;
   onBack: () => void;
   onComplete: (message?: string) => void;
@@ -25,6 +26,7 @@ type CreateUnitStepProps = {
 export default function CreateUnitStep({
   labels,
   propertyId,
+  contractTypeLocked,
   unitId,
   onBack,
   onComplete,
@@ -80,7 +82,10 @@ export default function CreateUnitStep({
           <CreateUnitDataForm
             labels={labels}
             contractType={contractType}
-            onContractTypeChange={setContractType}
+            contractTypeLocked={contractTypeLocked}
+            onContractTypeChange={
+              contractTypeLocked ? undefined : setContractType
+            }
             unitTypeOptions={unitTypesQuery.data ?? []}
             unitUsageOptions={unitUsageQuery.data ?? []}
             value={unitData}

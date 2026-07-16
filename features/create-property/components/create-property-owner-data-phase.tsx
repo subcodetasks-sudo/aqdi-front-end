@@ -1,10 +1,11 @@
 "use client";
 
-import { CreditCard, IdCard, Phone, User } from "lucide-react";
+import { IdCard, Phone } from "lucide-react";
 
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import CreatePropertyIconInputField from "@/features/create-property/components/create-property-icon-input-field";
+import CreatePropertySaudiMobileField from "@/features/create-property/components/create-property-saudi-mobile-field";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import {
   PROPERTY_HAS_AGENT_OPTIONS,
@@ -14,7 +15,7 @@ import {
   getIdNumberFieldError,
   getPhoneFieldError,
 } from "@/lib/validation/owner-step-validation";
-import { isPropertyOwnerIbanComplete } from "@/features/create-property/utils/property-owner-api";
+import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreatePropertyOwnerDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["ownerData"];
@@ -54,21 +55,9 @@ export default function CreatePropertyOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
-  const ibanError =
-    (value.iban ?? "").trim() && !isPropertyOwnerIbanComplete(value.iban)
-      ? validationLabels.iban
-      : undefined;
 
   return (
     <div className="space-y-5">
-      <CreatePropertyIconInputField
-        label={labels.fullName.label}
-        placeholder={labels.fullName.placeholder}
-        value={value.fullName}
-        onChange={(fullName) => updateField("fullName", fullName)}
-        icon={User}
-      />
-
       <CreatePropertyIconInputField
         label={labels.idNumber.label}
         placeholder={labels.idNumber.placeholder}
@@ -90,18 +79,14 @@ export default function CreatePropertyOwnerDataPhase({
       />
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        <CreatePropertyIconInputField
+        <CreatePropertySaudiMobileField
           label={labels.phone.label}
           placeholder={labels.phone.placeholder}
           value={value.phone}
           onChange={(phone) =>
-            updateField("phone", phone.replace(/\D/g, "").slice(0, 10))
+            updateField("phone", toSaudiMobileInputValue(phone))
           }
           icon={Phone}
-          type="tel"
-          dir="ltr"
-          inputMode="tel"
-          maxLength={10}
           errorMessage={phoneError}
         />
 
@@ -118,19 +103,6 @@ export default function CreatePropertyOwnerDataPhase({
           }
         />
       </div>
-
-      <CreatePropertyIconInputField
-        label={labels.iban.label}
-        placeholder={labels.iban.placeholder}
-        value={value.iban ?? ""}
-        onChange={(iban) =>
-          updateField("iban", iban.replace(/\s/g, "").toUpperCase().slice(0, 24))
-        }
-        icon={CreditCard}
-        dir="ltr"
-        maxLength={24}
-        errorMessage={ibanError}
-      />
     </div>
   );
 }

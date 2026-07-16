@@ -5,8 +5,10 @@ import { IdCard, Phone } from "lucide-react";
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractIconInputField from "@/features/create-contract/components/create-contract-icon-input-field";
+import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { AgentDataState } from "@/features/create-contract/types/owner-step";
+import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractAgentDataPhaseProps = {
   labels: CreateContractLabels["owner"]["agentData"];
@@ -55,18 +57,12 @@ export default function CreateContractAgentDataPhase({
         onChange={(birthDate) => updateField("birthDate", birthDate)}
       />
 
-      <CreateContractIconInputField
+      <CreateContractSaudiMobileField
         label={labels.phone.label}
         placeholder={labels.phone.placeholder}
         value={value.phone}
-        onChange={(phone) =>
-          updateField("phone", phone.replace(/\D/g, "").slice(0, 10))
-        }
+        onChange={(phone) => updateField("phone", toSaudiMobileInputValue(phone))}
         icon={Phone}
-        type="tel"
-        dir="ltr"
-        inputMode="tel"
-        maxLength={10}
       />
 
       <CreateContractDeedImageUpload

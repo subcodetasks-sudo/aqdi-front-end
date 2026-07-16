@@ -1,41 +1,30 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
+import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import {
   PROPERTY_NATIONAL_ADDRESS_METHODS,
-  type PropertyNationalAddressMapLocation,
   type PropertyNationalAddressMethodId,
 } from "@/features/create-property/types/national-address";
-import type { OsmMapLocation } from "@/features/shared/components/osm-location-picker-map";
-import { cn } from "@/lib/utils";
-
-const OsmLocationPickerMap = dynamic(
-  () => import("@/features/shared/components/osm-location-picker-map"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-72 animate-pulse rounded-3xl border border-[#e8e8e8] bg-brand-background md:h-80" />
-    ),
-  },
-);
+import ManualNationalAddressForm from "@/features/shared/components/manual-national-address-form";
+import type { ManualNationalAddressData } from "@/features/shared/types/manual-national-address";
 
 type CreatePropertyNationalAddressProps = {
   labels: CreatePropertyLabels["address"]["nationalAddress"];
-  method: PropertyNationalAddressMethodId;
+  method: PropertyNationalAddressMethodId | "";
   onMethodChange: (method: PropertyNationalAddressMethodId) => void;
   photoFiles: File[];
   onPhotoFilesChange: (files: File[]) => void;
   existingPhotoUrl?: string | null;
   linkUrl: string;
   onLinkUrlChange: (url: string) => void;
-  mapLocation: PropertyNationalAddressMapLocation;
-  onMapLocationChange: (location: PropertyNationalAddressMapLocation) => void;
+  manualAddress: ManualNationalAddressData;
+  onManualAddressChange: (value: ManualNationalAddressData) => void;
 };
 
 export default function CreatePropertyNationalAddress({
@@ -47,48 +36,27 @@ export default function CreatePropertyNationalAddress({
   existingPhotoUrl = null,
   linkUrl,
   onLinkUrlChange,
-  mapLocation,
-  onMapLocationChange,
+  manualAddress,
+  onManualAddressChange,
 }: CreatePropertyNationalAddressProps) {
   const linkInputId = useId();
 
-  function handleMapLocationChange(location: OsmMapLocation) {
-    onMapLocationChange(location);
-  }
+  const methodOptions = PROPERTY_NATIONAL_ADDRESS_METHODS.map((methodId) => ({
+    value: methodId,
+    label: labels.methods[methodId],
+  }));
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center rounded-full border border-[#e8e8e8] bg-brand-background p-1">
-        {labels.methods.map((methodLabel, index) => {
-          const methodId = PROPERTY_NATIONAL_ADDRESS_METHODS[index];
-
-          return (
-            <button
-              key={methodId}
-              type="button"
-              onClick={() => onMethodChange(methodId)}
-              className={cn(
-                "flex-1 rounded-full px-3 py-2.5 text-sm font-semibold transition-colors",
-                method === methodId
-                  ? "bg-brand text-white"
-                  : "text-[#7f7f7f] hover:text-[#555555]",
-              )}
-            >
-              {methodLabel}
-            </button>
-          );
-        })}
-      </div>
-
-      {method === "map" ? (
-        <OsmLocationPickerMap
-          value={mapLocation}
-          onChange={handleMapLocationChange}
-          mapTitle={labels.mapTitle}
-          hint={labels.mapHint}
-          coordinatesLabel={labels.coordinatesLabel}
-        />
-      ) : null}
+      <CreatePropertyFormSelect
+        label={labels.methodSelect.label}
+        placeholder={labels.methodSelect.placeholder}
+        options={methodOptions}
+        value={method}
+        onChange={(nextMethod) =>
+          onMethodChange(nextMethod as PropertyNationalAddressMethodId)
+        }
+      />
 
       {method === "photo" ? (
         <CreatePropertyDeedImageUpload
@@ -112,6 +80,14 @@ export default function CreatePropertyNationalAddress({
             className="h-14 rounded-full border-[#e8e8e8] bg-brand-background px-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] focus-visible:ring-brand-secondary/20"
           />
         </div>
+      ) : null}
+
+      {method === "manual" ? (
+        <ManualNationalAddressForm
+          labels={labels.manual}
+          value={manualAddress}
+          onChange={onManualAddressChange}
+        />
       ) : null}
     </div>
   );

@@ -37,3 +37,7 @@ export function deedTypeIsDeceasedOwner(deedType: DeedTypeId | ""): boolean {
 export function deedTypeIsWaqfOwner(deedType: DeedTypeId | ""): boolean {
   return deedType === "waqf-owner";
 }
+
+export function deedTypeIsLeaseRenewal(deedType: DeedTypeId | ""): boolean {
+  return deedType === "lease-renewal";
+}

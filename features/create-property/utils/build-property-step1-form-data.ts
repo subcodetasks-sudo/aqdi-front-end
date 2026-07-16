@@ -1,5 +1,9 @@
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { PropertyNationalAddressMethodId } from "@/features/create-property/types/national-address";
+import {
+  appendManualNationalAddressFields,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
 
 export type PropertyStep1FormPayload = {
   propertyId?: number;
@@ -16,6 +20,7 @@ export type PropertyStep1FormPayload = {
   addressMethod: PropertyNationalAddressMethodId;
   imageAddress?: File;
   addressUrl?: string;
+  manualAddress?: ManualNationalAddressData;
   latitude: number;
   longitude: number;
 };
@@ -90,5 +95,9 @@ export function appendPropertyStep1Fields(
 
   if (payload.addressMethod === "link" && payload.addressUrl) {
     formData.append("address_url", payload.addressUrl);
+  }
+
+  if (payload.addressMethod === "manual" && payload.manualAddress) {
+    appendManualNationalAddressFields(formData, payload.manualAddress);
   }
 }

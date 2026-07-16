@@ -8,7 +8,5 @@ export type ContractStep4ApiData = {
   type_tenant_dob: string | null;
   tenant_entity_unified_registry_number: string | null;
   authorization_type: string | null;
-  region_of_the_tenant_legal_agent: number | null;
-  city_of_the_tenant_legal_agent: number | null;
   step: number;
 };

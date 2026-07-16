@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpLeft, Menu, User, X } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
-import { usePathname } from "next/navigation";
+import type { MouseEvent } from "react";
+import { ArrowUpLeft, Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { HiBars2 } from "react-icons/hi2";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,19 +16,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import UserSheet from "@/features/auth/components/user-sheet";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import CustomIcon from "@/features/shared/components/custom-icon";
-import { cn } from "@/lib/utils";
+import {
+  isPropertiesNavActive,
+  usePropertiesNavHref,
+} from "@/features/shared/hooks/use-properties-nav-href";
+import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
+import { scrollToSection } from "@/features/shared/utils/scroll-to-section";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
-import { useAuthStore } from "@/features/auth/stores/use-auth-store";
-import UserSheet from "@/features/auth/components/user-sheet";
-import { HiBars2 } from "react-icons/hi2";
+import { cn } from "@/lib/utils";
 
 type NavItem = {
   href: string;
   label: string;
   iconSrc: string;
   external?: boolean;
+  scrollToSectionId?: string;
+  isActive?: boolean;
 };
 
 type NavbarMobileSheetProps = {
@@ -57,11 +65,6 @@ export default function NavbarMobileSheet({
   aboutUs,
   blog,
   faq,
-  httpsSecurity,
-  httpfor,
-  officialLinks,
-  endWith,
-  whatsappService,
   brandName,
   brandTagline,
   home,
@@ -76,23 +79,50 @@ export default function NavbarMobileSheet({
   dialogLabels,
 }: NavbarMobileSheetProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const propertiesHref = usePropertiesNavHref();
+  const { user } = useAuthStore();
 
   const navItems: NavItem[] = [
     { href: "/", label: home, iconSrc: "/icons/home.svg" },
-    { href: "/properties", label: myProperties, iconSrc: "/icons/lable.svg" },
+    {
+      href: "/properties/my-properties",
+      label: myProperties,
+      iconSrc: "/icons/lable.svg",
+      isActive: pathname === "/properties/my-properties",
+    },
     { href: "/requests", label: requests, iconSrc: "/icons/bag.svg" },
     {
-      href: "/app",
+      href: `/#${APP_SECTION_ID}`,
       label: downloadApp,
       iconSrc: "/icons/app.svg",
-      external: true,
+      scrollToSectionId: APP_SECTION_ID,
     },
   ];
 
   const topLinkClassName =
     "text-base font-bold text-black transition-colors hover:text-brand";
 
-  const {user}= useAuthStore()
+  function handleNavItemClick(
+    event: MouseEvent<HTMLAnchorElement>,
+    scrollToSectionId?: string,
+  ) {
+    if (!scrollToSectionId) {
+      return;
+    }
+
+    if (scrollToSection(scrollToSectionId)) {
+      event.preventDefault();
+      window.history.replaceState(null, "", `#${scrollToSectionId}`);
+      return;
+    }
+
+    if (pathname !== "/") {
+      event.preventDefault();
+      router.push(`/#${APP_SECTION_ID}`);
+    }
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -135,31 +165,38 @@ export default function NavbarMobileSheet({
 
         <div className="flex flex-col gap-4 py-4">
           <nav aria-label="Main navigation" className="flex flex-col gap-4">
-            {navItems.map((item) => (
-              <SheetClose asChild key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "inline-flex items-center gap-2 font-bold transition-colors hover:text-brand text-base",
-                    pathname === item.href ? "text-brand" : "text-black",
-                  )}
-                  {...(item.external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                >
-                  <span className="inline-flex size-4 shrink-0 items-center justify-center">
-                    <CustomIcon src={item.iconSrc} size={16} />
-                  </span>
-                  <span className="leading-none">{item.label}</span>
-                  {item.external ? (
-                    <ArrowUpLeft
-                      className="size-4 text-brand-secondary"
-                      aria-hidden="true"
-                    />
-                  ) : null}
-                </Link>
-              </SheetClose>
-            ))}
+            {navItems.map((item) => {
+              const active = item.isActive ?? pathname === item.href;
+
+              return (
+                <SheetClose asChild key={item.label}>
+                  <Link
+                    href={item.href}
+                    onClick={(event) =>
+                      handleNavItemClick(event, item.scrollToSectionId)
+                    }
+                    className={cn(
+                      "inline-flex items-center gap-2 font-bold transition-colors hover:text-brand text-base",
+                      active ? "text-brand" : "text-black",
+                    )}
+                    {...(item.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    <span className="inline-flex size-4 shrink-0 items-center justify-center">
+                      <CustomIcon src={item.iconSrc} size={16} />
+                    </span>
+                    <span className="leading-none">{item.label}</span>
+                    {item.external || item.scrollToSectionId ? (
+                      <ArrowUpLeft
+                        className="size-4 text-brand-secondary"
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                  </Link>
+                </SheetClose>
+              );
+            })}
           </nav>
 
           <div className="flex flex-col gap-3">
@@ -182,18 +219,18 @@ export default function NavbarMobileSheet({
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-border/60 pt-4">
-          {!user&&
-          <Link href="/login">
-            <Button
-              variant="outline"
-              className="h-12 w-full rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
-              aria-label={profile}
-            >
-              <CustomIcon src="/icons/user.svg" size={16} />
-              <span className="leading-none">تسجيل الدخول</span>
-            </Button>
-          </Link>
-          }
+          {!user && (
+            <Link href="/login">
+              <Button
+                variant="outline"
+                className="h-12 w-full rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
+                aria-label={profile}
+              >
+                <CustomIcon src="/icons/user.svg" size={16} />
+                <span className="leading-none">تسجيل الدخول</span>
+              </Button>
+            </Link>
+          )}
           {user && (
             <div className="flex w-full flex-col gap-3">
               <UserSheet>

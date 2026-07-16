@@ -1,4 +1,8 @@
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
+import {
+  appendManualNationalAddressFields,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
 
 export type SubmitContractStep2Payload = {
   contractId: number;
@@ -7,6 +11,7 @@ export type SubmitContractStep2Payload = {
   longitude: number;
   imageAddress?: File;
   addressUrl?: string;
+  manualAddress?: ManualNationalAddressData;
 };
 
 export function appendContractStep2Fields(
@@ -25,5 +30,9 @@ export function appendContractStep2Fields(
 
   if (payload.addressMethod === "link" && payload.addressUrl) {
     formData.append("address_url", payload.addressUrl);
+  }
+
+  if (payload.addressMethod === "manual" && payload.manualAddress) {
+    appendManualNationalAddressFields(formData, payload.manualAddress);
   }
 }

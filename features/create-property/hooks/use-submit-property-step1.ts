@@ -47,6 +47,7 @@ export function useSubmitPropertyStep1() {
     (state) => state.addressPhotoFiles,
   );
   const addressLinkUrl = useCreatePropertyDraftStore((state) => state.addressLinkUrl);
+  const addressManual = useCreatePropertyDraftStore((state) => state.addressManual);
   const mapLocation = useCreatePropertyDraftStore((state) => state.mapLocation);
   const propertyId = useCreatePropertyDraftStore((state) => state.propertyId);
   const existingDeedImageUrl = useCreatePropertyDraftStore(
@@ -108,6 +109,13 @@ export function useSubmitPropertyStep1() {
       };
     }
 
+    if (!addressMethod) {
+      return {
+        ok: false as const,
+        error: "National address method is required",
+      };
+    }
+
     if (isEditMode && !editPropertyId) {
       return {
         ok: false as const,
@@ -145,8 +153,11 @@ export function useSubmitPropertyStep1() {
             ? deedGuardiansPoaFiles[0]
             : undefined,
         addressMethod,
-        imageAddress: addressPhotoFiles[0],
-        addressUrl: addressLinkUrl.trim() || undefined,
+        imageAddress:
+          addressMethod === "photo" ? addressPhotoFiles[0] : undefined,
+        addressUrl:
+          addressMethod === "link" ? addressLinkUrl.trim() || undefined : undefined,
+        manualAddress: addressMethod === "manual" ? addressManual : undefined,
         latitude: mapLocation.lat,
         longitude: mapLocation.lng,
       };

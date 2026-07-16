@@ -1,5 +1,5 @@
-import RequestsHeader from "@/features/requests/components/requests-header";
 import RequestsUnitTabs from "@/features/requests/components/requests-unit-tabs";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestLabels } from "@/features/requests/types/request-labels";
 
@@ -15,9 +15,10 @@ export default function RequestsPageContent({
   commercialItems,
 }: RequestsPageContentProps) {
   return (
-    <section className="container py-8 lg:py-10">
-      <RequestsHeader
+    <>
+      <ServicesPageBackConfig
         backLabel={labels.backLabel}
+        backHref="/"
         pageTitle={labels.pageTitle}
       />
 
@@ -26,6 +27,6 @@ export default function RequestsPageContent({
         residentialItems={residentialItems}
         commercialItems={commercialItems}
       />
-    </section>
+    </>
   );
 }

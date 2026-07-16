@@ -3,29 +3,16 @@
 import {
   DEED_STEP_PHASE_COUNT,
   deedTypeIsDeceasedOwner,
+  deedTypeIsLeaseRenewal,
   deedTypeIsWaqfOwner,
   deedTypeNeedsFrontBack,
 } from "@/features/create-contract/types/deed-type";
-import { DEFAULT_NATIONAL_ADDRESS_LOCATION } from "@/features/create-contract/types/national-address";
+import {
+  canContinueNationalAddress,
+  DEFAULT_NATIONAL_ADDRESS_LOCATION,
+} from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
-
-function canContinueNationalAddress(
-  method: "map" | "photo" | "link",
-  photoFiles: File[],
-  linkUrl: string,
-  hasExistingAddressImage: boolean,
-) {
-  if (method === "map") {
-    return true;
-  }
-
-  if (method === "photo") {
-    return photoFiles.length > 0 || hasExistingAddressImage;
-  }
-
-  return linkUrl.trim().length > 0;
-}
 
 export function useCreateContractDeedStep() {
   const deed = useCreateContractDraftStore((state) => state.deed);
@@ -81,6 +68,9 @@ export function useCreateContractDeedStep() {
   const setNationalAddressLinkUrl = useCreateContractDraftStore(
     (state) => state.setNationalAddressLinkUrl,
   );
+  const setNationalAddressManual = useCreateContractDraftStore(
+    (state) => state.setNationalAddressManual,
+  );
   const setMapLocation = useCreateContractDraftStore((state) => state.setMapLocation);
 
   const existingInstrumentImageUrl = resolveContractAssetUrl(
@@ -111,6 +101,7 @@ export function useCreateContractDeedStep() {
     existingPropertyContext?.property.image_address,
   );
   const isInstrumentTypeLocked = existingPropertyContext !== null;
+  const isLeaseRenewal = deedTypeIsLeaseRenewal(deed.selectedDeedType);
   const needsFrontBack = deedTypeNeedsFrontBack(deed.selectedDeedType);
   const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
   const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
@@ -142,23 +133,27 @@ export function useCreateContractDeedStep() {
         isInstrumentTypeLocked ||
         isDeedAlreadySubmitted ||
         (deed.selectedDeedType !== "" &&
-          (needsFrontBack
-            ? hasFrontImage && hasBackImage
-            : isDeceasedOwner
-              ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
-              : isWaqfOwner
-                ? hasSingleImage &&
-                  hasEndowmentCertImage &&
-                  hasTrusteeshipImage &&
-                  (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-                : hasSingleImage))
+          (isLeaseRenewal ||
+            (needsFrontBack
+              ? hasFrontImage && hasBackImage
+              : isDeceasedOwner
+                ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+                : isWaqfOwner
+                  ? hasSingleImage &&
+                    hasEndowmentCertImage &&
+                    hasTrusteeshipImage &&
+                    (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
+                  : hasSingleImage)))
       : isInstrumentTypeLocked ||
         isAddressAlreadySubmitted ||
         canContinueNationalAddress(
           deed.nationalAddressMethod,
           deed.nationalAddressPhotoFiles,
           deed.nationalAddressLinkUrl,
-          existingAddressImageUrl !== null,
+          {
+            hasExistingPhoto: existingAddressImageUrl !== null,
+            manualAddress: deed.nationalAddressManual,
+          },
         );
 
   function goToNextPhase() {
@@ -204,6 +199,8 @@ export function useCreateContractDeedStep() {
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl: deed.nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
+    nationalAddressManual: deed.nationalAddressManual,
+    setNationalAddressManual,
     mapLocation: deed.mapLocation ?? DEFAULT_NATIONAL_ADDRESS_LOCATION,
     setMapLocation,
     isLastPhase,
@@ -221,5 +218,6 @@ export function useCreateContractDeedStep() {
     existingAddressImageUrl,
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
+    isLeaseRenewal,
   };
 }

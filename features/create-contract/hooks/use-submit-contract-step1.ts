@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { submitContractStep1 } from "@/features/create-contract/services/submit-contract-step1";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
+import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
 
 export function useSubmitContractStep1() {
@@ -54,19 +55,21 @@ export function useSubmitContractStep1() {
         files.trusteeship ||
         files.guardiansPoa,
     );
+    const isLeaseRenewal = deedTypeIsLeaseRenewal(selectedDeedType);
 
-    if (!hasNewFile) {
+    if (!hasNewFile && !isLeaseRenewal) {
       // Existing-property contracts already have the deed data stored on the
       // backend from /contract/start, so allow continuing without re-uploading.
       return isExistingPropertyContract;
     }
 
     const instrumentType = mapDeedTypeToInstrumentType(selectedDeedType);
+    const minSubmittedStep = isLeaseRenewal ? 4 : 2;
 
     if (
       contractStep1Data &&
       contractStep1Data.instrument_type === instrumentType &&
-      contractStep1Data.step >= 2
+      contractStep1Data.step >= minSubmittedStep
     ) {
       return true;
     }

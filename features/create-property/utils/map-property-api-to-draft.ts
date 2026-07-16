@@ -11,7 +11,12 @@ import {
 } from "@/features/create-property/types/owner-step";
 import { EMPTY_PROPERTY_REVIEW_DATA } from "@/features/create-property/types/review-step";
 import type { PropertyNationalAddressMethodId } from "@/features/create-property/types/national-address";
+import {
+  EMPTY_MANUAL_NATIONAL_ADDRESS,
+  type ManualNationalAddressData,
+} from "@/features/shared/types/manual-national-address";
 import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
+import { formatSaudiMobileForForm } from "@/lib/validation/format-saudi-mobile-for-form";
 
 export type PropertyEditDraftData = {
   propertyId: number;
@@ -30,6 +35,7 @@ export type PropertyEditDraftData = {
   hasExistingPowerOfAttorney: boolean;
   addressMethod: PropertyNationalAddressMethodId;
   addressLinkUrl: string;
+  addressManual: ManualNationalAddressData;
   mapLocation: { lat: number; lng: number };
   ownerData: typeof EMPTY_PROPERTY_OWNER_DATA;
   agentData: typeof EMPTY_PROPERTY_AGENT_DATA;
@@ -88,10 +94,43 @@ function parseBirthDate(
   return { ...EMPTY_PROPERTY_BIRTH_DATE, calendarType };
 }
 
+function resolveManualAddress(
+  property: PropertyWithUnitsApiData,
+): ManualNationalAddressData {
+  const placeId = Number(property.property_place_id);
+  const cityId = Number(property.property_city_id);
+
+  return {
+    propertyPlaceId: Number.isFinite(placeId) && placeId > 0 ? placeId : "",
+    propertyCityId: Number.isFinite(cityId) && cityId > 0 ? cityId : "",
+    neighborhood: property.neighborhood?.trim() ?? "",
+    street: property.street?.trim() ?? "",
+    buildingNumber: property.building_number?.trim() ?? "",
+    postalCode: property.postal_code?.trim() ?? "",
+    extraFigure: property.extra_figure?.trim() ?? "",
+  };
+}
+
 function resolveAddressMethod(
   property: PropertyWithUnitsApiData,
 ): PropertyNationalAddressMethodId {
-  if (property.address_url?.trim()) {
+  const manualAddress = resolveManualAddress(property);
+  const hasManualFields =
+    manualAddress.propertyPlaceId !== "" ||
+    manualAddress.propertyCityId !== "" ||
+    manualAddress.neighborhood.length > 0 ||
+    manualAddress.street.length > 0 ||
+    manualAddress.buildingNumber.length > 0 ||
+    manualAddress.postalCode.length > 0 ||
+    manualAddress.extraFigure.length > 0;
+
+  if (hasManualFields) {
+    return "manual";
+  }
+
+  const addressUrl = property.address_url?.trim();
+
+  if (addressUrl) {
     return "link";
   }
 
@@ -99,25 +138,11 @@ function resolveAddressMethod(
     return "photo";
   }
 
-  return "map";
+  return "photo";
 }
 
 function formatPhoneForForm(phone: string | null) {
-  if (!phone) {
-    return "";
-  }
-
-  const digits = phone.replace(/\D/g, "");
-
-  if (digits.startsWith("966")) {
-    return `+${digits}`;
-  }
-
-  if (digits.startsWith("0")) {
-    return `+966${digits.slice(1)}`;
-  }
-
-  return digits.startsWith("+") ? phone : `+966${digits}`;
+  return formatSaudiMobileForForm(phone);
 }
 
 export function mapPropertyApiToEditDraft(
@@ -160,6 +185,7 @@ export function mapPropertyApiToEditDraft(
     hasExistingPowerOfAttorney: Boolean(property.copy_of_the_authorization_or_agency),
     addressMethod: resolveAddressMethod(property),
     addressLinkUrl: property.address_url?.trim() ?? "",
+    addressManual: resolveManualAddress(property),
     mapLocation: {
       lat: Number(property.latitude) || 24.7136,
       lng: Number(property.longitude) || 46.6753,

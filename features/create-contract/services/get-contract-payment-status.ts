@@ -6,6 +6,7 @@ import type {
   ContractPaymentStatusApiResponse,
   ContractPaymentStatusData,
 } from "@/features/create-contract/types/contract-payment";
+import { resolvePaidAmountFromStatusPayload } from "@/features/payment/utils/parse-payment-status-amount";
 import { apiRequest } from "@/lib/api/api-request";
 
 export type ContractPaymentStatusSource = "contract" | "admin";
@@ -17,8 +18,13 @@ function asPaymentRecord(value: unknown): ContractPaymentGatewayRecord | null {
 
   const status =
     "status" in value && typeof value.status === "string" ? value.status : null;
+  const amount =
+    "amount" in value &&
+    (typeof value.amount === "string" || typeof value.amount === "number")
+      ? value.amount
+      : null;
 
-  return { status };
+  return { status, amount };
 }
 
 function asEmployeePaidRecord(value: unknown): ContractEmployeePaidRecord | null {
@@ -35,14 +41,23 @@ function asEmployeePaidRecord(value: unknown): ContractEmployeePaidRecord | null
   return { is_paid: isPaid };
 }
 
+function asNullableString(value: unknown): string | null {
+  return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
+}
+
 function mapPaymentStatus(
   data: NonNullable<ContractPaymentStatusApiResponse["data"]>,
 ): ContractPaymentStatusData {
   return {
     result: data.result,
+    resolvedResult: data.resolved_result ?? null,
     contractUuid: data.contract_uuid,
     contractId: data.contract_id,
+    contractType: asNullableString(data.contract_type),
+    contractTypeTrans: asNullableString(data.contract_type_trans),
+    paidAmount: resolvePaidAmountFromStatusPayload(data),
     isCompleted: data.is_completed,
+    paymentConfirmed: data.payment_confirmed ?? null,
     employeePaidRecord: asEmployeePaidRecord(data.employee_paid_record),
     payment: asPaymentRecord(data.payment),
   };

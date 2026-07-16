@@ -24,6 +24,9 @@ export type ContractFinancialData = {
   services_total: number;
   meter_fees_total: number;
   total_price: number;
+  doc_fee?: number | null;
+  doc_fee_lines?: string[] | null;
+  duration_preset?: string | null;
 };
 
 export type ContractFinancialApiResponse = {

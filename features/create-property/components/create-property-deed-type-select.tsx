@@ -3,6 +3,7 @@
 import { Building2, ChevronLeft, X } from "lucide-react";
 import { useRef, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -10,11 +11,10 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
-import {
-  PROPERTY_DEED_TYPES,
-  type PropertyDeedTypeId,
-} from "@/features/create-property/types/deed-type";
+import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import { useSettingContracts } from "@/features/shared/hooks/use-setting-contracts";
+import { resolvePropertySettingContractOptions } from "@/features/shared/utils/resolve-setting-contract-options";
 
 type CreatePropertyDeedTypeSelectProps = {
   labels: CreatePropertyLabels["deed"]["deedType"];
@@ -31,6 +31,11 @@ export default function CreatePropertyDeedTypeSelect({
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
   const containerRef = useRef<HTMLDivElement>(null);
+  const { data: settingContracts } = useSettingContracts();
+  const deedTypeOptions = resolvePropertySettingContractOptions(
+    settingContracts,
+    value,
+  );
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen && containerRef.current) {
@@ -119,13 +124,23 @@ export default function CreatePropertyDeedTypeSelect({
               minWidth: contentWidth,
             }}
           >
-            {PROPERTY_DEED_TYPES.map((deedType) => (
+            {deedTypeOptions.map((option) => (
               <SelectItem
-                key={deedType}
-                value={deedType}
-                className="text-base!"
+                key={option.id}
+                value={option.id}
+                className="text-base! [&>span:last-child]:w-full"
               >
-                {labels.types[deedType]}
+                <span className="flex w-full min-w-0 items-center justify-between gap-3">
+                  <span className="truncate">{labels.types[option.id]}</span>
+                  {option.badgeLabel ? (
+                    <Badge
+                      variant="secondary"
+                      className="max-w-[40%] shrink-0 truncate rounded-full bg-brand-background px-2.5 py-0.5 text-[11px] font-semibold text-brand-secondary"
+                    >
+                      {option.badgeLabel}
+                    </Badge>
+                  ) : null}
+                </span>
               </SelectItem>
             ))}
           </SelectContent>

@@ -104,9 +104,15 @@ export default function CreateContractFinancialBreakdown({
 
   if (data) {
     const services =
-      data.additional_services.length > 0
+      (data.additional_services?.length ?? 0) > 0
         ? data.additional_services
-        : data.services;
+        : (data.services ?? []);
+    const docFeeLines = Array.isArray(data.doc_fee_lines)
+      ? data.doc_fee_lines.filter((line) => line.trim() !== "")
+      : [];
+    const docFeeAmount =
+      typeof data.doc_fee === "number" ? data.doc_fee : null;
+    const isCustomDuration = data.duration_preset === "other";
 
     return (
       <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
@@ -124,13 +130,25 @@ export default function CreateContractFinancialBreakdown({
 
         <SummaryRow
           label={labels.electricityMeterFee}
-          amount={data.price_details.electricity_meter_fee}
+          amount={data.price_details.electricity_meter_fee ?? 0}
         />
 
         <SummaryRow
           label={labels.waterMeterFee}
-          amount={data.price_details.water_meter_fee}
+          amount={data.price_details.water_meter_fee ?? 0}
         />
+
+        {isCustomDuration && docFeeAmount !== null ? (
+          <SummaryRow label={labels.docFee} amount={docFeeAmount} />
+        ) : null}
+
+        {isCustomDuration && docFeeLines.length > 0 ? (
+          <div className="rounded-xl border border-[#d9eadf] bg-[#f3faf5] px-4 py-3 text-sm leading-7 text-[#333333]">
+            {docFeeLines.map((line, index) => (
+              <p key={`${line}-${index}`}>{line}</p>
+            ))}
+          </div>
+        ) : null}
 
         {services.length > 0 ? (
           <div className="space-y-3 border-t border-dashed border-[#d4d4d4] pt-3">
@@ -139,22 +157,22 @@ export default function CreateContractFinancialBreakdown({
                 {labels.services}
               </span>
               <PaymentAmount
-                amount={data.services_total}
+                amount={data.services_total ?? 0}
                 className="text-sm font-bold text-[#333333]"
               />
             </div>
-            {services.map((service) => (
+            {services.map((service, index) => (
               <SummaryRow
-                key={service.id}
+                key={service.id ?? `${service.service_name}-${index}`}
                 label={getContractFinancialServiceLabel(service, locale)}
                 amount={getContractFinancialServicePrice(service)}
               />
             ))}
           </div>
-        ) : data.services_total > 0 ? (
+        ) : (data.services_total ?? 0) > 0 ? (
           <SummaryRow
             label={labels.servicesTotal}
-            amount={data.services_total}
+            amount={data.services_total ?? 0}
           />
         ) : null}
 

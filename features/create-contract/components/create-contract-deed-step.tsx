@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
@@ -9,9 +12,14 @@ import CreateContractStepPhaseProgress from "@/features/create-contract/componen
 import { Switch } from "@/components/ui/switch";
 import { useCreateContractDeedStep } from "@/features/create-contract/hooks/use-create-contract-deed-step";
 import { useSubmitContractStep1 } from "@/features/create-contract/hooks/use-submit-contract-step1";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { useSubmitContractStep2 } from "@/features/create-contract/hooks/use-submit-contract-step2";
-import { DEED_STEP_PHASE_COUNT } from "@/features/create-contract/types/deed-type";
+import { DEED_STEP_PHASE_COUNT, type DeedTypeId } from "@/features/create-contract/types/deed-type";
+import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
+import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
 
 type CreateContractDeedStepProps = {
   labels: CreateContractLabels["deed"];
@@ -26,6 +34,7 @@ export default function CreateContractDeedStep({
   onBack,
   onComplete,
 }: CreateContractDeedStepProps) {
+  const tIncomplete = useTranslations("createContract");
   const {
     currentPhaseIndex,
     selectedDeedType,
@@ -57,8 +66,8 @@ export default function CreateContractDeedStep({
     setNationalAddressPhotoFiles,
     nationalAddressLinkUrl,
     setNationalAddressLinkUrl,
-    mapLocation,
-    setMapLocation,
+    nationalAddressManual,
+    setNationalAddressManual,
     isLastPhase,
     canContinue,
     goToNextPhase,
@@ -74,12 +83,28 @@ export default function CreateContractDeedStep({
     existingAddressImageUrl,
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
+    isLeaseRenewal,
   } = useCreateContractDeedStep();
+  const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
   const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
+  const deedTypePopup = useInstrumentTypeDeedPopup("contract");
 
   const phase = labels.phases[currentPhaseIndex];
+
+  function handleDeedTypeChange(value: DeedTypeId | "") {
+    setSelectedDeedType(value);
+
+    if (!value || isInstrumentTypeLocked) {
+      return;
+    }
+
+    void deedTypePopup.showPopupFor(
+      mapDeedTypeToInstrumentType(value),
+      labels.deedType.types[value],
+    );
+  }
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
@@ -91,11 +116,27 @@ export default function CreateContractDeedStep({
   }
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting) {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinue) {
+      toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
     if (currentPhaseIndex === 0) {
+      if (selectedDeedType && deedTypeIsLeaseRenewal(selectedDeedType)) {
+        const submitted = await submitStep1(selectedDeedType, {});
+
+        if (!submitted) {
+          return;
+        }
+
+        setCurrentStep("tenant");
+        return;
+      }
+
       const hasNewFile = needsFrontBack
         ? deedFrontFiles.length > 0 || deedBackFiles.length > 0
         : isDeceasedOwner
@@ -145,10 +186,16 @@ export default function CreateContractDeedStep({
     }
 
     if (isLastPhase) {
+      if (!nationalAddressMethod) {
+        toast.error(tIncomplete("incompleteContinue"));
+        return;
+      }
+
       const submitted = await submitStep2({
         addressMethod: nationalAddressMethod,
         photoFiles: nationalAddressPhotoFiles,
         linkUrl: nationalAddressLinkUrl,
+        manualAddress: nationalAddressManual,
       });
 
       if (!submitted) {
@@ -181,11 +228,12 @@ export default function CreateContractDeedStep({
             <CreateContractDeedTypeSelect
               labels={labels.deedType}
               value={selectedDeedType}
-              onChange={setSelectedDeedType}
+              onChange={handleDeedTypeChange}
               locked={isInstrumentTypeLocked}
             />
 
             {(selectedDeedType || existingInstrumentImageUrl) &&
+            !isLeaseRenewal &&
             needsFrontBack ? (
               <div className="space-y-6">
                 <CreateContractDeedImageUpload
@@ -207,6 +255,7 @@ export default function CreateContractDeedStep({
                 />
               </div>
             ) : (selectedDeedType || existingInstrumentImageUrl) &&
+              !isLeaseRenewal &&
               isDeceasedOwner ? (
               <div className="space-y-6">
                 <CreateContractDeedImageUpload
@@ -235,7 +284,9 @@ export default function CreateContractDeedStep({
                   existingImageUrl={existingHeirsPoaImageUrl}
                 />
               </div>
-            ) : (selectedDeedType || existingInstrumentImageUrl) && isWaqfOwner ? (
+            ) : (selectedDeedType || existingInstrumentImageUrl) &&
+              !isLeaseRenewal &&
+              isWaqfOwner ? (
               <div className="space-y-6">
                 <CreateContractDeedImageUpload
                   labels={labels.deedImage}
@@ -286,7 +337,7 @@ export default function CreateContractDeedStep({
                   />
                 ) : null}
               </div>
-            ) : selectedDeedType || existingInstrumentImageUrl ? (
+            ) : (selectedDeedType || existingInstrumentImageUrl) && !isLeaseRenewal ? (
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
                 value={deedFiles}
@@ -306,8 +357,8 @@ export default function CreateContractDeedStep({
             onPhotoFilesChange={setNationalAddressPhotoFiles}
             linkUrl={nationalAddressLinkUrl}
             onLinkUrlChange={setNationalAddressLinkUrl}
-            mapLocation={mapLocation}
-            onMapLocationChange={setMapLocation}
+            manualAddress={nationalAddressManual}
+            onManualAddressChange={setNationalAddressManual}
             existingPhotoUrl={existingAddressImageUrl}
           />
         ) : null}
@@ -318,9 +369,16 @@ export default function CreateContractDeedStep({
         continueLabel={
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
-        canContinue={canContinue && !isSubmitting}
+        isSubmitting={isSubmitting}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
+      />
+
+      <InstrumentTypePopupDialog
+        open={deedTypePopup.open}
+        onOpenChange={deedTypePopup.setOpen}
+        popup={deedTypePopup.popup}
+        deedTypeLabel={deedTypePopup.deedTypeLabel}
       />
     </div>
   );

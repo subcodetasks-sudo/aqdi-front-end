@@ -5,8 +5,10 @@ import { IdCard, Phone } from "lucide-react";
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyIconInputField from "@/features/create-property/components/create-property-icon-input-field";
+import CreatePropertySaudiMobileField from "@/features/create-property/components/create-property-saudi-mobile-field";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import type { PropertyAgentDataState } from "@/features/create-property/types/owner-step";
+import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreatePropertyAgentDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["agentData"];
@@ -55,18 +57,12 @@ export default function CreatePropertyAgentDataPhase({
         onChange={(birthDate) => updateField("birthDate", birthDate)}
       />
 
-      <CreatePropertyIconInputField
+      <CreatePropertySaudiMobileField
         label={labels.phone.label}
         placeholder={labels.phone.placeholder}
         value={value.phone}
-        onChange={(phone) =>
-          updateField("phone", phone.replace(/\D/g, "").slice(0, 10))
-        }
+        onChange={(phone) => updateField("phone", toSaudiMobileInputValue(phone))}
         icon={Phone}
-        type="tel"
-        dir="ltr"
-        inputMode="tel"
-        maxLength={10}
       />
 
       <CreatePropertyDeedImageUpload

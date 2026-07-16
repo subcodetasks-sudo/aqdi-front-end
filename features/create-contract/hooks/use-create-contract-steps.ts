@@ -11,8 +11,17 @@ import {
 export function useCreateContractSteps() {
   const currentStep = useCreateContractDraftStore((state) => state.currentStep);
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const contractStep1Data = useCreateContractDraftStore(
+    (state) => state.contractStep1Data,
+  );
   const contractStep2Data = useCreateContractDraftStore((state) => state.contractStep2Data);
   const contractStep3Data = useCreateContractDraftStore((state) => state.contractStep3Data);
+  const contractStep4Data = useCreateContractDraftStore(
+    (state) => state.contractStep4Data,
+  );
   const contractStep5Data = useCreateContractDraftStore((state) => state.contractStep5Data);
   const contractStep6Data = useCreateContractDraftStore((state) => state.contractStep6Data);
   const goNextStep = useCreateContractDraftStore((state) => state.goNextStep);
@@ -22,8 +31,11 @@ export function useCreateContractSteps() {
   const progressState = {
     currentStep,
     contractSession,
+    selectedDeedType,
+    contractStep1Data,
     contractStep2Data,
     contractStep3Data,
+    contractStep4Data,
     contractStep5Data,
     contractStep6Data,
   };

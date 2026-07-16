@@ -8,6 +8,7 @@ import { mapContractToRequestCard } from "@/features/requests/utils/map-contract
 
 export default async function RequestsPage() {
   const t = await getTranslations("requests");
+  const tPayment = await getTranslations("createContract.payment");
 
   const labels: RequestLabels = {
     backLabel: t("backLabel"),
@@ -32,7 +33,40 @@ export default async function RequestsPage() {
       completePaymentHint: t("card.completePaymentHint"),
       completePayment: t("card.completePayment"),
       completePaymentLoading: t("card.completePaymentLoading"),
-      completePaymentError: t("card.completePaymentError"),
+      paymentFlow: {
+        methodDialog: {
+          title: tPayment("methodDialog.title"),
+          question: tPayment("methodDialog.question"),
+          submitting: tPayment("methodDialog.submitting"),
+          draft: {
+            title: tPayment("methodDialog.draft.title"),
+            description: tPayment("methodDialog.draft.description"),
+          },
+          payNow: {
+            title: tPayment("methodDialog.payNow.title"),
+            description: tPayment("methodDialog.payNow.description"),
+          },
+          missingContractSession: tPayment("methodDialog.missingContractSession"),
+          draftError: tPayment("methodDialog.draftError"),
+        },
+        draftSuccessDialog: {
+          title: tPayment("draftSuccessDialog.title"),
+          paymentStatusLabel: tPayment("draftSuccessDialog.paymentStatusLabel"),
+          paymentStatusDescription: tPayment(
+            "draftSuccessDialog.paymentStatusDescription",
+          ),
+          orderNumberLabel: tPayment("draftSuccessDialog.orderNumberLabel"),
+          copy: tPayment("draftSuccessDialog.copy"),
+          copySuccess: tPayment("draftSuccessDialog.copySuccess"),
+          copyError: tPayment("draftSuccessDialog.copyError"),
+          preparationDescription: tPayment(
+            "draftSuccessDialog.preparationDescription",
+          ),
+          whatsappCta: tPayment("draftSuccessDialog.whatsappCta"),
+          whatsappHref: tPayment("draftSuccessDialog.whatsappHref"),
+        },
+        payError: tPayment("navigation.payError"),
+      },
       helpCenter: t("card.helpCenter"),
       whenReceiveContract: t("card.whenReceiveContract"),
       status: {
@@ -61,8 +95,6 @@ export default async function RequestsPage() {
     residentialItems = [];
     commercialItems = [];
   }
-  console.log(residentialItems);
-  console.log(commercialItems);
 
   return (
     <RequestsPageContent

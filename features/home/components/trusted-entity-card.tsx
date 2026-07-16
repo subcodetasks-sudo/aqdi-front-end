@@ -68,6 +68,9 @@ export default function TrustedEntityCard({
             height={100}
             className=" w-25  object-contain shrink-0"
             aria-hidden="true"
+            unoptimized={
+              logoSrc.startsWith("http://") || logoSrc.startsWith("https://")
+            }
           />
       </div>
 

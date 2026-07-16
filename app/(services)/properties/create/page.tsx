@@ -1,3 +1,4 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations } from "next-intl/server";
 
 import CreatePropertyPageContent from "@/features/create-property/components/create-property-page-content";
@@ -8,6 +9,9 @@ import { mapPropertyApiToEditDraft } from "@/features/create-property/utils/map-
 import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 import { parsePropertyType } from "@/features/properties/types/property-type";
 import { getPropertyUnits } from "@/features/property-units/services/get-property-units";
+import { settingContractsKeys } from "@/features/shared/query-keys";
+import { getSettingContracts } from "@/features/shared/services/get-setting-contracts";
+import { getQueryClient } from "@/lib/react-query/get-query-client";
 
 type CreatePropertyPageProps = {
   searchParams: Promise<{ type?: string; propertyId?: string }>;
@@ -20,6 +24,12 @@ export default async function CreatePropertyPage({
   const propertyType = parsePropertyType(type);
   const propertyId = parsePropertyId(propertyIdParam);
   const t = await getTranslations("createProperty");
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: settingContractsKeys.list(),
+    queryFn: () => getSettingContracts(),
+  });
 
   const labels: CreatePropertyLabels = {
     backLabel: t("backLabel"),
@@ -85,13 +95,63 @@ export default async function CreatePropertyPage({
       title: t("address.title"),
       subtitle: t("address.subtitle"),
       nationalAddress: {
-        methods: t.raw("address.nationalAddress.methods") as string[],
+        methodSelect: {
+          label: t("address.nationalAddress.methodSelect.label"),
+          placeholder: t("address.nationalAddress.methodSelect.placeholder"),
+        },
+        methods: t.raw("address.nationalAddress.methods") as Record<
+          "photo" | "link" | "manual",
+          string
+        >,
         mapTitle: t("address.nationalAddress.mapTitle"),
         mapHint: t("address.nationalAddress.mapHint"),
         coordinatesLabel: t("address.nationalAddress.coordinatesLabel"),
         link: {
           label: t("address.nationalAddress.link.label"),
           placeholder: t("address.nationalAddress.link.placeholder"),
+        },
+        manual: {
+          place: {
+            label: t("address.nationalAddress.manual.place.label"),
+            placeholder: t("address.nationalAddress.manual.place.placeholder"),
+            loading: t("address.nationalAddress.manual.place.loading"),
+          },
+          city: {
+            label: t("address.nationalAddress.manual.city.label"),
+            placeholder: t("address.nationalAddress.manual.city.placeholder"),
+            loading: t("address.nationalAddress.manual.city.loading"),
+            selectPlaceFirst: t(
+              "address.nationalAddress.manual.city.selectPlaceFirst",
+            ),
+          },
+          neighborhood: {
+            label: t("address.nationalAddress.manual.neighborhood.label"),
+            placeholder: t(
+              "address.nationalAddress.manual.neighborhood.placeholder",
+            ),
+          },
+          street: {
+            label: t("address.nationalAddress.manual.street.label"),
+            placeholder: t("address.nationalAddress.manual.street.placeholder"),
+          },
+          buildingNumber: {
+            label: t("address.nationalAddress.manual.buildingNumber.label"),
+            placeholder: t(
+              "address.nationalAddress.manual.buildingNumber.placeholder",
+            ),
+          },
+          postalCode: {
+            label: t("address.nationalAddress.manual.postalCode.label"),
+            placeholder: t(
+              "address.nationalAddress.manual.postalCode.placeholder",
+            ),
+          },
+          extraFigure: {
+            label: t("address.nationalAddress.manual.extraFigure.label"),
+            placeholder: t(
+              "address.nationalAddress.manual.extraFigure.placeholder",
+            ),
+          },
         },
         photo: {
           label: t("address.nationalAddress.photo.label"),
@@ -229,10 +289,12 @@ export default async function CreatePropertyPage({
   }
 
   return (
-    <CreatePropertyPageContent
-      labels={labels}
-      propertyType={propertyType}
-      initialEditDraft={initialEditDraft}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CreatePropertyPageContent
+        labels={labels}
+        propertyType={propertyType}
+        initialEditDraft={initialEditDraft}
+      />
+    </HydrationBoundary>
   );
 }

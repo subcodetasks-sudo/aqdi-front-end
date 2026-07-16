@@ -1,36 +1,89 @@
 import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
-import { EMPTY_BIRTH_DATE } from "@/features/create-contract/types/owner-step";
-
-export const PAYMENT_METHOD_OPTIONS = [
-  "monthly",
-  "quarterly",
-  "semi-annual",
-  "annual",
-] as const;
-
-export type PaymentMethodOption = (typeof PAYMENT_METHOD_OPTIONS)[number];
+import { getTodayContractStartDate } from "@/features/create-contract/utils/get-today-contract-start-date";
 
 export type FinanceDataState = {
   contractStartDate: BirthDateValue;
   contractPeriodId: number | "";
+  isCustomDuration: boolean;
+  customDurationYears: number | "";
+  customDurationMonths: number | "";
   totalRentAmount: string;
-  paymentMethod: PaymentMethodOption | "";
+  paymentTypeId: number | "";
   addTenantPermissions: boolean;
   addOtherConditions: boolean;
   selectedTenantRoleIds: number[];
   otherConditionsText: string;
 };
 
-export const EMPTY_FINANCE_DATA: FinanceDataState = {
-  contractStartDate: { ...EMPTY_BIRTH_DATE, calendarType: "hijri" },
-  contractPeriodId: "",
-  totalRentAmount: "",
-  paymentMethod: "",
-  addTenantPermissions: false,
-  addOtherConditions: false,
-  selectedTenantRoleIds: [],
-  otherConditionsText: "",
+export function createEmptyFinanceData(): FinanceDataState {
+  return {
+    contractStartDate: getTodayContractStartDate("hijri"),
+    contractPeriodId: "",
+    isCustomDuration: false,
+    customDurationYears: "",
+    customDurationMonths: "",
+    totalRentAmount: "",
+    paymentTypeId: "",
+    addTenantPermissions: false,
+    addOtherConditions: false,
+    selectedTenantRoleIds: [],
+    otherConditionsText: "",
+  };
+}
+
+export const EMPTY_FINANCE_DATA: FinanceDataState = createEmptyFinanceData();
+
+const LEGACY_PAYMENT_METHOD_TO_TYPE_ID: Record<string, number> = {
+  monthly: 1,
+  quarterly: 2,
+  "semi-annual": 3,
+  annual: 4,
 };
+
+function resolveContractStartDate(
+  contractStartDate: BirthDateValue | undefined,
+): BirthDateValue {
+  const calendarType = contractStartDate?.calendarType ?? "hijri";
+
+  if (
+    !contractStartDate ||
+    (contractStartDate.day === "" &&
+      contractStartDate.month === "" &&
+      contractStartDate.year === "")
+  ) {
+    return getTodayContractStartDate(calendarType);
+  }
+
+  return contractStartDate;
+}
+
+export function normalizeFinanceData(
+  financeData: Partial<FinanceDataState> & { paymentMethod?: string },
+): FinanceDataState {
+  let paymentTypeId = financeData.paymentTypeId ?? "";
+
+  if (paymentTypeId === "" && financeData.paymentMethod) {
+    paymentTypeId =
+      LEGACY_PAYMENT_METHOD_TO_TYPE_ID[financeData.paymentMethod] ?? "";
+  }
+
+  return {
+    ...createEmptyFinanceData(),
+    ...financeData,
+    contractStartDate: resolveContractStartDate(financeData.contractStartDate),
+    isCustomDuration: Boolean(financeData.isCustomDuration),
+    customDurationYears:
+      typeof financeData.customDurationYears === "number"
+        ? financeData.customDurationYears
+        : "",
+    customDurationMonths:
+      typeof financeData.customDurationMonths === "number"
+        ? financeData.customDurationMonths
+        : "",
+    paymentTypeId:
+      typeof paymentTypeId === "number" && paymentTypeId > 0 ? paymentTypeId : "",
+  };
+}
 
 function isContractStartDateComplete(contractStartDate: BirthDateValue) {
   return (
@@ -45,12 +98,27 @@ function isRentAmountComplete(totalRentAmount: string) {
   return digits.length > 0 && Number(digits) > 0;
 }
 
+function isDurationComplete(financeData: FinanceDataState) {
+  if (financeData.isCustomDuration) {
+    return (
+      typeof financeData.customDurationYears === "number" &&
+      financeData.customDurationYears >= 1 &&
+      financeData.customDurationYears <= 30 &&
+      typeof financeData.customDurationMonths === "number" &&
+      financeData.customDurationMonths >= 0 &&
+      financeData.customDurationMonths <= 11
+    );
+  }
+
+  return financeData.contractPeriodId !== "";
+}
+
 export function isFinanceDataComplete(financeData: FinanceDataState) {
   const baseComplete =
     isContractStartDateComplete(financeData.contractStartDate) &&
-    financeData.contractPeriodId !== "" &&
+    isDurationComplete(financeData) &&
     isRentAmountComplete(financeData.totalRentAmount) &&
-    financeData.paymentMethod !== "";
+    financeData.paymentTypeId !== "";
 
   if (!baseComplete) {
     return false;

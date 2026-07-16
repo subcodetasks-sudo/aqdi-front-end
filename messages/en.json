@@ -1,4 +1,11 @@
 {
+  "site": {
+    "metaTitle": "Aqadi | Electronic Rental Contract Documentation",
+    "metaDescription": "Aqadi helps you document residential and commercial rental contracts electronically through the Ejar network — quickly, securely, and in a way that protects all parties.",
+    "homeTitle": "Home",
+    "aboutTitle": "About us",
+    "aboutDescription": "Learn about Aqadi, our vision, mission, and values for documenting electronic rental contracts."
+  },
   "navbar": {
     "topBar": {
       "aboutUs": "About us",
@@ -25,6 +32,12 @@
     "menu": "Menu",
     "myAccount": "My Account",
     "notifications": "Notifications"
+  },
+  "instrumentTypePopup": {
+    "title": "Contract fees for {deedType}",
+    "clarification": "Clarification:",
+    "confirmContinue": "Confirm and continue",
+    "close": "Close"
   },
   "userSheet": {
     "title": "My Account",
@@ -570,7 +583,7 @@
       "greeting": "Welcome back!",
       "subtitle": "Enter your details to sign in to your account.",
       "phoneLabel": "Mobile number",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password here ...",
       "forgotPassword": "Forgot your password?",
@@ -595,7 +608,7 @@
       "fullNameLabel": "First and last name",
       "fullNamePlaceholder": "Enter your full name",
       "phoneLabel": "Mobile number",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "emailLabel": "Email address",
       "emailPlaceholder": "example@email.com",
       "passwordLabel": "Password",
@@ -651,7 +664,7 @@
       "title": "Forgot your password!",
       "subtitle": "Enter the mobile number linked to your account..",
       "phoneLabel": "Mobile number",
-      "phonePlaceholder": "5x xxx xx xx",
+      "phonePlaceholder": "5xxxxxxxx",
       "submit": "Send verification code",
       "submitSuccess": "A new password reset code has been sent to your registered mobile number",
       "submitError": "Unable to send the verification code, please try again",
@@ -685,6 +698,8 @@
     },
     "profile": {
       "back": "Back",
+      "title": "Edit profile",
+      "close": "Close",
       "avatarAlt": "User avatar",
       "fullNameLabel": "First and last name",
       "fullNamePlaceholder": "Enter your first and last name here...",
@@ -926,6 +941,7 @@
     }
   },
   "createProperty": {
+    "incompleteContinue": "Please complete all required fields before continuing",
     "backLabel": "Back",
     "pageTitle": "Add new property",
     "pageTitleResidential": "Add residential property",
@@ -993,13 +1009,54 @@
       "title": "National address for the property",
       "subtitle": "Choose your preferred method:",
       "nationalAddress": {
-        "methods": ["Map", "Attach image", "Enter link"],
+        "methodSelect": {
+          "label": "National address entry method",
+          "placeholder": "Choose from here.."
+        },
+        "methods": {
+          "photo": "Address photo",
+          "link": "Address link",
+          "manual": "Enter address details"
+        },
         "mapTitle": "National address map",
         "mapHint": "Click on the map to select the property location.",
         "coordinatesLabel": "Selected coordinates",
         "link": {
           "label": "Add Google Maps link for the property",
           "placeholder": "Add Google Maps link for the property here..."
+        },
+        "manual": {
+          "place": {
+            "label": "Region",
+            "placeholder": "Choose from here...",
+            "loading": "Loading..."
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Choose from here...",
+            "loading": "Loading...",
+            "selectPlaceFirst": "Select the region first"
+          },
+          "neighborhood": {
+            "label": "Neighborhood",
+            "placeholder": "Choose from here..."
+          },
+          "street": {
+            "label": "Street name",
+            "placeholder": "Choose from here..."
+          },
+          "buildingNumber": {
+            "label": "Building number",
+            "placeholder": "Choose from here..."
+          },
+          "postalCode": {
+            "label": "Postal code",
+            "placeholder": "Choose from here..."
+          },
+          "extraFigure": {
+            "label": "Additional number",
+            "placeholder": "Choose from here..."
+          }
         },
         "photo": {
           "label": "Attach national address image",
@@ -1026,7 +1083,7 @@
           "idNumberLength": "ID number must be 10 digits",
           "birthDate": "Owner's date of birth",
           "phone": "Owner's mobile number",
-          "phoneLength": "Mobile number must be at least 9 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "Owner's IBAN",
           "ibanInvalid": "Owner's IBAN must be a valid Saudi IBAN",
           "hasAgent": "Is there an agent for the owner?",
@@ -1034,7 +1091,7 @@
         },
         "fieldErrors": {
           "idNumberLength": "ID number must be 10 digits",
-          "phoneLength": "Mobile number must be at least 9 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "IBAN must start with SA followed by 22 digits"
         }
       },
@@ -1070,7 +1127,7 @@
         },
         "phone": {
           "label": "Owner's mobile number",
-          "placeholder": "5x xxx xx xx"
+          "placeholder": "xxxxxxxx"
         },
         "iban": {
           "label": "Owner's IBAN",
@@ -1093,7 +1150,7 @@
         "birthDateLabel": "Owner's agent date of birth:",
         "phone": {
           "label": "Owner's agent mobile number",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney image",
@@ -1159,10 +1216,11 @@
     "editSubtitle": "Update the unit details below:",
     "selectPlaceholder": "Choose from here...",
     "contractType": {
-      "label": "Contract type",
+      "label": "Property linked contract type",
+      "linkedLabel": "Property linked contract type",
       "options": {
-        "housing": "Residential property",
-        "commercial": "Commercial property"
+        "housing": "Residential",
+        "commercial": "Commercial"
       }
     },
     "unitType": {
@@ -1198,11 +1256,18 @@
       "label": "Unit number",
       "placeholder": "Write here..."
     },
+    "additionalInfo": {
+      "toggle": "Would you like to add additional information?",
+      "writeHerePlaceholder": "Write here..."
+    },
     "roomsCount": {
       "label": "Number of rooms"
     },
     "hallsCount": {
       "label": "Number of halls"
+    },
+    "majlisCount": {
+      "label": "Number of majlis"
     },
     "kitchensCount": {
       "label": "Number of kitchens"
@@ -1258,6 +1323,7 @@
     }
   },
   "createContract": {
+    "incompleteContinue": "Please complete all required fields before continuing",
     "backLabel": "Back",
     "pageTitleResidential": "Create residential lease contract",
     "pageTitleCommercial": "Create commercial lease contract",
@@ -1356,13 +1422,54 @@
         "closePreview": "Close"
       },
       "nationalAddress": {
-        "methods": ["Map", "Attach photo", "Enter link"],
+        "methodSelect": {
+          "label": "National address entry method",
+          "placeholder": "Choose from here.."
+        },
+        "methods": {
+          "photo": "Address photo",
+          "link": "Address link",
+          "manual": "Enter address details"
+        },
         "mapTitle": "National address map",
         "mapHint": "Click on the map to select the property location.",
         "coordinatesLabel": "Selected coordinates",
         "link": {
           "label": "Add Google Maps link for the property",
           "placeholder": "... Add Google Maps link for the property here"
+        },
+        "manual": {
+          "place": {
+            "label": "Region",
+            "placeholder": "Choose from here...",
+            "loading": "Loading..."
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Choose from here...",
+            "loading": "Loading...",
+            "selectPlaceFirst": "Select the region first"
+          },
+          "neighborhood": {
+            "label": "Neighborhood",
+            "placeholder": "Choose from here..."
+          },
+          "street": {
+            "label": "Street name",
+            "placeholder": "Choose from here..."
+          },
+          "buildingNumber": {
+            "label": "Building number",
+            "placeholder": "Choose from here..."
+          },
+          "postalCode": {
+            "label": "Postal code",
+            "placeholder": "Choose from here..."
+          },
+          "extraFigure": {
+            "label": "Additional number",
+            "placeholder": "Choose from here..."
+          }
         },
         "photo": {
           "label": "Attach national address photo",
@@ -1399,7 +1506,7 @@
           "idNumberLength": "ID number must be 10 digits",
           "birthDate": "Owner's date of birth",
           "phone": "Owner's mobile number",
-          "phoneLength": "Mobile number must be at least 9 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "Owner's IBAN",
           "ibanInvalid": "Owner's IBAN must be a valid Saudi IBAN",
           "hasAgent": "Is there an agent for the owner?",
@@ -1407,7 +1514,7 @@
         },
         "fieldErrors": {
           "idNumberLength": "ID number must be 10 digits",
-          "phoneLength": "Mobile number must be at least 9 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "IBAN must start with SA followed by 22 digits"
         }
       },
@@ -1443,7 +1550,7 @@
         },
         "phone": {
           "label": "Owner mobile number",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "iban": {
           "label": "Owner IBAN",
@@ -1466,7 +1573,7 @@
         "birthDateLabel": "Owner agent date of birth:",
         "phone": {
           "label": "Owner agent mobile number",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1529,7 +1636,7 @@
         },
         "phone": {
           "label": "Tenant mobile number",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         }
       },
       "organizationData": {
@@ -1554,7 +1661,7 @@
         },
         "unifiedRecordNumber": {
           "label": "Unified registry number - starting with 7",
-          "placeholder": "7x xxx xx xxx"
+          "placeholder": "x xxx xx xxx"
         },
         "ownerIdNumber": {
           "label": "Registry owner ID number",
@@ -1563,7 +1670,7 @@
         "ownerBirthDateLabel": "Registry owner date of birth:",
         "ownerPhone": {
           "label": "Registry owner mobile number",
-          "placeholder": "5x xxx xx xxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1612,6 +1719,10 @@
           "label": "Unit number",
           "placeholder": "Write here..."
         },
+        "additionalInfo": {
+          "toggle": "Would you like to add additional information?",
+          "writeHerePlaceholder": "Write here..."
+        },
         "roomsCount": {
           "label": "Number of rooms"
         },
@@ -1657,6 +1768,47 @@
         "waterMeterNumber": {
           "label": "Water meter number",
           "placeholder": "Write here..."
+        },
+        "meterRegistration": {
+          "title": "After documenting the contract, the meter will be:",
+          "currency": "SAR",
+          "tenant": {
+            "title": "Transferred to the tenant's name",
+            "subtitle": "Bills are issued in the tenant's name",
+            "feeBadge": "Transfer fee '{'fee'}' '{'currency'}'",
+            "feeFooter": "+ '{'fee'}' '{'currency'}' transfer fee"
+          },
+          "owner": {
+            "title": "Remains in the owner's name",
+            "subtitle": "Bills are issued in the owner's name",
+            "noFee": "No fees"
+          },
+          "notice": {
+            "beforeFee": "Meter ownership transfer fee is",
+            "feeAmount": "'{'fee'}' SAR",
+            "afterFee": "for transferring the meter to the tenant's name, and it is",
+            "nonRefundable": "non-refundable",
+            "afterNonRefundable": "if there is a reason preventing the transfer. It is added to the total request. If the contract period is",
+            "lessThanMonth": "less than a month",
+            "afterLessThanMonth": "transferring the meter to the tenant's name is not accepted."
+          }
+        }
+      },
+      "leaseRenewal": {
+        "heading": "Would you like to add amendments?",
+        "subtitle": "Update your details quickly",
+        "addNotesToggle": "Add notes?",
+        "edit": "Edit",
+        "confirmContinue": "Confirm and continue",
+        "notesDialog": {
+          "title": "Required amendments...",
+          "close": "Close",
+          "heading": "Please write all required amendments.",
+          "subtitle": "You can add the following:",
+          "notesLabel": "Please write the required amendments",
+          "notesPlaceholder": "Write here...",
+          "stepIndicator": "2 of 2",
+          "save": "Save"
         }
       },
       "saveLaterDialog": {
@@ -1702,7 +1854,15 @@
       "contractDuration": {
         "label": "Contract duration",
         "loading": "Loading contract periods...",
-        "optionsError": "Failed to load contract periods"
+        "optionsError": "Failed to load contract periods",
+        "otherOption": "Other",
+        "custom": {
+          "yearOption": "'{'count'}' year(s)",
+          "monthOption": "+ '{'count'}' month(s)",
+          "monthOptionZero": "No months",
+          "loadingPreview": "Calculating documentation fees...",
+          "previewError": "Failed to load documentation fee preview"
+        }
       },
       "totalRentAmount": {
         "label": "Total rent amount",
@@ -1710,12 +1870,8 @@
       },
       "paymentMethod": {
         "label": "Payment method",
-        "options": {
-          "monthly": "Monthly",
-          "quarterly": "Quarterly",
-          "semi-annual": "Semi-annual",
-          "annual": "Annual"
-        }
+        "loading": "Loading payment methods...",
+        "optionsError": "Failed to load payment methods"
       },
       "addTenantPermissions": {
         "label": "Would you like to add tenant permissions...?",
@@ -1762,6 +1918,7 @@
         "meterFeesTotal": "Total meter fees:",
         "services": "Additional services:",
         "servicesTotal": "Services total:",
+        "docFee": "Documentation fees:",
         "total": "Total:",
         "currency": "SAR",
         "ejarLogoAlt": "Ejar"
@@ -1791,6 +1948,33 @@
         "privacyLink": "Privacy Policy",
         "termsHref": "/terms",
         "privacyHref": "/privacy"
+      },
+      "methodDialog": {
+        "title": "Choose how to receive the contract",
+        "question": "Choose receipt type?",
+        "submitting": "Processing...",
+        "draft": {
+          "title": "I want to receive the contract draft first",
+          "description": "We will send the contract draft via WhatsApp before payment"
+        },
+        "payNow": {
+          "title": "I want to pay now",
+          "description": "We will send the contract draft via WhatsApp after payment"
+        },
+        "missingContractSession": "Contract session is missing. Please restart the contract flow.",
+        "draftError": "Could not save the contract draft. Please try again."
+      },
+      "draftSuccessDialog": {
+        "title": "Congratulations, your request was received successfully!",
+        "paymentStatusLabel": "Payment status: Incomplete",
+        "paymentStatusDescription": "The client wishes to receive the contract draft first, then complete payment",
+        "orderNumberLabel": "Your order number",
+        "copy": "Copy",
+        "copySuccess": "Order number copied",
+        "copyError": "Could not copy the order number",
+        "preparationDescription": "Our team will prepare the contract draft and send it to you via WhatsApp for review",
+        "whatsappCta": "Aqdi team is happy to hear from you",
+        "whatsappHref": "https://wa.me/"
       }
     }
   },
@@ -1809,7 +1993,10 @@
       "description": "Your payment could not be completed"
     },
     "contractNumberLabel": "Contract number",
-    "contractIdLabel": "Contract ID",
+    "contractTypeLabel": "Contract type",
+    "paidAmountLabel": "Paid amount",
+    "housingContractTypeLabel": "Residential",
+    "commercialContractTypeLabel": "Commercial",
     "backToRequests": "Back to requests",
     "backToHome": "Back to home",
     "retryPayment": "Retry payment",

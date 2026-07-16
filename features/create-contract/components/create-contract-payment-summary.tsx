@@ -16,7 +16,10 @@ export default function CreateContractPaymentSummary({
   contractType,
 }: CreateContractPaymentSummaryProps) {
   const contractUuid = useCreateContractDraftStore(
-    (state) => state.contractSession?.uuid ?? null,
+    (state) =>
+      state.contractSession?.uuid ??
+      state.contractStep1Data?.uuid ??
+      null,
   );
   const { data, isLoading } = useContractFinanceSummary(contractUuid);
 

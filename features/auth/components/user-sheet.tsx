@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import CustomIcon from "@/features/shared/components/custom-icon";
+import ProfileEditDialog from "@/features/auth/components/profile-edit-dialog";
 import UserSheetAppDownload from "@/features/auth/components/user-sheet-app-download";
 import UserSheetHeader from "@/features/auth/components/user-sheet-header";
 import UserSheetMenuRow from "@/features/auth/components/user-sheet-menu-row";
@@ -31,6 +32,8 @@ export default function UserSheet({ children }: UserSheetProps) {
   const t = useTranslations("userSheet");
   const user = useAuthStore((state) => state.user);
   const { logout, isLoading: isLoggingOut } = useLogout();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
   async function handleLogout() {
@@ -44,95 +47,114 @@ export default function UserSheet({ children }: UserSheetProps) {
     toast.success(response.message || t("accountSettings.logoutSuccess"));
   }
 
+  function handleOpenProfile() {
+    setSheetOpen(false);
+    window.setTimeout(() => {
+      setProfileOpen(true);
+    }, 150);
+  }
+
   return (
-    <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent
-        side="left"
-        showCloseButton={false}
-        className="flex h-full w-full max-w-md flex-col gap-0 overflow-y-auto rounded-tr-[40px] rounded-br-[40px] p-6 sm:max-w-md no-scrollbar"
-      >
-        <UserSheetHeader title={t("title")} closeLabel={t("close")} />
+    <>
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetTrigger asChild>{children}</SheetTrigger>
+        <SheetContent
+          side="left"
+          showCloseButton={false}
+          className="flex h-full w-full max-w-md flex-col gap-0 overflow-y-auto rounded-tr-[40px] rounded-br-[40px] p-6 sm:max-w-md no-scrollbar"
+        >
+          <UserSheetHeader title={t("title")} closeLabel={t("close")} />
 
-        <div className="flex flex-1 flex-col gap-4 py-4">
-          {user ? (
-            <UserSheetProfileSection
-              user={user}
-              sectionTitle={t("profile.sectionTitle")}
-              avatarAlt={t("profile.avatarAlt")}
-            />
-          ) : null}
+          <div className="flex flex-1 flex-col gap-4 py-4">
+            {user ? (
+              <UserSheetProfileSection
+                user={user}
+                sectionTitle={t("profile.sectionTitle")}
+                avatarAlt={t("profile.avatarAlt")}
+                onEditProfile={handleOpenProfile}
+              />
+            ) : null}
 
-          <UserSheetSectionCard title={t("policies.sectionTitle")}>
-            <UserSheetMenuRow
-              label={t("policies.terms")}
-              icon={<CustomIcon src="/icons/arrow-circle.svg" size={16} />}
-              href={t("policies.termsHref")}
-            />
-            <UserSheetMenuRow
-              label={t("policies.privacy")}
-              icon={<CustomIcon src="/icons/arrow-circle.svg" size={16} className="rotate-90" />}
-              href={t("policies.privacyHref")}
-            />
-          </UserSheetSectionCard>
+            <UserSheetSectionCard title={t("policies.sectionTitle")}>
+              <UserSheetMenuRow
+                label={t("policies.terms")}
+                icon={<CustomIcon src="/icons/arrow-circle.svg" size={16} />}
+                href={t("policies.termsHref")}
+              />
+              <UserSheetMenuRow
+                label={t("policies.privacy")}
+                icon={
+                  <CustomIcon
+                    src="/icons/arrow-circle.svg"
+                    size={16}
+                    className="rotate-90"
+                  />
+                }
+                href={t("policies.privacyHref")}
+              />
+            </UserSheetSectionCard>
 
-          <UserSheetSectionCard title={t("helpCenter.sectionTitle")}>
-            <UserSheetMenuRow
-              label={t("helpCenter.whatsapp")}
-              icon={<FaWhatsapp className="size-4" aria-hidden="true" />}
-              href={t("helpCenter.whatsappHref")}
-              external
-            />
-          </UserSheetSectionCard>
+            <UserSheetSectionCard title={t("helpCenter.sectionTitle")}>
+              <UserSheetMenuRow
+                label={t("helpCenter.whatsapp")}
+                icon={<FaWhatsapp className="size-4" aria-hidden="true" />}
+                href={t("helpCenter.whatsappHref")}
+                external
+              />
+            </UserSheetSectionCard>
 
-          <UserSheetSectionCard title={t("accountSettings.sectionTitle")}>
-            {/* <UserSheetMenuRow
-              label={t("accountSettings.language")}
-              icon={<Globe className="size-4" aria-hidden="true" />}
-              href="#"
-            /> */}
-            <UserSheetMenuRow
-              label={t("accountSettings.notifications")}
-              icon={
-                <CustomIcon
-                  src="/icons/notification-bell.svg"
-                  size={16}
-                  className="text-brand"
-                />
-              }
-              trailing={
-                <Switch
-                  dir="ltr"
-                  checked={notificationsEnabled}
-                  onCheckedChange={setNotificationsEnabled}
-                  className="data-checked:bg-brand-secondary"
-                  aria-label={t("accountSettings.notifications")}
-                />
-              }
-            />
-            <UserSheetMenuRow
-              label={t("accountSettings.logout")}
-              icon={<LogOut className="size-4" aria-hidden="true" />}
-              onClick={handleLogout}
-              isLoading={isLoggingOut}
-            />
-          </UserSheetSectionCard>
+            <UserSheetSectionCard title={t("accountSettings.sectionTitle")}>
+              <UserSheetMenuRow
+                label={t("accountSettings.notifications")}
+                icon={
+                  <CustomIcon
+                    src="/icons/notification-bell.svg"
+                    size={16}
+                    className="text-brand"
+                  />
+                }
+                trailing={
+                  <Switch
+                    dir="ltr"
+                    checked={notificationsEnabled}
+                    onCheckedChange={setNotificationsEnabled}
+                    className="data-checked:bg-brand-secondary"
+                    aria-label={t("accountSettings.notifications")}
+                  />
+                }
+              />
+              <UserSheetMenuRow
+                label={t("accountSettings.logout")}
+                icon={<LogOut className="size-4" aria-hidden="true" />}
+                onClick={handleLogout}
+                isLoading={isLoggingOut}
+              />
+            </UserSheetSectionCard>
 
-          <UserSheetSocialBar
-            followUs={t("social.followUs")}
-            youtubeLabel={t("social.youtube")}
-            twitterLabel={t("social.twitter")}
-            tiktokLabel={t("social.tiktok")}
-          />
+            <UserSheetSocialBar
+              followUs={t("social.followUs")}
+              youtubeLabel={t("social.youtube")}
+              twitterLabel={t("social.twitter")}
+              tiktokLabel={t("social.tiktok")}
+            />
 
-          <UserSheetAppDownload
-            title={t("downloadApp")}
-            downloadOnThe={t("downloadOnThe")}
-            googlePlay={t("googlePlay")}
-            appStore={t("appStore")}
-          />
-        </div>
-      </SheetContent>
-    </Sheet>
+            <UserSheetAppDownload
+              title={t("downloadApp")}
+              downloadOnThe={t("downloadOnThe")}
+              googlePlay={t("googlePlay")}
+              appStore={t("appStore")}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {user ? (
+        <ProfileEditDialog
+          user={user}
+          open={profileOpen}
+          onOpenChange={setProfileOpen}
+        />
+      ) : null}
+    </>
   );
 }

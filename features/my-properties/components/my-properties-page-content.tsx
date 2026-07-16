@@ -1,6 +1,6 @@
 import MyPropertiesAddButton from "@/features/my-properties/components/my-properties-add-button";
 import MyPropertiesGrid from "@/features/my-properties/components/my-properties-grid";
-import MyPropertiesHeader from "@/features/my-properties/components/my-properties-header";
+import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { MyPropertyCardData } from "@/features/my-properties/types/property-card";
 import type { MyPropertiesLabels } from "@/features/my-properties/types/my-properties-labels";
 
@@ -14,9 +14,10 @@ export default function MyPropertiesPageContent({
   items,
 }: MyPropertiesPageContentProps) {
   return (
-    <section className="container py-8 lg:py-10">
-      <MyPropertiesHeader
+    <>
+      <ServicesPageBackConfig
         backLabel={labels.backLabel}
+        backHref="/"
         pageTitle={labels.pageTitle}
       />
 
@@ -29,10 +30,8 @@ export default function MyPropertiesPageContent({
       )}
 
       <div className="mt-10 flex justify-center">
-        <MyPropertiesAddButton
-          label={labels.addProperty}
-        />
+        <MyPropertiesAddButton label={labels.addProperty} />
       </div>
-    </section>
+    </>
   );
 }

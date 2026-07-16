@@ -1,10 +1,8 @@
 "use client";
 
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
-import type {
-  BirthDateValue,
-  CalendarType,
-} from "@/features/create-contract/types/owner-step";
+import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
+import { getAdultBirthYearOptions } from "@/lib/validation/birth-date-year-options";
 import { cn } from "@/lib/utils";
 
 type BirthDateLabels = {
@@ -32,22 +30,16 @@ function padOptions(count: number) {
   });
 }
 
-function getYearOptions(calendarType: CalendarType) {
-  const start = calendarType === "hijri" ? 1350 : 1940;
-  const end = calendarType === "hijri" ? 1450 : 2015;
-
-  return Array.from({ length: end - start + 1 }, (_, index) => {
-    const year = String(end - index);
-    return { value: year, label: year };
-  });
-}
-
 export default function CreateContractBirthDateFields({
   labels,
   value,
   onChange,
 }: CreateContractBirthDateFieldsProps) {
   const dayCount = value.calendarType === "hijri" ? 30 : 31;
+  const yearOptions = getAdultBirthYearOptions(value.calendarType);
+  const selectedYear = yearOptions.some((option) => option.value === value.year)
+    ? value.year
+    : "";
 
   function updateField<K extends keyof BirthDateValue>(
     field: K,
@@ -109,8 +101,8 @@ export default function CreateContractBirthDateFields({
         <CreateContractFormSelect
           label={labels.year}
           placeholder={labels.yearPlaceholder}
-          options={getYearOptions(value.calendarType)}
-          value={value.year}
+          options={yearOptions}
+          value={selectedYear}
           onChange={(year) => updateField("year", year)}
         />
       </div>

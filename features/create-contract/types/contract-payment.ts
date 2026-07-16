@@ -9,6 +9,7 @@ export type ContractPaymentData = {
 
 export type ContractPaymentGatewayRecord = {
   status?: string | null;
+  amount?: number | string | null;
 };
 
 export type ContractEmployeePaidRecord = {
@@ -20,6 +21,9 @@ export type ContractPaymentStatusData = {
   resolvedResult?: "success" | "error" | null;
   contractUuid: string;
   contractId: number;
+  contractType: string | null;
+  contractTypeTrans: string | null;
+  paidAmount: number | null;
   isCompleted: boolean;
   paymentConfirmed?: boolean | null;
   employeePaidRecord: ContractEmployeePaidRecord | null;
@@ -56,6 +60,11 @@ export type ContractPaymentStatusApiResponse = {
     resolved_result?: "success" | "error" | null;
     contract_uuid: string;
     contract_id: number;
+    contract_type?: string | null;
+    contract_type_trans?: string | null;
+    paid_amount?: number | string | null;
+    cart_amount?: number | string | null;
+    amount?: number | string | null;
     is_completed: boolean;
     payment_confirmed?: boolean | null;
     employee_paid_record: unknown;

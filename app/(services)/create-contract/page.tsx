@@ -4,9 +4,11 @@ import { getTranslations } from "next-intl/server";
 import CreateContractPageContent from "@/features/create-contract/components/create-contract-page-content";
 import {
   contractPaperworkKeys,
+  contractPaymentTypeKeys,
   contractServicesPricingKeys,
 } from "@/features/create-contract/query-keys";
 import { getPaperwork } from "@/features/create-contract/services/get-paperwork";
+import { getPaymentTypes } from "@/features/create-contract/services/get-payment-types";
 import { getServicesPricing } from "@/features/create-contract/services/get-services-pricing";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import {
@@ -14,8 +16,10 @@ import {
   type ContractTypeId,
 } from "@/features/create-contract/types/contract-type";
 import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
+import { meterFeeSettingsKeys, settingContractsKeys } from "@/features/shared/query-keys";
+import { getMeterFeeSettings } from "@/features/shared/services/get-meter-fee-settings";
+import { getSettingContracts } from "@/features/shared/services/get-setting-contracts";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
-import { PAYMENT_METHOD_OPTIONS } from "@/features/create-contract/types/finance-step";
 import {
   DELEGATION_TYPE_OPTIONS,
   TENANT_STATUS_OPTIONS,
@@ -45,6 +49,18 @@ export default async function CreateContractPage({
     queryClient.prefetchQuery({
       queryKey: contractServicesPricingKeys.list(propertyContractType),
       queryFn: () => getServicesPricing(propertyContractType),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: contractPaymentTypeKeys.list(propertyContractType),
+      queryFn: () => getPaymentTypes(propertyContractType),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: settingContractsKeys.list(),
+      queryFn: () => getSettingContracts(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: meterFeeSettingsKeys.detail(),
+      queryFn: () => getMeterFeeSettings(),
     }),
   ]);
 
@@ -124,13 +140,57 @@ export default async function CreateContractPage({
         closePreview: t("deed.deedImage.closePreview"),
       },
       nationalAddress: {
-        methods: t.raw("deed.nationalAddress.methods") as string[],
+        methodSelect: {
+          label: t("deed.nationalAddress.methodSelect.label"),
+          placeholder: t("deed.nationalAddress.methodSelect.placeholder"),
+        },
+        methods: t.raw("deed.nationalAddress.methods") as Record<
+          "photo" | "link" | "manual",
+          string
+        >,
         mapTitle: t("deed.nationalAddress.mapTitle"),
         mapHint: t("deed.nationalAddress.mapHint"),
         coordinatesLabel: t("deed.nationalAddress.coordinatesLabel"),
         link: {
           label: t("deed.nationalAddress.link.label"),
           placeholder: t("deed.nationalAddress.link.placeholder"),
+        },
+        manual: {
+          place: {
+            label: t("deed.nationalAddress.manual.place.label"),
+            placeholder: t("deed.nationalAddress.manual.place.placeholder"),
+            loading: t("deed.nationalAddress.manual.place.loading"),
+          },
+          city: {
+            label: t("deed.nationalAddress.manual.city.label"),
+            placeholder: t("deed.nationalAddress.manual.city.placeholder"),
+            loading: t("deed.nationalAddress.manual.city.loading"),
+            selectPlaceFirst: t(
+              "deed.nationalAddress.manual.city.selectPlaceFirst",
+            ),
+          },
+          neighborhood: {
+            label: t("deed.nationalAddress.manual.neighborhood.label"),
+            placeholder: t("deed.nationalAddress.manual.neighborhood.placeholder"),
+          },
+          street: {
+            label: t("deed.nationalAddress.manual.street.label"),
+            placeholder: t("deed.nationalAddress.manual.street.placeholder"),
+          },
+          buildingNumber: {
+            label: t("deed.nationalAddress.manual.buildingNumber.label"),
+            placeholder: t(
+              "deed.nationalAddress.manual.buildingNumber.placeholder",
+            ),
+          },
+          postalCode: {
+            label: t("deed.nationalAddress.manual.postalCode.label"),
+            placeholder: t("deed.nationalAddress.manual.postalCode.placeholder"),
+          },
+          extraFigure: {
+            label: t("deed.nationalAddress.manual.extraFigure.label"),
+            placeholder: t("deed.nationalAddress.manual.extraFigure.placeholder"),
+          },
         },
         photo: {
           label: t("deed.nationalAddress.photo.label"),
@@ -285,17 +345,6 @@ export default async function CreateContractPage({
             ]),
           ) as CreateContractLabels["tenant"]["organizationData"]["delegationType"]["options"],
         },
-        region: {
-          label: t("tenant.organizationData.region.label"),
-          placeholder: t("tenant.organizationData.region.placeholder"),
-          loading: t("tenant.organizationData.region.loading"),
-        },
-        city: {
-          label: t("tenant.organizationData.city.label"),
-          placeholder: t("tenant.organizationData.city.placeholder"),
-          loading: t("tenant.organizationData.city.loading"),
-          selectRegionFirst: t("tenant.organizationData.city.selectRegionFirst"),
-        },
         unifiedRecordNumber: {
           label: t("tenant.organizationData.unifiedRecordNumber.label"),
           placeholder: t(
@@ -354,6 +403,12 @@ export default async function CreateContractPage({
           label: t("tenant.rentedUnit.unitNumber.label"),
           placeholder: t("tenant.rentedUnit.unitNumber.placeholder"),
         },
+        additionalInfo: {
+          toggle: t("tenant.rentedUnit.additionalInfo.toggle"),
+          writeHerePlaceholder: t(
+            "tenant.rentedUnit.additionalInfo.writeHerePlaceholder",
+          ),
+        },
         roomsCount: {
           label: t("tenant.rentedUnit.roomsCount.label"),
         },
@@ -400,6 +455,55 @@ export default async function CreateContractPage({
           label: t("tenant.rentedUnit.waterMeterNumber.label"),
           placeholder: t("tenant.rentedUnit.waterMeterNumber.placeholder"),
         },
+        meterRegistration: {
+          title: t("tenant.rentedUnit.meterRegistration.title"),
+          currency: t("tenant.rentedUnit.meterRegistration.currency"),
+          tenant: {
+            title: t("tenant.rentedUnit.meterRegistration.tenant.title"),
+            subtitle: t("tenant.rentedUnit.meterRegistration.tenant.subtitle"),
+            feeBadge: t("tenant.rentedUnit.meterRegistration.tenant.feeBadge"),
+            feeFooter: t("tenant.rentedUnit.meterRegistration.tenant.feeFooter"),
+          },
+          owner: {
+            title: t("tenant.rentedUnit.meterRegistration.owner.title"),
+            subtitle: t("tenant.rentedUnit.meterRegistration.owner.subtitle"),
+            noFee: t("tenant.rentedUnit.meterRegistration.owner.noFee"),
+          },
+          notice: {
+            beforeFee: t("tenant.rentedUnit.meterRegistration.notice.beforeFee"),
+            feeAmount: t("tenant.rentedUnit.meterRegistration.notice.feeAmount"),
+            afterFee: t("tenant.rentedUnit.meterRegistration.notice.afterFee"),
+            nonRefundable: t(
+              "tenant.rentedUnit.meterRegistration.notice.nonRefundable",
+            ),
+            afterNonRefundable: t(
+              "tenant.rentedUnit.meterRegistration.notice.afterNonRefundable",
+            ),
+            lessThanMonth: t(
+              "tenant.rentedUnit.meterRegistration.notice.lessThanMonth",
+            ),
+            afterLessThanMonth: t(
+              "tenant.rentedUnit.meterRegistration.notice.afterLessThanMonth",
+            ),
+          },
+        },
+      },
+      leaseRenewal: {
+        heading: t("tenant.leaseRenewal.heading"),
+        subtitle: t("tenant.leaseRenewal.subtitle"),
+        addNotesToggle: t("tenant.leaseRenewal.addNotesToggle"),
+        edit: t("tenant.leaseRenewal.edit"),
+        confirmContinue: t("tenant.leaseRenewal.confirmContinue"),
+        notesDialog: {
+          title: t("tenant.leaseRenewal.notesDialog.title"),
+          close: t("tenant.leaseRenewal.notesDialog.close"),
+          heading: t("tenant.leaseRenewal.notesDialog.heading"),
+          subtitle: t("tenant.leaseRenewal.notesDialog.subtitle"),
+          notesLabel: t("tenant.leaseRenewal.notesDialog.notesLabel"),
+          notesPlaceholder: t("tenant.leaseRenewal.notesDialog.notesPlaceholder"),
+          stepIndicator: t("tenant.leaseRenewal.notesDialog.stepIndicator"),
+          save: t("tenant.leaseRenewal.notesDialog.save"),
+        },
       },
       saveLaterDialog: {
         title: t("tenant.saveLaterDialog.title"),
@@ -445,6 +549,14 @@ export default async function CreateContractPage({
         label: t("finance.contractDuration.label"),
         loading: t("finance.contractDuration.loading"),
         optionsError: t("finance.contractDuration.optionsError"),
+        otherOption: t("finance.contractDuration.otherOption"),
+        custom: {
+          yearOption: t("finance.contractDuration.custom.yearOption"),
+          monthOption: t("finance.contractDuration.custom.monthOption"),
+          monthOptionZero: t("finance.contractDuration.custom.monthOptionZero"),
+          loadingPreview: t("finance.contractDuration.custom.loadingPreview"),
+          previewError: t("finance.contractDuration.custom.previewError"),
+        },
       },
       totalRentAmount: {
         label: t("finance.totalRentAmount.label"),
@@ -452,12 +564,8 @@ export default async function CreateContractPage({
       },
       paymentMethod: {
         label: t("finance.paymentMethod.label"),
-        options: Object.fromEntries(
-          PAYMENT_METHOD_OPTIONS.map((paymentMethod) => [
-            paymentMethod,
-            t(`finance.paymentMethod.options.${paymentMethod}`),
-          ]),
-        ) as CreateContractLabels["finance"]["paymentMethod"]["options"],
+        loading: t("finance.paymentMethod.loading"),
+        optionsError: t("finance.paymentMethod.optionsError"),
       },
       addTenantPermissions: {
         label: t("finance.addTenantPermissions.label"),
@@ -504,6 +612,7 @@ export default async function CreateContractPage({
         meterFeesTotal: t("payment.summary.meterFeesTotal"),
         services: t("payment.summary.services"),
         servicesTotal: t("payment.summary.servicesTotal"),
+        docFee: t("payment.summary.docFee"),
         total: t("payment.summary.total"),
         currency: t("payment.summary.currency"),
         ejarLogoAlt: t("payment.summary.ejarLogoAlt"),
@@ -535,6 +644,37 @@ export default async function CreateContractPage({
         privacyLink: t("payment.disclaimer.privacyLink"),
         termsHref: t("payment.disclaimer.termsHref"),
         privacyHref: t("payment.disclaimer.privacyHref"),
+      },
+      methodDialog: {
+        title: t("payment.methodDialog.title"),
+        question: t("payment.methodDialog.question"),
+        submitting: t("payment.methodDialog.submitting"),
+        draft: {
+          title: t("payment.methodDialog.draft.title"),
+          description: t("payment.methodDialog.draft.description"),
+        },
+        payNow: {
+          title: t("payment.methodDialog.payNow.title"),
+          description: t("payment.methodDialog.payNow.description"),
+        },
+        missingContractSession: t("payment.methodDialog.missingContractSession"),
+        draftError: t("payment.methodDialog.draftError"),
+      },
+      draftSuccessDialog: {
+        title: t("payment.draftSuccessDialog.title"),
+        paymentStatusLabel: t("payment.draftSuccessDialog.paymentStatusLabel"),
+        paymentStatusDescription: t(
+          "payment.draftSuccessDialog.paymentStatusDescription",
+        ),
+        orderNumberLabel: t("payment.draftSuccessDialog.orderNumberLabel"),
+        copy: t("payment.draftSuccessDialog.copy"),
+        copySuccess: t("payment.draftSuccessDialog.copySuccess"),
+        copyError: t("payment.draftSuccessDialog.copyError"),
+        preparationDescription: t(
+          "payment.draftSuccessDialog.preparationDescription",
+        ),
+        whatsappCta: t("payment.draftSuccessDialog.whatsappCta"),
+        whatsappHref: t("payment.draftSuccessDialog.whatsappHref"),
       },
     },
     prices: {
