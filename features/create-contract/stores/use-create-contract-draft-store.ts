@@ -54,6 +54,7 @@ import type { ContractStep3ApiData } from "@/features/create-contract/types/cont
 import type { ContractStep4ApiData } from "@/features/create-contract/types/contract-step4-api";
 import type { ContractStep5ApiData } from "@/features/create-contract/types/contract-step5-api";
 import type { ContractStep6ApiData } from "@/features/create-contract/types/contract-step6-api";
+import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
 import { mapInstrumentTypeToDeedType } from "@/features/create-contract/utils/map-instrument-type-to-deed-type";
 import {
@@ -118,6 +119,8 @@ type CreateContractDraftStore = {
   contractStep4Data: ContractStep4ApiData | null;
   contractStep5Data: ContractStep5ApiData | null;
   contractStep6Data: ContractStep6ApiData | null;
+  contractFinancialData: ContractFinancialData | null;
+  contractFinanceSummaryData: ContractFinancialData | null;
   existingPropertyContext: ExistingPropertyContractContext | null;
   deed: DeedDraftState;
   owner: OwnerDraftState;
@@ -161,6 +164,8 @@ type CreateContractDraftStore = {
   setContractStep4Data: (data: ContractStep4ApiData | null) => void;
   setContractStep5Data: (data: ContractStep5ApiData | null) => void;
   setContractStep6Data: (data: ContractStep6ApiData | null) => void;
+  setContractFinancialData: (data: ContractFinancialData | null) => void;
+  setContractFinanceSummaryData: (data: ContractFinancialData | null) => void;
   startExistingPropertyContractFlow: (payload: {
     session: ExistingPropertyContractSession;
     context: ExistingPropertyContractContext;
@@ -371,6 +376,8 @@ function createInitialState() {
     contractStep4Data: null as ContractStep4ApiData | null,
     contractStep5Data: null as ContractStep5ApiData | null,
     contractStep6Data: null as ContractStep6ApiData | null,
+    contractFinancialData: null as ContractFinancialData | null,
+    contractFinanceSummaryData: null as ContractFinancialData | null,
     existingPropertyContext: null as ExistingPropertyContractContext | null,
     deed: { ...INITIAL_DEED },
     owner: { ...INITIAL_OWNER, ownerData: { ...EMPTY_OWNER_DATA }, agentData: { ...EMPTY_AGENT_DATA } },
@@ -650,6 +657,14 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             state.contractSession?.contractId === session.contractId
               ? state.contractStep6Data
               : null,
+          contractFinancialData:
+            state.contractSession?.contractId === session.contractId
+              ? state.contractFinancialData
+              : null,
+          contractFinanceSummaryData:
+            state.contractSession?.contractId === session.contractId
+              ? state.contractFinanceSummaryData
+              : null,
         })),
       setContractStep1Data: (data) => set({ contractStep1Data: data }),
       setContractStep2Data: (data) => set({ contractStep2Data: data }),
@@ -657,6 +672,9 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       setContractStep4Data: (data) => set({ contractStep4Data: data }),
       setContractStep5Data: (data) => set({ contractStep5Data: data }),
       setContractStep6Data: (data) => set({ contractStep6Data: data }),
+      setContractFinancialData: (data) => set({ contractFinancialData: data }),
+      setContractFinanceSummaryData: (data) =>
+        set({ contractFinanceSummaryData: data }),
       startExistingPropertyContractFlow: ({ session, context }) => {
         const base = createInitialState();
 
@@ -765,6 +783,8 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         contractStep4Data: state.contractStep4Data,
         contractStep5Data: state.contractStep5Data,
         contractStep6Data: state.contractStep6Data,
+        contractFinancialData: state.contractFinancialData,
+        contractFinanceSummaryData: state.contractFinanceSummaryData,
         existingPropertyContext: state.existingPropertyContext,
         deed: {
           currentPhaseIndex: state.deed.currentPhaseIndex,

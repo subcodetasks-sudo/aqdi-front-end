@@ -6,11 +6,11 @@ import type {
 } from "@/features/create-contract/types/contract-financial";
 import { apiRequest } from "@/lib/api/api-request";
 
-export async function getContractFinancial(
+export async function getContractFinanceSummary(
   contractUuid: string,
 ): Promise<ContractFinancialData> {
   const response = await apiRequest<ContractFinancialApiResponse>(
-    `/financial/${contractUuid}`,
+    `/finance-summary/${contractUuid}`,
     {
       method: "GET",
       cache: "no-store",
@@ -21,7 +21,7 @@ export async function getContractFinancial(
     throw new Error(
       response.error ||
         response.data?.message ||
-        "Failed to fetch contract financial details",
+        "Failed to fetch contract finance summary",
     );
   }
 

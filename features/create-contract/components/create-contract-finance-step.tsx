@@ -1,6 +1,7 @@
 "use client";
 
 import CreateContractFinanceDataPhase from "@/features/create-contract/components/create-contract-finance-data-phase";
+import CreateContractFinanceFinancialSummary from "@/features/create-contract/components/create-contract-finance-financial-summary";
 import CreateContractOtherConditionsDialog from "@/features/create-contract/components/create-contract-other-conditions-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
@@ -12,6 +13,7 @@ import type { CreateContractLabels } from "@/features/create-contract/types/crea
 
 type CreateContractFinanceStepProps = {
   labels: CreateContractLabels["finance"];
+  summaryLabels: CreateContractLabels["payment"]["summary"];
   contractType: ContractTypeId;
   onBack: () => void;
   onComplete: () => void;
@@ -19,6 +21,7 @@ type CreateContractFinanceStepProps = {
 
 export default function CreateContractFinanceStep({
   labels,
+  summaryLabels,
   contractType,
   onBack,
   onComplete,
@@ -59,14 +62,21 @@ export default function CreateContractFinanceStep({
           icon="dollar"
         />
 
-        <CreateContractFinanceDataPhase
-          labels={labels}
-          contractType={contractType}
-          value={financeData}
-          onChange={setFinanceData}
-          onOpenTenantPermissions={() => setTenantPermissionsDialogOpen(true)}
-          onOpenOtherConditions={() => setOtherConditionsDialogOpen(true)}
-        />
+        <div className="space-y-5">
+          <CreateContractFinanceDataPhase
+            labels={labels}
+            contractType={contractType}
+            value={financeData}
+            onChange={setFinanceData}
+            onOpenTenantPermissions={() => setTenantPermissionsDialogOpen(true)}
+            onOpenOtherConditions={() => setOtherConditionsDialogOpen(true)}
+          />
+
+          <CreateContractFinanceFinancialSummary
+            labels={summaryLabels}
+            contractType={contractType}
+          />
+        </div>
       </div>
 
       <CreateContractTenantPermissionsDialog

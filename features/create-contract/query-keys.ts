@@ -23,6 +23,12 @@ export const contractServicesPricingKeys = {
 
 export const contractFinancialKeys = {
   all: ["contract-financial"] as const,
-  detail: (contractId: number) =>
-    [...contractFinancialKeys.all, contractId] as const,
+  detail: (contractUuid: string) =>
+    [...contractFinancialKeys.all, contractUuid] as const,
+};
+
+export const contractFinanceSummaryKeys = {
+  all: ["contract-finance-summary"] as const,
+  detail: (contractUuid: string) =>
+    [...contractFinanceSummaryKeys.all, contractUuid] as const,
 };

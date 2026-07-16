@@ -86,6 +86,7 @@ export default function CreateContractWizard({
       {currentStep === "finance" ? (
         <CreateContractFinanceStep
           labels={labels.finance}
+          summaryLabels={labels.payment.summary}
           contractType={contractType}
           onBack={goBack}
           onComplete={goNext}

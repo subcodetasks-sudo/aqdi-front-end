@@ -413,7 +413,11 @@ export type CreateContractLabels = {
       contractPeriodPrice: string;
       vat: string;
       applicationFees: string;
+      electricityMeterFee: string;
+      waterMeterFee: string;
+      meterFeesTotal: string;
       services: string;
+      servicesTotal: string;
       total: string;
       currency: string;
       ejarLogoAlt: string;
