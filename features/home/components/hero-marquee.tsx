@@ -16,7 +16,14 @@ export default function HeroMarquee() {
 <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
       <Marquee pauseOnHover className="[--duration:40s] [--gap:2rem]">
         {featureLogos.map((logo) => (
-          <Image src={logo} alt="logo" width={100} height={100} className="size-16 object-contain" />
+          <Image
+            key={logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+            className="size-16 object-contain"
+          />
         ))}
       </Marquee>
       {/* <Marquee reverse pauseOnHover className="[--duration:20s]">
