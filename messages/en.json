@@ -1242,7 +1242,7 @@
       }
     },
     "totalArea": {
-      "label": "Total unit area",
+      "label": "Approximate unit area",
       "placeholder": "Write here...",
       "suffix": "m²"
     },
@@ -1256,12 +1256,14 @@
       "label": "Unit number",
       "placeholder": "Write here..."
     },
+    "unitCardTitle": "Basic information",
     "additionalInfo": {
       "toggle": "Would you like to add additional information?",
       "writeHerePlaceholder": "Write here..."
     },
     "roomsCount": {
-      "label": "Number of rooms"
+      "label": "Number of rooms",
+      "hint": "Living rooms, majlis, and bedrooms are all counted as rooms"
     },
     "hallsCount": {
       "label": "Number of halls"
@@ -1282,10 +1284,11 @@
       "label": "Split AC"
     },
     "kitchenCabinetsInstalled": {
-      "label": "Are kitchen cabinets installed?"
+      "label": "Are kitchen cabinets installed?",
+      "kitchensRequiredHint": "Specify the number of kitchens first"
     },
     "furnished": {
-      "label": "Furnished?"
+      "label": "Is the unit furnished?"
     },
     "furnishingType": {
       "label": "Furnishing type:",
@@ -1325,8 +1328,16 @@
   "createContract": {
     "incompleteContinue": "Please complete all required fields before continuing",
     "backLabel": "Back",
-    "pageTitleResidential": "Create residential lease contract",
-    "pageTitleCommercial": "Create commercial lease contract",
+    "pageTitleResidential": "Residential lease contract",
+    "pageTitleCommercial": "Commercial lease contract",
+    "header": {
+      "home": "Home",
+      "help": "Help",
+      "requestPrefix": "Request",
+      "copySuccess": "Request number copied",
+      "copyError": "Could not copy request number",
+      "whatsappHref": "https://wa.me/"
+    },
     "stepper": {
       "journey": "Your rental journey has become easier.",
       "ejarLogoAlt": "Ejar",
@@ -1384,7 +1395,7 @@
         },
         {
           "title": "National address for the property",
-          "subtitle": "Choose your preferred method:"
+          "subtitle": "Identify the property location using one of the three methods"
         }
       ],
       "deedType": {
@@ -1427,9 +1438,18 @@
           "placeholder": "Choose from here.."
         },
         "methods": {
-          "photo": "Address photo",
-          "link": "Address link",
-          "manual": "Enter address details"
+          "link": {
+            "title": "Property location link",
+            "description": "Via Google Maps"
+          },
+          "manual": {
+            "title": "Enter address manually",
+            "description": "City, neighborhood, and street"
+          },
+          "photo": {
+            "title": "Attach national address",
+            "description": "Address card image"
+          }
         },
         "mapTitle": "National address map",
         "mapHint": "Click on the map to select the property location.",
@@ -1522,10 +1542,6 @@
         {
           "title": "Property owner data",
           "subtitle": "Fill in your data correctly:"
-        },
-        {
-          "title": "Agent data",
-          "subtitle": "Fill in your data correctly:"
         }
       ],
       "birthDate": {
@@ -1557,23 +1573,22 @@
           "placeholder": "SA00 0000 0000 0000 0000 0000"
         },
         "hasAgent": {
-          "label": "Is there an agent for the owner?",
-          "placeholder": "Select from here..",
-          "options": {
-            "yes": "Yes",
-            "no": "No"
-          }
+          "title": "Do you want to add an agent for the property owner?",
+          "description": "Agent details + power of attorney image — we verify it in official systems"
         }
       },
       "agentData": {
+        "sectionTitle": "Agent details",
+        "sectionDescription": "We verify the agent in official systems before accepting the power of attorney",
+        "footerNote": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause",
         "idNumber": {
-          "label": "Owner agent ID number",
-          "placeholder": "1x xxx xx xxx"
+          "label": "Agent ID number",
+          "placeholder": "1xxxxxxxxx"
         },
-        "birthDateLabel": "Owner agent date of birth:",
+        "birthDateLabel": "Agent date of birth",
         "phone": {
-          "label": "Owner agent mobile number",
-          "placeholder": "xxxxxxxx"
+          "label": "Agent mobile number",
+          "placeholder": "05 xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1611,7 +1626,7 @@
         }
       ],
       "tenantStatus": {
-        "label": "Tenant status / Individual - Establishment - Company",
+        "label": "Tenant status",
         "placeholder": "Select from here...",
         "options": {
           "individual": "Individual",
@@ -1619,7 +1634,7 @@
         }
       },
       "birthDate": {
-        "label": "Tenant date of birth:",
+        "label": "Tenant date of birth",
         "hijri": "Hijri",
         "gregorian": "Gregorian",
         "day": "Day!",
@@ -1632,20 +1647,26 @@
       "individualData": {
         "idNumber": {
           "label": "Tenant ID number",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
         "phone": {
           "label": "Tenant mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05 xxxxxxxx"
         }
       },
       "organizationData": {
         "delegationType": {
-          "label": "Type of delegation or power of attorney",
-          "placeholder": "Select from here...",
+          "label": "Type of authorization or power of attorney",
           "options": {
-            "owner-representative": "I am the registry owner and representative",
-            "agent-authorized": "I am an agent or authorized by the registry owner"
+            "owner-representative": {
+              "title": "I am the registry owner and its representative",
+              "description": "Your details and registry details are enough — no attachments"
+            },
+            "agent-authorized": {
+              "title": "I am an agent or authorized for the registry owner",
+              "description": "Same details + power of attorney or authorization image",
+              "badge": "Requires attaching the power of attorney"
+            }
           }
         },
         "region": {
@@ -1660,17 +1681,18 @@
           "selectRegionFirst": "Select a region first"
         },
         "unifiedRecordNumber": {
-          "label": "Unified registry number - starting with 7",
-          "placeholder": "x xxx xx xxx"
+          "label": "Unified registry number",
+          "placeholder": "xxxxxxxxx",
+          "hint": "The unified registry is 10 digits and always starts with 7"
         },
         "ownerIdNumber": {
           "label": "Registry owner ID number",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
-        "ownerBirthDateLabel": "Registry owner date of birth:",
+        "ownerBirthDateLabel": "Registry owner date of birth",
         "ownerPhone": {
           "label": "Registry owner mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05 xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1705,7 +1727,7 @@
           }
         },
         "totalArea": {
-          "label": "Total unit area",
+          "label": "Approximate unit area",
           "placeholder": "Write here...",
           "suffix": "m²"
         },
@@ -1719,12 +1741,14 @@
           "label": "Unit number",
           "placeholder": "Write here..."
         },
+        "unitCardTitle": "Basic information",
         "additionalInfo": {
           "toggle": "Would you like to add additional information?",
           "writeHerePlaceholder": "Write here..."
         },
         "roomsCount": {
-          "label": "Number of rooms"
+          "label": "Number of rooms",
+          "hint": "Living rooms, majlis, and bedrooms are all counted as rooms"
         },
         "hallsCount": {
           "label": "Number of halls"
@@ -1745,10 +1769,11 @@
           "label": "Split AC"
         },
         "kitchenCabinetsInstalled": {
-          "label": "Are kitchen cabinets installed"
+          "label": "Are kitchen cabinets installed?",
+          "kitchensRequiredHint": "Specify the number of kitchens first"
         },
         "furnished": {
-          "label": "Furnished"
+          "label": "Is the unit furnished?"
         },
         "furnishingType": {
           "label": "Furnishing type:",
@@ -1855,7 +1880,9 @@
         "label": "Contract duration",
         "loading": "Loading contract periods...",
         "optionsError": "Failed to load contract periods",
-        "otherOption": "Other",
+        "otherOption": "Other duration",
+        "feeLabel": "Total fees",
+        "currency": "SAR",
         "custom": {
           "yearOption": "'{'count'}' year(s)",
           "monthOption": "+ '{'count'}' month(s)",
@@ -1873,30 +1900,19 @@
         "loading": "Loading payment methods...",
         "optionsError": "Failed to load payment methods"
       },
-      "addTenantPermissions": {
-        "label": "Would you like to add tenant permissions...?",
-        "edit": "Edit"
-      },
-      "addOtherConditions": {
-        "label": "Would you like to add other conditions...?",
-        "add": "Add"
-      },
-      "tenantPermissionsDialog": {
-        "title": "Tenant permissions",
-        "close": "Close",
-        "heading": "Would you like to add permissions for the tenant...?",
-        "subtitle": "You can add the following:",
-        "continue": "Continue",
+      "tenantPermissions": {
+        "title": "Permissions for the tenant, guarantee amount, or daily fine?",
+        "subtitle": "Such as subletting, a daily fine, or holding a guarantee deposit",
+        "instruction": "Choose what you want to add — unselected items are not included in the contract",
         "optionsError": "Failed to load tenant roles"
       },
-      "otherConditionsDialog": {
-        "title": "Other terms...?",
-        "close": "Close",
-        "heading": "Would you like to add other terms...?",
-        "subtitle": "You can add the following:",
-        "termsLabel": "Terms:",
-        "termsPlaceholder": "Write here...",
-        "save": "Save"
+      "otherConditions": {
+        "title": "Would you like to add other conditions...?",
+        "subtitle": "Additional conditions agreed by both parties and documented in the contract",
+        "instruction": "Add one condition per line — it appears in the contract terms",
+        "placeholder": "Write the condition here",
+        "add": "Add condition",
+        "remove": "Remove condition"
       }
     },
     "payment": {

@@ -34,31 +34,35 @@ export default function CreateContractTenantIndividualDataPhase({
 
   return (
     <div className="mt-5 space-y-5">
-      <CreateContractIconInputField
-        label={labels.idNumber.label}
-        placeholder={labels.idNumber.placeholder}
-        value={value.idNumber}
-        onChange={(idNumber) =>
-          updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
-        }
-        icon={IdCard}
-        dir="ltr"
-        inputMode="numeric"
-        maxLength={10}
-      />
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <CreateContractIconInputField
+          label={labels.idNumber.label}
+          placeholder={labels.idNumber.placeholder}
+          value={value.idNumber}
+          onChange={(idNumber) =>
+            updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
+          }
+          icon={IdCard}
+          dir="ltr"
+          inputMode="numeric"
+          maxLength={10}
+        />
+
+        <CreateContractSaudiMobileField
+          label={labels.phone.label}
+          placeholder={labels.phone.placeholder}
+          value={value.phone}
+          onChange={(phone) =>
+            updateField("phone", toSaudiMobileInputValue(phone))
+          }
+          icon={Phone}
+        />
+      </div>
 
       <CreateContractBirthDateFields
         labels={birthDateLabels}
         value={value.birthDate}
         onChange={(birthDate) => updateField("birthDate", birthDate)}
-      />
-
-      <CreateContractSaudiMobileField
-        label={labels.phone.label}
-        placeholder={labels.phone.placeholder}
-        value={value.phone}
-        onChange={(phone) => updateField("phone", toSaudiMobileInputValue(phone))}
-        icon={Phone}
       />
     </div>
   );

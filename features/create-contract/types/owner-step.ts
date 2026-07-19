@@ -48,7 +48,7 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
   birthDate: EMPTY_BIRTH_DATE,
   phone: "05",
   iban: "",
-  hasAgent: "",
+  hasAgent: "no",
 };
 
 export const EMPTY_AGENT_DATA: AgentDataState = {
@@ -61,7 +61,11 @@ export const EMPTY_AGENT_DATA: AgentDataState = {
 export const OWNER_STEP_MAX_PHASE_COUNT = 2;
 
 export function isOwnerDataComplete(ownerData: OwnerDataState) {
-  return isBaseOwnerDataComplete(ownerData);
+  return isBaseOwnerDataComplete({
+    ...ownerData,
+    // Toggle defaults to off; treat unset as "no".
+    hasAgent: ownerData.hasAgent === "yes" ? "yes" : "no",
+  });
 }
 
 export {

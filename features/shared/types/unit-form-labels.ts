@@ -21,18 +21,22 @@ export type UnitFormLabels = {
     label: string;
     placeholder: string;
   };
+  unitCardTitle?: string;
   additionalInfo: {
     toggle: string;
     writeHerePlaceholder: string;
   };
-  roomsCount: { label: string };
+  roomsCount: { label: string; hint?: string };
   hallsCount: { label: string };
   majlisCount: { label: string };
   kitchensCount: { label: string };
   bathroomsCount: { label: string };
   windowAcCount: { label: string };
   splitAcCount: { label: string };
-  kitchenCabinetsInstalled: { label: string };
+  kitchenCabinetsInstalled: {
+    label: string;
+    kitchensRequiredHint?: string;
+  };
   furnished: { label: string };
   furnishingType: {
     label: string;

@@ -5,33 +5,28 @@ import { Hand } from "lucide-react";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { cn } from "@/lib/utils";
 
-export type FinanceDurationOption = {
+export type FinancePaymentMethodOption = {
   value: string;
   title: string;
-  fee?: string;
-  feeLabel?: string;
 };
 
-type CreateContractFinanceDurationSelectProps = {
+type CreateContractFinancePaymentMethodSelectProps = {
   label: string;
-  placeholder: string;
-  options: FinanceDurationOption[];
+  options: FinancePaymentMethodOption[];
   value: string;
   note?: string;
-  currencyLabel?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
 };
 
-export default function CreateContractFinanceDurationSelect({
+export default function CreateContractFinancePaymentMethodSelect({
   label,
   options,
   value,
   note,
-  currencyLabel,
   disabled = false,
   onChange,
-}: CreateContractFinanceDurationSelectProps) {
+}: CreateContractFinancePaymentMethodSelectProps) {
   return (
     <div>
       <CreateContractFieldLabel label={label} />
@@ -43,7 +38,6 @@ export default function CreateContractFinanceDurationSelect({
       >
         {options.map((option) => {
           const selected = value === option.value;
-          const hasFee = Boolean(option.fee);
 
           return (
             <button
@@ -54,7 +48,7 @@ export default function CreateContractFinanceDurationSelect({
               disabled={disabled}
               onClick={() => onChange(option.value)}
               className={cn(
-                "flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl border px-2 py-2 text-center transition-colors",
+                "flex min-h-12 items-center justify-center rounded-xl border px-2 py-2 text-center transition-colors",
                 selected
                   ? "border-brand bg-brand text-white"
                   : "border-[#e8e8e8] bg-brand-background text-brand hover:border-brand/30",
@@ -64,29 +58,6 @@ export default function CreateContractFinanceDurationSelect({
               <span className="text-xs font-extrabold leading-4">
                 {option.title}
               </span>
-
-              {hasFee ? (
-                <span
-                  className={cn(
-                    "text-[11px] font-bold tabular-nums leading-3.5",
-                    selected ? "text-white/95" : "text-brand-secondary",
-                  )}
-                >
-                  {option.fee}
-                  {currencyLabel ? ` ${currencyLabel}` : ""}
-                </span>
-              ) : null}
-
-              {hasFee && option.feeLabel ? (
-                <span
-                  className={cn(
-                    "text-[9px] leading-3",
-                    selected ? "text-white/75" : "text-[#9a9a9a]",
-                  )}
-                >
-                  {option.feeLabel}
-                </span>
-              ) : null}
             </button>
           );
         })}

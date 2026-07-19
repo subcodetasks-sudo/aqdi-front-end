@@ -1,20 +1,15 @@
 "use client";
 
-import { FileText, ChevronLeft } from "lucide-react";
-import { useRef, useState } from "react";
+import { Briefcase, ScrollText } from "lucide-react";
+import type { ReactNode } from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
   DELEGATION_TYPE_OPTIONS,
   type DelegationTypeOption,
 } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { cn } from "@/lib/utils";
 
 type CreateContractTenantDelegationTypeSelectProps = {
   labels: CreateContractLabels["tenant"]["organizationData"]["delegationType"];
@@ -22,105 +17,65 @@ type CreateContractTenantDelegationTypeSelectProps = {
   onChange: (value: DelegationTypeOption | "") => void;
 };
 
+const DELEGATION_ICONS: Record<DelegationTypeOption, ReactNode> = {
+  "owner-representative": (
+    <Briefcase className="size-8 text-[#8a6a3a]" aria-hidden />
+  ),
+  "agent-authorized": (
+    <ScrollText className="size-8 text-[#6b5b95]" aria-hidden />
+  ),
+};
+
 export default function CreateContractTenantDelegationTypeSelect({
   labels,
   value,
   onChange,
 }: CreateContractTenantDelegationTypeSelectProps) {
-  const [open, setOpen] = useState(false);
-  const [contentWidth, setContentWidth] = useState<number>();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const selectedLabel = value ? labels.options[value] : undefined;
-
-  function handleOpenChange(nextOpen: boolean) {
-    if (nextOpen && containerRef.current) {
-      setContentWidth(containerRef.current.offsetWidth);
-    }
-
-    setOpen(nextOpen);
-  }
-
-  function openSelect() {
-    if (containerRef.current) {
-      setContentWidth(containerRef.current.offsetWidth);
-    }
-
-    setOpen(true);
-  }
-
   return (
     <div>
       <CreateContractFieldLabel label={labels.label} />
 
       <div
-        ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        role="radiogroup"
+        aria-label={labels.label}
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2"
       >
-        <div
-          className="flex min-w-0 flex-1 items-center gap-2"
-          onClick={openSelect}
-        >
-          <FileText
-            className="size-5 shrink-0 text-brand-secondary"
-            aria-hidden="true"
-          />
+        {DELEGATION_TYPE_OPTIONS.map((delegationType) => {
+          const selected = value === delegationType;
+          const option = labels.options[delegationType];
 
-          <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
+          return (
+            <button
+              key={delegationType}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              onClick={() => onChange(delegationType)}
+              className={cn(
+                "relative flex flex-col items-center gap-2 rounded-2xl border px-4 py-6 text-center transition-colors",
+                selected
+                  ? "border-brand bg-brand-background-green/50"
+                  : "border-[#e8e8e8] bg-white hover:border-brand/30",
+              )}
+            >
+              {"badge" in option && option.badge ? (
+                <span className="absolute inset-s-3 top-0 -translate-y-1/2 rounded-md bg-[#f3ead7] px-2.5 py-1 text-[10px] font-bold text-[#8a6a3a]">
+                  {option.badge}
+                </span>
+              ) : null}
 
-          <div className="flex min-w-0 flex-1 items-center px-1">
-            {value ? (
-              <span className="truncate text-sm font-semibold text-[#333333]">
-                {selectedLabel}
+              <span className="flex size-12 items-center justify-center">
+                {DELEGATION_ICONS[delegationType]}
               </span>
-            ) : (
-              <button
-                type="button"
-                className="w-full text-start text-sm text-[#bdbdbd]"
-                onClick={openSelect}
-              >
-                {labels.placeholder}
-              </button>
-            )}
-          </div>
-        </div>
-
-        <Select
-          open={open}
-          onOpenChange={handleOpenChange}
-          value={value || undefined}
-          onValueChange={(nextValue) => {
-            onChange(nextValue as DelegationTypeOption);
-            setOpen(false);
-          }}
-        >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft
-              className="size-5 -rotate-90 text-white!"
-              aria-hidden="true"
-            />
-          </SelectTrigger>
-
-          <SelectContent
-            position="popper"
-            align="end"
-            side="bottom"
-            className="max-h-72 rounded-2xl"
-            style={{
-              width: contentWidth,
-              minWidth: contentWidth,
-            }}
-          >
-            {DELEGATION_TYPE_OPTIONS.map((delegationType) => (
-              <SelectItem
-                key={delegationType}
-                value={delegationType}
-                className="text-base!"
-              >
-                {labels.options[delegationType]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+              <span className="text-sm font-extrabold text-brand">
+                {option.title}
+              </span>
+              <span className="text-xs leading-5 text-[#9a9a9a]">
+                {option.description}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

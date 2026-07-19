@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import CreateContractDeedStep from "@/features/create-contract/components/create-contract-deed-step";
 import CreateContractFinanceStep from "@/features/create-contract/components/create-contract-finance-step";
+import CreateContractHeader from "@/features/create-contract/components/create-contract-header";
 import CreateContractIntroStep from "@/features/create-contract/components/create-contract-intro-step";
 import CreateContractOwnerStep from "@/features/create-contract/components/create-contract-owner-step";
 import CreateContractPaymentStep from "@/features/create-contract/components/create-contract-payment-step";
@@ -31,6 +32,10 @@ export default function CreateContractWizard({
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
+  const pageTitle =
+    contractType === "residential"
+      ? labels.pageTitleResidential
+      : labels.pageTitleCommercial;
 
   useEffect(() => {
     return () => {
@@ -43,8 +48,10 @@ export default function CreateContractWizard({
   }, []);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-4">
+    <div className="mx-auto w-full max-w-2xl space-y-4">
       <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
+
+      <CreateContractHeader pageTitle={pageTitle} labels={labels.header} />
       <CreateContractStepper labels={labels.stepper} />
 
       {currentStep === "intro" ? (

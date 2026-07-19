@@ -1,6 +1,6 @@
 "use client";
 
-import { Hash } from "lucide-react";
+import { Droplets, Hash, Zap } from "lucide-react";
 
 import CreateUnitAreaField from "@/features/create-unit/components/create-unit-area-field";
 import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-form-select";
@@ -9,8 +9,9 @@ import type { UnitLookupOption } from "@/features/create-unit/types/unit-option"
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 import MeterRegistrationOptions from "@/features/shared/components/meter-registration-options";
 import UnitAdditionalInfoSection from "@/features/shared/components/unit-form/unit-additional-info-section";
+import UnitBasicSection from "@/features/shared/components/unit-form/unit-basic-section";
+import UnitCountStepper from "@/features/shared/components/unit-form/unit-count-stepper";
 import UnitOptionalCheckboxField from "@/features/shared/components/unit-form/unit-optional-checkbox-field";
-import UnitOptionalCountField from "@/features/shared/components/unit-form/unit-optional-count-field";
 import type { UnitFormLabels } from "@/features/shared/types/unit-form-labels";
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import { cn } from "@/lib/utils";
@@ -48,10 +49,10 @@ function FurnishingTypeToggle({
   onChange: (value: "new" | "used") => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-brand-background px-4 py-3">
       <label className="text-sm font-semibold text-brand">{label}</label>
 
-      <div className="flex items-center rounded-full border border-[#e8e8e8] bg-brand-background p-1">
+      <div className="flex items-center rounded-full border border-[#e8e8e8] bg-white p-1">
         {(["new", "used"] as const).map((furnishingType) => (
           <button
             key={furnishingType}
@@ -103,6 +104,85 @@ export default function UnitDataFormFields({
 
   const contractTypeLabel =
     labels.contractType?.linkedLabel ?? labels.contractType?.label ?? "";
+  const kitchensSelected = value.kitchensCount !== "";
+  const basicFields = (
+    <>
+      <div className="grid gap-3 md:grid-cols-3">
+        <CreateUnitFormSelect
+          label={labels.unitType.label}
+          placeholder={labels.selectPlaceholder}
+          options={toSelectOptions(unitTypeOptions)}
+          value={value.unitTypeId}
+          onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
+        />
+
+        <CreateUnitFormSelect
+          label={labels.unitUsage.label}
+          placeholder={labels.selectPlaceholder}
+          options={toSelectOptions(unitUsageOptions)}
+          value={value.unitUsageId}
+          onChange={(unitUsageId) => updateField("unitUsageId", unitUsageId)}
+        />
+
+        <CreateUnitFormSelect
+          label={labels.floorNumber.label}
+          placeholder={labels.selectPlaceholder}
+          options={floorOptions}
+          value={value.floorNumber}
+          onChange={(floorNumber) => updateField("floorNumber", floorNumber)}
+        />
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <CreateUnitIconInputField
+          label={labels.unitNumber.label}
+          placeholder={labels.unitNumber.placeholder}
+          value={value.unitNumber}
+          onChange={(unitNumber) => updateField("unitNumber", unitNumber)}
+          icon={Hash}
+          dir="ltr"
+        />
+
+        <CreateUnitAreaField
+          label={labels.totalArea.label}
+          placeholder={labels.totalArea.placeholder}
+          suffix={labels.totalArea.suffix}
+          value={value.totalArea}
+          onChange={(totalArea) => updateField("totalArea", totalArea)}
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-3">
+        <UnitCountStepper
+          label={labels.roomsCount.label}
+          value={value.roomsCount}
+          onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
+          required
+        />
+        <UnitCountStepper
+          label={labels.bathroomsCount.label}
+          value={value.bathroomsCount}
+          onChange={(bathroomsCount) =>
+            updateField("bathroomsCount", bathroomsCount)
+          }
+        />
+        <UnitCountStepper
+          label={labels.kitchensCount.label}
+          value={value.kitchensCount}
+          onChange={(kitchensCount) =>
+            onChange({
+              ...value,
+              kitchensCount,
+              kitchenCabinetsInstalled:
+                kitchensCount === ""
+                  ? false
+                  : value.kitchenCabinetsInstalled,
+            })
+          }
+        />
+      </div>
+    </>
+  );
 
   return (
     <div className="space-y-5">
@@ -140,144 +220,54 @@ export default function UnitDataFormFields({
         />
       ) : null}
 
-      <div className="grid gap-3 md:grid-cols-2">
-        <CreateUnitFormSelect
-          label={labels.unitType.label}
-          placeholder={labels.selectPlaceholder}
-          options={toSelectOptions(unitTypeOptions)}
-          value={value.unitTypeId}
-          onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
-        />
+      {labels.unitCardTitle ? (
+        <UnitBasicSection title={labels.unitCardTitle}>
+          {basicFields}
+        </UnitBasicSection>
+      ) : (
+        <div className="space-y-4">{basicFields}</div>
+      )}
 
-        <CreateUnitFormSelect
-          label={labels.unitUsage.label}
-          placeholder={labels.selectPlaceholder}
-          options={toSelectOptions(unitUsageOptions)}
-          value={value.unitUsageId}
-          onChange={(unitUsageId) => updateField("unitUsageId", unitUsageId)}
-        />
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        <CreateUnitIconInputField
-          label={labels.unitNumber.label}
-          placeholder={labels.unitNumber.placeholder}
-          value={value.unitNumber}
-          onChange={(unitNumber) => updateField("unitNumber", unitNumber)}
-          icon={Hash}
-          dir="ltr"
-        />
-
-        <CreateUnitFormSelect
-          label={labels.floorNumber.label}
-          placeholder={labels.selectPlaceholder}
-          options={floorOptions}
-          value={value.floorNumber}
-          onChange={(floorNumber) => updateField("floorNumber", floorNumber)}
-        />
-      </div>
-
-      <CreateUnitAreaField
-        label={labels.totalArea.label}
-        placeholder={labels.totalArea.placeholder}
-        suffix={labels.totalArea.suffix}
-        value={value.totalArea}
-        onChange={(totalArea) => updateField("totalArea", totalArea)}
-      />
-
-      <UnitAdditionalInfoSection toggleLabel={labels.additionalInfo.toggle}>
-        <UnitOptionalCountField
-          label={labels.roomsCount.label}
-          enabled={value.roomsCount !== ""}
-          count={value.roomsCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField("roomsCount", enabled ? value.roomsCount || "01" : "")
-          }
-          onCountChange={(roomsCount) => updateField("roomsCount", roomsCount)}
-        />
-
-        <UnitOptionalCountField
-          label={labels.hallsCount.label}
-          enabled={value.hallsCount !== ""}
-          count={value.hallsCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField("hallsCount", enabled ? value.hallsCount || "01" : "")
-          }
-          onCountChange={(hallsCount) => updateField("hallsCount", hallsCount)}
-        />
-
-        <UnitOptionalCountField
-          label={labels.majlisCount.label}
-          enabled={value.majlisCount !== ""}
-          count={value.majlisCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField("majlisCount", enabled ? value.majlisCount || "01" : "")
-          }
-          onCountChange={(majlisCount) =>
-            updateField("majlisCount", majlisCount)
-          }
-        />
-
-        <UnitOptionalCountField
-          label={labels.kitchensCount.label}
-          enabled={value.kitchensCount !== ""}
-          count={value.kitchensCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField(
-              "kitchensCount",
-              enabled ? value.kitchensCount || "01" : "",
-            )
-          }
-          onCountChange={(kitchensCount) =>
-            updateField("kitchensCount", kitchensCount)
-          }
-        />
-
-        <UnitOptionalCountField
-          label={labels.bathroomsCount.label}
-          enabled={value.bathroomsCount !== ""}
-          count={value.bathroomsCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField(
-              "bathroomsCount",
-              enabled ? value.bathroomsCount || "01" : "",
-            )
-          }
-          onCountChange={(bathroomsCount) =>
-            updateField("bathroomsCount", bathroomsCount)
-          }
-        />
-
-        <UnitOptionalCountField
-          label={labels.windowAcCount.label}
-          enabled={value.windowAcCount !== ""}
-          count={value.windowAcCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField(
-              "windowAcCount",
-              enabled ? value.windowAcCount || "01" : "",
-            )
-          }
-          onCountChange={(windowAcCount) =>
-            updateField("windowAcCount", windowAcCount)
-          }
-        />
-
-        <UnitOptionalCountField
-          label={labels.splitAcCount.label}
-          enabled={value.splitAcCount !== ""}
-          count={value.splitAcCount || "01"}
-          onEnabledChange={(enabled) =>
-            updateField("splitAcCount", enabled ? value.splitAcCount || "01" : "")
-          }
-          onCountChange={(splitAcCount) =>
-            updateField("splitAcCount", splitAcCount)
-          }
-        />
+      <UnitAdditionalInfoSection
+        toggleLabel={labels.additionalInfo.toggle}
+        defaultOpen
+      >
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <UnitCountStepper
+            label={labels.majlisCount.label}
+            value={value.majlisCount}
+            onChange={(majlisCount) => updateField("majlisCount", majlisCount)}
+          />
+          <UnitCountStepper
+            label={labels.hallsCount.label}
+            value={value.hallsCount}
+            onChange={(hallsCount) => updateField("hallsCount", hallsCount)}
+          />
+          <UnitCountStepper
+            label={labels.splitAcCount.label}
+            value={value.splitAcCount}
+            onChange={(splitAcCount) =>
+              updateField("splitAcCount", splitAcCount)
+            }
+          />
+          <UnitCountStepper
+            label={labels.windowAcCount.label}
+            value={value.windowAcCount}
+            onChange={(windowAcCount) =>
+              updateField("windowAcCount", windowAcCount)
+            }
+          />
+        </div>
 
         <UnitOptionalCheckboxField
           label={labels.kitchenCabinetsInstalled.label}
           checked={value.kitchenCabinetsInstalled}
+          disabled={!kitchensSelected}
+          warning={
+            kitchensSelected
+              ? undefined
+              : labels.kitchenCabinetsInstalled.kitchensRequiredHint
+          }
           onCheckedChange={(kitchenCabinetsInstalled) =>
             updateField("kitchenCabinetsInstalled", kitchenCabinetsInstalled)
           }
@@ -308,6 +298,7 @@ export default function UnitDataFormFields({
         <UnitOptionalCheckboxField
           label={labels.addElectricityMeter.label}
           checked={value.addElectricityMeter}
+          icon={<Zap className="size-4 text-[#e39b2d]" aria-hidden />}
           onCheckedChange={(addElectricityMeter) =>
             onChange({
               ...value,
@@ -357,6 +348,7 @@ export default function UnitDataFormFields({
         <UnitOptionalCheckboxField
           label={labels.addWaterMeter.label}
           checked={value.addWaterMeter}
+          icon={<Droplets className="size-4 text-[#3b82f6]" aria-hidden />}
           onCheckedChange={(addWaterMeter) =>
             onChange({
               ...value,

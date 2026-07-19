@@ -7,7 +7,6 @@ import CreateContractAgentDataPhase from "@/features/create-contract/components/
 import CreateContractOwnerDataPhase from "@/features/create-contract/components/create-contract-owner-data-phase";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
-import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
 import { useCreateContractOwnerStep } from "@/features/create-contract/hooks/use-create-contract-owner-step";
 import { useSubmitContractStep3 } from "@/features/create-contract/hooks/use-submit-contract-step3";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -25,29 +24,16 @@ export default function CreateContractOwnerStep({
 }: CreateContractOwnerStepProps) {
   const t = useTranslations("createContract");
   const {
-    currentPhaseIndex,
     ownerData,
     setOwnerData,
     agentData,
     setAgentData,
-    phaseCount,
-    isLastPhase,
     canContinue,
-    goToNextPhase,
-    goToPreviousPhase,
   } = useCreateContractOwnerStep();
   const { submitStep3, isSubmitting } = useSubmitContractStep3();
 
-  const phase = labels.phases[currentPhaseIndex];
-
-  function handlePrevious() {
-    if (currentPhaseIndex === 0) {
-      onBack();
-      return;
-    }
-
-    goToPreviousPhase();
-  }
+  const phase = labels.phases[0];
+  const showAgentForm = ownerData.hasAgent === "yes";
 
   async function handleContinue() {
     if (isSubmitting) {
@@ -59,27 +45,17 @@ export default function CreateContractOwnerStep({
       return;
     }
 
-    if (isLastPhase) {
-      const submitted = await submitStep3({ ownerData, agentData });
+    const submitted = await submitStep3({ ownerData, agentData });
 
-      if (!submitted) {
-        return;
-      }
-
-      onComplete();
+    if (!submitted) {
       return;
     }
 
-    goToNextPhase();
+    onComplete();
   }
 
   return (
     <div className="space-y-4">
-      <CreateContractStepPhaseProgress
-        totalPhases={phaseCount}
-        currentPhaseIndex={currentPhaseIndex}
-      />
-
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={phase.title}
@@ -87,7 +63,7 @@ export default function CreateContractOwnerStep({
           icon="id-card"
         />
 
-        {currentPhaseIndex === 0 ? (
+        <div className="space-y-5">
           <CreateContractOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}
@@ -95,16 +71,16 @@ export default function CreateContractOwnerStep({
             value={ownerData}
             onChange={setOwnerData}
           />
-        ) : null}
 
-        {currentPhaseIndex === 1 ? (
-          <CreateContractAgentDataPhase
-            labels={labels.agentData}
-            birthDateLabels={labels.birthDate}
-            value={agentData}
-            onChange={setAgentData}
-          />
-        ) : null}
+          {showAgentForm ? (
+            <CreateContractAgentDataPhase
+              labels={labels.agentData}
+              birthDateLabels={labels.birthDate}
+              value={agentData}
+              onChange={setAgentData}
+            />
+          ) : null}
+        </div>
       </div>
 
       <CreateContractStepNavigation
@@ -113,7 +89,7 @@ export default function CreateContractOwnerStep({
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
         isSubmitting={isSubmitting}
-        onPrevious={handlePrevious}
+        onPrevious={onBack}
         onContinue={() => void handleContinue()}
       />
     </div>

@@ -34,19 +34,36 @@ export default function CreateContractAgentDataPhase({
   }
 
   return (
-    <div className="space-y-5">
-      <CreateContractIconInputField
-        label={labels.idNumber.label}
-        placeholder={labels.idNumber.placeholder}
-        value={value.idNumber}
-        onChange={(idNumber) =>
-          updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
-        }
-        icon={IdCard}
-        dir="ltr"
-        inputMode="numeric"
-        maxLength={10}
-      />
+    <div className="space-y-5 border-t border-[#f0f0f0] pt-6">
+      <div className="space-y-1 text-center">
+        <h3 className="text-lg font-extrabold text-brand">{labels.sectionTitle}</h3>
+        <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <CreateContractIconInputField
+          label={labels.idNumber.label}
+          placeholder={labels.idNumber.placeholder}
+          value={value.idNumber}
+          onChange={(idNumber) =>
+            updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
+          }
+          icon={IdCard}
+          dir="ltr"
+          inputMode="numeric"
+          maxLength={10}
+        />
+
+        <CreateContractSaudiMobileField
+          label={labels.phone.label}
+          placeholder={labels.phone.placeholder}
+          value={value.phone}
+          onChange={(phone) =>
+            updateField("phone", toSaudiMobileInputValue(phone))
+          }
+          icon={Phone}
+        />
+      </div>
 
       <CreateContractBirthDateFields
         labels={{
@@ -57,14 +74,6 @@ export default function CreateContractAgentDataPhase({
         onChange={(birthDate) => updateField("birthDate", birthDate)}
       />
 
-      <CreateContractSaudiMobileField
-        label={labels.phone.label}
-        placeholder={labels.phone.placeholder}
-        value={value.phone}
-        onChange={(phone) => updateField("phone", toSaudiMobileInputValue(phone))}
-        icon={Phone}
-      />
-
       <CreateContractDeedImageUpload
         labels={labels.powerOfAttorney}
         value={value.powerOfAttorneyFiles}
@@ -72,6 +81,8 @@ export default function CreateContractAgentDataPhase({
           updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
         }
       />
+
+      <p className="text-xs leading-6 text-[#9a9a9a]">{labels.footerNote}</p>
     </div>
   );
 }

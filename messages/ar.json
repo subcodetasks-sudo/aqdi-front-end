@@ -1268,9 +1268,9 @@
       }
     },
     "totalArea": {
-      "label": "مساحة الوحدة الاجمالي",
+      "label": "مساحة الوحدة تقريبًا",
       "placeholder": "أكتب هنا ..",
-      "suffix": "متر 2"
+      "suffix": "م²"
     },
     "floorNumber": {
       "label": "رقم طابق الوحدة"
@@ -1282,12 +1282,14 @@
       "label": "رقم الوحدة",
       "placeholder": "أكتب هنا .."
     },
+    "unitCardTitle": "المعلومات الأساسية",
     "additionalInfo": {
-      "toggle": "هل ترغب بإضافة معلومات إضافية ؟",
+      "toggle": "هل ترغب بإضافة معلومات إضافية؟",
       "writeHerePlaceholder": "أكتب هنا ..."
     },
     "roomsCount": {
-      "label": "عدد الغرف"
+      "label": "عدد الغرف",
+      "hint": "تحتسب الصالات والمجالس وغرف النوم كلها ضمن الغرف"
     },
     "hallsCount": {
       "label": "عدد الصالات"
@@ -1305,13 +1307,14 @@
       "label": "مكيف شباك"
     },
     "splitAcCount": {
-      "label": "مكيف سبيلت"
+      "label": "مكيف سبيليت"
     },
     "kitchenCabinetsInstalled": {
-      "label": "هل تم تركيب خزائن المطبخ"
+      "label": "هل تم تركيب خزائن المطبخ؟",
+      "kitchensRequiredHint": "حدد عدد المطابخ أولاً"
     },
     "furnished": {
-      "label": "مؤثث / مفروش"
+      "label": "هل الوحدة مؤثثة؟"
     },
     "furnishingType": {
       "label": "نوع التأثيث :",
@@ -1319,14 +1322,14 @@
       "used": "مستخدم"
     },
     "addElectricityMeter": {
-      "label": "هل ترغب بإضافة عداد كهرباء.. ؟"
+      "label": "هل ترغب بإضافة عداد كهرباء؟"
     },
     "electricityMeterNumber": {
       "label": "رقم عداد الكهرباء ..",
       "placeholder": "أكتب هنا .."
     },
     "addWaterMeter": {
-      "label": "هل ترغب بإضافة عداد المياه.. ؟"
+      "label": "هل ترغب بإضافة عداد مياه؟"
     },
     "waterMeterNumber": {
       "label": "رقم عداد المياه ..",
@@ -1351,10 +1354,18 @@
   "createContract": {
     "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
     "backLabel": "رجوع",
-    "pageTitleResidential": "انشاء عقد ايجار سكني",
-    "pageTitleCommercial": "انشاء عقد ايجار تجاري",
+    "pageTitleResidential": "عقد إيجار سكني",
+    "pageTitleCommercial": "عقد إيجار تجاري",
+    "header": {
+      "home": "الرئيسية",
+      "help": "للمساعدة",
+      "requestPrefix": "طلب",
+      "copySuccess": "تم نسخ رقم الطلب",
+      "copyError": "تعذر نسخ رقم الطلب",
+      "whatsappHref": "https://wa.me/"
+    },
     "stepper": {
-      "journey": "رحلتك الاجاريــة اصبحــت أسهل.",
+      "journey": "رحلتك الإيجارية أصبحت أسهل.",
       "ejarLogoAlt": "إيجار",
       "steps": {
         "intro": "عقدي",
@@ -1410,7 +1421,7 @@
         },
         {
           "title": "العنوان الوطني للعقار",
-          "subtitle": "إختر الطريقة المفضلة لك :"
+          "subtitle": "حدد موقع العقار بإحدى الطرق الثلاث"
         }
       ],
       "deedType": {
@@ -1453,9 +1464,18 @@
           "placeholder": "إختر من هنا .."
         },
         "methods": {
-          "photo": "صورة العنوان",
-          "link": "رابط العنوان",
-          "manual": "ادخال تفاصيل العنوان"
+          "link": {
+            "title": "رابط موقع العقار",
+            "description": "من خلال قوقل ماب"
+          },
+          "manual": {
+            "title": "إدخال العنوان يدويًا",
+            "description": "المدينة والحي والشارع"
+          },
+          "photo": {
+            "title": "إرفاق العنوان الوطني",
+            "description": "صورة بطاقة العنوان"
+          }
         },
         "mapTitle": "خريطة العنوان الوطني",
         "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
@@ -1548,10 +1568,6 @@
         {
           "title": "بيانات مالك العقار",
           "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
-        },
-        {
-          "title": "بيانات الوكيل",
-          "subtitle": "قم بتعبئة بياناتك بشكل صحيح :"
         }
       ],
       "birthDate": {
@@ -1583,27 +1599,26 @@
           "placeholder": "SA00 0000 0000 0000 0000 0000"
         },
         "hasAgent": {
-          "label": "هل يوجد وكيل للمالك",
-          "placeholder": "إختر من هنا ..",
-          "options": {
-            "yes": "نعم",
-            "no": "لا"
-          }
+          "title": "هل ترغب بإضافة وكيل عن مالك العقار؟",
+          "description": "بيانات الوكيل + صورة الوكالة - نتحقق منه في الأنظمة الرسمية"
         }
       },
       "agentData": {
+        "sectionTitle": "بيانات الوكيل",
+        "sectionDescription": "نتحقق من الوكيل في الأنظمة الرسمية قبل قبول الوكالة",
+        "footerNote": "يتم قبول الوكالات الإلكترونية في نظام إيجار في حال كانت الوكالة مضافاً لها بند \"شبكة إيجار الإلكترونية\"",
         "idNumber": {
-          "label": "رقم هوية وكيل المالك",
-          "placeholder": "1x xxx xx xxx"
+          "label": "رقم هوية الوكيل",
+          "placeholder": "1xxxxxxxxx"
         },
-        "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
+        "birthDateLabel": "تاريخ ميلاد الوكيل",
         "phone": {
-          "label": "رقم جوال وكيل المالك",
-          "placeholder": "xxxxxxxx"
+          "label": "رقم جوال الوكيل",
+          "placeholder": "05 xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
-          "clickHere": "إضغط هنا",
+          "clickHere": "اضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
           "preview": "معاينة",
@@ -1637,7 +1652,7 @@
         }
       ],
       "tenantStatus": {
-        "label": "صفة المستأجر / فرد - مؤسسة - شركة",
+        "label": "صفة المستأجر",
         "placeholder": "... إختر من هنا",
         "options": {
           "individual": "فرد",
@@ -1645,7 +1660,7 @@
         }
       },
       "birthDate": {
-        "label": "تاريخ ميلاد المستأجر :",
+        "label": "تاريخ ميلاد المستأجر",
         "hijri": "هجري",
         "gregorian": "ميلادي",
         "day": "اليوم",
@@ -1658,20 +1673,26 @@
       "individualData": {
         "idNumber": {
           "label": "رقم هوية المستأجر",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
         "phone": {
           "label": "رقم جوال المستأجر",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05 xxxxxxxx"
         }
       },
       "organizationData": {
         "delegationType": {
           "label": "نوع التفويض أو الوكالة",
-          "placeholder": "... إختر من هنا",
           "options": {
-            "owner-representative": "انا مالك السجل وممثله",
-            "agent-authorized": "انا وكيل او مفوض عن مالك السجل"
+            "owner-representative": {
+              "title": "أنا مالك السجل وممثله",
+              "description": "تكفي بياناتك وبيانات السجل - بدون مرفقات"
+            },
+            "agent-authorized": {
+              "title": "أنا وكيل أو مفوض عن مالك السجل",
+              "description": "نفس البيانات + صورة الوكالة أو التفويض",
+              "badge": "يتطلب إرفاق الوكالة"
+            }
           }
         },
         "region": {
@@ -1686,17 +1707,18 @@
           "selectRegionFirst": "يرجى اختيار المنطقة أولاً"
         },
         "unifiedRecordNumber": {
-          "label": "رقم السجل الموحد - المبتدئ برقم 7",
-          "placeholder": "x xxx xx xxx"
+          "label": "رقم السجل الموحد",
+          "placeholder": "xxxxxxxxx",
+          "hint": "السجل الموحد 10 أرقام ويبدأ دائماً بالرقم 7"
         },
         "ownerIdNumber": {
           "label": "رقم هوية مالك السجل",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
-        "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل :",
+        "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل",
         "ownerPhone": {
           "label": "رقم جوال مالك السجل",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05 xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1731,9 +1753,9 @@
           }
         },
         "totalArea": {
-          "label": "مساحة الوحدة الاجمالي",
+          "label": "مساحة الوحدة تقريبًا",
           "placeholder": "أكتب هنا ..",
-          "suffix": "متر 2"
+          "suffix": "م²"
         },
         "floorNumber": {
           "label": "رقم طابق الوحدة"
@@ -1745,12 +1767,14 @@
           "label": "رقم الوحدة",
           "placeholder": "أكتب هنا .."
         },
+        "unitCardTitle": "المعلومات الأساسية",
         "additionalInfo": {
-          "toggle": "هل ترغب بإضافة معلومات إضافية ؟",
+          "toggle": "هل ترغب بإضافة معلومات إضافية؟",
           "writeHerePlaceholder": "أكتب هنا ..."
         },
         "roomsCount": {
-          "label": "عدد الغرف"
+          "label": "عدد الغرف",
+          "hint": "تحتسب الصالات والمجالس وغرف النوم كلها ضمن الغرف"
         },
         "hallsCount": {
           "label": "عدد الصالات"
@@ -1768,13 +1792,14 @@
           "label": "مكيف شباك"
         },
         "splitAcCount": {
-          "label": "مكيف سبيلت"
+          "label": "مكيف سبيليت"
         },
         "kitchenCabinetsInstalled": {
-          "label": "هل تم تركيب خزائن المطبخ"
+          "label": "هل تم تركيب خزائن المطبخ؟",
+          "kitchensRequiredHint": "حدد عدد المطابخ أولاً"
         },
         "furnished": {
-          "label": "مؤثث / مفروش"
+          "label": "هل الوحدة مؤثثة؟"
         },
         "furnishingType": {
           "label": "نوع التأثيث :",
@@ -1782,14 +1807,14 @@
           "used": "مستخدم"
         },
         "addElectricityMeter": {
-          "label": "هل ترغب بإضافة عداد كهرباء.. ؟"
+          "label": "هل ترغب بإضافة عداد كهرباء؟"
         },
         "electricityMeterNumber": {
           "label": "رقم عداد الكهرباء ..",
           "placeholder": "أكتب هنا .."
         },
         "addWaterMeter": {
-          "label": "هل ترغب بإضافة عداد المياه.. ؟"
+          "label": "هل ترغب بإضافة عداد مياه؟"
         },
         "waterMeterNumber": {
           "label": "رقم عداد المياه ..",
@@ -1881,7 +1906,9 @@
         "label": "مدة العقد",
         "loading": "جاري تحميل مدد العقد...",
         "optionsError": "فشل تحميل مدد العقد",
-        "otherOption": "أخرى",
+        "otherOption": "مدة أخرى",
+        "feeLabel": "إجمالي الرسوم",
+        "currency": "ريال",
         "custom": {
           "yearOption": "'{'count'}' سنة",
           "monthOption": "+ '{'count'}' شهر",
@@ -1891,7 +1918,7 @@
         }
       },
       "totalRentAmount": {
-        "label": "مبلغ الايجار الاجمالي",
+        "label": "مبلغ الإيجار الإجمالي",
         "placeholder": "أكتب هنا .."
       },
       "paymentMethod": {
@@ -1899,30 +1926,19 @@
         "loading": "جاري تحميل طرق الدفع...",
         "optionsError": "فشل تحميل طرق الدفع"
       },
-      "addTenantPermissions": {
-        "label": "هل ترغب بإضافة صلاحيات للمستأجر... ؟",
-        "edit": "تعديل"
-      },
-      "addOtherConditions": {
-        "label": "هل ترغب بإضافة شروط أخرى... ؟",
-        "add": "إضافة +"
-      },
-      "tenantPermissionsDialog": {
-        "title": "صلاحيات المستأجر",
-        "close": "إغلاق",
-        "heading": "هل ترغب بإضافة صلاحيات للمستأجر...؟",
-        "subtitle": "يمكنك إضافة ما يلي :",
-        "continue": "متابعة",
+      "tenantPermissions": {
+        "title": "صلاحيات للمستأجر أو مبلغ ضمان أو غرامة يومية ؟",
+        "subtitle": "مثل التأجير من الباطن، أو غرامة يومية، أو حجز مبلغ الضمان",
+        "instruction": "اختر ما تريد إضافته - البنود غير المحددة لا تُدْرَج في العقد",
         "optionsError": "فشل تحميل صلاحيات المستأجر"
       },
-      "otherConditionsDialog": {
-        "title": "شروط أخرى... ؟",
-        "close": "إغلاق",
-        "heading": "هل ترغب بإضافة شروط أخرى... ؟",
-        "subtitle": "يمكنك اضافة ما يلي :",
-        "termsLabel": "الشروط :",
-        "termsPlaceholder": "... أكتب هنا",
-        "save": "حفظ"
+      "otherConditions": {
+        "title": "هل ترغب بإضافة شروط أخرى... ؟",
+        "subtitle": "شروط إضافية يتفق عليها الطرفان وتُوثّق في العقد",
+        "instruction": "أضف شرطًا واحدًا في كل سطر - يظهر ضمن بنود العقد",
+        "placeholder": "اكتب الشرط هنا",
+        "add": "إضافة شرط",
+        "remove": "حذف الشرط"
       }
     },
     "payment": {

@@ -1,16 +1,17 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type ReactNode } from "react";
+import { IdCard, MapPin, PenLine } from "lucide-react";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 import { Input } from "@/components/ui/input";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
-import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
-import { NATIONAL_ADDRESS_METHODS } from "@/features/create-contract/types/national-address";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import ManualNationalAddressForm from "@/features/shared/components/manual-national-address-form";
 import type { ManualNationalAddressData } from "@/features/shared/types/manual-national-address";
+import { cn } from "@/lib/utils";
 
 type CreateContractDeedNationalAddressProps = {
   labels: CreateContractLabels["deed"]["nationalAddress"];
@@ -25,6 +26,29 @@ type CreateContractDeedNationalAddressProps = {
   existingPhotoUrl?: string | null;
 };
 
+const METHOD_CARDS: {
+  id: NationalAddressMethodId;
+  icon: ReactNode;
+}[] = [
+  {
+    id: "link",
+    icon: <FaMapMarkerAlt className="size-7 text-[#ea4335]" aria-hidden />,
+  },
+  {
+    id: "manual",
+    icon: <PenLine className="size-7 text-brand-secondary" aria-hidden />,
+  },
+  {
+    id: "photo",
+    icon: (
+      <span className="relative inline-flex size-8 items-center justify-center">
+        <IdCard className="size-7 text-brand" aria-hidden />
+        <MapPin className="absolute -inset-e-0.5 -top-0.5 size-3.5 text-brand-secondary" aria-hidden />
+      </span>
+    ),
+  },
+];
+
 export default function CreateContractDeedNationalAddress({
   labels,
   method,
@@ -38,23 +62,52 @@ export default function CreateContractDeedNationalAddress({
   existingPhotoUrl = null,
 }: CreateContractDeedNationalAddressProps) {
   const linkInputId = useId();
-
-  const methodOptions = NATIONAL_ADDRESS_METHODS.map((methodId) => ({
-    value: methodId,
-    label: labels.methods[methodId],
-  }));
+  const methodGroupId = useId();
 
   return (
     <div className="space-y-4">
-      <CreateContractFormSelect
-        label={labels.methodSelect.label}
-        placeholder={labels.methodSelect.placeholder}
-        options={methodOptions}
-        value={method}
-        onChange={(nextMethod) =>
-          onMethodChange(nextMethod as NationalAddressMethodId)
-        }
-      />
+      <div>
+        <CreateContractFieldLabel label={labels.methodSelect.label} />
+
+        <div
+          role="radiogroup"
+          aria-labelledby={methodGroupId}
+          className="grid grid-cols-1 gap-3 sm:grid-cols-3"
+        >
+          <span id={methodGroupId} className="sr-only">
+            {labels.methodSelect.label}
+          </span>
+
+          {METHOD_CARDS.map((card) => {
+            const selected = method === card.id;
+            const copy = labels.methods[card.id];
+
+            return (
+              <button
+                key={card.id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onClick={() => onMethodChange(card.id)}
+                className={cn(
+                  "flex flex-col items-center gap-2 rounded-2xl border px-3 py-5 text-center transition-colors",
+                  selected
+                    ? "border-brand bg-brand-background-green/50"
+                    : "border-[#e8e8e8] bg-white hover:border-brand/30",
+                )}
+              >
+                <span className="flex size-12 items-center justify-center">
+                  {card.icon}
+                </span>
+                <span className="text-sm font-extrabold text-brand">
+                  {copy.title}
+                </span>
+                <span className="text-xs text-[#9a9a9a]">{copy.description}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {method === "photo" ? (
         <CreateContractDeedImageUpload

@@ -2,11 +2,10 @@
 
 import { IdCard, Phone } from "lucide-react";
 
+import { Switch } from "@/components/ui/switch";
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
-import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractIconInputField from "@/features/create-contract/components/create-contract-icon-input-field";
 import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
-import { HAS_AGENT_OPTIONS } from "@/features/create-contract/types/owner-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OwnerDataState } from "@/features/create-contract/types/owner-step";
 import {
@@ -40,11 +39,6 @@ export default function CreateContractOwnerDataPhase({
     });
   }
 
-  const hasAgentOptions = HAS_AGENT_OPTIONS.map((option) => ({
-    value: option,
-    label: labels.hasAgent.options[option],
-  }));
-
   const idNumberError = getIdNumberFieldError(value.idNumber, {
     required: validationLabels.idNumberLength,
     length: validationLabels.idNumberLength,
@@ -53,6 +47,7 @@ export default function CreateContractOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
+  const hasAgentChecked = value.hasAgent === "yes";
 
   return (
     <div className="space-y-5">
@@ -76,28 +71,35 @@ export default function CreateContractOwnerDataPhase({
         onChange={(birthDate) => updateField("birthDate", birthDate)}
       />
 
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        <CreateContractSaudiMobileField
-          label={labels.phone.label}
-          placeholder={labels.phone.placeholder}
-          value={value.phone}
-          onChange={(phone) =>
-            updateField("phone", toSaudiMobileInputValue(phone))
-          }
-          icon={Phone}
-          errorMessage={phoneError}
-        />
+      <CreateContractSaudiMobileField
+        label={labels.phone.label}
+        placeholder={labels.phone.placeholder}
+        value={value.phone}
+        onChange={(phone) =>
+          updateField("phone", toSaudiMobileInputValue(phone))
+        }
+        icon={Phone}
+        errorMessage={phoneError}
+      />
 
-        <CreateContractFormSelect
-          label={labels.hasAgent.label}
-          placeholder={labels.hasAgent.placeholder}
-          options={hasAgentOptions}
-          value={value.hasAgent}
-          onChange={(hasAgent) =>
-            updateField("hasAgent", hasAgent as OwnerDataState["hasAgent"])
+      <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4">
+        <span className="min-w-0 space-y-1 text-start">
+          <span className="block text-sm font-bold text-brand">
+            {labels.hasAgent.title}
+          </span>
+          <span className="block text-xs leading-5 text-[#9a9a9a]">
+            {labels.hasAgent.description}
+          </span>
+        </span>
+        <Switch
+          dir="ltr"
+          checked={hasAgentChecked}
+          onCheckedChange={(checked) =>
+            updateField("hasAgent", checked ? "yes" : "no")
           }
+          className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
         />
-      </div>
+      </label>
     </div>
   );
 }

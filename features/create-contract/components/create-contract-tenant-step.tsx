@@ -150,8 +150,10 @@ export default function CreateContractTenantStep({
     goToNextPhase();
   }
 
+  const showDraftActions = Boolean(contractSession) && !isLeaseRenewal;
+
   async function handleSaveLater() {
-    if (isSavingDraft) {
+    if (isSavingDraft || isSubmitting) {
       return;
     }
 
@@ -181,7 +183,7 @@ export default function CreateContractTenantStep({
       />
 
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        {currentPhaseIndex === 0 && tenantData.status === "" && contractSession && !isLeaseRenewal ? (
+        {showDraftActions && contractSession ? (
           <div className="mb-4 flex justify-end">
             <CreateContractCancelRequestButton
               contractId={contractSession.contractId}
@@ -276,19 +278,17 @@ export default function CreateContractTenantStep({
               : labels.navigation.continue
         }
         saveLaterLabel={
-          currentPhaseIndex === 0 && tenantData.status === "" && !isLeaseRenewal
+          showDraftActions
             ? isSavingDraft
               ? labels.navigation.savingLater
               : labels.navigation.saveLater
             : undefined
         }
-        isSubmitting={isSubmitting}
+        isSubmitting={isSubmitting || isSavingDraft}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
         onSaveLater={
-          currentPhaseIndex === 0 && tenantData.status === "" && !isLeaseRenewal
-            ? () => void handleSaveLater()
-            : undefined
+          showDraftActions ? () => void handleSaveLater() : undefined
         }
       />
     </div>

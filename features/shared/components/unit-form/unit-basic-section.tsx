@@ -5,28 +5,27 @@ import { useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-type UnitAdditionalInfoSectionProps = {
-  toggleLabel: string;
+type UnitBasicSectionProps = {
+  title: string;
   defaultOpen?: boolean;
   children: ReactNode;
 };
 
-export default function UnitAdditionalInfoSection({
-  toggleLabel,
-  defaultOpen = false,
+export default function UnitBasicSection({
+  title,
+  defaultOpen = true,
   children,
-}: UnitAdditionalInfoSectionProps) {
+}: UnitBasicSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
     <div dir="rtl" className="overflow-hidden rounded-2xl border border-[#e8e8e8]">
       <button
         type="button"
-        dir="rtl"
         onClick={() => setOpen((current) => !current)}
         className="flex h-12 w-full items-center justify-between bg-[#f7f7f7] px-4 text-sm font-extrabold text-brand"
       >
-        <span>{toggleLabel}</span>
+        <span>{title}</span>
         <ChevronUp
           className={cn(
             "size-5 shrink-0 text-[#9a9a9a] transition-transform",

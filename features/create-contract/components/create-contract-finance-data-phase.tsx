@@ -1,14 +1,13 @@
 "use client";
 
-import { ArrowLeft, Hand } from "lucide-react";
-
 import CreateContractContractStartDateFields from "@/features/create-contract/components/create-contract-contract-start-date-fields";
 import CreateContractCustomDurationFields, {
   CUSTOM_CONTRACT_DURATION_VALUE,
 } from "@/features/create-contract/components/create-contract-custom-duration-fields";
+import CreateContractFinanceConditionsSection from "@/features/create-contract/components/create-contract-finance-conditions-section";
 import CreateContractFinanceDurationSelect from "@/features/create-contract/components/create-contract-finance-duration-select";
-import CreateContractFinanceToggleOption from "@/features/create-contract/components/create-contract-finance-toggle-option";
-import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
+import CreateContractFinancePaymentMethodSelect from "@/features/create-contract/components/create-contract-finance-payment-method-select";
+import CreateContractFinancePermissionsSection from "@/features/create-contract/components/create-contract-finance-permissions-section";
 import CreateContractRentAmountField from "@/features/create-contract/components/create-contract-rent-amount-field";
 import { useContractPeriods } from "@/features/create-contract/hooks/use-contract-periods";
 import { usePaymentTypes } from "@/features/create-contract/hooks/use-payment-types";
@@ -18,14 +17,13 @@ import type { ContractTypeId } from "@/features/create-contract/types/contract-t
 import { toPropertyContractType } from "@/features/create-contract/types/contract-type";
 import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
 import { getDocFeeLinesFromStep6 } from "@/features/create-contract/utils/build-finance-data-from-step6";
+import { parseContractPeriodLabel } from "@/features/create-contract/utils/parse-contract-period-label";
 
 type CreateContractFinanceDataPhaseProps = {
   labels: CreateContractLabels["finance"];
   contractType: ContractTypeId;
   value: FinanceDataState;
   onChange: (value: FinanceDataState) => void;
-  onOpenTenantPermissions: () => void;
-  onOpenOtherConditions: () => void;
 };
 
 export default function CreateContractFinanceDataPhase({
@@ -33,8 +31,6 @@ export default function CreateContractFinanceDataPhase({
   contractType,
   value,
   onChange,
-  onOpenTenantPermissions,
-  onOpenOtherConditions,
 }: CreateContractFinanceDataPhaseProps) {
   const apiContractType = toPropertyContractType(contractType);
   const contractId = useCreateContractDraftStore(
@@ -51,13 +47,21 @@ export default function CreateContractFinanceDataPhase({
   const paymentTypesQuery = usePaymentTypes(apiContractType);
 
   const durationOptions = [
-    ...(contractPeriodsQuery.data ?? []).map((period) => ({
-      value: String(period.id),
-      label: period.period,
-    })),
+    ...(contractPeriodsQuery.data ?? []).map((period) => {
+      const parsed = parseContractPeriodLabel(period.period);
+
+      return {
+        value: String(period.id),
+        title: parsed.title,
+        fee: parsed.fee,
+        feeLabel: parsed.fee
+          ? labels.contractDuration.feeLabel
+          : undefined,
+      };
+    }),
     {
       value: CUSTOM_CONTRACT_DURATION_VALUE,
-      label: labels.contractDuration.otherOption,
+      title: labels.contractDuration.otherOption,
     },
   ];
 
@@ -70,7 +74,7 @@ export default function CreateContractFinanceDataPhase({
   const paymentTypeOptions = (paymentTypesQuery.data ?? []).map(
     (paymentType) => ({
       value: String(paymentType.id),
-      label: paymentType.name,
+      title: paymentType.name,
     }),
   );
 
@@ -140,24 +144,28 @@ export default function CreateContractFinanceDataPhase({
                 : String(value.contractPeriodId)
           }
           note={selectedPeriodNote}
+          currencyLabel={labels.contractDuration.currency}
+          disabled={contractPeriodsQuery.isLoading}
           onChange={handleDurationChange}
         />
 
         {value.isCustomDuration ? (
-          <CreateContractCustomDurationFields
-            labels={labels.contractDuration.custom}
-            years={value.customDurationYears}
-            months={value.customDurationMonths}
-            contractId={contractId}
-            contractType={apiContractType}
-            initialLines={initialDocFeeLines}
-            onYearsChange={(customDurationYears) =>
-              updateField("customDurationYears", customDurationYears)
-            }
-            onMonthsChange={(customDurationMonths) =>
-              updateField("customDurationMonths", customDurationMonths)
-            }
-          />
+          <div className="rounded-2xl border border-[#e8e8e8] bg-brand-background/40 p-4">
+            <CreateContractCustomDurationFields
+              labels={labels.contractDuration.custom}
+              years={value.customDurationYears}
+              months={value.customDurationMonths}
+              contractId={contractId}
+              contractType={apiContractType}
+              initialLines={initialDocFeeLines}
+              onYearsChange={(customDurationYears) =>
+                updateField("customDurationYears", customDurationYears)
+              }
+              onMonthsChange={(customDurationMonths) =>
+                updateField("customDurationMonths", customDurationMonths)
+              }
+            />
+          </div>
         ) : null}
       </div>
 
@@ -167,30 +175,25 @@ export default function CreateContractFinanceDataPhase({
         </p>
       ) : null}
 
-      <div className="grid gap-3 md:grid-cols-2">
-        <CreateContractRentAmountField
-          label={labels.totalRentAmount.label}
-          placeholder={labels.totalRentAmount.placeholder}
-          value={value.totalRentAmount}
-          onChange={(totalRentAmount) =>
-            updateField("totalRentAmount", totalRentAmount)
-          }
-        />
+      <CreateContractRentAmountField
+        label={labels.totalRentAmount.label}
+        placeholder={labels.totalRentAmount.placeholder}
+        value={value.totalRentAmount}
+        onChange={(totalRentAmount) =>
+          updateField("totalRentAmount", totalRentAmount)
+        }
+      />
 
-        <CreateContractFormSelect
-          label={labels.paymentMethod.label}
-          placeholder={
-            paymentTypesQuery.isLoading
-              ? labels.paymentMethod.loading
-              : labels.selectPlaceholder
-          }
-          options={paymentTypeOptions}
-          value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
-          onChange={(paymentTypeId) =>
-            updateField("paymentTypeId", Number(paymentTypeId))
-          }
-        />
-      </div>
+      <CreateContractFinancePaymentMethodSelect
+        label={labels.paymentMethod.label}
+        options={paymentTypeOptions}
+        value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
+        note={selectedPaymentTypeNotes}
+        disabled={paymentTypesQuery.isLoading}
+        onChange={(paymentTypeId) =>
+          updateField("paymentTypeId", Number(paymentTypeId))
+        }
+      />
 
       {paymentTypesQuery.error ? (
         <p className="text-sm text-destructive">
@@ -198,44 +201,29 @@ export default function CreateContractFinanceDataPhase({
         </p>
       ) : null}
 
-      {selectedPaymentTypeNotes ? (
-        <p className="flex items-center gap-1.5 text-sm text-[#555555]">
-          <Hand className="size-4 shrink-0 text-red-500" aria-hidden="true" />
-          <ArrowLeft
-            className="size-3.5 shrink-0 text-red-500"
-            aria-hidden="true"
-          />
-          <span>{selectedPaymentTypeNotes}</span>
-        </p>
-      ) : null}
-
       <div className="space-y-4 pt-2">
-        <CreateContractFinanceToggleOption
-          label={labels.addTenantPermissions.label}
-          checked={value.addTenantPermissions}
-          onCheckedChange={(addTenantPermissions) =>
+        <CreateContractFinancePermissionsSection
+          labels={labels.tenantPermissions}
+          value={value.selectedTenantRoleIds}
+          onChange={(selectedTenantRoleIds) =>
             onChange({
               ...value,
-              addTenantPermissions,
-              selectedTenantRoleIds: addTenantPermissions
-                ? value.selectedTenantRoleIds
-                : [],
+              selectedTenantRoleIds,
+              addTenantPermissions: selectedTenantRoleIds.length > 0,
             })
           }
-          actionLabel={labels.addTenantPermissions.edit}
-          actionVariant="edit"
-          onAction={onOpenTenantPermissions}
         />
 
-        <CreateContractFinanceToggleOption
-          label={labels.addOtherConditions.label}
-          checked={value.addOtherConditions}
-          onCheckedChange={(addOtherConditions) =>
-            updateField("addOtherConditions", addOtherConditions)
+        <CreateContractFinanceConditionsSection
+          labels={labels.otherConditions}
+          value={value.otherConditionsText}
+          onChange={(otherConditionsText) =>
+            onChange({
+              ...value,
+              otherConditionsText,
+              addOtherConditions: otherConditionsText.trim().length > 0,
+            })
           }
-          actionLabel={labels.addOtherConditions.add}
-          actionVariant="add"
-          onAction={onOpenOtherConditions}
         />
       </div>
     </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  DEED_STEP_PHASE_COUNT,
   deedTypeIsDeceasedOwner,
   deedTypeIsLeaseRenewal,
   deedTypeIsWaqfOwner,
@@ -27,9 +26,6 @@ export function useCreateContractDeedStep() {
   );
   const isAddressAlreadySubmitted = useCreateContractDraftStore(
     (state) => (state.contractStep2Data?.step ?? 0) >= 3,
-  );
-  const setDeedPhaseIndex = useCreateContractDraftStore(
-    (state) => state.setDeedPhaseIndex,
   );
   const setSelectedDeedType = useCreateContractDraftStore(
     (state) => state.setSelectedDeedType,
@@ -124,52 +120,42 @@ export function useCreateContractDeedStep() {
   const hasGuardiansPoaImage =
     deed.deedGuardiansPoaFiles.length > 0 || existingGuardiansPoaImageUrl !== null;
 
-  const isLastPhase = deed.currentPhaseIndex === DEED_STEP_PHASE_COUNT - 1;
-  const canContinue =
-    deed.currentPhaseIndex === 0
-      ? // Existing-property contracts already carry the (locked) instrument type
-        // and deed image from /contract/start, and resumed contracts already have
-        // a submitted deed, so the user can always continue in those cases.
-        isInstrumentTypeLocked ||
-        isDeedAlreadySubmitted ||
-        (deed.selectedDeedType !== "" &&
-          (isLeaseRenewal ||
-            (needsFrontBack
-              ? hasFrontImage && hasBackImage
-              : isDeceasedOwner
-                ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
-                : isWaqfOwner
-                  ? hasSingleImage &&
-                    hasEndowmentCertImage &&
-                    hasTrusteeshipImage &&
-                    (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-                  : hasSingleImage)))
-      : isInstrumentTypeLocked ||
-        isAddressAlreadySubmitted ||
-        canContinueNationalAddress(
-          deed.nationalAddressMethod,
-          deed.nationalAddressPhotoFiles,
-          deed.nationalAddressLinkUrl,
-          {
-            hasExistingPhoto: existingAddressImageUrl !== null,
-            manualAddress: deed.nationalAddressManual,
-          },
-        );
+  const isDeedComplete =
+    isInstrumentTypeLocked ||
+    isDeedAlreadySubmitted ||
+    (deed.selectedDeedType !== "" &&
+      (isLeaseRenewal ||
+        (needsFrontBack
+          ? hasFrontImage && hasBackImage
+          : isDeceasedOwner
+            ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+            : isWaqfOwner
+              ? hasSingleImage &&
+                hasEndowmentCertImage &&
+                hasTrusteeshipImage &&
+                (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
+              : hasSingleImage)));
 
-  function goToNextPhase() {
-    if (deed.currentPhaseIndex < DEED_STEP_PHASE_COUNT - 1) {
-      setDeedPhaseIndex(deed.currentPhaseIndex + 1);
-    }
-  }
+  const showNationalAddress = isDeedComplete && !isLeaseRenewal;
 
-  function goToPreviousPhase() {
-    if (deed.currentPhaseIndex > 0) {
-      setDeedPhaseIndex(deed.currentPhaseIndex - 1);
-    }
-  }
+  const isAddressComplete =
+    isInstrumentTypeLocked ||
+    isAddressAlreadySubmitted ||
+    canContinueNationalAddress(
+      deed.nationalAddressMethod,
+      deed.nationalAddressPhotoFiles,
+      deed.nationalAddressLinkUrl,
+      {
+        hasExistingPhoto: existingAddressImageUrl !== null,
+        manualAddress: deed.nationalAddressManual,
+      },
+    );
+
+  const canContinue = isLeaseRenewal
+    ? isDeedComplete
+    : isDeedComplete && isAddressComplete;
 
   return {
-    currentPhaseIndex: deed.currentPhaseIndex,
     selectedDeedType: deed.selectedDeedType,
     setSelectedDeedType,
     deedFiles: deed.deedFiles,
@@ -203,10 +189,8 @@ export function useCreateContractDeedStep() {
     setNationalAddressManual,
     mapLocation: deed.mapLocation ?? DEFAULT_NATIONAL_ADDRESS_LOCATION,
     setMapLocation,
-    isLastPhase,
+    showNationalAddress,
     canContinue,
-    goToNextPhase,
-    goToPreviousPhase,
     existingInstrumentImageUrl,
     existingInstrumentFrontImageUrl,
     existingInstrumentBackImageUrl,

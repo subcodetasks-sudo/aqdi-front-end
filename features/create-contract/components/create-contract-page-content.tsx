@@ -14,22 +14,14 @@ export default function CreateContractPageContent({
   labels,
   contractType,
 }: CreateContractPageContentProps) {
-  const pageTitle =
-    contractType === "residential"
-      ? labels.pageTitleResidential
-      : labels.pageTitleCommercial;
-
   return (
     <>
       <ServicesPageBackConfig
         backLabel={labels.backLabel}
-        pageTitle={pageTitle}
-        useRouterBack
+        hideBack
       />
 
-      <div className="mx-auto max-w-2xl">
-        <CreateContractWizard labels={labels} contractType={contractType} />
-      </div>
+      <CreateContractWizard labels={labels} contractType={contractType} />
     </>
   );
 }

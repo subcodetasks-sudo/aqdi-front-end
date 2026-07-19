@@ -68,6 +68,14 @@ export default async function CreateContractPage({
     backLabel: t("backLabel"),
     pageTitleResidential: t("pageTitleResidential"),
     pageTitleCommercial: t("pageTitleCommercial"),
+    header: {
+      home: t("header.home"),
+      help: t("header.help"),
+      requestPrefix: t("header.requestPrefix"),
+      copySuccess: t("header.copySuccess"),
+      copyError: t("header.copyError"),
+      whatsappHref: t("header.whatsappHref"),
+    },
     stepper: {
       journey: t("stepper.journey"),
       ejarLogoAlt: t("stepper.ejarLogoAlt"),
@@ -146,7 +154,10 @@ export default async function CreateContractPage({
         },
         methods: t.raw("deed.nationalAddress.methods") as Record<
           "photo" | "link" | "manual",
-          string
+          {
+            title: string;
+            description: string;
+          }
         >,
         mapTitle: t("deed.nationalAddress.mapTitle"),
         mapHint: t("deed.nationalAddress.mapHint"),
@@ -258,14 +269,14 @@ export default async function CreateContractPage({
           placeholder: t("owner.ownerData.iban.placeholder"),
         },
         hasAgent: {
-          label: t("owner.ownerData.hasAgent.label"),
-          placeholder: t("owner.ownerData.hasAgent.placeholder"),
-          options: t.raw(
-            "owner.ownerData.hasAgent.options",
-          ) as CreateContractLabels["owner"]["ownerData"]["hasAgent"]["options"],
+          title: t("owner.ownerData.hasAgent.title"),
+          description: t("owner.ownerData.hasAgent.description"),
         },
       },
       agentData: {
+        sectionTitle: t("owner.agentData.sectionTitle"),
+        sectionDescription: t("owner.agentData.sectionDescription"),
+        footerNote: t("owner.agentData.footerNote"),
         idNumber: {
           label: t("owner.agentData.idNumber.label"),
           placeholder: t("owner.agentData.idNumber.placeholder"),
@@ -335,13 +346,24 @@ export default async function CreateContractPage({
       organizationData: {
         delegationType: {
           label: t("tenant.organizationData.delegationType.label"),
-          placeholder: t("tenant.organizationData.delegationType.placeholder"),
           options: Object.fromEntries(
             DELEGATION_TYPE_OPTIONS.map((delegationType) => [
               delegationType,
-              t(
-                `tenant.organizationData.delegationType.options.${delegationType}`,
-              ),
+              {
+                title: t(
+                  `tenant.organizationData.delegationType.options.${delegationType}.title`,
+                ),
+                description: t(
+                  `tenant.organizationData.delegationType.options.${delegationType}.description`,
+                ),
+                ...(delegationType === "agent-authorized"
+                  ? {
+                      badge: t(
+                        "tenant.organizationData.delegationType.options.agent-authorized.badge",
+                      ),
+                    }
+                  : {}),
+              },
             ]),
           ) as CreateContractLabels["tenant"]["organizationData"]["delegationType"]["options"],
         },
@@ -350,6 +372,7 @@ export default async function CreateContractPage({
           placeholder: t(
             "tenant.organizationData.unifiedRecordNumber.placeholder",
           ),
+          hint: t("tenant.organizationData.unifiedRecordNumber.hint"),
         },
         ownerIdNumber: {
           label: t("tenant.organizationData.ownerIdNumber.label"),
@@ -403,6 +426,7 @@ export default async function CreateContractPage({
           label: t("tenant.rentedUnit.unitNumber.label"),
           placeholder: t("tenant.rentedUnit.unitNumber.placeholder"),
         },
+        unitCardTitle: t("tenant.rentedUnit.unitCardTitle"),
         additionalInfo: {
           toggle: t("tenant.rentedUnit.additionalInfo.toggle"),
           writeHerePlaceholder: t(
@@ -411,6 +435,7 @@ export default async function CreateContractPage({
         },
         roomsCount: {
           label: t("tenant.rentedUnit.roomsCount.label"),
+          hint: t("tenant.rentedUnit.roomsCount.hint"),
         },
         hallsCount: {
           label: t("tenant.rentedUnit.hallsCount.label"),
@@ -432,6 +457,9 @@ export default async function CreateContractPage({
         },
         kitchenCabinetsInstalled: {
           label: t("tenant.rentedUnit.kitchenCabinetsInstalled.label"),
+          kitchensRequiredHint: t(
+            "tenant.rentedUnit.kitchenCabinetsInstalled.kitchensRequiredHint",
+          ),
         },
         furnished: {
           label: t("tenant.rentedUnit.furnished.label"),
@@ -550,6 +578,8 @@ export default async function CreateContractPage({
         loading: t("finance.contractDuration.loading"),
         optionsError: t("finance.contractDuration.optionsError"),
         otherOption: t("finance.contractDuration.otherOption"),
+        feeLabel: t("finance.contractDuration.feeLabel"),
+        currency: t("finance.contractDuration.currency"),
         custom: {
           yearOption: t("finance.contractDuration.custom.yearOption"),
           monthOption: t("finance.contractDuration.custom.monthOption"),
@@ -567,30 +597,19 @@ export default async function CreateContractPage({
         loading: t("finance.paymentMethod.loading"),
         optionsError: t("finance.paymentMethod.optionsError"),
       },
-      addTenantPermissions: {
-        label: t("finance.addTenantPermissions.label"),
-        edit: t("finance.addTenantPermissions.edit"),
+      tenantPermissions: {
+        title: t("finance.tenantPermissions.title"),
+        subtitle: t("finance.tenantPermissions.subtitle"),
+        instruction: t("finance.tenantPermissions.instruction"),
+        optionsError: t("finance.tenantPermissions.optionsError"),
       },
-      addOtherConditions: {
-        label: t("finance.addOtherConditions.label"),
-        add: t("finance.addOtherConditions.add"),
-      },
-      tenantPermissionsDialog: {
-        title: t("finance.tenantPermissionsDialog.title"),
-        close: t("finance.tenantPermissionsDialog.close"),
-        heading: t("finance.tenantPermissionsDialog.heading"),
-        subtitle: t("finance.tenantPermissionsDialog.subtitle"),
-        continue: t("finance.tenantPermissionsDialog.continue"),
-        optionsError: t("finance.tenantPermissionsDialog.optionsError"),
-      },
-      otherConditionsDialog: {
-        title: t("finance.otherConditionsDialog.title"),
-        close: t("finance.otherConditionsDialog.close"),
-        heading: t("finance.otherConditionsDialog.heading"),
-        subtitle: t("finance.otherConditionsDialog.subtitle"),
-        termsLabel: t("finance.otherConditionsDialog.termsLabel"),
-        termsPlaceholder: t("finance.otherConditionsDialog.termsPlaceholder"),
-        save: t("finance.otherConditionsDialog.save"),
+      otherConditions: {
+        title: t("finance.otherConditions.title"),
+        subtitle: t("finance.otherConditions.subtitle"),
+        instruction: t("finance.otherConditions.instruction"),
+        placeholder: t("finance.otherConditions.placeholder"),
+        add: t("finance.otherConditions.add"),
+        remove: t("finance.otherConditions.remove"),
       },
     },
     payment: {

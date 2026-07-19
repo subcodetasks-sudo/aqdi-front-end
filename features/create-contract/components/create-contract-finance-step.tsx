@@ -4,10 +4,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import CreateContractFinanceDataPhase from "@/features/create-contract/components/create-contract-finance-data-phase";
-import CreateContractOtherConditionsDialog from "@/features/create-contract/components/create-contract-other-conditions-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
-import CreateContractTenantPermissionsDialog from "@/features/create-contract/components/create-contract-tenant-permissions-dialog";
 import { useSubmitContractStep6 } from "@/features/create-contract/hooks/use-submit-contract-step6";
 import { useCreateContractFinanceStep } from "@/features/create-contract/hooks/use-create-contract-finance-step";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -27,17 +25,8 @@ export default function CreateContractFinanceStep({
   onComplete,
 }: CreateContractFinanceStepProps) {
   const tIncomplete = useTranslations("createContract");
-  const {
-    financeData,
-    setFinanceData,
-    canContinue,
-    tenantPermissionsDialogOpen,
-    setTenantPermissionsDialogOpen,
-    otherConditionsDialogOpen,
-    setOtherConditionsDialogOpen,
-    saveTenantRoles,
-    saveOtherConditions,
-  } = useCreateContractFinanceStep();
+  const { financeData, setFinanceData, canContinue } =
+    useCreateContractFinanceStep();
   const { submitStep6, isSubmitting } = useSubmitContractStep6();
 
   async function handleContinue() {
@@ -73,26 +62,8 @@ export default function CreateContractFinanceStep({
           contractType={contractType}
           value={financeData}
           onChange={setFinanceData}
-          onOpenTenantPermissions={() => setTenantPermissionsDialogOpen(true)}
-          onOpenOtherConditions={() => setOtherConditionsDialogOpen(true)}
         />
       </div>
-
-      <CreateContractTenantPermissionsDialog
-        labels={labels.tenantPermissionsDialog}
-        open={tenantPermissionsDialogOpen}
-        onOpenChange={setTenantPermissionsDialogOpen}
-        value={financeData.selectedTenantRoleIds}
-        onSave={saveTenantRoles}
-      />
-
-      <CreateContractOtherConditionsDialog
-        labels={labels.otherConditionsDialog}
-        open={otherConditionsDialogOpen}
-        onOpenChange={setOtherConditionsDialogOpen}
-        value={financeData.otherConditionsText}
-        onSave={saveOtherConditions}
-      />
 
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}

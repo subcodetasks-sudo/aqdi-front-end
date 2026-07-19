@@ -35,7 +35,9 @@ function getStepPillClassName(
   );
 }
 
-export default function CreateContractStepper({ labels }: CreateContractStepperProps) {
+export default function CreateContractStepper({
+  labels,
+}: CreateContractStepperProps) {
   const { currentStep, currentStepIndex, goToStep, isStepUnlocked } =
     useCreateContractSteps();
   const isPaymentStep = currentStep === "payment";

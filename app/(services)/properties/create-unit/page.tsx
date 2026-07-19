@@ -94,12 +94,14 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       label: t("unitNumber.label"),
       placeholder: t("unitNumber.placeholder"),
     },
+    unitCardTitle: t("unitCardTitle"),
     additionalInfo: {
       toggle: t("additionalInfo.toggle"),
       writeHerePlaceholder: t("additionalInfo.writeHerePlaceholder"),
     },
     roomsCount: {
       label: t("roomsCount.label"),
+      hint: t("roomsCount.hint"),
     },
     hallsCount: {
       label: t("hallsCount.label"),
@@ -121,6 +123,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     },
     kitchenCabinetsInstalled: {
       label: t("kitchenCabinetsInstalled.label"),
+      kitchensRequiredHint: t("kitchenCabinetsInstalled.kitchensRequiredHint"),
     },
     furnished: {
       label: t("furnished.label"),

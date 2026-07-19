@@ -1,5 +1,4 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import type { HasAgentOption } from "@/features/create-contract/types/owner-step";
 import type {
   DelegationTypeOption,
   TenantStatusOption,
@@ -9,6 +8,14 @@ export type CreateContractLabels = {
   backLabel: string;
   pageTitleResidential: string;
   pageTitleCommercial: string;
+  header: {
+    home: string;
+    help: string;
+    requestPrefix: string;
+    copySuccess: string;
+    copyError: string;
+    whatsappHref: string;
+  };
   stepper: {
     journey: string;
     ejarLogoAlt: string;
@@ -79,7 +86,13 @@ export type CreateContractLabels = {
         label: string;
         placeholder: string;
       };
-      methods: Record<"photo" | "link" | "manual", string>;
+      methods: Record<
+        "photo" | "link" | "manual",
+        {
+          title: string;
+          description: string;
+        }
+      >;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
@@ -192,12 +205,14 @@ export type CreateContractLabels = {
         placeholder: string;
       };
       hasAgent: {
-        label: string;
-        placeholder: string;
-        options: Record<HasAgentOption, string>;
+        title: string;
+        description: string;
       };
     };
     agentData: {
+      sectionTitle: string;
+      sectionDescription: string;
+      footerNote: string;
       idNumber: {
         label: string;
         placeholder: string;
@@ -256,12 +271,19 @@ export type CreateContractLabels = {
     organizationData: {
       delegationType: {
         label: string;
-        placeholder: string;
-        options: Record<DelegationTypeOption, string>;
+        options: Record<
+          DelegationTypeOption,
+          {
+            title: string;
+            description: string;
+            badge?: string;
+          }
+        >;
       };
       unifiedRecordNumber: {
         label: string;
         placeholder: string;
+        hint: string;
       };
       ownerIdNumber: {
         label: string;
@@ -298,12 +320,14 @@ export type CreateContractLabels = {
         label: string;
         placeholder: string;
       };
+      unitCardTitle?: string;
       additionalInfo: {
         toggle: string;
         writeHerePlaceholder: string;
       };
       roomsCount: {
         label: string;
+        hint?: string;
       };
       hallsCount: {
         label: string;
@@ -325,6 +349,7 @@ export type CreateContractLabels = {
       };
       kitchenCabinetsInstalled: {
         label: string;
+        kitchensRequiredHint?: string;
       };
       furnished: {
         label: string;
@@ -435,6 +460,8 @@ export type CreateContractLabels = {
       loading: string;
       optionsError: string;
       otherOption: string;
+      feeLabel: string;
+      currency: string;
       custom: {
         yearOption: string;
         monthOption: string;
@@ -452,30 +479,19 @@ export type CreateContractLabels = {
       loading: string;
       optionsError: string;
     };
-    addTenantPermissions: {
-      label: string;
-      edit: string;
-    };
-    addOtherConditions: {
-      label: string;
-      add: string;
-    };
-    tenantPermissionsDialog: {
+    tenantPermissions: {
       title: string;
-      close: string;
-      heading: string;
       subtitle: string;
-      continue: string;
+      instruction: string;
       optionsError: string;
     };
-    otherConditionsDialog: {
+    otherConditions: {
       title: string;
-      close: string;
-      heading: string;
       subtitle: string;
-      termsLabel: string;
-      termsPlaceholder: string;
-      save: string;
+      instruction: string;
+      placeholder: string;
+      add: string;
+      remove: string;
     };
   };
   payment: {

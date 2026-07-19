@@ -61,6 +61,7 @@ export default function CreateContractTenantOrganizationDataPhase({
           <CreateContractUnifiedRecordNumberField
             label={labels.unifiedRecordNumber.label}
             placeholder={labels.unifiedRecordNumber.placeholder}
+            hint={labels.unifiedRecordNumber.hint}
             value={value.unifiedRecordNumber}
             onChange={(unifiedRecordNumber) =>
               updateField("unifiedRecordNumber", unifiedRecordNumber)
@@ -68,21 +69,33 @@ export default function CreateContractTenantOrganizationDataPhase({
             icon={FilePenLine}
           />
 
-          <CreateContractIconInputField
-            label={labels.ownerIdNumber.label}
-            placeholder={labels.ownerIdNumber.placeholder}
-            value={value.ownerIdNumber}
-            onChange={(ownerIdNumber) =>
-              updateField(
-                "ownerIdNumber",
-                ownerIdNumber.replace(/\D/g, "").slice(0, 10),
-              )
-            }
-            icon={IdCard}
-            dir="ltr"
-            inputMode="numeric"
-            maxLength={10}
-          />
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <CreateContractIconInputField
+              label={labels.ownerIdNumber.label}
+              placeholder={labels.ownerIdNumber.placeholder}
+              value={value.ownerIdNumber}
+              onChange={(ownerIdNumber) =>
+                updateField(
+                  "ownerIdNumber",
+                  ownerIdNumber.replace(/\D/g, "").slice(0, 10),
+                )
+              }
+              icon={IdCard}
+              dir="ltr"
+              inputMode="numeric"
+              maxLength={10}
+            />
+
+            <CreateContractSaudiMobileField
+              label={labels.ownerPhone.label}
+              placeholder={labels.ownerPhone.placeholder}
+              value={value.ownerPhone}
+              onChange={(ownerPhone) =>
+                updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
+              }
+              icon={Phone}
+            />
+          </div>
 
           <CreateContractBirthDateFields
             labels={{
@@ -93,16 +106,6 @@ export default function CreateContractTenantOrganizationDataPhase({
             onChange={(ownerBirthDate) =>
               updateField("ownerBirthDate", ownerBirthDate)
             }
-          />
-
-          <CreateContractSaudiMobileField
-            label={labels.ownerPhone.label}
-            placeholder={labels.ownerPhone.placeholder}
-            value={value.ownerPhone}
-            onChange={(ownerPhone) =>
-              updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
-            }
-            icon={Phone}
           />
 
           {value.delegationType === "agent-authorized" ? (
