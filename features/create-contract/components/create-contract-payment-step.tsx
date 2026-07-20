@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
+import CreateContractDiscountCodeField from "@/features/create-contract/components/create-contract-discount-code-field";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
@@ -111,6 +112,17 @@ export default function CreateContractPaymentStep({
               />
             </label>
           </div>
+
+          <CreateContractDiscountCodeField
+            labels={labels.discountCode}
+            value={paymentData.discountCode}
+            onChange={(discountCode) =>
+              setPaymentData({
+                ...paymentData,
+                discountCode,
+              })
+            }
+          />
 
           <div className="flex items-start gap-2">
             <Info

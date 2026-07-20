@@ -1957,6 +1957,13 @@
           "missingContractSession": "Contract session is missing. Please restart the contract flow."
         }
       },
+      "discountCode": {
+        "question": "Do you have a discount code?",
+        "add": "Click to add",
+        "placeholder": "Enter discount code",
+        "apply": "Apply",
+        "clear": "Clear"
+      },
       "disclaimer": {
         "prefix": "By clicking 'Pay and document the contract', you agree to the",
         "termsLink": "Terms and Conditions",

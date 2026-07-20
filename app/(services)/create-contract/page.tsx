@@ -656,6 +656,13 @@ export default async function CreateContractPage({
           ),
         },
       },
+      discountCode: {
+        question: t("payment.discountCode.question"),
+        add: t("payment.discountCode.add"),
+        placeholder: t("payment.discountCode.placeholder"),
+        apply: t("payment.discountCode.apply"),
+        clear: t("payment.discountCode.clear"),
+      },
       disclaimer: {
         prefix: t("payment.disclaimer.prefix"),
         termsLink: t("payment.disclaimer.termsLink"),

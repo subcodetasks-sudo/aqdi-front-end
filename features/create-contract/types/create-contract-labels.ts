@@ -536,6 +536,13 @@ export type CreateContractLabels = {
         missingContractSession: string;
       };
     };
+    discountCode: {
+      question: string;
+      add: string;
+      placeholder: string;
+      apply: string;
+      clear: string;
+    };
     disclaimer: {
       prefix: string;
       termsLink: string;
