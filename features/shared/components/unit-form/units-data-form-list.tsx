@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 type UnitsDataFormListProps = {
   addUnitLabel: string;
+  removeUnitLabel?: string;
   unitsCountLabel: string;
   unitSectionTitle?: (index: number) => string;
   units: UnitDataState[];
@@ -17,17 +18,22 @@ type UnitsDataFormListProps = {
     onChange: (unit: UnitDataState) => void,
   ) => ReactNode;
   allowAddUnit?: boolean;
+  allowRemoveUnit?: boolean;
+  minUnits?: number;
   className?: string;
 };
 
 export default function UnitsDataFormList({
   addUnitLabel,
+  removeUnitLabel,
   unitsCountLabel,
   unitSectionTitle,
   units,
   onUnitsChange,
   renderUnitForm,
   allowAddUnit = true,
+  allowRemoveUnit = false,
+  minUnits = 1,
   className,
 }: UnitsDataFormListProps) {
   function updateUnit(index: number, unit: UnitDataState) {
@@ -38,12 +44,38 @@ export default function UnitsDataFormList({
     onUnitsChange([...units, { ...EMPTY_UNIT_DATA }]);
   }
 
+  function handleRemoveUnit(index: number) {
+    if (units.length <= minUnits) {
+      return;
+    }
+
+    onUnitsChange(units.filter((_, currentIndex) => currentIndex !== index));
+  }
+
   return (
     <div className={cn("space-y-6", className)}>
       {units.map((unit, index) => (
-        <div key={`unit-form-${index}`} className="space-y-4">
-          {unitSectionTitle ? (
-            <p className="text-sm font-extrabold text-brand">{unitSectionTitle(index)}</p>
+        <div key={`unit-form-${unit.unitId ?? index}`} className="space-y-4">
+          {unitSectionTitle || (allowRemoveUnit && units.length > minUnits) ? (
+            <div className="flex items-center justify-between gap-3">
+              {unitSectionTitle ? (
+                <p className="text-sm font-extrabold text-brand">
+                  {unitSectionTitle(index)}
+                </p>
+              ) : (
+                <span />
+              )}
+
+              {allowRemoveUnit && units.length > minUnits ? (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveUnit(index)}
+                  className="text-xs font-semibold text-[#c0392b] transition-colors hover:text-[#962d22]"
+                >
+                  {removeUnitLabel}
+                </button>
+              ) : null}
+            </div>
           ) : null}
 
           {renderUnitForm(unit, index, (nextUnit) => updateUnit(index, nextUnit))}

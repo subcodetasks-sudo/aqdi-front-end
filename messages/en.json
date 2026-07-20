@@ -1278,6 +1278,7 @@
     },
     "unitCardTitle": "Basic information",
     "addUnit": "Add unit",
+    "removeUnit": "Remove unit",
     "unitsCount": "Number of units",
     "unitListTitle": "Unit",
     "additionalInfo": {

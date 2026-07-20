@@ -11,8 +11,8 @@ type CreateUnitPageContentProps = {
   propertyId: number | null;
   contractType: PropertyContractType;
   contractTypeLocked: boolean;
-  unitId: number | null;
-  initialUnitData: UnitDataState | null;
+  hasExistingUnits: boolean;
+  initialUnits: UnitDataState[] | null;
 };
 
 export default function CreateUnitPageContent({
@@ -20,10 +20,10 @@ export default function CreateUnitPageContent({
   propertyId,
   contractType,
   contractTypeLocked,
-  unitId,
-  initialUnitData,
+  hasExistingUnits,
+  initialUnits,
 }: CreateUnitPageContentProps) {
-  const pageTitle = unitId ? labels.editPageTitle : labels.pageTitle;
+  const pageTitle = hasExistingUnits ? labels.editPageTitle : labels.pageTitle;
 
   return (
     <>
@@ -39,8 +39,8 @@ export default function CreateUnitPageContent({
           propertyId={propertyId}
           contractType={contractType}
           contractTypeLocked={contractTypeLocked}
-          unitId={unitId}
-          initialUnitData={initialUnitData}
+          hasExistingUnits={hasExistingUnits}
+          initialUnits={initialUnits}
         />
       </div>
     </>

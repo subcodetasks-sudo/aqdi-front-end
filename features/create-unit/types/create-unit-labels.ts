@@ -101,6 +101,7 @@ export type CreateUnitLabels = {
     placeholder: string;
   };
   addUnit: string;
+  removeUnit: string;
   unitsCount: string;
   unitListTitle: string;
   success: {

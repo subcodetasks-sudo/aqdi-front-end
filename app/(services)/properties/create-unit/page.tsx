@@ -2,15 +2,14 @@ import { getTranslations } from "next-intl/server";
 
 import CreateUnitPageContent from "@/features/create-unit/components/create-unit-page-content";
 import { mapApiUnitToUnitData } from "@/features/create-unit/utils/map-api-unit-to-form";
-import { resolveCreateUnitContractType } from "@/features/create-unit/utils/resolve-create-unit-contract-type";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 import {
   parseUnitContractType,
-  parseUnitId,
   parseUnitPropertyId,
 } from "@/features/create-unit/utils/contract-type";
-import { getPropertyUnits } from "@/features/property-units/services/get-property-units";
+import { getRealEstateShow } from "@/features/property-units/services/get-real-estate-show";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 
 type CreateUnitPageProps = {
   searchParams: Promise<{
@@ -21,37 +20,45 @@ type CreateUnitPageProps = {
   }>;
 };
 
+function resolvePropertyContractType(
+  value: PropertyContractType | null,
+  fallback: PropertyContractType,
+) {
+  if (value === "housing" || value === "commercial") {
+    return value;
+  }
+
+  return fallback;
+}
+
 export default async function CreateUnitPage({ searchParams }: CreateUnitPageProps) {
   const params = await searchParams;
   const propertyId = parseUnitPropertyId(params.propertyId);
-  const unitId = parseUnitId(params.unitId);
   let contractType = parseUnitContractType(params.contract_type, params.type);
   let contractTypeLocked = false;
   const t = await getTranslations("createUnit");
 
-  let initialUnitData: UnitDataState | null = null;
+  let initialUnits: UnitDataState[] | null = null;
+  let hasExistingUnits = false;
 
   if (propertyId) {
     try {
-      const property = await getPropertyUnits(propertyId);
-      const unit = unitId
-        ? property.units?.find((item) => item.id === unitId) ?? null
-        : null;
+      const property = await getRealEstateShow(propertyId);
+      const units = property.units ?? [];
 
-      if (unit) {
-        initialUnitData = mapApiUnitToUnitData(unit);
+      if (units.length > 0) {
+        initialUnits = units.map((unit) => mapApiUnitToUnitData(unit));
+        hasExistingUnits = true;
       }
 
-      const resolvedContractType = resolveCreateUnitContractType({
+      contractType = resolvePropertyContractType(
+        property.contract_type,
         contractType,
-        unitId,
-        unit,
-      });
-
-      contractType = resolvedContractType.contractType;
-      contractTypeLocked = resolvedContractType.contractTypeLocked;
+      );
+      contractTypeLocked = hasExistingUnits;
     } catch {
-      initialUnitData = null;
+      initialUnits = null;
+      hasExistingUnits = false;
     }
   }
 
@@ -96,6 +103,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     },
     unitCardTitle: t("unitCardTitle"),
     addUnit: t("addUnit"),
+    removeUnit: t("removeUnit"),
     unitsCount: t("unitsCount"),
     unitListTitle: t("unitListTitle"),
     additionalInfo: {
@@ -181,8 +189,8 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       propertyId={propertyId}
       contractType={contractType}
       contractTypeLocked={contractTypeLocked}
-      unitId={unitId}
-      initialUnitData={initialUnitData}
+      hasExistingUnits={hasExistingUnits}
+      initialUnits={initialUnits}
     />
   );
 }

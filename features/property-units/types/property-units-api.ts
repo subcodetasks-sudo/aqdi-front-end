@@ -20,6 +20,8 @@ export type PropertyUnitApiItem = {
   water_meter: boolean | null;
   electricity_meter_number: string | null;
   water_meter_number: string | null;
+  electricity_meter_ownership?: "owner" | "tenant" | null;
+  water_meter_ownership?: "owner" | "tenant" | null;
   contract_type: "housing" | "commercial" | null;
 };
 

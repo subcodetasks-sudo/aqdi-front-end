@@ -412,6 +412,8 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         deedTrusteeshipPersistedFiles: state.deedTrusteeshipPersistedFiles,
         isMultipleTrusteeshipDeedCopy: state.isMultipleTrusteeshipDeedCopy,
         deedGuardiansPoaPersistedFiles: state.deedGuardiansPoaPersistedFiles,
+        useManualDeedEntry: state.useManualDeedEntry,
+        manualDeedEntry: state.manualDeedEntry,
         addressMethod: state.addressMethod,
         addressPhotoPersistedFiles: state.addressPhotoPersistedFiles,
         addressLinkUrl: state.addressLinkUrl,

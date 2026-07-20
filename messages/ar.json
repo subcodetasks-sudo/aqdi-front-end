@@ -1304,6 +1304,7 @@
     },
     "unitCardTitle": "المعلومات الأساسية",
     "addUnit": "إضافة وحدة",
+    "removeUnit": "حذف الوحدة",
     "unitsCount": "عدد الوحدات",
     "unitListTitle": "الوحدة",
     "additionalInfo": {
@@ -1810,10 +1811,11 @@
           "label": "رقم الوحدة",
           "placeholder": "أكتب هنا .."
         },
-        "unitCardTitle": "المعلومات الأساسية",
-        "addUnit": "إضافة وحدة",
-        "unitsCount": "عدد الوحدات",
-        "unitListTitle": "الوحدة",
+    "unitCardTitle": "المعلومات الأساسية",
+    "addUnit": "إضافة وحدة",
+    "removeUnit": "حذف الوحدة",
+    "unitsCount": "عدد الوحدات",
+    "unitListTitle": "الوحدة",
         "additionalInfo": {
           "toggle": "هل ترغب بإضافة معلومات إضافية؟",
           "writeHerePlaceholder": "أكتب هنا ..."

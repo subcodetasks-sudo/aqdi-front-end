@@ -11,13 +11,12 @@ import {
 import type { CreateUnitStep } from "@/features/create-unit/types/create-unit-step";
 
 type InitializeSessionOptions = {
-  unitId?: number | null;
-  unitData?: UnitDataState;
+  initialUnits?: UnitDataState[];
 };
 
 type CreateUnitDraftStore = {
   propertyId: number | null;
-  unitId: number | null;
+  hasExistingUnits: boolean;
   contractType: PropertyContractType;
   currentStep: CreateUnitStep;
   units: UnitDataState[];
@@ -29,7 +28,7 @@ type CreateUnitDraftStore = {
   initializeSession: (
     propertyId: number | null,
     contractType: PropertyContractType,
-    options?: InitializeSessionOptions,
+    options?: InitializeSessionOptions & { hasExistingUnits?: boolean },
   ) => void;
   resetDraft: () => void;
 };
@@ -51,12 +50,12 @@ function normalizePersistedUnitData(
 function createInitialUnitDraft(
   propertyId: number | null = null,
   contractType: PropertyContractType = "housing",
-  unitId: number | null = null,
+  hasExistingUnits = false,
   units: UnitDataState[] = [{ ...EMPTY_UNIT_DATA }],
 ) {
   return {
     propertyId,
-    unitId,
+    hasExistingUnits,
     contractType,
     currentStep: "form" as CreateUnitStep,
     units,
@@ -96,27 +95,31 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
       setUnits: (units) => set({ units }),
       initializeSession: (propertyId, contractType, options = {}) => {
         const state = get();
-        const nextUnitId = options.unitId ?? null;
+        const nextHasExistingUnits = options.hasExistingUnits ?? false;
+        const nextUnits =
+          options.initialUnits && options.initialUnits.length > 0
+            ? options.initialUnits
+            : [{ ...EMPTY_UNIT_DATA }];
         const sessionChanged =
           state.propertyId !== propertyId ||
-          state.unitId !== nextUnitId ||
+          state.hasExistingUnits !== nextHasExistingUnits ||
           state.contractType !== contractType ||
           state.currentStep === "success";
 
-        if (sessionChanged || options.unitData) {
+        if (sessionChanged || options.initialUnits) {
           set(
             createInitialUnitDraft(
               propertyId,
               contractType,
-              nextUnitId,
-              options.unitData ? [options.unitData] : [{ ...EMPTY_UNIT_DATA }],
+              nextHasExistingUnits,
+              nextUnits,
             ),
           );
         }
       },
       resetDraft: () => {
-        const { propertyId, contractType, unitId } = get();
-        set(createInitialUnitDraft(propertyId, contractType, unitId));
+        const { propertyId, contractType, hasExistingUnits } = get();
+        set(createInitialUnitDraft(propertyId, contractType, hasExistingUnits));
       },
     }),
     {
@@ -124,7 +127,7 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         propertyId: state.propertyId,
-        unitId: state.unitId,
+        hasExistingUnits: state.hasExistingUnits,
         contractType: state.contractType,
         currentStep: state.currentStep === "success" ? "form" : state.currentStep,
         units: state.units,

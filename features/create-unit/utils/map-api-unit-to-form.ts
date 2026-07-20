@@ -34,10 +34,21 @@ function mapBathroomsCount(unit: PropertyUnitApiItem) {
   return displayCount(unit.The_number_of_toilets ?? unit.The_number_of_the_toilet);
 }
 
+function mapMeterRegistration(
+  value: string | null | undefined,
+): UnitDataState["electricityMeterRegistration"] {
+  if (value === "owner" || value === "tenant") {
+    return value;
+  }
+
+  return "";
+}
+
 export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
   const furnished = Boolean(unit.furnished);
 
   return {
+    unitId: unit.id,
     unitTypeId: unit.unit_type_id ? String(unit.unit_type_id) : "",
     unitUsageId: unit.unit_usage_id ? String(unit.unit_usage_id) : "",
     totalArea: unit.unit_area?.trim() ?? "",
@@ -59,9 +70,11 @@ export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
       : "",
     addElectricityMeter: Boolean(unit.electricity_meter),
     electricityMeterNumber: unit.electricity_meter_number?.trim() ?? "",
-    electricityMeterRegistration: "",
+    electricityMeterRegistration: mapMeterRegistration(
+      unit.electricity_meter_ownership,
+    ),
     addWaterMeter: Boolean(unit.water_meter),
     waterMeterNumber: unit.water_meter_number?.trim() ?? "",
-    waterMeterRegistration: "",
+    waterMeterRegistration: mapMeterRegistration(unit.water_meter_ownership),
   };
 }

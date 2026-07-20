@@ -29,6 +29,10 @@ export function buildUnitFieldsPayload(unitData: UnitDataState) {
     Services: [],
   };
 
+  if (unitData.unitId) {
+    payload.unit_id = unitData.unitId;
+  }
+
   if (unitData.roomsCount !== "") {
     const roomsCount = parseCount(unitData.roomsCount);
     payload.tootal_rooms = roomsCount;
@@ -101,6 +105,16 @@ export function buildUnitsCreateApiPayload(
   return {
     real_estates_units_id: propertyId,
     contract_type: contractType,
+    units: units.map((unit) => buildUnitFieldsPayload(unit)),
+  };
+}
+
+export function buildRealEstateStep3Payload(
+  propertyId: number,
+  units: UnitDataState[],
+) {
+  return {
+    id: propertyId,
     units: units.map((unit) => buildUnitFieldsPayload(unit)),
   };
 }

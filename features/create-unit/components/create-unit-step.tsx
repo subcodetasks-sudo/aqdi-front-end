@@ -18,7 +18,7 @@ type CreateUnitStepProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
   contractTypeLocked: boolean;
-  unitId: number | null;
+  hasExistingUnits: boolean;
   onBack: () => void;
   onComplete: (message?: string) => void;
 };
@@ -27,20 +27,22 @@ export default function CreateUnitStep({
   labels,
   propertyId,
   contractTypeLocked,
-  unitId,
+  hasExistingUnits,
   onBack,
   onComplete,
 }: CreateUnitStepProps) {
   const { units, setUnits, canContinue } = useCreateUnitStep();
   const contractType = useCreateUnitDraftStore((state) => state.contractType);
   const setContractType = useCreateUnitDraftStore((state) => state.setContractType);
-  const { isSubmitting, submitUnit } = useSubmitUnit(propertyId, unitId);
+  const { isSubmitting, submitUnit } = useSubmitUnit(
+    propertyId,
+    hasExistingUnits,
+  );
   const unitTypesQuery = useUnitTypeOptions(contractType);
   const unitUsageQuery = useUnitUsageOptions(contractType);
 
   const isLoadingOptions = unitTypesQuery.isLoading || unitUsageQuery.isLoading;
   const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
-  const isEditMode = unitId !== null;
 
   async function handleContinue() {
     if (!canContinue || isSubmitting || isLoadingOptions || optionsError) {
@@ -61,8 +63,8 @@ export default function CreateUnitStep({
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateUnitStepPhaseHeader
-          title={unitId ? labels.editTitle : labels.title}
-          subtitle={unitId ? labels.editSubtitle : labels.subtitle}
+          title={hasExistingUnits ? labels.editTitle : labels.title}
+          subtitle={hasExistingUnits ? labels.editSubtitle : labels.subtitle}
         />
 
         {optionsError ? (
@@ -81,6 +83,7 @@ export default function CreateUnitStep({
         ) : (
           <UnitsDataFormList
             addUnitLabel={labels.addUnit}
+            removeUnitLabel={labels.removeUnit}
             unitsCountLabel={labels.unitsCount}
             unitSectionTitle={
               units.length > 1
@@ -89,7 +92,8 @@ export default function CreateUnitStep({
             }
             units={units}
             onUnitsChange={setUnits}
-            allowAddUnit={!isEditMode}
+            allowAddUnit
+            allowRemoveUnit
             renderUnitForm={(unit, _index, onUnitChange) => (
               <UnitDataFormFields
                 labels={labels}
@@ -112,7 +116,7 @@ export default function CreateUnitStep({
         continueLabel={
           isSubmitting
             ? labels.navigation.submitting
-            : unitId
+            : hasExistingUnits
               ? labels.navigation.save
               : labels.navigation.continue
         }

@@ -15,8 +15,8 @@ type CreateUnitWizardProps = {
   propertyId: number | null;
   contractType: PropertyContractType;
   contractTypeLocked: boolean;
-  unitId: number | null;
-  initialUnitData: UnitDataState | null;
+  hasExistingUnits: boolean;
+  initialUnits: UnitDataState[] | null;
 };
 
 export default function CreateUnitWizard({
@@ -24,8 +24,8 @@ export default function CreateUnitWizard({
   propertyId,
   contractType,
   contractTypeLocked,
-  unitId,
-  initialUnitData,
+  hasExistingUnits,
+  initialUnits,
 }: CreateUnitWizardProps) {
   const router = useRouter();
   const initializeSession = useCreateUnitDraftStore(
@@ -35,15 +35,15 @@ export default function CreateUnitWizard({
 
   useEffect(() => {
     initializeSession(propertyId, contractType, {
-      unitId,
-      unitData: initialUnitData ?? undefined,
+      hasExistingUnits,
+      initialUnits: initialUnits ?? undefined,
     });
   }, [
     contractType,
-    initialUnitData,
+    hasExistingUnits,
+    initialUnits,
     initializeSession,
     propertyId,
-    unitId,
   ]);
 
   function handleComplete(message?: string) {
@@ -51,7 +51,7 @@ export default function CreateUnitWizard({
 
     toast.success(
       message ||
-        (unitId
+        (hasExistingUnits
           ? labels.navigation.updateSuccess
           : labels.navigation.createSuccess),
     );
@@ -72,7 +72,7 @@ export default function CreateUnitWizard({
         labels={labels}
         propertyId={propertyId}
         contractTypeLocked={contractTypeLocked}
-        unitId={unitId}
+        hasExistingUnits={hasExistingUnits}
         onBack={() => router.back()}
         onComplete={handleComplete}
       />

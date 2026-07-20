@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 
-import { createUnit } from "@/features/create-unit/services/create-unit";
-import { updateUnit } from "@/features/create-unit/services/update-unit";
+import { submitPropertyStep3 } from "@/features/create-unit/services/submit-property-step3";
+import { updatePropertyStep3 } from "@/features/create-unit/services/update-property-step3";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import { areAllUnitsComplete } from "@/features/create-unit/types/unit-data";
 
-export function useSubmitUnit(propertyId: number | null, unitId: number | null) {
+export function useSubmitUnit(
+  propertyId: number | null,
+  hasExistingUnits: boolean,
+) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const units = useCreateUnitDraftStore((state) => state.units);
-  const contractType = useCreateUnitDraftStore((state) => state.contractType);
 
   async function submitUnit() {
     if (!propertyId) {
@@ -30,18 +32,15 @@ export function useSubmitUnit(propertyId: number | null, unitId: number | null) 
     setIsSubmitting(true);
 
     try {
-      if (unitId) {
-        return await updateUnit({
-          unitId,
+      if (hasExistingUnits) {
+        return await updatePropertyStep3({
           propertyId,
-          contractType,
-          unitData: units[0],
+          units,
         });
       }
 
-      return await createUnit({
+      return await submitPropertyStep3({
         propertyId,
-        contractType,
         units,
       });
     } finally {

@@ -8,6 +8,7 @@ export type MeterRegistrationParty =
   (typeof METER_REGISTRATION_PARTIES)[number];
 
 export type UnitDataState = {
+  unitId?: number;
   unitTypeId: string;
   unitUsageId: string;
   totalArea: string;
