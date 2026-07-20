@@ -22,6 +22,9 @@ export type UnitFormLabels = {
     placeholder: string;
   };
   unitCardTitle?: string;
+  addUnit?: string;
+  unitsCount?: string;
+  unitListTitle?: string;
   additionalInfo: {
     toggle: string;
     writeHerePlaceholder: string;

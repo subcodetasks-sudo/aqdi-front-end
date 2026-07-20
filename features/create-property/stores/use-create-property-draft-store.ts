@@ -18,6 +18,10 @@ import {
   type ManualNationalAddressData,
 } from "@/features/shared/types/manual-national-address";
 import {
+  EMPTY_MANUAL_DEED_ENTRY,
+  type ManualDeedEntryData,
+} from "@/features/shared/types/manual-deed-entry";
+import {
   EMPTY_PROPERTY_AGENT_DATA,
   EMPTY_PROPERTY_OWNER_DATA,
   type PropertyAgentDataState,
@@ -64,6 +68,8 @@ type PropertyDraftStore = {
   isMultipleTrusteeshipDeedCopy: boolean;
   deedGuardiansPoaFiles: File[];
   deedGuardiansPoaPersistedFiles: PersistedFile[];
+  useManualDeedEntry: boolean;
+  manualDeedEntry: ManualDeedEntryData;
   addressMethod: PropertyNationalAddressMethodId | "";
   addressPhotoFiles: File[];
   addressPhotoPersistedFiles: PersistedFile[];
@@ -89,6 +95,8 @@ type PropertyDraftStore = {
   setDeedTrusteeshipFiles: (files: File[]) => Promise<void>;
   setIsMultipleTrusteeshipDeedCopy: (value: boolean) => void;
   setDeedGuardiansPoaFiles: (files: File[]) => Promise<void>;
+  setUseManualDeedEntry: (value: boolean) => void;
+  setManualDeedEntry: (value: ManualDeedEntryData) => void;
   setAddressMethod: (method: PropertyNationalAddressMethodId) => void;
   setAddressPhotoFiles: (files: File[]) => Promise<void>;
   setAddressLinkUrl: (url: string) => void;
@@ -153,6 +161,8 @@ function createInitialPropertyDraft() {
     isMultipleTrusteeshipDeedCopy: false,
     deedGuardiansPoaFiles: [] as File[],
     deedGuardiansPoaPersistedFiles: [] as PersistedFile[],
+    useManualDeedEntry: false,
+    manualDeedEntry: { ...EMPTY_MANUAL_DEED_ENTRY },
     addressMethod: "" as PropertyNationalAddressMethodId | "",
     addressPhotoFiles: [] as File[],
     addressPhotoPersistedFiles: [] as PersistedFile[],
@@ -212,18 +222,39 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           deedGuardiansPoaFiles: value === "" ? [] : state.deedGuardiansPoaFiles,
           deedGuardiansPoaPersistedFiles:
             value === "" ? [] : state.deedGuardiansPoaPersistedFiles,
+          useManualDeedEntry: value === "" ? false : state.useManualDeedEntry,
+          manualDeedEntry:
+            value === "" ? { ...EMPTY_MANUAL_DEED_ENTRY } : state.manualDeedEntry,
         })),
       setDeedFiles: async (files) => {
         const deedPersistedFiles = await filesToPersisted(files);
-        set({ deedFiles: files, deedPersistedFiles });
+        set((state) => ({
+          deedFiles: files,
+          deedPersistedFiles,
+          useManualDeedEntry: files.length > 0 ? false : state.useManualDeedEntry,
+          manualDeedEntry:
+            files.length > 0 ? { ...EMPTY_MANUAL_DEED_ENTRY } : state.manualDeedEntry,
+        }));
       },
       setDeedFrontFiles: async (files) => {
         const deedFrontPersistedFiles = await filesToPersisted(files);
-        set({ deedFrontFiles: files, deedFrontPersistedFiles });
+        set((state) => ({
+          deedFrontFiles: files,
+          deedFrontPersistedFiles,
+          useManualDeedEntry: files.length > 0 ? false : state.useManualDeedEntry,
+          manualDeedEntry:
+            files.length > 0 ? { ...EMPTY_MANUAL_DEED_ENTRY } : state.manualDeedEntry,
+        }));
       },
       setDeedBackFiles: async (files) => {
         const deedBackPersistedFiles = await filesToPersisted(files);
-        set({ deedBackFiles: files, deedBackPersistedFiles });
+        set((state) => ({
+          deedBackFiles: files,
+          deedBackPersistedFiles,
+          useManualDeedEntry: files.length > 0 ? false : state.useManualDeedEntry,
+          manualDeedEntry:
+            files.length > 0 ? { ...EMPTY_MANUAL_DEED_ENTRY } : state.manualDeedEntry,
+        }));
       },
       setDeedInheritanceFiles: async (files) => {
         const deedInheritancePersistedFiles = await filesToPersisted(files);
@@ -253,6 +284,20 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         const deedGuardiansPoaPersistedFiles = await filesToPersisted(files);
         set({ deedGuardiansPoaFiles: files, deedGuardiansPoaPersistedFiles });
       },
+      setUseManualDeedEntry: (value) =>
+        set((state) => ({
+          useManualDeedEntry: value,
+          deedFiles: value ? [] : state.deedFiles,
+          deedPersistedFiles: value ? [] : state.deedPersistedFiles,
+          deedFrontFiles: value ? [] : state.deedFrontFiles,
+          deedFrontPersistedFiles: value ? [] : state.deedFrontPersistedFiles,
+          deedBackFiles: value ? [] : state.deedBackFiles,
+          deedBackPersistedFiles: value ? [] : state.deedBackPersistedFiles,
+          manualDeedEntry: value
+            ? state.manualDeedEntry
+            : { ...EMPTY_MANUAL_DEED_ENTRY },
+        })),
+      setManualDeedEntry: (value) => set({ manualDeedEntry: value }),
       setAddressMethod: (method) => set({ addressMethod: method }),
       setAddressPhotoFiles: async (files) => {
         const addressPhotoPersistedFiles = await filesToPersisted(files);

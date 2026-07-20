@@ -6,7 +6,7 @@ import {
   isTenantDataComplete,
 } from "@/features/create-contract/types/tenant-step";
 import {
-  isRentedUnitDataComplete,
+  areRentedUnitsComplete,
   TENANT_STEP_PHASE_COUNT,
 } from "@/features/create-contract/types/rented-unit-step";
 import {
@@ -30,9 +30,7 @@ export function useCreateContractTenantStep() {
     (state) => state.setTenantPhaseIndex,
   );
   const setTenantData = useCreateContractDraftStore((state) => state.setTenantData);
-  const setRentedUnitData = useCreateContractDraftStore(
-    (state) => state.setRentedUnitData,
-  );
+  const setRentedUnits = useCreateContractDraftStore((state) => state.setRentedUnits);
   const setLeaseRenewalAddNotes = useCreateContractDraftStore(
     (state) => state.setLeaseRenewalAddNotes,
   );
@@ -58,7 +56,7 @@ export function useCreateContractTenantStep() {
         })
     : tenant.currentPhaseIndex === 0
       ? isTenantDataComplete(tenant.tenantData)
-      : isRentedUnitDataComplete(tenant.rentedUnitData);
+      : areRentedUnitsComplete(tenant.rentedUnits);
 
   function updateStatus(status: TenantStatusOption | "") {
     setTenantData(updateContractTenantStatus(tenant.tenantData, status));
@@ -84,8 +82,8 @@ export function useCreateContractTenantStep() {
     currentPhaseIndex: tenant.currentPhaseIndex,
     tenantData: tenant.tenantData,
     setTenantData,
-    rentedUnitData: tenant.rentedUnitData,
-    setRentedUnitData,
+    rentedUnits: tenant.rentedUnits,
+    setRentedUnits,
     leaseRenewalAddNotes: tenant.leaseRenewalAddNotes,
     leaseRenewalNotes: tenant.leaseRenewalNotes,
     setLeaseRenewalAddNotes,

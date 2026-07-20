@@ -1,17 +1,17 @@
 "use client";
 
-import { isUnitDataComplete } from "@/features/create-unit/types/unit-data";
+import { areAllUnitsComplete } from "@/features/create-unit/types/unit-data";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 
 export function useCreateUnitStep() {
-  const unitData = useCreateUnitDraftStore((state) => state.unitData);
-  const setUnitData = useCreateUnitDraftStore((state) => state.setUnitData);
+  const units = useCreateUnitDraftStore((state) => state.units);
+  const setUnits = useCreateUnitDraftStore((state) => state.setUnits);
 
-  const canContinue = isUnitDataComplete(unitData);
+  const canContinue = areAllUnitsComplete(units);
 
   return {
-    unitData,
-    setUnitData,
+    units,
+    setUnits,
     canContinue,
   };
 }

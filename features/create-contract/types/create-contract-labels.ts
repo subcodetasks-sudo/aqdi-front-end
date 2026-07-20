@@ -3,6 +3,7 @@ import type {
   DelegationTypeOption,
   TenantStatusOption,
 } from "@/features/create-contract/types/tenant-step";
+import type { ManualDeedEntryLabels } from "@/features/shared/types/manual-deed-entry-labels";
 
 export type CreateContractLabels = {
   backLabel: string;
@@ -138,6 +139,7 @@ export type CreateContractLabels = {
     waqf: {
       multipleTrusteesLabel: string;
     };
+    manualEntry: ManualDeedEntryLabels;
   };
   owner: {
     cancelRequest: string;
@@ -321,6 +323,9 @@ export type CreateContractLabels = {
         placeholder: string;
       };
       unitCardTitle?: string;
+      addUnit: string;
+      unitsCount: string;
+      unitListTitle: string;
       additionalInfo: {
         toggle: string;
         writeHerePlaceholder: string;
@@ -515,6 +520,9 @@ export type CreateContractLabels = {
       servicesTotal: string;
       docFee: string;
       total: string;
+      priceBeforeCoupon: string;
+      discount: string;
+      priceAfterCoupon: string;
       currency: string;
       ejarLogoAlt: string;
     };
@@ -541,7 +549,11 @@ export type CreateContractLabels = {
       add: string;
       placeholder: string;
       apply: string;
+      applying: string;
       clear: string;
+      applyError: string;
+      alreadyApplied: string;
+      missingContractSession: string;
     };
     disclaimer: {
       prefix: string;

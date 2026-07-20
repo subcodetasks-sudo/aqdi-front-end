@@ -5,11 +5,11 @@ import { useState } from "react";
 import { createUnit } from "@/features/create-unit/services/create-unit";
 import { updateUnit } from "@/features/create-unit/services/update-unit";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
-import { isUnitDataComplete } from "@/features/create-unit/types/unit-data";
+import { areAllUnitsComplete } from "@/features/create-unit/types/unit-data";
 
 export function useSubmitUnit(propertyId: number | null, unitId: number | null) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const unitData = useCreateUnitDraftStore((state) => state.unitData);
+  const units = useCreateUnitDraftStore((state) => state.units);
   const contractType = useCreateUnitDraftStore((state) => state.contractType);
 
   async function submitUnit() {
@@ -20,7 +20,7 @@ export function useSubmitUnit(propertyId: number | null, unitId: number | null) 
       };
     }
 
-    if (!isUnitDataComplete(unitData)) {
+    if (!areAllUnitsComplete(units)) {
       return {
         ok: false as const,
         error: "Unit data is incomplete",
@@ -35,14 +35,14 @@ export function useSubmitUnit(propertyId: number | null, unitId: number | null) 
           unitId,
           propertyId,
           contractType,
-          unitData,
+          unitData: units[0],
         });
       }
 
       return await createUnit({
         propertyId,
         contractType,
-        unitData,
+        units,
       });
     } finally {
       setIsSubmitting(false);

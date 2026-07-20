@@ -1,14 +1,14 @@
 "use server";
 
 import { apiRequest } from "@/lib/api/api-request";
-import { buildUnitApiPayload } from "@/features/create-unit/utils/build-unit-api-payload";
+import { buildUnitsCreateApiPayload } from "@/features/create-unit/utils/build-unit-api-payload";
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 
 export type CreateUnitPayload = {
   propertyId: number;
   contractType: PropertyContractType;
-  unitData: UnitDataState;
+  units: UnitDataState[];
 };
 
 type CreateUnitApiResponse = {
@@ -23,11 +23,11 @@ type CreateUnitApiResponse = {
 export async function createUnit({
   propertyId,
   contractType,
-  unitData,
+  units,
 }: CreateUnitPayload) {
   const response = await apiRequest<CreateUnitApiResponse>("/unit/create", {
     method: "POST",
-    body: JSON.stringify(buildUnitApiPayload(propertyId, contractType, unitData)),
+    body: JSON.stringify(buildUnitsCreateApiPayload(propertyId, contractType, units)),
     cache: "no-store",
   });
 

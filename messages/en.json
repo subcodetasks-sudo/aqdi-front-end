@@ -997,6 +997,26 @@
       },
       "waqf": {
         "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
+      },
+      "manualEntry": {
+        "separator": "Or - if you prefer not to upload an image",
+        "toggleLabel": "Enter deed data manually instead of an image",
+        "instrumentNumber": {
+          "label": "Deed number",
+          "placeholder": "XXXXXXXXXXXX",
+          "hint": "The deed number consists of 12 digits"
+        },
+        "instrumentDate": {
+          "label": "Deed date",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "Day",
+          "monthPlaceholder": "Month",
+          "yearPlaceholder": "Year"
+        }
       }
     },
     "address": {
@@ -1257,6 +1277,9 @@
       "placeholder": "Write here..."
     },
     "unitCardTitle": "Basic information",
+    "addUnit": "Add unit",
+    "unitsCount": "Number of units",
+    "unitListTitle": "Unit",
     "additionalInfo": {
       "toggle": "Would you like to add additional information?",
       "writeHerePlaceholder": "Write here..."
@@ -1504,6 +1527,26 @@
       },
       "waqf": {
         "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
+      },
+      "manualEntry": {
+        "separator": "Or - if you prefer not to upload an image",
+        "toggleLabel": "Enter deed data manually instead of an image",
+        "instrumentNumber": {
+          "label": "Deed number",
+          "placeholder": "XXXXXXXXXXXX",
+          "hint": "The deed number consists of 12 digits"
+        },
+        "instrumentDate": {
+          "label": "Deed date",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "Day",
+          "monthPlaceholder": "Month",
+          "yearPlaceholder": "Year"
+        }
       }
     },
     "owner": {
@@ -1742,6 +1785,9 @@
           "placeholder": "Write here..."
         },
         "unitCardTitle": "Basic information",
+        "addUnit": "Add unit",
+        "unitsCount": "Number of units",
+        "unitListTitle": "Unit",
         "additionalInfo": {
           "toggle": "Would you like to add additional information?",
           "writeHerePlaceholder": "Write here..."
@@ -1936,6 +1982,9 @@
         "servicesTotal": "Services total:",
         "docFee": "Documentation fees:",
         "total": "Total:",
+        "priceBeforeCoupon": "Total before discount:",
+        "discount": "Discount amount:",
+        "priceAfterCoupon": "Total after discount:",
         "currency": "SAR",
         "ejarLogoAlt": "Ejar"
       },
@@ -1962,7 +2011,11 @@
         "add": "Click to add",
         "placeholder": "Enter discount code",
         "apply": "Apply",
-        "clear": "Clear"
+        "applying": "Applying...",
+        "clear": "Clear",
+        "applyError": "Could not apply the discount code. Check the code and try again.",
+        "alreadyApplied": "A discount code has already been applied to this contract.",
+        "missingContractSession": "Contract session is missing. Please restart the contract flow."
       },
       "disclaimer": {
         "prefix": "By clicking 'Pay and document the contract', you agree to the",

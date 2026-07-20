@@ -100,6 +100,9 @@ export type CreateUnitLabels = {
     label: string;
     placeholder: string;
   };
+  addUnit: string;
+  unitsCount: string;
+  unitListTitle: string;
   success: {
     title: string;
     description: string;

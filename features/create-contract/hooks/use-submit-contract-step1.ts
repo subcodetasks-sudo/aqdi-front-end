@@ -9,6 +9,8 @@ import { useCreateContractDraftStore } from "@/features/create-contract/stores/u
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
+import type { ManualDeedEntryData } from "@/features/shared/types/manual-deed-entry";
 
 export function useSubmitContractStep1() {
   const t = useTranslations("createContract.deed");
@@ -34,6 +36,7 @@ export function useSubmitContractStep1() {
       trusteeship?: File;
       isMultipleTrusteeshipDeedCopy?: boolean;
       guardiansPoa?: File;
+      manualDeedEntry?: ManualDeedEntryData;
     },
   ): Promise<boolean> {
     if (isSubmitting) {
@@ -45,6 +48,9 @@ export function useSubmitContractStep1() {
       return false;
     }
 
+    const hasManualEntry = Boolean(
+      files.manualDeedEntry && isManualDeedEntryComplete(files.manualDeedEntry),
+    );
     const hasNewFile = Boolean(
       files.instrument ||
         files.front ||
@@ -53,7 +59,8 @@ export function useSubmitContractStep1() {
         files.heirsPoa ||
         files.endowmentCert ||
         files.trusteeship ||
-        files.guardiansPoa,
+        files.guardiansPoa ||
+        hasManualEntry,
     );
     const isLeaseRenewal = deedTypeIsLeaseRenewal(selectedDeedType);
 
@@ -89,6 +96,7 @@ export function useSubmitContractStep1() {
         copyOfTheTrusteeshipDeed: files.trusteeship,
         isMultipleTrusteeshipDeedCopy: files.isMultipleTrusteeshipDeedCopy,
         copyOfGuardiansPowerOfAttorneyForAgent: files.guardiansPoa,
+        manualDeedEntry: hasManualEntry ? files.manualDeedEntry : undefined,
       });
 
       if (!result.ok) {

@@ -1023,6 +1023,26 @@
       },
       "waqf": {
         "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
+      },
+      "manualEntry": {
+        "separator": "أو - إذا كنت تفضل عدم رفع صورة",
+        "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
+        "instrumentNumber": {
+          "label": "رقم الصك",
+          "placeholder": "XXXXXXXXXXXX",
+          "hint": "رقم الصك يتكون من 12 رقمًا"
+        },
+        "instrumentDate": {
+          "label": "تاريخ الصك",
+          "hijri": "هجري",
+          "gregorian": "ميلادي",
+          "day": "اليوم",
+          "month": "الشهر",
+          "year": "السنة",
+          "dayPlaceholder": "اليوم",
+          "monthPlaceholder": "الشهر",
+          "yearPlaceholder": "السنة"
+        }
       }
     },
     "address": {
@@ -1283,6 +1303,9 @@
       "placeholder": "أكتب هنا .."
     },
     "unitCardTitle": "المعلومات الأساسية",
+    "addUnit": "إضافة وحدة",
+    "unitsCount": "عدد الوحدات",
+    "unitListTitle": "الوحدة",
     "additionalInfo": {
       "toggle": "هل ترغب بإضافة معلومات إضافية؟",
       "writeHerePlaceholder": "أكتب هنا ..."
@@ -1530,6 +1553,26 @@
       },
       "waqf": {
         "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
+      },
+      "manualEntry": {
+        "separator": "أو - إذا كنت تفضل عدم رفع صورة",
+        "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
+        "instrumentNumber": {
+          "label": "رقم الصك",
+          "placeholder": "XXXXXXXXXXXX",
+          "hint": "رقم الصك يتكون من 12 رقمًا"
+        },
+        "instrumentDate": {
+          "label": "تاريخ الصك",
+          "hijri": "هجري",
+          "gregorian": "ميلادي",
+          "day": "اليوم",
+          "month": "الشهر",
+          "year": "السنة",
+          "dayPlaceholder": "اليوم",
+          "monthPlaceholder": "الشهر",
+          "yearPlaceholder": "السنة"
+        }
       }
     },
     "owner": {
@@ -1768,6 +1811,9 @@
           "placeholder": "أكتب هنا .."
         },
         "unitCardTitle": "المعلومات الأساسية",
+        "addUnit": "إضافة وحدة",
+        "unitsCount": "عدد الوحدات",
+        "unitListTitle": "الوحدة",
         "additionalInfo": {
           "toggle": "هل ترغب بإضافة معلومات إضافية؟",
           "writeHerePlaceholder": "أكتب هنا ..."
@@ -1962,6 +2008,9 @@
         "servicesTotal": "إجمالي الخدمات :",
         "docFee": "رسوم التوثيق :",
         "total": "الاجمالي :",
+        "priceBeforeCoupon": "الإجمالي قبل الخصم :",
+        "discount": "قيمة الخصم :",
+        "priceAfterCoupon": "الإجمالي بعد الخصم :",
         "currency": "ر.س",
         "ejarLogoAlt": "إيجار"
       },
@@ -1988,7 +2037,11 @@
         "add": "اضغط للإضافة",
         "placeholder": "أدخل كود الخصم",
         "apply": "تطبيق",
-        "clear": "مسح"
+        "applying": "جاري التطبيق...",
+        "clear": "مسح",
+        "applyError": "تعذر تطبيق كود الخصم. تحقق من الكود وحاول مرة أخرى.",
+        "alreadyApplied": "تم تطبيق كود خصم بالفعل على هذا العقد.",
+        "missingContractSession": "جلسة العقد غير متوفرة. يرجى إعادة بدء إنشاء العقد."
       },
       "disclaimer": {
         "prefix": "بالنقر فوق 'الدفع وتوثيق العقد'، فإنك توافق على",

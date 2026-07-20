@@ -1,5 +1,7 @@
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
+import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
+
 export type PaymentBreakdown = {
   ejarFees: number;
   contractPeriodPrice: number;
@@ -28,13 +30,13 @@ export const PAYMENT_BREAKDOWN: Record<ContractTypeId, PaymentBreakdown> = {
 export type PaymentDataState = {
   savePropertyData: boolean;
   propertyName: string;
-  discountCode: string;
+  appliedCoupon: AppliedContractCoupon | null;
 };
 
 export const EMPTY_PAYMENT_DATA: PaymentDataState = {
   savePropertyData: false,
   propertyName: "",
-  discountCode: "",
+  appliedCoupon: null,
 };
 
 export function formatPaymentAmount(amount: number) {

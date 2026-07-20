@@ -27,7 +27,6 @@ import { TENANT_STEP_PHASE_COUNT } from "@/features/create-contract/types/rented
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
-import { toPropertyContractType } from "@/features/create-contract/types/contract-type";
 
 type CreateContractTenantStepProps = {
   labels: CreateContractLabels["tenant"];
@@ -47,8 +46,8 @@ export default function CreateContractTenantStep({
     currentPhaseIndex,
     tenantData,
     setTenantData,
-    rentedUnitData,
-    setRentedUnitData,
+    rentedUnits,
+    setRentedUnits,
     leaseRenewalAddNotes,
     leaseRenewalNotes,
     setLeaseRenewalAddNotes,
@@ -65,7 +64,6 @@ export default function CreateContractTenantStep({
   const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
-  const apiContractType = toPropertyContractType(contractType);
   const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
 
   const phase = labels.phases[currentPhaseIndex];
@@ -133,8 +131,7 @@ export default function CreateContractTenantStep({
 
     if (isRentedUnitPhase) {
       const submitted = await submitStep5({
-        contractType: apiContractType,
-        rentedUnitData,
+        rentedUnits,
       });
 
       if (!submitted) {
@@ -262,8 +259,8 @@ export default function CreateContractTenantStep({
         {isRentedUnitPhase && !isLeaseRenewal ? (
           <CreateContractRentedUnitDataPhase
             labels={labels.rentedUnit}
-            value={rentedUnitData}
-            onChange={setRentedUnitData}
+            units={rentedUnits}
+            onChange={setRentedUnits}
           />
         ) : null}
       </div>

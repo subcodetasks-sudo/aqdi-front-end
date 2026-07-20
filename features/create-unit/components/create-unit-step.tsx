@@ -1,10 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
-
-import CreateUnitDataForm from "@/features/create-unit/components/create-unit-data-form";
-import CreateUnitStepNavigation from "@/features/create-unit/components/create-unit-step-navigation";
-import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
 import { useSubmitUnit } from "@/features/create-unit/hooks/use-submit-unit";
 import {
   useUnitTypeOptions,
@@ -13,6 +8,11 @@ import {
 import { useCreateUnitStep } from "@/features/create-unit/hooks/use-create-unit-step";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
+import CreateUnitStepNavigation from "@/features/create-unit/components/create-unit-step-navigation";
+import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
+import UnitDataFormFields from "@/features/shared/components/unit-data-form-fields";
+import UnitsDataFormList from "@/features/shared/components/unit-form/units-data-form-list";
+import { toast } from "sonner";
 
 type CreateUnitStepProps = {
   labels: CreateUnitLabels;
@@ -31,16 +31,16 @@ export default function CreateUnitStep({
   onBack,
   onComplete,
 }: CreateUnitStepProps) {
-  const { unitData, setUnitData, canContinue } = useCreateUnitStep();
+  const { units, setUnits, canContinue } = useCreateUnitStep();
   const contractType = useCreateUnitDraftStore((state) => state.contractType);
   const setContractType = useCreateUnitDraftStore((state) => state.setContractType);
   const { isSubmitting, submitUnit } = useSubmitUnit(propertyId, unitId);
   const unitTypesQuery = useUnitTypeOptions(contractType);
   const unitUsageQuery = useUnitUsageOptions(contractType);
 
-  const isLoadingOptions =
-    unitTypesQuery.isLoading || unitUsageQuery.isLoading;
+  const isLoadingOptions = unitTypesQuery.isLoading || unitUsageQuery.isLoading;
   const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
+  const isEditMode = unitId !== null;
 
   async function handleContinue() {
     if (!canContinue || isSubmitting || isLoadingOptions || optionsError) {
@@ -79,17 +79,30 @@ export default function CreateUnitStep({
             <div className="h-14 animate-pulse rounded-full bg-brand-background" />
           </div>
         ) : (
-          <CreateUnitDataForm
-            labels={labels}
-            contractType={contractType}
-            contractTypeLocked={contractTypeLocked}
-            onContractTypeChange={
-              contractTypeLocked ? undefined : setContractType
+          <UnitsDataFormList
+            addUnitLabel={labels.addUnit}
+            unitsCountLabel={labels.unitsCount}
+            unitSectionTitle={
+              units.length > 1
+                ? (index) => `${labels.unitListTitle} ${index + 1}`
+                : undefined
             }
-            unitTypeOptions={unitTypesQuery.data ?? []}
-            unitUsageOptions={unitUsageQuery.data ?? []}
-            value={unitData}
-            onChange={setUnitData}
+            units={units}
+            onUnitsChange={setUnits}
+            allowAddUnit={!isEditMode}
+            renderUnitForm={(unit, _index, onUnitChange) => (
+              <UnitDataFormFields
+                labels={labels}
+                contractType={contractType}
+                onContractTypeChange={
+                  contractTypeLocked ? undefined : setContractType
+                }
+                unitTypeOptions={unitTypesQuery.data ?? []}
+                unitUsageOptions={unitUsageQuery.data ?? []}
+                value={unit}
+                onChange={onUnitChange}
+              />
+            )}
           />
         )}
       </div>

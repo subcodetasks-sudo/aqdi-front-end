@@ -5,14 +5,19 @@ import { toast } from "sonner";
 
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyDeedTypeSelect from "@/features/create-property/components/create-property-deed-type-select";
+import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
+import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
 import { Switch } from "@/components/ui/switch";
 import { useCreatePropertyDeedStep } from "@/features/create-property/hooks/use-create-property-deed-step";
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
+import { propertyDeedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
+import type { ReactNode } from "react";
 
 type CreatePropertyDeedStepProps = {
   labels: CreatePropertyLabels["deed"];
@@ -47,6 +52,10 @@ export default function CreatePropertyDeedStep({
     setIsMultipleTrusteeshipDeedCopy,
     deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
+    useManualDeedEntry,
+    setUseManualDeedEntry,
+    manualDeedEntry,
+    setManualDeedEntry,
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,
@@ -61,6 +70,12 @@ export default function CreatePropertyDeedStep({
     canContinue,
   } = useCreatePropertyDeedStep();
   const deedTypePopup = useInstrumentTypeDeedPopup("realestate");
+  const supportsManualEntry = propertyDeedTypeSupportsManualEntry(selectedDeedType);
+  const hasExistingInstrument =
+    Boolean(existingDeedImageUrl) ||
+    Boolean(existingDeedFrontImageUrl) ||
+    Boolean(existingDeedBackImageUrl);
+  const allowManualEntry = supportsManualEntry && !hasExistingInstrument;
 
   function handleDeedTypeChange(value: PropertyDeedTypeId | "") {
     setSelectedDeedType(value);
@@ -81,6 +96,62 @@ export default function CreatePropertyDeedStep({
     onComplete();
   }
 
+  function renderInstrumentEntry(upload: ReactNode) {
+    if (!selectedDeedType || !supportsManualEntry) {
+      return null;
+    }
+
+    if (!allowManualEntry) {
+      return upload;
+    }
+
+    return (
+      <DeedInstrumentEntrySection
+        labels={labels.manualEntry}
+        useManualDeedEntry={useManualDeedEntry}
+        onUseManualDeedEntryChange={setUseManualDeedEntry}
+        manualDeedEntry={manualDeedEntry}
+        onManualDeedEntryChange={setManualDeedEntry}
+        FormSelect={CreatePropertyFormSelect}
+        FieldLabel={CreatePropertyFieldLabel}
+        upload={upload}
+      />
+    );
+  }
+
+  function renderFrontBackUpload() {
+    return (
+      <div className="space-y-6">
+        <CreatePropertyDeedImageUpload
+          labels={labels.deedImage}
+          fieldLabel={labels.deedImage.frontLabel}
+          value={deedFrontFiles}
+          onChange={setDeedFrontFiles}
+          existingFileUrl={existingDeedFrontImageUrl}
+        />
+
+        <CreatePropertyDeedImageUpload
+          labels={labels.deedImage}
+          fieldLabel={labels.deedImage.backLabel}
+          value={deedBackFiles}
+          onChange={setDeedBackFiles}
+          existingFileUrl={existingDeedBackImageUrl}
+        />
+      </div>
+    );
+  }
+
+  function renderSingleUpload() {
+    return (
+      <CreatePropertyDeedImageUpload
+        labels={labels.deedImage}
+        value={deedFiles}
+        onChange={setDeedFiles}
+        existingFileUrl={existingDeedImageUrl}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
@@ -98,30 +169,11 @@ export default function CreatePropertyDeedStep({
 
           {selectedDeedType && needsFrontBack ? (
             <div className="space-y-6">
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.frontLabel}
-                value={deedFrontFiles}
-                onChange={setDeedFrontFiles}
-                existingFileUrl={existingDeedFrontImageUrl}
-              />
-
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.backLabel}
-                value={deedBackFiles}
-                onChange={setDeedBackFiles}
-                existingFileUrl={existingDeedBackImageUrl}
-              />
+              {renderInstrumentEntry(renderFrontBackUpload())}
             </div>
           ) : selectedDeedType && isDeceasedOwner ? (
             <div className="space-y-6">
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                value={deedFiles}
-                onChange={setDeedFiles}
-                existingFileUrl={existingDeedImageUrl}
-              />
+              {renderInstrumentEntry(renderSingleUpload())}
 
               <CreatePropertyDeedImageUpload
                 labels={labels.deedImage}
@@ -141,12 +193,7 @@ export default function CreatePropertyDeedStep({
             </div>
           ) : selectedDeedType && isWaqfOwner ? (
             <div className="space-y-6">
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                value={deedFiles}
-                onChange={setDeedFiles}
-                existingFileUrl={existingDeedImageUrl}
-              />
+              {renderInstrumentEntry(renderSingleUpload())}
 
               <CreatePropertyDeedImageUpload
                 labels={labels.deedImage}
@@ -187,12 +234,7 @@ export default function CreatePropertyDeedStep({
               ) : null}
             </div>
           ) : selectedDeedType ? (
-            <CreatePropertyDeedImageUpload
-              labels={labels.deedImage}
-              value={deedFiles}
-              onChange={setDeedFiles}
-              existingFileUrl={existingDeedImageUrl}
-            />
+            renderInstrumentEntry(renderSingleUpload())
           ) : null}
         </div>
       </div>

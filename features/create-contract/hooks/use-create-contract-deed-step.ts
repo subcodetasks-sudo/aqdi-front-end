@@ -12,6 +12,8 @@ import {
 } from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
+import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
+import { deedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
 
 export function useCreateContractDeedStep() {
   const deed = useCreateContractDraftStore((state) => state.deed);
@@ -67,6 +69,12 @@ export function useCreateContractDeedStep() {
   const setNationalAddressManual = useCreateContractDraftStore(
     (state) => state.setNationalAddressManual,
   );
+  const setUseManualDeedEntry = useCreateContractDraftStore(
+    (state) => state.setUseManualDeedEntry,
+  );
+  const setManualDeedEntry = useCreateContractDraftStore(
+    (state) => state.setManualDeedEntry,
+  );
   const setMapLocation = useCreateContractDraftStore((state) => state.setMapLocation);
 
   const existingInstrumentImageUrl = resolveContractAssetUrl(
@@ -120,21 +128,34 @@ export function useCreateContractDeedStep() {
   const hasGuardiansPoaImage =
     deed.deedGuardiansPoaFiles.length > 0 || existingGuardiansPoaImageUrl !== null;
 
+  const hasManualInstrumentEntry =
+    deed.useManualDeedEntry &&
+    deedTypeSupportsManualEntry(deed.selectedDeedType) &&
+    isManualDeedEntryComplete(deed.manualDeedEntry);
+
   const isDeedComplete =
     isInstrumentTypeLocked ||
     isDeedAlreadySubmitted ||
     (deed.selectedDeedType !== "" &&
       (isLeaseRenewal ||
-        (needsFrontBack
-          ? hasFrontImage && hasBackImage
-          : isDeceasedOwner
-            ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+        (hasManualInstrumentEntry
+          ? isDeceasedOwner
+            ? hasInheritanceImage && hasHeirsPoaImage
             : isWaqfOwner
-              ? hasSingleImage &&
-                hasEndowmentCertImage &&
+              ? hasEndowmentCertImage &&
                 hasTrusteeshipImage &&
                 (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-              : hasSingleImage)));
+              : true
+          : needsFrontBack
+            ? hasFrontImage && hasBackImage
+            : isDeceasedOwner
+              ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+              : isWaqfOwner
+                ? hasSingleImage &&
+                  hasEndowmentCertImage &&
+                  hasTrusteeshipImage &&
+                  (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
+                : hasSingleImage)));
 
   const showNationalAddress = isDeedComplete && !isLeaseRenewal;
 
@@ -176,6 +197,10 @@ export function useCreateContractDeedStep() {
     setIsMultipleTrusteeshipDeedCopy,
     deedGuardiansPoaFiles: deed.deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
+    useManualDeedEntry: deed.useManualDeedEntry,
+    setUseManualDeedEntry,
+    manualDeedEntry: deed.manualDeedEntry,
+    setManualDeedEntry,
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,

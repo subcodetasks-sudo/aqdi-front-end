@@ -74,6 +74,10 @@ export function useSubmitPropertyStep1() {
   const existingGuardiansPoaImageUrl = useCreatePropertyDraftStore(
     (state) => state.existingGuardiansPoaImageUrl,
   );
+  const useManualDeedEntry = useCreatePropertyDraftStore(
+    (state) => state.useManualDeedEntry,
+  );
+  const manualDeedEntry = useCreatePropertyDraftStore((state) => state.manualDeedEntry);
   const setPropertyId = useCreatePropertyDraftStore((state) => state.setPropertyId);
   const isEditMode = urlPropertyId !== null;
   const editPropertyId = urlPropertyId ?? propertyId;
@@ -90,6 +94,8 @@ export function useSubmitPropertyStep1() {
       deedTrusteeshipFiles,
       deedGuardiansPoaFiles,
       isMultipleTrusteeshipDeedCopy,
+      useManualDeedEntry,
+      manualDeedEntry,
       existingImages: {
         instrument: existingDeedImageUrl,
         front: existingDeedFrontImageUrl,
@@ -132,9 +138,13 @@ export function useSubmitPropertyStep1() {
 
       const payload = {
         instrumentType: selectedDeedType,
-        imageInstrument: needsFrontBack ? undefined : deedFiles[0],
-        imageInstrumentFront: needsFrontBack ? deedFrontFiles[0] : undefined,
-        imageInstrumentBack: needsFrontBack ? deedBackFiles[0] : undefined,
+        imageInstrument:
+          needsFrontBack || useManualDeedEntry ? undefined : deedFiles[0],
+        imageInstrumentFront:
+          needsFrontBack && !useManualDeedEntry ? deedFrontFiles[0] : undefined,
+        imageInstrumentBack:
+          needsFrontBack && !useManualDeedEntry ? deedBackFiles[0] : undefined,
+        manualDeedEntry: useManualDeedEntry ? manualDeedEntry : undefined,
         imageInheritanceCertificate: isDeceasedOwner
           ? deedInheritanceFiles[0]
           : undefined,

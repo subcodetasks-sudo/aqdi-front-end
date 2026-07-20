@@ -12,64 +12,84 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
+import { cn } from "@/lib/utils";
 
 type CreateContractDiscountCodeFieldProps = {
   labels: CreateContractLabels["payment"]["discountCode"];
-  value: string;
-  onChange: (value: string) => void;
+  appliedCoupon: AppliedContractCoupon | null;
+  isApplying: boolean;
+  onApply: (code: string) => Promise<boolean>;
+  onClear: () => void;
 };
 
 export default function CreateContractDiscountCodeField({
   labels,
-  value,
-  onChange,
+  appliedCoupon,
+  isApplying,
+  onApply,
+  onClear,
 }: CreateContractDiscountCodeFieldProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isExpanded, setIsExpanded] = useState(Boolean(value.trim()));
-  const [draft, setDraft] = useState(value);
+  const isLocked = Boolean(appliedCoupon);
+  const [isExpanded, setIsExpanded] = useState(isLocked);
+  const [draft, setDraft] = useState(appliedCoupon?.code ?? "");
 
   useEffect(() => {
-    setDraft(value);
-    if (value.trim()) {
+    if (appliedCoupon) {
+      setDraft(appliedCoupon.code);
       setIsExpanded(true);
     }
-  }, [value]);
+  }, [appliedCoupon]);
 
   useEffect(() => {
-    if (!isExpanded) {
+    if (!isExpanded || isLocked) {
       return;
     }
 
     inputRef.current?.focus();
-  }, [isExpanded]);
+  }, [isExpanded, isLocked]);
 
   function handleExpand() {
+    if (isLocked) {
+      return;
+    }
+
     setIsExpanded(true);
   }
 
-  function handleApply() {
-    onChange(draft.trim());
+  async function handleApply() {
+    if (isLocked || isApplying || !draft.trim()) {
+      return;
+    }
+
+    await onApply(draft.trim());
   }
 
   function handleClear() {
+    if (isLocked) {
+      return;
+    }
+
     setDraft("");
-    onChange("");
+    onClear();
     setIsExpanded(false);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (isLocked || isApplying) {
+      return;
+    }
+
     if (event.key === "Enter") {
       event.preventDefault();
-      handleApply();
+      void handleApply();
     }
 
     if (event.key === "Escape") {
       event.preventDefault();
-      if (!value.trim()) {
-        setDraft("");
-        setIsExpanded(false);
-      }
+      handleClear();
     }
   }
 
@@ -106,29 +126,46 @@ export default function CreateContractDiscountCodeField({
           onKeyDown={handleKeyDown}
           placeholder={labels.placeholder}
           autoComplete="off"
-          className="h-11 flex-1 rounded-xl border-[#e8e8e8] bg-brand-background px-3 text-sm focus-visible:border-brand-secondary focus-visible:ring-brand-secondary/20"
+          disabled={isLocked || isApplying}
+          className="h-11 flex-1 rounded-xl border-[#e8e8e8] bg-brand-background px-3 text-sm focus-visible:border-brand-secondary focus-visible:ring-brand-secondary/20 disabled:cursor-not-allowed disabled:opacity-70"
         />
 
-        <Button
-          type="button"
-          onClick={handleApply}
-          disabled={!draft.trim()}
-          className="h-11 shrink-0 rounded-xl bg-brand px-4 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
-        >
-          {labels.apply}
-        </Button>
+        {!isLocked ? (
+          <Button
+            type="button"
+            onClick={() => void handleApply()}
+            disabled={!draft.trim() || isApplying}
+            className="h-11 shrink-0 rounded-xl bg-brand px-4 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
+          >
+            {isApplying ? labels.applying : labels.apply}
+          </Button>
+        ) : null}
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={handleClear}
-          aria-label={labels.clear}
-          className="size-11 shrink-0 rounded-xl text-[#9a9a9a] hover:bg-brand-background hover:text-brand"
-        >
-          <X className="size-4" aria-hidden="true" />
-        </Button>
+        {!isLocked ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={handleClear}
+            disabled={isApplying}
+            aria-label={labels.clear}
+            className="size-11 shrink-0 rounded-xl text-[#9a9a9a] hover:bg-brand-background hover:text-brand"
+          >
+            <X className="size-4" aria-hidden="true" />
+          </Button>
+        ) : null}
       </div>
+
+      {appliedCoupon ? (
+        <p
+          className={cn(
+            "mt-2 text-sm font-medium text-brand-secondary",
+            "leading-relaxed",
+          )}
+        >
+          {appliedCoupon.message}
+        </p>
+      ) : null}
     </div>
   );
 }

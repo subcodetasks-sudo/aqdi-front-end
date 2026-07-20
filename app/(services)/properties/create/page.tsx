@@ -84,6 +84,26 @@ export default async function CreatePropertyPage({
       waqf: {
         multipleTrusteesLabel: t("deed.waqf.multipleTrusteesLabel"),
       },
+      manualEntry: {
+        separator: t("deed.manualEntry.separator"),
+        toggleLabel: t("deed.manualEntry.toggleLabel"),
+        instrumentNumber: {
+          label: t("deed.manualEntry.instrumentNumber.label"),
+          placeholder: t("deed.manualEntry.instrumentNumber.placeholder"),
+          hint: t("deed.manualEntry.instrumentNumber.hint"),
+        },
+        instrumentDate: {
+          label: t("deed.manualEntry.instrumentDate.label"),
+          hijri: t("deed.manualEntry.instrumentDate.hijri"),
+          gregorian: t("deed.manualEntry.instrumentDate.gregorian"),
+          day: t("deed.manualEntry.instrumentDate.day"),
+          month: t("deed.manualEntry.instrumentDate.month"),
+          year: t("deed.manualEntry.instrumentDate.year"),
+          dayPlaceholder: t("deed.manualEntry.instrumentDate.dayPlaceholder"),
+          monthPlaceholder: t("deed.manualEntry.instrumentDate.monthPlaceholder"),
+          yearPlaceholder: t("deed.manualEntry.instrumentDate.yearPlaceholder"),
+        },
+      },
     },
     address: {
       navigation: {

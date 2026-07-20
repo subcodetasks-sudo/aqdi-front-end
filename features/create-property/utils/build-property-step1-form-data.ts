@@ -4,6 +4,10 @@ import {
   appendManualNationalAddressFields,
   type ManualNationalAddressData,
 } from "@/features/shared/types/manual-national-address";
+import {
+  appendManualDeedEntryFields,
+  type ManualDeedEntryData,
+} from "@/features/shared/types/manual-deed-entry";
 
 export type PropertyStep1FormPayload = {
   propertyId?: number;
@@ -17,6 +21,7 @@ export type PropertyStep1FormPayload = {
   copyOfTheTrusteeshipDeed?: File;
   isMultipleTrusteeshipDeedCopy?: boolean;
   copyOfGuardiansPowerOfAttorneyForAgent?: File;
+  manualDeedEntry?: ManualDeedEntryData;
   addressMethod: PropertyNationalAddressMethodId;
   imageAddress?: File;
   addressUrl?: string;
@@ -84,6 +89,10 @@ export function appendPropertyStep1Fields(
       "copy_of_guardians_power_of_attorney_for_agent",
       payload.copyOfGuardiansPowerOfAttorneyForAgent,
     );
+  }
+
+  if (payload.manualDeedEntry) {
+    appendManualDeedEntryFields(formData, payload.manualDeedEntry);
   }
 
   formData.append("latitude", String(payload.latitude));

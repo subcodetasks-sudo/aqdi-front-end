@@ -93,6 +93,18 @@ export function buildUnitFieldsPayload(unitData: UnitDataState) {
   return payload;
 }
 
+export function buildUnitsCreateApiPayload(
+  propertyId: number,
+  contractType: PropertyContractType,
+  units: UnitDataState[],
+) {
+  return {
+    real_estates_units_id: propertyId,
+    contract_type: contractType,
+    units: units.map((unit) => buildUnitFieldsPayload(unit)),
+  };
+}
+
 export function buildUnitApiPayload(
   propertyId: number,
   contractType: PropertyContractType,

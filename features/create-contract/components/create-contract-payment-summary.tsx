@@ -4,16 +4,19 @@ import CreateContractFinancialBreakdown from "@/features/create-contract/compone
 import { useContractFinanceSummary } from "@/features/create-contract/hooks/use-contract-finance-summary";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
 type CreateContractPaymentSummaryProps = {
   labels: CreateContractLabels["payment"]["summary"];
   contractType: ContractTypeId;
+  appliedCoupon?: AppliedContractCoupon | null;
 };
 
 export default function CreateContractPaymentSummary({
   labels,
   contractType,
+  appliedCoupon = null,
 }: CreateContractPaymentSummaryProps) {
   const contractUuid = useCreateContractDraftStore(
     (state) =>
@@ -29,6 +32,7 @@ export default function CreateContractPaymentSummary({
       contractType={contractType}
       data={data}
       isLoading={isLoading}
+      appliedCoupon={appliedCoupon}
     />
   );
 }

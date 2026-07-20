@@ -20,14 +20,12 @@ type CreateUnitDraftStore = {
   unitId: number | null;
   contractType: PropertyContractType;
   currentStep: CreateUnitStep;
-  unitData: UnitDataState;
+  units: UnitDataState[];
   setCurrentStep: (step: CreateUnitStep) => void;
   goNextStep: () => void;
   goBackStep: () => void;
   setContractType: (contractType: PropertyContractType) => void;
-  setUnitData: (
-    data: UnitDataState | ((current: UnitDataState) => UnitDataState),
-  ) => void;
+  setUnits: (units: UnitDataState[]) => void;
   initializeSession: (
     propertyId: number | null,
     contractType: PropertyContractType,
@@ -54,15 +52,29 @@ function createInitialUnitDraft(
   propertyId: number | null = null,
   contractType: PropertyContractType = "housing",
   unitId: number | null = null,
-  unitData: UnitDataState = { ...EMPTY_UNIT_DATA },
+  units: UnitDataState[] = [{ ...EMPTY_UNIT_DATA }],
 ) {
   return {
     propertyId,
     unitId,
     contractType,
     currentStep: "form" as CreateUnitStep,
-    unitData,
+    units,
   };
+}
+
+function normalizePersistedUnits(
+  state: Partial<CreateUnitDraftStore> & { unitData?: UnitDataState },
+): UnitDataState[] {
+  if (state.units?.length) {
+    return state.units.map((unit) => normalizePersistedUnitData(unit));
+  }
+
+  if (state.unitData) {
+    return [normalizePersistedUnitData(state.unitData)];
+  }
+
+  return [{ ...EMPTY_UNIT_DATA }];
 }
 
 export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
@@ -75,16 +87,13 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
       setContractType: (contractType) =>
         set((state) => ({
           contractType,
-          unitData: {
-            ...state.unitData,
+          units: state.units.map((unit) => ({
+            ...unit,
             unitTypeId: "",
             unitUsageId: "",
-          },
+          })),
         })),
-      setUnitData: (data) =>
-        set((state) => ({
-          unitData: typeof data === "function" ? data(state.unitData) : data,
-        })),
+      setUnits: (units) => set({ units }),
       initializeSession: (propertyId, contractType, options = {}) => {
         const state = get();
         const nextUnitId = options.unitId ?? null;
@@ -100,7 +109,7 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
               propertyId,
               contractType,
               nextUnitId,
-              options.unitData ?? EMPTY_UNIT_DATA,
+              options.unitData ? [options.unitData] : [{ ...EMPTY_UNIT_DATA }],
             ),
           );
         }
@@ -118,14 +127,14 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
         unitId: state.unitId,
         contractType: state.contractType,
         currentStep: state.currentStep === "success" ? "form" : state.currentStep,
-        unitData: state.unitData,
+        units: state.units,
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) {
           return;
         }
 
-        state.unitData = normalizePersistedUnitData(state.unitData);
+        state.units = normalizePersistedUnits(state);
 
         if (state.currentStep === "success") {
           state.currentStep = "form";

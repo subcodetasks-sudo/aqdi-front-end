@@ -2,6 +2,8 @@
 
 import type { ContractInstrumentType } from "@/features/create-contract/types/instrument-type";
 import type { ContractStep1ApiData } from "@/features/create-contract/types/contract-step1-api";
+import { appendManualDeedEntryFields } from "@/features/shared/types/manual-deed-entry";
+import type { ManualDeedEntryData } from "@/features/shared/types/manual-deed-entry";
 import { apiFormDataRequest } from "@/lib/api/api-request";
 
 type ContractStep1ApiResponse = {
@@ -23,6 +25,7 @@ export type SubmitContractStep1Payload = {
   copyOfTheTrusteeshipDeed?: File;
   isMultipleTrusteeshipDeedCopy?: boolean;
   copyOfGuardiansPowerOfAttorneyForAgent?: File;
+  manualDeedEntry?: ManualDeedEntryData;
 };
 
 export async function submitContractStep1(payload: SubmitContractStep1Payload) {
@@ -82,6 +85,10 @@ export async function submitContractStep1(payload: SubmitContractStep1Payload) {
       "copy_of_guardians_power_of_attorney_for_agent",
       payload.copyOfGuardiansPowerOfAttorneyForAgent,
     );
+  }
+
+  if (payload.manualDeedEntry) {
+    appendManualDeedEntryFields(formData, payload.manualDeedEntry);
   }
 
   const response = await apiFormDataRequest<ContractStep1ApiResponse>(

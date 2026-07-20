@@ -83,6 +83,16 @@ export function useCreatePropertyDeedStep() {
   const setDeedGuardiansPoaFiles = useCreatePropertyDraftStore(
     (state) => state.setDeedGuardiansPoaFiles,
   );
+  const useManualDeedEntry = useCreatePropertyDraftStore(
+    (state) => state.useManualDeedEntry,
+  );
+  const manualDeedEntry = useCreatePropertyDraftStore((state) => state.manualDeedEntry);
+  const setUseManualDeedEntry = useCreatePropertyDraftStore(
+    (state) => state.setUseManualDeedEntry,
+  );
+  const setManualDeedEntry = useCreatePropertyDraftStore(
+    (state) => state.setManualDeedEntry,
+  );
 
   const needsFrontBack = propertyDeedTypeNeedsFrontBack(selectedDeedType);
   const isDeceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
@@ -99,6 +109,8 @@ export function useCreatePropertyDeedStep() {
     deedTrusteeshipFiles,
     deedGuardiansPoaFiles,
     isMultipleTrusteeshipDeedCopy,
+    useManualDeedEntry,
+    manualDeedEntry,
     existingImages: {
       instrument: existingDeedImageUrl,
       front: existingDeedFrontImageUrl,
@@ -132,6 +144,10 @@ export function useCreatePropertyDeedStep() {
     setIsMultipleTrusteeshipDeedCopy,
     deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
+    useManualDeedEntry,
+    setUseManualDeedEntry,
+    manualDeedEntry,
+    setManualDeedEntry,
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,

@@ -7,11 +7,9 @@ import { toast } from "sonner";
 import { submitContractStep5 } from "@/features/create-contract/services/submit-contract-step5";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { RentedUnitDataState } from "@/features/create-contract/types/rented-unit-step";
-import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 
 type SubmitContractStep5Input = {
-  contractType: PropertyContractType;
-  rentedUnitData: RentedUnitDataState;
+  rentedUnits: RentedUnitDataState[];
 };
 
 export function useSubmitContractStep5() {
@@ -24,10 +22,7 @@ export function useSubmitContractStep5() {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function submitStep5({
-    contractType,
-    rentedUnitData,
-  }: SubmitContractStep5Input): Promise<boolean> {
+  async function submitStep5({ rentedUnits }: SubmitContractStep5Input): Promise<boolean> {
     if (isSubmitting) {
       return false;
     }
@@ -51,8 +46,7 @@ export function useSubmitContractStep5() {
     try {
       const result = await submitContractStep5({
         contractId,
-        contractType,
-        rentedUnitData,
+        rentedUnits,
       });
 
       if (!result.ok) {

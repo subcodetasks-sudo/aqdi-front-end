@@ -217,6 +217,26 @@ export default async function CreateContractPage({
       waqf: {
         multipleTrusteesLabel: t("deed.waqf.multipleTrusteesLabel"),
       },
+      manualEntry: {
+        separator: t("deed.manualEntry.separator"),
+        toggleLabel: t("deed.manualEntry.toggleLabel"),
+        instrumentNumber: {
+          label: t("deed.manualEntry.instrumentNumber.label"),
+          placeholder: t("deed.manualEntry.instrumentNumber.placeholder"),
+          hint: t("deed.manualEntry.instrumentNumber.hint"),
+        },
+        instrumentDate: {
+          label: t("deed.manualEntry.instrumentDate.label"),
+          hijri: t("deed.manualEntry.instrumentDate.hijri"),
+          gregorian: t("deed.manualEntry.instrumentDate.gregorian"),
+          day: t("deed.manualEntry.instrumentDate.day"),
+          month: t("deed.manualEntry.instrumentDate.month"),
+          year: t("deed.manualEntry.instrumentDate.year"),
+          dayPlaceholder: t("deed.manualEntry.instrumentDate.dayPlaceholder"),
+          monthPlaceholder: t("deed.manualEntry.instrumentDate.monthPlaceholder"),
+          yearPlaceholder: t("deed.manualEntry.instrumentDate.yearPlaceholder"),
+        },
+      },
     },
     owner: {
       cancelRequest: t("owner.cancelRequest"),
@@ -427,6 +447,9 @@ export default async function CreateContractPage({
           placeholder: t("tenant.rentedUnit.unitNumber.placeholder"),
         },
         unitCardTitle: t("tenant.rentedUnit.unitCardTitle"),
+        addUnit: t("tenant.rentedUnit.addUnit"),
+        unitsCount: t("tenant.rentedUnit.unitsCount"),
+        unitListTitle: t("tenant.rentedUnit.unitListTitle"),
         additionalInfo: {
           toggle: t("tenant.rentedUnit.additionalInfo.toggle"),
           writeHerePlaceholder: t(
@@ -633,6 +656,9 @@ export default async function CreateContractPage({
         servicesTotal: t("payment.summary.servicesTotal"),
         docFee: t("payment.summary.docFee"),
         total: t("payment.summary.total"),
+        priceBeforeCoupon: t("payment.summary.priceBeforeCoupon"),
+        discount: t("payment.summary.discount"),
+        priceAfterCoupon: t("payment.summary.priceAfterCoupon"),
         currency: t("payment.summary.currency"),
         ejarLogoAlt: t("payment.summary.ejarLogoAlt"),
       },
@@ -661,7 +687,11 @@ export default async function CreateContractPage({
         add: t("payment.discountCode.add"),
         placeholder: t("payment.discountCode.placeholder"),
         apply: t("payment.discountCode.apply"),
+        applying: t("payment.discountCode.applying"),
         clear: t("payment.discountCode.clear"),
+        applyError: t("payment.discountCode.applyError"),
+        alreadyApplied: t("payment.discountCode.alreadyApplied"),
+        missingContractSession: t("payment.discountCode.missingContractSession"),
       },
       disclaimer: {
         prefix: t("payment.disclaimer.prefix"),

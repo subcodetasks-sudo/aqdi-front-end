@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
+import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
+import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { Switch } from "@/components/ui/switch";
@@ -17,8 +19,11 @@ import { type DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
+import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
+import { deedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
 
 type CreateContractDeedStepProps = {
   labels: CreateContractLabels["deed"];
@@ -78,12 +83,17 @@ export default function CreateContractDeedStep({
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
     isLeaseRenewal,
+    useManualDeedEntry,
+    setUseManualDeedEntry,
+    manualDeedEntry,
+    setManualDeedEntry,
   } = useCreateContractDeedStep();
   const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
   const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
   const deedTypePopup = useInstrumentTypeDeedPopup("contract");
+  const supportsManualEntry = deedTypeSupportsManualEntry(selectedDeedType);
 
   const deedPhase = labels.phases[0];
   const addressPhase = labels.phases[1];
@@ -122,6 +132,11 @@ export default function CreateContractDeedStep({
       return;
     }
 
+    const hasManualEntry =
+      useManualDeedEntry &&
+      supportsManualEntry &&
+      isManualDeedEntryComplete(manualDeedEntry);
+
     const hasNewFile = needsFrontBack
       ? deedFrontFiles.length > 0 || deedBackFiles.length > 0
       : isDeceasedOwner
@@ -135,20 +150,21 @@ export default function CreateContractDeedStep({
             deedGuardiansPoaFiles.length > 0
           : deedFiles.length > 0;
 
-    if (selectedDeedType && hasNewFile) {
+    const shouldSubmitDeed = hasManualEntry || hasNewFile;
+
+    if (selectedDeedType && shouldSubmitDeed) {
       const submitted = await submitStep1(
         selectedDeedType,
-        needsFrontBack
-          ? { front: deedFrontFiles[0], back: deedBackFiles[0] }
-          : isDeceasedOwner
+        hasManualEntry
+          ? isDeceasedOwner
             ? {
-                instrument: deedFiles[0],
+                manualDeedEntry,
                 inheritance: deedInheritanceFiles[0],
                 heirsPoa: deedHeirsPoaFiles[0],
               }
             : isWaqfOwner
               ? {
-                  instrument: deedFiles[0],
+                  manualDeedEntry,
                   endowmentCert: deedEndowmentCertFiles[0],
                   trusteeship: deedTrusteeshipFiles[0],
                   isMultipleTrusteeshipDeedCopy,
@@ -156,7 +172,26 @@ export default function CreateContractDeedStep({
                     ? deedGuardiansPoaFiles[0]
                     : undefined,
                 }
-              : { instrument: deedFiles[0] },
+              : { manualDeedEntry }
+          : needsFrontBack
+            ? { front: deedFrontFiles[0], back: deedBackFiles[0] }
+            : isDeceasedOwner
+              ? {
+                  instrument: deedFiles[0],
+                  inheritance: deedInheritanceFiles[0],
+                  heirsPoa: deedHeirsPoaFiles[0],
+                }
+              : isWaqfOwner
+                ? {
+                    instrument: deedFiles[0],
+                    endowmentCert: deedEndowmentCertFiles[0],
+                    trusteeship: deedTrusteeshipFiles[0],
+                    isMultipleTrusteeshipDeedCopy,
+                    guardiansPoa: isMultipleTrusteeshipDeedCopy
+                      ? deedGuardiansPoaFiles[0]
+                      : undefined,
+                  }
+                : { instrument: deedFiles[0] },
       );
 
       if (!submitted) {
@@ -185,6 +220,38 @@ export default function CreateContractDeedStep({
     onComplete();
   }
 
+  const showDeedFields =
+    Boolean(selectedDeedType || existingInstrumentImageUrl) && !isLeaseRenewal;
+  const hasExistingInstrument =
+    Boolean(existingInstrumentImageUrl) ||
+    Boolean(existingInstrumentFrontImageUrl) ||
+    Boolean(existingInstrumentBackImageUrl);
+  const allowManualEntry =
+    supportsManualEntry && !isInstrumentTypeLocked && !(isDeedAlreadySubmitted && hasExistingInstrument);
+
+  function renderInstrumentEntry(upload: React.ReactNode) {
+    if (!showDeedFields) {
+      return null;
+    }
+
+    if (!allowManualEntry) {
+      return upload;
+    }
+
+    return (
+      <DeedInstrumentEntrySection
+        labels={labels.manualEntry}
+        useManualDeedEntry={useManualDeedEntry}
+        onUseManualDeedEntryChange={setUseManualDeedEntry}
+        manualDeedEntry={manualDeedEntry}
+        onManualDeedEntryChange={setManualDeedEntry}
+        FormSelect={CreateContractFormSelect}
+        FieldLabel={CreateContractFieldLabel}
+        upload={upload}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
@@ -202,39 +269,41 @@ export default function CreateContractDeedStep({
             locked={isInstrumentTypeLocked}
           />
 
-          {(selectedDeedType || existingInstrumentImageUrl) &&
-          !isLeaseRenewal &&
-          needsFrontBack ? (
+          {showDeedFields && needsFrontBack ? (
             <div className="space-y-6">
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.frontLabel}
-                single
-                value={deedFrontFiles}
-                onChange={setDeedFrontFiles}
-                existingImageUrl={existingInstrumentFrontImageUrl}
-              />
+              {renderInstrumentEntry(
+                <div className="space-y-6">
+                  <CreateContractDeedImageUpload
+                    labels={labels.deedImage}
+                    fieldLabel={labels.deedImage.frontLabel}
+                    single
+                    value={deedFrontFiles}
+                    onChange={setDeedFrontFiles}
+                    existingImageUrl={existingInstrumentFrontImageUrl}
+                  />
 
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.backLabel}
-                single
-                value={deedBackFiles}
-                onChange={setDeedBackFiles}
-                existingImageUrl={existingInstrumentBackImageUrl}
-              />
+                  <CreateContractDeedImageUpload
+                    labels={labels.deedImage}
+                    fieldLabel={labels.deedImage.backLabel}
+                    single
+                    value={deedBackFiles}
+                    onChange={setDeedBackFiles}
+                    existingImageUrl={existingInstrumentBackImageUrl}
+                  />
+                </div>,
+              )}
             </div>
-          ) : (selectedDeedType || existingInstrumentImageUrl) &&
-            !isLeaseRenewal &&
-            isDeceasedOwner ? (
+          ) : showDeedFields && isDeceasedOwner ? (
             <div className="space-y-6">
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                single
-                value={deedFiles}
-                onChange={setDeedFiles}
-                existingImageUrl={existingInstrumentImageUrl}
-              />
+              {renderInstrumentEntry(
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  single
+                  value={deedFiles}
+                  onChange={setDeedFiles}
+                  existingImageUrl={existingInstrumentImageUrl}
+                />,
+              )}
 
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
@@ -254,17 +323,17 @@ export default function CreateContractDeedStep({
                 existingImageUrl={existingHeirsPoaImageUrl}
               />
             </div>
-          ) : (selectedDeedType || existingInstrumentImageUrl) &&
-            !isLeaseRenewal &&
-            isWaqfOwner ? (
+          ) : showDeedFields && isWaqfOwner ? (
             <div className="space-y-6">
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                single
-                value={deedFiles}
-                onChange={setDeedFiles}
-                existingImageUrl={existingInstrumentImageUrl}
-              />
+              {renderInstrumentEntry(
+                <CreateContractDeedImageUpload
+                  labels={labels.deedImage}
+                  single
+                  value={deedFiles}
+                  onChange={setDeedFiles}
+                  existingImageUrl={existingInstrumentImageUrl}
+                />,
+              )}
 
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
@@ -307,13 +376,15 @@ export default function CreateContractDeedStep({
                 />
               ) : null}
             </div>
-          ) : (selectedDeedType || existingInstrumentImageUrl) && !isLeaseRenewal ? (
-            <CreateContractDeedImageUpload
-              labels={labels.deedImage}
-              value={deedFiles}
-              onChange={setDeedFiles}
-              existingImageUrl={existingInstrumentImageUrl}
-            />
+          ) : showDeedFields ? (
+            renderInstrumentEntry(
+              <CreateContractDeedImageUpload
+                labels={labels.deedImage}
+                value={deedFiles}
+                onChange={setDeedFiles}
+                existingImageUrl={existingInstrumentImageUrl}
+              />,
+            )
           ) : null}
 
           {showNationalAddress ? (

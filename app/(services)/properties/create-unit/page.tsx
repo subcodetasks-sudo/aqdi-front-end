@@ -95,6 +95,9 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       placeholder: t("unitNumber.placeholder"),
     },
     unitCardTitle: t("unitCardTitle"),
+    addUnit: t("addUnit"),
+    unitsCount: t("unitsCount"),
+    unitListTitle: t("unitListTitle"),
     additionalInfo: {
       toggle: t("additionalInfo.toggle"),
       writeHerePlaceholder: t("additionalInfo.writeHerePlaceholder"),

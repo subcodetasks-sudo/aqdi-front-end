@@ -1,6 +1,7 @@
 import type { CreatePropertyStepperStep } from "@/features/create-property/types/create-property-step";
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { PropertyHasAgentOption } from "@/features/create-property/types/owner-step";
+import type { ManualDeedEntryLabels } from "@/features/shared/types/manual-deed-entry-labels";
 export type CreatePropertyLabels = {
   backLabel: string;
   pageTitle: string;
@@ -44,6 +45,7 @@ export type CreatePropertyLabels = {
     waqf: {
       multipleTrusteesLabel: string;
     };
+    manualEntry: ManualDeedEntryLabels;
   };
   address: {
     navigation: {

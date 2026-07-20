@@ -102,6 +102,13 @@ export function isUnitDataComplete(
   return true;
 }
 
+export function areAllUnitsComplete(
+  units: UnitDataState[],
+  options?: { requireMeterRegistration?: boolean },
+) {
+  return units.length > 0 && units.every((unit) => isUnitDataComplete(unit, options));
+}
+
 export function buildCountOptions(max = 20) {
   return Array.from({ length: max + 1 }, (_, index) => {
     const value = String(index);

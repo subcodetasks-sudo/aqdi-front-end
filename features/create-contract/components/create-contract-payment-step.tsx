@@ -13,6 +13,7 @@ import CreateContractPaymentNavigation from "@/features/create-contract/componen
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
+import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
 import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
@@ -34,6 +35,13 @@ export default function CreateContractPaymentStep({
   const tFooter = useTranslations("footer");
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
+  const contractStep1Data = useCreateContractDraftStore(
+    (state) => state.contractStep1Data,
+  );
+  const contractUuid =
+    contractSession?.uuid ?? contractStep1Data?.uuid ?? null;
+  const { appliedCoupon, isApplying, applyCoupon, clearCouponDraft } =
+    useApplyContractCoupon(contractUuid);
   const { submitSaveProperty, isSaving } = useSaveProperty();
   const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
 
@@ -96,6 +104,7 @@ export default function CreateContractPaymentStep({
           <CreateContractPaymentSummary
             labels={labels.summary}
             contractType={contractType}
+            appliedCoupon={appliedCoupon}
           />
 
           <div className="flex items-center justify-between gap-3 rounded-2xl bg-brand-background px-4 py-4">
@@ -115,13 +124,10 @@ export default function CreateContractPaymentStep({
 
           <CreateContractDiscountCodeField
             labels={labels.discountCode}
-            value={paymentData.discountCode}
-            onChange={(discountCode) =>
-              setPaymentData({
-                ...paymentData,
-                discountCode,
-              })
-            }
+            appliedCoupon={appliedCoupon}
+            isApplying={isApplying}
+            onApply={applyCoupon}
+            onClear={clearCouponDraft}
           />
 
           <div className="flex items-start gap-2">

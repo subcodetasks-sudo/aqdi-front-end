@@ -4,6 +4,11 @@ import {
   propertyDeedTypeIsWaqfOwner,
   propertyDeedTypeNeedsFrontBack,
 } from "@/features/create-property/types/deed-type";
+import {
+  isManualDeedEntryComplete,
+  type ManualDeedEntryData,
+} from "@/features/shared/types/manual-deed-entry";
+import { propertyDeedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
 
 export type PropertyDeedExistingImages = {
   instrument: string | null;
@@ -27,11 +32,31 @@ export type PropertyDeedFilesState = {
   deedTrusteeshipFiles: File[];
   deedGuardiansPoaFiles: File[];
   isMultipleTrusteeshipDeedCopy: boolean;
+  useManualDeedEntry: boolean;
+  manualDeedEntry: ManualDeedEntryData;
   existingImages: PropertyDeedExistingImages;
 };
 
 function hasFileOrUrl(files: File[], url: string | null) {
   return files.length > 0 || Boolean(url);
+}
+
+function hasInstrumentData(state: PropertyDeedFilesState) {
+  if (
+    state.useManualDeedEntry &&
+    propertyDeedTypeSupportsManualEntry(state.selectedDeedType)
+  ) {
+    return isManualDeedEntryComplete(state.manualDeedEntry);
+  }
+
+  if (propertyDeedTypeNeedsFrontBack(state.selectedDeedType)) {
+    return (
+      hasFileOrUrl(state.deedFrontFiles, state.existingImages.front) &&
+      hasFileOrUrl(state.deedBackFiles, state.existingImages.back)
+    );
+  }
+
+  return hasFileOrUrl(state.deedFiles, state.existingImages.instrument);
 }
 
 export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
@@ -41,9 +66,6 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
 
   const {
     selectedDeedType,
-    deedFiles,
-    deedFrontFiles,
-    deedBackFiles,
     deedInheritanceFiles,
     deedHeirsPoaFiles,
     deedEndowmentCertFiles,
@@ -53,16 +75,12 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
     existingImages,
   } = state;
 
-  if (propertyDeedTypeNeedsFrontBack(selectedDeedType)) {
-    return (
-      hasFileOrUrl(deedFrontFiles, existingImages.front) &&
-      hasFileOrUrl(deedBackFiles, existingImages.back)
-    );
+  if (!hasInstrumentData(state)) {
+    return false;
   }
 
   if (propertyDeedTypeIsDeceasedOwner(selectedDeedType)) {
     return (
-      hasFileOrUrl(deedFiles, existingImages.instrument) &&
       hasFileOrUrl(deedInheritanceFiles, existingImages.inheritance) &&
       hasFileOrUrl(deedHeirsPoaFiles, existingImages.heirsPoa)
     );
@@ -70,7 +88,6 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
 
   if (propertyDeedTypeIsWaqfOwner(selectedDeedType)) {
     return (
-      hasFileOrUrl(deedFiles, existingImages.instrument) &&
       hasFileOrUrl(deedEndowmentCertFiles, existingImages.endowmentCert) &&
       hasFileOrUrl(deedTrusteeshipFiles, existingImages.trusteeship) &&
       (!isMultipleTrusteeshipDeedCopy ||
@@ -78,5 +95,5 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
     );
   }
 
-  return hasFileOrUrl(deedFiles, existingImages.instrument);
+  return true;
 }

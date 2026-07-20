@@ -19,6 +19,10 @@ import {
   type ManualNationalAddressData,
 } from "@/features/shared/types/manual-national-address";
 import {
+  EMPTY_MANUAL_DEED_ENTRY,
+  type ManualDeedEntryData,
+} from "@/features/shared/types/manual-deed-entry";
+import {
   createEmptyFinanceData,
   normalizeFinanceData,
   type FinanceDataState,
@@ -98,6 +102,8 @@ type DeedDraftState = {
   isMultipleTrusteeshipDeedCopy: boolean;
   deedGuardiansPoaFiles: File[];
   deedGuardiansPoaPersistedFiles: PersistedFile[];
+  useManualDeedEntry: boolean;
+  manualDeedEntry: ManualDeedEntryData;
   nationalAddressMethod: NationalAddressMethodId | "";
   nationalAddressPhotoFiles: File[];
   nationalAddressPhotoPersistedFiles: PersistedFile[];
@@ -117,7 +123,7 @@ type TenantDraftState = {
   currentPhaseIndex: number;
   tenantData: TenantDataState;
   tenantPersistedFiles: PersistedFile[];
-  rentedUnitData: RentedUnitDataState;
+  rentedUnits: RentedUnitDataState[];
   leaseRenewalAddNotes: boolean;
   leaseRenewalNotes: string;
 };
@@ -153,6 +159,8 @@ type CreateContractDraftStore = {
   setDeedTrusteeshipFiles: (files: File[]) => Promise<void>;
   setIsMultipleTrusteeshipDeedCopy: (value: boolean) => void;
   setDeedGuardiansPoaFiles: (files: File[]) => Promise<void>;
+  setUseManualDeedEntry: (value: boolean) => void;
+  setManualDeedEntry: (value: ManualDeedEntryData) => void;
   setNationalAddressMethod: (method: NationalAddressMethodId) => void;
   setNationalAddressPhotoFiles: (files: File[]) => Promise<void>;
   setNationalAddressLinkUrl: (url: string) => void;
@@ -163,7 +171,7 @@ type CreateContractDraftStore = {
   setAgentData: (data: AgentDataState) => void;
   setTenantPhaseIndex: (index: number) => void;
   setTenantData: (data: TenantDataState) => void;
-  setRentedUnitData: (data: RentedUnitDataState) => void;
+  setRentedUnits: (units: RentedUnitDataState[]) => void;
   setLeaseRenewalAddNotes: (value: boolean) => void;
   setLeaseRenewalNotes: (value: string) => void;
   setFinanceData: (
@@ -210,6 +218,8 @@ const INITIAL_DEED: DeedDraftState = {
   isMultipleTrusteeshipDeedCopy: false,
   deedGuardiansPoaFiles: [],
   deedGuardiansPoaPersistedFiles: [],
+  useManualDeedEntry: false,
+  manualDeedEntry: { ...EMPTY_MANUAL_DEED_ENTRY },
   nationalAddressMethod: "" as NationalAddressMethodId | "",
   nationalAddressPhotoFiles: [],
   nationalAddressPhotoPersistedFiles: [],
@@ -388,10 +398,27 @@ const INITIAL_TENANT: TenantDraftState = {
   currentPhaseIndex: 0,
   tenantData: EMPTY_TENANT_DATA,
   tenantPersistedFiles: [],
-  rentedUnitData: EMPTY_RENTED_UNIT_DATA,
+  rentedUnits: [{ ...EMPTY_RENTED_UNIT_DATA }],
   leaseRenewalAddNotes: false,
   leaseRenewalNotes: "",
 };
+
+function normalizePersistedRentedUnits(
+  tenant: Partial<TenantDraftState> & { rentedUnitData?: RentedUnitDataState },
+): RentedUnitDataState[] {
+  if (tenant.rentedUnits?.length) {
+    return tenant.rentedUnits.map((unit) => ({
+      ...EMPTY_RENTED_UNIT_DATA,
+      ...unit,
+    }));
+  }
+
+  if (tenant.rentedUnitData) {
+    return [{ ...EMPTY_RENTED_UNIT_DATA, ...tenant.rentedUnitData }];
+  }
+
+  return [{ ...EMPTY_RENTED_UNIT_DATA }];
+}
 
 function createInitialState() {
   return {
@@ -411,7 +438,7 @@ function createInitialState() {
     tenant: {
       ...INITIAL_TENANT,
       tenantData: { ...EMPTY_TENANT_DATA, individual: { ...EMPTY_TENANT_DATA.individual }, organization: { ...EMPTY_TENANT_DATA.organization } },
-      rentedUnitData: { ...EMPTY_RENTED_UNIT_DATA },
+      rentedUnits: [{ ...EMPTY_RENTED_UNIT_DATA }],
     },
     financeData: createEmptyFinanceData(),
     paymentData: { ...EMPTY_PAYMENT_DATA },
@@ -491,6 +518,11 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
                 value === "" ? [] : state.deed.deedGuardiansPoaFiles,
               deedGuardiansPoaPersistedFiles:
                 value === "" ? [] : state.deed.deedGuardiansPoaPersistedFiles,
+              useManualDeedEntry: value === "" ? false : state.deed.useManualDeedEntry,
+              manualDeedEntry:
+                value === ""
+                  ? { ...EMPTY_MANUAL_DEED_ENTRY }
+                  : state.deed.manualDeedEntry,
             },
             contractStep1Data: shouldClearStep1 ? null : state.contractStep1Data,
             contractStep2Data: shouldClearStep1 ? null : state.contractStep2Data,
@@ -499,19 +531,49 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       setDeedFiles: async (files) => {
         const deedPersistedFiles = await filesToPersisted(files);
         set((state) => ({
-          deed: { ...state.deed, deedFiles: files, deedPersistedFiles },
+          deed: {
+            ...state.deed,
+            deedFiles: files,
+            deedPersistedFiles,
+            useManualDeedEntry:
+              files.length > 0 ? false : state.deed.useManualDeedEntry,
+            manualDeedEntry:
+              files.length > 0
+                ? { ...EMPTY_MANUAL_DEED_ENTRY }
+                : state.deed.manualDeedEntry,
+          },
         }));
       },
       setDeedFrontFiles: async (files) => {
         const deedFrontPersistedFiles = await filesToPersisted(files);
         set((state) => ({
-          deed: { ...state.deed, deedFrontFiles: files, deedFrontPersistedFiles },
+          deed: {
+            ...state.deed,
+            deedFrontFiles: files,
+            deedFrontPersistedFiles,
+            useManualDeedEntry:
+              files.length > 0 ? false : state.deed.useManualDeedEntry,
+            manualDeedEntry:
+              files.length > 0
+                ? { ...EMPTY_MANUAL_DEED_ENTRY }
+                : state.deed.manualDeedEntry,
+          },
         }));
       },
       setDeedBackFiles: async (files) => {
         const deedBackPersistedFiles = await filesToPersisted(files);
         set((state) => ({
-          deed: { ...state.deed, deedBackFiles: files, deedBackPersistedFiles },
+          deed: {
+            ...state.deed,
+            deedBackFiles: files,
+            deedBackPersistedFiles,
+            useManualDeedEntry:
+              files.length > 0 ? false : state.deed.useManualDeedEntry,
+            manualDeedEntry:
+              files.length > 0
+                ? { ...EMPTY_MANUAL_DEED_ENTRY }
+                : state.deed.manualDeedEntry,
+          },
         }));
       },
       setDeedInheritanceFiles: async (files) => {
@@ -575,6 +637,26 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
         }));
       },
+      setUseManualDeedEntry: (value) =>
+        set((state) => ({
+          deed: {
+            ...state.deed,
+            useManualDeedEntry: value,
+            deedFiles: value ? [] : state.deed.deedFiles,
+            deedPersistedFiles: value ? [] : state.deed.deedPersistedFiles,
+            deedFrontFiles: value ? [] : state.deed.deedFrontFiles,
+            deedFrontPersistedFiles: value ? [] : state.deed.deedFrontPersistedFiles,
+            deedBackFiles: value ? [] : state.deed.deedBackFiles,
+            deedBackPersistedFiles: value ? [] : state.deed.deedBackPersistedFiles,
+            manualDeedEntry: value
+              ? state.deed.manualDeedEntry
+              : { ...EMPTY_MANUAL_DEED_ENTRY },
+          },
+        })),
+      setManualDeedEntry: (value) =>
+        set((state) => ({
+          deed: { ...state.deed, manualDeedEntry: value },
+        })),
       setNationalAddressMethod: (method) =>
         set((state) => ({
           deed: { ...state.deed, nationalAddressMethod: method },
@@ -652,8 +734,8 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
         );
       },
-      setRentedUnitData: (data) =>
-        set((state) => ({ tenant: { ...state.tenant, rentedUnitData: data } })),
+      setRentedUnits: (units) =>
+        set((state) => ({ tenant: { ...state.tenant, rentedUnits: units } })),
       setLeaseRenewalAddNotes: (value) =>
         set((state) => ({
           tenant: {
@@ -751,7 +833,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
           tenant: {
             ...base.tenant,
-            rentedUnitData: buildRentedUnitData(context.unit),
+            rentedUnits: [buildRentedUnitData(context.unit)],
           },
         });
       },
@@ -912,7 +994,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             },
           },
           tenantPersistedFiles: state.tenant.tenantPersistedFiles,
-          rentedUnitData: state.tenant.rentedUnitData,
+          rentedUnits: state.tenant.rentedUnits,
         },
         financeData: state.financeData,
         paymentData: state.paymentData,
@@ -962,10 +1044,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
                 ...(persistedTenantData.organization ?? {}),
               },
             },
-            rentedUnitData: {
-              ...initial.tenant.rentedUnitData,
-              ...(persistedTenant.rentedUnitData ?? {}),
-            },
+            rentedUnits: normalizePersistedRentedUnits(persistedTenant),
           },
           financeData: normalizeFinanceData({
             ...initial.financeData,
@@ -981,6 +1060,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.financeData = normalizeFinanceData(state.financeData);
+          state.tenant.rentedUnits = normalizePersistedRentedUnits(state.tenant);
         }
 
         state?.hydrateFilesFromPersisted();

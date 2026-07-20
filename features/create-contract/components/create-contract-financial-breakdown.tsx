@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useLocale } from "next-intl";
 
 import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
+import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import {
@@ -24,6 +25,7 @@ type CreateContractFinancialBreakdownProps = {
   contractType: ContractTypeId;
   data: ContractFinancialData | undefined;
   isLoading: boolean;
+  appliedCoupon?: AppliedContractCoupon | null;
 };
 
 type PaymentAmountProps = {
@@ -83,6 +85,7 @@ export default function CreateContractFinancialBreakdown({
   contractType,
   data,
   isLoading,
+  appliedCoupon = null,
 }: CreateContractFinancialBreakdownProps) {
   const locale = useLocale();
   const breakdown = PAYMENT_BREAKDOWN[contractType];
@@ -176,13 +179,30 @@ export default function CreateContractFinancialBreakdown({
           />
         ) : null}
 
+        {appliedCoupon ? (
+          <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-3">
+            <SummaryRow
+              label={labels.priceBeforeCoupon}
+              amount={appliedCoupon.totalPriceBeforeCoupon}
+            />
+            <SummaryRow
+              label={labels.discount}
+              amount={appliedCoupon.discount}
+            />
+          </div>
+        ) : null}
+
         <div className="border-t border-dashed border-[#d4d4d4] pt-3">
           <div className="flex items-center justify-between gap-4">
             <span className="text-base font-extrabold text-[#333333]">
-              {labels.total}
+              {appliedCoupon ? labels.priceAfterCoupon : labels.total}
             </span>
             <PaymentAmount
-              amount={data.total_price}
+              amount={
+                appliedCoupon
+                  ? appliedCoupon.totalPriceAfterCoupon
+                  : data.total_price
+              }
               className="text-xl font-extrabold text-brand!"
               iconClassName="text-brand"
               iconSize={22}
