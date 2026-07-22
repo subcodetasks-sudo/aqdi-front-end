@@ -9,10 +9,14 @@ import { areAllUnitsComplete } from "@/features/create-unit/types/unit-data";
 
 export function useSubmitUnit(
   propertyId: number | null,
-  hasExistingUnits: boolean,
+  propertyHasUnits: boolean,
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const units = useCreateUnitDraftStore((state) => state.units);
+  const preservedUnits = useCreateUnitDraftStore(
+    (state) => state.preservedUnits,
+  );
+  const contractType = useCreateUnitDraftStore((state) => state.contractType);
 
   async function submitUnit() {
     if (!propertyId) {
@@ -29,19 +33,27 @@ export function useSubmitUnit(
       };
     }
 
+    const stampedUnits = units.map((unit) => ({
+      ...unit,
+      contractType: unit.contractType ?? contractType,
+    }));
+    const payloadUnits = [...preservedUnits, ...stampedUnits];
+
     setIsSubmitting(true);
 
     try {
-      if (hasExistingUnits) {
+      if (propertyHasUnits) {
         return await updatePropertyStep3({
           propertyId,
-          units,
+          units: payloadUnits,
+          contractType,
         });
       }
 
       return await submitPropertyStep3({
         propertyId,
-        units,
+        units: payloadUnits,
+        contractType,
       });
     } finally {
       setIsSubmitting(false);

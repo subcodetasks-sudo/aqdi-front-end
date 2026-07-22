@@ -22,6 +22,9 @@ export default function ServicesPageBackConfig(props: ServicesPageMeta) {
     props.pageTitle,
     props.useRouterBack,
     props.hideBack,
+    props.pageBadge,
+    props.pageAction?.label,
+    props.pageAction?.href,
     setMeta,
   ]);
 

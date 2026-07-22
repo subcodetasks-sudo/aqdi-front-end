@@ -11,8 +11,9 @@ export type StartContractPayload =
   | {
       contract_type: PropertyContractType;
       is_real: true;
-      real_id: string;
-      real_units_id: string;
+      real_id: number;
+      unit_ids: number[];
+      instrument_type?: string;
     };
 
 type StartContractApiResponse = {
@@ -22,6 +23,10 @@ type StartContractApiResponse = {
   data: {
     contract_id: number;
     uuid: string;
+    real_id?: number | null;
+    real_units_id?: number | null;
+    units_count?: number;
+    unit_ids?: number[];
   };
 };
 
@@ -32,17 +37,23 @@ export async function startContract(payload: StartContractPayload) {
     body: JSON.stringify(payload),
   });
 
-  if (!response.ok || !response.data?.success) {
+  if (!response.ok || !response.data?.success || !response.data.data) {
     return {
       ok: false as const,
       error: response.error || response.data?.message || "Failed to start contract",
     };
   }
 
+  const data = response.data.data;
+
   return {
     ok: true as const,
-    contractId: response.data.data.contract_id,
-    uuid: response.data.data.uuid,
+    contractId: data.contract_id,
+    uuid: data.uuid,
+    realId: data.real_id ?? null,
+    realUnitsId: data.real_units_id ?? null,
+    unitsCount: data.units_count ?? data.unit_ids?.length ?? 0,
+    unitIds: data.unit_ids ?? [],
     message: response.data.message,
   };
 }

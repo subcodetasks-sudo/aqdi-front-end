@@ -11,7 +11,9 @@ import type { ContractTypeId } from "@/features/create-contract/types/contract-t
 import type { PropertyUnitCardData } from "@/features/property-units/types/property-unit";
 import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
 
-function toContractTypeId(contractType: PropertyUnitCardData["contractType"]): ContractTypeId {
+function toContractTypeId(
+  contractType: PropertyUnitCardData["contractType"],
+): ContractTypeId {
   return contractType === "commercial" ? "commercial" : "residential";
 }
 
@@ -24,24 +26,33 @@ export function useStartContractFromUnit() {
   const [isStarting, setIsStarting] = useState(false);
 
   async function handleStartContract(
-    unit: PropertyUnitCardData,
+    selectedUnits: PropertyUnitCardData[],
     property: PropertyWithUnitsApiData,
   ) {
-    const apiUnit = property.units.find((item) => item.id === unit.unitId);
+    if (selectedUnits.length < 1) {
+      toast.error(t("selectAtLeastOneUnit"));
+      return;
+    }
 
-    if (!apiUnit) {
+    const unitIds = selectedUnits.map((unit) => unit.unitId);
+    const apiUnits = property.units.filter((item) => unitIds.includes(item.id));
+
+    if (apiUnits.length !== selectedUnits.length) {
       toast.error(t("startContractError"));
       return;
     }
+
+    const contractType = selectedUnits[0].contractType;
 
     setIsStarting(true);
 
     try {
       const result = await startContract({
-        contract_type: unit.contractType,
+        contract_type: contractType,
         is_real: true,
-        real_id: String(unit.propertyId),
-        real_units_id: String(unit.unitId),
+        real_id: selectedUnits[0].propertyId,
+        unit_ids: unitIds,
+        instrument_type: property.instrument_type ?? undefined,
       });
 
       if (!result.ok) {
@@ -49,22 +60,27 @@ export function useStartContractFromUnit() {
         return;
       }
 
+      const resolvedUnitIds =
+        result.unitIds.length > 0 ? result.unitIds : unitIds;
+
       startExistingPropertyContractFlow({
         session: {
           contractId: result.contractId,
           uuid: result.uuid,
-          contractType: unit.contractType,
+          contractType,
           isReal: true,
-          realId: unit.propertyId,
-          realUnitsId: unit.unitId,
+          realId: selectedUnits[0].propertyId,
+          realUnitsId: result.realUnitsId ?? resolvedUnitIds[0],
+          unitIds: resolvedUnitIds,
+          unitsCount: result.unitsCount || resolvedUnitIds.length,
         },
         context: {
           property,
-          unit: apiUnit,
+          units: apiUnits,
         },
       });
 
-      router.push(`/create-contract?id=${toContractTypeId(unit.contractType)}`);
+      router.push(`/create-contract?id=${toContractTypeId(contractType)}`);
     } finally {
       setIsStarting(false);
     }

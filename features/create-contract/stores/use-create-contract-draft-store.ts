@@ -833,7 +833,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
           tenant: {
             ...base.tenant,
-            rentedUnits: [buildRentedUnitData(context.unit)],
+            rentedUnits: context.units.map((unit) => buildRentedUnitData(unit)),
           },
         });
       },

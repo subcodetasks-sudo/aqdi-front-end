@@ -1,3 +1,4 @@
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import type { PropertyUnitApiItem } from "@/features/property-units/types/property-units-api";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 
@@ -44,11 +45,19 @@ function mapMeterRegistration(
   return "";
 }
 
-export function mapApiUnitToUnitData(unit: PropertyUnitApiItem): UnitDataState {
+export function mapApiUnitToUnitData(
+  unit: PropertyUnitApiItem,
+  contractType?: PropertyContractType,
+): UnitDataState {
   const furnished = Boolean(unit.furnished);
+  const resolvedContractType =
+    unit.contract_type === "commercial" || unit.contract_type === "housing"
+      ? unit.contract_type
+      : contractType;
 
   return {
     unitId: unit.id,
+    contractType: resolvedContractType,
     unitTypeId: unit.unit_type_id ? String(unit.unit_type_id) : "",
     unitUsageId: unit.unit_usage_id ? String(unit.unit_usage_id) : "",
     totalArea: unit.unit_area?.trim() ?? "",

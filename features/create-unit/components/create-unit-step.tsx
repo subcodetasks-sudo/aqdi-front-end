@@ -8,6 +8,7 @@ import {
 import { useCreateUnitStep } from "@/features/create-unit/hooks/use-create-unit-step";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
+import { EMPTY_UNIT_DATA } from "@/features/create-unit/types/unit-data";
 import CreateUnitStepNavigation from "@/features/create-unit/components/create-unit-step-navigation";
 import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
 import UnitDataFormFields from "@/features/shared/components/unit-data-form-fields";
@@ -18,7 +19,8 @@ type CreateUnitStepProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
   contractTypeLocked: boolean;
-  hasExistingUnits: boolean;
+  isEditMode: boolean;
+  propertyHasUnits: boolean;
   onBack: () => void;
   onComplete: (message?: string) => void;
 };
@@ -27,7 +29,8 @@ export default function CreateUnitStep({
   labels,
   propertyId,
   contractTypeLocked,
-  hasExistingUnits,
+  isEditMode,
+  propertyHasUnits,
   onBack,
   onComplete,
 }: CreateUnitStepProps) {
@@ -36,7 +39,7 @@ export default function CreateUnitStep({
   const setContractType = useCreateUnitDraftStore((state) => state.setContractType);
   const { isSubmitting, submitUnit } = useSubmitUnit(
     propertyId,
-    hasExistingUnits,
+    propertyHasUnits,
   );
   const unitTypesQuery = useUnitTypeOptions(contractType);
   const unitUsageQuery = useUnitUsageOptions(contractType);
@@ -63,8 +66,8 @@ export default function CreateUnitStep({
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateUnitStepPhaseHeader
-          title={hasExistingUnits ? labels.editTitle : labels.title}
-          subtitle={hasExistingUnits ? labels.editSubtitle : labels.subtitle}
+          title={isEditMode ? labels.editTitle : labels.title}
+          subtitle={isEditMode ? labels.editSubtitle : labels.subtitle}
         />
 
         {optionsError ? (
@@ -91,9 +94,20 @@ export default function CreateUnitStep({
                 : undefined
             }
             units={units}
-            onUnitsChange={setUnits}
+            onUnitsChange={(nextUnits) =>
+              setUnits(
+                nextUnits.map((unit) => ({
+                  ...unit,
+                  contractType: unit.contractType ?? contractType,
+                })),
+              )
+            }
             allowAddUnit
             allowRemoveUnit
+            createEmptyUnit={() => ({
+              ...EMPTY_UNIT_DATA,
+              contractType,
+            })}
             renderUnitForm={(unit, _index, onUnitChange) => (
               <UnitDataFormFields
                 labels={labels}
@@ -116,7 +130,7 @@ export default function CreateUnitStep({
         continueLabel={
           isSubmitting
             ? labels.navigation.submitting
-            : hasExistingUnits
+            : isEditMode
               ? labels.navigation.save
               : labels.navigation.continue
         }

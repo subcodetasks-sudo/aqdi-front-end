@@ -1,15 +1,18 @@
 import { getTranslations } from "next-intl/server";
 
 import CreateUnitPageContent from "@/features/create-unit/components/create-unit-page-content";
+import { getUnitTypes } from "@/features/create-unit/services/get-unit-types";
+import { getUnitUsageOptions } from "@/features/create-unit/services/get-unit-usage";
 import { mapApiUnitToUnitData } from "@/features/create-unit/utils/map-api-unit-to-form";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 import {
   parseUnitContractType,
+  parseUnitId,
   parseUnitPropertyId,
 } from "@/features/create-unit/utils/contract-type";
 import { getRealEstateShow } from "@/features/property-units/services/get-real-estate-show";
-import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+import { resolveUnitContractType } from "@/features/property-units/utils/map-property-units";
 
 type CreateUnitPageProps = {
   searchParams: Promise<{
@@ -20,45 +23,88 @@ type CreateUnitPageProps = {
   }>;
 };
 
-function resolvePropertyContractType(
-  value: PropertyContractType | null,
-  fallback: PropertyContractType,
-) {
-  if (value === "housing" || value === "commercial") {
-    return value;
-  }
-
-  return fallback;
-}
-
 export default async function CreateUnitPage({ searchParams }: CreateUnitPageProps) {
   const params = await searchParams;
   const propertyId = parseUnitPropertyId(params.propertyId);
-  let contractType = parseUnitContractType(params.contract_type, params.type);
-  let contractTypeLocked = false;
+  const unitId = parseUnitId(params.unitId);
+  const urlContractType = parseUnitContractType(params.contract_type, params.type);
+  const urlHasExplicitContractType =
+    params.contract_type === "commercial" ||
+    params.contract_type === "housing" ||
+    params.type === "commercial" ||
+    params.type === "residential";
+
+  const contractType = urlContractType;
+  const contractTypeLocked = urlHasExplicitContractType || unitId !== null;
   const t = await getTranslations("createUnit");
 
   let initialUnits: UnitDataState[] | null = null;
-  let hasExistingUnits = false;
+  let preservedUnits: UnitDataState[] = [];
+  let propertyHasUnits = false;
+  const isEditMode = unitId !== null;
 
   if (propertyId) {
     try {
       const property = await getRealEstateShow(propertyId);
       const units = property.units ?? [];
+      propertyHasUnits = units.length > 0;
 
-      if (units.length > 0) {
-        initialUnits = units.map((unit) => mapApiUnitToUnitData(unit));
-        hasExistingUnits = true;
-      }
+      const fallbackContractType =
+        property.contract_type === "commercial" ||
+        property.contract_type === "housing"
+          ? property.contract_type
+          : contractType;
 
-      contractType = resolvePropertyContractType(
-        property.contract_type,
-        contractType,
+      const [
+        housingTypes,
+        housingUsages,
+        commercialTypes,
+        commercialUsages,
+      ] = await Promise.all([
+        getUnitTypes("housing"),
+        getUnitUsageOptions("housing"),
+        getUnitTypes("commercial"),
+        getUnitUsageOptions("commercial"),
+      ]);
+
+      const lookups = {
+        housing: { types: housingTypes, usages: housingUsages },
+        commercial: { types: commercialTypes, usages: commercialUsages },
+      };
+
+      const unitsOfSelectedType = units.filter(
+        (unit) =>
+          resolveUnitContractType(unit, fallbackContractType, lookups) ===
+          contractType,
       );
-      contractTypeLocked = hasExistingUnits;
+      const unitsOfOtherType = units.filter(
+        (unit) =>
+          resolveUnitContractType(unit, fallbackContractType, lookups) !==
+          contractType,
+      );
+
+      preservedUnits = unitsOfOtherType.map((unit) =>
+        mapApiUnitToUnitData(
+          unit,
+          resolveUnitContractType(unit, fallbackContractType, lookups),
+        ),
+      );
+
+      if (isEditMode) {
+        initialUnits =
+          unitsOfSelectedType.length > 0
+            ? unitsOfSelectedType.map((unit) =>
+                mapApiUnitToUnitData(
+                  unit,
+                  resolveUnitContractType(unit, fallbackContractType, lookups),
+                ),
+              )
+            : null;
+      }
     } catch {
       initialUnits = null;
-      hasExistingUnits = false;
+      preservedUnits = [];
+      propertyHasUnits = false;
     }
   }
 
@@ -189,8 +235,10 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       propertyId={propertyId}
       contractType={contractType}
       contractTypeLocked={contractTypeLocked}
-      hasExistingUnits={hasExistingUnits}
+      isEditMode={isEditMode}
+      propertyHasUnits={propertyHasUnits}
       initialUnits={initialUnits}
+      preservedUnits={preservedUnits}
     />
   );
 }

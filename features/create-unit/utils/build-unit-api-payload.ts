@@ -33,6 +33,10 @@ export function buildUnitFieldsPayload(unitData: UnitDataState) {
     payload.unit_id = unitData.unitId;
   }
 
+  if (unitData.contractType === "housing" || unitData.contractType === "commercial") {
+    payload.contract_type = unitData.contractType;
+  }
+
   if (unitData.roomsCount !== "") {
     const roomsCount = parseCount(unitData.roomsCount);
     payload.tootal_rooms = roomsCount;
@@ -112,10 +116,23 @@ export function buildUnitsCreateApiPayload(
 export function buildRealEstateStep3Payload(
   propertyId: number,
   units: UnitDataState[],
+  defaultContractType?: PropertyContractType,
 ) {
   return {
     id: propertyId,
-    units: units.map((unit) => buildUnitFieldsPayload(unit)),
+    units: units.map((unit) => {
+      const payload = buildUnitFieldsPayload(unit);
+
+      if (
+        !("contract_type" in payload) &&
+        (defaultContractType === "housing" ||
+          defaultContractType === "commercial")
+      ) {
+        payload.contract_type = defaultContractType;
+      }
+
+      return payload;
+    }),
   };
 }
 

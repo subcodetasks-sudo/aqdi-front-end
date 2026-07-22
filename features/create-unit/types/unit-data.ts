@@ -1,3 +1,5 @@
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+
 export const FURNISHING_TYPE_OPTIONS = ["new", "used"] as const;
 
 export type FurnishingTypeOption = (typeof FURNISHING_TYPE_OPTIONS)[number];
@@ -9,6 +11,7 @@ export type MeterRegistrationParty =
 
 export type UnitDataState = {
   unitId?: number;
+  contractType?: PropertyContractType;
   unitTypeId: string;
   unitUsageId: string;
   totalArea: string;

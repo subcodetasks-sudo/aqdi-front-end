@@ -15,8 +15,10 @@ type CreateUnitWizardProps = {
   propertyId: number | null;
   contractType: PropertyContractType;
   contractTypeLocked: boolean;
-  hasExistingUnits: boolean;
+  isEditMode: boolean;
+  propertyHasUnits: boolean;
   initialUnits: UnitDataState[] | null;
+  preservedUnits: UnitDataState[];
 };
 
 export default function CreateUnitWizard({
@@ -24,8 +26,10 @@ export default function CreateUnitWizard({
   propertyId,
   contractType,
   contractTypeLocked,
-  hasExistingUnits,
+  isEditMode,
+  propertyHasUnits,
   initialUnits,
+  preservedUnits,
 }: CreateUnitWizardProps) {
   const router = useRouter();
   const initializeSession = useCreateUnitDraftStore(
@@ -35,14 +39,16 @@ export default function CreateUnitWizard({
 
   useEffect(() => {
     initializeSession(propertyId, contractType, {
-      hasExistingUnits,
+      isEditMode,
       initialUnits: initialUnits ?? undefined,
+      preservedUnits,
     });
   }, [
     contractType,
-    hasExistingUnits,
     initialUnits,
     initializeSession,
+    isEditMode,
+    preservedUnits,
     propertyId,
   ]);
 
@@ -51,7 +57,7 @@ export default function CreateUnitWizard({
 
     toast.success(
       message ||
-        (hasExistingUnits
+        (isEditMode
           ? labels.navigation.updateSuccess
           : labels.navigation.createSuccess),
     );
@@ -72,7 +78,8 @@ export default function CreateUnitWizard({
         labels={labels}
         propertyId={propertyId}
         contractTypeLocked={contractTypeLocked}
-        hasExistingUnits={hasExistingUnits}
+        isEditMode={isEditMode}
+        propertyHasUnits={propertyHasUnits}
         onBack={() => router.back()}
         onComplete={handleComplete}
       />

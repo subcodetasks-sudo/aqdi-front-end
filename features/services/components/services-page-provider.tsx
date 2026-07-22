@@ -9,12 +9,19 @@ import {
   type ReactNode,
 } from "react";
 
+export type ServicesPageAction = {
+  label: string;
+  href: string;
+};
+
 export type ServicesPageMeta = {
   backLabel: string;
   backHref?: string;
   useRouterBack?: boolean;
   pageTitle?: string;
   hideBack?: boolean;
+  pageBadge?: string;
+  pageAction?: ServicesPageAction;
 };
 
 type ServicesPageContextValue = {

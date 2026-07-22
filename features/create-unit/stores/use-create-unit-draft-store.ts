@@ -11,15 +11,18 @@ import {
 import type { CreateUnitStep } from "@/features/create-unit/types/create-unit-step";
 
 type InitializeSessionOptions = {
+  isEditMode?: boolean;
   initialUnits?: UnitDataState[];
+  preservedUnits?: UnitDataState[];
 };
 
 type CreateUnitDraftStore = {
   propertyId: number | null;
-  hasExistingUnits: boolean;
+  isEditMode: boolean;
   contractType: PropertyContractType;
   currentStep: CreateUnitStep;
   units: UnitDataState[];
+  preservedUnits: UnitDataState[];
   setCurrentStep: (step: CreateUnitStep) => void;
   goNextStep: () => void;
   goBackStep: () => void;
@@ -28,7 +31,7 @@ type CreateUnitDraftStore = {
   initializeSession: (
     propertyId: number | null,
     contractType: PropertyContractType,
-    options?: InitializeSessionOptions & { hasExistingUnits?: boolean },
+    options?: InitializeSessionOptions,
   ) => void;
   resetDraft: () => void;
 };
@@ -50,15 +53,20 @@ function normalizePersistedUnitData(
 function createInitialUnitDraft(
   propertyId: number | null = null,
   contractType: PropertyContractType = "housing",
-  hasExistingUnits = false,
-  units: UnitDataState[] = [{ ...EMPTY_UNIT_DATA }],
+  isEditMode = false,
+  units: UnitDataState[] = [{ ...EMPTY_UNIT_DATA, contractType }],
+  preservedUnits: UnitDataState[] = [],
 ) {
   return {
     propertyId,
-    hasExistingUnits,
+    isEditMode,
     contractType,
     currentStep: "form" as CreateUnitStep,
-    units,
+    units: units.map((unit) => ({
+      ...unit,
+      contractType: unit.contractType ?? contractType,
+    })),
+    preservedUnits,
   };
 }
 
@@ -95,31 +103,38 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
       setUnits: (units) => set({ units }),
       initializeSession: (propertyId, contractType, options = {}) => {
         const state = get();
-        const nextHasExistingUnits = options.hasExistingUnits ?? false;
+        const nextIsEditMode = options.isEditMode ?? false;
+        const nextPreservedUnits = options.preservedUnits ?? [];
         const nextUnits =
           options.initialUnits && options.initialUnits.length > 0
             ? options.initialUnits
-            : [{ ...EMPTY_UNIT_DATA }];
+            : [{ ...EMPTY_UNIT_DATA, contractType }];
         const sessionChanged =
           state.propertyId !== propertyId ||
-          state.hasExistingUnits !== nextHasExistingUnits ||
+          state.isEditMode !== nextIsEditMode ||
           state.contractType !== contractType ||
           state.currentStep === "success";
 
-        if (sessionChanged || options.initialUnits) {
-          set(
-            createInitialUnitDraft(
-              propertyId,
-              contractType,
-              nextHasExistingUnits,
-              nextUnits,
-            ),
-          );
+        if (!sessionChanged) {
+          if (options.preservedUnits) {
+            set({ preservedUnits: nextPreservedUnits });
+          }
+          return;
         }
+
+        set(
+          createInitialUnitDraft(
+            propertyId,
+            contractType,
+            nextIsEditMode,
+            nextUnits,
+            nextPreservedUnits,
+          ),
+        );
       },
       resetDraft: () => {
-        const { propertyId, contractType, hasExistingUnits } = get();
-        set(createInitialUnitDraft(propertyId, contractType, hasExistingUnits));
+        const { propertyId, contractType, isEditMode } = get();
+        set(createInitialUnitDraft(propertyId, contractType, isEditMode));
       },
     }),
     {
@@ -127,10 +142,11 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         propertyId: state.propertyId,
-        hasExistingUnits: state.hasExistingUnits,
+        isEditMode: state.isEditMode,
         contractType: state.contractType,
         currentStep: state.currentStep === "success" ? "form" : state.currentStep,
         units: state.units,
+        preservedUnits: state.preservedUnits,
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) {
@@ -138,6 +154,9 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
         }
 
         state.units = normalizePersistedUnits(state);
+        state.preservedUnits = (state.preservedUnits ?? []).map((unit) =>
+          normalizePersistedUnitData(unit),
+        );
 
         if (state.currentStep === "success") {
           state.currentStep = "form";

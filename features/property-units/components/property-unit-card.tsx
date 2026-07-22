@@ -10,19 +10,37 @@ import {
   type PropertyUnitCardData,
   type PropertyUnitDetailField,
 } from "@/features/property-units/types/property-unit";
-import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
+import { cn } from "@/lib/utils";
 
 type PropertyUnitCardProps = {
   unit: PropertyUnitCardData;
-  property: PropertyWithUnitsApiData | null;
+  selected: boolean;
+  onSelectedChange: (selected: boolean) => void;
+  isStarting: boolean;
+  onCreateContract: (unit: PropertyUnitCardData) => void;
 };
 
-export default function PropertyUnitCard({ unit, property }: PropertyUnitCardProps) {
+export default function PropertyUnitCard({
+  unit,
+  selected,
+  onSelectedChange,
+  isStarting,
+  onCreateContract,
+}: PropertyUnitCardProps) {
   const tFields = useTranslations("propertyUnits.card.fields");
 
   return (
-    <article className="rounded-[40px] border border-[#ececec] bg-white p-5 shadow-sm md:p-6">
-      <PropertyUnitCardHeader unit={unit} />
+    <article
+      className={cn(
+        "rounded-[40px] border bg-white p-5 shadow-sm transition-colors md:p-6",
+        selected ? "border-brand" : "border-[#ececec]",
+      )}
+    >
+      <PropertyUnitCardHeader
+        unit={unit}
+        selected={selected}
+        onSelectedChange={onSelectedChange}
+      />
 
       <div className="border-t border-[#f0f0f0]">
         {PROPERTY_UNIT_DETAIL_FIELDS.map((field) => (
@@ -34,7 +52,11 @@ export default function PropertyUnitCard({ unit, property }: PropertyUnitCardPro
         ))}
       </div>
 
-      <PropertyUnitCardFooter unit={unit} property={property} />
+      <PropertyUnitCardFooter
+        unit={unit}
+        isStarting={isStarting}
+        onCreateContract={onCreateContract}
+      />
     </article>
   );
 }

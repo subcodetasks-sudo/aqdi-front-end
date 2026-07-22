@@ -7,6 +7,7 @@ export type RealEstateUnitPayload = {
   unit_number?: string;
   floor_number?: number;
   unit_area?: number;
+  contract_type?: "housing" | "commercial";
   tootal_rooms?: number;
   The_number_of_halls?: number;
   The_number_of_kitchens?: number;

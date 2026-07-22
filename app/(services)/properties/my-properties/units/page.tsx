@@ -30,16 +30,6 @@ export default async function PropertyUnitsPage({
   const initialTab = contractType === "commercial" ? "commercial" : "residential";
   const t = await getTranslations("propertyUnits");
 
-  const labels: PropertyUnitsLabels = {
-    backLabel: t("backLabel"),
-    pageTitle: t("pageTitle"),
-    emptyState: t("emptyState"),
-    tabs: {
-      residential: t("tabs.residential"),
-      commercial: t("tabs.commercial"),
-    },
-  };
-
   let residentialItems: PropertyUnitCardData[] = [];
   let commercialItems: PropertyUnitCardData[] = [];
   let propertyName: string | null = null;
@@ -86,6 +76,24 @@ export default async function PropertyUnitsPage({
       property = null;
     }
   }
+
+  const labels: PropertyUnitsLabels = {
+    backLabel: t("backLabel"),
+    pageTitle: t("pageTitle"),
+    emptyState: t("emptyState"),
+    residentialUnitsCount: t("residentialUnitsCount", {
+      count: residentialItems.length,
+    }),
+    commercialUnitsCount: t("commercialUnitsCount", {
+      count: commercialItems.length,
+    }),
+    createResidentialUnit: t("createResidentialUnit"),
+    createCommercialUnit: t("createCommercialUnit"),
+    tabs: {
+      residential: t("tabs.residential"),
+      commercial: t("tabs.commercial"),
+    },
+  };
 
   return (
     <PropertyUnitsPageContent

@@ -129,6 +129,11 @@ export function buildRentedUnitData(
 ): RentedUnitDataState {
   return {
     ...EMPTY_RENTED_UNIT_DATA,
+    unitId: unit.id,
+    contractType:
+      unit.contract_type === "commercial" || unit.contract_type === "housing"
+        ? unit.contract_type
+        : undefined,
     unitTypeId: toStringValue(unit.unit_type_id),
     unitUsageId: toStringValue(unit.unit_usage_id),
     totalArea: toStringValue(unit.unit_area),

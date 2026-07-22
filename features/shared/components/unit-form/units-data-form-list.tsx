@@ -20,6 +20,7 @@ type UnitsDataFormListProps = {
   allowAddUnit?: boolean;
   allowRemoveUnit?: boolean;
   minUnits?: number;
+  createEmptyUnit?: () => UnitDataState;
   className?: string;
 };
 
@@ -34,6 +35,7 @@ export default function UnitsDataFormList({
   allowAddUnit = true,
   allowRemoveUnit = false,
   minUnits = 1,
+  createEmptyUnit,
   className,
 }: UnitsDataFormListProps) {
   function updateUnit(index: number, unit: UnitDataState) {
@@ -41,7 +43,10 @@ export default function UnitsDataFormList({
   }
 
   function handleAddUnit() {
-    onUnitsChange([...units, { ...EMPTY_UNIT_DATA }]);
+    onUnitsChange([
+      ...units,
+      createEmptyUnit ? createEmptyUnit() : { ...EMPTY_UNIT_DATA },
+    ]);
   }
 
   function handleRemoveUnit(index: number) {

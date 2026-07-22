@@ -23,12 +23,69 @@ function toUnitCategory(
   return contractType === "commercial" ? "commercial" : "residential";
 }
 
-function resolveUnitContractType(
+function hasLookupId(
+  options: UnitLookupOption[],
+  id: number | null | undefined,
+) {
+  if (!id) {
+    return false;
+  }
+
+  return options.some((option) => option.id === id);
+}
+
+function inferContractTypeFromLookups(
+  unit: PropertyUnitApiItem,
+  lookups: UnitLookups,
+): PropertyContractType | null {
+  const inCommercialType = hasLookupId(
+    lookups.commercial.types,
+    unit.unit_type_id,
+  );
+  const inHousingType = hasLookupId(lookups.housing.types, unit.unit_type_id);
+
+  if (inCommercialType && !inHousingType) {
+    return "commercial";
+  }
+
+  if (inHousingType && !inCommercialType) {
+    return "housing";
+  }
+
+  const inCommercialUsage = hasLookupId(
+    lookups.commercial.usages,
+    unit.unit_usage_id,
+  );
+  const inHousingUsage = hasLookupId(
+    lookups.housing.usages,
+    unit.unit_usage_id,
+  );
+
+  if (inCommercialUsage && !inHousingUsage) {
+    return "commercial";
+  }
+
+  if (inHousingUsage && !inCommercialUsage) {
+    return "housing";
+  }
+
+  return null;
+}
+
+export function resolveUnitContractType(
   unit: PropertyUnitApiItem,
   fallbackContractType: PropertyContractType,
+  lookups?: UnitLookups,
 ): PropertyContractType {
   if (unit.contract_type === "commercial" || unit.contract_type === "housing") {
     return unit.contract_type;
+  }
+
+  if (lookups) {
+    const inferred = inferContractTypeFromLookups(unit, lookups);
+    if (inferred) {
+      return inferred;
+    }
   }
 
   return fallbackContractType;
@@ -94,7 +151,11 @@ export function mapPropertyUnitsToCards(
   lookups: UnitLookups,
 ) {
   const cards = units.map((unit) => {
-    const unitContractType = resolveUnitContractType(unit, fallbackContractType);
+    const unitContractType = resolveUnitContractType(
+      unit,
+      fallbackContractType,
+      lookups,
+    );
     const lookupSet =
       unitContractType === "commercial" ? lookups.commercial : lookups.housing;
 

@@ -18,11 +18,13 @@ export type ExistingPropertyContractSession = ContractSessionBase & {
   isReal: true;
   realId: number;
   realUnitsId: number;
+  unitIds: number[];
+  unitsCount: number;
 };
 
 export type ContractSession = FreshContractSession | ExistingPropertyContractSession;
 
 export type ExistingPropertyContractContext = {
   property: PropertyWithUnitsApiData;
-  unit: PropertyUnitApiItem;
+  units: PropertyUnitApiItem[];
 };

@@ -925,9 +925,20 @@
     "backLabel": "رجوع",
     "pageTitle": "عرض وحدات العقار",
     "emptyState": "لا توجد وحدات لهذا العقار.",
+    "residentialUnitsCount": "عدد الوحدات السكنية: {count}",
+    "commercialUnitsCount": "عدد الوحدات التجارية: {count}",
+    "createResidentialUnit": "إضافة وحدة سكنية",
+    "createCommercialUnit": "إضافة وحدة تجارية",
     "tabs": {
       "residential": "وحدات سكنية",
       "commercial": "وحدات تجارية"
+    },
+    "selection": {
+      "selectedResidential": "{count} وحدة سكنية محددة",
+      "selectedCommercial": "{count} وحدة تجارية محددة",
+      "cancelSelection": "إلغاء التحديد",
+      "createContractOnSelected": "إنشاء عقد على المحدد",
+      "starting": "جاري بدء العقد..."
     },
     "card": {
       "unitNumberLabel": "رقم الوحدة",
@@ -948,6 +959,8 @@
       "createCommercialContract": "إنشاء عقد تجاري على هذه الوحدة",
       "startContractLoading": "جاري بدء العقد...",
       "startContractError": "فشل بدء العقد",
+      "selectAtLeastOneUnit": "يجب اختيار وحدة واحدة على الأقل من العقار.",
+      "selectUnit": "اختيار الوحدة {number}",
       "orDivider": "أو",
       "createNewResidentialUnit": "إنشاء وحدة سكنية جديدة",
       "createNewCommercialUnit": "إنشاء وحدة تجارية جديدة",

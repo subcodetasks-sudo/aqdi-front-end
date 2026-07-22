@@ -899,9 +899,20 @@
     "backLabel": "Back",
     "pageTitle": "View property units",
     "emptyState": "No units found for this property.",
+    "residentialUnitsCount": "Residential units: {count}",
+    "commercialUnitsCount": "Commercial units: {count}",
+    "createResidentialUnit": "Add residential unit",
+    "createCommercialUnit": "Add commercial unit",
     "tabs": {
       "residential": "Residential units",
       "commercial": "Commercial units"
+    },
+    "selection": {
+      "selectedResidential": "{count} residential units selected",
+      "selectedCommercial": "{count} commercial units selected",
+      "cancelSelection": "Cancel selection",
+      "createContractOnSelected": "Create a contract on selected",
+      "starting": "Starting contract..."
     },
     "card": {
       "unitNumberLabel": "Unit number",
@@ -922,6 +933,8 @@
       "createCommercialContract": "Create a commercial contract for this unit",
       "startContractLoading": "Starting contract...",
       "startContractError": "Failed to start contract",
+      "selectAtLeastOneUnit": "You must select at least one unit from the property.",
+      "selectUnit": "Select unit {number}",
       "orDivider": "or",
       "createNewResidentialUnit": "Create a new residential unit",
       "createNewCommercialUnit": "Create a new commercial unit",
