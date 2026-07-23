@@ -13,7 +13,10 @@ export default async function ServicesLayout({
   const hero = await getTranslations("hero");
 
   return (
-    <div className="flex min-h-screen flex-col bg-brand-background">
+    <div
+      data-services-layout
+      className="flex min-h-screen flex-col bg-brand-background"
+    >
       <ServicesPageProvider>
         <div className="relative flex-1">
           <div className="container pt-4 pb-8 lg:pb-10">

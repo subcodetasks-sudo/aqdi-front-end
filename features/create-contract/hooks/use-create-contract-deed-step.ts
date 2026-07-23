@@ -54,6 +54,9 @@ export function useCreateContractDeedStep() {
   const setIsMultipleTrusteeshipDeedCopy = useCreateContractDraftStore(
     (state) => state.setIsMultipleTrusteeshipDeedCopy,
   );
+  const setHasMinorHeirs = useCreateContractDraftStore(
+    (state) => state.setHasMinorHeirs,
+  );
   const setDeedGuardiansPoaFiles = useCreateContractDraftStore(
     (state) => state.setDeedGuardiansPoaFiles,
   );
@@ -110,6 +113,7 @@ export function useCreateContractDeedStep() {
   const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
   const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
   const isMultipleTrusteeshipDeedCopy = deed.isMultipleTrusteeshipDeedCopy;
+  const hasMinorHeirs = deed.hasMinorHeirs;
 
   const hasFrontImage =
     deed.deedFrontFiles.length > 0 || existingInstrumentFrontImageUrl !== null;
@@ -140,7 +144,9 @@ export function useCreateContractDeedStep() {
       (isLeaseRenewal ||
         (hasManualInstrumentEntry
           ? isDeceasedOwner
-            ? hasInheritanceImage && hasHeirsPoaImage
+            ? hasInheritanceImage &&
+              hasHeirsPoaImage &&
+              (!hasMinorHeirs || hasGuardiansPoaImage)
             : isWaqfOwner
               ? hasEndowmentCertImage &&
                 hasTrusteeshipImage &&
@@ -149,7 +155,10 @@ export function useCreateContractDeedStep() {
           : needsFrontBack
             ? hasFrontImage && hasBackImage
             : isDeceasedOwner
-              ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+              ? hasSingleImage &&
+                hasInheritanceImage &&
+                hasHeirsPoaImage &&
+                (!hasMinorHeirs || hasGuardiansPoaImage)
               : isWaqfOwner
                 ? hasSingleImage &&
                   hasEndowmentCertImage &&
@@ -195,6 +204,8 @@ export function useCreateContractDeedStep() {
     setDeedTrusteeshipFiles,
     isMultipleTrusteeshipDeedCopy,
     setIsMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
+    setHasMinorHeirs,
     deedGuardiansPoaFiles: deed.deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
     useManualDeedEntry: deed.useManualDeedEntry,

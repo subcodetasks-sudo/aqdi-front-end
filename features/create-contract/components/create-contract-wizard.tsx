@@ -21,11 +21,15 @@ import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-dr
 type CreateContractWizardProps = {
   labels: CreateContractLabels;
   contractType: ContractTypeId;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
 };
 
 export default function CreateContractWizard({
   labels,
   contractType,
+  isDarkMode = false,
+  onToggleDarkMode,
 }: CreateContractWizardProps) {
   const { currentStep, goNext, goBack, goToStep } = useCreateContractSteps();
   const { handleStart, isStarting } = useStartFreshContract(contractType);
@@ -51,7 +55,12 @@ export default function CreateContractWizard({
     <div className="mx-auto w-full max-w-2xl space-y-4">
       <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
 
-      <CreateContractHeader pageTitle={pageTitle} labels={labels.header} />
+      <CreateContractHeader
+        pageTitle={pageTitle}
+        labels={labels.header}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
+      />
       <CreateContractStepper labels={labels.stepper} />
 
       {currentStep === "intro" ? (

@@ -966,6 +966,11 @@
     "pageTitleCommercial": "Add commercial property",
     "editPageTitleResidential": "Edit residential property",
     "editPageTitleCommercial": "Edit commercial property",
+    "header": {
+      "home": "Home",
+      "dark": "Dark",
+      "light": "Light"
+    },
     "stepper": {
       "journey": "Your rental journey just got easier.",
       "saveAlt": "Save",
@@ -998,7 +1003,7 @@
         }
       },
       "deedImage": {
-        "label": "Deed image",
+        "label": "Electronic deed image",
         "frontLabel": "Deed image (front)",
         "backLabel": "Deed image (back)",
         "inheritanceLabel": "Inheritance certificate image",
@@ -1017,6 +1022,16 @@
       "waqf": {
         "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
       },
+      "deceased": {
+        "deedLabel": "Copy of the property deed",
+        "inheritanceLabel": "Copy of the inheritance certificate",
+        "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
+        "najizHint": "Power of attorney issued by Najiz is accepted",
+        "minorHeirsLabel": "Are any of the heirs minors?",
+        "guardiansPoaLabel": "Copy of the minor's guardian power of attorney",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file"
+      },
       "manualEntry": {
         "separator": "Or - if you prefer not to upload an image",
         "toggleLabel": "Enter deed data manually instead of an image",
@@ -1026,7 +1041,7 @@
           "hint": "The deed number consists of 12 digits"
         },
         "instrumentDate": {
-          "label": "Deed date",
+          "label": "First registration date",
           "hijri": "Hijri",
           "gregorian": "Gregorian",
           "day": "Day",
@@ -1386,6 +1401,8 @@
     "header": {
       "home": "Home",
       "help": "Help",
+      "dark": "Dark",
+      "light": "Light",
       "requestPrefix": "Request",
       "copySuccess": "Request number copied",
       "copyError": "Could not copy request number",
@@ -1481,7 +1498,7 @@
         }
       },
       "deedImage": {
-        "label": "Deed image",
+        "label": "Electronic deed image",
         "frontLabel": "Deed image (front)",
         "backLabel": "Deed image (back)",
         "inheritanceLabel": "Inheritance certificate image",
@@ -1496,6 +1513,16 @@
         "delete": "Delete",
         "previewTitle": "File preview",
         "closePreview": "Close"
+      },
+      "sublease": {
+        "alertTitle": "Note:",
+        "notes": [
+          "01- You must mention the same unit as in the primary contract.",
+          "02- You must mention the same unit floor as in the primary contract.",
+          "03- You must mention the same unit area as in the primary contract."
+        ],
+        "uploadLabel": "Attach the primary sublease agreement (PDF)",
+        "pdfHint": "PDF only — verify the actual file type, not just the extension"
       },
       "nationalAddress": {
         "methodSelect": {
@@ -1571,6 +1598,16 @@
       "waqf": {
         "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
       },
+      "deceased": {
+        "deedLabel": "Copy of the property deed",
+        "inheritanceLabel": "Copy of the inheritance certificate",
+        "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
+        "najizHint": "Power of attorney issued by Najiz is accepted",
+        "minorHeirsLabel": "Are any of the heirs minors?",
+        "guardiansPoaLabel": "Copy of the minor's guardian power of attorney",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file"
+      },
       "manualEntry": {
         "separator": "Or - if you prefer not to upload an image",
         "toggleLabel": "Enter deed data manually instead of an image",
@@ -1580,7 +1617,7 @@
           "hint": "The deed number consists of 12 digits"
         },
         "instrumentDate": {
-          "label": "Deed date",
+          "label": "First registration date",
           "hijri": "Hijri",
           "gregorian": "Gregorian",
           "day": "Day",

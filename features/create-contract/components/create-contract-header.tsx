@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Home } from "lucide-react";
+import { Copy, Home, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 type CreateContractHeaderProps = {
   pageTitle: string;
   labels: CreateContractLabels["header"];
+  isDarkMode: boolean;
+  onToggleDarkMode: () => void;
 };
 
 const pillBaseClassName =
@@ -25,6 +27,8 @@ const pillBaseClassName =
 export default function CreateContractHeader({
   pageTitle,
   labels,
+  isDarkMode,
+  onToggleDarkMode,
 }: CreateContractHeaderProps) {
   const router = useRouter();
   const { saveDraft, isSaving } = useSaveContractDraft();
@@ -85,13 +89,13 @@ export default function CreateContractHeader({
 
   return (
     <>
-      <div className="flex w-full flex-wrap items-center gap-2 rounded-full bg-white p-2 shadow-sm">
+      <div className="flex w-full flex-wrap items-center gap-2 rounded-full bg-white p-2 shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
         <button
           type="button"
           onClick={handleHomeClick}
           className={cn(
             pillBaseClassName,
-            "bg-brand-background-green text-brand hover:bg-brand-background-green/80",
+            "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
           )}
         >
           <Home className="size-4 shrink-0" aria-hidden />
@@ -108,7 +112,7 @@ export default function CreateContractHeader({
             onClick={() => void handleCopyRequest()}
             className={cn(
               pillBaseClassName,
-              "bg-brand-background-green text-brand hover:bg-brand-background-green/80",
+              "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
             )}
           >
             <Copy className="size-4 shrink-0" aria-hidden />
@@ -122,12 +126,32 @@ export default function CreateContractHeader({
           rel="noopener noreferrer"
           className={cn(
             pillBaseClassName,
-            "ms-auto bg-brand-background-green text-brand hover:bg-brand-background-green/80",
+            "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
           )}
         >
           <FaWhatsapp className="size-4 shrink-0 text-[#25D366]" aria-hidden />
           {labels.help}
         </Link>
+
+        <button
+          type="button"
+          aria-label={isDarkMode ? labels.light : labels.dark}
+          aria-pressed={isDarkMode}
+          onClick={onToggleDarkMode}
+          className={cn(
+            pillBaseClassName,
+            "ms-auto border border-[#e4e4e4] bg-white text-brand hover:bg-brand-background",
+            isDarkMode &&
+              "border-brand-secondary/40 bg-brand text-white hover:bg-brand/90",
+          )}
+        >
+          {isDarkMode ? (
+            <Sun className="size-4 shrink-0" aria-hidden />
+          ) : (
+            <Moon className="size-4 shrink-0" aria-hidden />
+          )}
+          {isDarkMode ? labels.light : labels.dark}
+        </button>
       </div>
 
       <CreateContractExitHomeDialog

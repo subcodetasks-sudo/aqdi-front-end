@@ -100,6 +100,7 @@ type DeedDraftState = {
   deedTrusteeshipFiles: File[];
   deedTrusteeshipPersistedFiles: PersistedFile[];
   isMultipleTrusteeshipDeedCopy: boolean;
+  hasMinorHeirs: boolean;
   deedGuardiansPoaFiles: File[];
   deedGuardiansPoaPersistedFiles: PersistedFile[];
   useManualDeedEntry: boolean;
@@ -158,6 +159,7 @@ type CreateContractDraftStore = {
   setDeedEndowmentCertFiles: (files: File[]) => Promise<void>;
   setDeedTrusteeshipFiles: (files: File[]) => Promise<void>;
   setIsMultipleTrusteeshipDeedCopy: (value: boolean) => void;
+  setHasMinorHeirs: (value: boolean) => void;
   setDeedGuardiansPoaFiles: (files: File[]) => Promise<void>;
   setUseManualDeedEntry: (value: boolean) => void;
   setManualDeedEntry: (value: ManualDeedEntryData) => void;
@@ -216,6 +218,7 @@ const INITIAL_DEED: DeedDraftState = {
   deedTrusteeshipFiles: [],
   deedTrusteeshipPersistedFiles: [],
   isMultipleTrusteeshipDeedCopy: false,
+  hasMinorHeirs: false,
   deedGuardiansPoaFiles: [],
   deedGuardiansPoaPersistedFiles: [],
   useManualDeedEntry: false,
@@ -514,6 +517,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
                 value === "" ? [] : state.deed.deedTrusteeshipPersistedFiles,
               isMultipleTrusteeshipDeedCopy:
                 value === "" ? false : state.deed.isMultipleTrusteeshipDeedCopy,
+              hasMinorHeirs: value === "" ? false : state.deed.hasMinorHeirs,
               deedGuardiansPoaFiles:
                 value === "" ? [] : state.deed.deedGuardiansPoaFiles,
               deedGuardiansPoaPersistedFiles:
@@ -621,6 +625,17 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           deed: {
             ...state.deed,
             isMultipleTrusteeshipDeedCopy: value,
+            deedGuardiansPoaFiles: value ? state.deed.deedGuardiansPoaFiles : [],
+            deedGuardiansPoaPersistedFiles: value
+              ? state.deed.deedGuardiansPoaPersistedFiles
+              : [],
+          },
+        })),
+      setHasMinorHeirs: (value) =>
+        set((state) => ({
+          deed: {
+            ...state.deed,
+            hasMinorHeirs: value,
             deedGuardiansPoaFiles: value ? state.deed.deedGuardiansPoaFiles : [],
             deedGuardiansPoaPersistedFiles: value
               ? state.deed.deedGuardiansPoaPersistedFiles
@@ -977,6 +992,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           deedEndowmentCertPersistedFiles: state.deed.deedEndowmentCertPersistedFiles,
           deedTrusteeshipPersistedFiles: state.deed.deedTrusteeshipPersistedFiles,
           isMultipleTrusteeshipDeedCopy: state.deed.isMultipleTrusteeshipDeedCopy,
+          hasMinorHeirs: state.deed.hasMinorHeirs,
           deedGuardiansPoaPersistedFiles: state.deed.deedGuardiansPoaPersistedFiles,
           nationalAddressMethod: state.deed.nationalAddressMethod,
           nationalAddressPhotoPersistedFiles:

@@ -8,6 +8,11 @@ export type CreatePropertyLabels = {
   pageTitleCommercial: string;
   editPageTitleResidential: string;
   editPageTitleCommercial: string;
+  header: {
+    home: string;
+    dark: string;
+    light: string;
+  };
   stepper: {
     journey: string;
     saveAlt: string;

@@ -41,3 +41,7 @@ export function deedTypeIsWaqfOwner(deedType: DeedTypeId | ""): boolean {
 export function deedTypeIsLeaseRenewal(deedType: DeedTypeId | ""): boolean {
   return deedType === "lease-renewal";
 }
+
+export function deedTypeIsSublease(deedType: DeedTypeId | ""): boolean {
+  return deedType === "sublease-contract";
+}

@@ -262,7 +262,7 @@ export default function CreatePropertyDeedImageUpload({
           className={cn(
             "flex w-full cursor-pointer items-center gap-3 transition-colors",
             variant === "dropzone"
-              ? "min-h-28 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-8 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+              ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
               : "h-14 rounded-full border bg-brand-background px-2 ps-4",
             showInvalid
               ? "border-[#e57373]"

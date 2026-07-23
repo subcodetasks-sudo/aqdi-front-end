@@ -29,11 +29,14 @@ type CreateContractDeedImageUploadProps = {
   existingImageUrl?: string | null;
   fieldLabel?: string;
   single?: boolean;
-  variant?: "default" | "dropzone" | "dashed";
+  variant?: "default" | "dropzone" | "dashed" | "dashed-pill";
+  accept?: string;
+  hint?: string;
   invalid?: boolean;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
+const PDF_ONLY_ACCEPT = "application/pdf";
 
 function getFileParts(file: File) {
   const extension = file.name.includes(".")
@@ -172,6 +175,8 @@ export default function CreateContractDeedImageUpload({
   fieldLabel,
   single = false,
   variant = "default",
+  accept = ACCEPTED_FILE_TYPES,
+  hint,
   invalid = false,
 }: CreateContractDeedImageUploadProps) {
   const inputId = useId();
@@ -184,6 +189,7 @@ export default function CreateContractDeedImageUpload({
     .map((format) => format.trim())
     .filter(Boolean);
   const showInvalid = invalid && value.length === 0 && !showExistingImage;
+  const pdfOnly = accept === PDF_ONLY_ACCEPT;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -202,7 +208,9 @@ export default function CreateContractDeedImageUpload({
   }, [previewUrl]);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []);
+    const files = Array.from(event.target.files ?? []).filter((file) =>
+      pdfOnly ? isPdfFile(file) : true,
+    );
 
     if (files.length > 0) {
       onChange(single ? [files[0]] : [...value, ...files]);
@@ -218,6 +226,7 @@ export default function CreateContractDeedImageUpload({
   const resolvedLabel = fieldLabel ?? labels.label;
   const isDropzone = variant === "dropzone";
   const isDashed = variant === "dashed";
+  const isDashedPill = variant === "dashed-pill";
   const isAreaUpload = isDropzone || isDashed;
 
   return (
@@ -257,12 +266,14 @@ export default function CreateContractDeedImageUpload({
         htmlFor={inputId}
         className={cn(
           "flex w-full cursor-pointer items-center gap-3 transition-colors",
-          isAreaUpload
-            ? "min-h-28 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-8 text-center hover:border-brand/40 hover:bg-[#fafafa]"
-            : "h-14 rounded-full border bg-brand-background px-2 ps-4",
+          isDashedPill
+            ? "h-14 justify-center rounded-full border border-dashed bg-white px-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+            : isAreaUpload
+              ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+              : "h-14 rounded-full border bg-brand-background px-2 ps-4",
           showInvalid
             ? "border-[#e57373]"
-            : isAreaUpload
+            : isDashedPill || isAreaUpload
               ? "border-[#d4d4d4]"
               : "border-[#e8e8e8]",
         )}
@@ -272,18 +283,20 @@ export default function CreateContractDeedImageUpload({
           id={inputId}
           type="file"
           multiple={!single}
-          accept={ACCEPTED_FILE_TYPES}
+          accept={accept}
           className="sr-only"
           onChange={handleFileChange}
         />
 
-        {isDashed ? (
-          <div className="space-y-2">
+        {isDashed || isDashedPill ? (
+          <div className="space-y-1">
             <p className="text-sm font-medium text-[#666666]">
               <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
               <span>{labels.chooseFile}</span>
             </p>
-            <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+            {isDashed && !hint && labels.acceptedFormats ? (
+              <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+            ) : null}
           </div>
         ) : isDropzone ? (
           <p className="text-sm font-medium text-[#666666]">
@@ -306,6 +319,10 @@ export default function CreateContractDeedImageUpload({
           </>
         )}
       </label>
+
+      {hint ? (
+        <p className="text-xs leading-relaxed text-[#9a9a9a]">{hint}</p>
+      ) : null}
 
       {showExistingImage && existingImageUrl ? (
         <ExistingImageRow

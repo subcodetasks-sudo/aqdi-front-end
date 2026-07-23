@@ -37,6 +37,11 @@ export default async function CreatePropertyPage({
     pageTitleCommercial: t("pageTitleCommercial"),
     editPageTitleResidential: t("editPageTitleResidential"),
     editPageTitleCommercial: t("editPageTitleCommercial"),
+    header: {
+      home: t("header.home"),
+      dark: t("header.dark"),
+      light: t("header.light"),
+    },
     stepper: {
       journey: t("stepper.journey"),
       saveAlt: t("stepper.saveAlt"),

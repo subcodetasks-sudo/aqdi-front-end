@@ -12,6 +12,8 @@ export type CreateContractLabels = {
   header: {
     home: string;
     help: string;
+    dark: string;
+    light: string;
     requestPrefix: string;
     copySuccess: string;
     copyError: string;
@@ -93,6 +95,22 @@ export type CreateContractLabels = {
       delete: string;
       previewTitle: string;
       closePreview: string;
+    };
+    sublease: {
+      alertTitle: string;
+      notes: string[];
+      uploadLabel: string;
+      pdfHint: string;
+    };
+    deceased: {
+      deedLabel: string;
+      inheritanceLabel: string;
+      heirsPoaLabel: string;
+      najizHint: string;
+      minorHeirsLabel: string;
+      guardiansPoaLabel: string;
+      clickHere: string;
+      chooseFile: string;
     };
     nationalAddress: {
       methodSelect: {

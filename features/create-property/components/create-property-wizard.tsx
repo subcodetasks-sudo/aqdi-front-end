@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import CreatePropertyDeedStep from "@/features/create-property/components/create-property-deed-step";
+import CreatePropertyHeader from "@/features/create-property/components/create-property-header";
 import CreatePropertyOwnerStep from "@/features/create-property/components/create-property-owner-step";
 import CreatePropertyReviewStep from "@/features/create-property/components/create-property-review-step";
 import CreatePropertyStepper from "@/features/create-property/components/create-property-stepper";
@@ -20,12 +21,16 @@ type CreatePropertyWizardProps = {
   labels: CreatePropertyLabels;
   propertyType: PropertyTypeId;
   initialEditDraft: PropertyEditDraftData | null;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
 };
 
 export default function CreatePropertyWizard({
   labels,
   propertyType,
   initialEditDraft,
+  isDarkMode = false,
+  onToggleDarkMode,
 }: CreatePropertyWizardProps) {
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
@@ -79,14 +84,29 @@ export default function CreatePropertyWizard({
   }
 
   const showStepper = currentStep !== "success";
+  const isEditMode = initialEditDraft !== null;
+  const pageTitle = isEditMode
+    ? propertyType === "residential"
+      ? labels.editPageTitleResidential
+      : labels.editPageTitleCommercial
+    : labels.pageTitle;
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       {initialEditDraft ? null : (
         <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       )}
+
       {showStepper ? (
-        <CreatePropertyStepper labels={labels.stepper} />
+        <>
+          <CreatePropertyHeader
+            pageTitle={pageTitle}
+            labels={labels.header}
+            isDarkMode={isDarkMode}
+            onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
+          />
+          <CreatePropertyStepper labels={labels.stepper} />
+        </>
       ) : null}
 
       {currentStep === "deed" ? (

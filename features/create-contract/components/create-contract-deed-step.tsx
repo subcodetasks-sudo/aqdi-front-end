@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import CreateContractDeceasedOwnerSection from "@/features/create-contract/components/create-contract-deceased-owner-section";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
@@ -17,9 +18,13 @@ import { useSubmitContractStep1 } from "@/features/create-contract/hooks/use-sub
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { useSubmitContractStep2 } from "@/features/create-contract/hooks/use-submit-contract-step2";
 import { type DeedTypeId } from "@/features/create-contract/types/deed-type";
-import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
+import {
+  deedTypeIsLeaseRenewal,
+  deedTypeIsSublease,
+} from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import CreateContractSubleaseSection from "@/features/create-contract/components/create-contract-sublease-section";
 import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
@@ -57,6 +62,8 @@ export default function CreateContractDeedStep({
     setDeedTrusteeshipFiles,
     isMultipleTrusteeshipDeedCopy,
     setIsMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
+    setHasMinorHeirs,
     deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
     needsFrontBack,
@@ -89,6 +96,7 @@ export default function CreateContractDeedStep({
     manualDeedEntry,
     setManualDeedEntry,
   } = useCreateContractDeedStep();
+  const isSublease = deedTypeIsSublease(selectedDeedType);
   const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
@@ -145,7 +153,8 @@ export default function CreateContractDeedStep({
       : isDeceasedOwner
         ? deedFiles.length > 0 ||
           deedInheritanceFiles.length > 0 ||
-          deedHeirsPoaFiles.length > 0
+          deedHeirsPoaFiles.length > 0 ||
+          deedGuardiansPoaFiles.length > 0
         : isWaqfOwner
           ? deedFiles.length > 0 ||
             deedEndowmentCertFiles.length > 0 ||
@@ -183,6 +192,9 @@ export default function CreateContractDeedStep({
                   instrument: deedFiles[0],
                   inheritance: deedInheritanceFiles[0],
                   heirsPoa: deedHeirsPoaFiles[0],
+                  guardiansPoa: hasMinorHeirs
+                    ? deedGuardiansPoaFiles[0]
+                    : undefined,
                 }
               : isWaqfOwner
                 ? {
@@ -260,6 +272,19 @@ export default function CreateContractDeedStep({
       return null;
     }
 
+    if (isSublease) {
+      return (
+        <CreateContractSubleaseSection
+          labels={labels.sublease}
+          deedImageLabels={labels.deedImage}
+          value={deedFiles}
+          onChange={setDeedFiles}
+          existingImageUrl={existingInstrumentImageUrl}
+          showFieldErrors={showFieldErrors}
+        />
+      );
+    }
+
     if (needsFrontBack) {
       return (
         <div className="space-y-6">
@@ -292,38 +317,25 @@ export default function CreateContractDeedStep({
 
     if (isDeceasedOwner) {
       return (
-        <div className="space-y-6">
-          {renderInstrumentUpload(
-            <CreateContractDeedImageUpload
-              labels={labels.deedImage}
-              single
-              variant="dropzone"
-              value={deedFiles}
-              onChange={setDeedFiles}
-              existingImageUrl={existingInstrumentImageUrl}
-            />,
-          )}
-
-          <CreateContractDeedImageUpload
-            labels={labels.deedImage}
-            fieldLabel={labels.deedImage.inheritanceLabel}
-            single
-            variant="dropzone"
-            value={deedInheritanceFiles}
-            onChange={setDeedInheritanceFiles}
-            existingImageUrl={existingInheritanceImageUrl}
-          />
-
-          <CreateContractDeedImageUpload
-            labels={labels.deedImage}
-            fieldLabel={labels.deedImage.heirsPoaLabel}
-            single
-            variant="dropzone"
-            value={deedHeirsPoaFiles}
-            onChange={setDeedHeirsPoaFiles}
-            existingImageUrl={existingHeirsPoaImageUrl}
-          />
-        </div>
+        <CreateContractDeceasedOwnerSection
+          labels={labels.deceased}
+          deedImageLabels={labels.deedImage}
+          deedFiles={deedFiles}
+          onDeedFilesChange={setDeedFiles}
+          existingDeedImageUrl={existingInstrumentImageUrl}
+          inheritanceFiles={deedInheritanceFiles}
+          onInheritanceFilesChange={setDeedInheritanceFiles}
+          existingInheritanceImageUrl={existingInheritanceImageUrl}
+          heirsPoaFiles={deedHeirsPoaFiles}
+          onHeirsPoaFilesChange={setDeedHeirsPoaFiles}
+          existingHeirsPoaImageUrl={existingHeirsPoaImageUrl}
+          hasMinorHeirs={hasMinorHeirs}
+          onHasMinorHeirsChange={setHasMinorHeirs}
+          guardiansPoaFiles={deedGuardiansPoaFiles}
+          onGuardiansPoaFilesChange={setDeedGuardiansPoaFiles}
+          existingGuardiansPoaImageUrl={existingGuardiansPoaImageUrl}
+          showFieldErrors={showFieldErrors}
+        />
       );
     }
 

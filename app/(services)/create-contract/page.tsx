@@ -71,6 +71,8 @@ export default async function CreateContractPage({
     header: {
       home: t("header.home"),
       help: t("header.help"),
+      dark: t("header.dark"),
+      light: t("header.light"),
       requestPrefix: t("header.requestPrefix"),
       copySuccess: t("header.copySuccess"),
       copyError: t("header.copyError"),
@@ -161,6 +163,12 @@ export default async function CreateContractPage({
         previewTitle: t("deed.deedImage.previewTitle"),
         closePreview: t("deed.deedImage.closePreview"),
       },
+      sublease: {
+        alertTitle: t("deed.sublease.alertTitle"),
+        notes: t.raw("deed.sublease.notes") as string[],
+        uploadLabel: t("deed.sublease.uploadLabel"),
+        pdfHint: t("deed.sublease.pdfHint"),
+      },
       nationalAddress: {
         methodSelect: {
           label: t("deed.nationalAddress.methodSelect.label"),
@@ -231,6 +239,16 @@ export default async function CreateContractPage({
       },
       waqf: {
         multipleTrusteesLabel: t("deed.waqf.multipleTrusteesLabel"),
+      },
+      deceased: {
+        deedLabel: t("deed.deceased.deedLabel"),
+        inheritanceLabel: t("deed.deceased.inheritanceLabel"),
+        heirsPoaLabel: t("deed.deceased.heirsPoaLabel"),
+        najizHint: t("deed.deceased.najizHint"),
+        minorHeirsLabel: t("deed.deceased.minorHeirsLabel"),
+        guardiansPoaLabel: t("deed.deceased.guardiansPoaLabel"),
+        clickHere: t("deed.deceased.clickHere"),
+        chooseFile: t("deed.deceased.chooseFile"),
       },
       manualEntry: {
         separator: t("deed.manualEntry.separator"),

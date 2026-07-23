@@ -33,7 +33,7 @@ function getStepPillClassName(
       ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
       : isCompleted
         ? "bg-brand text-white"
-        : "bg-brand-background-green text-brand",
+        : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]",
   );
 }
 
@@ -48,7 +48,7 @@ export default function CreatePropertyStepper({
   }
 
   return (
-    <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5">
+    <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5 dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
         {CREATE_PROPERTY_STEPPER_STEPS.map((step) => {
           const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
@@ -75,7 +75,7 @@ export default function CreatePropertyStepper({
         <span
           title={labels.saveAlt}
           aria-label={labels.saveAlt}
-          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-brand/40 bg-white text-brand"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-brand/40 bg-white text-brand dark:border-brand-secondary/50 dark:bg-[#16352f] dark:text-[#7dccc0]"
         >
           <Save className="size-5" aria-hidden="true" />
         </span>
@@ -88,9 +88,9 @@ export default function CreatePropertyStepper({
           width={203}
           height={26}
           aria-hidden="true"
-          className="h-auto min-w-0 flex-1 object-contain object-right"
+          className="h-auto min-w-0 flex-1 object-contain object-right dark:opacity-70"
         />
-        <p className="shrink-0 text-center text-xs font-medium text-brand md:text-sm">
+        <p className="shrink-0 text-center text-xs font-medium text-brand md:text-sm dark:text-[#7dccc0]">
           {labels.journey}
         </p>
         <Image
@@ -99,7 +99,7 @@ export default function CreatePropertyStepper({
           width={203}
           height={26}
           aria-hidden="true"
-          className="h-auto min-w-0 flex-1 object-contain object-left"
+          className="h-auto min-w-0 flex-1 object-contain object-left dark:opacity-70"
         />
       </div>
     </div>

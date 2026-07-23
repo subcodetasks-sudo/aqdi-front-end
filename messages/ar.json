@@ -992,6 +992,11 @@
     "pageTitleCommercial": "إضافة عقار تجاري",
     "editPageTitleResidential": "تعديل العقار السكني",
     "editPageTitleCommercial": "تعديل العقار التجاري",
+    "header": {
+      "home": "الرئيسية",
+      "dark": "داكن",
+      "light": "فاتح"
+    },
     "stepper": {
       "journey": "رحلتك الإيجارية أصبحت أسهل.",
       "saveAlt": "حفظ",
@@ -1024,7 +1029,7 @@
         }
       },
       "deedImage": {
-        "label": "صورة الصك",
+        "label": "صورة الصك الالكتروني",
         "frontLabel": "صورة الصك من الأمام",
         "backLabel": "صورة الصك من الخلف",
         "inheritanceLabel": "صورة صك حصر الورثة",
@@ -1043,6 +1048,16 @@
       "waqf": {
         "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
       },
+      "deceased": {
+        "deedLabel": "صورة من صك الملكية",
+        "inheritanceLabel": "صورة من صك حصر الورثة",
+        "heirsPoaLabel": "صورة من الوكالة الشرعية عن الورثة",
+        "najizHint": "تُقبل الوكالة الصادرة من ناجز",
+        "minorHeirsLabel": "هل يوجد من الورثة قاصر؟",
+        "guardiansPoaLabel": "صورة من وكالة ولي القاصر",
+        "clickHere": "اضغط هنا",
+        "chooseFile": "لاختيار صورة أو ملف"
+      },
       "manualEntry": {
         "separator": "أو - إذا كنت تفضل عدم رفع صورة",
         "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
@@ -1052,7 +1067,7 @@
           "hint": "رقم الصك يتكون من 12 رقمًا"
         },
         "instrumentDate": {
-          "label": "تاريخ الصك",
+          "label": "تاريخ التسجيل الأول",
           "hijri": "هجري",
           "gregorian": "ميلادي",
           "day": "اليوم",
@@ -1412,6 +1427,8 @@
     "header": {
       "home": "الرئيسية",
       "help": "للمساعدة",
+      "dark": "داكن",
+      "light": "فاتح",
       "requestPrefix": "طلب",
       "copySuccess": "تم نسخ رقم الطلب",
       "copyError": "تعذر نسخ رقم الطلب",
@@ -1507,7 +1524,7 @@
         }
       },
       "deedImage": {
-        "label": "صورة الصك",
+        "label": "صورة الصك الالكتروني",
         "frontLabel": "صورة الصك من الأمام",
         "backLabel": "صورة الصك من الخلف",
         "inheritanceLabel": "صورة صك حصر الورثة",
@@ -1515,13 +1532,23 @@
         "endowmentCertLabel": "صورة من شهادة تسجيل الوقف",
         "trusteeshipLabel": "صورة من صك النظارة",
         "guardiansPoaLabel": "صورة من وكالة النظار للوكيل",
-        "clickHere": "إضغط هنا",
+        "clickHere": "اضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
         "preview": "معاينة",
         "delete": "حذف",
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
+      },
+      "sublease": {
+        "alertTitle": "تنبيه:",
+        "notes": [
+          "01- يجب ذكر نفس الوحدة الموجودة بالعقد الأساسي.",
+          "02- يجب ذكر نفس طابق الوحدة بالعقد الأساسي.",
+          "03- يجب ذكر نفس المساحة المذكورة للوحدة فالعقد الأساسي."
+        ],
+        "uploadLabel": "إرفاق عقد الإيجار من الباطن الأساسي (PDF)",
+        "pdfHint": "يُقبل PDF فقط - تحقق من نوع الملف الفعلي لا الامتداد"
       },
       "nationalAddress": {
         "methodSelect": {
@@ -1597,6 +1624,16 @@
       "waqf": {
         "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
       },
+      "deceased": {
+        "deedLabel": "صورة من صك الملكية",
+        "inheritanceLabel": "صورة من صك حصر الورثة",
+        "heirsPoaLabel": "صورة من الوكالة الشرعية عن الورثة",
+        "najizHint": "تُقبل الوكالة الصادرة من ناجز",
+        "minorHeirsLabel": "هل يوجد من الورثة قاصر؟",
+        "guardiansPoaLabel": "صورة من وكالة ولي القاصر",
+        "clickHere": "اضغط هنا",
+        "chooseFile": "لاختيار صورة أو ملف"
+      },
       "manualEntry": {
         "separator": "أو - إذا كنت تفضل عدم رفع صورة",
         "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
@@ -1606,7 +1643,7 @@
           "hint": "رقم الصك يتكون من 12 رقمًا"
         },
         "instrumentDate": {
-          "label": "تاريخ الصك",
+          "label": "تاريخ التسجيل الأول",
           "hijri": "هجري",
           "gregorian": "ميلادي",
           "day": "اليوم",

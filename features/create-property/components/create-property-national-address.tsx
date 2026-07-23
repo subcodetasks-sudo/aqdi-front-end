@@ -33,19 +33,19 @@ const METHOD_CARDS: {
 }[] = [
   {
     id: "link",
-    icon: <FaMapMarkerAlt className="size-7 text-[#ea4335]" aria-hidden />,
+    icon: <FaMapMarkerAlt className="size-5 text-[#ea4335]" aria-hidden />,
   },
   {
     id: "manual",
-    icon: <PenLine className="size-7 text-brand-secondary" aria-hidden />,
+    icon: <PenLine className="size-5 text-brand-secondary" aria-hidden />,
   },
   {
     id: "photo",
     icon: (
-      <span className="relative inline-flex size-8 items-center justify-center">
-        <IdCard className="size-7 text-brand" aria-hidden />
+      <span className="relative inline-flex size-6 items-center justify-center">
+        <IdCard className="size-5 text-brand" aria-hidden />
         <MapPin
-          className="absolute -inset-e-0.5 -top-0.5 size-3.5 text-brand-secondary"
+          className="absolute -inset-e-0.5 -top-0.5 size-2.5 text-brand-secondary"
           aria-hidden
         />
       </span>
@@ -89,7 +89,7 @@ export default function CreatePropertyNationalAddress({
         <div
           role="radiogroup"
           aria-labelledby={methodGroupId}
-          className="grid grid-cols-1 gap-3 sm:grid-cols-3"
+          className="grid grid-cols-3 gap-2"
         >
           <span id={methodGroupId} className="sr-only">
             {labels.methodSelect.label}
@@ -107,7 +107,7 @@ export default function CreatePropertyNationalAddress({
                 aria-checked={selected}
                 onClick={() => onMethodChange(card.id)}
                 className={cn(
-                  "flex flex-col items-center gap-2 rounded-2xl border px-3 py-5 text-center transition-colors",
+                  "flex min-w-0 flex-col items-center gap-1 rounded-xl border px-2 py-3 text-center transition-colors",
                   selected
                     ? "border-brand bg-brand-background-green/60 shadow-[0_0_0_1px_rgba(13,90,80,0.08)]"
                     : methodInvalid
@@ -115,13 +115,15 @@ export default function CreatePropertyNationalAddress({
                       : "border-[#e8e8e8] bg-white hover:border-brand/30",
                 )}
               >
-                <span className="flex size-12 items-center justify-center">
+                <span className="flex size-8 items-center justify-center">
                   {card.icon}
                 </span>
-                <span className="text-sm font-extrabold text-brand">
+                <span className="text-xs font-extrabold text-brand">
                   {copy.title}
                 </span>
-                <span className="text-xs text-[#9a9a9a]">{copy.description}</span>
+                <span className="line-clamp-2 text-[10px] leading-snug text-[#9a9a9a]">
+                  {copy.description}
+                </span>
               </button>
             );
           })}
