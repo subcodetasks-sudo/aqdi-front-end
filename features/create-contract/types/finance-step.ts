@@ -1,4 +1,5 @@
 import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
+import { areTenantRoleValuesComplete } from "@/features/create-contract/utils/tenant-role-helpers";
 import { getTodayContractStartDate } from "@/features/create-contract/utils/get-today-contract-start-date";
 
 export type FinanceDataState = {
@@ -12,8 +13,11 @@ export type FinanceDataState = {
   addTenantPermissions: boolean;
   addOtherConditions: boolean;
   selectedTenantRoleIds: number[];
-  otherConditionsText: string;
+  tenantRoleValues: Record<string, string>;
+  otherConditionsList: string[];
 };
+
+export const MAX_OTHER_CONDITIONS = 50;
 
 export function createEmptyFinanceData(): FinanceDataState {
   return {
@@ -27,7 +31,8 @@ export function createEmptyFinanceData(): FinanceDataState {
     addTenantPermissions: false,
     addOtherConditions: false,
     selectedTenantRoleIds: [],
-    otherConditionsText: "",
+    tenantRoleValues: {},
+    otherConditionsList: [],
   };
 }
 
@@ -57,8 +62,39 @@ function resolveContractStartDate(
   return contractStartDate;
 }
 
+function resolveOtherConditionsList(
+  financeData: Partial<FinanceDataState> & {
+    paymentMethod?: string;
+    otherConditionsText?: string;
+  },
+): string[] {
+  if (Array.isArray(financeData.otherConditionsList)) {
+    return financeData.otherConditionsList
+      .slice(0, MAX_OTHER_CONDITIONS)
+      .map((item) => (typeof item === "string" ? item : ""));
+  }
+
+  const legacyText = financeData.otherConditionsText;
+  if (typeof legacyText === "string" && legacyText.trim() !== "") {
+    return legacyText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(0, MAX_OTHER_CONDITIONS);
+  }
+
+  return [];
+}
+
+export function getFilledOtherConditions(list: string[]) {
+  return list.map((item) => item.trim()).filter(Boolean);
+}
+
 export function normalizeFinanceData(
-  financeData: Partial<FinanceDataState> & { paymentMethod?: string },
+  financeData: Partial<FinanceDataState> & {
+    paymentMethod?: string;
+    otherConditionsText?: string;
+  },
 ): FinanceDataState {
   let paymentTypeId = financeData.paymentTypeId ?? "";
 
@@ -66,6 +102,26 @@ export function normalizeFinanceData(
     paymentTypeId =
       LEGACY_PAYMENT_METHOD_TO_TYPE_ID[financeData.paymentMethod] ?? "";
   }
+
+  const otherConditionsList = resolveOtherConditionsList(financeData);
+
+  const selectedTenantRoleIds = Array.isArray(financeData.selectedTenantRoleIds)
+    ? financeData.selectedTenantRoleIds.filter(
+        (id): id is number => typeof id === "number" && Number.isFinite(id),
+      )
+    : [];
+
+  const tenantRoleValues =
+    financeData.tenantRoleValues &&
+    typeof financeData.tenantRoleValues === "object" &&
+    !Array.isArray(financeData.tenantRoleValues)
+      ? Object.fromEntries(
+          Object.entries(financeData.tenantRoleValues).map(([key, value]) => [
+            key,
+            value == null ? "" : String(value),
+          ]),
+        )
+      : {};
 
   return {
     ...createEmptyFinanceData(),
@@ -82,6 +138,14 @@ export function normalizeFinanceData(
         : "",
     paymentTypeId:
       typeof paymentTypeId === "number" && paymentTypeId > 0 ? paymentTypeId : "",
+    selectedTenantRoleIds,
+    tenantRoleValues,
+    addTenantPermissions:
+      financeData.addTenantPermissions === true ||
+      selectedTenantRoleIds.length > 0,
+    otherConditionsList,
+    addOtherConditions:
+      financeData.addOtherConditions === true || otherConditionsList.length > 0,
   };
 }
 
@@ -132,8 +196,17 @@ export function isFinanceDataComplete(financeData: FinanceDataState) {
   }
 
   if (
+    !areTenantRoleValuesComplete(
+      financeData.selectedTenantRoleIds,
+      financeData.tenantRoleValues,
+    )
+  ) {
+    return false;
+  }
+
+  if (
     financeData.addOtherConditions &&
-    financeData.otherConditionsText.trim() === ""
+    getFilledOtherConditions(financeData.otherConditionsList).length === 0
   ) {
     return false;
   }

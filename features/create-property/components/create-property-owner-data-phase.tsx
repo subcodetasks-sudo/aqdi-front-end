@@ -14,7 +14,9 @@ import {
 import {
   getIdNumberFieldError,
   getPhoneFieldError,
+  isPhoneComplete,
 } from "@/lib/validation/owner-step-validation";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreatePropertyOwnerDataPhaseProps = {
@@ -23,7 +25,12 @@ type CreatePropertyOwnerDataPhaseProps = {
   validationLabels: CreatePropertyLabels["owner"]["validation"]["fieldErrors"];
   value: PropertyOwnerDataState;
   onChange: (value: PropertyOwnerDataState) => void;
+  showFieldErrors?: boolean;
 };
+
+function isIdNumberComplete(idNumber: string) {
+  return idNumber.replace(/\D/g, "").length === 10;
+}
 
 export default function CreatePropertyOwnerDataPhase({
   labels,
@@ -31,6 +38,7 @@ export default function CreatePropertyOwnerDataPhase({
   validationLabels,
   value,
   onChange,
+  showFieldErrors = false,
 }: CreatePropertyOwnerDataPhaseProps) {
   function updateField<K extends keyof PropertyOwnerDataState>(
     field: K,
@@ -55,6 +63,17 @@ export default function CreatePropertyOwnerDataPhase({
     required: validationLabels.phoneLength,
     length: validationLabels.phoneLength,
   });
+  const idInvalid =
+    Boolean(idNumberError) ||
+    (showFieldErrors && !isIdNumberComplete(value.idNumber));
+  const phoneInvalid =
+    Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
+  const birthDateInvalid =
+    showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
+  const hasAgentInvalid = showFieldErrors && value.hasAgent === "";
+  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
+  const hasAgentValid = !hasAgentInvalid && value.hasAgent !== "";
 
   return (
     <div className="space-y-5">
@@ -70,12 +89,15 @@ export default function CreatePropertyOwnerDataPhase({
         inputMode="numeric"
         maxLength={10}
         errorMessage={idNumberError}
+        invalid={idInvalid}
+        valid={idValid}
       />
 
       <CreatePropertyBirthDateFields
         labels={birthDateLabels}
         value={value.birthDate}
         onChange={(birthDate) => updateField("birthDate", birthDate)}
+        invalid={birthDateInvalid}
       />
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -88,6 +110,8 @@ export default function CreatePropertyOwnerDataPhase({
           }
           icon={Phone}
           errorMessage={phoneError}
+          invalid={phoneInvalid}
+          valid={phoneValid}
         />
 
         <CreatePropertyFormSelect
@@ -101,6 +125,8 @@ export default function CreatePropertyOwnerDataPhase({
               hasAgent as PropertyOwnerDataState["hasAgent"],
             )
           }
+          invalid={hasAgentInvalid}
+          valid={hasAgentValid}
         />
       </div>
     </div>

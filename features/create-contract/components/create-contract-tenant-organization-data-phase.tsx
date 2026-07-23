@@ -10,6 +10,12 @@ import CreateContractTenantDelegationTypeSelect from "@/features/create-contract
 import CreateContractUnifiedRecordNumberField from "@/features/create-contract/components/create-contract-unified-record-number-field";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { OrganizationTenantData } from "@/features/create-contract/types/tenant-step";
+import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
+import {
+  isUnifiedRecordNumberPrefixOnly,
+  UNIFIED_RECORD_NUMBER_LENGTH,
+} from "@/lib/validation/format-unified-record-number-for-form";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractTenantOrganizationDataPhaseProps = {
@@ -17,13 +23,28 @@ type CreateContractTenantOrganizationDataPhaseProps = {
   birthDateLabels: CreateContractLabels["tenant"]["birthDate"];
   value: OrganizationTenantData;
   onChange: (value: OrganizationTenantData) => void;
+  showFieldErrors?: boolean;
 };
+
+function isIdNumberComplete(idNumber: string) {
+  return idNumber.replace(/\D/g, "").length === 10;
+}
+
+function isUnifiedRecordNumberComplete(unifiedRecordNumber: string) {
+  if (isUnifiedRecordNumberPrefixOnly(unifiedRecordNumber)) {
+    return false;
+  }
+
+  const digits = unifiedRecordNumber.replace(/\D/g, "");
+  return digits.length === UNIFIED_RECORD_NUMBER_LENGTH && digits.startsWith("7");
+}
 
 export default function CreateContractTenantOrganizationDataPhase({
   labels,
   birthDateLabels,
   value,
   onChange,
+  showFieldErrors = false,
 }: CreateContractTenantOrganizationDataPhaseProps) {
   function updateField<K extends keyof OrganizationTenantData>(
     field: K,
@@ -48,76 +69,90 @@ export default function CreateContractTenantOrganizationDataPhase({
     });
   }
 
+  const delegationType = value.delegationType || "owner-representative";
+
   return (
     <div className="mt-5 space-y-5">
       <CreateContractTenantDelegationTypeSelect
         labels={labels.delegationType}
-        value={value.delegationType}
+        value={delegationType}
         onChange={updateDelegationType}
+        invalid={showFieldErrors && value.delegationType === ""}
       />
 
-      {value.delegationType ? (
-        <>
-          <CreateContractUnifiedRecordNumberField
-            label={labels.unifiedRecordNumber.label}
-            placeholder={labels.unifiedRecordNumber.placeholder}
-            hint={labels.unifiedRecordNumber.hint}
-            value={value.unifiedRecordNumber}
-            onChange={(unifiedRecordNumber) =>
-              updateField("unifiedRecordNumber", unifiedRecordNumber)
-            }
-            icon={FilePenLine}
-          />
+      <CreateContractUnifiedRecordNumberField
+        label={labels.unifiedRecordNumber.label}
+        placeholder={labels.unifiedRecordNumber.placeholder}
+        hint={labels.unifiedRecordNumber.hint}
+        value={value.unifiedRecordNumber}
+        onChange={(unifiedRecordNumber) =>
+          updateField("unifiedRecordNumber", unifiedRecordNumber)
+        }
+        icon={FilePenLine}
+        invalid={
+          showFieldErrors &&
+          !isUnifiedRecordNumberComplete(value.unifiedRecordNumber)
+        }
+        valid={isUnifiedRecordNumberComplete(value.unifiedRecordNumber)}
+      />
 
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-            <CreateContractIconInputField
-              label={labels.ownerIdNumber.label}
-              placeholder={labels.ownerIdNumber.placeholder}
-              value={value.ownerIdNumber}
-              onChange={(ownerIdNumber) =>
-                updateField(
-                  "ownerIdNumber",
-                  ownerIdNumber.replace(/\D/g, "").slice(0, 10),
-                )
-              }
-              icon={IdCard}
-              dir="ltr"
-              inputMode="numeric"
-              maxLength={10}
-            />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <CreateContractIconInputField
+          label={labels.ownerIdNumber.label}
+          placeholder={labels.ownerIdNumber.placeholder}
+          value={value.ownerIdNumber}
+          onChange={(ownerIdNumber) =>
+            updateField(
+              "ownerIdNumber",
+              ownerIdNumber.replace(/\D/g, "").slice(0, 10),
+            )
+          }
+          icon={IdCard}
+          dir="ltr"
+          inputMode="numeric"
+          maxLength={10}
+          invalid={showFieldErrors && !isIdNumberComplete(value.ownerIdNumber)}
+          valid={isIdNumberComplete(value.ownerIdNumber)}
+        />
 
-            <CreateContractSaudiMobileField
-              label={labels.ownerPhone.label}
-              placeholder={labels.ownerPhone.placeholder}
-              value={value.ownerPhone}
-              onChange={(ownerPhone) =>
-                updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
-              }
-              icon={Phone}
-            />
-          </div>
+        <CreateContractSaudiMobileField
+          label={labels.ownerPhone.label}
+          placeholder={labels.ownerPhone.placeholder}
+          value={value.ownerPhone}
+          onChange={(ownerPhone) =>
+            updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
+          }
+          icon={Phone}
+          invalid={showFieldErrors && !isPhoneComplete(value.ownerPhone)}
+          valid={isPhoneComplete(value.ownerPhone)}
+        />
+      </div>
 
-          <CreateContractBirthDateFields
-            labels={{
-              ...birthDateLabels,
-              label: labels.ownerBirthDateLabel,
-            }}
-            value={value.ownerBirthDate}
-            onChange={(ownerBirthDate) =>
-              updateField("ownerBirthDate", ownerBirthDate)
-            }
-          />
+      <CreateContractBirthDateFields
+        labels={{
+          ...birthDateLabels,
+          label: labels.ownerBirthDateLabel,
+        }}
+        value={value.ownerBirthDate}
+        onChange={(ownerBirthDate) =>
+          updateField("ownerBirthDate", ownerBirthDate)
+        }
+        invalid={
+          showFieldErrors && !isAdultBirthDateComplete(value.ownerBirthDate)
+        }
+      />
 
-          {value.delegationType === "agent-authorized" ? (
-            <CreateContractDeedImageUpload
-              labels={labels.powerOfAttorney}
-              value={value.powerOfAttorneyFiles}
-              onChange={(powerOfAttorneyFiles) =>
-                updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
-              }
-            />
-          ) : null}
-        </>
+      {delegationType === "agent-authorized" ? (
+        <CreateContractDeedImageUpload
+          labels={labels.powerOfAttorney}
+          value={value.powerOfAttorneyFiles}
+          onChange={(powerOfAttorneyFiles) =>
+            updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
+          }
+          invalid={showFieldErrors && value.powerOfAttorneyFiles.length === 0}
+          single
+          variant="dashed"
+        />
       ) : null}
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -17,7 +18,6 @@ import DeedInstrumentEntrySection from "@/features/shared/components/deed-instru
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
 import { propertyDeedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
-import type { ReactNode } from "react";
 
 type CreatePropertyDeedStepProps = {
   labels: CreatePropertyLabels["deed"];
@@ -69,6 +69,7 @@ export default function CreatePropertyDeedStep({
     existingGuardiansPoaImageUrl,
     canContinue,
   } = useCreatePropertyDeedStep();
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
   const deedTypePopup = useInstrumentTypeDeedPopup("realestate");
   const supportsManualEntry = propertyDeedTypeSupportsManualEntry(selectedDeedType);
   const hasExistingInstrument =
@@ -89,19 +90,21 @@ export default function CreatePropertyDeedStep({
 
   function handleContinue() {
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
+    setShowFieldErrors(false);
     onComplete();
   }
 
   function renderInstrumentEntry(upload: ReactNode) {
-    if (!selectedDeedType || !supportsManualEntry) {
+    if (!selectedDeedType) {
       return null;
     }
 
-    if (!allowManualEntry) {
+    if (!supportsManualEntry || !allowManualEntry) {
       return upload;
     }
 
@@ -120,6 +123,9 @@ export default function CreatePropertyDeedStep({
   }
 
   function renderFrontBackUpload() {
+    const instrumentInvalid =
+      showFieldErrors && !useManualDeedEntry;
+
     return (
       <div className="space-y-6">
         <CreatePropertyDeedImageUpload
@@ -128,6 +134,12 @@ export default function CreatePropertyDeedStep({
           value={deedFrontFiles}
           onChange={setDeedFrontFiles}
           existingFileUrl={existingDeedFrontImageUrl}
+          variant="dropzone"
+          invalid={
+            instrumentInvalid &&
+            deedFrontFiles.length === 0 &&
+            !existingDeedFrontImageUrl
+          }
         />
 
         <CreatePropertyDeedImageUpload
@@ -136,6 +148,12 @@ export default function CreatePropertyDeedStep({
           value={deedBackFiles}
           onChange={setDeedBackFiles}
           existingFileUrl={existingDeedBackImageUrl}
+          variant="dropzone"
+          invalid={
+            instrumentInvalid &&
+            deedBackFiles.length === 0 &&
+            !existingDeedBackImageUrl
+          }
         />
       </div>
     );
@@ -148,23 +166,31 @@ export default function CreatePropertyDeedStep({
         value={deedFiles}
         onChange={setDeedFiles}
         existingFileUrl={existingDeedImageUrl}
+        variant="dropzone"
+        invalid={
+          showFieldErrors &&
+          !useManualDeedEntry &&
+          deedFiles.length === 0 &&
+          !existingDeedImageUrl
+        }
       />
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
         />
 
-        <div className="space-y-6">
+        <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
           <CreatePropertyDeedTypeSelect
             labels={labels.deedType}
             value={selectedDeedType}
             onChange={handleDeedTypeChange}
+            invalid={showFieldErrors && selectedDeedType === ""}
           />
 
           {selectedDeedType && needsFrontBack ? (
@@ -181,6 +207,12 @@ export default function CreatePropertyDeedStep({
                 value={deedInheritanceFiles}
                 onChange={setDeedInheritanceFiles}
                 existingFileUrl={existingInheritanceImageUrl}
+                variant="dropzone"
+                invalid={
+                  showFieldErrors &&
+                  deedInheritanceFiles.length === 0 &&
+                  !existingInheritanceImageUrl
+                }
               />
 
               <CreatePropertyDeedImageUpload
@@ -189,6 +221,12 @@ export default function CreatePropertyDeedStep({
                 value={deedHeirsPoaFiles}
                 onChange={setDeedHeirsPoaFiles}
                 existingFileUrl={existingHeirsPoaImageUrl}
+                variant="dropzone"
+                invalid={
+                  showFieldErrors &&
+                  deedHeirsPoaFiles.length === 0 &&
+                  !existingHeirsPoaImageUrl
+                }
               />
             </div>
           ) : selectedDeedType && isWaqfOwner ? (
@@ -201,6 +239,12 @@ export default function CreatePropertyDeedStep({
                 value={deedEndowmentCertFiles}
                 onChange={setDeedEndowmentCertFiles}
                 existingFileUrl={existingEndowmentCertImageUrl}
+                variant="dropzone"
+                invalid={
+                  showFieldErrors &&
+                  deedEndowmentCertFiles.length === 0 &&
+                  !existingEndowmentCertImageUrl
+                }
               />
 
               <CreatePropertyDeedImageUpload
@@ -209,6 +253,12 @@ export default function CreatePropertyDeedStep({
                 value={deedTrusteeshipFiles}
                 onChange={setDeedTrusteeshipFiles}
                 existingFileUrl={existingTrusteeshipImageUrl}
+                variant="dropzone"
+                invalid={
+                  showFieldErrors &&
+                  deedTrusteeshipFiles.length === 0 &&
+                  !existingTrusteeshipImageUrl
+                }
               />
 
               <label className="flex cursor-pointer items-center justify-between gap-3">
@@ -230,6 +280,12 @@ export default function CreatePropertyDeedStep({
                   value={deedGuardiansPoaFiles}
                   onChange={setDeedGuardiansPoaFiles}
                   existingFileUrl={existingGuardiansPoaImageUrl}
+                  variant="dropzone"
+                  invalid={
+                    showFieldErrors &&
+                    deedGuardiansPoaFiles.length === 0 &&
+                    !existingGuardiansPoaImageUrl
+                  }
                 />
               ) : null}
             </div>
@@ -242,6 +298,7 @@ export default function CreatePropertyDeedStep({
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={labels.navigation.continue}
+        variant="stacked"
         onPrevious={onBack}
         onContinue={handleContinue}
       />

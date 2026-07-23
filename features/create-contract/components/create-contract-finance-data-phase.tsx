@@ -24,6 +24,7 @@ type CreateContractFinanceDataPhaseProps = {
   contractType: ContractTypeId;
   value: FinanceDataState;
   onChange: (value: FinanceDataState) => void;
+  showFieldErrors?: boolean;
 };
 
 export default function CreateContractFinanceDataPhase({
@@ -31,6 +32,7 @@ export default function CreateContractFinanceDataPhase({
   contractType,
   value,
   onChange,
+  showFieldErrors = false,
 }: CreateContractFinanceDataPhaseProps) {
   const apiContractType = toPropertyContractType(contractType);
   const contractId = useCreateContractDraftStore(
@@ -117,6 +119,30 @@ export default function CreateContractFinanceDataPhase({
     });
   }
 
+  const durationValue = value.isCustomDuration
+    ? CUSTOM_CONTRACT_DURATION_VALUE
+    : value.contractPeriodId === ""
+      ? ""
+      : String(value.contractPeriodId);
+  const durationInvalid =
+    showFieldErrors &&
+    (value.isCustomDuration
+      ? !(
+          typeof value.customDurationYears === "number" &&
+          value.customDurationYears >= 1 &&
+          typeof value.customDurationMonths === "number"
+        )
+      : value.contractPeriodId === "");
+  const rentInvalid =
+    showFieldErrors &&
+    (value.totalRentAmount.replace(/\D/g, "").length === 0 ||
+      Number(value.totalRentAmount.replace(/\D/g, "")) <= 0);
+  const paymentInvalid = showFieldErrors && value.paymentTypeId === "";
+  const rentValid =
+    !rentInvalid &&
+    value.totalRentAmount.replace(/\D/g, "").length > 0 &&
+    Number(value.totalRentAmount.replace(/\D/g, "")) > 0;
+
   return (
     <div className="space-y-5">
       <CreateContractContractStartDateFields
@@ -136,16 +162,11 @@ export default function CreateContractFinanceDataPhase({
               : labels.selectPlaceholder
           }
           options={durationOptions}
-          value={
-            value.isCustomDuration
-              ? CUSTOM_CONTRACT_DURATION_VALUE
-              : value.contractPeriodId === ""
-                ? ""
-                : String(value.contractPeriodId)
-          }
+          value={durationValue}
           note={selectedPeriodNote}
           currencyLabel={labels.contractDuration.currency}
           disabled={contractPeriodsQuery.isLoading}
+          invalid={durationInvalid}
           onChange={handleDurationChange}
         />
 
@@ -178,10 +199,13 @@ export default function CreateContractFinanceDataPhase({
       <CreateContractRentAmountField
         label={labels.totalRentAmount.label}
         placeholder={labels.totalRentAmount.placeholder}
+        currency={labels.contractDuration.currency}
         value={value.totalRentAmount}
         onChange={(totalRentAmount) =>
           updateField("totalRentAmount", totalRentAmount)
         }
+        invalid={rentInvalid}
+        valid={rentValid}
       />
 
       <CreateContractFinancePaymentMethodSelect
@@ -190,6 +214,7 @@ export default function CreateContractFinanceDataPhase({
         value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
         note={selectedPaymentTypeNotes}
         disabled={paymentTypesQuery.isLoading}
+        invalid={paymentInvalid}
         onChange={(paymentTypeId) =>
           updateField("paymentTypeId", Number(paymentTypeId))
         }
@@ -205,10 +230,12 @@ export default function CreateContractFinanceDataPhase({
         <CreateContractFinancePermissionsSection
           labels={labels.tenantPermissions}
           value={value.selectedTenantRoleIds}
-          onChange={(selectedTenantRoleIds) =>
+          values={value.tenantRoleValues}
+          onChange={({ selectedTenantRoleIds, tenantRoleValues }) =>
             onChange({
               ...value,
               selectedTenantRoleIds,
+              tenantRoleValues,
               addTenantPermissions: selectedTenantRoleIds.length > 0,
             })
           }
@@ -216,12 +243,25 @@ export default function CreateContractFinanceDataPhase({
 
         <CreateContractFinanceConditionsSection
           labels={labels.otherConditions}
-          value={value.otherConditionsText}
-          onChange={(otherConditionsText) =>
+          enabled={value.addOtherConditions}
+          value={value.otherConditionsList}
+          onEnabledChange={(addOtherConditions) =>
             onChange({
               ...value,
-              otherConditionsText,
-              addOtherConditions: otherConditionsText.trim().length > 0,
+              addOtherConditions,
+              otherConditionsList:
+                addOtherConditions && value.otherConditionsList.length === 0
+                  ? [""]
+                  : value.otherConditionsList,
+            })
+          }
+          onChange={(otherConditionsList) =>
+            onChange({
+              ...value,
+              otherConditionsList,
+              addOtherConditions:
+                otherConditionsList.some((item) => item.trim() !== "") ||
+                otherConditionsList.length > 0,
             })
           }
         />

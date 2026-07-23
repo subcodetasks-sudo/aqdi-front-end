@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -92,6 +93,7 @@ export default function CreateContractDeedStep({
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
   const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
   const deedTypePopup = useInstrumentTypeDeedPopup("contract");
   const supportsManualEntry = deedTypeSupportsManualEntry(selectedDeedType);
 
@@ -117,6 +119,7 @@ export default function CreateContractDeedStep({
     }
 
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
@@ -229,7 +232,7 @@ export default function CreateContractDeedStep({
   const allowManualEntry =
     supportsManualEntry && !isInstrumentTypeLocked && !(isDeedAlreadySubmitted && hasExistingInstrument);
 
-  function renderInstrumentEntry(upload: React.ReactNode) {
+  function renderInstrumentUpload(upload: ReactNode) {
     if (!showDeedFields) {
       return null;
     }
@@ -252,147 +255,178 @@ export default function CreateContractDeedStep({
     );
   }
 
+  function renderDeedInstrumentContent() {
+    if (!showDeedFields) {
+      return null;
+    }
+
+    if (needsFrontBack) {
+      return (
+        <div className="space-y-6">
+          {renderInstrumentUpload(
+            <div className="space-y-6">
+              <CreateContractDeedImageUpload
+                labels={labels.deedImage}
+                fieldLabel={labels.deedImage.frontLabel}
+                single
+                variant="dropzone"
+                value={deedFrontFiles}
+                onChange={setDeedFrontFiles}
+                existingImageUrl={existingInstrumentFrontImageUrl}
+              />
+
+              <CreateContractDeedImageUpload
+                labels={labels.deedImage}
+                fieldLabel={labels.deedImage.backLabel}
+                single
+                variant="dropzone"
+                value={deedBackFiles}
+                onChange={setDeedBackFiles}
+                existingImageUrl={existingInstrumentBackImageUrl}
+              />
+            </div>,
+          )}
+        </div>
+      );
+    }
+
+    if (isDeceasedOwner) {
+      return (
+        <div className="space-y-6">
+          {renderInstrumentUpload(
+            <CreateContractDeedImageUpload
+              labels={labels.deedImage}
+              single
+              variant="dropzone"
+              value={deedFiles}
+              onChange={setDeedFiles}
+              existingImageUrl={existingInstrumentImageUrl}
+            />,
+          )}
+
+          <CreateContractDeedImageUpload
+            labels={labels.deedImage}
+            fieldLabel={labels.deedImage.inheritanceLabel}
+            single
+            variant="dropzone"
+            value={deedInheritanceFiles}
+            onChange={setDeedInheritanceFiles}
+            existingImageUrl={existingInheritanceImageUrl}
+          />
+
+          <CreateContractDeedImageUpload
+            labels={labels.deedImage}
+            fieldLabel={labels.deedImage.heirsPoaLabel}
+            single
+            variant="dropzone"
+            value={deedHeirsPoaFiles}
+            onChange={setDeedHeirsPoaFiles}
+            existingImageUrl={existingHeirsPoaImageUrl}
+          />
+        </div>
+      );
+    }
+
+    if (isWaqfOwner) {
+      return (
+        <div className="space-y-6">
+          {renderInstrumentUpload(
+            <CreateContractDeedImageUpload
+              labels={labels.deedImage}
+              single
+              variant="dropzone"
+              value={deedFiles}
+              onChange={setDeedFiles}
+              existingImageUrl={existingInstrumentImageUrl}
+            />,
+          )}
+
+          <CreateContractDeedImageUpload
+            labels={labels.deedImage}
+            fieldLabel={labels.deedImage.endowmentCertLabel}
+            single
+            variant="dropzone"
+            value={deedEndowmentCertFiles}
+            onChange={setDeedEndowmentCertFiles}
+            existingImageUrl={existingEndowmentCertImageUrl}
+          />
+
+          <CreateContractDeedImageUpload
+            labels={labels.deedImage}
+            fieldLabel={labels.deedImage.trusteeshipLabel}
+            single
+            variant="dropzone"
+            value={deedTrusteeshipFiles}
+            onChange={setDeedTrusteeshipFiles}
+            existingImageUrl={existingTrusteeshipImageUrl}
+          />
+
+          <label className="flex cursor-pointer items-center justify-between gap-3">
+            <span className="text-sm font-semibold text-brand">
+              {labels.waqf.multipleTrusteesLabel}
+            </span>
+            <Switch
+              dir="ltr"
+              checked={isMultipleTrusteeshipDeedCopy}
+              onCheckedChange={setIsMultipleTrusteeshipDeedCopy}
+              className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
+            />
+          </label>
+
+          {isMultipleTrusteeshipDeedCopy ? (
+            <CreateContractDeedImageUpload
+              labels={labels.deedImage}
+              fieldLabel={labels.deedImage.guardiansPoaLabel}
+              single
+              variant="dropzone"
+              value={deedGuardiansPoaFiles}
+              onChange={setDeedGuardiansPoaFiles}
+              existingImageUrl={existingGuardiansPoaImageUrl}
+            />
+          ) : null}
+        </div>
+      );
+    }
+
+    return renderInstrumentUpload(
+      <CreateContractDeedImageUpload
+        labels={labels.deedImage}
+        variant="dropzone"
+        value={deedFiles}
+        onChange={setDeedFiles}
+        existingImageUrl={existingInstrumentImageUrl}
+      />,
+    );
+  }
+
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={deedPhase.title}
           subtitle={deedPhase.subtitle}
-          icon="check"
+          showIcon={false}
         />
 
-        <div className="space-y-6">
-          <CreateContractDeedTypeSelect
-            labels={labels.deedType}
-            value={selectedDeedType}
-            onChange={handleDeedTypeChange}
-            locked={isInstrumentTypeLocked}
-          />
+        <div className="space-y-8">
+          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
+            <CreateContractDeedTypeSelect
+              labels={labels.deedType}
+              value={selectedDeedType}
+              onChange={handleDeedTypeChange}
+              locked={isInstrumentTypeLocked}
+              invalid={showFieldErrors && selectedDeedType === ""}
+            />
 
-          {showDeedFields && needsFrontBack ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(
-                <div className="space-y-6">
-                  <CreateContractDeedImageUpload
-                    labels={labels.deedImage}
-                    fieldLabel={labels.deedImage.frontLabel}
-                    single
-                    value={deedFrontFiles}
-                    onChange={setDeedFrontFiles}
-                    existingImageUrl={existingInstrumentFrontImageUrl}
-                  />
-
-                  <CreateContractDeedImageUpload
-                    labels={labels.deedImage}
-                    fieldLabel={labels.deedImage.backLabel}
-                    single
-                    value={deedBackFiles}
-                    onChange={setDeedBackFiles}
-                    existingImageUrl={existingInstrumentBackImageUrl}
-                  />
-                </div>,
-              )}
-            </div>
-          ) : showDeedFields && isDeceasedOwner ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(
-                <CreateContractDeedImageUpload
-                  labels={labels.deedImage}
-                  single
-                  value={deedFiles}
-                  onChange={setDeedFiles}
-                  existingImageUrl={existingInstrumentImageUrl}
-                />,
-              )}
-
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.inheritanceLabel}
-                single
-                value={deedInheritanceFiles}
-                onChange={setDeedInheritanceFiles}
-                existingImageUrl={existingInheritanceImageUrl}
-              />
-
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.heirsPoaLabel}
-                single
-                value={deedHeirsPoaFiles}
-                onChange={setDeedHeirsPoaFiles}
-                existingImageUrl={existingHeirsPoaImageUrl}
-              />
-            </div>
-          ) : showDeedFields && isWaqfOwner ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(
-                <CreateContractDeedImageUpload
-                  labels={labels.deedImage}
-                  single
-                  value={deedFiles}
-                  onChange={setDeedFiles}
-                  existingImageUrl={existingInstrumentImageUrl}
-                />,
-              )}
-
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.endowmentCertLabel}
-                single
-                value={deedEndowmentCertFiles}
-                onChange={setDeedEndowmentCertFiles}
-                existingImageUrl={existingEndowmentCertImageUrl}
-              />
-
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.trusteeshipLabel}
-                single
-                value={deedTrusteeshipFiles}
-                onChange={setDeedTrusteeshipFiles}
-                existingImageUrl={existingTrusteeshipImageUrl}
-              />
-
-              <label className="flex cursor-pointer items-center justify-between gap-3">
-                <span className="text-sm font-semibold text-brand">
-                  {labels.waqf.multipleTrusteesLabel}
-                </span>
-                <Switch
-                  dir="ltr"
-                  checked={isMultipleTrusteeshipDeedCopy}
-                  onCheckedChange={setIsMultipleTrusteeshipDeedCopy}
-                  className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
-                />
-              </label>
-
-              {isMultipleTrusteeshipDeedCopy ? (
-                <CreateContractDeedImageUpload
-                  labels={labels.deedImage}
-                  fieldLabel={labels.deedImage.guardiansPoaLabel}
-                  single
-                  value={deedGuardiansPoaFiles}
-                  onChange={setDeedGuardiansPoaFiles}
-                  existingImageUrl={existingGuardiansPoaImageUrl}
-                />
-              ) : null}
-            </div>
-          ) : showDeedFields ? (
-            renderInstrumentEntry(
-              <CreateContractDeedImageUpload
-                labels={labels.deedImage}
-                value={deedFiles}
-                onChange={setDeedFiles}
-                existingImageUrl={existingInstrumentImageUrl}
-              />,
-            )
-          ) : null}
+            {renderDeedInstrumentContent()}
+          </div>
 
           {showNationalAddress ? (
-            <div className="space-y-6 border-t border-[#ececec] pt-6">
+            <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
               <CreateContractStepPhaseHeader
                 title={addressPhase.title}
                 subtitle={addressPhase.subtitle}
-                icon="location"
+                showIcon={false}
               />
 
               <CreateContractDeedNationalAddress
@@ -406,6 +440,7 @@ export default function CreateContractDeedStep({
                 manualAddress={nationalAddressManual}
                 onManualAddressChange={setNationalAddressManual}
                 existingPhotoUrl={existingAddressImageUrl}
+                showFieldErrors={showFieldErrors}
               />
             </div>
           ) : null}
@@ -418,6 +453,7 @@ export default function CreateContractDeedStep({
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
         isSubmitting={isSubmitting}
+        variant="stacked"
         onPrevious={onBack}
         onContinue={() => void handleContinue()}
       />

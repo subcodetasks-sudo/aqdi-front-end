@@ -1,12 +1,8 @@
 "use client";
 
-import { Check, Copy, Hand, X } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Lightbulb, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import CustomIcon from "@/features/shared/components/custom-icon";
 import {
   Dialog,
   DialogClose,
@@ -19,120 +15,119 @@ type CreateContractSaveLaterDialogProps = {
   labels: CreateContractLabels["tenant"]["saveLaterDialog"];
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  orderNumber?: string;
+  orderNumber?: string | number | null;
+  isSaving?: boolean;
+  onConfirm: () => void;
 };
+
+function SaveProgressIcon() {
+  return (
+    <svg
+      width="72"
+      height="72"
+      viewBox="0 0 72 72"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <rect x="14" y="10" width="44" height="52" rx="6" fill="#7B6CF0" />
+      <rect x="20" y="10" width="32" height="14" rx="2" fill="#E8E4FF" />
+      <rect x="24" y="14" width="10" height="6" rx="1" fill="#5B4FD1" />
+      <rect x="20" y="32" width="32" height="24" rx="3" fill="#F5F3FF" />
+      <rect x="26" y="38" width="20" height="3" rx="1.5" fill="#C4BDF5" />
+      <rect x="26" y="46" width="14" height="3" rx="1.5" fill="#C4BDF5" />
+    </svg>
+  );
+}
 
 export default function CreateContractSaveLaterDialog({
   labels,
   open,
   onOpenChange,
   orderNumber,
+  isSaving = false,
+  onConfirm,
 }: CreateContractSaveLaterDialogProps) {
-  const [copied, setCopied] = useState(false);
-
-  async function handleCopy() {
-    if (!orderNumber) {
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(`#${orderNumber}`);
-      setCopied(true);
-      toast.success(labels.copySuccess);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error(labels.copyError);
-    }
-  }
+  const resolvedOrderNumber =
+    orderNumber != null && String(orderNumber).trim() !== ""
+      ? String(orderNumber)
+      : "—";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="gap-0 overflow-hidden rounded-3xl p-6 sm:max-w-md"
+        className="gap-0 overflow-hidden rounded-3xl border-0 bg-white p-6 shadow-2xl sm:max-w-md"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-[#ececec] pb-4">
-          <DialogTitle className="text-base font-bold leading-snug text-brand">
+        <div className="relative flex items-center justify-center">
+          <DialogTitle className="text-center text-[15px] font-bold text-[#1a1a1a]">
             {labels.title}
           </DialogTitle>
 
           <DialogClose asChild>
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="shrink-0 text-red-500 hover:bg-red-50 hover:text-red-600"
               aria-label={labels.close}
+              disabled={isSaving}
+              className="absolute start-0 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0f0f0] text-[#9a9a9a] transition-colors hover:bg-[#e8e8e8] hover:text-[#666] disabled:opacity-50"
             >
-              <X className="size-4" aria-hidden="true" />
-            </Button>
+              <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
+            </button>
           </DialogClose>
         </div>
 
-        <div className="mt-6 flex flex-col items-center gap-4 text-center">
-          <div className="size-16 rounded-full bg-brand-secondary flex items-center justify-center shadow-lg shadow-brand-secondary/80">
-            <Check className="size-8 text-white" aria-hidden="true" />
-          </div>
-          <div className="space-y-2">
-            <p className="text-3xl font-extrabold leading-relaxed text-brand">
+        <div className="mt-6 flex flex-col items-center gap-3 text-center">
+          <SaveProgressIcon />
+
+          <div className="space-y-2 px-1">
+            <p className="text-[22px] font-extrabold leading-snug text-brand md:text-2xl">
               {labels.successTitle}
             </p>
-            <p className="text-sm leading-relaxed text-[#7f7f7f]">
+            <p className="text-sm leading-6 text-[#8f8f8f]">
               {labels.successDescription}
             </p>
           </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <div className="mt-2 flex items-end justify-between gap-3">
-            <div className="flex flex-col items-start gap-2">
-              <p className="text-sm text-[#7f7f7f]">
-                {labels.orderNumberLabel}
-              </p>
+        <div className="mt-5 overflow-hidden rounded-2xl border border-[#ececec] bg-white">
+          <div className="flex items-center justify-between gap-3 border-b border-[#f0f0f0] px-4 py-3">
+            <span className="text-sm text-[#8f8f8f]">{labels.orderNumberLabel}</span>
+            <span className="text-sm font-extrabold text-[#222222]">
+              #{resolvedOrderNumber}
+            </span>
+          </div>
 
-              <p className="text-2xl font-extrabold text-[#333333]">
-                #{orderNumber ?? "—"}
-              </p>
-            </div>
+          <div className="flex items-center justify-between gap-3 border-b border-[#f0f0f0] px-4 py-3">
+            <span className="text-sm text-[#8f8f8f]">{labels.foundInLabel}</span>
+            <span className="text-sm font-extrabold text-[#222222]">
+              {labels.foundInValue}
+            </span>
+          </div>
 
-            <Button
-              type="button"
-              onClick={handleCopy}
-              className="h-9 gap-1.5 rounded-full bg-brand px-3 text-xs font-semibold text-white hover:bg-brand-secondary/90"
-            >
-              {copied ? labels.copied : labels.copy}
-              <Copy className="size-3.5" aria-hidden="true" />
-            </Button>
+          <div className="flex items-center justify-between gap-3 px-4 py-3">
+            <span className="text-sm text-[#8f8f8f]">{labels.retentionLabel}</span>
+            <span className="text-sm font-extrabold text-[#222222]">
+              {labels.retentionDays}
+            </span>
           </div>
         </div>
 
-        <div className="mt-5 flex items-start gap-3 rounded-2xl border border-brand-secondary/30 bg-brand-background-green px-4 py-3">
-          <Hand
-            className="size-5 shrink-0 text-brand-secondary"
+        <div className="mt-4 flex items-start gap-2 px-1">
+          <Lightbulb
+            className="mt-0.5 size-4 shrink-0 text-[#e39b2d]"
             aria-hidden="true"
           />
-          <p className="text-sm leading-relaxed text-[#333333]">
-            {labels.retentionNotice}{" "}
-            <span className="font-bold">{labels.retentionDays}</span>
-          </p>
+          <p className="text-xs leading-5 text-[#8f8f8f]">{labels.tip}</p>
         </div>
 
-        <div className="mt-6 flex items-center gap-3">
-          <Button
-            type="button"
-            asChild
-            className="h-12 flex-1 rounded-full bg-brand text-base font-bold text-white hover:bg-brand/90"
-          >
-            <Link href={labels.mainMenuHref}>{labels.mainMenu}</Link>
-          </Button>
-          <Button
-            type="button"
-            asChild
-            className="h-12 flex-1 rounded-full bg-brand-secondary text-base font-bold text-white hover:bg-brand-secondary/90"
-          >
-            <Link href={labels.ordersHref}>{labels.orders}</Link>
-          </Button>
-        </div>
+        <Button
+          type="button"
+          disabled={isSaving}
+          onClick={onConfirm}
+          className="mt-5 h-12 w-full rounded-2xl bg-brand text-[15px] font-bold text-white hover:bg-brand/90"
+        >
+          {isSaving ? labels.saving : labels.confirm}
+        </Button>
       </DialogContent>
     </Dialog>
   );

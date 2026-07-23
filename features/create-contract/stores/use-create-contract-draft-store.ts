@@ -178,7 +178,7 @@ type CreateContractDraftStore = {
     data: FinanceDataState | ((current: FinanceDataState) => FinanceDataState),
   ) => void;
   saveTenantRoles: (roleIds: number[]) => void;
-  saveOtherConditions: (text: string) => void;
+  saveOtherConditions: (conditions: string[]) => void;
   setPaymentData: (data: PaymentDataState) => void;
   setFreshContractSession: (session: FreshContractSession) => void;
   setContractStep1Data: (data: ContractStep1ApiData | null) => void;
@@ -758,13 +758,23 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           ...current,
           selectedTenantRoleIds,
           addTenantPermissions: selectedTenantRoleIds.length > 0,
+          tenantRoleValues: Object.fromEntries(
+            Object.entries(current.tenantRoleValues).filter(([key]) =>
+              selectedTenantRoleIds.includes(Number(key)),
+            ),
+          ),
         }));
       },
-      saveOtherConditions: (otherConditionsText) => {
+      saveOtherConditions: (otherConditionsList) => {
+        const filled = otherConditionsList
+          .map((item) => item.trim())
+          .filter(Boolean);
+
         get().setFinanceData((current) => ({
           ...current,
-          otherConditionsText,
-          addOtherConditions: otherConditionsText.trim().length > 0,
+          otherConditionsList:
+            filled.length > 0 ? otherConditionsList : [],
+          addOtherConditions: filled.length > 0,
         }));
       },
       setPaymentData: (data) => set({ paymentData: data }),
@@ -871,6 +881,14 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
                 total_months: step6.total_months ?? null,
                 doc_fee: step6.doc_fee ?? null,
                 doc_fee_lines: step6.doc_fee_lines ?? null,
+                conditions: step6.conditions ?? null,
+                other_conditions: step6.other_conditions ?? null,
+                other_conditions_list: step6.other_conditions_list ?? null,
+                tenant_roles: step6.tenant_roles ?? null,
+                tenant_role_id: step6.tenant_role_id ?? null,
+                tenant_role_ids: step6.tenant_role_ids ?? null,
+                tenant_role_values: step6.tenant_role_values ?? null,
+                tenant_roles_details: step6.tenant_roles_details ?? null,
                 step: step6.step ?? data.step,
               }
             : null,

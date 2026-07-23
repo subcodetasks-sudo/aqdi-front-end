@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import CreateUnitFieldLabel from "@/features/create-unit/components/create-unit-field-label";
+import { cn } from "@/lib/utils";
 
 type CreateUnitFormSelectProps = {
   label: string;
@@ -61,9 +62,12 @@ export default function CreateUnitFormSelect({
 
       <div
         ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className="flex h-14 w-full items-center gap-2 rounded-2xl border border-[#e8e8e8] bg-brand-background px-3"
       >
-        <div className="flex min-w-0 flex-1 items-center px-2">
+        <div
+          className="flex min-w-0 flex-1 items-center"
+          onClick={openSelect}
+        >
           {value ? (
             <span className="truncate text-sm font-semibold text-[#333333]">
               {selectedLabel}
@@ -88,11 +92,13 @@ export default function CreateUnitFormSelect({
             setOpen(false);
           }}
         >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft
-              className="size-5 -rotate-90 text-white!"
-              aria-hidden="true"
-            />
+          <SelectTrigger
+            aria-label={label}
+            className={cn(
+              "inline-flex size-8! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-brand shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden",
+            )}
+          >
+            <ChevronDown className="size-4 text-brand" aria-hidden="true" />
           </SelectTrigger>
 
           <SelectContent

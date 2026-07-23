@@ -1,6 +1,8 @@
 import { isSaudiMobilePrefixOnly } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 
 export type OwnerBirthDateLike = {
+  calendarType?: "hijri" | "gregorian";
   day: string;
   month: string;
   year: string;
@@ -35,9 +37,16 @@ export type OwnerValidationIssue =
   | "powerOfAttorney";
 
 function isBirthDateComplete(birthDate: OwnerBirthDateLike) {
-  return (
-    birthDate.day !== "" && birthDate.month !== "" && birthDate.year !== ""
-  );
+  if (birthDate.day === "" || birthDate.month === "" || birthDate.year === "") {
+    return false;
+  }
+
+  return isAdultBirthDateComplete({
+    calendarType: birthDate.calendarType ?? "hijri",
+    day: birthDate.day,
+    month: birthDate.month,
+    year: birthDate.year,
+  });
 }
 
 /** Saudi mobile as entered by the user: 05xxxxxxxx (10 digits). */
@@ -130,10 +139,11 @@ export function getAgentDataValidationIssues(
 export function getIdNumberFieldError(
   idNumber: string,
   messages: { required: string; length: string },
+  options?: { showEmpty?: boolean },
 ) {
   const digits = idNumber.replace(/\D/g, "");
   if (digits.length === 0) {
-    return undefined;
+    return options?.showEmpty ? messages.required : undefined;
   }
   if (digits.length !== 10) {
     return messages.length;
@@ -144,9 +154,10 @@ export function getIdNumberFieldError(
 export function getPhoneFieldError(
   phone: string,
   messages: { required: string; length: string },
+  options?: { showEmpty?: boolean },
 ) {
   if (isSaudiMobilePrefixOnly(phone)) {
-    return undefined;
+    return options?.showEmpty ? messages.required : undefined;
   }
   if (!isPhoneComplete(phone)) {
     return messages.length;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
-import { IdCard, MapPin, PenLine } from "lucide-react";
+import { IdCard, Link2, MapPin, PenLine } from "lucide-react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,7 @@ type CreateContractDeedNationalAddressProps = {
   manualAddress: ManualNationalAddressData;
   onManualAddressChange: (value: ManualNationalAddressData) => void;
   existingPhotoUrl?: string | null;
+  showFieldErrors?: boolean;
 };
 
 const METHOD_CARDS: {
@@ -43,7 +44,10 @@ const METHOD_CARDS: {
     icon: (
       <span className="relative inline-flex size-8 items-center justify-center">
         <IdCard className="size-7 text-brand" aria-hidden />
-        <MapPin className="absolute -inset-e-0.5 -top-0.5 size-3.5 text-brand-secondary" aria-hidden />
+        <MapPin
+          className="absolute -inset-e-0.5 -top-0.5 size-3.5 text-brand-secondary"
+          aria-hidden
+        />
       </span>
     ),
   },
@@ -60,14 +64,26 @@ export default function CreateContractDeedNationalAddress({
   manualAddress,
   onManualAddressChange,
   existingPhotoUrl = null,
+  showFieldErrors = false,
 }: CreateContractDeedNationalAddressProps) {
   const linkInputId = useId();
   const methodGroupId = useId();
+  const methodInvalid = showFieldErrors && method === "";
+  const photoInvalid =
+    showFieldErrors &&
+    method === "photo" &&
+    photoFiles.length === 0 &&
+    !existingPhotoUrl;
+  const linkInvalid = showFieldErrors && method === "link" && linkUrl.trim() === "";
+  const linkValid = method === "link" && linkUrl.trim() !== "";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div>
-        <CreateContractFieldLabel label={labels.methodSelect.label} />
+        <CreateContractFieldLabel
+          label={labels.methodSelect.label}
+          invalid={methodInvalid}
+        />
 
         <div
           role="radiogroup"
@@ -92,8 +108,10 @@ export default function CreateContractDeedNationalAddress({
                 className={cn(
                   "flex flex-col items-center gap-2 rounded-2xl border px-3 py-5 text-center transition-colors",
                   selected
-                    ? "border-brand bg-brand-background-green/50"
-                    : "border-[#e8e8e8] bg-white hover:border-brand/30",
+                    ? "border-brand bg-brand-background-green/60 shadow-[0_0_0_1px_rgba(13,90,80,0.08)]"
+                    : methodInvalid
+                      ? "border-[#e57373] bg-white"
+                      : "border-[#e8e8e8] bg-white hover:border-brand/30",
                 )}
               >
                 <span className="flex size-12 items-center justify-center">
@@ -115,21 +133,50 @@ export default function CreateContractDeedNationalAddress({
           value={photoFiles}
           onChange={onPhotoFilesChange}
           existingImageUrl={existingPhotoUrl}
+          variant="dropzone"
+          invalid={photoInvalid}
         />
       ) : null}
 
       {method === "link" ? (
-        <div className="space-y-3">
-          <CreateContractFieldLabel label={labels.link.label} />
+        <div className="space-y-2">
+          <CreateContractFieldLabel label={labels.link.label} invalid={linkInvalid} />
 
-          <Input
-            id={linkInputId}
-            type="url"
-            value={linkUrl}
-            onChange={(event) => onLinkUrlChange(event.target.value)}
-            placeholder={labels.link.placeholder}
-            className="h-14 rounded-full border-[#e8e8e8] bg-brand-background px-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] focus-visible:ring-brand-secondary/20"
-          />
+          <div className="relative">
+            <Link2
+              className={cn(
+                "pointer-events-none absolute start-4 top-1/2 size-4 -translate-y-1/2",
+                linkInvalid
+                  ? "text-[#c62828]"
+                  : linkValid
+                    ? "text-brand"
+                    : "text-brand-secondary",
+              )}
+              aria-hidden="true"
+            />
+            <Input
+              id={linkInputId}
+              type="url"
+              value={linkUrl}
+              onChange={(event) => onLinkUrlChange(event.target.value)}
+              placeholder={labels.link.placeholder}
+              aria-invalid={linkInvalid}
+              className={cn(
+                "h-14 rounded-2xl ps-11 pe-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand focus-visible:ring-brand/15",
+                linkInvalid
+                  ? "border-[#e57373] bg-white"
+                  : linkValid
+                    ? "border-brand bg-brand-background-green"
+                    : "border-[#e4e4e4] bg-white",
+              )}
+            />
+          </div>
+
+          {labels.link.hint ? (
+            <p className="text-xs leading-relaxed text-[#9a9a9a]">
+              {labels.link.hint}
+            </p>
+          ) : null}
         </div>
       ) : null}
 
@@ -138,6 +185,7 @@ export default function CreateContractDeedNationalAddress({
           labels={labels.manual}
           value={manualAddress}
           onChange={onManualAddressChange}
+          showFieldErrors={showFieldErrors}
         />
       ) : null}
     </div>

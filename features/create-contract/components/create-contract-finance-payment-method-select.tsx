@@ -1,7 +1,5 @@
 "use client";
 
-import { Hand } from "lucide-react";
-
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +14,7 @@ type CreateContractFinancePaymentMethodSelectProps = {
   value: string;
   note?: string;
   disabled?: boolean;
+  invalid?: boolean;
   onChange: (value: string) => void;
 };
 
@@ -25,16 +24,17 @@ export default function CreateContractFinancePaymentMethodSelect({
   value,
   note,
   disabled = false,
+  invalid = false,
   onChange,
 }: CreateContractFinancePaymentMethodSelectProps) {
   return (
     <div>
-      <CreateContractFieldLabel label={label} />
+      <CreateContractFieldLabel label={label} invalid={invalid} />
 
       <div
         role="radiogroup"
         aria-label={label}
-        className="grid w-full grid-cols-3 gap-1.5 sm:grid-cols-4 lg:grid-cols-5"
+        className="flex flex-wrap gap-2"
       >
         {options.map((option) => {
           const selected = value === option.value;
@@ -48,28 +48,29 @@ export default function CreateContractFinancePaymentMethodSelect({
               disabled={disabled}
               onClick={() => onChange(option.value)}
               className={cn(
-                "flex min-h-12 items-center justify-center rounded-xl border px-2 py-2 text-center transition-colors",
+                "min-h-11 rounded-2xl border px-3.5 py-2.5 text-center text-xs font-bold transition-colors sm:text-sm",
                 selected
                   ? "border-brand bg-brand text-white"
-                  : "border-[#e8e8e8] bg-brand-background text-brand hover:border-brand/30",
+                  : invalid
+                    ? "border-[#e57373] bg-brand-background text-brand"
+                    : "border-[#e8e8e8] bg-brand-background text-[#555555] hover:border-brand/30",
                 disabled && "pointer-events-none opacity-60",
               )}
             >
-              <span className="text-xs font-extrabold leading-4">
-                {option.title}
-              </span>
+              {option.title}
             </button>
           );
         })}
       </div>
 
       {note ? (
-        <p className="mt-3 flex items-start gap-2 text-sm leading-6 text-[#555555]">
-          <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-[#f3ead7] text-[#e39b2d]">
-            <Hand className="size-3" aria-hidden="true" />
-          </span>
-          <span>{note}</span>
-        </p>
+        <div className="mt-3 flex items-start gap-2 rounded-2xl bg-brand-background-green px-3.5 py-3">
+          <span
+            className="mt-1.5 size-2 shrink-0 rounded-full bg-[#e39b2d]"
+            aria-hidden="true"
+          />
+          <p className="text-sm leading-6 font-medium text-brand">{note}</p>
+        </div>
       ) : null}
     </div>
   );

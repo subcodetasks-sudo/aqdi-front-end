@@ -1,75 +1,174 @@
 "use client";
 
+import { useState } from "react";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import CreateContractFinanceAccordion from "@/features/create-contract/components/create-contract-finance-accordion";
+import CreateContractTenantRoleDialog from "@/features/create-contract/components/create-contract-tenant-role-dialog";
 import { useTenantRoles } from "@/features/create-contract/hooks/use-tenant-roles";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import type { TenantRole } from "@/features/create-contract/types/tenant-role";
+import {
+  onToggleTenantRole,
+  resolveTenantRoleIcon,
+} from "@/features/create-contract/utils/tenant-role-helpers";
+import { cn } from "@/lib/utils";
 
 type CreateContractFinancePermissionsSectionProps = {
   labels: CreateContractLabels["finance"]["tenantPermissions"];
   value: number[];
-  onChange: (roleIds: number[]) => void;
+  values: Record<string, string>;
+  onChange: (next: {
+    selectedTenantRoleIds: number[];
+    tenantRoleValues: Record<string, string>;
+  }) => void;
 };
 
 export default function CreateContractFinancePermissionsSection({
   labels,
   value,
+  values,
   onChange,
 }: CreateContractFinancePermissionsSectionProps) {
   const { data: tenantRoles = [], isLoading, error } = useTenantRoles();
+  const [openRole, setOpenRole] = useState<TenantRole | null>(null);
 
-  function toggleRole(roleId: number, checked: boolean) {
-    onChange(
-      checked
-        ? [...value, roleId]
-        : value.filter((id) => id !== roleId),
-    );
+  function applyToggle(role: TenantRole, checked: boolean) {
+    const result = onToggleTenantRole(role, checked, {
+      selectedIds: value,
+      values,
+    });
+
+    onChange({
+      selectedTenantRoleIds: result.selectedIds,
+      tenantRoleValues: result.values,
+    });
+
+    setOpenRole(result.openModal);
+  }
+
+  function handleDialogOpenChange(open: boolean) {
+    if (open || !openRole) {
+      return;
+    }
+
+    const role = openRole;
+    const key = String(role.id);
+    const saved = values[key]?.trim() ?? "";
+
+    if (role.has_user_input && !saved) {
+      applyToggle(role, false);
+    }
+
+    setOpenRole(null);
+  }
+
+  function handleConfirm(nextValue: string) {
+    if (!openRole) {
+      return;
+    }
+
+    const key = String(openRole.id);
+    const nextValues = openRole.has_user_input
+      ? { ...values, [key]: nextValue }
+      : values;
+
+    onChange({
+      selectedTenantRoleIds: value.includes(openRole.id)
+        ? value
+        : [...value, openRole.id],
+      tenantRoleValues: nextValues,
+    });
+    setOpenRole(null);
   }
 
   return (
-    <CreateContractFinanceAccordion
-      title={labels.title}
-      subtitle={labels.subtitle}
-      defaultOpen={value.length > 0}
-    >
-      <p className="text-xs leading-5 text-[#9a9a9a]">{labels.instruction}</p>
+    <>
+      <CreateContractFinanceAccordion
+        title={labels.title}
+        subtitle={labels.subtitle}
+        defaultOpen={value.length > 0}
+      >
+        <p className="text-xs leading-5 text-[#9a9a9a]">{labels.instruction}</p>
 
-      {error ? (
-        <p className="text-sm text-red-500">
-          {error instanceof Error ? error.message : labels.optionsError}
-        </p>
-      ) : null}
+        {error ? (
+          <p className="text-sm text-red-500">
+            {error instanceof Error ? error.message : labels.optionsError}
+          </p>
+        ) : null}
 
-      {isLoading ? (
-        <div className="space-y-3">
-          <div className="h-12 animate-pulse rounded-2xl bg-brand-background" />
-          <div className="h-12 animate-pulse rounded-2xl bg-brand-background" />
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {tenantRoles.map((role) => {
-            const checked = value.includes(role.id);
+        {isLoading ? (
+          <div className="space-y-3">
+            <div className="h-12 animate-pulse rounded-2xl bg-brand-background" />
+            <div className="h-12 animate-pulse rounded-2xl bg-brand-background" />
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {tenantRoles.map((role) => {
+              const checked = value.includes(role.id);
+              const Icon = resolveTenantRoleIcon(role.icon);
+              const savedValue = values[String(role.id)]?.trim();
 
-            return (
-              <label
-                key={role.id}
-                className="flex cursor-pointer items-center gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3"
-              >
-                <Checkbox
-                  checked={checked}
-                  onCheckedChange={(nextValue) =>
-                    toggleRole(role.id, nextValue === true)
-                  }
-                  className="size-5 rounded-full border-brand-secondary data-checked:border-brand-secondary data-checked:bg-brand-secondary"
-                />
-                <span className="flex-1 text-sm font-semibold text-brand">
-                  {role.text_of_reason}
-                </span>
-              </label>
-            );
-          })}
-        </div>
-      )}
-    </CreateContractFinanceAccordion>
+              return (
+                <div
+                  key={role.id}
+                  className={cn(
+                    "flex items-center gap-3 rounded-2xl border px-4 py-3",
+                    checked
+                      ? "border-brand/25 bg-brand-background-green"
+                      : "border-[#e8e8e8] bg-white",
+                  )}
+                >
+                  <Checkbox
+                    checked={checked}
+                    onCheckedChange={(nextValue) =>
+                      applyToggle(role, nextValue === true)
+                    }
+                    className="size-5 rounded-md border-brand data-checked:border-brand data-checked:bg-brand"
+                  />
+
+                  <button
+                    type="button"
+                    className="flex min-w-0 flex-1 items-center gap-2 text-start"
+                    onClick={() => {
+                      if (checked && role.pop) {
+                        setOpenRole(role);
+                        return;
+                      }
+
+                      applyToggle(role, !checked);
+                    }}
+                  >
+                    <Icon
+                      className="size-4 shrink-0 text-brand"
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1 text-sm font-semibold text-brand">
+                      {role.text_of_reason}
+                    </span>
+                    {checked && savedValue ? (
+                      <span className="shrink-0 text-xs font-bold text-brand-secondary tabular-nums">
+                        {/^\d+$/.test(savedValue)
+                          ? Number(savedValue).toLocaleString("en-US")
+                          : savedValue}
+                      </span>
+                    ) : null}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </CreateContractFinanceAccordion>
+
+      <CreateContractTenantRoleDialog
+        labels={labels}
+        role={openRole}
+        open={openRole != null}
+        value={openRole ? (values[String(openRole.id)] ?? "") : ""}
+        onOpenChange={handleDialogOpenChange}
+        onConfirm={handleConfirm}
+      />
+    </>
   );
 }

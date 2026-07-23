@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -34,7 +35,13 @@ export default function CreatePropertyOwnerStep({
     canContinue,
     goToNextPhase,
     goToPreviousPhase,
+    hasExistingPowerOfAttorney,
   } = useCreatePropertyOwnerStep();
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
+
+  useEffect(() => {
+    setShowFieldErrors(false);
+  }, [currentPhaseIndex]);
 
   const phase = labels.phases[currentPhaseIndex];
 
@@ -49,9 +56,12 @@ export default function CreatePropertyOwnerStep({
 
   function handleContinue() {
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(t("incompleteContinue"));
       return;
     }
+
+    setShowFieldErrors(false);
 
     if (isLastPhase) {
       onComplete();
@@ -84,6 +94,7 @@ export default function CreatePropertyOwnerStep({
             validationLabels={labels.validation.fieldErrors}
             value={ownerData}
             onChange={setOwnerData}
+            showFieldErrors={showFieldErrors}
           />
         ) : null}
 
@@ -91,8 +102,11 @@ export default function CreatePropertyOwnerStep({
           <CreatePropertyAgentDataPhase
             labels={labels.agentData}
             birthDateLabels={labels.birthDate}
+            validationLabels={labels.validation.fieldErrors}
             value={agentData}
             onChange={setAgentData}
+            showFieldErrors={showFieldErrors}
+            hasExistingPowerOfAttorney={hasExistingPowerOfAttorney}
           />
         ) : null}
       </div>
@@ -100,6 +114,7 @@ export default function CreatePropertyOwnerStep({
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={labels.navigation.continue}
+        variant="stacked"
         onPrevious={handlePrevious}
         onContinue={handleContinue}
       />

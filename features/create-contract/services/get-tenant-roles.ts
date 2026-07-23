@@ -1,6 +1,7 @@
 "use server";
 
 import type { TenantRolesApiResponse } from "@/features/create-contract/types/tenant-role";
+import { normalizeTenantRole } from "@/features/create-contract/utils/tenant-role-helpers";
 import { apiRequest } from "@/lib/api/api-request";
 
 export async function getTenantRoles() {
@@ -15,5 +16,5 @@ export async function getTenantRoles() {
     );
   }
 
-  return response.data.data;
+  return (response.data.data ?? []).map((role) => normalizeTenantRole(role));
 }

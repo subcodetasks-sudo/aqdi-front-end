@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -31,6 +32,7 @@ export default function CreateContractOwnerStep({
     canContinue,
   } = useCreateContractOwnerStep();
   const { submitStep3, isSubmitting } = useSubmitContractStep3();
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   const phase = labels.phases[0];
   const showAgentForm = ownerData.hasAgent === "yes";
@@ -41,6 +43,7 @@ export default function CreateContractOwnerStep({
     }
 
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(t("incompleteContinue"));
       return;
     }
@@ -60,7 +63,7 @@ export default function CreateContractOwnerStep({
         <CreateContractStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
-          icon="id-card"
+          showIcon={false}
         />
 
         <div className="space-y-5">
@@ -70,14 +73,17 @@ export default function CreateContractOwnerStep({
             validationLabels={labels.validation.fieldErrors}
             value={ownerData}
             onChange={setOwnerData}
+            showFieldErrors={showFieldErrors}
           />
 
           {showAgentForm ? (
             <CreateContractAgentDataPhase
               labels={labels.agentData}
               birthDateLabels={labels.birthDate}
+              validationLabels={labels.validation.fieldErrors}
               value={agentData}
               onChange={setAgentData}
+              showFieldErrors={showFieldErrors}
             />
           ) : null}
         </div>

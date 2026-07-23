@@ -37,6 +37,8 @@ export default function UnitCountStepper({
   className,
 }: UnitCountStepperProps) {
   const currentCount = parseCount(value);
+  const canDecrease = currentCount > 0;
+  const canIncrease = currentCount < max;
 
   function setCount(nextCount: number) {
     const clamped = Math.min(max, Math.max(0, nextCount));
@@ -57,14 +59,17 @@ export default function UnitCountStepper({
 
       <div
         dir="ltr"
-        className="flex h-11 w-full items-center justify-between gap-2 rounded-full bg-brand-background-green/70 px-1.5"
+        className="flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-[#f1f7f5] px-1.5"
       >
         <button
           type="button"
           aria-label="decrease"
-          disabled={currentCount <= 0}
+          disabled={!canDecrease}
           onClick={() => setCount(currentCount - 1)}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand text-white disabled:opacity-40"
+          className={cn(
+            "inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-white transition-colors",
+            canDecrease ? "bg-brand" : "bg-[#c8d6d2]",
+          )}
         >
           <Minus className="size-4" />
         </button>
@@ -76,9 +81,12 @@ export default function UnitCountStepper({
         <button
           type="button"
           aria-label="increase"
-          disabled={currentCount >= max}
+          disabled={!canIncrease}
           onClick={() => setCount(currentCount + 1)}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand text-white disabled:opacity-40"
+          className={cn(
+            "inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-white transition-colors",
+            canIncrease ? "bg-brand" : "bg-[#c8d6d2]",
+          )}
         >
           <Plus className="size-4" />
         </button>

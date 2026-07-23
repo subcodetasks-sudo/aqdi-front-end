@@ -5,11 +5,12 @@ export const SAUDI_MOBILE_LENGTH = 10;
 /**
  * Normalize any phone input to 05xxxxxxxx.
  * Collapses duplicated 05 prefixes (e.g. 0505... → 05...).
+ * Preserves a legitimate subscriber that starts with 0 (e.g. 0501234567).
  */
 export function toSaudiMobileInputValue(raw: string) {
   let digits = raw.replace(/\D/g, "");
 
-  if (!digits || digits === "0" || digits === "5" || digits === "05") {
+  if (!digits) {
     return SAUDI_MOBILE_PREFIX;
   }
 
@@ -19,19 +20,36 @@ export function toSaudiMobileInputValue(raw: string) {
     digits = digits.slice(3);
   }
 
-  while (digits.startsWith("05")) {
-    digits = digits.slice(2);
+  // User retyped/pasted "05" after the fixed prefix: 0505... → 05...
+  while (digits.startsWith("0505")) {
+    digits = `05${digits.slice(4)}`;
   }
 
-  if (digits.startsWith("0")) {
-    digits = digits.slice(1);
+  if (digits.startsWith(SAUDI_MOBILE_PREFIX)) {
+    const subscriber = digits.slice(SAUDI_MOBILE_PREFIX.length);
+    return `${SAUDI_MOBILE_PREFIX}${subscriber.slice(0, SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
   }
 
+  // National form without leading 0: 5xxxxxxxx
   if (digits.startsWith("5") && digits.length >= 9) {
-    digits = digits.slice(1);
+    return `${SAUDI_MOBILE_PREFIX}${digits.slice(1, 1 + SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
   }
 
   return `${SAUDI_MOBILE_PREFIX}${digits.slice(0, SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
+}
+
+/**
+ * Normalize digits typed into the subscriber input (after the fixed 05 prefix).
+ * Strips a leading 05 if the user pasted or retyped the full local number.
+ */
+export function toSaudiMobileFromSubscriberInput(raw: string) {
+  let digits = raw.replace(/\D/g, "");
+
+  while (digits.startsWith(SAUDI_MOBILE_PREFIX)) {
+    digits = digits.slice(SAUDI_MOBILE_PREFIX.length);
+  }
+
+  return toSaudiMobileInputValue(`${SAUDI_MOBILE_PREFIX}${digits}`);
 }
 
 /** Format API phone values for create-flow inputs as 05xxxxxxxx. */

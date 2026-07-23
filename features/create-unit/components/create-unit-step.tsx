@@ -13,6 +13,7 @@ import CreateUnitStepNavigation from "@/features/create-unit/components/create-u
 import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
 import UnitDataFormFields from "@/features/shared/components/unit-data-form-fields";
 import UnitsDataFormList from "@/features/shared/components/unit-form/units-data-form-list";
+import { buildUnitFormSummary } from "@/features/shared/utils/build-unit-form-summary";
 import { toast } from "sonner";
 
 type CreateUnitStepProps = {
@@ -88,10 +89,13 @@ export default function CreateUnitStep({
             addUnitLabel={labels.addUnit}
             removeUnitLabel={labels.removeUnit}
             unitsCountLabel={labels.unitsCount}
-            unitSectionTitle={
-              units.length > 1
-                ? (index) => `${labels.unitListTitle} ${index + 1}`
-                : undefined
+            unitSectionTitle={(index) => `${labels.unitListTitle} ${index + 1}`}
+            getUnitSummary={(unit) =>
+              buildUnitFormSummary(unit, {
+                unitTypeOptions: unitTypesQuery.data ?? [],
+                groundFloorLabel: labels.floorOptions.ground,
+                floorPrefix: labels.floorSummaryPrefix,
+              })
             }
             units={units}
             onUnitsChange={(nextUnits) =>
@@ -110,7 +114,10 @@ export default function CreateUnitStep({
             })}
             renderUnitForm={(unit, _index, onUnitChange) => (
               <UnitDataFormFields
-                labels={labels}
+                labels={{
+                  ...labels,
+                  unitCardTitle: undefined,
+                }}
                 contractType={contractType}
                 onContractTypeChange={
                   contractTypeLocked ? undefined : setContractType

@@ -9,6 +9,8 @@ type CreateContractFinanceAccordionProps = {
   title: string;
   subtitle?: string;
   defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   children: ReactNode;
 };
 
@@ -16,15 +18,29 @@ export default function CreateContractFinanceAccordion({
   title,
   subtitle,
   defaultOpen = false,
+  open: openProp,
+  onOpenChange,
   children,
 }: CreateContractFinanceAccordionProps) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : uncontrolledOpen;
+
+  function handleToggle() {
+    const next = !open;
+
+    if (!isControlled) {
+      setUncontrolledOpen(next);
+    }
+
+    onOpenChange?.(next);
+  }
 
   return (
     <div dir="rtl" className="overflow-hidden rounded-2xl border border-[#e8e8e8]">
       <button
         type="button"
-        onClick={() => setOpen((current) => !current)}
+        onClick={handleToggle}
         className="flex w-full items-start justify-between gap-3 bg-[#f7f7f7] px-4 py-3 text-start"
       >
         <span className="min-w-0 space-y-1">

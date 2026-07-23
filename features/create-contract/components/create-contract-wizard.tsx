@@ -102,6 +102,7 @@ export default function CreateContractWizard({
       {currentStep === "payment" ? (
         <CreateContractPaymentStep
           labels={labels.payment}
+          saveLaterDialogLabels={labels.tenant.saveLaterDialog}
           contractType={contractType}
           onBack={goBack}
         />

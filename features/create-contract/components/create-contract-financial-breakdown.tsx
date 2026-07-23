@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import type { ReactNode } from "react";
 
 import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
 import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
@@ -26,6 +27,7 @@ type CreateContractFinancialBreakdownProps = {
   data: ContractFinancialData | undefined;
   isLoading: boolean;
   appliedCoupon?: AppliedContractCoupon | null;
+  sectionTitle?: string;
 };
 
 type PaymentAmountProps = {
@@ -56,17 +58,40 @@ function PaymentAmount({
 type SummaryRowProps = {
   label: string;
   amount: number;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 };
+
+function hasDisplayAmount(amount: number | null | undefined): amount is number {
+  return typeof amount === "number" && Number.isFinite(amount) && amount > 0;
+}
 
 function SummaryRow({ label, amount, icon }: SummaryRowProps) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2">
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-[#666666]">{label}</span>
+    <div className="flex items-center justify-between gap-4 py-2.5">
+      <div className="flex min-w-0 items-center gap-2">
+        <span className="text-sm font-medium text-[#555555]">{label}</span>
         {icon}
       </div>
-      <PaymentAmount amount={amount} className="text-sm font-semibold " />
+      <PaymentAmount amount={amount} className="text-sm font-bold text-[#333333]" />
+    </div>
+  );
+}
+
+function BreakdownShell({
+  sectionTitle,
+  children,
+}: {
+  sectionTitle?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-3">
+      {sectionTitle ? (
+        <p className="text-base font-extrabold text-brand">{sectionTitle}</p>
+      ) : null}
+      <div className="space-y-1 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3">
+        {children}
+      </div>
     </div>
   );
 }
@@ -86,22 +111,21 @@ export default function CreateContractFinancialBreakdown({
   data,
   isLoading,
   appliedCoupon = null,
+  sectionTitle,
 }: CreateContractFinancialBreakdownProps) {
   const locale = useLocale();
   const breakdown = PAYMENT_BREAKDOWN[contractType];
 
   if (isLoading) {
     return (
-      <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
-        <SummarySkeletonRow />
-        <SummarySkeletonRow />
+      <BreakdownShell sectionTitle={sectionTitle}>
         <SummarySkeletonRow />
         <SummarySkeletonRow />
         <SummarySkeletonRow />
         <div className="border-t border-dashed border-[#d4d4d4] pt-3">
           <SummarySkeletonRow />
         </div>
-      </div>
+      </BreakdownShell>
     );
   }
 
@@ -116,32 +140,45 @@ export default function CreateContractFinancialBreakdown({
     const docFeeAmount =
       typeof data.doc_fee === "number" ? data.doc_fee : null;
     const isCustomDuration = data.duration_preset === "other";
+    const visibleServices = services.filter((service) =>
+      hasDisplayAmount(getContractFinancialServicePrice(service)),
+    );
 
     return (
-      <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
-        <SummaryRow
-          label={labels.contractPeriodPrice}
-          amount={data.price_details.contract_period_price}
-        />
+      <BreakdownShell sectionTitle={sectionTitle}>
+        {hasDisplayAmount(data.price_details.contract_period_price) ? (
+          <SummaryRow
+            label={labels.contractPeriodPrice}
+            amount={data.price_details.contract_period_price}
+          />
+        ) : null}
 
-        <SummaryRow
-          label={labels.applicationFees}
-          amount={data.price_details.application_fees}
-        />
+        {hasDisplayAmount(data.price_details.application_fees) ? (
+          <SummaryRow
+            label={labels.applicationFees}
+            amount={data.price_details.application_fees}
+          />
+        ) : null}
 
-        <SummaryRow label={labels.vat} amount={data.price_details.tax} />
+        {hasDisplayAmount(data.price_details.tax) ? (
+          <SummaryRow label={labels.vat} amount={data.price_details.tax} />
+        ) : null}
 
-        <SummaryRow
-          label={labels.electricityMeterFee}
-          amount={data.price_details.electricity_meter_fee ?? 0}
-        />
+        {hasDisplayAmount(data.price_details.electricity_meter_fee) ? (
+          <SummaryRow
+            label={labels.electricityMeterFee}
+            amount={data.price_details.electricity_meter_fee}
+          />
+        ) : null}
 
-        <SummaryRow
-          label={labels.waterMeterFee}
-          amount={data.price_details.water_meter_fee ?? 0}
-        />
+        {hasDisplayAmount(data.price_details.water_meter_fee) ? (
+          <SummaryRow
+            label={labels.waterMeterFee}
+            amount={data.price_details.water_meter_fee}
+          />
+        ) : null}
 
-        {isCustomDuration && docFeeAmount !== null ? (
+        {isCustomDuration && hasDisplayAmount(docFeeAmount) ? (
           <SummaryRow label={labels.docFee} amount={docFeeAmount} />
         ) : null}
 
@@ -153,18 +190,20 @@ export default function CreateContractFinancialBreakdown({
           </div>
         ) : null}
 
-        {services.length > 0 ? (
-          <div className="space-y-3 border-t border-dashed border-[#d4d4d4] pt-3">
-            <div className="flex items-center justify-between gap-4">
+        {visibleServices.length > 0 ? (
+          <div className="space-y-1 border-t border-dashed border-[#d4d4d4] pt-2">
+            <div className="flex items-center justify-between gap-4 py-2">
               <span className="text-sm font-bold text-[#333333]">
                 {labels.services}
               </span>
-              <PaymentAmount
-                amount={data.services_total ?? 0}
-                className="text-sm font-bold text-[#333333]"
-              />
+              {hasDisplayAmount(data.services_total) ? (
+                <PaymentAmount
+                  amount={data.services_total}
+                  className="text-sm font-bold text-[#333333]"
+                />
+              ) : null}
             </div>
-            {services.map((service, index) => (
+            {visibleServices.map((service, index) => (
               <SummaryRow
                 key={service.id ?? `${service.service_name}-${index}`}
                 label={getContractFinancialServiceLabel(service, locale)}
@@ -172,23 +211,27 @@ export default function CreateContractFinancialBreakdown({
               />
             ))}
           </div>
-        ) : (data.services_total ?? 0) > 0 ? (
+        ) : hasDisplayAmount(data.services_total) ? (
           <SummaryRow
             label={labels.servicesTotal}
-            amount={data.services_total ?? 0}
+            amount={data.services_total}
           />
         ) : null}
 
         {appliedCoupon ? (
-          <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-3">
-            <SummaryRow
-              label={labels.priceBeforeCoupon}
-              amount={appliedCoupon.totalPriceBeforeCoupon}
-            />
-            <SummaryRow
-              label={labels.discount}
-              amount={appliedCoupon.discount}
-            />
+          <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-2">
+            {hasDisplayAmount(appliedCoupon.totalPriceBeforeCoupon) ? (
+              <SummaryRow
+                label={labels.priceBeforeCoupon}
+                amount={appliedCoupon.totalPriceBeforeCoupon}
+              />
+            ) : null}
+            {hasDisplayAmount(appliedCoupon.discount) ? (
+              <SummaryRow
+                label={labels.discount}
+                amount={appliedCoupon.discount}
+              />
+            ) : null}
           </div>
         ) : null}
 
@@ -209,37 +252,45 @@ export default function CreateContractFinancialBreakdown({
             />
           </div>
         </div>
-      </div>
+      </BreakdownShell>
     );
   }
 
   return (
-    <div className="space-y-5 rounded-2xl bg-brand-background px-4 py-5">
-      <SummaryRow
-        label={labels.ejarFees}
-        amount={breakdown.ejarFees}
-        icon={
-          <Image
-            src="/images/ejar.png"
-            alt={labels.ejarLogoAlt}
-            width={48}
-            height={18}
-            className="h-4 w-auto shrink-0 object-contain"
-          />
-        }
-      />
+    <BreakdownShell sectionTitle={sectionTitle}>
+      {hasDisplayAmount(breakdown.ejarFees) ? (
+        <SummaryRow
+          label={labels.ejarFees}
+          amount={breakdown.ejarFees}
+          icon={
+            <Image
+              src="/images/ejar.png"
+              alt={labels.ejarLogoAlt}
+              width={48}
+              height={18}
+              className="h-4 w-auto shrink-0 object-contain"
+            />
+          }
+        />
+      ) : null}
 
-      <SummaryRow
-        label={labels.contractPeriodPrice}
-        amount={breakdown.contractPeriodPrice}
-      />
+      {hasDisplayAmount(breakdown.contractPeriodPrice) ? (
+        <SummaryRow
+          label={labels.contractPeriodPrice}
+          amount={breakdown.contractPeriodPrice}
+        />
+      ) : null}
 
-      <SummaryRow label={labels.vat} amount={breakdown.vat} />
+      {hasDisplayAmount(breakdown.vat) ? (
+        <SummaryRow label={labels.vat} amount={breakdown.vat} />
+      ) : null}
 
-      <SummaryRow
-        label={labels.applicationFees}
-        amount={breakdown.applicationFees}
-      />
+      {hasDisplayAmount(breakdown.applicationFees) ? (
+        <SummaryRow
+          label={labels.applicationFees}
+          amount={breakdown.applicationFees}
+        />
+      ) : null}
 
       <div className="border-t border-dashed border-[#d4d4d4] pt-3">
         <div className="flex items-center justify-between gap-4">
@@ -254,6 +305,6 @@ export default function CreateContractFinancialBreakdown({
           />
         </div>
       </div>
-    </div>
+    </BreakdownShell>
   );
 }

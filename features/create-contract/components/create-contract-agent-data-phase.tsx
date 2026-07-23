@@ -8,20 +8,34 @@ import CreateContractIconInputField from "@/features/create-contract/components/
 import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { AgentDataState } from "@/features/create-contract/types/owner-step";
+import {
+  getIdNumberFieldError,
+  getPhoneFieldError,
+  isPhoneComplete,
+} from "@/lib/validation/owner-step-validation";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractAgentDataPhaseProps = {
   labels: CreateContractLabels["owner"]["agentData"];
   birthDateLabels: CreateContractLabels["owner"]["birthDate"];
+  validationLabels: CreateContractLabels["owner"]["validation"]["fieldErrors"];
   value: AgentDataState;
   onChange: (value: AgentDataState) => void;
+  showFieldErrors?: boolean;
 };
+
+function isIdNumberComplete(idNumber: string) {
+  return idNumber.replace(/\D/g, "").length === 10;
+}
 
 export default function CreateContractAgentDataPhase({
   labels,
   birthDateLabels,
+  validationLabels,
   value,
   onChange,
+  showFieldErrors = false,
 }: CreateContractAgentDataPhaseProps) {
   function updateField<K extends keyof AgentDataState>(
     field: K,
@@ -33,14 +47,34 @@ export default function CreateContractAgentDataPhase({
     });
   }
 
+  const idNumberError = getIdNumberFieldError(value.idNumber, {
+    required: validationLabels.idNumberLength,
+    length: validationLabels.idNumberLength,
+  });
+  const phoneError = getPhoneFieldError(value.phone, {
+    required: validationLabels.phoneLength,
+    length: validationLabels.phoneLength,
+  });
+  const idInvalid =
+    Boolean(idNumberError) || (showFieldErrors && !isIdNumberComplete(value.idNumber));
+  const phoneInvalid =
+    Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
+  const birthDateInvalid = showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
+  const powerOfAttorneyInvalid =
+    showFieldErrors && value.powerOfAttorneyFiles.length === 0;
+  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
+
   return (
-    <div className="space-y-5 border-t border-[#f0f0f0] pt-6">
+    <div className="space-y-5">
       <div className="space-y-1 text-center">
-        <h3 className="text-lg font-extrabold text-brand">{labels.sectionTitle}</h3>
+        <h3 className="text-lg font-extrabold text-brand md:text-xl">
+          {labels.sectionTitle}
+        </h3>
         <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <CreateContractIconInputField
           label={labels.idNumber.label}
           placeholder={labels.idNumber.placeholder}
@@ -52,6 +86,9 @@ export default function CreateContractAgentDataPhase({
           dir="ltr"
           inputMode="numeric"
           maxLength={10}
+          errorMessage={idNumberError}
+          invalid={idInvalid}
+          valid={idValid}
         />
 
         <CreateContractSaudiMobileField
@@ -62,6 +99,9 @@ export default function CreateContractAgentDataPhase({
             updateField("phone", toSaudiMobileInputValue(phone))
           }
           icon={Phone}
+          errorMessage={phoneError}
+          invalid={phoneInvalid}
+          valid={phoneValid}
         />
       </div>
 
@@ -72,6 +112,7 @@ export default function CreateContractAgentDataPhase({
         }}
         value={value.birthDate}
         onChange={(birthDate) => updateField("birthDate", birthDate)}
+        invalid={birthDateInvalid}
       />
 
       <CreateContractDeedImageUpload
@@ -80,6 +121,9 @@ export default function CreateContractAgentDataPhase({
         onChange={(powerOfAttorneyFiles) =>
           updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
         }
+        invalid={powerOfAttorneyInvalid}
+        single
+        variant="dashed"
       />
 
       <p className="text-xs leading-6 text-[#9a9a9a]">{labels.footerNote}</p>

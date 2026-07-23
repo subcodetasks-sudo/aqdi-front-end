@@ -18,6 +18,8 @@ type ContractStartDateLabels = {
   dayPlaceholder: string;
   monthPlaceholder: string;
   yearPlaceholder: string;
+  correspondingHijri: string;
+  correspondingGregorian: string;
 };
 
 type CreateContractContractStartDateFieldsProps = {
@@ -58,6 +60,13 @@ export default function CreateContractContractStartDateFields({
   onChange,
 }: CreateContractContractStartDateFieldsProps) {
   const dayCount = value.calendarType === "hijri" ? 30 : 31;
+  const day = value.day.replace(/\D/g, "");
+  const month = value.month.replace(/\D/g, "");
+  const year = value.year.replace(/\D/g, "");
+  const hasCompleteDate = Boolean(day && month && year);
+  const selectedDateLabel = hasCompleteDate
+    ? `${Number(day)}/${Number(month)}/${year}`
+    : null;
 
   function updateField<K extends keyof BirthDateValue>(
     field: K,
@@ -74,13 +83,13 @@ export default function CreateContractContractStartDateFields({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <label className="text-sm font-semibold text-brand">
           {labels.label}
           <span className="text-red-500"> *</span>
         </label>
 
-        <div className="flex items-center rounded-full border border-[#e8e8e8] bg-brand-background p-1">
+        <div className="flex items-center rounded-full bg-[#f0f0f0] p-1">
           {(["hijri", "gregorian"] as const).map((calendarType) => (
             <button
               key={calendarType}
@@ -89,7 +98,7 @@ export default function CreateContractContractStartDateFields({
               className={cn(
                 "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
                 value.calendarType === calendarType
-                  ? "bg-brand text-white"
+                  ? "bg-brand text-white shadow-sm"
                   : "text-[#7f7f7f] hover:text-[#555555]",
               )}
             >
@@ -99,13 +108,14 @@ export default function CreateContractContractStartDateFields({
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-3">
         <CreateContractFormSelect
           label={labels.day}
           placeholder={labels.dayPlaceholder}
           options={padOptions(dayCount)}
           value={value.day}
-          onChange={(day) => updateField("day", day)}
+          onChange={(dayValue) => updateField("day", dayValue)}
+          variant="compact"
         />
 
         <CreateContractFormSelect
@@ -113,7 +123,8 @@ export default function CreateContractContractStartDateFields({
           placeholder={labels.monthPlaceholder}
           options={padOptions(12)}
           value={value.month}
-          onChange={(month) => updateField("month", month)}
+          onChange={(monthValue) => updateField("month", monthValue)}
+          variant="compact"
         />
 
         <CreateContractFormSelect
@@ -121,9 +132,21 @@ export default function CreateContractContractStartDateFields({
           placeholder={labels.yearPlaceholder}
           options={getYearOptions(value.calendarType)}
           value={value.year}
-          onChange={(year) => updateField("year", year)}
+          onChange={(yearValue) => updateField("year", yearValue)}
+          variant="compact"
         />
       </div>
+
+      {selectedDateLabel ? (
+        <p className="text-xs text-[#9a9a9a]">
+          {value.calendarType === "hijri"
+            ? labels.correspondingHijri.replace("{date}", selectedDateLabel)
+            : labels.correspondingGregorian.replace(
+                "{date}",
+                selectedDateLabel,
+              )}
+        </p>
+      ) : null}
     </div>
   );
 }

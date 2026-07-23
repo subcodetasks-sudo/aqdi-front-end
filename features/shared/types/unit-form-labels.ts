@@ -25,6 +25,7 @@ export type UnitFormLabels = {
   addUnit?: string;
   unitsCount?: string;
   unitListTitle?: string;
+  floorSummaryPrefix?: string;
   additionalInfo: {
     toggle: string;
     writeHerePlaceholder: string;

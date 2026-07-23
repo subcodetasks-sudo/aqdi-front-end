@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -35,6 +36,7 @@ export default function CreatePropertyAddressStep({
     canContinue,
   } = useCreatePropertyAddressStep();
   const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   async function handleContinue() {
     if (isSubmitting) {
@@ -42,9 +44,12 @@ export default function CreatePropertyAddressStep({
     }
 
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
+
+    setShowFieldErrors(false);
 
     const result = await submitStep1();
 
@@ -58,7 +63,7 @@ export default function CreatePropertyAddressStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -76,6 +81,7 @@ export default function CreatePropertyAddressStep({
           onLinkUrlChange={setLinkUrl}
           manualAddress={manualAddress}
           onManualAddressChange={setManualAddress}
+          showFieldErrors={showFieldErrors}
         />
       </div>
 
@@ -85,6 +91,7 @@ export default function CreatePropertyAddressStep({
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
         isSubmitting={isSubmitting}
+        variant="stacked"
         onPrevious={onBack}
         onContinue={handleContinue}
       />

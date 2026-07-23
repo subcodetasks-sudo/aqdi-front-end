@@ -2,7 +2,13 @@
 
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import type { PropertyBirthDateValue } from "@/features/create-property/types/owner-step";
-import { getAdultBirthYearOptions } from "@/lib/validation/birth-date-year-options";
+import {
+  getAdultBirthDayOptions,
+  getAdultBirthMonthOptions,
+  getAdultBirthYearOptions,
+  isAdultBirthDateComplete,
+  isAtLeastAdultAge,
+} from "@/lib/validation/birth-date-year-options";
 import { cn } from "@/lib/utils";
 
 type BirthDateLabels = {
@@ -21,43 +27,100 @@ type CreatePropertyBirthDateFieldsProps = {
   labels: BirthDateLabels;
   value: PropertyBirthDateValue;
   onChange: (value: PropertyBirthDateValue) => void;
+  invalid?: boolean;
 };
-
-function padOptions(count: number) {
-  return Array.from({ length: count }, (_, index) => {
-    const value = String(index + 1).padStart(2, "0");
-    return { value, label: value };
-  });
-}
 
 export default function CreatePropertyBirthDateFields({
   labels,
   value,
   onChange,
+  invalid = false,
 }: CreatePropertyBirthDateFieldsProps) {
-  const dayCount = value.calendarType === "hijri" ? 30 : 31;
   const yearOptions = getAdultBirthYearOptions(value.calendarType);
+  const monthOptions = getAdultBirthMonthOptions(
+    value.calendarType,
+    value.year,
+  );
+  const dayOptions = getAdultBirthDayOptions(
+    value.calendarType,
+    value.year,
+    value.month,
+  );
   const selectedYear = yearOptions.some((option) => option.value === value.year)
     ? value.year
     : "";
+  const selectedMonth = monthOptions.some((option) => option.value === value.month)
+    ? value.month
+    : "";
+  const selectedDay = dayOptions.some((option) => option.value === value.day)
+    ? value.day
+    : "";
+  const underAge =
+    value.day !== "" &&
+    value.month !== "" &&
+    value.year !== "" &&
+    !isAtLeastAdultAge(value);
+  const showInvalid = invalid || underAge;
+  const birthDateValid = !showInvalid && isAdultBirthDateComplete(value);
+  const dayInvalid = showInvalid && (selectedDay === "" || underAge);
+  const monthInvalid = showInvalid && (selectedMonth === "" || underAge);
+  const yearInvalid = showInvalid && (selectedYear === "" || underAge);
 
   function updateField<K extends keyof PropertyBirthDateValue>(
     field: K,
     fieldValue: PropertyBirthDateValue[K],
   ) {
-    onChange({
+    const nextValue: PropertyBirthDateValue = {
       ...value,
       [field]: fieldValue,
       ...(field === "calendarType"
         ? { day: "", month: "", year: "" }
         : {}),
-    });
+    };
+
+    if (field === "year") {
+      const nextMonthOptions = getAdultBirthMonthOptions(
+        nextValue.calendarType,
+        String(fieldValue),
+      );
+      if (!nextMonthOptions.some((option) => option.value === nextValue.month)) {
+        nextValue.month = "";
+        nextValue.day = "";
+      } else {
+        const nextDayOptions = getAdultBirthDayOptions(
+          nextValue.calendarType,
+          String(fieldValue),
+          nextValue.month,
+        );
+        if (!nextDayOptions.some((option) => option.value === nextValue.day)) {
+          nextValue.day = "";
+        }
+      }
+    }
+
+    if (field === "month") {
+      const nextDayOptions = getAdultBirthDayOptions(
+        nextValue.calendarType,
+        nextValue.year,
+        String(fieldValue),
+      );
+      if (!nextDayOptions.some((option) => option.value === nextValue.day)) {
+        nextValue.day = "";
+      }
+    }
+
+    onChange(nextValue);
   }
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3">
-        <label className="text-sm font-semibold text-brand">
+      <div className="flex flex-wrap items-center gap-3">
+        <label
+          className={cn(
+            "text-sm font-semibold",
+            showInvalid ? "text-[#c62828]" : "text-brand",
+          )}
+        >
           {labels.label}
           <span className="text-red-500"> *</span>
         </label>
@@ -85,17 +148,21 @@ export default function CreatePropertyBirthDateFields({
         <CreatePropertyFormSelect
           label={labels.day}
           placeholder={labels.dayPlaceholder}
-          options={padOptions(dayCount)}
-          value={value.day}
+          options={dayOptions}
+          value={selectedDay}
           onChange={(day) => updateField("day", day)}
+          invalid={dayInvalid}
+          valid={birthDateValid || (!showInvalid && selectedDay !== "")}
         />
 
         <CreatePropertyFormSelect
           label={labels.month}
           placeholder={labels.monthPlaceholder}
-          options={padOptions(12)}
-          value={value.month}
+          options={monthOptions}
+          value={selectedMonth}
           onChange={(month) => updateField("month", month)}
+          invalid={monthInvalid}
+          valid={birthDateValid || (!showInvalid && selectedMonth !== "")}
         />
 
         <CreatePropertyFormSelect
@@ -104,6 +171,8 @@ export default function CreatePropertyBirthDateFields({
           options={yearOptions}
           value={selectedYear}
           onChange={(year) => updateField("year", year)}
+          invalid={yearInvalid}
+          valid={birthDateValid || (!showInvalid && selectedYear !== "")}
         />
       </div>
     </div>

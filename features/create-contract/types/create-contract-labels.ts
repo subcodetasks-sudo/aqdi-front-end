@@ -16,6 +16,18 @@ export type CreateContractLabels = {
     copySuccess: string;
     copyError: string;
     whatsappHref: string;
+    exitHomeDialog: {
+      title: string;
+      close: string;
+      incompleteTitle: string;
+      description: string;
+      saveThenExit: string;
+      saving: string;
+      exitWithoutSaving: string;
+      continue: string;
+      saveError: string;
+      missingContractSession: string;
+    };
   };
   stepper: {
     journey: string;
@@ -100,6 +112,7 @@ export type CreateContractLabels = {
       link: {
         label: string;
         placeholder: string;
+        hint?: string;
       };
       manual: {
         place: {
@@ -324,8 +337,10 @@ export type CreateContractLabels = {
       };
       unitCardTitle?: string;
       addUnit: string;
+      removeUnit: string;
       unitsCount: string;
       unitListTitle: string;
+      floorSummaryPrefix: string;
       additionalInfo: {
         toggle: string;
         writeHerePlaceholder: string;
@@ -426,16 +441,13 @@ export type CreateContractLabels = {
       successTitle: string;
       successDescription: string;
       orderNumberLabel: string;
-      copy: string;
-      copied: string;
-      copySuccess: string;
-      copyError: string;
-      retentionNotice: string;
+      foundInLabel: string;
+      foundInValue: string;
+      retentionLabel: string;
       retentionDays: string;
-      orders: string;
-      ordersHref: string;
-      mainMenu: string;
-      mainMenuHref: string;
+      tip: string;
+      confirm: string;
+      saving: string;
     };
   };
   finance: {
@@ -459,6 +471,8 @@ export type CreateContractLabels = {
       dayPlaceholder: string;
       monthPlaceholder: string;
       yearPlaceholder: string;
+      correspondingHijri: string;
+      correspondingGregorian: string;
     };
     contractDuration: {
       label: string;
@@ -489,6 +503,14 @@ export type CreateContractLabels = {
       subtitle: string;
       instruction: string;
       optionsError: string;
+      close: string;
+      confirmPrefix: string;
+      serviceDefinitionLabel: string;
+      depositNote: string;
+      currency: string;
+      currencyPerDay: string;
+      inputRequired: string;
+      inputFallbackLabel: string;
     };
     otherConditions: {
       title: string;
@@ -502,13 +524,17 @@ export type CreateContractLabels = {
   payment: {
     title: string;
     subtitle: string;
+    encryptionNote: string;
     navigation: {
       previous: string;
       pay: string;
       paying: string;
       payError: string;
+      save: string;
+      saveError: string;
     };
     summary: {
+      sectionTitle: string;
       ejarFees: string;
       contractPeriodPrice: string;
       vat: string;

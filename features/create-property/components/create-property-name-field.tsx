@@ -6,6 +6,12 @@ import { useId } from "react";
 import { Input } from "@/components/ui/input";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import CustomIcon from "@/features/shared/components/custom-icon";
+import {
+  fieldChromeIconClass,
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreatePropertyNameFieldProps = {
   label: string;
@@ -14,6 +20,8 @@ type CreatePropertyNameFieldProps = {
   example: string;
   value: string;
   onChange: (value: string) => void;
+  invalid?: boolean;
+  valid?: boolean;
 };
 
 export default function CreatePropertyNameField({
@@ -23,15 +31,30 @@ export default function CreatePropertyNameField({
   example,
   value,
   onChange,
+  invalid = false,
+  valid = false,
 }: CreatePropertyNameFieldProps) {
   const inputId = useId();
+  const chrome = resolveFieldChromeState({ invalid, valid });
 
   return (
     <div className="space-y-3">
-      <CreatePropertyFieldLabel label={label} />
+      <CreatePropertyFieldLabel label={label} invalid={invalid} />
 
-      <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2">
-        <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
+      <div
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
+          fieldChromeSurfaceClass(chrome, {
+            defaultBgClassName: "bg-white",
+          }),
+        )}
+      >
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center",
+            fieldChromeIconClass(chrome),
+          )}
+        >
           <Building2 className="size-5" aria-hidden="true" />
         </span>
 
@@ -43,6 +66,7 @@ export default function CreatePropertyNameField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
+          aria-invalid={invalid}
           className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
         />
       </div>

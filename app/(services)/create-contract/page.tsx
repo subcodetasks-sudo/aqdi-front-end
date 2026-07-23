@@ -75,6 +75,20 @@ export default async function CreateContractPage({
       copySuccess: t("header.copySuccess"),
       copyError: t("header.copyError"),
       whatsappHref: t("header.whatsappHref"),
+      exitHomeDialog: {
+        title: t("header.exitHomeDialog.title"),
+        close: t("header.exitHomeDialog.close"),
+        incompleteTitle: t("header.exitHomeDialog.incompleteTitle", {
+          orderNumber: "—",
+        }),
+        description: t("header.exitHomeDialog.description"),
+        saveThenExit: t("header.exitHomeDialog.saveThenExit"),
+        saving: t("header.exitHomeDialog.saving"),
+        exitWithoutSaving: t("header.exitHomeDialog.exitWithoutSaving"),
+        continue: t("header.exitHomeDialog.continue"),
+        saveError: t("header.exitHomeDialog.saveError"),
+        missingContractSession: t("header.exitHomeDialog.missingContractSession"),
+      },
     },
     stepper: {
       journey: t("stepper.journey"),
@@ -165,6 +179,7 @@ export default async function CreateContractPage({
         link: {
           label: t("deed.nationalAddress.link.label"),
           placeholder: t("deed.nationalAddress.link.placeholder"),
+          hint: t("deed.nationalAddress.link.hint"),
         },
         manual: {
           place: {
@@ -448,8 +463,10 @@ export default async function CreateContractPage({
         },
         unitCardTitle: t("tenant.rentedUnit.unitCardTitle"),
         addUnit: t("tenant.rentedUnit.addUnit"),
+        removeUnit: t("tenant.rentedUnit.removeUnit"),
         unitsCount: t("tenant.rentedUnit.unitsCount"),
         unitListTitle: t("tenant.rentedUnit.unitListTitle"),
+        floorSummaryPrefix: t("tenant.rentedUnit.floorSummaryPrefix"),
         additionalInfo: {
           toggle: t("tenant.rentedUnit.additionalInfo.toggle"),
           writeHerePlaceholder: t(
@@ -562,16 +579,13 @@ export default async function CreateContractPage({
         successTitle: t("tenant.saveLaterDialog.successTitle"),
         successDescription: t("tenant.saveLaterDialog.successDescription"),
         orderNumberLabel: t("tenant.saveLaterDialog.orderNumberLabel"),
-        copy: t("tenant.saveLaterDialog.copy"),
-        copied: t("tenant.saveLaterDialog.copied"),
-        copySuccess: t("tenant.saveLaterDialog.copySuccess"),
-        copyError: t("tenant.saveLaterDialog.copyError"),
-        retentionNotice: t("tenant.saveLaterDialog.retentionNotice"),
+        foundInLabel: t("tenant.saveLaterDialog.foundInLabel"),
+        foundInValue: t("tenant.saveLaterDialog.foundInValue"),
+        retentionLabel: t("tenant.saveLaterDialog.retentionLabel"),
         retentionDays: t("tenant.saveLaterDialog.retentionDays"),
-        orders: t("tenant.saveLaterDialog.orders"),
-        ordersHref: t("tenant.saveLaterDialog.ordersHref"),
-        mainMenu: t("tenant.saveLaterDialog.mainMenu"),
-        mainMenuHref: t("tenant.saveLaterDialog.mainMenuHref"),
+        tip: t("tenant.saveLaterDialog.tip"),
+        confirm: t("tenant.saveLaterDialog.confirm"),
+        saving: t("tenant.saveLaterDialog.saving"),
       },
     },
     finance: {
@@ -595,6 +609,10 @@ export default async function CreateContractPage({
         dayPlaceholder: t("finance.contractStartDate.dayPlaceholder"),
         monthPlaceholder: t("finance.contractStartDate.monthPlaceholder"),
         yearPlaceholder: t("finance.contractStartDate.yearPlaceholder"),
+        correspondingHijri: t("finance.contractStartDate.correspondingHijri"),
+        correspondingGregorian: t(
+          "finance.contractStartDate.correspondingGregorian",
+        ),
       },
       contractDuration: {
         label: t("finance.contractDuration.label"),
@@ -625,6 +643,16 @@ export default async function CreateContractPage({
         subtitle: t("finance.tenantPermissions.subtitle"),
         instruction: t("finance.tenantPermissions.instruction"),
         optionsError: t("finance.tenantPermissions.optionsError"),
+        close: t("finance.tenantPermissions.close"),
+        confirmPrefix: t("finance.tenantPermissions.confirmPrefix"),
+        serviceDefinitionLabel: t(
+          "finance.tenantPermissions.serviceDefinitionLabel",
+        ),
+        depositNote: t("finance.tenantPermissions.depositNote"),
+        currency: t("finance.tenantPermissions.currency"),
+        currencyPerDay: t("finance.tenantPermissions.currencyPerDay"),
+        inputRequired: t("finance.tenantPermissions.inputRequired"),
+        inputFallbackLabel: t("finance.tenantPermissions.inputFallbackLabel"),
       },
       otherConditions: {
         title: t("finance.otherConditions.title"),
@@ -638,13 +666,17 @@ export default async function CreateContractPage({
     payment: {
       title: t("payment.title"),
       subtitle: t("payment.subtitle"),
+      encryptionNote: t("payment.encryptionNote"),
       navigation: {
         previous: t("payment.navigation.previous"),
         pay: t("payment.navigation.pay"),
         paying: t("payment.navigation.paying"),
         payError: t("payment.navigation.payError"),
+        save: t("payment.navigation.save"),
+        saveError: t("payment.navigation.saveError"),
       },
       summary: {
+        sectionTitle: t("payment.summary.sectionTitle"),
         ejarFees: t("payment.summary.ejarFees"),
         contractPeriodPrice: t("payment.summary.contractPeriodPrice"),
         vat: t("payment.summary.vat"),

@@ -1,3 +1,5 @@
+import type { TenantRoleDetail } from "@/features/create-contract/types/tenant-role";
+
 export type ContractStep6ApiData = {
   id: number;
   contract_id: number;
@@ -11,5 +13,13 @@ export type ContractStep6ApiData = {
   total_months?: number | null;
   doc_fee?: number | null;
   doc_fee_lines?: string[] | null;
+  conditions?: boolean | number | null;
+  other_conditions?: string | null;
+  other_conditions_list?: string[] | null;
+  tenant_roles?: boolean | number | null;
+  tenant_role_id?: number | null;
+  tenant_role_ids?: number[] | null;
+  tenant_role_values?: Record<string, string> | null;
+  tenant_roles_details?: TenantRoleDetail[] | null;
   step: number;
 };

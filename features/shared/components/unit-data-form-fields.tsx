@@ -5,6 +5,7 @@ import { Droplets, Hash, Zap } from "lucide-react";
 import CreateUnitAreaField from "@/features/create-unit/components/create-unit-area-field";
 import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-form-select";
 import CreateUnitIconInputField from "@/features/create-unit/components/create-unit-icon-input-field";
+import CreateUnitNumberField from "@/features/create-unit/components/create-unit-number-field";
 import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import type { UnitDataState } from "@/features/create-unit/types/unit-data";
 import MeterRegistrationOptions from "@/features/shared/components/meter-registration-options";
@@ -49,25 +50,29 @@ function FurnishingTypeToggle({
   onChange: (value: "new" | "used") => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-brand-background px-4 py-3">
-      <label className="text-sm font-semibold text-brand">{label}</label>
+    <div className="space-y-2">
+      <label className="block text-sm font-semibold text-brand">{label}</label>
 
-      <div className="flex items-center rounded-full border border-[#e8e8e8] bg-white p-1">
-        {(["new", "used"] as const).map((furnishingType) => (
-          <button
-            key={furnishingType}
-            type="button"
-            onClick={() => onChange(furnishingType)}
-            className={cn(
-              "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
-              value === furnishingType
-                ? "bg-brand text-white"
-                : "text-[#7f7f7f] hover:text-[#555555]",
-            )}
-          >
-            {furnishingType === "new" ? newLabel : usedLabel}
-          </button>
-        ))}
+      <div className="grid grid-cols-2 gap-3">
+        {(["new", "used"] as const).map((furnishingType) => {
+          const selected = value === furnishingType;
+
+          return (
+            <button
+              key={furnishingType}
+              type="button"
+              onClick={() => onChange(furnishingType)}
+              className={cn(
+                "h-12 rounded-xl text-sm font-bold transition-colors",
+                selected
+                  ? "bg-brand text-white"
+                  : "border border-[#e8e8e8] bg-white text-[#b0b0b0] hover:border-[#d4d4d4] hover:text-[#8a8a8a]",
+              )}
+            >
+              {furnishingType === "new" ? newLabel : usedLabel}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -107,7 +112,7 @@ export default function UnitDataFormFields({
   const kitchensSelected = value.kitchensCount !== "";
   const basicFields = (
     <>
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <CreateUnitFormSelect
           label={labels.unitType.label}
           placeholder={labels.selectPlaceholder}
@@ -133,14 +138,12 @@ export default function UnitDataFormFields({
         />
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2">
-        <CreateUnitIconInputField
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1.5fr_1fr]">
+        <CreateUnitNumberField
           label={labels.unitNumber.label}
           placeholder={labels.unitNumber.placeholder}
           value={value.unitNumber}
           onChange={(unitNumber) => updateField("unitNumber", unitNumber)}
-          icon={Hash}
-          dir="ltr"
         />
 
         <CreateUnitAreaField
@@ -152,34 +155,46 @@ export default function UnitDataFormFields({
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <UnitCountStepper
-          label={labels.roomsCount.label}
-          value={value.roomsCount}
-          onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
-          required
-        />
-        <UnitCountStepper
-          label={labels.bathroomsCount.label}
-          value={value.bathroomsCount}
-          onChange={(bathroomsCount) =>
-            updateField("bathroomsCount", bathroomsCount)
-          }
-        />
-        <UnitCountStepper
-          label={labels.kitchensCount.label}
-          value={value.kitchensCount}
-          onChange={(kitchensCount) =>
-            onChange({
-              ...value,
-              kitchensCount,
-              kitchenCabinetsInstalled:
-                kitchensCount === ""
-                  ? false
-                  : value.kitchenCabinetsInstalled,
-            })
-          }
-        />
+      <div className="space-y-2">
+        <div className="grid grid-cols-3 gap-3">
+          <UnitCountStepper
+            label={labels.roomsCount.label}
+            value={value.roomsCount}
+            onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
+            required
+          />
+          <UnitCountStepper
+            label={labels.bathroomsCount.label}
+            value={value.bathroomsCount}
+            onChange={(bathroomsCount) =>
+              updateField("bathroomsCount", bathroomsCount)
+            }
+          />
+          <UnitCountStepper
+            label={labels.kitchensCount.label}
+            value={value.kitchensCount}
+            onChange={(kitchensCount) =>
+              onChange({
+                ...value,
+                kitchensCount,
+                kitchenCabinetsInstalled:
+                  kitchensCount === ""
+                    ? false
+                    : value.kitchenCabinetsInstalled,
+              })
+            }
+          />
+        </div>
+
+        {labels.roomsCount.hint ? (
+          <p className="flex items-start gap-2 text-xs leading-5 text-[#9a9a9a]">
+            <span
+              className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-secondary"
+              aria-hidden="true"
+            />
+            <span>{labels.roomsCount.hint}</span>
+          </p>
+        ) : null}
       </div>
     </>
   );
@@ -230,19 +245,9 @@ export default function UnitDataFormFields({
 
       <UnitAdditionalInfoSection
         toggleLabel={labels.additionalInfo.toggle}
-        defaultOpen
+        defaultOpen={false}
       >
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <UnitCountStepper
-            label={labels.majlisCount.label}
-            value={value.majlisCount}
-            onChange={(majlisCount) => updateField("majlisCount", majlisCount)}
-          />
-          <UnitCountStepper
-            label={labels.hallsCount.label}
-            value={value.hallsCount}
-            onChange={(hallsCount) => updateField("hallsCount", hallsCount)}
-          />
+        <div className="grid grid-cols-2 gap-3">
           <UnitCountStepper
             label={labels.splitAcCount.label}
             value={value.splitAcCount}

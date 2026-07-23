@@ -10,6 +10,7 @@ import {
   useUnitUsageOptions,
 } from "@/features/create-unit/hooks/use-unit-lookup-options";
 import { useMeterFeeSettings } from "@/features/shared/hooks/use-meter-fee-settings";
+import { buildUnitFormSummary } from "@/features/shared/utils/build-unit-form-summary";
 import { resolveMeterTransferFee } from "@/features/shared/utils/resolve-meter-transfer-fee";
 
 type CreateContractRentedUnitDataPhaseProps = {
@@ -64,22 +65,32 @@ export default function CreateContractRentedUnitDataPhase({
     "water",
     contractType,
   );
+  const unitTypeOptions = unitTypesQuery.data ?? [];
 
   return (
     <UnitsDataFormList
       addUnitLabel={labels.addUnit}
+      removeUnitLabel={labels.removeUnit}
       unitsCountLabel={labels.unitsCount}
-      unitSectionTitle={
-        units.length > 1
-          ? (index) => `${labels.unitListTitle} ${index + 1}`
-          : undefined
+      unitSectionTitle={(index) => `${labels.unitListTitle} ${index + 1}`}
+      getUnitSummary={(unit) =>
+        buildUnitFormSummary(unit, {
+          unitTypeOptions,
+          groundFloorLabel: labels.floorOptions.ground,
+          floorPrefix: labels.floorSummaryPrefix,
+        })
       }
       units={units}
       onUnitsChange={onChange}
+      allowAddUnit
+      allowRemoveUnit
       renderUnitForm={(unit, _index, onUnitChange) => (
         <UnitDataFormFields
-          labels={labels}
-          unitTypeOptions={unitTypesQuery.data ?? []}
+          labels={{
+            ...labels,
+            unitCardTitle: undefined,
+          }}
+          unitTypeOptions={unitTypeOptions}
           unitUsageOptions={unitUsageQuery.data ?? []}
           value={unit}
           onChange={onUnitChange}

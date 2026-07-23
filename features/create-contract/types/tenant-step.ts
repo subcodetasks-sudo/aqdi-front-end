@@ -2,6 +2,7 @@ import {
   EMPTY_BIRTH_DATE,
   type BirthDateValue,
 } from "@/features/create-contract/types/owner-step";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
 import {
   isUnifiedRecordNumberPrefixOnly,
@@ -44,7 +45,7 @@ export type OrganizationTenantData = {
 };
 
 export const EMPTY_ORGANIZATION_TENANT_DATA: OrganizationTenantData = {
-  delegationType: "",
+  delegationType: "owner-representative",
   unifiedRecordNumber: "7",
   ownerIdNumber: "",
   ownerBirthDate: EMPTY_BIRTH_DATE,
@@ -59,7 +60,7 @@ export type TenantDataState = {
 };
 
 export const EMPTY_TENANT_DATA: TenantDataState = {
-  status: "",
+  status: "individual",
   individual: EMPTY_INDIVIDUAL_TENANT_DATA,
   organization: EMPTY_ORGANIZATION_TENANT_DATA,
 };
@@ -69,9 +70,7 @@ export function isOrganizationTenantStatus(status: TenantStatusOption | "") {
 }
 
 function isBirthDateComplete(birthDate: BirthDateValue) {
-  return (
-    birthDate.day !== "" && birthDate.month !== "" && birthDate.year !== ""
-  );
+  return isAdultBirthDateComplete(birthDate);
 }
 
 function isIdNumberComplete(idNumber: string) {

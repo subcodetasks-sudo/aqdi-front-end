@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -8,6 +9,7 @@ import CreateContractBirthDateFields from "@/features/create-contract/components
 import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
 import CreateContractLeaseRenewalAmendmentsSection from "@/features/create-contract/components/create-contract-lease-renewal-amendments-section";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
+import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import CreateContractStepPhaseProgress from "@/features/create-contract/components/create-contract-step-phase-progress";
@@ -27,6 +29,7 @@ import { TENANT_STEP_PHASE_COUNT } from "@/features/create-contract/types/rented
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 
 type CreateContractTenantStepProps = {
   labels: CreateContractLabels["tenant"];
@@ -65,6 +68,8 @@ export default function CreateContractTenantStep({
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
+  const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
 
   const phase = labels.phases[currentPhaseIndex];
   const isTenantDataPhase = currentPhaseIndex === 0;
@@ -94,9 +99,12 @@ export default function CreateContractTenantStep({
     }
 
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
+
+    setShowFieldErrors(false);
 
     if (isLeaseRenewalBirthDatePhase) {
       goToNextPhase();
@@ -149,7 +157,15 @@ export default function CreateContractTenantStep({
 
   const showDraftActions = Boolean(contractSession) && !isLeaseRenewal;
 
-  async function handleSaveLater() {
+  function handleOpenSaveLater() {
+    if (isSavingDraft || isSubmitting) {
+      return;
+    }
+
+    setSaveLaterDialogOpen(true);
+  }
+
+  async function handleConfirmSaveLater() {
     if (isSavingDraft || isSubmitting) {
       return;
     }
@@ -166,6 +182,7 @@ export default function CreateContractTenantStep({
       return;
     }
 
+    setSaveLaterDialogOpen(false);
     resetCreateContractDraft();
     router.push("/requests");
   }
@@ -210,6 +227,10 @@ export default function CreateContractTenantStep({
                   },
                 })
               }
+              invalid={
+                showFieldErrors &&
+                !isAdultBirthDateComplete(tenantData.individual.birthDate)
+              }
             />
           </div>
         ) : null}
@@ -228,11 +249,12 @@ export default function CreateContractTenantStep({
           <>
             <CreateContractTenantStatusSelect
               labels={labels.tenantStatus}
-              value={tenantData.status}
+              value={tenantData.status || "individual"}
               onChange={updateStatus}
+              invalid={showFieldErrors && tenantData.status === ""}
             />
 
-            {tenantData.status === "individual" ? (
+            {(tenantData.status || "individual") === "individual" ? (
               <CreateContractTenantIndividualDataPhase
                 labels={labels.individualData}
                 birthDateLabels={labels.birthDate}
@@ -240,6 +262,7 @@ export default function CreateContractTenantStep({
                 onChange={(individual) =>
                   setTenantData({ ...tenantData, individual })
                 }
+                showFieldErrors={showFieldErrors}
               />
             ) : null}
 
@@ -251,6 +274,7 @@ export default function CreateContractTenantStep({
                 onChange={(organization) =>
                   setTenantData({ ...tenantData, organization })
                 }
+                showFieldErrors={showFieldErrors}
               />
             ) : null}
           </>
@@ -275,18 +299,21 @@ export default function CreateContractTenantStep({
               : labels.navigation.continue
         }
         saveLaterLabel={
-          showDraftActions
-            ? isSavingDraft
-              ? labels.navigation.savingLater
-              : labels.navigation.saveLater
-            : undefined
+          showDraftActions ? labels.navigation.saveLater : undefined
         }
         isSubmitting={isSubmitting || isSavingDraft}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
-        onSaveLater={
-          showDraftActions ? () => void handleSaveLater() : undefined
-        }
+        onSaveLater={showDraftActions ? handleOpenSaveLater : undefined}
+      />
+
+      <CreateContractSaveLaterDialog
+        labels={labels.saveLaterDialog}
+        open={saveLaterDialogOpen}
+        onOpenChange={setSaveLaterDialogOpen}
+        orderNumber={contractSession?.contractId}
+        isSaving={isSavingDraft}
+        onConfirm={() => void handleConfirmSaveLater()}
       />
     </div>
   );

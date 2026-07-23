@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, ChevronLeft, Lock, X } from "lucide-react";
+import { Building2, ChevronDown, Lock, X } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -15,12 +15,18 @@ import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { useSettingContracts } from "@/features/shared/hooks/use-setting-contracts";
 import { resolveContractSettingContractOptions } from "@/features/shared/utils/resolve-setting-contract-options";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateContractDeedTypeSelectProps = {
   labels: CreateContractLabels["deed"]["deedType"];
   value: DeedTypeId | "";
   onChange: (value: DeedTypeId | "") => void;
   locked?: boolean;
+  invalid?: boolean;
 };
 
 export default function CreateContractDeedTypeSelect({
@@ -28,6 +34,7 @@ export default function CreateContractDeedTypeSelect({
   value,
   onChange,
   locked = false,
+  invalid = false,
 }: CreateContractDeedTypeSelectProps) {
   const [selectKey, setSelectKey] = useState(0);
   const [open, setOpen] = useState(false);
@@ -38,6 +45,10 @@ export default function CreateContractDeedTypeSelect({
     settingContracts,
     value,
   );
+  const chrome = resolveFieldChromeState({
+    invalid,
+    valid: value !== "",
+  });
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen && containerRef.current) {
@@ -48,6 +59,10 @@ export default function CreateContractDeedTypeSelect({
   }
 
   function openSelect() {
+    if (locked) {
+      return;
+    }
+
     if (containerRef.current) {
       setContentWidth(containerRef.current.offsetWidth);
     }
@@ -62,12 +77,6 @@ export default function CreateContractDeedTypeSelect({
     setSelectKey((currentKey) => currentKey + 1);
   }
 
-  function handleContainerClick() {
-    if (locked) return;
-
-    openSelect();
-  }
-
   function handleValueChange(nextValue: string) {
     onChange(nextValue as DeedTypeId);
     setOpen(false);
@@ -75,51 +84,57 @@ export default function CreateContractDeedTypeSelect({
 
   return (
     <div>
-      <CreateContractFieldLabel label={labels.label} />
+      <CreateContractFieldLabel label={labels.label} invalid={invalid} />
 
       <div
         ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-3 transition-colors",
+          fieldChromeSurfaceClass(chrome, {
+            defaultBgClassName: "bg-white",
+          }),
+          open && chrome === "default" && "border-brand",
+        )}
       >
-        <div
-          className="flex min-w-0 flex-1 items-center gap-2"
-          onClick={handleContainerClick}
+        <button
+          type="button"
+          className="flex min-w-0 flex-1 items-center gap-2 text-start disabled:cursor-not-allowed"
+          onClick={openSelect}
+          disabled={locked}
         >
-          <Building2 className="size-5 shrink-0 text-brand-secondary" />
+          <Building2 className="size-5 shrink-0 text-brand-secondary" aria-hidden="true" />
+          <span className="h-5 w-px shrink-0 bg-[#e8e8e8]" aria-hidden="true" />
 
-          <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
-
-          <div className="flex min-w-0 flex-1 items-center px-1">
-            {value ? (
-              <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-linear-to-r from-brand-secondary via-brand to-brand px-3 py-1.5 text-sm font-semibold text-white">
-                <span className="truncate">{labels.types[value]}</span>
-                {locked ? null : (
-                  <button
-                    type="button"
-                    className="inline-flex shrink-0 items-center justify-center"
-                    aria-label={labels.clearSelection}
-                    onClick={handleClear}
-                  >
-                    <X className="size-3.5" aria-hidden="true" />
-                  </button>
-                )}
+          {value ? (
+            <span className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="truncate text-sm font-semibold text-[#333333]">
+                {labels.types[value]}
               </span>
-            ) : (
-              <button
-                type="button"
-                className="w-full text-start text-sm text-[#bdbdbd] disabled:cursor-not-allowed"
-                onClick={openSelect}
-                disabled={locked}
-              >
-                {labels.placeholder}
-              </button>
-            )}
-          </div>
-        </div>
+              {!locked ? (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#f0f0f0] text-[#7f7f7f]"
+                  aria-label={labels.clearSelection}
+                  onClick={handleClear}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      handleClear(event as unknown as MouseEvent);
+                    }
+                  }}
+                >
+                  <X className="size-3.5" aria-hidden="true" />
+                </span>
+              ) : null}
+            </span>
+          ) : (
+            <span className="truncate text-sm text-[#bdbdbd]">{labels.placeholder}</span>
+          )}
+        </button>
 
         {locked ? (
           <span
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[#e0e0e0] text-[#9a9a9a]"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[#eeeeee] text-[#9a9a9a]"
             aria-hidden="true"
           >
             <Lock className="size-4" />
@@ -132,8 +147,8 @@ export default function CreateContractDeedTypeSelect({
             value={value || undefined}
             onValueChange={handleValueChange}
           >
-            <SelectTrigger className="inline-flex size-9!  shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-              <ChevronLeft className="size-5 -rotate-90 text-white!" aria-hidden="true" />
+            <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand p-0! text-white shadow-none focus-visible:ring-brand/20 [&>svg:last-child]:hidden">
+              <ChevronDown className="size-4 text-white" aria-hidden="true" />
             </SelectTrigger>
 
             <SelectContent

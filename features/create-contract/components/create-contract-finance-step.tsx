@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -28,6 +29,7 @@ export default function CreateContractFinanceStep({
   const { financeData, setFinanceData, canContinue } =
     useCreateContractFinanceStep();
   const { submitStep6, isSubmitting } = useSubmitContractStep6();
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   async function handleContinue() {
     if (isSubmitting) {
@@ -35,6 +37,7 @@ export default function CreateContractFinanceStep({
     }
 
     if (!canContinue) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
@@ -62,6 +65,7 @@ export default function CreateContractFinanceStep({
           contractType={contractType}
           value={financeData}
           onChange={setFinanceData}
+          showFieldErrors={showFieldErrors}
         />
       </div>
 

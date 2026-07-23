@@ -1,4 +1,6 @@
 import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
+import { getFilledOtherConditions } from "@/features/create-contract/types/finance-step";
+import { buildStep6TenantPayload } from "@/features/create-contract/utils/tenant-role-helpers";
 import {
   formatPropertyOwnerDatePart,
   formatPropertyOwnerYear,
@@ -29,7 +31,15 @@ export function buildContractStep6Body({
     throw new Error("Contract duration is required");
   }
 
-  const body: Record<string, string | number | boolean | number[]> = {
+  const tenantPayload = buildStep6TenantPayload(
+    financeData.selectedTenantRoleIds,
+    financeData.tenantRoleValues,
+  );
+
+  const body: Record<
+    string,
+    string | number | boolean | number[] | string[] | Record<string, string>
+  > = {
     id: contractId,
     type_contract_starting_date: contractStartDate.calendarType,
     contract_starting_date_day: formatPropertyOwnerDatePart(contractStartDate.day),
@@ -39,7 +49,7 @@ export function buildContractStep6Body({
     contract_starting_date_year: formatPropertyOwnerYear(contractStartDate.year),
     payment_type_id: financeData.paymentTypeId,
     conditions: financeData.addOtherConditions,
-    tenant_roles: financeData.addTenantPermissions,
+    tenant_roles: tenantPayload.tenant_roles,
     additional_terms: financeData.addOtherConditions,
   };
 
@@ -51,12 +61,24 @@ export function buildContractStep6Body({
     body.contract_term_in_years = financeData.contractPeriodId as number;
   }
 
-  if (financeData.addTenantPermissions && financeData.selectedTenantRoleIds.length > 0) {
-    if (financeData.selectedTenantRoleIds.length === 1) {
-      body.tenant_role_id = financeData.selectedTenantRoleIds[0];
-    } else {
-      body.tenant_role_ids = financeData.selectedTenantRoleIds;
+  if (tenantPayload.tenant_role_ids.length > 0) {
+    body.tenant_role_ids = tenantPayload.tenant_role_ids;
+  }
+
+  if (Object.keys(tenantPayload.tenant_role_values).length > 0) {
+    body.tenant_role_values = tenantPayload.tenant_role_values;
+  }
+
+  if (financeData.addOtherConditions) {
+    const otherConditionsList = getFilledOtherConditions(
+      financeData.otherConditionsList,
+    );
+
+    if (otherConditionsList.length === 0) {
+      throw new Error("At least one other condition is required");
     }
+
+    body.other_conditions_list = otherConditionsList;
   }
 
   return body;

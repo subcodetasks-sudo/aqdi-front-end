@@ -152,6 +152,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     removeUnit: t("removeUnit"),
     unitsCount: t("unitsCount"),
     unitListTitle: t("unitListTitle"),
+    floorSummaryPrefix: t("floorSummaryPrefix"),
     additionalInfo: {
       toggle: t("additionalInfo.toggle"),
       writeHerePlaceholder: t("additionalInfo.writeHerePlaceholder"),

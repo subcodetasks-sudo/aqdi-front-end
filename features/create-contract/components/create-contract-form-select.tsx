@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronDown, ChevronLeft } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -10,6 +10,11 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateContractFormSelectProps = {
   label: string;
@@ -18,6 +23,10 @@ type CreateContractFormSelectProps = {
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
+  hideLabel?: boolean;
+  variant?: "default" | "compact";
+  invalid?: boolean;
+  valid?: boolean;
 };
 
 export default function CreateContractFormSelect({
@@ -27,11 +36,17 @@ export default function CreateContractFormSelect({
   value,
   onChange,
   required = true,
+  hideLabel = false,
+  variant = "default",
+  invalid = false,
+  valid = false,
 }: CreateContractFormSelectProps) {
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedLabel = options.find((option) => option.value === value)?.label;
+  const isCompact = variant === "compact";
+  const chrome = resolveFieldChromeState({ invalid, valid });
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen && containerRef.current) {
@@ -50,21 +65,39 @@ export default function CreateContractFormSelect({
   }
 
   return (
-    <div>
-      {required ? (
-        <CreateContractFieldLabel label={label} />
-      ) : (
-        <label className="mb-2 block text-sm font-semibold text-brand">
-          {label}
-        </label>
-      )}
+    <div className={cn(isCompact && "min-w-0")}>
+      {!hideLabel ? (
+        required ? (
+          <CreateContractFieldLabel label={label} invalid={invalid} />
+        ) : (
+          <label
+            className={cn(
+              "mb-2 block text-sm font-semibold",
+              invalid ? "text-[#c62828]" : "text-brand",
+            )}
+          >
+            {label}
+          </label>
+        )
+      ) : null}
 
       <div
         ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className={cn(
+          "flex w-full items-center gap-2 border",
+          fieldChromeSurfaceClass(chrome, {
+            defaultBgClassName: isCompact ? "bg-white" : "bg-brand-background",
+          }),
+          isCompact
+            ? "h-12 rounded-2xl px-3"
+            : "h-14 rounded-full px-2",
+        )}
       >
         <div
-          className="flex min-w-0 flex-1 items-center px-2"
+          className={cn(
+            "flex min-w-0 flex-1 items-center",
+            !isCompact && "px-2",
+          )}
           onClick={openSelect}
         >
           {value ? (
@@ -74,6 +107,7 @@ export default function CreateContractFormSelect({
           ) : (
             <button
               type="button"
+              aria-label={label}
               className="w-full text-start text-sm text-[#bdbdbd]"
               onClick={openSelect}
             >
@@ -91,12 +125,21 @@ export default function CreateContractFormSelect({
             setOpen(false);
           }}
         >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft
-              className="size-5 -rotate-90 text-white!"
-              aria-hidden="true"
-            />
-          </SelectTrigger>
+          {isCompact ? (
+            <SelectTrigger
+              aria-label={label}
+              className="inline-flex size-8! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#9a9a9a] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
+            >
+              <ChevronDown className="size-4 text-[#9a9a9a]" aria-hidden="true" />
+            </SelectTrigger>
+          ) : (
+            <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
+              <ChevronLeft
+                className="size-5 -rotate-90 text-white!"
+                aria-hidden="true"
+              />
+            </SelectTrigger>
+          )}
 
           <SelectContent
             position="popper"

@@ -1047,16 +1047,26 @@
           "placeholder": "Choose from here.."
         },
         "methods": {
-          "photo": "Address photo",
-          "link": "Address link",
-          "manual": "Enter address details"
+          "link": {
+            "title": "Property location link",
+            "description": "Via Google Maps"
+          },
+          "manual": {
+            "title": "Enter address manually",
+            "description": "City, neighborhood, and street"
+          },
+          "photo": {
+            "title": "Attach national address",
+            "description": "Address card image"
+          }
         },
         "mapTitle": "National address map",
         "mapHint": "Click on the map to select the property location.",
         "coordinatesLabel": "Selected coordinates",
         "link": {
           "label": "Add Google Maps link for the property",
-          "placeholder": "Add Google Maps link for the property here..."
+          "placeholder": "Add Google Maps link for the property here...",
+          "hint": "Open Google Maps → long-press the property location → Share → Copy link, then paste it here"
         },
         "manual": {
           "place": {
@@ -1291,9 +1301,10 @@
     },
     "unitCardTitle": "Basic information",
     "addUnit": "Add unit",
-    "removeUnit": "Remove unit",
+    "removeUnit": "Delete",
     "unitsCount": "Number of units",
     "unitListTitle": "Unit",
+    "floorSummaryPrefix": "Floor",
     "additionalInfo": {
       "toggle": "Would you like to add additional information?",
       "writeHerePlaceholder": "Write here..."
@@ -1328,7 +1339,7 @@
       "label": "Is the unit furnished?"
     },
     "furnishingType": {
-      "label": "Furnishing type:",
+      "label": "Furnishing type",
       "new": "New",
       "used": "Used"
     },
@@ -1373,7 +1384,19 @@
       "requestPrefix": "Request",
       "copySuccess": "Request number copied",
       "copyError": "Could not copy request number",
-      "whatsappHref": "https://wa.me/"
+      "whatsappHref": "https://wa.me/",
+      "exitHomeDialog": {
+        "title": "Return to Home",
+        "close": "Close",
+        "incompleteTitle": "Your request #{orderNumber} is not complete yet",
+        "description": "If you leave without saving, you will lose what you entered. We recommend saving it to complete later from the orders section.",
+        "saveThenExit": "Save the request then exit",
+        "saving": "Saving...",
+        "exitWithoutSaving": "Exit without saving",
+        "continue": "Go back - Complete my request",
+        "saveError": "Could not save the request, please try again",
+        "missingContractSession": "There is no active request to save"
+      }
     },
     "stepper": {
       "journey": "Your rental journey has become easier.",
@@ -1436,7 +1459,7 @@
         }
       ],
       "deedType": {
-        "label": "Select deed type",
+        "label": "Select document type",
         "placeholder": "Select from here..",
         "clearSelection": "Clear deed type",
         "types": {
@@ -1493,39 +1516,40 @@
         "coordinatesLabel": "Selected coordinates",
         "link": {
           "label": "Add Google Maps link for the property",
-          "placeholder": "... Add Google Maps link for the property here"
+          "placeholder": "... Add Google Maps link for the property here",
+          "hint": "Open Google Maps → long-press the property location → Share → Copy link, then paste it here"
         },
         "manual": {
           "place": {
             "label": "Region",
-            "placeholder": "Choose from here...",
+            "placeholder": "... Select",
             "loading": "Loading..."
           },
           "city": {
             "label": "City",
-            "placeholder": "Choose from here...",
+            "placeholder": "... Select",
             "loading": "Loading...",
             "selectPlaceFirst": "Select the region first"
           },
           "neighborhood": {
             "label": "Neighborhood",
-            "placeholder": "Choose from here..."
+            "placeholder": "... Select"
           },
           "street": {
-            "label": "Street name",
-            "placeholder": "Choose from here..."
+            "label": "Street",
+            "placeholder": "Write here.."
           },
           "buildingNumber": {
             "label": "Building number",
-            "placeholder": "Choose from here..."
+            "placeholder": "0000"
           },
           "postalCode": {
             "label": "Postal code",
-            "placeholder": "Choose from here..."
+            "placeholder": "00000"
           },
           "extraFigure": {
             "label": "Additional number",
-            "placeholder": "Choose from here..."
+            "placeholder": "0000"
           }
         },
         "photo": {
@@ -1619,7 +1643,7 @@
         },
         "idNumber": {
           "label": "Owner ID number",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
         "phone": {
           "label": "Owner mobile number",
@@ -1645,7 +1669,7 @@
         "birthDateLabel": "Agent date of birth",
         "phone": {
           "label": "Agent mobile number",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1749,7 +1773,7 @@
         "ownerBirthDateLabel": "Registry owner date of birth",
         "ownerPhone": {
           "label": "Registry owner mobile number",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1800,8 +1824,10 @@
         },
         "unitCardTitle": "Basic information",
         "addUnit": "Add unit",
+        "removeUnit": "Delete",
         "unitsCount": "Number of units",
         "unitListTitle": "Unit",
+        "floorSummaryPrefix": "Floor",
         "additionalInfo": {
           "toggle": "Would you like to add additional information?",
           "writeHerePlaceholder": "Write here..."
@@ -1836,7 +1862,7 @@
           "label": "Is the unit furnished?"
         },
         "furnishingType": {
-          "label": "Furnishing type:",
+          "label": "Furnishing type",
           "new": "New",
           "used": "Used"
         },
@@ -1897,21 +1923,18 @@
         }
       },
       "saveLaterDialog": {
-        "title": "Save contract and complete later",
+        "title": "Save and complete later",
         "close": "Close",
-        "successTitle": "Contract saved successfully. You can complete it later at any time!",
-        "successDescription": "To return and complete the contract, go to the Orders section on the site.",
-        "orderNumberLabel": "Your order number",
-        "copy": "Copy",
-        "copied": "Copied",
-        "copySuccess": "Order number copied",
-        "copyError": "Could not copy order number",
-        "retentionNotice": "Please note that incomplete contracts are kept for only",
+        "successTitle": "We save your progress",
+        "successDescription": "Everything you entered is saved, and you can continue where you left off",
+        "orderNumberLabel": "Request number",
+        "foundInLabel": "Find it in",
+        "foundInValue": "Requests section",
+        "retentionLabel": "Request retention",
         "retentionDays": "30 days",
-        "orders": "Orders",
-        "ordersHref": "/requests",
-        "mainMenu": "Main menu",
-        "mainMenuHref": "/"
+        "tip": "Save the request number — you'll need it if you contact support before finishing",
+        "confirm": "Save request and exit",
+        "saving": "Saving..."
       }
     },
     "finance": {
@@ -1934,7 +1957,9 @@
         "year": "Year",
         "dayPlaceholder": "00",
         "monthPlaceholder": "00",
-        "yearPlaceholder": "0000"
+        "yearPlaceholder": "0000",
+        "correspondingHijri": "Corresponding Hijri: '{'date'}' AH",
+        "correspondingGregorian": "Corresponding Gregorian: '{'date'}' AD"
       },
       "contractDuration": {
         "label": "Contract duration",
@@ -1964,12 +1989,20 @@
         "title": "Permissions for the tenant, guarantee amount, or daily fine?",
         "subtitle": "Such as subletting, a daily fine, or holding a guarantee deposit",
         "instruction": "Choose what you want to add — unselected items are not included in the contract",
-        "optionsError": "Failed to load tenant roles"
+        "optionsError": "Failed to load tenant roles",
+        "close": "Close",
+        "confirmPrefix": "Confirm",
+        "serviceDefinitionLabel": "Service definition:",
+        "depositNote": "Note: If you add a security deposit amount, the tenant cannot approve the contract until the deposit is paid and held on the Ejar platform.",
+        "currency": "SAR",
+        "currencyPerDay": "SAR/day",
+        "inputRequired": "Please enter a valid value",
+        "inputFallbackLabel": "Enter value"
       },
       "otherConditions": {
         "title": "Would you like to add other conditions...?",
         "subtitle": "Additional conditions agreed by both parties and documented in the contract",
-        "instruction": "Add one condition per line — it appears in the contract terms",
+        "instruction": "Add one or more conditions — each appears in the contract terms",
         "placeholder": "Write the condition here",
         "add": "Add condition",
         "remove": "Remove condition"
@@ -1978,13 +2011,17 @@
     "payment": {
       "title": "Pay the contract financial consideration",
       "subtitle": "Contract financial consideration details:",
+      "encryptionNote": "Full data encryption — we do not store your card numbers",
       "navigation": {
-        "previous": "Previous",
-        "pay": "Pay and document the contract",
+        "previous": "Back",
+        "pay": "Continue",
         "paying": "Redirecting to payment...",
-        "payError": "Failed to start payment. Please try again."
+        "payError": "Failed to start payment. Please try again.",
+        "save": "Save",
+        "saveError": "Failed to save contract draft"
       },
       "summary": {
+        "sectionTitle": "Your order fees",
         "ejarFees": "Ejar fees:",
         "contractPeriodPrice": "Contract period price:",
         "vat": "VAT:",
@@ -2032,7 +2069,7 @@
         "missingContractSession": "Contract session is missing. Please restart the contract flow."
       },
       "disclaimer": {
-        "prefix": "By clicking 'Pay and document the contract', you agree to the",
+        "prefix": "By clicking 'Continue', you agree to the",
         "termsLink": "Terms and Conditions",
         "and": "and",
         "privacyLink": "Privacy Policy",

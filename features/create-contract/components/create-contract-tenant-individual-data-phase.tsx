@@ -7,6 +7,8 @@ import CreateContractIconInputField from "@/features/create-contract/components/
 import CreateContractSaudiMobileField from "@/features/create-contract/components/create-contract-saudi-mobile-field";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { IndividualTenantData } from "@/features/create-contract/types/tenant-step";
+import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
 
 type CreateContractTenantIndividualDataPhaseProps = {
@@ -14,13 +16,19 @@ type CreateContractTenantIndividualDataPhaseProps = {
   birthDateLabels: CreateContractLabels["tenant"]["birthDate"];
   value: IndividualTenantData;
   onChange: (value: IndividualTenantData) => void;
+  showFieldErrors?: boolean;
 };
+
+function isIdNumberComplete(idNumber: string) {
+  return idNumber.replace(/\D/g, "").length === 10;
+}
 
 export default function CreateContractTenantIndividualDataPhase({
   labels,
   birthDateLabels,
   value,
   onChange,
+  showFieldErrors = false,
 }: CreateContractTenantIndividualDataPhaseProps) {
   function updateField<K extends keyof IndividualTenantData>(
     field: K,
@@ -34,7 +42,7 @@ export default function CreateContractTenantIndividualDataPhase({
 
   return (
     <div className="mt-5 space-y-5">
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <CreateContractIconInputField
           label={labels.idNumber.label}
           placeholder={labels.idNumber.placeholder}
@@ -46,6 +54,8 @@ export default function CreateContractTenantIndividualDataPhase({
           dir="ltr"
           inputMode="numeric"
           maxLength={10}
+          invalid={showFieldErrors && !isIdNumberComplete(value.idNumber)}
+          valid={isIdNumberComplete(value.idNumber)}
         />
 
         <CreateContractSaudiMobileField
@@ -56,6 +66,8 @@ export default function CreateContractTenantIndividualDataPhase({
             updateField("phone", toSaudiMobileInputValue(phone))
           }
           icon={Phone}
+          invalid={showFieldErrors && !isPhoneComplete(value.phone)}
+          valid={isPhoneComplete(value.phone)}
         />
       </div>
 
@@ -63,6 +75,7 @@ export default function CreateContractTenantIndividualDataPhase({
         labels={birthDateLabels}
         value={value.birthDate}
         onChange={(birthDate) => updateField("birthDate", birthDate)}
+        invalid={showFieldErrors && !isAdultBirthDateComplete(value.birthDate)}
       />
     </div>
   );

@@ -30,6 +30,8 @@ type CreatePropertyDeedImageUploadProps = {
   multiple?: boolean;
   fieldLabel?: string;
   existingFileUrl?: string | null;
+  variant?: "default" | "dropzone";
+  invalid?: boolean;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -167,12 +169,20 @@ export default function CreatePropertyDeedImageUpload({
   multiple = false,
   fieldLabel,
   existingFileUrl = null,
+  variant = "default",
+  invalid = false,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const canUploadMore = multiple || value.length === 0;
   const showExistingFile = Boolean(existingFileUrl) && value.length === 0;
+  const formatChips = labels.acceptedFormats
+    .split(/[-,|]/)
+    .map((format) => format.trim())
+    .filter(Boolean);
+  const showInvalid = invalid && value.length === 0 && !showExistingFile;
+  const resolvedLabel = fieldLabel ?? labels.label;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -215,13 +225,50 @@ export default function CreatePropertyDeedImageUpload({
 
   return (
     <div className="space-y-3">
-      <CreatePropertyFieldLabel label={fieldLabel ?? labels.label} />
+      {variant === "dropzone" ? (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <span
+              className={cn(
+                "text-sm font-semibold",
+                showInvalid ? "text-[#c62828]" : "text-[#333333]",
+              )}
+            >
+              {resolvedLabel}
+            </span>
+            <span className="text-red-500" aria-hidden="true">
+              *
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {formatChips.map((format) => (
+              <span
+                key={format}
+                className="rounded-lg bg-brand-background-green px-2.5 py-1 text-[11px] font-semibold lowercase text-brand"
+              >
+                {format}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <CreatePropertyFieldLabel label={resolvedLabel} invalid={showInvalid} />
+      )}
 
       {canUploadMore ? (
         <label
           htmlFor={inputId}
           className={cn(
-            "flex h-14 w-full cursor-pointer items-center gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-2 ps-4",
+            "flex w-full cursor-pointer items-center gap-3 transition-colors",
+            variant === "dropzone"
+              ? "min-h-28 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-8 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+              : "h-14 rounded-full border bg-brand-background px-2 ps-4",
+            showInvalid
+              ? "border-[#e57373]"
+              : variant === "dropzone"
+                ? "border-[#d4d4d4]"
+                : "border-[#e8e8e8]",
           )}
         >
           <input
@@ -234,17 +281,29 @@ export default function CreatePropertyDeedImageUpload({
             onChange={handleFileChange}
           />
 
-          <div className="min-w-0 flex-1 text-start">
-            <p className="text-sm leading-snug font-semibold">
-              <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
-              <span className="text-gray-600">{labels.chooseFile}</span>
+          {variant === "dropzone" ? (
+            <p className="text-sm font-medium text-[#666666]">
+              <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
+              <span>{labels.chooseFile}</span>
             </p>
-            <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
-          </div>
+          ) : (
+            <>
+              <div className="min-w-0 flex-1 text-start">
+                <p className="text-sm leading-snug font-semibold">
+                  <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
+                  <span className="text-gray-600">{labels.chooseFile}</span>
+                </p>
+                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+              </div>
 
-          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
-            <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
-          </span>
+              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
+                <CloudDownload
+                  className="size-5 text-[#bdbdbd]"
+                  aria-hidden="true"
+                />
+              </span>
+            </>
+          )}
         </label>
       ) : null}
 

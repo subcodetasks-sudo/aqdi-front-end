@@ -1,7 +1,7 @@
 "use client";
 
-import { Building2, ChevronLeft, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { Building2, ChevronDown, X } from "lucide-react";
+import { useRef, useState, type MouseEvent } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,17 +15,24 @@ import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-t
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { useSettingContracts } from "@/features/shared/hooks/use-setting-contracts";
 import { resolvePropertySettingContractOptions } from "@/features/shared/utils/resolve-setting-contract-options";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreatePropertyDeedTypeSelectProps = {
   labels: CreatePropertyLabels["deed"]["deedType"];
   value: PropertyDeedTypeId | "";
   onChange: (value: PropertyDeedTypeId | "") => void;
+  invalid?: boolean;
 };
 
 export default function CreatePropertyDeedTypeSelect({
   labels,
   value,
   onChange,
+  invalid = false,
 }: CreatePropertyDeedTypeSelectProps) {
   const [selectKey, setSelectKey] = useState(0);
   const [open, setOpen] = useState(false);
@@ -36,6 +43,10 @@ export default function CreatePropertyDeedTypeSelect({
     settingContracts,
     value,
   );
+  const chrome = resolveFieldChromeState({
+    invalid,
+    valid: value !== "",
+  });
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen && containerRef.current) {
@@ -53,7 +64,8 @@ export default function CreatePropertyDeedTypeSelect({
     setOpen(true);
   }
 
-  function handleClear() {
+  function handleClear(event: MouseEvent) {
+    event.stopPropagation();
     onChange("");
     setOpen(false);
     setSelectKey((currentKey) => currentKey + 1);
@@ -66,39 +78,55 @@ export default function CreatePropertyDeedTypeSelect({
 
   return (
     <div>
-      <CreatePropertyFieldLabel label={labels.label} />
+      <CreatePropertyFieldLabel label={labels.label} invalid={invalid} />
 
       <div
         ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-3 transition-colors",
+          fieldChromeSurfaceClass(chrome, {
+            defaultBgClassName: "bg-white",
+          }),
+          open && chrome === "default" && "border-brand",
+        )}
       >
-        <Building2 className="size-5 shrink-0 text-brand-secondary" />
+        <button
+          type="button"
+          className="flex min-w-0 flex-1 items-center gap-2 text-start"
+          onClick={openSelect}
+        >
+          <Building2
+            className="size-5 shrink-0 text-brand-secondary"
+            aria-hidden="true"
+          />
+          <span className="h-5 w-px shrink-0 bg-[#e8e8e8]" aria-hidden="true" />
 
-        <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
-
-        <div className="flex min-w-0 flex-1 items-center px-1">
           {value ? (
-            <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-linear-to-r from-brand-secondary via-brand to-brand px-3 py-1.5 text-sm font-semibold text-white">
-              <span className="truncate">{labels.types[value]}</span>
-              <button
-                type="button"
-                className="inline-flex shrink-0 items-center justify-center"
+            <span className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="truncate text-sm font-semibold text-[#333333]">
+                {labels.types[value]}
+              </span>
+              <span
+                role="button"
+                tabIndex={0}
+                className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#f0f0f0] text-[#7f7f7f]"
                 aria-label={labels.clearSelection}
                 onClick={handleClear}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    handleClear(event as unknown as MouseEvent);
+                  }
+                }}
               >
                 <X className="size-3.5" aria-hidden="true" />
-              </button>
+              </span>
             </span>
           ) : (
-            <button
-              type="button"
-              className="w-full text-start text-sm text-[#bdbdbd]"
-              onClick={openSelect}
-            >
+            <span className="truncate text-sm text-[#bdbdbd]">
               {labels.placeholder}
-            </button>
+            </span>
           )}
-        </div>
+        </button>
 
         <Select
           key={selectKey}
@@ -107,11 +135,8 @@ export default function CreatePropertyDeedTypeSelect({
           value={value || undefined}
           onValueChange={handleValueChange}
         >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft
-              className="size-5 -rotate-90 text-white!"
-              aria-hidden="true"
-            />
+          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand p-0! text-white shadow-none focus-visible:ring-brand/20 [&>svg:last-child]:hidden">
+            <ChevronDown className="size-4 text-white" aria-hidden="true" />
           </SelectTrigger>
 
           <SelectContent

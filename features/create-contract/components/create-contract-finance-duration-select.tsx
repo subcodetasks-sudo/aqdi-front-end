@@ -20,6 +20,7 @@ type CreateContractFinanceDurationSelectProps = {
   note?: string;
   currencyLabel?: string;
   disabled?: boolean;
+  invalid?: boolean;
   onChange: (value: string) => void;
 };
 
@@ -30,16 +31,17 @@ export default function CreateContractFinanceDurationSelect({
   note,
   currencyLabel,
   disabled = false,
+  invalid = false,
   onChange,
 }: CreateContractFinanceDurationSelectProps) {
   return (
     <div>
-      <CreateContractFieldLabel label={label} />
+      <CreateContractFieldLabel label={label} invalid={invalid} />
 
       <div
         role="radiogroup"
         aria-label={label}
-        className="grid w-full grid-cols-3 gap-1.5 sm:grid-cols-4 lg:grid-cols-5"
+        className="flex flex-wrap gap-2"
       >
         {options.map((option) => {
           const selected = value === option.value;
@@ -54,14 +56,16 @@ export default function CreateContractFinanceDurationSelect({
               disabled={disabled}
               onClick={() => onChange(option.value)}
               className={cn(
-                "flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl border px-2 py-2 text-center transition-colors",
+                "flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-2xl border px-3.5 py-2.5 text-center transition-colors",
                 selected
                   ? "border-brand bg-brand text-white"
-                  : "border-[#e8e8e8] bg-brand-background text-brand hover:border-brand/30",
+                  : invalid
+                    ? "border-[#e57373] bg-brand-background text-brand"
+                    : "border-[#e8e8e8] bg-brand-background text-[#555555] hover:border-brand/30",
                 disabled && "pointer-events-none opacity-60",
               )}
             >
-              <span className="text-xs font-extrabold leading-4">
+              <span className="text-xs font-bold leading-4 sm:text-sm">
                 {option.title}
               </span>
 

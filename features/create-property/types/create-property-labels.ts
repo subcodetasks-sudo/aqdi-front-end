@@ -61,13 +61,20 @@ export type CreatePropertyLabels = {
         label: string;
         placeholder: string;
       };
-      methods: Record<"photo" | "link" | "manual", string>;
+      methods: Record<
+        "photo" | "link" | "manual",
+        {
+          title: string;
+          description: string;
+        }
+      >;
       mapTitle: string;
       mapHint: string;
       coordinatesLabel: string;
       link: {
         label: string;
         placeholder: string;
+        hint?: string;
       };
       manual: {
         place: {

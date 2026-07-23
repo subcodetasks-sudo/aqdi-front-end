@@ -33,6 +33,7 @@ export default function CreateContractPaymentSummary({
       data={data}
       isLoading={isLoading}
       appliedCoupon={appliedCoupon}
+      sectionTitle={labels.sectionTitle}
     />
   );
 }

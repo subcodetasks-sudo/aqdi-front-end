@@ -56,6 +56,7 @@ export function useCreatePropertyOwnerStep() {
     phaseCount,
     isLastPhase,
     canContinue,
+    hasExistingPowerOfAttorney: isEditMode && hasExistingPowerOfAttorney,
     goToNextPhase,
     goToPreviousPhase,
   };

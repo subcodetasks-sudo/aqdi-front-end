@@ -104,6 +104,7 @@ export type CreateUnitLabels = {
   removeUnit: string;
   unitsCount: string;
   unitListTitle: string;
+  floorSummaryPrefix: string;
   success: {
     title: string;
     description: string;

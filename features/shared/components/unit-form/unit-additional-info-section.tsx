@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -19,25 +19,26 @@ export default function UnitAdditionalInfoSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div dir="rtl" className="overflow-hidden rounded-2xl border border-[#e8e8e8]">
+    <div className="overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white">
       <button
         type="button"
-        dir="rtl"
         onClick={() => setOpen((current) => !current)}
-        className="flex h-12 w-full items-center justify-between bg-[#f7f7f7] px-4 text-sm font-extrabold text-brand"
+        className="flex h-12 w-full items-center justify-between gap-3 px-4 text-sm font-semibold text-brand"
       >
         <span>{toggleLabel}</span>
-        <ChevronUp
-          className={cn(
-            "size-5 shrink-0 text-[#9a9a9a] transition-transform",
-            open ? "rotate-0" : "rotate-180",
-          )}
-          aria-hidden="true"
-        />
+        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[#e8e8e8]">
+          <ChevronDown
+            className={cn(
+              "size-4 text-brand transition-transform",
+              open ? "rotate-180" : "rotate-0",
+            )}
+            aria-hidden="true"
+          />
+        </span>
       </button>
 
       {open ? (
-        <div className="space-y-4 border-t border-[#f0f0f0] bg-white px-4 py-4">
+        <div className="space-y-4 border-t border-[#f0f0f0] px-4 py-4">
           {children}
         </div>
       ) : null}

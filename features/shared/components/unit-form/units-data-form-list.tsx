@@ -1,15 +1,20 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { ChevronUp } from "lucide-react";
+import { useState, type ReactNode } from "react";
 
-import { EMPTY_UNIT_DATA, type UnitDataState } from "@/features/create-unit/types/unit-data";
+import {
+  EMPTY_UNIT_DATA,
+  type UnitDataState,
+} from "@/features/create-unit/types/unit-data";
 import { cn } from "@/lib/utils";
 
 type UnitsDataFormListProps = {
   addUnitLabel: string;
   removeUnitLabel?: string;
   unitsCountLabel: string;
-  unitSectionTitle?: (index: number) => string;
+  unitSectionTitle: (index: number) => string;
+  getUnitSummary?: (unit: UnitDataState, index: number) => string | null;
   units: UnitDataState[];
   onUnitsChange: (units: UnitDataState[]) => void;
   renderUnitForm: (
@@ -24,11 +29,76 @@ type UnitsDataFormListProps = {
   className?: string;
 };
 
+function UnitFormCard({
+  title,
+  summary,
+  removeLabel,
+  showRemove,
+  onRemove,
+  children,
+}: {
+  title: string;
+  summary: string | null;
+  removeLabel?: string;
+  showRemove: boolean;
+  onRemove: () => void;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white">
+      <div className="flex items-center gap-2 border-b border-[#f0f0f0] px-4 py-3">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+          <p className="shrink-0 text-base font-extrabold text-brand">{title}</p>
+
+          {summary ? (
+            <span className="max-w-full truncate rounded-full bg-[#f0f0f0] px-3 py-1 text-xs font-semibold text-[#666666]">
+              {summary}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2">
+          {showRemove && removeLabel ? (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="rounded-full border border-[#e57373] px-3 py-1.5 text-xs font-bold text-[#c62828] transition-colors hover:bg-[#fff5f5]"
+            >
+              {removeLabel}
+            </button>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => setOpen((current) => !current)}
+            aria-expanded={open}
+            aria-label={title}
+            className="inline-flex size-8 items-center justify-center rounded-full border border-[#e8e8e8] text-brand"
+          >
+            <ChevronUp
+              className={cn(
+                "size-4 transition-transform",
+                open ? "rotate-0" : "rotate-180",
+              )}
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+      </div>
+
+      {open ? <div className="space-y-4 p-4 md:p-5">{children}</div> : null}
+    </div>
+  );
+}
+
 export default function UnitsDataFormList({
   addUnitLabel,
   removeUnitLabel,
   unitsCountLabel,
   unitSectionTitle,
+  getUnitSummary,
   units,
   onUnitsChange,
   renderUnitForm,
@@ -39,7 +109,11 @@ export default function UnitsDataFormList({
   className,
 }: UnitsDataFormListProps) {
   function updateUnit(index: number, unit: UnitDataState) {
-    onUnitsChange(units.map((current, currentIndex) => (currentIndex === index ? unit : current)));
+    onUnitsChange(
+      units.map((current, currentIndex) =>
+        currentIndex === index ? unit : current,
+      ),
+    );
   }
 
   function handleAddUnit() {
@@ -57,34 +131,23 @@ export default function UnitsDataFormList({
     onUnitsChange(units.filter((_, currentIndex) => currentIndex !== index));
   }
 
+  const canRemove = allowRemoveUnit && units.length > minUnits;
+
   return (
     <div className={cn("space-y-6", className)}>
       {units.map((unit, index) => (
-        <div key={`unit-form-${unit.unitId ?? index}`} className="space-y-4">
-          {unitSectionTitle || (allowRemoveUnit && units.length > minUnits) ? (
-            <div className="flex items-center justify-between gap-3">
-              {unitSectionTitle ? (
-                <p className="text-sm font-extrabold text-brand">
-                  {unitSectionTitle(index)}
-                </p>
-              ) : (
-                <span />
-              )}
-
-              {allowRemoveUnit && units.length > minUnits ? (
-                <button
-                  type="button"
-                  onClick={() => handleRemoveUnit(index)}
-                  className="text-xs font-semibold text-[#c0392b] transition-colors hover:text-[#962d22]"
-                >
-                  {removeUnitLabel}
-                </button>
-              ) : null}
-            </div>
-          ) : null}
-
-          {renderUnitForm(unit, index, (nextUnit) => updateUnit(index, nextUnit))}
-        </div>
+        <UnitFormCard
+          key={`unit-form-${unit.unitId ?? index}`}
+          title={unitSectionTitle(index)}
+          summary={getUnitSummary?.(unit, index) ?? null}
+          removeLabel={removeUnitLabel}
+          showRemove={canRemove}
+          onRemove={() => handleRemoveUnit(index)}
+        >
+          {renderUnitForm(unit, index, (nextUnit) =>
+            updateUnit(index, nextUnit),
+          )}
+        </UnitFormCard>
       ))}
 
       {allowAddUnit ? (

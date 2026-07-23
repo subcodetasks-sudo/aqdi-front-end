@@ -1,38 +1,46 @@
 "use client";
 
-import { Info } from "lucide-react";
+import { Info, Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { Switch } from "@/components/ui/switch";
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import CreateContractDiscountCodeField from "@/features/create-contract/components/create-contract-discount-code-field";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
+import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
+import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
 import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 
 type CreateContractPaymentStepProps = {
   labels: CreateContractLabels["payment"];
+  saveLaterDialogLabels: CreateContractLabels["tenant"]["saveLaterDialog"];
   contractType: ContractTypeId;
   onBack: () => void;
 };
 
 export default function CreateContractPaymentStep({
   labels,
+  saveLaterDialogLabels,
   contractType,
   onBack,
 }: CreateContractPaymentStepProps) {
   const tFooter = useTranslations("footer");
+  const router = useRouter();
   const { paymentData, setPaymentData } = useCreateContractPaymentStep();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const contractStep1Data = useCreateContractDraftStore(
@@ -40,10 +48,14 @@ export default function CreateContractPaymentStep({
   );
   const contractUuid =
     contractSession?.uuid ?? contractStep1Data?.uuid ?? null;
+  const contractId =
+    contractSession?.contractId ?? contractStep1Data?.contract_id ?? null;
   const { appliedCoupon, isApplying, applyCoupon, clearCouponDraft } =
     useApplyContractCoupon(contractUuid);
   const { submitSaveProperty, isSaving } = useSaveProperty();
+  const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
+  const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
 
   const paymentFlow = useContractPaymentMethodFlow(
     contractSession?.contractId,
@@ -91,6 +103,27 @@ export default function CreateContractPaymentStep({
     setIsPropertyDialogOpen(false);
   }
 
+  async function handleConfirmSaveLater() {
+    if (isSavingDraft || paymentFlow.isSubmitting) {
+      return;
+    }
+
+    const result = await saveDraft();
+
+    if (!result.ok) {
+      toast.error(
+        result.error === "missingContractSession"
+          ? labels.navigation.payError
+          : result.error || labels.navigation.saveError,
+      );
+      return;
+    }
+
+    setSaveLaterDialogOpen(false);
+    resetCreateContractDraft();
+    router.push("/requests");
+  }
+
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
@@ -130,6 +163,16 @@ export default function CreateContractPaymentStep({
             onClear={clearCouponDraft}
           />
 
+          <div className="flex justify-center">
+            <Image
+              src="/images/payments.png"
+              alt={tFooter("paymentsAlt")}
+              width={280}
+              height={40}
+              className="h-auto w-full max-w-[280px] object-contain"
+            />
+          </div>
+
           <div className="flex items-start gap-2">
             <Info
               className="mt-0.5 size-4 shrink-0 text-[#bdbdbd]"
@@ -152,16 +195,6 @@ export default function CreateContractPaymentStep({
               </Link>
               .
             </p>
-          </div>
-
-          <div className="flex justify-center pt-2">
-            <Image
-              src="/images/payments.png"
-              alt={tFooter("paymentsAlt")}
-              width={280}
-              height={40}
-              className="h-auto w-full max-w-[280px] object-contain"
-            />
           </div>
         </div>
       </div>
@@ -190,14 +223,31 @@ export default function CreateContractPaymentStep({
         onSelect={paymentFlow.handlePaymentMethodSelect}
       />
 
+      <CreateContractSaveLaterDialog
+        labels={saveLaterDialogLabels}
+        open={saveLaterDialogOpen}
+        onOpenChange={setSaveLaterDialogOpen}
+        orderNumber={contractId}
+        isSaving={isSavingDraft}
+        onConfirm={() => void handleConfirmSaveLater()}
+      />
+
       <CreateContractPaymentNavigation
         previousLabel={labels.navigation.previous}
         payLabel={labels.navigation.pay}
         payingLabel={labels.navigation.paying}
+        saveLabel={labels.navigation.save}
         isPaying={paymentFlow.isSubmitting}
+        isSaving={isSavingDraft}
         onPrevious={onBack}
         onPay={paymentFlow.openMethodDialog}
+        onSave={() => setSaveLaterDialogOpen(true)}
       />
+
+      <p className="flex items-center justify-center gap-2 text-xs text-[#9a9a9a]">
+        <Lock className="size-3.5 shrink-0" aria-hidden="true" />
+        <span>{labels.encryptionNote}</span>
+      </p>
     </div>
   );
 }

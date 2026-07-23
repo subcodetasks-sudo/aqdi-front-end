@@ -55,28 +55,32 @@ export function CreateContractFurnishingTypeToggle({
   onChange,
 }: FurnishingTypeToggleProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <label className="text-sm font-semibold text-brand">
+    <div className="space-y-2">
+      <label className="block text-sm font-semibold text-brand">
         {label}
         <span className="text-red-500"> *</span>
       </label>
 
-      <div className="flex items-center rounded-full border border-[#e8e8e8] bg-brand-background p-1">
-        {(["new", "used"] as const).map((furnishingType) => (
-          <button
-            key={furnishingType}
-            type="button"
-            onClick={() => onChange(furnishingType)}
-            className={cn(
-              "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
-              value === furnishingType
-                ? "bg-brand text-white"
-                : "text-[#7f7f7f] hover:text-[#555555]",
-            )}
-          >
-            {furnishingType === "new" ? newLabel : usedLabel}
-          </button>
-        ))}
+      <div className="grid grid-cols-2 gap-3">
+        {(["new", "used"] as const).map((furnishingType) => {
+          const selected = value === furnishingType;
+
+          return (
+            <button
+              key={furnishingType}
+              type="button"
+              onClick={() => onChange(furnishingType)}
+              className={cn(
+                "h-12 rounded-xl text-sm font-bold transition-colors",
+                selected
+                  ? "bg-brand text-white"
+                  : "border border-[#e8e8e8] bg-white text-[#b0b0b0] hover:border-[#d4d4d4] hover:text-[#8a8a8a]",
+              )}
+            >
+              {furnishingType === "new" ? newLabel : usedLabel}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -7,10 +7,16 @@ import { Input } from "@/components/ui/input";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
   getSaudiMobileSubscriber,
+  SAUDI_MOBILE_LENGTH,
   SAUDI_MOBILE_PREFIX,
-  SAUDI_MOBILE_SUBSCRIBER_LENGTH,
-  toSaudiMobileInputValue,
+  toSaudiMobileFromSubscriberInput,
 } from "@/lib/validation/format-saudi-mobile-for-form";
+import {
+  fieldChromeIconClass,
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateContractSaudiMobileFieldProps = {
   label: string;
@@ -19,6 +25,8 @@ type CreateContractSaudiMobileFieldProps = {
   onChange: (value: string) => void;
   icon: LucideIcon;
   errorMessage?: string;
+  invalid?: boolean;
+  valid?: boolean;
 };
 
 export default function CreateContractSaudiMobileField({
@@ -28,19 +36,34 @@ export default function CreateContractSaudiMobileField({
   onChange,
   icon: Icon,
   errorMessage,
+  invalid = false,
+  valid = false,
 }: CreateContractSaudiMobileFieldProps) {
   const inputId = useId();
   const subscriber = getSaudiMobileSubscriber(value);
+  const showInvalid = invalid || Boolean(errorMessage);
+  const chrome = resolveFieldChromeState({
+    invalid: showInvalid,
+    valid,
+  });
 
   return (
     <div>
-      <CreateContractFieldLabel label={label} />
+      <CreateContractFieldLabel label={label} invalid={showInvalid} />
 
       <div
         dir="ltr"
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
+          fieldChromeSurfaceClass(chrome),
+        )}
       >
-        <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center",
+            fieldChromeIconClass(chrome),
+          )}
+        >
           <Icon className="size-5" aria-hidden="true" />
         </span>
 
@@ -55,13 +78,13 @@ export default function CreateContractSaudiMobileField({
           type="tel"
           dir="ltr"
           inputMode="tel"
-          maxLength={SAUDI_MOBILE_SUBSCRIBER_LENGTH}
+          maxLength={SAUDI_MOBILE_LENGTH}
           value={subscriber}
           onChange={(event) => {
-            const nextDigits = event.target.value.replace(/\D/g, "");
-            onChange(toSaudiMobileInputValue(`${SAUDI_MOBILE_PREFIX}${nextDigits}`));
+            onChange(toSaudiMobileFromSubscriberInput(event.target.value));
           }}
           placeholder={placeholder}
+          aria-invalid={showInvalid}
           className="h-auto border-0 bg-transparent px-1 text-sm shadow-none focus-visible:ring-0"
         />
       </div>

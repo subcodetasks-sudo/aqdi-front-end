@@ -5,6 +5,12 @@ import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
+import {
+  fieldChromeIconClass,
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreatePropertyIconInputFieldProps = {
   label: string;
@@ -17,6 +23,8 @@ type CreatePropertyIconInputFieldProps = {
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   maxLength?: number;
   errorMessage?: string;
+  invalid?: boolean;
+  valid?: boolean;
 };
 
 export default function CreatePropertyIconInputField({
@@ -30,18 +38,33 @@ export default function CreatePropertyIconInputField({
   inputMode,
   maxLength,
   errorMessage,
+  invalid = false,
+  valid = false,
 }: CreatePropertyIconInputFieldProps) {
   const inputId = useId();
+  const showInvalid = invalid || Boolean(errorMessage);
+  const chrome = resolveFieldChromeState({
+    invalid: showInvalid,
+    valid,
+  });
 
   return (
     <div>
-      <CreatePropertyFieldLabel label={label} />
+      <CreatePropertyFieldLabel label={label} invalid={showInvalid} />
 
       <div
         dir={dir}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-full border px-2",
+          fieldChromeSurfaceClass(chrome),
+        )}
       >
-        <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center",
+            fieldChromeIconClass(chrome),
+          )}
+        >
           <Icon className="size-5" aria-hidden="true" />
         </span>
 
@@ -56,6 +79,7 @@ export default function CreatePropertyIconInputField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
+          aria-invalid={showInvalid}
           className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
         />
       </div>

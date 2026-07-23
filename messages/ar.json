@@ -1073,48 +1073,58 @@
           "placeholder": "إختر من هنا .."
         },
         "methods": {
-          "photo": "صورة العنوان",
-          "link": "رابط العنوان",
-          "manual": "ادخال تفاصيل العنوان"
+          "link": {
+            "title": "رابط موقع العقار",
+            "description": "من خلال قوقل ماب"
+          },
+          "manual": {
+            "title": "إدخال العنوان يدويًا",
+            "description": "المدينة والحي والشارع"
+          },
+          "photo": {
+            "title": "إرفاق العنوان الوطني",
+            "description": "صورة بطاقة العنوان"
+          }
         },
         "mapTitle": "خريطة العنوان الوطني",
         "mapHint": "انقر على الخريطة لتحديد موقع العقار.",
         "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
-          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا",
+          "hint": "افتح خرائط قوقل ← اضغط مطولاً على موقع العقار ← مشاركة ← نسخ الرابط، ثم الصقه هنا"
         },
         "manual": {
           "place": {
             "label": "المنطقة",
-            "placeholder": "... إختر من هنا",
+            "placeholder": "... إختر",
             "loading": "جاري التحميل..."
           },
           "city": {
             "label": "المدينة",
-            "placeholder": "... إختر من هنا",
+            "placeholder": "... إختر",
             "loading": "جاري التحميل...",
             "selectPlaceFirst": "اختر المنطقة أولاً"
           },
           "neighborhood": {
             "label": "الحي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "... إختر"
           },
           "street": {
-            "label": "اسم الشارع",
-            "placeholder": "... إختر من هنا"
+            "label": "الشارع",
+            "placeholder": "أكتب هنا .."
           },
           "buildingNumber": {
             "label": "رقم المبنى",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "0000"
           },
           "postalCode": {
             "label": "الرمز البريدي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "00000"
           },
           "extraFigure": {
             "label": "الرقم الإضافي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "0000"
           }
         },
         "photo": {
@@ -1317,16 +1327,17 @@
     },
     "unitCardTitle": "المعلومات الأساسية",
     "addUnit": "إضافة وحدة",
-    "removeUnit": "حذف الوحدة",
+    "removeUnit": "حذف",
     "unitsCount": "عدد الوحدات",
     "unitListTitle": "الوحدة",
+    "floorSummaryPrefix": "الدور",
     "additionalInfo": {
       "toggle": "هل ترغب بإضافة معلومات إضافية؟",
       "writeHerePlaceholder": "أكتب هنا ..."
     },
     "roomsCount": {
       "label": "عدد الغرف",
-      "hint": "تحتسب الصالات والمجالس وغرف النوم كلها ضمن الغرف"
+      "hint": "تُحتسب الصالات والمجالس وغرف النوم جميعها ضمن عدد الغرف"
     },
     "hallsCount": {
       "label": "عدد الصالات"
@@ -1354,9 +1365,9 @@
       "label": "هل الوحدة مؤثثة؟"
     },
     "furnishingType": {
-      "label": "نوع التأثيث :",
+      "label": "نوع التأثيث",
       "new": "جديد",
-      "used": "مستخدم"
+      "used": "مستعمل"
     },
     "addElectricityMeter": {
       "label": "هل ترغب بإضافة عداد كهرباء؟"
@@ -1399,7 +1410,19 @@
       "requestPrefix": "طلب",
       "copySuccess": "تم نسخ رقم الطلب",
       "copyError": "تعذر نسخ رقم الطلب",
-      "whatsappHref": "https://wa.me/"
+      "whatsappHref": "https://wa.me/",
+      "exitHomeDialog": {
+        "title": "الخروج للرئيسية",
+        "close": "إغلاق",
+        "incompleteTitle": "طلبك #{orderNumber} لم يكتمل بعد",
+        "description": "إذا خرجت بدون حفظ ستفقد ما أدخلته. ننصحك بحفظه لتكمل لاحقاً من قسم الطلبات.",
+        "saveThenExit": "حفظ الطلب ثم الخروج",
+        "saving": "جاري الحفظ...",
+        "exitWithoutSaving": "الخروج بدون حفظ",
+        "continue": "تراجع - أكمل طلبي",
+        "saveError": "تعذر حفظ الطلب، حاول مرة أخرى",
+        "missingContractSession": "لا يوجد طلب نشط للحفظ"
+      }
     },
     "stepper": {
       "journey": "رحلتك الإيجارية أصبحت أسهل.",
@@ -1462,7 +1485,7 @@
         }
       ],
       "deedType": {
-        "label": "حدد نوع الصك",
+        "label": "حدد نوع المستند",
         "placeholder": "إختر من هنا ..",
         "clearSelection": "إزالة نوع الصك",
         "types": {
@@ -1519,39 +1542,40 @@
         "coordinatesLabel": "الإحداثيات المحددة",
         "link": {
           "label": "اضافة رابط قوقل ماب للعقار",
-          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا"
+          "placeholder": "... اضافة رابط قوقل ماب للعقار هنا",
+          "hint": "افتح خرائط قوقل ← اضغط مطولاً على موقع العقار ← مشاركة ← نسخ الرابط، ثم الصقه هنا"
         },
         "manual": {
           "place": {
             "label": "المنطقة",
-            "placeholder": "... إختر من هنا",
+            "placeholder": "... إختر",
             "loading": "جاري التحميل..."
           },
           "city": {
             "label": "المدينة",
-            "placeholder": "... إختر من هنا",
+            "placeholder": "... إختر",
             "loading": "جاري التحميل...",
             "selectPlaceFirst": "اختر المنطقة أولاً"
           },
           "neighborhood": {
             "label": "الحي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "... إختر"
           },
           "street": {
-            "label": "اسم الشارع",
-            "placeholder": "... إختر من هنا"
+            "label": "الشارع",
+            "placeholder": "أكتب هنا .."
           },
           "buildingNumber": {
             "label": "رقم المبنى",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "0000"
           },
           "postalCode": {
             "label": "الرمز البريدي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "00000"
           },
           "extraFigure": {
             "label": "الرقم الإضافي",
-            "placeholder": "... إختر من هنا"
+            "placeholder": "0000"
           }
         },
         "photo": {
@@ -1645,7 +1669,7 @@
         },
         "idNumber": {
           "label": "رقم هوية المالك",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxx"
         },
         "phone": {
           "label": "رقم جوال المالك",
@@ -1671,7 +1695,7 @@
         "birthDateLabel": "تاريخ ميلاد الوكيل",
         "phone": {
           "label": "رقم جوال الوكيل",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1743,7 +1767,7 @@
           "options": {
             "owner-representative": {
               "title": "أنا مالك السجل وممثله",
-              "description": "تكفي بياناتك وبيانات السجل - بدون مرفقات"
+        "description": "تكفي بياناتك وبيانات السجل – بدون مرفقات"
             },
             "agent-authorized": {
               "title": "أنا وكيل أو مفوض عن مالك السجل",
@@ -1775,7 +1799,7 @@
         "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل",
         "ownerPhone": {
           "label": "رقم جوال مالك السجل",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1824,18 +1848,19 @@
           "label": "رقم الوحدة",
           "placeholder": "أكتب هنا .."
         },
-    "unitCardTitle": "المعلومات الأساسية",
-    "addUnit": "إضافة وحدة",
-    "removeUnit": "حذف الوحدة",
-    "unitsCount": "عدد الوحدات",
-    "unitListTitle": "الوحدة",
+        "unitCardTitle": "المعلومات الأساسية",
+        "addUnit": "إضافة وحدة",
+        "removeUnit": "حذف",
+        "unitsCount": "عدد الوحدات",
+        "unitListTitle": "الوحدة",
+        "floorSummaryPrefix": "الدور",
         "additionalInfo": {
           "toggle": "هل ترغب بإضافة معلومات إضافية؟",
           "writeHerePlaceholder": "أكتب هنا ..."
         },
         "roomsCount": {
           "label": "عدد الغرف",
-          "hint": "تحتسب الصالات والمجالس وغرف النوم كلها ضمن الغرف"
+          "hint": "تُحتسب الصالات والمجالس وغرف النوم جميعها ضمن عدد الغرف"
         },
         "hallsCount": {
           "label": "عدد الصالات"
@@ -1863,9 +1888,9 @@
           "label": "هل الوحدة مؤثثة؟"
         },
         "furnishingType": {
-          "label": "نوع التأثيث :",
+          "label": "نوع التأثيث",
           "new": "جديد",
-          "used": "مستخدم"
+          "used": "مستعمل"
         },
         "addElectricityMeter": {
           "label": "هل ترغب بإضافة عداد كهرباء؟"
@@ -1924,21 +1949,18 @@
         }
       },
       "saveLaterDialog": {
-        "title": "حفظ العقد والإكمال لاحقاً",
+        "title": "حفظ والإكمال لاحقًا",
         "close": "إغلاق",
-        "successTitle": "تم حفظ العقد بنجاح ويمكنك إكماله لاحقاً في أي وقت !",
-        "successDescription": "للرجوع وإكمال العقد، توجه إلى قسم الطلبات داخل الموقع.",
-        "orderNumberLabel": "رقم طلبكم",
-        "copy": "نسخ",
-        "copied": "تم النسخ",
-        "copySuccess": "تم نسخ رقم الطلب",
-        "copyError": "تعذر نسخ رقم الطلب",
-        "retentionNotice": "نود التنويه أن العقود غير المكتملة يتم الاحتفاظ بها لمدة",
-        "retentionDays": "30 يوم فقط",
-        "orders": "الطلبات",
-        "ordersHref": "/requests",
-        "mainMenu": "القائمة الرئيسية",
-        "mainMenuHref": "/"
+        "successTitle": "نحفظ لك تقدّمك",
+        "successDescription": "كل ما أدخلته يُحفظ وترجع تكمل من حيث توقفت",
+        "orderNumberLabel": "رقم الطلب",
+        "foundInLabel": "تجده في",
+        "foundInValue": "قسم الطلبات",
+        "retentionLabel": "مدة حفظ الطلب",
+        "retentionDays": "30 يومًا",
+        "tip": "احفظ رقم الطلب - تحتاجه لو تواصلت مع الدعم قبل ما تكمل",
+        "confirm": "حفظ الطلب والخروج",
+        "saving": "جاري الحفظ..."
       }
     },
     "finance": {
@@ -1961,7 +1983,9 @@
         "year": "السنة",
         "dayPlaceholder": "00",
         "monthPlaceholder": "00",
-        "yearPlaceholder": "0000"
+        "yearPlaceholder": "0000",
+        "correspondingHijri": "الموافق هجرياً: '{'date'}' هـ",
+        "correspondingGregorian": "الموافق ميلادياً: '{'date'}' م"
       },
       "contractDuration": {
         "label": "مدة العقد",
@@ -1991,12 +2015,20 @@
         "title": "صلاحيات للمستأجر أو مبلغ ضمان أو غرامة يومية ؟",
         "subtitle": "مثل التأجير من الباطن، أو غرامة يومية، أو حجز مبلغ الضمان",
         "instruction": "اختر ما تريد إضافته - البنود غير المحددة لا تُدْرَج في العقد",
-        "optionsError": "فشل تحميل صلاحيات المستأجر"
+        "optionsError": "فشل تحميل صلاحيات المستأجر",
+        "close": "إغلاق",
+        "confirmPrefix": "اعتماد",
+        "serviceDefinitionLabel": "التعريف بالخدمة:",
+        "depositNote": "ملاحظة: إذا أضفت مبلغ الضمان لا يمكن للمستأجر الموافقة على العقد حتى يسدّد مبلغ الضمان ويُحجز في منصة إيجار.",
+        "currency": "ريال",
+        "currencyPerDay": "ريال/يوم",
+        "inputRequired": "يرجى إدخال قيمة صحيحة",
+        "inputFallbackLabel": "أدخل القيمة"
       },
       "otherConditions": {
         "title": "هل ترغب بإضافة شروط أخرى... ؟",
         "subtitle": "شروط إضافية يتفق عليها الطرفان وتُوثّق في العقد",
-        "instruction": "أضف شرطًا واحدًا في كل سطر - يظهر ضمن بنود العقد",
+        "instruction": "أضف شرطًا أو أكثر — يظهر كل شرط ضمن بنود العقد",
         "placeholder": "اكتب الشرط هنا",
         "add": "إضافة شرط",
         "remove": "حذف الشرط"
@@ -2005,13 +2037,17 @@
     "payment": {
       "title": "دفع المقابل المالي للعقد",
       "subtitle": "تفاصيل المقابل المالي للعقد :",
+      "encryptionNote": "تشفير كامل للبيانات - لا نحفظ أرقام بطاقتك",
       "navigation": {
-        "previous": "السابق",
-        "pay": "الدفع وتوثيق العقد",
+        "previous": "عودة",
+        "pay": "متابعة",
         "paying": "جاري التوجيه للدفع...",
-        "payError": "تعذر بدء عملية الدفع. حاول مرة أخرى."
+        "payError": "تعذر بدء عملية الدفع. حاول مرة أخرى.",
+        "save": "حفظ",
+        "saveError": "فشل حفظ مسودة العقد"
       },
       "summary": {
+        "sectionTitle": "رسوم طلبك",
         "ejarFees": "رسوم إيجار :",
         "contractPeriodPrice": "سعر فترة العقد :",
         "vat": "قيمة الضريبة :",
@@ -2059,7 +2095,7 @@
         "missingContractSession": "جلسة العقد غير متوفرة. يرجى إعادة بدء إنشاء العقد."
       },
       "disclaimer": {
-        "prefix": "بالنقر فوق 'الدفع وتوثيق العقد'، فإنك توافق على",
+        "prefix": "بالنقر فوق 'متابعة'، فإنك توافق على",
         "termsLink": "الشروط والأحكام",
         "and": "و",
         "privacyLink": "سياسة الخصوصية",

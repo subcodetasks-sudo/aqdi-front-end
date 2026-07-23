@@ -121,7 +121,10 @@ export default async function CreatePropertyPage({
         },
         methods: t.raw("address.nationalAddress.methods") as Record<
           "photo" | "link" | "manual",
-          string
+          {
+            title: string;
+            description: string;
+          }
         >,
         mapTitle: t("address.nationalAddress.mapTitle"),
         mapHint: t("address.nationalAddress.mapHint"),
@@ -129,6 +132,7 @@ export default async function CreatePropertyPage({
         link: {
           label: t("address.nationalAddress.link.label"),
           placeholder: t("address.nationalAddress.link.placeholder"),
+          hint: t("address.nationalAddress.link.hint"),
         },
         manual: {
           place: {

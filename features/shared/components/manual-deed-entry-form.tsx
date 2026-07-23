@@ -19,6 +19,9 @@ type FormSelectProps = {
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
+  hideLabel?: boolean;
+  variant?: "default" | "compact";
+  valid?: boolean;
 };
 
 type FieldLabelProps = {
@@ -40,12 +43,22 @@ function padOptions(count: number) {
   });
 }
 
+function RequiredFieldLabel({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className="text-sm font-semibold text-[#333333]">{label}</span>
+      <span className="text-red-500" aria-hidden="true">
+        *
+      </span>
+    </div>
+  );
+}
+
 export default function ManualDeedEntryForm({
   labels,
   value,
   onChange,
   FormSelect,
-  FieldLabel,
 }: ManualDeedEntryFormProps) {
   const inputId = useId();
   const dayCount = value.typeInstrumentHistory === "hijri" ? 30 : 31;
@@ -53,6 +66,8 @@ export default function ManualDeedEntryForm({
   const selectedYear = yearOptions.some((option) => option.value === value.instrumentHistoryYear)
     ? value.instrumentHistoryYear
     : "";
+  const instrumentNumberValid =
+    value.instrumentNumber.length === INSTRUMENT_NUMBER_LENGTH;
 
   function updateField<K extends keyof ManualDeedEntryData>(
     field: K,
@@ -72,9 +87,9 @@ export default function ManualDeedEntryForm({
   }
 
   return (
-    <div className="space-y-6 rounded-3xl bg-brand-background p-5 md:p-6">
+    <div className="space-y-6 rounded-3xl bg-brand-background p-4 sm:p-5 md:p-6">
       <div className="space-y-2">
-        <FieldLabel label={labels.instrumentNumber.label} />
+        <RequiredFieldLabel label={labels.instrumentNumber.label} />
 
         <div className="relative">
           <Input
@@ -89,7 +104,12 @@ export default function ManualDeedEntryForm({
                 normalizeInstrumentNumber(event.target.value),
               )
             }
-            className="h-12 rounded-full border-[#e8e8e8] bg-white pe-16 text-end font-semibold tracking-widest"
+            className={cn(
+              "h-12 rounded-2xl ps-4 pe-14 text-start text-sm font-semibold tracking-[0.2em] placeholder:tracking-[0.2em] placeholder:text-[#cfcfcf] md:text-sm",
+              instrumentNumberValid
+                ? "border-brand bg-brand-background-green"
+                : "border-[#e8e8e8] bg-white",
+            )}
           />
 
           <span className="pointer-events-none absolute inset-y-0 end-4 flex items-center text-xs text-[#bdbdbd]">
@@ -97,27 +117,24 @@ export default function ManualDeedEntryForm({
           </span>
         </div>
 
-        <p className="text-xs text-[#7f7f7f]">{labels.instrumentNumber.hint}</p>
+        <p className="text-xs text-[#8a8a8a]">{labels.instrumentNumber.hint}</p>
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <label className="text-sm font-semibold text-brand">
-            {labels.instrumentDate.label}
-            <span className="text-red-500"> *</span>
-          </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <RequiredFieldLabel label={labels.instrumentDate.label} />
 
-          <div className="flex items-center rounded-full border border-[#e8e8e8] bg-white p-1">
+          <div className="inline-flex shrink-0 items-center rounded-full bg-[#f0f0f0] p-1">
             {(["hijri", "gregorian"] as const).map((calendarType) => (
               <button
                 key={calendarType}
                 type="button"
                 onClick={() => updateField("typeInstrumentHistory", calendarType)}
                 className={cn(
-                  "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
+                  "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors sm:px-5",
                   value.typeInstrumentHistory === calendarType
                     ? "bg-brand text-white"
-                    : "text-[#7f7f7f] hover:text-[#555555]",
+                    : "text-[#555555] hover:text-[#333333]",
                 )}
               >
                 {labels.instrumentDate[calendarType]}
@@ -126,13 +143,16 @@ export default function ManualDeedEntryForm({
           </div>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           <FormSelect
             label={labels.instrumentDate.day}
             placeholder={labels.instrumentDate.dayPlaceholder}
             options={padOptions(dayCount)}
             value={value.instrumentHistoryDay}
             onChange={(day) => updateField("instrumentHistoryDay", day)}
+            hideLabel
+            variant="compact"
+            valid={value.instrumentHistoryDay !== ""}
           />
 
           <FormSelect
@@ -141,6 +161,9 @@ export default function ManualDeedEntryForm({
             options={padOptions(12)}
             value={value.instrumentHistoryMonth}
             onChange={(month) => updateField("instrumentHistoryMonth", month)}
+            hideLabel
+            variant="compact"
+            valid={value.instrumentHistoryMonth !== ""}
           />
 
           <FormSelect
@@ -149,6 +172,9 @@ export default function ManualDeedEntryForm({
             options={yearOptions}
             value={selectedYear}
             onChange={(year) => updateField("instrumentHistoryYear", year)}
+            hideLabel
+            variant="compact"
+            valid={selectedYear !== ""}
           />
         </div>
       </div>
