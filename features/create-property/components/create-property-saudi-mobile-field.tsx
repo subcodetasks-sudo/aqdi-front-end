@@ -54,7 +54,7 @@ export default function CreatePropertySaudiMobileField({
       <div
         dir="ltr"
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-full border px-2",
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
           fieldChromeSurfaceClass(chrome),
         )}
       >

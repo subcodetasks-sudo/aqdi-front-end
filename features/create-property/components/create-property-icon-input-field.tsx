@@ -55,7 +55,7 @@ export default function CreatePropertyIconInputField({
       <div
         dir={dir}
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-full border px-2",
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
           fieldChromeSurfaceClass(chrome),
         )}
       >

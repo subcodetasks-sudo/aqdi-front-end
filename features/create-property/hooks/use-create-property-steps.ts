@@ -15,6 +15,13 @@ export function useCreatePropertySteps() {
   const currentStepIndex = CREATE_PROPERTY_STEPS.indexOf(currentStep);
 
   function goToStep(step: CreatePropertyStepperStep) {
+    const targetIndex = CREATE_PROPERTY_STEPS.indexOf(step);
+    const currentIndex = CREATE_PROPERTY_STEPS.indexOf(currentStep);
+
+    if (targetIndex < 0 || targetIndex > currentIndex) {
+      return;
+    }
+
     setCurrentStep(step);
   }
 

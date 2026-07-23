@@ -1,6 +1,5 @@
 import type { CreatePropertyStepperStep } from "@/features/create-property/types/create-property-step";
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
-import type { PropertyHasAgentOption } from "@/features/create-property/types/owner-step";
 import type { ManualDeedEntryLabels } from "@/features/shared/types/manual-deed-entry-labels";
 export type CreatePropertyLabels = {
   backLabel: string;
@@ -10,6 +9,8 @@ export type CreatePropertyLabels = {
   editPageTitleResidential: string;
   editPageTitleCommercial: string;
   stepper: {
+    journey: string;
+    saveAlt: string;
     steps: Record<CreatePropertyStepperStep, string>;
   };
   deed: {
@@ -171,12 +172,14 @@ export type CreatePropertyLabels = {
         placeholder: string;
       };
       hasAgent: {
-        label: string;
-        placeholder: string;
-        options: Record<PropertyHasAgentOption, string>;
+        title: string;
+        description: string;
       };
     };
     agentData: {
+      sectionTitle: string;
+      sectionDescription?: string;
+      footerNote?: string;
       idNumber: {
         label: string;
         placeholder: string;

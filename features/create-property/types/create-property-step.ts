@@ -1,6 +1,5 @@
 export const CREATE_PROPERTY_STEPS = [
   "deed",
-  "address",
   "owner",
   "review",
   "success",
@@ -8,7 +7,6 @@ export const CREATE_PROPERTY_STEPS = [
 
 export const CREATE_PROPERTY_STEPPER_STEPS = [
   "deed",
-  "address",
   "owner",
   "review",
 ] as const;

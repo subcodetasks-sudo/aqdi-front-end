@@ -8,10 +8,13 @@ import CreatePropertyDeedImageUpload from "@/features/create-property/components
 import CreatePropertyDeedTypeSelect from "@/features/create-property/components/create-property-deed-type-select";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
+import CreatePropertyNationalAddress from "@/features/create-property/components/create-property-national-address";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
 import { Switch } from "@/components/ui/switch";
+import { useCreatePropertyAddressStep } from "@/features/create-property/hooks/use-create-property-address-step";
 import { useCreatePropertyDeedStep } from "@/features/create-property/hooks/use-create-property-deed-step";
+import { useSubmitPropertyStep1 } from "@/features/create-property/hooks/use-submit-property-step1";
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
@@ -21,12 +24,14 @@ import { propertyDeedTypeSupportsManualEntry } from "@/features/shared/utils/sup
 
 type CreatePropertyDeedStepProps = {
   labels: CreatePropertyLabels["deed"];
+  addressLabels: CreatePropertyLabels["address"];
   onBack: () => void;
   onComplete: () => void;
 };
 
 export default function CreatePropertyDeedStep({
   labels,
+  addressLabels,
   onBack,
   onComplete,
 }: CreatePropertyDeedStepProps) {
@@ -67,8 +72,21 @@ export default function CreatePropertyDeedStep({
     existingEndowmentCertImageUrl,
     existingTrusteeshipImageUrl,
     existingGuardiansPoaImageUrl,
-    canContinue,
+    canContinue: canContinueDeed,
   } = useCreatePropertyDeedStep();
+  const {
+    method,
+    setMethod,
+    photoFiles,
+    setPhotoFiles,
+    linkUrl,
+    setLinkUrl,
+    manualAddress,
+    setManualAddress,
+    existingAddressImageUrl,
+    canContinue: canContinueAddress,
+  } = useCreatePropertyAddressStep();
+  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const deedTypePopup = useInstrumentTypeDeedPopup("realestate");
   const supportsManualEntry = propertyDeedTypeSupportsManualEntry(selectedDeedType);
@@ -88,14 +106,26 @@ export default function CreatePropertyDeedStep({
     void deedTypePopup.showPopupFor(value, labels.deedType.types[value]);
   }
 
-  function handleContinue() {
-    if (!canContinue) {
+  async function handleContinue() {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (!canContinueDeed || !canContinueAddress) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
       return;
     }
 
     setShowFieldErrors(false);
+
+    const result = await submitStep1();
+
+    if (!result.ok) {
+      toast.error(result.error || addressLabels.navigation.submitError);
+      return;
+    }
+
     onComplete();
   }
 
@@ -123,8 +153,7 @@ export default function CreatePropertyDeedStep({
   }
 
   function renderFrontBackUpload() {
-    const instrumentInvalid =
-      showFieldErrors && !useManualDeedEntry;
+    const instrumentInvalid = showFieldErrors && !useManualDeedEntry;
 
     return (
       <div className="space-y-6">
@@ -183,124 +212,154 @@ export default function CreatePropertyDeedStep({
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
+          showIcon={false}
         />
 
-        <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
-          <CreatePropertyDeedTypeSelect
-            labels={labels.deedType}
-            value={selectedDeedType}
-            onChange={handleDeedTypeChange}
-            invalid={showFieldErrors && selectedDeedType === ""}
-          />
+        <div className="space-y-8">
+          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
+            <CreatePropertyDeedTypeSelect
+              labels={labels.deedType}
+              value={selectedDeedType}
+              onChange={handleDeedTypeChange}
+              invalid={showFieldErrors && selectedDeedType === ""}
+            />
 
-          {selectedDeedType && needsFrontBack ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(renderFrontBackUpload())}
-            </div>
-          ) : selectedDeedType && isDeceasedOwner ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(renderSingleUpload())}
+            {selectedDeedType && needsFrontBack ? (
+              <div className="space-y-6">
+                {renderInstrumentEntry(renderFrontBackUpload())}
+              </div>
+            ) : selectedDeedType && isDeceasedOwner ? (
+              <div className="space-y-6">
+                {renderInstrumentEntry(renderSingleUpload())}
 
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.inheritanceLabel}
-                value={deedInheritanceFiles}
-                onChange={setDeedInheritanceFiles}
-                existingFileUrl={existingInheritanceImageUrl}
-                variant="dropzone"
-                invalid={
-                  showFieldErrors &&
-                  deedInheritanceFiles.length === 0 &&
-                  !existingInheritanceImageUrl
-                }
-              />
-
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.heirsPoaLabel}
-                value={deedHeirsPoaFiles}
-                onChange={setDeedHeirsPoaFiles}
-                existingFileUrl={existingHeirsPoaImageUrl}
-                variant="dropzone"
-                invalid={
-                  showFieldErrors &&
-                  deedHeirsPoaFiles.length === 0 &&
-                  !existingHeirsPoaImageUrl
-                }
-              />
-            </div>
-          ) : selectedDeedType && isWaqfOwner ? (
-            <div className="space-y-6">
-              {renderInstrumentEntry(renderSingleUpload())}
-
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.endowmentCertLabel}
-                value={deedEndowmentCertFiles}
-                onChange={setDeedEndowmentCertFiles}
-                existingFileUrl={existingEndowmentCertImageUrl}
-                variant="dropzone"
-                invalid={
-                  showFieldErrors &&
-                  deedEndowmentCertFiles.length === 0 &&
-                  !existingEndowmentCertImageUrl
-                }
-              />
-
-              <CreatePropertyDeedImageUpload
-                labels={labels.deedImage}
-                fieldLabel={labels.deedImage.trusteeshipLabel}
-                value={deedTrusteeshipFiles}
-                onChange={setDeedTrusteeshipFiles}
-                existingFileUrl={existingTrusteeshipImageUrl}
-                variant="dropzone"
-                invalid={
-                  showFieldErrors &&
-                  deedTrusteeshipFiles.length === 0 &&
-                  !existingTrusteeshipImageUrl
-                }
-              />
-
-              <label className="flex cursor-pointer items-center justify-between gap-3">
-                <span className="text-sm font-semibold text-brand">
-                  {labels.waqf.multipleTrusteesLabel}
-                </span>
-                <Switch
-                  dir="ltr"
-                  checked={isMultipleTrusteeshipDeedCopy}
-                  onCheckedChange={setIsMultipleTrusteeshipDeedCopy}
-                  className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
-                />
-              </label>
-
-              {isMultipleTrusteeshipDeedCopy ? (
                 <CreatePropertyDeedImageUpload
                   labels={labels.deedImage}
-                  fieldLabel={labels.deedImage.guardiansPoaLabel}
-                  value={deedGuardiansPoaFiles}
-                  onChange={setDeedGuardiansPoaFiles}
-                  existingFileUrl={existingGuardiansPoaImageUrl}
+                  fieldLabel={labels.deedImage.inheritanceLabel}
+                  value={deedInheritanceFiles}
+                  onChange={setDeedInheritanceFiles}
+                  existingFileUrl={existingInheritanceImageUrl}
                   variant="dropzone"
                   invalid={
                     showFieldErrors &&
-                    deedGuardiansPoaFiles.length === 0 &&
-                    !existingGuardiansPoaImageUrl
+                    deedInheritanceFiles.length === 0 &&
+                    !existingInheritanceImageUrl
                   }
                 />
-              ) : null}
-            </div>
-          ) : selectedDeedType ? (
-            renderInstrumentEntry(renderSingleUpload())
-          ) : null}
+
+                <CreatePropertyDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.heirsPoaLabel}
+                  value={deedHeirsPoaFiles}
+                  onChange={setDeedHeirsPoaFiles}
+                  existingFileUrl={existingHeirsPoaImageUrl}
+                  variant="dropzone"
+                  invalid={
+                    showFieldErrors &&
+                    deedHeirsPoaFiles.length === 0 &&
+                    !existingHeirsPoaImageUrl
+                  }
+                />
+              </div>
+            ) : selectedDeedType && isWaqfOwner ? (
+              <div className="space-y-6">
+                {renderInstrumentEntry(renderSingleUpload())}
+
+                <CreatePropertyDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.endowmentCertLabel}
+                  value={deedEndowmentCertFiles}
+                  onChange={setDeedEndowmentCertFiles}
+                  existingFileUrl={existingEndowmentCertImageUrl}
+                  variant="dropzone"
+                  invalid={
+                    showFieldErrors &&
+                    deedEndowmentCertFiles.length === 0 &&
+                    !existingEndowmentCertImageUrl
+                  }
+                />
+
+                <CreatePropertyDeedImageUpload
+                  labels={labels.deedImage}
+                  fieldLabel={labels.deedImage.trusteeshipLabel}
+                  value={deedTrusteeshipFiles}
+                  onChange={setDeedTrusteeshipFiles}
+                  existingFileUrl={existingTrusteeshipImageUrl}
+                  variant="dropzone"
+                  invalid={
+                    showFieldErrors &&
+                    deedTrusteeshipFiles.length === 0 &&
+                    !existingTrusteeshipImageUrl
+                  }
+                />
+
+                <label className="flex cursor-pointer items-center justify-between gap-3">
+                  <span className="text-sm font-semibold text-brand">
+                    {labels.waqf.multipleTrusteesLabel}
+                  </span>
+                  <Switch
+                    dir="ltr"
+                    checked={isMultipleTrusteeshipDeedCopy}
+                    onCheckedChange={setIsMultipleTrusteeshipDeedCopy}
+                    className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
+                  />
+                </label>
+
+                {isMultipleTrusteeshipDeedCopy ? (
+                  <CreatePropertyDeedImageUpload
+                    labels={labels.deedImage}
+                    fieldLabel={labels.deedImage.guardiansPoaLabel}
+                    value={deedGuardiansPoaFiles}
+                    onChange={setDeedGuardiansPoaFiles}
+                    existingFileUrl={existingGuardiansPoaImageUrl}
+                    variant="dropzone"
+                    invalid={
+                      showFieldErrors &&
+                      deedGuardiansPoaFiles.length === 0 &&
+                      !existingGuardiansPoaImageUrl
+                    }
+                  />
+                ) : null}
+              </div>
+            ) : selectedDeedType ? (
+              renderInstrumentEntry(renderSingleUpload())
+            ) : null}
+          </div>
+
+          <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
+            <CreatePropertyStepPhaseHeader
+              title={addressLabels.title}
+              subtitle={addressLabels.subtitle}
+              showIcon={false}
+            />
+
+            <CreatePropertyNationalAddress
+              labels={addressLabels.nationalAddress}
+              method={method}
+              onMethodChange={setMethod}
+              photoFiles={photoFiles}
+              onPhotoFilesChange={setPhotoFiles}
+              existingPhotoUrl={existingAddressImageUrl}
+              linkUrl={linkUrl}
+              onLinkUrlChange={setLinkUrl}
+              manualAddress={manualAddress}
+              onManualAddressChange={setManualAddress}
+              showFieldErrors={showFieldErrors}
+            />
+          </div>
         </div>
       </div>
 
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
+        continueLabel={
+          isSubmitting
+            ? addressLabels.navigation.submitting
+            : labels.navigation.continue
+        }
+        isSubmitting={isSubmitting}
         variant="stacked"
         onPrevious={onBack}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
       />
 
       <InstrumentTypePopupDialog

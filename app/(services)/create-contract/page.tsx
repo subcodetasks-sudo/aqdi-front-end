@@ -667,6 +667,9 @@ export default async function CreateContractPage({
       title: t("payment.title"),
       subtitle: t("payment.subtitle"),
       encryptionNote: t("payment.encryptionNote"),
+      journeyMessage: t("payment.journeyMessage"),
+      securePaymentLabel: t("payment.securePaymentLabel"),
+      reviewOrderLabel: t("payment.reviewOrderLabel"),
       navigation: {
         previous: t("payment.navigation.previous"),
         pay: t("payment.navigation.pay"),

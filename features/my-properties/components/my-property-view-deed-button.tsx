@@ -25,7 +25,7 @@ export default function MyPropertyViewDeedButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-full bg-[#f0f9f9] px-3 py-1.5 text-sm font-semibold text-brand transition-colors hover:bg-[#e4f2ef]"
+        className="inline-flex items-center gap-1.5 rounded-full border border-[#e4eeec] bg-[#f5faf9] px-3 py-1.5 text-xs font-semibold text-brand transition-colors hover:bg-[#e8f1ef] sm:text-sm"
       >
         {t("viewDeed")}
         <Eye className="size-4" aria-hidden="true" />

@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  Building2,
-  Download,
-  FilePenLine,
-  User,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { Fragment } from "react";
+import Image from "next/image";
+import { Save } from "lucide-react";
 
 import { useCreatePropertySteps } from "@/features/create-property/hooks/use-create-property-steps";
 import {
+  CREATE_PROPERTY_STEPS,
   CREATE_PROPERTY_STEPPER_STEPS,
   type CreatePropertyStepperStep,
 } from "@/features/create-property/types/create-property-step";
@@ -21,62 +16,91 @@ type CreatePropertyStepperProps = {
   labels: CreatePropertyLabels["stepper"];
 };
 
-const STEPPER_ICONS: Record<CreatePropertyStepperStep, LucideIcon> = {
-  deed: Building2,
-  address: FilePenLine,
-  owner: User,
-  review: Download,
-};
+const stepPillClassName =
+  "inline-flex items-center justify-center rounded-full grow h-12 px-3 text-sm font-semibold whitespace-nowrap transition-all";
 
-const STEP_CIRCLE_CLASSNAME =
-  "inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-linear-to-b from-brand-secondary via-brand to-[#083d36] text-white shadow-sm transition-all md:size-12";
-
-const CONNECTOR_CLASSNAME =
-  "mx-2 h-0.5 min-w-4 flex-1 rounded-full bg-brand-secondary md:mx-3";
+function getStepPillClassName(
+  isActive: boolean,
+  isCompleted: boolean,
+  isUnlocked: boolean,
+) {
+  return cn(
+    stepPillClassName,
+    isUnlocked
+      ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
+      : "cursor-not-allowed opacity-50",
+    isActive
+      ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
+      : isCompleted
+        ? "bg-brand text-white"
+        : "bg-brand-background-green text-brand",
+  );
+}
 
 export default function CreatePropertyStepper({
   labels,
 }: CreatePropertyStepperProps) {
   const { currentStepIndex, goToStep } = useCreatePropertySteps();
 
+  function isStepUnlocked(step: CreatePropertyStepperStep) {
+    const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
+    return stepIndex >= 0 && stepIndex <= currentStepIndex;
+  }
+
   return (
-    <div className="rounded-2xl bg-white px-4 py-4 md:rounded-3xl md:px-6 md:py-5">
-      <div className="flex items-center">
-        {CREATE_PROPERTY_STEPPER_STEPS.map((step, index) => {
-          const Icon = STEPPER_ICONS[step];
-          const isActive = index === currentStepIndex;
-          const isCompleted = index < currentStepIndex;
+    <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5">
+      <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
+        {CREATE_PROPERTY_STEPPER_STEPS.map((step) => {
+          const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
+          const isCompleted = stepIndex < currentStepIndex;
+          const isActive = stepIndex === currentStepIndex;
+          const isUnlocked = isStepUnlocked(step);
 
           return (
-            <Fragment key={step}>
-              <button
-                type="button"
-                title={labels.steps[step]}
-                aria-label={labels.steps[step]}
-                aria-current={isActive ? "step" : undefined}
-                onClick={() => goToStep(step)}
-                className={cn(
-                  STEP_CIRCLE_CLASSNAME,
-                  "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30",
-                  isActive && "ring-2 ring-brand-secondary ring-offset-2",
-                  !isActive && !isCompleted && "opacity-60",
-                )}
-              >
-                <Icon className="size-5" aria-hidden="true" />
-              </button>
-
-              {index < CREATE_PROPERTY_STEPPER_STEPS.length - 1 ? (
-                <span
-                  className={cn(
-                    CONNECTOR_CLASSNAME,
-                    index < currentStepIndex && "bg-brand",
-                  )}
-                  aria-hidden="true"
-                />
-              ) : null}
-            </Fragment>
+            <button
+              key={step}
+              type="button"
+              title={labels.steps[step]}
+              aria-label={labels.steps[step]}
+              aria-current={isActive ? "step" : undefined}
+              disabled={!isUnlocked}
+              onClick={() => goToStep(step)}
+              className={getStepPillClassName(isActive, isCompleted, isUnlocked)}
+            >
+              {labels.steps[step]}
+            </button>
           );
         })}
+
+        <span
+          title={labels.saveAlt}
+          aria-label={labels.saveAlt}
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-brand/40 bg-white text-brand"
+        >
+          <Save className="size-5" aria-hidden="true" />
+        </span>
+      </div>
+
+      <div dir="rtl" className="mx-auto mt-4 flex w-[90%] items-end gap-2">
+        <Image
+          src="/images/contract-line-r.svg"
+          alt=""
+          width={203}
+          height={26}
+          aria-hidden="true"
+          className="h-auto min-w-0 flex-1 object-contain object-right"
+        />
+        <p className="shrink-0 text-center text-xs font-medium text-brand md:text-sm">
+          {labels.journey}
+        </p>
+        <Image
+          src="/images/contract-line-l.svg"
+          alt=""
+          width={203}
+          height={26}
+          aria-hidden="true"
+          className="h-auto min-w-0 flex-1 object-contain object-left"
+        />
       </div>
     </div>
   );

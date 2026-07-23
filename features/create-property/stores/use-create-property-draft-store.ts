@@ -125,6 +125,10 @@ function normalizePersistedOwnerData(
       ...ownerData?.birthDate,
     },
     iban: ownerData?.iban ?? "",
+    hasAgent:
+      ownerData?.hasAgent === "yes" || ownerData?.hasAgent === "no"
+        ? ownerData.hasAgent
+        : "no",
   };
 }
 
@@ -401,7 +405,10 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         existingAddressImageUrl: state.existingAddressImageUrl,
         hasExistingPowerOfAttorney: state.hasExistingPowerOfAttorney,
         currentStep:
-          state.currentStep === "success" ? "deed" : state.currentStep,
+          state.currentStep === "success" ||
+          (state.currentStep as string) === "address"
+            ? "deed"
+            : state.currentStep,
         selectedDeedType: state.selectedDeedType,
         deedPersistedFiles: state.deedPersistedFiles,
         deedFrontPersistedFiles: state.deedFrontPersistedFiles,
@@ -441,7 +448,10 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           ...state.addressManual,
         };
 
-        if (state.currentStep === "success") {
+        if (
+          state.currentStep === "success" ||
+          (state.currentStep as string) === "address"
+        ) {
           state.currentStep = "deed";
         }
 

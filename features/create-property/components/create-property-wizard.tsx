@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import CreatePropertyAddressStep from "@/features/create-property/components/create-property-address-step";
 import CreatePropertyDeedStep from "@/features/create-property/components/create-property-deed-step";
 import CreatePropertyOwnerStep from "@/features/create-property/components/create-property-owner-step";
 import CreatePropertyReviewStep from "@/features/create-property/components/create-property-review-step";
@@ -87,23 +86,14 @@ export default function CreatePropertyWizard({
         <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       )}
       {showStepper ? (
-        <div className="rounded-3xl bg-white p-4 shadow-sm md:p-5">
-          <CreatePropertyStepper labels={labels.stepper} />
-        </div>
+        <CreatePropertyStepper labels={labels.stepper} />
       ) : null}
 
       {currentStep === "deed" ? (
         <CreatePropertyDeedStep
           labels={labels.deed}
+          addressLabels={labels.address}
           onBack={() => router.back()}
-          onComplete={goNext}
-        />
-      ) : null}
-
-      {currentStep === "address" ? (
-        <CreatePropertyAddressStep
-          labels={labels.address}
-          onBack={goBack}
           onComplete={goNext}
         />
       ) : null}

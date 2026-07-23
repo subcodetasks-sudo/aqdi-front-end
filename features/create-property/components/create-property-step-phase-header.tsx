@@ -5,6 +5,7 @@ type CreatePropertyStepPhaseHeaderProps = {
   title: string;
   subtitle: string;
   icon?: "building" | "location" | "id-card" | "tag";
+  showIcon?: boolean;
 };
 
 const HEADER_ICONS: Record<
@@ -15,18 +16,23 @@ const HEADER_ICONS: Record<
   location: MapPin,
   "id-card": IdCard,
   tag: Tag,
-};export default function CreatePropertyStepPhaseHeader({
+};
+
+export default function CreatePropertyStepPhaseHeader({
   title,
   subtitle,
   icon = "building",
+  showIcon = true,
 }: CreatePropertyStepPhaseHeaderProps) {
   const Icon = HEADER_ICONS[icon];
 
   return (
     <div className="mb-8 flex flex-col items-center gap-3 text-center">
-      <span className="inline-flex text-brand-secondary">
-        <Icon className="size-6 text-brand-secondary" aria-hidden="true" />
-      </span>
+      {showIcon ? (
+        <span className="inline-flex text-brand-secondary">
+          <Icon className="size-6 text-brand-secondary" aria-hidden="true" />
+        </span>
+      ) : null}
 
       <div className="space-y-2">
         <h2 className="text-2xl font-extrabold text-brand md:text-3xl">

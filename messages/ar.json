@@ -886,16 +886,21 @@
     ]
   },
   "myProperties": {
-    "backLabel": "رجوع",
+    "backLabel": "الرئيسية",
     "pageTitle": "عقاراتي",
+    "pageSubtitle": "عقاراتك المحفوظة – أنشئ عقودك عليها بسهولة ودون إعادة تعبئة البيانات.",
+    "pageBadge": "فيه عقارات",
+    "propertiesCount": "{count} عقارات",
     "addProperty": "إضافة عقار جديد",
-    "emptyState": "لا يوجد لديك عقارات حتى الآن.",
+    "emptyStateTitle": "لا توجد عقارات محفوظة بعد",
+    "emptyStateDescription": "أضف عقارك الأول لتنشئ عقودك عليه بسهولة ودون إعادة تعبئة البيانات.",
+
     "contractTypes": {
       "housing": "عقار سكني",
       "commercial": "عقار تجاري"
     },
     "card": {
-      "requestDateLabel": "تاريخ الطلب:",
+      "requestDateLabel": "تاريخ الإضافة :",
       "deleteProperty": "حذف العقار",
       "deleteDialog": {
         "title": "حذف العقار",
@@ -988,11 +993,12 @@
     "editPageTitleResidential": "تعديل العقار السكني",
     "editPageTitleCommercial": "تعديل العقار التجاري",
     "stepper": {
+      "journey": "رحلتك الإيجارية أصبحت أسهل.",
+      "saveAlt": "حفظ",
       "steps": {
-        "deed": "وثيقة الملكية",
-        "address": "العنوان الوطني",
-        "owner": "بيانات المالك",
-        "review": "مراجعة البيانات"
+        "deed": "الصك",
+        "owner": "المالك",
+        "review": "اسم العقار"
       }
     },
     "deed": {
@@ -1141,7 +1147,7 @@
     },
     "owner": {
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة"
       },
       "validation": {
@@ -1192,7 +1198,7 @@
         },
         "idNumber": {
           "label": "رقم هوية المالك",
-          "placeholder": "1x xxx xx xxx"
+          "placeholder": "1xxxxxxxxxx"
         },
         "phone": {
           "label": "رقم جوال المالك",
@@ -1203,27 +1209,26 @@
           "placeholder": "SA00 0000 0000 0000 0000 0000"
         },
         "hasAgent": {
-          "label": "هل يوجد وكيل للمالك ؟",
-          "placeholder": "إختر من هنا ...",
-          "options": {
-            "yes": "نعم",
-            "no": "لا"
-          }
+          "title": "هل ترغب بإضافة وكيل عن مالك العقار؟",
+          "description": "بيانات الوكيل + صورة الوكالة - نتحقق منه في الأنظمة الرسمية"
         }
       },
       "agentData": {
+        "sectionTitle": "بيانات الوكيل",
+        "sectionDescription": "نتحقق من الوكيل في الأنظمة الرسمية قبل قبول الوكالة",
+        "footerNote": "يتم قبول الوكالات الإلكترونية في نظام إيجار في حال كانت الوكالة مضافاً لها بند \"شبكة إيجار الإلكترونية\"",
         "idNumber": {
-          "label": "رقم هوية وكيل المالك",
-          "placeholder": "1x xxx xx xxx"
+          "label": "رقم هوية الوكيل",
+          "placeholder": "1xxxxxxxxx"
         },
-        "birthDateLabel": "تاريخ ميلاد وكيل المالك :",
+        "birthDateLabel": "تاريخ ميلاد الوكيل",
         "phone": {
-          "label": "رقم جوال وكيل المالك",
+          "label": "رقم جوال الوكيل",
           "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
-          "clickHere": "إضغط هنا",
+          "clickHere": "اضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
           "preview": "معاينة",
@@ -2038,6 +2043,9 @@
       "title": "دفع المقابل المالي للعقد",
       "subtitle": "تفاصيل المقابل المالي للعقد :",
       "encryptionNote": "تشفير كامل للبيانات - لا نحفظ أرقام بطاقتك",
+      "journeyMessage": "رحلتك الإيجارية أصبحت أسهل.",
+      "securePaymentLabel": "دفع آمن ومشفر",
+      "reviewOrderLabel": "استعراض الطلب – راجع كل بياناتك قبل الدفع",
       "navigation": {
         "previous": "عودة",
         "pay": "متابعة",

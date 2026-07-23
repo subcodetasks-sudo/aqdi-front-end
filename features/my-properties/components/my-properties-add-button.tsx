@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { Building2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { resetCreatePropertyDraft } from "@/features/create-property/utils/reset-create-property-draft";
-import CustomIcon from "@/features/shared/components/custom-icon";
 
 type MyPropertiesAddButtonProps = {
   label: string;
@@ -16,17 +16,12 @@ export default function MyPropertiesAddButton({
   return (
     <Button
       type="button"
-      className="flex h-14 w-full max-w-xl items-center justify-between rounded-full bg-linear-to-l from-brand-secondary to-brand px-4 text-base font-bold text-white hover:opacity-90"
+      className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl bg-brand px-5 text-sm font-bold text-white shadow-sm hover:bg-brand/90"
       asChild
     >
-      <Link
-        href="/properties/create"
-        onClick={resetCreatePropertyDraft}
-        className="flex items-center justify-center gap-2"
-      >
-        <CustomIcon src="/icons/arrow-r.svg" size={28} />
+      <Link href="/properties/create" onClick={resetCreatePropertyDraft}>
+        <Building2 className="size-5" aria-hidden="true" />
         {label}
-        <CustomIcon src="/icons/arrow-l.svg" size={28} />
       </Link>
     </Button>
   );

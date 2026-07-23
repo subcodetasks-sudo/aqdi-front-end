@@ -860,16 +860,21 @@
     ]
   },
   "myProperties": {
-    "backLabel": "Back",
+    "backLabel": "Home",
     "pageTitle": "My Properties",
+    "pageSubtitle": "Your saved properties – create contracts on them easily without re-entering data.",
+    "pageBadge": "Has properties",
+    "propertiesCount": "{count} properties",
     "addProperty": "Add new property",
-    "emptyState": "You do not have any properties yet.",
+    "emptyStateTitle": "No saved properties yet",
+    "emptyStateDescription": "Add your first property to create contracts on it easily without re-entering data.",
+
     "contractTypes": {
       "housing": "Residential property",
       "commercial": "Commercial property"
     },
     "card": {
-      "requestDateLabel": "Request date:",
+      "requestDateLabel": "Added on:",
       "deleteProperty": "Delete property",
       "deleteDialog": {
         "title": "Delete property",
@@ -962,11 +967,12 @@
     "editPageTitleResidential": "Edit residential property",
     "editPageTitleCommercial": "Edit commercial property",
     "stepper": {
+      "journey": "Your rental journey just got easier.",
+      "saveAlt": "Save",
       "steps": {
-        "deed": "Ownership document",
-        "address": "National address",
-        "owner": "Owner details",
-        "review": "Review data"
+        "deed": "Deed",
+        "owner": "Owner",
+        "review": "Property name"
       }
     },
     "deed": {
@@ -1115,7 +1121,7 @@
     },
     "owner": {
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue"
       },
       "validation": {
@@ -1177,22 +1183,21 @@
           "placeholder": "SA00 0000 0000 0000 0000 0000"
         },
         "hasAgent": {
-          "label": "Is there an agent for the owner?",
-          "placeholder": "Select from here...",
-          "options": {
-            "yes": "Yes",
-            "no": "No"
-          }
+          "title": "Do you want to add an agent for the property owner?",
+          "description": "Agent details + power of attorney image — we verify it in official systems"
         }
       },
       "agentData": {
+        "sectionTitle": "Agent details",
+        "sectionDescription": "We verify the agent in official systems before accepting the power of attorney",
+        "footerNote": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause",
         "idNumber": {
-          "label": "Owner's agent ID number",
-          "placeholder": "1x xxx xx xxx"
+          "label": "Agent ID number",
+          "placeholder": "1xxxxxxxxx"
         },
-        "birthDateLabel": "Owner's agent date of birth:",
+        "birthDateLabel": "Agent date of birth",
         "phone": {
-          "label": "Owner's agent mobile number",
+          "label": "Agent mobile number",
           "placeholder": "xxxxxxxx"
         },
         "powerOfAttorney": {
@@ -2012,6 +2017,9 @@
       "title": "Pay the contract financial consideration",
       "subtitle": "Contract financial consideration details:",
       "encryptionNote": "Full data encryption — we do not store your card numbers",
+      "journeyMessage": "Your rental journey just got easier.",
+      "securePaymentLabel": "Secure and encrypted payment",
+      "reviewOrderLabel": "Review request – check all your details before paying",
       "navigation": {
         "previous": "Back",
         "pay": "Continue",

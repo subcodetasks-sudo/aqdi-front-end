@@ -11,11 +11,11 @@ import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import CreateContractDiscountCodeField from "@/features/create-contract/components/create-contract-discount-code-field";
+import CreateContractPaymentHero from "@/features/create-contract/components/create-contract-payment-hero";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
 import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
-import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
@@ -31,6 +31,7 @@ type CreateContractPaymentStepProps = {
   saveLaterDialogLabels: CreateContractLabels["tenant"]["saveLaterDialog"];
   contractType: ContractTypeId;
   onBack: () => void;
+  onReviewOrder: () => void;
 };
 
 export default function CreateContractPaymentStep({
@@ -38,6 +39,7 @@ export default function CreateContractPaymentStep({
   saveLaterDialogLabels,
   contractType,
   onBack,
+  onReviewOrder,
 }: CreateContractPaymentStepProps) {
   const tFooter = useTranslations("footer");
   const router = useRouter();
@@ -127,13 +129,14 @@ export default function CreateContractPaymentStep({
   return (
     <div className="space-y-4">
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        <CreateContractStepPhaseHeader
-          title={labels.title}
-          subtitle={labels.subtitle}
-          icon="payment"
-        />
-
         <div className="space-y-5">
+          <CreateContractPaymentHero
+            journeyMessage={labels.journeyMessage}
+            securePaymentLabel={labels.securePaymentLabel}
+            reviewOrderLabel={labels.reviewOrderLabel}
+            onReviewOrder={onReviewOrder}
+          />
+
           <CreateContractPaymentSummary
             labels={labels.summary}
             contractType={contractType}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -8,7 +8,6 @@ import CreatePropertyAgentDataPhase from "@/features/create-property/components/
 import CreatePropertyOwnerDataPhase from "@/features/create-property/components/create-property-owner-data-phase";
 import CreatePropertyStepNavigation from "@/features/create-property/components/create-property-step-navigation";
 import CreatePropertyStepPhaseHeader from "@/features/create-property/components/create-property-step-phase-header";
-import CreatePropertyStepPhaseProgress from "@/features/create-property/components/create-property-step-phase-progress";
 import { useCreatePropertyOwnerStep } from "@/features/create-property/hooks/use-create-property-owner-step";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 
@@ -25,34 +24,17 @@ export default function CreatePropertyOwnerStep({
 }: CreatePropertyOwnerStepProps) {
   const t = useTranslations("createProperty");
   const {
-    currentPhaseIndex,
     ownerData,
     setOwnerData,
     agentData,
     setAgentData,
-    phaseCount,
-    isLastPhase,
     canContinue,
-    goToNextPhase,
-    goToPreviousPhase,
     hasExistingPowerOfAttorney,
   } = useCreatePropertyOwnerStep();
   const [showFieldErrors, setShowFieldErrors] = useState(false);
 
-  useEffect(() => {
-    setShowFieldErrors(false);
-  }, [currentPhaseIndex]);
-
-  const phase = labels.phases[currentPhaseIndex];
-
-  function handlePrevious() {
-    if (currentPhaseIndex === 0) {
-      onBack();
-      return;
-    }
-
-    goToPreviousPhase();
-  }
+  const phase = labels.phases[0];
+  const showAgentForm = ownerData.hasAgent === "yes";
 
   function handleContinue() {
     if (!canContinue) {
@@ -62,32 +44,19 @@ export default function CreatePropertyOwnerStep({
     }
 
     setShowFieldErrors(false);
-
-    if (isLastPhase) {
-      onComplete();
-      return;
-    }
-
-    goToNextPhase();
+    onComplete();
   }
 
   return (
     <div className="space-y-4">
-      {phaseCount > 1 ? (
-        <CreatePropertyStepPhaseProgress
-          totalPhases={phaseCount}
-          currentPhaseIndex={currentPhaseIndex}
-        />
-      ) : null}
-
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
         <CreatePropertyStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
-          icon="id-card"
+          showIcon={false}
         />
 
-        {currentPhaseIndex === 0 ? (
+        <div className="space-y-5">
           <CreatePropertyOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}
@@ -96,26 +65,26 @@ export default function CreatePropertyOwnerStep({
             onChange={setOwnerData}
             showFieldErrors={showFieldErrors}
           />
-        ) : null}
 
-        {currentPhaseIndex === 1 ? (
-          <CreatePropertyAgentDataPhase
-            labels={labels.agentData}
-            birthDateLabels={labels.birthDate}
-            validationLabels={labels.validation.fieldErrors}
-            value={agentData}
-            onChange={setAgentData}
-            showFieldErrors={showFieldErrors}
-            hasExistingPowerOfAttorney={hasExistingPowerOfAttorney}
-          />
-        ) : null}
+          {showAgentForm ? (
+            <CreatePropertyAgentDataPhase
+              labels={labels.agentData}
+              birthDateLabels={labels.birthDate}
+              validationLabels={labels.validation.fieldErrors}
+              value={agentData}
+              onChange={setAgentData}
+              showFieldErrors={showFieldErrors}
+              hasExistingPowerOfAttorney={hasExistingPowerOfAttorney}
+            />
+          ) : null}
+        </div>
       </div>
 
       <CreatePropertyStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={labels.navigation.continue}
         variant="stacked"
-        onPrevious={handlePrevious}
+        onPrevious={onBack}
         onContinue={handleContinue}
       />
     </div>

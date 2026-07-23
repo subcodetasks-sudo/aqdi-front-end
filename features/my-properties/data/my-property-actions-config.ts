@@ -15,7 +15,7 @@ export const MY_PROPERTY_ACTIONS_CONFIG: MyPropertyActionConfig[] = [
     id: "view-edit",
     labelKey: "view-edit",
     iconType: "svg",
-    iconSrc: "/icons/building.svg",
+    iconSrc: "/icons/user-edit.svg",
   },
   {
     id: "view-units",
@@ -28,11 +28,6 @@ export const MY_PROPERTY_ACTIONS_CONFIG: MyPropertyActionConfig[] = [
     labelKey: "add-unit",
     iconType: "plus",
   },
-  // {
-  //   id: "create-contract",
-  //   labelKey: "create-contract",
-  //   iconType: "ejar",
-  // },
 ];
 
 export function buildPropertyActionHref(

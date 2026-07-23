@@ -73,21 +73,45 @@ export default function CreatePropertyAgentDataPhase({
 
   return (
     <div className="space-y-5">
-      <CreatePropertyIconInputField
-        label={labels.idNumber.label}
-        placeholder={labels.idNumber.placeholder}
-        value={value.idNumber}
-        onChange={(idNumber) =>
-          updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
-        }
-        icon={IdCard}
-        dir="ltr"
-        inputMode="numeric"
-        maxLength={10}
-        errorMessage={idNumberError}
-        invalid={idInvalid}
-        valid={idValid}
-      />
+      <div className="space-y-1 text-center">
+        <h3 className="text-lg font-extrabold text-brand md:text-xl">
+          {labels.sectionTitle}
+        </h3>
+        {labels.sectionDescription ? (
+          <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
+        ) : null}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <CreatePropertyIconInputField
+          label={labels.idNumber.label}
+          placeholder={labels.idNumber.placeholder}
+          value={value.idNumber}
+          onChange={(idNumber) =>
+            updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
+          }
+          icon={IdCard}
+          dir="ltr"
+          inputMode="numeric"
+          maxLength={10}
+          errorMessage={idNumberError}
+          invalid={idInvalid}
+          valid={idValid}
+        />
+
+        <CreatePropertySaudiMobileField
+          label={labels.phone.label}
+          placeholder={labels.phone.placeholder}
+          value={value.phone}
+          onChange={(phone) =>
+            updateField("phone", toSaudiMobileInputValue(phone))
+          }
+          icon={Phone}
+          errorMessage={phoneError}
+          invalid={phoneInvalid}
+          valid={phoneValid}
+        />
+      </div>
 
       <CreatePropertyBirthDateFields
         labels={{
@@ -99,17 +123,6 @@ export default function CreatePropertyAgentDataPhase({
         invalid={birthDateInvalid}
       />
 
-      <CreatePropertySaudiMobileField
-        label={labels.phone.label}
-        placeholder={labels.phone.placeholder}
-        value={value.phone}
-        onChange={(phone) => updateField("phone", toSaudiMobileInputValue(phone))}
-        icon={Phone}
-        errorMessage={phoneError}
-        invalid={phoneInvalid}
-        valid={phoneValid}
-      />
-
       <CreatePropertyDeedImageUpload
         labels={labels.powerOfAttorney}
         value={value.powerOfAttorneyFiles}
@@ -119,6 +132,10 @@ export default function CreatePropertyAgentDataPhase({
         invalid={powerOfAttorneyInvalid}
         variant="dropzone"
       />
+
+      {labels.footerNote ? (
+        <p className="text-xs leading-6 text-[#9a9a9a]">{labels.footerNote}</p>
+      ) : null}
     </div>
   );
 }

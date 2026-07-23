@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronLeft } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -65,7 +65,7 @@ export default function CreatePropertyFormSelect({
   }
 
   return (
-    <div className={cn(isCompact && "min-w-0")}>
+    <div className="min-w-0">
       {!hideLabel ? (
         required ? (
           <CreatePropertyFieldLabel label={label} invalid={invalid} />
@@ -84,18 +84,16 @@ export default function CreatePropertyFormSelect({
       <div
         ref={containerRef}
         className={cn(
-          "flex w-full items-center gap-2 border",
+          "flex w-full items-center gap-2 rounded-2xl border px-3",
           fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: isCompact ? "bg-white" : "bg-brand-background",
+            defaultBgClassName: "bg-white",
           }),
-          isCompact ? "h-12 rounded-2xl px-3" : "h-14 rounded-full px-2",
+          isCompact ? "h-12" : "h-14",
         )}
       >
         <div
-          className={cn(
-            "flex min-w-0 flex-1 items-center",
-            !isCompact && "px-2",
-          )}
+          className="flex min-w-0 flex-1 items-center"
+          onClick={openSelect}
         >
           {value ? (
             <span
@@ -130,21 +128,12 @@ export default function CreatePropertyFormSelect({
             setOpen(false);
           }}
         >
-          {isCompact ? (
-            <SelectTrigger
-              aria-label={label}
-              className="inline-flex size-7! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
-            >
-              <ChevronDown className="size-4 text-[#333333]" aria-hidden="true" />
-            </SelectTrigger>
-          ) : (
-            <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-              <ChevronLeft
-                className="size-5 -rotate-90 text-white!"
-                aria-hidden="true"
-              />
-            </SelectTrigger>
-          )}
+          <SelectTrigger
+            aria-label={label}
+            className="inline-flex size-7! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
+          >
+            <ChevronDown className="size-4 text-[#333333]" aria-hidden="true" />
+          </SelectTrigger>
 
           <SelectContent
             position="popper"

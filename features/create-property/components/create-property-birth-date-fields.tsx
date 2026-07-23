@@ -125,7 +125,7 @@ export default function CreatePropertyBirthDateFields({
           <span className="text-red-500"> *</span>
         </label>
 
-        <div className="flex items-center rounded-full border border-[#e8e8e8] bg-brand-background p-1">
+        <div className="flex items-center rounded-full bg-[#f0f0f0] p-1">
           {(["hijri", "gregorian"] as const).map((calendarType) => (
             <button
               key={calendarType}
@@ -134,7 +134,7 @@ export default function CreatePropertyBirthDateFields({
               className={cn(
                 "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
                 value.calendarType === calendarType
-                  ? "bg-brand text-white"
+                  ? "bg-brand text-white shadow-sm"
                   : "text-[#7f7f7f] hover:text-[#555555]",
               )}
             >
@@ -144,7 +144,7 @@ export default function CreatePropertyBirthDateFields({
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <CreatePropertyFormSelect
           label={labels.day}
           placeholder={labels.dayPlaceholder}
@@ -153,6 +153,7 @@ export default function CreatePropertyBirthDateFields({
           onChange={(day) => updateField("day", day)}
           invalid={dayInvalid}
           valid={birthDateValid || (!showInvalid && selectedDay !== "")}
+          variant="compact"
         />
 
         <CreatePropertyFormSelect
@@ -163,6 +164,7 @@ export default function CreatePropertyBirthDateFields({
           onChange={(month) => updateField("month", month)}
           invalid={monthInvalid}
           valid={birthDateValid || (!showInvalid && selectedMonth !== "")}
+          variant="compact"
         />
 
         <CreatePropertyFormSelect
@@ -173,6 +175,7 @@ export default function CreatePropertyBirthDateFields({
           onChange={(year) => updateField("year", year)}
           invalid={yearInvalid}
           valid={birthDateValid || (!showInvalid && selectedYear !== "")}
+          variant="compact"
         />
       </div>
     </div>

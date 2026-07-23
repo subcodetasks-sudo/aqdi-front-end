@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronLeft } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 
 import {
@@ -65,7 +65,7 @@ export default function CreateContractFormSelect({
   }
 
   return (
-    <div className={cn(isCompact && "min-w-0")}>
+    <div className="min-w-0">
       {!hideLabel ? (
         required ? (
           <CreateContractFieldLabel label={label} invalid={invalid} />
@@ -84,31 +84,34 @@ export default function CreateContractFormSelect({
       <div
         ref={containerRef}
         className={cn(
-          "flex w-full items-center gap-2 border",
+          "flex w-full items-center gap-2 rounded-2xl border px-3",
           fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: isCompact ? "bg-white" : "bg-brand-background",
+            defaultBgClassName: "bg-white",
           }),
-          isCompact
-            ? "h-12 rounded-2xl px-3"
-            : "h-14 rounded-full px-2",
+          isCompact ? "h-12" : "h-14",
         )}
       >
         <div
-          className={cn(
-            "flex min-w-0 flex-1 items-center",
-            !isCompact && "px-2",
-          )}
+          className="flex min-w-0 flex-1 items-center"
           onClick={openSelect}
         >
           {value ? (
-            <span className="truncate text-sm font-semibold text-[#333333]">
+            <span
+              className={cn(
+                "truncate font-semibold text-[#333333]",
+                isCompact ? "text-xs sm:text-sm" : "text-sm",
+              )}
+            >
               {selectedLabel}
             </span>
           ) : (
             <button
               type="button"
               aria-label={label}
-              className="w-full text-start text-sm text-[#bdbdbd]"
+              className={cn(
+                "w-full text-start text-[#bdbdbd]",
+                isCompact ? "text-xs sm:text-sm" : "text-sm",
+              )}
               onClick={openSelect}
             >
               {placeholder}
@@ -125,21 +128,12 @@ export default function CreateContractFormSelect({
             setOpen(false);
           }}
         >
-          {isCompact ? (
-            <SelectTrigger
-              aria-label={label}
-              className="inline-flex size-8! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#9a9a9a] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
-            >
-              <ChevronDown className="size-4 text-[#9a9a9a]" aria-hidden="true" />
-            </SelectTrigger>
-          ) : (
-            <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-              <ChevronLeft
-                className="size-5 -rotate-90 text-white!"
-                aria-hidden="true"
-              />
-            </SelectTrigger>
-          )}
+          <SelectTrigger
+            aria-label={label}
+            className="inline-flex size-7! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
+          >
+            <ChevronDown className="size-4 text-[#333333]" aria-hidden="true" />
+          </SelectTrigger>
 
           <SelectContent
             position="popper"

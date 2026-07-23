@@ -2,15 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Building2, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import MyPropertyPlusIcon from "@/features/my-properties/components/my-property-plus-icon";
 import {
   MY_PROPERTY_EJAR_LOGO,
   type MyPropertyActionIconType,
 } from "@/features/my-properties/data/my-property-actions-config";
 import CustomIcon from "@/features/shared/components/custom-icon";
-import { PlusCircle } from "lucide-react";
 
 type MyPropertyActionButtonProps = {
   href: string;
@@ -29,7 +28,12 @@ export default function MyPropertyActionButton({
 
   function renderIcon() {
     if (iconType === "plus") {
-      return <PlusCircle/>;
+      return (
+        <span className="relative inline-flex size-5 shrink-0 items-center justify-center">
+          <Building2 className="size-4 text-brand" aria-hidden="true" />
+          <PlusCircle className="absolute -end-1 -top-1 size-3 text-brand-secondary" aria-hidden="true" />
+        </span>
+      );
     }
 
     if (iconType === "ejar") {
@@ -49,7 +53,7 @@ export default function MyPropertyActionButton({
     return (
       <CustomIcon
         src={iconSrc ?? ""}
-        size={22}
+        size={20}
         className="shrink-0 text-brand"
       />
     );
@@ -58,9 +62,9 @@ export default function MyPropertyActionButton({
   return (
     <Link
       href={href}
-      className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[#f0f7f6] px-5 text-sm font-bold text-brand transition-colors hover:bg-[#e4f2ef]"
+      className="flex h-12 w-full items-center justify-between gap-3 rounded-2xl bg-[#f3f7f6] px-4 text-sm font-bold text-brand transition-colors hover:bg-[#e8f1ef]"
     >
-      <span className="text-start leading-6">{label}</span>
+      <span className="min-w-0 flex-1 text-start leading-5">{label}</span>
       {renderIcon()}
     </Link>
   );

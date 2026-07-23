@@ -49,7 +49,7 @@ export const EMPTY_PROPERTY_OWNER_DATA: PropertyOwnerDataState = {
   birthDate: EMPTY_PROPERTY_BIRTH_DATE,
   phone: "05",
   iban: "",
-  hasAgent: "",
+  hasAgent: "no",
 };
 
 export const EMPTY_PROPERTY_AGENT_DATA: PropertyAgentDataState = {

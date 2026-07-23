@@ -1,4 +1,5 @@
 import MyPropertiesAddButton from "@/features/my-properties/components/my-properties-add-button";
+import MyPropertiesEmptyState from "@/features/my-properties/components/my-properties-empty-state";
 import MyPropertiesGrid from "@/features/my-properties/components/my-properties-grid";
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { MyPropertyCardData } from "@/features/my-properties/types/property-card";
@@ -18,20 +19,35 @@ export default function MyPropertiesPageContent({
       <ServicesPageBackConfig
         backLabel={labels.backLabel}
         backHref="/"
-        pageTitle={labels.pageTitle}
       />
+
+      <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+        <header className="min-w-0 space-y-2">
+          <h1 className="text-3xl font-extrabold text-brand md:text-4xl">
+            {labels.pageTitle}
+          </h1>
+          <p className="max-w-2xl text-sm leading-7 text-[#7a7a7a] md:text-base">
+            {labels.pageSubtitle}
+          </p>
+        </header>
+
+        <div className="flex shrink-0 flex-wrap items-center gap-3">
+          <span className="inline-flex items-center rounded-full bg-brand-background-green px-3.5 py-1.5 text-sm font-bold text-brand">
+            {labels.propertiesCountLabel}
+          </span>
+          <MyPropertiesAddButton label={labels.addProperty} />
+        </div>
+      </div>
 
       {items.length > 0 ? (
         <MyPropertiesGrid items={items} />
       ) : (
-        <p className="rounded-3xl border border-dashed border-[#e8e8e8] bg-white px-6 py-12 text-center text-sm text-muted-foreground">
-          {labels.emptyState}
-        </p>
+        <MyPropertiesEmptyState
+          title={labels.emptyStateTitle}
+          description={labels.emptyStateDescription}
+          addPropertyLabel={labels.addProperty}
+        />
       )}
-
-      <div className="mt-10 flex justify-center">
-        <MyPropertiesAddButton label={labels.addProperty} />
-      </div>
     </>
   );
 }

@@ -525,6 +525,9 @@ export type CreateContractLabels = {
     title: string;
     subtitle: string;
     encryptionNote: string;
+    journeyMessage: string;
+    securePaymentLabel: string;
+    reviewOrderLabel: string;
     navigation: {
       previous: string;
       pay: string;

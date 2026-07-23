@@ -27,7 +27,7 @@ export default function CreateContractWizard({
   labels,
   contractType,
 }: CreateContractWizardProps) {
-  const { currentStep, goNext, goBack } = useCreateContractSteps();
+  const { currentStep, goNext, goBack, goToStep } = useCreateContractSteps();
   const { handleStart, isStarting } = useStartFreshContract(contractType);
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
@@ -105,6 +105,7 @@ export default function CreateContractWizard({
           saveLaterDialogLabels={labels.tenant.saveLaterDialog}
           contractType={contractType}
           onBack={goBack}
+          onReviewOrder={() => goToStep("deed")}
         />
       ) : null}
     </div>

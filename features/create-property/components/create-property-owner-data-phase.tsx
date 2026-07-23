@@ -2,15 +2,12 @@
 
 import { IdCard, Phone } from "lucide-react";
 
+import { Switch } from "@/components/ui/switch";
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
-import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import CreatePropertyIconInputField from "@/features/create-property/components/create-property-icon-input-field";
 import CreatePropertySaudiMobileField from "@/features/create-property/components/create-property-saudi-mobile-field";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
-import {
-  PROPERTY_HAS_AGENT_OPTIONS,
-  type PropertyOwnerDataState,
-} from "@/features/create-property/types/owner-step";
+import type { PropertyOwnerDataState } from "@/features/create-property/types/owner-step";
 import {
   getIdNumberFieldError,
   getPhoneFieldError,
@@ -18,6 +15,7 @@ import {
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { cn } from "@/lib/utils";
 
 type CreatePropertyOwnerDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["ownerData"];
@@ -50,11 +48,6 @@ export default function CreatePropertyOwnerDataPhase({
     });
   }
 
-  const hasAgentOptions = PROPERTY_HAS_AGENT_OPTIONS.map((option) => ({
-    value: option,
-    label: labels.hasAgent.options[option],
-  }));
-
   const idNumberError = getIdNumberFieldError(value.idNumber, {
     required: validationLabels.idNumberLength,
     length: validationLabels.idNumberLength,
@@ -71,36 +64,29 @@ export default function CreatePropertyOwnerDataPhase({
   const birthDateInvalid =
     showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
   const hasAgentInvalid = showFieldErrors && value.hasAgent === "";
+  const hasAgentChecked = value.hasAgent === "yes";
   const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
-  const hasAgentValid = !hasAgentInvalid && value.hasAgent !== "";
 
   return (
     <div className="space-y-5">
-      <CreatePropertyIconInputField
-        label={labels.idNumber.label}
-        placeholder={labels.idNumber.placeholder}
-        value={value.idNumber}
-        onChange={(idNumber) =>
-          updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
-        }
-        icon={IdCard}
-        dir="ltr"
-        inputMode="numeric"
-        maxLength={10}
-        errorMessage={idNumberError}
-        invalid={idInvalid}
-        valid={idValid}
-      />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <CreatePropertyIconInputField
+          label={labels.idNumber.label}
+          placeholder={labels.idNumber.placeholder}
+          value={value.idNumber}
+          onChange={(idNumber) =>
+            updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
+          }
+          icon={IdCard}
+          dir="ltr"
+          inputMode="numeric"
+          maxLength={10}
+          errorMessage={idNumberError}
+          invalid={idInvalid}
+          valid={idValid}
+        />
 
-      <CreatePropertyBirthDateFields
-        labels={birthDateLabels}
-        value={value.birthDate}
-        onChange={(birthDate) => updateField("birthDate", birthDate)}
-        invalid={birthDateInvalid}
-      />
-
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         <CreatePropertySaudiMobileField
           label={labels.phone.label}
           placeholder={labels.phone.placeholder}
@@ -113,22 +99,47 @@ export default function CreatePropertyOwnerDataPhase({
           invalid={phoneInvalid}
           valid={phoneValid}
         />
-
-        <CreatePropertyFormSelect
-          label={labels.hasAgent.label}
-          placeholder={labels.hasAgent.placeholder}
-          options={hasAgentOptions}
-          value={value.hasAgent}
-          onChange={(hasAgent) =>
-            updateField(
-              "hasAgent",
-              hasAgent as PropertyOwnerDataState["hasAgent"],
-            )
-          }
-          invalid={hasAgentInvalid}
-          valid={hasAgentValid}
-        />
       </div>
+
+      <CreatePropertyBirthDateFields
+        labels={birthDateLabels}
+        value={value.birthDate}
+        onChange={(birthDate) => updateField("birthDate", birthDate)}
+        invalid={birthDateInvalid}
+      />
+
+      <label
+        className={cn(
+          "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
+          hasAgentInvalid
+            ? "border-[#e57373] bg-white"
+            : hasAgentChecked
+              ? "border-brand bg-brand-background-green"
+              : "border-[#e8e8e8] bg-white",
+        )}
+      >
+        <span className="min-w-0 space-y-1 text-start">
+          <span
+            className={cn(
+              "block text-sm font-bold",
+              hasAgentInvalid ? "text-[#c62828]" : "text-brand",
+            )}
+          >
+            {labels.hasAgent.title}
+          </span>
+          <span className="block text-xs leading-5 text-[#9a9a9a]">
+            {labels.hasAgent.description}
+          </span>
+        </span>
+        <Switch
+          dir="ltr"
+          checked={hasAgentChecked}
+          onCheckedChange={(checked) =>
+            updateField("hasAgent", checked ? "yes" : "no")
+          }
+          className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
+        />
+      </label>
     </div>
   );
 }

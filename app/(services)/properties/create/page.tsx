@@ -4,7 +4,6 @@ import { getTranslations } from "next-intl/server";
 import CreatePropertyPageContent from "@/features/create-property/components/create-property-page-content";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { PROPERTY_DEED_TYPES } from "@/features/create-property/types/deed-type";
-import { PROPERTY_HAS_AGENT_OPTIONS } from "@/features/create-property/types/owner-step";
 import { mapPropertyApiToEditDraft } from "@/features/create-property/utils/map-property-api-to-draft";
 import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 import { parsePropertyType } from "@/features/properties/types/property-type";
@@ -39,9 +38,10 @@ export default async function CreatePropertyPage({
     editPageTitleResidential: t("editPageTitleResidential"),
     editPageTitleCommercial: t("editPageTitleCommercial"),
     stepper: {
+      journey: t("stepper.journey"),
+      saveAlt: t("stepper.saveAlt"),
       steps: {
         deed: t("stepper.steps.deed"),
-        address: t("stepper.steps.address"),
         owner: t("stepper.steps.owner"),
         review: t("stepper.steps.review"),
       },
@@ -233,17 +233,14 @@ export default async function CreatePropertyPage({
           placeholder: t("owner.ownerData.iban.placeholder"),
         },
         hasAgent: {
-          label: t("owner.ownerData.hasAgent.label"),
-          placeholder: t("owner.ownerData.hasAgent.placeholder"),
-          options: Object.fromEntries(
-            PROPERTY_HAS_AGENT_OPTIONS.map((option) => [
-              option,
-              t(`owner.ownerData.hasAgent.options.${option}`),
-            ]),
-          ) as CreatePropertyLabels["owner"]["ownerData"]["hasAgent"]["options"],
+          title: t("owner.ownerData.hasAgent.title"),
+          description: t("owner.ownerData.hasAgent.description"),
         },
       },
       agentData: {
+        sectionTitle: t("owner.agentData.sectionTitle"),
+        sectionDescription: t("owner.agentData.sectionDescription"),
+        footerNote: t("owner.agentData.footerNote"),
         idNumber: {
           label: t("owner.agentData.idNumber.label"),
           placeholder: t("owner.agentData.idNumber.placeholder"),
