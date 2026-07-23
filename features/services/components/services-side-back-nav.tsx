@@ -40,10 +40,12 @@ export default function ServicesSideBackNav() {
     return null;
   }
 
-  const backHref = meta.backHref ?? "/";
-  const isHomeLink = !meta.useRouterBack && (backHref === "/" || backHref === "");
-  const homeLabel = isHomeLink ? t("home") : meta.backLabel;
-  const hasTrailing = Boolean(meta.pageBadge || meta.pageAction);
+  const pageMeta = meta;
+  const backHref = pageMeta.backHref ?? "/";
+  const isHomeLink =
+    !pageMeta.useRouterBack && (backHref === "/" || backHref === "");
+  const homeLabel = isHomeLink ? t("home") : pageMeta.backLabel;
+  const hasTrailing = Boolean(pageMeta.pageBadge || pageMeta.pageAction);
 
   function renderBackControl() {
     const className = cn(
@@ -57,11 +59,11 @@ export default function ServicesSideBackNav() {
       <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
     );
 
-    if (meta.useRouterBack) {
+    if (pageMeta.useRouterBack) {
       return (
         <button
           type="button"
-          aria-label={meta.backLabel}
+          aria-label={pageMeta.backLabel}
           onClick={() => router.back()}
           className={className}
         >
@@ -72,7 +74,11 @@ export default function ServicesSideBackNav() {
     }
 
     return (
-      <Link href={backHref} aria-label={meta.backLabel} className={className}>
+      <Link
+        href={backHref}
+        aria-label={pageMeta.backLabel}
+        className={className}
+      >
         {icon}
         {homeLabel}
       </Link>
@@ -84,35 +90,35 @@ export default function ServicesSideBackNav() {
       <div className="flex w-full flex-wrap items-center gap-2 rounded-full bg-white p-2 shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
         {renderBackControl()}
 
-        {meta.pageTitle ? (
+        {pageMeta.pageTitle ? (
           <span
             className={cn(
               pillBaseClassName,
               "max-w-[min(100%,14rem)] truncate bg-[#fff1e6] text-[#e67e22] sm:max-w-xs dark:bg-[#3a2a1c] dark:text-[#f0b27a]",
             )}
-            title={meta.pageTitle}
+            title={pageMeta.pageTitle}
           >
-            {meta.pageTitle}
+            {pageMeta.pageTitle}
           </span>
         ) : null}
 
         {hasTrailing ? (
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            {meta.pageBadge ? (
+            {pageMeta.pageBadge ? (
               <span className="truncate text-xs font-semibold text-brand sm:text-sm dark:text-[#7dccc0]">
-                {meta.pageBadge}
+                {pageMeta.pageBadge}
               </span>
             ) : null}
 
-            {meta.pageAction ? (
+            {pageMeta.pageAction ? (
               <Link
-                href={meta.pageAction.href}
+                href={pageMeta.pageAction.href}
                 className={cn(
                   pillBaseClassName,
                   "bg-brand text-white hover:bg-brand/90",
                 )}
               >
-                {meta.pageAction.label}
+                {pageMeta.pageAction.label}
               </Link>
             ) : null}
           </div>
