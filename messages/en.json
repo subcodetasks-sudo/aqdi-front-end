@@ -24,7 +24,7 @@
     "nav": {
       "home": "Home",
       "myProperties": "My Properties",
-      "requests": "Requests",
+      "requests": "My requests",
       "downloadApp": "Download the app now"
     },
     "cta": "Start with Aqadi",
@@ -133,6 +133,11 @@
     "downloadOnThe": "Download On The",
     "googlePlay": "Google Play",
     "appStore": "Apple Store",
+    "nav": {
+      "home": "Home",
+      "dark": "Dark",
+      "light": "Light"
+    },
     "items": {
       "residential": {
         "eyebrow": "Residential contract",
@@ -753,33 +758,145 @@
   },
   "requests": {
     "backLabel": "Back",
-    "pageTitle": "Requests",
+    "pageTitle": "My requests",
+    "pageSubtitle": "Track the status of your requests and rental contracts step by step until documentation on the Ejar platform.",
+    "searchPlaceholder": "Search by request number or ID",
+    "filtersLabel": "Filters",
+    "requestsCount": "{count} requests",
+    "filterAll": "All",
     "emptyState": "You do not have any requests yet.",
     "tabs": {
-      "residential": "Residential units",
-      "commercial": "Commercial units"
+      "residential": "Residential",
+      "commercial": "Commercial"
     },
     "contractTypes": {
       "housing": "Residential lease contract",
       "commercial": "Commercial lease contract"
     },
     "card": {
-      "requestDateLabel": "Request date:",
-      "requestNumberLabel": "Your request number",
-      "inquiryDivider": "Have a question?",
+      "requestNumberLabel": "Your request number is:",
       "copyRequestNumber": "Copy request number",
-      "paymentSuccessful": "Payment successful",
-      "viewOrEdit": "View or edit request details",
+      "lastUpdatedLabel": "Last updated:",
+      "requestStatusLabel": "Your request status",
+      "paymentSuccessful": "Paid",
+      "awaitingClientPayment": "Awaiting client payment",
+      "unitType": {
+        "residential": "Residential",
+        "commercial": "Commercial"
+      },
+      "viewData": "View data",
+      "viewShort": "View",
+      "completeRequest": "Complete request",
+      "draftIncompleteBadge": "Draft (incomplete)",
+      "incompleteValidityNotice": "An incomplete request is valid for 30 days from its creation date; after that period it is closed automatically.",
       "editError": "Failed to load contract data",
-      "completePaymentHint": "Please complete payment of the contract value",
-      "completePayment": "Complete payment of contract value",
+      "incompleteProgressDialog": {
+        "title": "Request details #{number}",
+        "close": "Close",
+        "loading": "Loading data...",
+        "requestNumberLabel": "Request number",
+        "contractTypeLabel": "Contract type",
+        "financialFeeLabel": "Contract service fee",
+        "pathTitle": "Request creation path",
+        "continueCta": "Continue from where you stopped",
+        "currency": "SAR",
+        "draftBadge": "Draft (incomplete)",
+        "stepStatus": {
+          "completed": "Completed",
+          "current": "Incomplete — stopped here",
+          "pending": "Not completed yet"
+        },
+        "steps": {
+          "contractType": "Contract type",
+          "deed": "Ownership document",
+          "owner": "Owner data",
+          "tenant": "Tenant data",
+          "unit": "Unit data",
+          "finance": "Financial data",
+          "payment": "Pay service fee"
+        }
+      },
+      "detailsDialog": {
+        "title": "Review request data #{number}",
+        "subtitle": "Your request data (owner, tenant, leased unit, and financial data).",
+        "close": "Close",
+        "loading": "Loading data...",
+        "emptyValue": "—",
+        "ownerSection": "Owner (lessor) data",
+        "tenantSection": "Tenant data",
+        "unitSection": "Leased unit data",
+        "financeSection": "Financial data",
+        "fields": {
+          "name": "Name",
+          "idNumber": "ID number",
+          "mobile": "Mobile number",
+          "unitType": "Unit type",
+          "usage": "Usage",
+          "area": "Area",
+          "floor": "Floor",
+          "electricityMeter": "Electricity meter",
+          "waterMeter": "Water meter",
+          "annualRent": "Annual rent",
+          "contractDuration": "Contract duration",
+          "paymentsCount": "Number of payments",
+          "financialFee": "Contract service fee"
+        },
+        "duration": {
+          "oneYear": "One year",
+          "years": "{count} years",
+          "months": "{count} months"
+        },
+        "payments": {
+          "monthly": "12 payments (monthly)",
+          "quarterly": "4 payments (quarterly)",
+          "semiAnnual": "2 payments (semi-annual)",
+          "annual": "1 payment (annual)"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²"
+      },
+      "completePayment": "Pay now",
       "completePaymentLoading": "Redirecting to payment...",
-      "completePaymentError": "Failed to start payment. Please try again.",
-      "helpCenter": "Help center",
-      "whenReceiveContract": "When will I receive my contract?",
+      "whenReceiveContract": "When will I receive the contract?",
+      "receiveContractDialog": {
+        "title": "When will I receive the contract?",
+        "subtitle": "Your request journey #{number} until receiving the documented contract:",
+        "close": "Close",
+        "loading": "Loading request journey...",
+        "retry": "Retry",
+        "draftBadge": "Draft",
+        "statusUpdatedToast": "Your request status was updated",
+        "expectedDurationTitle": "Expected duration",
+        "expectedDurationBody": "The expected time to send the contract draft via WhatsApp for review is less than 30 minutes during working hours from 9:00 AM to 1:00 AM daily.",
+        "contactPrompt": "For more help, feel free to contact us",
+        "whatsappCta": "Contact via WhatsApp",
+        "whatsappHref": "https://wa.me/"
+      },
+      "downloadInvoice": "Download invoice",
+      "invoiceDialog": {
+        "title": "Invoice",
+        "close": "Close",
+        "loading": "Loading invoice...",
+        "retry": "Retry",
+        "platformName": "Aqdi",
+        "platformSubtitle": "Rental contract documentation platform",
+        "customerLabel": "Customer",
+        "requestNumberLabel": "Request number",
+        "contractTypeLabel": "Contract type",
+        "tableIndex": "#",
+        "tableDescription": "Description",
+        "tableAmount": "Amount",
+        "totalDueLabel": "Total due",
+        "printLabel": "Print / Download invoice",
+        "paidStatusLabel": "Paid",
+        "unpaidStatusLabel": "Unpaid",
+        "loadError": "Failed to load invoice"
+      },
+      "whatsappLabel": "Contact via WhatsApp",
+      "whatsappHref": "https://wa.me/",
       "status": {
-        "completed": "Completed",
-        "incomplete": "Incomplete",
+        "completed": "Completed request",
+        "incomplete": "Contract draft request",
         "inProgress": "In progress",
         "returned": "Returned"
       },
@@ -793,71 +910,7 @@
         "success": "Contract deleted successfully",
         "error": "Failed to delete contract"
       }
-    },
-    "residentialItems": [
-      {
-        "id": "residential-completed",
-        "title": "Residential lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "completed",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      },
-      {
-        "id": "residential-incomplete",
-        "title": "Residential lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "incomplete",
-        "paymentSuccessful": false,
-        "showViewEdit": true,
-        "actionType": "complete-payment"
-      },
-      {
-        "id": "residential-in-progress",
-        "title": "Residential lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "in-progress",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "dual-actions"
-      },
-      {
-        "id": "residential-returned",
-        "title": "Residential lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "returned",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      }
-    ],
-    "commercialItems": [
-      {
-        "id": "commercial-completed",
-        "title": "Commercial lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100088",
-        "status": "completed",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      },
-      {
-        "id": "commercial-in-progress",
-        "title": "Commercial lease contract",
-        "date": "01-01-2025",
-        "requestNumber": "#100089",
-        "status": "in-progress",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "dual-actions"
-      }
-    ]
+    }
   },
   "myProperties": {
     "backLabel": "Home",

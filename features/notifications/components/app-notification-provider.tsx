@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type { MessagePayload } from "firebase/messaging";
+import { toast } from "sonner";
 
 import AppNotificationToaster from "@/features/notifications/components/app-notification-toaster";
 import {
@@ -11,6 +12,8 @@ import {
 } from "@/features/notifications/services/firebase-client";
 import { registerFirebaseServiceWorker } from "@/features/notifications/services/get-fcm-token";
 import { showAppNotification } from "@/features/notifications/services/show-app-notification";
+import { useContractsLiveStore } from "@/features/requests/stores/use-contracts-live-store";
+import { parseContractStatusFirebasePayload } from "@/features/requests/utils/parse-contract-status-firebase-payload";
 
 function parseForegroundMessage(payload: MessagePayload) {
   return {
@@ -27,6 +30,10 @@ function parseForegroundMessage(payload: MessagePayload) {
 }
 
 export function AppNotificationProvider() {
+  const applyFirebasePatch = useContractsLiveStore(
+    (state) => state.applyFirebasePatch,
+  );
+
   useEffect(() => {
     void initFirebaseAnalytics();
     void registerFirebaseServiceWorker();
@@ -39,15 +46,27 @@ export function AppNotificationProvider() {
       }
 
       unsubscribe = onForegroundMessage((payload) => {
-        const notification = parseForegroundMessage(payload);
-        showAppNotification(notification);
+        const contractPatch = parseContractStatusFirebasePayload(payload);
+
+        if (contractPatch) {
+          applyFirebasePatch(contractPatch);
+
+          if (contractPatch.status_label) {
+            toast.success(contractPatch.status_label);
+          } else {
+            showAppNotification(parseForegroundMessage(payload));
+          }
+          return;
+        }
+
+        showAppNotification(parseForegroundMessage(payload));
       });
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [applyFirebasePatch]);
 
   return <AppNotificationToaster />;
 }

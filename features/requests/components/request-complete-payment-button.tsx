@@ -5,6 +5,7 @@ import { CreditCard } from "lucide-react";
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
+import { cn } from "@/lib/utils";
 
 type RequestCompletePaymentButtonProps = {
   contractId: number;
@@ -12,6 +13,7 @@ type RequestCompletePaymentButtonProps = {
   label: string;
   payingLabel: string;
   paymentFlowLabels: ContractPaymentMethodLabels;
+  className?: string;
 };
 
 export default function RequestCompletePaymentButton({
@@ -20,6 +22,7 @@ export default function RequestCompletePaymentButton({
   label,
   payingLabel,
   paymentFlowLabels,
+  className,
 }: RequestCompletePaymentButtonProps) {
   const paymentFlow = useContractPaymentMethodFlow(
     contractId,
@@ -33,10 +36,15 @@ export default function RequestCompletePaymentButton({
         type="button"
         onClick={paymentFlow.openMethodDialog}
         disabled={paymentFlow.isSubmitting}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-l from-brand-secondary to-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        className={cn(
+          "inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-brand px-4 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60",
+          className,
+        )}
       >
-        <CreditCard className="size-4" aria-hidden="true" />
-        {paymentFlow.isSubmitting ? payingLabel : label}
+        <CreditCard className="size-4 shrink-0" aria-hidden="true" />
+        <span className="truncate">
+          {paymentFlow.isSubmitting ? payingLabel : label}
+        </span>
       </button>
 
       <ContractPaymentMethodFlowDialogs

@@ -305,7 +305,8 @@
 
 .create-property-dark-shell.dark,
 .create-contract-dark-shell.dark,
-.create-flow-dark-shell.dark {
+.create-flow-dark-shell.dark,
+.services-dark-shell.dark {
   --color-brand-background: #101614;
   --color-brand-background-green: #16352f;
   background-color: #101614;
@@ -323,6 +324,7 @@
 .create-property-dark-shell.dark .bg-white,
 .create-contract-dark-shell.dark .bg-white,
 .create-flow-dark-shell.dark .bg-white,
+.services-dark-shell.dark .bg-white,
 .create-property-flow.dark .bg-white,
 .create-contract-flow.dark .bg-white,
 .create-flow-dark.dark .bg-white {
@@ -332,6 +334,7 @@
 .create-property-dark-shell.dark .bg-brand-background,
 .create-contract-dark-shell.dark .bg-brand-background,
 .create-flow-dark-shell.dark .bg-brand-background,
+.services-dark-shell.dark .bg-brand-background,
 .create-property-flow.dark .bg-brand-background,
 .create-contract-flow.dark .bg-brand-background,
 .create-flow-dark.dark .bg-brand-background {
@@ -341,6 +344,7 @@
 .create-property-dark-shell.dark .bg-brand-background-green,
 .create-contract-dark-shell.dark .bg-brand-background-green,
 .create-flow-dark-shell.dark .bg-brand-background-green,
+.services-dark-shell.dark .bg-brand-background-green,
 .create-property-flow.dark .bg-brand-background-green,
 .create-contract-flow.dark .bg-brand-background-green,
 .create-flow-dark.dark .bg-brand-background-green {
@@ -350,6 +354,7 @@
 .create-property-dark-shell.dark .text-brand,
 .create-contract-dark-shell.dark .text-brand,
 .create-flow-dark-shell.dark .text-brand,
+.services-dark-shell.dark .text-brand,
 .create-property-flow.dark .text-brand,
 .create-contract-flow.dark .text-brand,
 .create-flow-dark.dark .text-brand {
@@ -368,6 +373,12 @@
 .create-flow-dark-shell.dark .text-\[\#9a9a9a\],
 .create-flow-dark-shell.dark .text-\[\#666666\],
 .create-flow-dark-shell.dark .text-\[\#bdbdbd\],
+.services-dark-shell.dark .text-\[\#7f7f7f\],
+.services-dark-shell.dark .text-\[\#7a7a7a\],
+.services-dark-shell.dark .text-\[\#8a8a8a\],
+.services-dark-shell.dark .text-\[\#9a9a9a\],
+.services-dark-shell.dark .text-\[\#666666\],
+.services-dark-shell.dark .text-\[\#bdbdbd\],
 .create-property-flow.dark .text-\[\#7f7f7f\],
 .create-property-flow.dark .text-\[\#9a9a9a\],
 .create-property-flow.dark .text-\[\#666666\],
@@ -386,6 +397,8 @@
 .create-property-dark-shell.dark .text-\[\#333333\],
 .create-contract-dark-shell.dark .text-\[\#333333\],
 .create-flow-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#222222\],
 .create-property-flow.dark .text-\[\#333333\],
 .create-contract-flow.dark .text-\[\#333333\],
 .create-flow-dark.dark .text-\[\#333333\] {
@@ -393,6 +406,7 @@
 }
 
 .create-property-dark-shell.dark .border-\[\#e8e8e8\],
+.create-property-dark-shell.dark .border-\[\#ececec\],
 .create-property-dark-shell.dark .border-\[\#e4e4e4\],
 .create-property-dark-shell.dark .border-\[\#d9d9d9\],
 .create-contract-dark-shell.dark .border-\[\#e8e8e8\],
@@ -401,6 +415,10 @@
 .create-flow-dark-shell.dark .border-\[\#e8e8e8\],
 .create-flow-dark-shell.dark .border-\[\#e4e4e4\],
 .create-flow-dark-shell.dark .border-\[\#d9d9d9\],
+.services-dark-shell.dark .border-\[\#e8e8e8\],
+.services-dark-shell.dark .border-\[\#ececec\],
+.services-dark-shell.dark .border-\[\#e4e4e4\],
+.services-dark-shell.dark .border-\[\#d9d9d9\],
 .create-property-flow.dark .border-\[\#e8e8e8\],
 .create-property-flow.dark .border-\[\#e4e4e4\],
 .create-property-flow.dark .border-\[\#d9d9d9\],

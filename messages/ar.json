@@ -24,7 +24,7 @@
     "nav": {
       "home": "الرئيسية",
       "myProperties": "عقاراتي",
-      "requests": "الطلبات",
+      "requests": "طلباتي",
       "downloadApp": "حمل التطبيق الآن"
     },
     "cta": "ابدأ مع عقدي",
@@ -133,6 +133,11 @@
     "downloadOnThe": "Download On The",
     "googlePlay": "Google Play",
     "appStore": "Apple Store",
+    "nav": {
+      "home": "الرئيسية",
+      "dark": "داكن",
+      "light": "فاتح"
+    },
     "items": {
       "residential": {
         "eyebrow": "عقد سكني",
@@ -779,33 +784,145 @@
   },
   "requests": {
     "backLabel": "رجوع",
-    "pageTitle": "الطلبات",
+    "pageTitle": "طلباتي",
+    "pageSubtitle": "تابع حالة طلباتك وعقودك الإيجارية خطوة بخطوة حتى التوثيق في منصة إيجار.",
+    "searchPlaceholder": "ابحث برقم الطلب، أو هوية",
+    "filtersLabel": "فلاتر",
+    "requestsCount": "{count} طلباً",
+    "filterAll": "الكل",
     "emptyState": "لا توجد لديك طلبات حالياً.",
     "tabs": {
-      "residential": "وحدات سكنية",
-      "commercial": "وحدات تجارية"
+      "residential": "سكني",
+      "commercial": "تجاري"
     },
     "contractTypes": {
       "housing": "عقد إيجار سكني",
       "commercial": "عقد إيجار تجاري"
     },
     "card": {
-      "requestDateLabel": "تاريخ الطلب:",
-      "requestNumberLabel": "رقم طلبك",
-      "inquiryDivider": "لديك استفسار؟",
+      "requestNumberLabel": "رقم طلبكم هو :",
       "copyRequestNumber": "نسخ رقم الطلب",
-      "paymentSuccessful": "تم الدفع بنجاح",
-      "viewOrEdit": "عرض و اكمال الطلب",
+      "lastUpdatedLabel": "آخر تحديث:",
+      "requestStatusLabel": "حالة طلبكم",
+      "paymentSuccessful": "تم الدفع",
+      "awaitingClientPayment": "دفع المقابل المالي من قبل العميل",
+      "unitType": {
+        "residential": "سكني",
+        "commercial": "تجاري"
+      },
+      "viewData": "عرض البيانات",
+      "viewShort": "عرض",
+      "completeRequest": "أكمل الطلب",
+      "draftIncompleteBadge": "مسودة (غير مكتمل)",
+      "incompleteValidityNotice": "تبلغ مدة صلاحية الطلب غير المكتمل 30 يومًا من تاريخ إنشائه، وبعد انتهاء المدة يُغلق الطلب تلقائيًا.",
       "editError": "تعذر تحميل بيانات العقد",
-      "completePaymentHint": "يرجى اتمام دفع قيمة العقد",
-      "completePayment": "اتمام دفع قيمة العقد",
+      "incompleteProgressDialog": {
+        "title": "تفاصيل الطلب #{number}",
+        "close": "إغلاق",
+        "loading": "جاري تحميل البيانات...",
+        "requestNumberLabel": "رقم الطلب",
+        "contractTypeLabel": "نوع العقد",
+        "financialFeeLabel": "المقابل المالي لعقدي",
+        "pathTitle": "مسار إنشاء الطلب",
+        "continueCta": "أكمل الطلب من حيث توقفت",
+        "currency": "ريال",
+        "draftBadge": "مسودة (غير مكتمل)",
+        "stepStatus": {
+          "completed": "مكتملة",
+          "current": "غير مكتمل - توقفت هنا",
+          "pending": "لم تُكمّل بعد"
+        },
+        "steps": {
+          "contractType": "نوع العقد",
+          "deed": "وثيقة الملكية",
+          "owner": "بيانات المالك",
+          "tenant": "بيانات المستأجر",
+          "unit": "بيانات الوحدة",
+          "finance": "البيانات المالية",
+          "payment": "دفع المقابل المالي"
+        }
+      },
+      "detailsDialog": {
+        "title": "استعراض بيانات الطلب #{number}",
+        "subtitle": "بيانات طلبك (المالك، المستأجر، الوحدة المؤجرة، والبيانات المالية).",
+        "close": "إغلاق",
+        "loading": "جاري تحميل البيانات...",
+        "emptyValue": "—",
+        "ownerSection": "بيانات المالك (المؤجر)",
+        "tenantSection": "بيانات المستأجر",
+        "unitSection": "بيانات الوحدة المؤجرة",
+        "financeSection": "البيانات المالية",
+        "fields": {
+          "name": "الاسم",
+          "idNumber": "رقم الهوية",
+          "mobile": "رقم الجوال",
+          "unitType": "نوع الوحدة",
+          "usage": "الاستخدام",
+          "area": "المساحة",
+          "floor": "الطابق",
+          "electricityMeter": "عداد الكهرباء",
+          "waterMeter": "عداد الماء",
+          "annualRent": "قيمة الإيجار السنوي",
+          "contractDuration": "مدة العقد",
+          "paymentsCount": "عدد الدفعات",
+          "financialFee": "المقابل المالي لعقدي"
+        },
+        "duration": {
+          "oneYear": "سنة واحدة",
+          "years": "{count} سنوات",
+          "months": "{count} أشهر"
+        },
+        "payments": {
+          "monthly": "12 دفعة (شهري)",
+          "quarterly": "4 دفعات (ربع سنوي)",
+          "semiAnnual": "2 دفعات (نصف سنوي)",
+          "annual": "دفعة واحدة (سنوي)"
+        },
+        "currency": "ريال",
+        "areaUnit": "م²"
+      },
+      "completePayment": "دفع المقابل المالي",
       "completePaymentLoading": "جاري التوجيه للدفع...",
-      "completePaymentError": "تعذر بدء عملية الدفع. حاول مرة أخرى.",
-      "helpCenter": "مركز المساعدة",
-      "whenReceiveContract": "متى أستلم عقدي؟",
+      "whenReceiveContract": "متى أستلم العقد؟",
+      "receiveContractDialog": {
+        "title": "متى أستلم العقد؟",
+        "subtitle": "رحلة طلبك #{number} حتى استلام العقد الموثّق:",
+        "close": "إغلاق",
+        "loading": "جاري تحميل مسار الطلب...",
+        "retry": "إعادة المحاولة",
+        "draftBadge": "مسودة",
+        "statusUpdatedToast": "تم تحديث حالة طلبك",
+        "expectedDurationTitle": "المدة المتوقعة",
+        "expectedDurationBody": "المدة المتوقعة لإرسال مسودة العقد عبر واتساب للمراجعة أقل من 30 دقيقة خلال أوقات العمل من الساعة 9:00 صباحاً حتى 1:00 صباحاً يومياً.",
+        "contactPrompt": "للمزيد أو المساعدة لا تتردد بالتواصل معنا",
+        "whatsappCta": "تواصل عبر واتساب",
+        "whatsappHref": "https://wa.me/"
+      },
+      "downloadInvoice": "تحميل الفاتورة",
+      "invoiceDialog": {
+        "title": "الفاتورة",
+        "close": "إغلاق",
+        "loading": "جاري تحميل الفاتورة...",
+        "retry": "إعادة المحاولة",
+        "platformName": "عقدي",
+        "platformSubtitle": "منصة توثيق عقود الإيجار",
+        "customerLabel": "العميل",
+        "requestNumberLabel": "رقم الطلب",
+        "contractTypeLabel": "نوع العقد",
+        "tableIndex": "#",
+        "tableDescription": "الوصف",
+        "tableAmount": "المبلغ",
+        "totalDueLabel": "الإجمالي المستحق",
+        "printLabel": "طباعة / تحميل الفاتورة",
+        "paidStatusLabel": "مدفوعة",
+        "unpaidStatusLabel": "غير مدفوعة",
+        "loadError": "تعذر تحميل الفاتورة"
+      },
+      "whatsappLabel": "تواصل عبر واتساب",
+      "whatsappHref": "https://wa.me/",
       "status": {
-        "completed": "مكتمل",
-        "incomplete": "غير مكتمل",
+        "completed": "طلب مكتمل",
+        "incomplete": "طلب مسودة عقد",
         "inProgress": "قيد التنفيذ",
         "returned": "مسترجع"
       },
@@ -819,71 +936,7 @@
         "success": "تم حذف العقد بنجاح",
         "error": "فشل حذف العقد"
       }
-    },
-    "residentialItems": [
-      {
-        "id": "residential-completed",
-        "title": "عقد إيجار سكني",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "completed",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      },
-      {
-        "id": "residential-incomplete",
-        "title": "عقد إيجار سكني",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "incomplete",
-        "paymentSuccessful": false,
-        "showViewEdit": true,
-        "actionType": "complete-payment"
-      },
-      {
-        "id": "residential-in-progress",
-        "title": "عقد إيجار سكني",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "in-progress",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "dual-actions"
-      },
-      {
-        "id": "residential-returned",
-        "title": "عقد إيجار سكني",
-        "date": "01-01-2025",
-        "requestNumber": "#100054",
-        "status": "returned",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      }
-    ],
-    "commercialItems": [
-      {
-        "id": "commercial-completed",
-        "title": "عقد إيجار تجاري",
-        "date": "01-01-2025",
-        "requestNumber": "#100088",
-        "status": "completed",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "help-center"
-      },
-      {
-        "id": "commercial-in-progress",
-        "title": "عقد إيجار تجاري",
-        "date": "01-01-2025",
-        "requestNumber": "#100089",
-        "status": "in-progress",
-        "paymentSuccessful": true,
-        "showViewEdit": false,
-        "actionType": "dual-actions"
-      }
-    ]
+    }
   },
   "myProperties": {
     "backLabel": "الرئيسية",

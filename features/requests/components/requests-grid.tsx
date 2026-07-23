@@ -9,7 +9,7 @@ type RequestsGridProps = {
 
 export default function RequestsGrid({ items, labels }: RequestsGridProps) {
   return (
-    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <div className="space-y-5">
       {items.map((card) => (
         <RequestCard key={card.id} card={card} labels={labels} />
       ))}

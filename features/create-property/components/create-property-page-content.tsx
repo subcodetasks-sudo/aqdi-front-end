@@ -54,6 +54,7 @@ export default function CreatePropertyPageContent({
         backLabel={labels.backLabel}
         pageTitle={pageTitle}
         useRouterBack
+        hideBack
       />
 
       <div

@@ -28,6 +28,12 @@ export const MY_PROPERTY_ACTIONS_CONFIG: MyPropertyActionConfig[] = [
     labelKey: "add-unit",
     iconType: "plus",
   },
+  {
+    id: "create-contract",
+    labelKey: "create-contract",
+    iconType: "svg",
+    iconSrc: "/icons/file.svg",
+  },
 ];
 
 export function buildPropertyActionHref(
@@ -39,16 +45,17 @@ export function buildPropertyActionHref(
     propertyId: String(propertyId),
     contract_type: contractType,
   });
+  const unitsHref = `/properties/my-properties/units?propertyId=${propertyId}&contract_type=${contractType}`;
 
   switch (actionId) {
     case "view-edit":
       return `/properties/create?type=${contractType === "commercial" ? "commercial" : "residential"}&propertyId=${propertyId}`;
     case "view-units":
-      return `/properties/my-properties/units?propertyId=${propertyId}&contract_type=${contractType}`;
+      return unitsHref;
     case "add-unit":
       return `/properties/create-unit?${unitParams.toString()}`;
     case "create-contract":
-      return `/create-contract?propertyId=${propertyId}`;
+      return unitsHref;
     default:
       return "/properties/my-properties";
   }

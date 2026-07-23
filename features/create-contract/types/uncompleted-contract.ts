@@ -68,6 +68,7 @@ export type UncompletedContractStep6 = {
   contract_term_in_years?: number | null;
   annual_rent_amount_for_the_unit?: number | null;
   payment_type_id?: number | null;
+  payment_type_name?: string | null;
   duration_preset?: string | null;
   duration_years?: number | null;
   duration_months?: number | null;
@@ -85,6 +86,49 @@ export type UncompletedContractStep6 = {
   step?: number;
 };
 
+export type UncompletedContractStep4 = {
+  id?: number;
+  uuid?: string;
+  tenant_entity?: string | null;
+  tenant_id_num?: string | null;
+  tenant_mobile?: string | null;
+  tenant_name?: string | null;
+  name_tenant?: string | null;
+  name?: string | null;
+  type_tenant_dob?: string | null;
+  tenant_entity_unified_registry_number?: string | null;
+  authorization_type?: string | null;
+  step?: number;
+};
+
+export type UncompletedContractUnit = {
+  unit_type_id?: number | null;
+  unit_type_name?: string | null;
+  unit_usage_id?: number | null;
+  unit_usage_name?: string | null;
+  unit_number?: string | null;
+  unit_area?: number | string | null;
+  floor_number?: number | string | null;
+  electricity_meter_number?: string | null;
+  water_meter_number?: string | null;
+};
+
+export type UncompletedContractStep5 = {
+  id?: number;
+  uuid?: string;
+  unit_type_id?: number | null;
+  unit_type_name?: string | null;
+  unit_usage_id?: number | null;
+  unit_usage_name?: string | null;
+  unit_number?: string | null;
+  unit_area?: number | string | null;
+  floor_number?: number | string | null;
+  electricity_meter_number?: string | null;
+  water_meter_number?: string | null;
+  units?: UncompletedContractUnit[] | null;
+  step?: number;
+};
+
 export type UncompletedContractData = {
   step: number;
   contract_id: number;
@@ -92,7 +136,10 @@ export type UncompletedContractData = {
   step1: UncompletedContractStep1 | null;
   step2: UncompletedContractStep2 | null;
   step3: UncompletedContractStep3 | null;
+  step4?: UncompletedContractStep4 | null;
+  step5?: UncompletedContractStep5 | null;
   step6?: UncompletedContractStep6 | null;
+  units?: UncompletedContractUnit[] | null;
 };
 
 export type UncompletedContractApiResponse = {

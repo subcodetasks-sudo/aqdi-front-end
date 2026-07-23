@@ -1,32 +1,22 @@
-import RequestsUnitTabs from "@/features/requests/components/requests-unit-tabs";
+import RequestsListContent from "@/features/requests/components/requests-list-content";
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestLabels } from "@/features/requests/types/request-labels";
 
 type RequestsPageContentProps = {
   labels: RequestLabels;
-  residentialItems: RequestCardData[];
-  commercialItems: RequestCardData[];
+  items: RequestCardData[];
 };
 
 export default function RequestsPageContent({
   labels,
-  residentialItems,
-  commercialItems,
+  items,
 }: RequestsPageContentProps) {
   return (
     <>
-      <ServicesPageBackConfig
-        backLabel={labels.backLabel}
-        backHref="/"
-        pageTitle={labels.pageTitle}
-      />
+      <ServicesPageBackConfig backLabel={labels.backLabel} backHref="/" />
 
-      <RequestsUnitTabs
-        labels={labels}
-        residentialItems={residentialItems}
-        commercialItems={commercialItems}
-      />
+      <RequestsListContent labels={labels} items={items} />
     </>
   );
 }

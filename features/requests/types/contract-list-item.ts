@@ -1,4 +1,8 @@
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+import type {
+  ContractJourneyStep,
+  ContractStatusType,
+} from "@/features/requests/types/contract-journey";
 
 export type ContractListItem = {
   id: number;
@@ -14,6 +18,15 @@ export type ContractListItem = {
   contract_status_id: number | null;
   contract_status_name: string | null;
   contract_status_color: string | null;
+  status?: string | null;
+  status_label?: string | null;
+  status_type?: ContractStatusType | string | null;
+  status_id?: number | null;
+  status_color?: string | null;
+  status_description?: string | null;
+  journey_status?: string | null;
+  journey_status_label?: string | null;
+  journey?: ContractJourneyStep[] | null;
   created_at: string;
   time_to_documentation_contract: string | null;
 };

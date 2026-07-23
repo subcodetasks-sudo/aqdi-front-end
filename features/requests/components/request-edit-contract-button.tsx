@@ -8,12 +8,15 @@ import { toast } from "sonner";
 import { getUncompletedContract } from "@/features/create-contract/services/get-uncompleted-contract";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { RequestCardData } from "@/features/requests/types/request";
+import { cn } from "@/lib/utils";
 
 type RequestEditContractButtonProps = {
   uuid: string;
   contractType: RequestCardData["contractType"];
   label: string;
   errorLabel: string;
+  className?: string;
+  showIcon?: boolean;
 };
 
 export default function RequestEditContractButton({
@@ -21,6 +24,8 @@ export default function RequestEditContractButton({
   contractType,
   label,
   errorLabel,
+  className,
+  showIcon = true,
 }: RequestEditContractButtonProps) {
   const router = useRouter();
   const loadUncompletedContract = useCreateContractDraftStore(
@@ -55,10 +60,13 @@ export default function RequestEditContractButton({
       type="button"
       onClick={() => void handleClick()}
       disabled={isLoading}
-      className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f0f0f0] px-4 text-sm font-bold text-foreground/70 transition-colors hover:bg-[#e6e6e6] disabled:cursor-not-allowed disabled:opacity-60"
+      className={cn(
+        "inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#f3f3f3] px-4 text-sm font-bold text-[#555555] transition-colors hover:bg-[#ebebeb] disabled:cursor-not-allowed disabled:opacity-60",
+        className,
+      )}
     >
-      <Eye className="size-4" aria-hidden="true" />
-      {label}
+      {showIcon ? <Eye className="size-4 shrink-0" aria-hidden="true" /> : null}
+      <span className="truncate">{label}</span>
     </button>
   );
 }

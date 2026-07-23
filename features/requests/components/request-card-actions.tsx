@@ -1,15 +1,22 @@
-import { CircleHelp, Headphones } from "lucide-react";
+import Link from "next/link";
+import { FaWhatsapp } from "react-icons/fa";
 
 import RequestCompletePaymentButton from "@/features/requests/components/request-complete-payment-button";
-import RequestEditContractButton from "@/features/requests/components/request-edit-contract-button";
-import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
+import RequestInvoiceButton from "@/features/requests/components/request-invoice-button";
+import RequestReceiveContractButton from "@/features/requests/components/request-receive-contract-button";
+import RequestViewDataButton from "@/features/requests/components/request-view-data-button";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
 
 type RequestCardActionsProps = {
   card: Pick<
     RequestCardData,
-    "actionType" | "uuid" | "contractId" | "contractType" | "showViewEdit"
+    | "actionType"
+    | "uuid"
+    | "contractId"
+    | "contractType"
+    | "requestNumber"
+    | "showDownloadInvoice"
   >;
   labels: RequestCardLabels;
 };
@@ -18,26 +25,54 @@ export default function RequestCardActions({
   card,
   labels,
 }: RequestCardActionsProps) {
-  const editButton = card.showViewEdit ? (
-    <RequestEditContractButton
-      uuid={card.uuid}
-      contractType={card.contractType}
-      label={labels.viewOrEdit}
-      errorLabel={labels.editError}
-    />
-  ) : null;
+  const contractTypeLabel =
+    card.contractType === "commercial"
+      ? labels.contractTypes.commercial
+      : labels.contractTypes.housing;
 
-  if (card.actionType === "none") {
-    return editButton;
-  }
+  return (
+    <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#f0f0f0] pt-4">
+      {/* RTL visual (right → left): WhatsApp, View, Invoice?, When, Pay? */}
+      <Link
+        href={labels.whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={labels.whatsappLabel}
+        className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f8ee] text-[#25D366] transition-opacity hover:opacity-90"
+      >
+        <FaWhatsapp className="size-5" aria-hidden="true" />
+      </Link>
 
-  if (card.actionType === "complete-payment") {
-    return (
-      <div className="space-y-3">
-        {editButton}
-        <p className="text-center text-xs font-medium text-muted-foreground">
-          {labels.completePaymentHint}
-        </p>
+      <RequestViewDataButton
+        uuid={card.uuid}
+        requestNumber={card.requestNumber}
+        label={labels.viewData}
+        loadErrorLabel={labels.editError}
+        detailsLabels={labels.detailsDialog}
+      />
+
+      {card.showDownloadInvoice ? (
+        <RequestInvoiceButton
+          label={labels.downloadInvoice}
+          contractId={card.contractId}
+          uuid={card.uuid}
+          contractTypeLabel={contractTypeLabel}
+          invoiceLabels={labels.invoiceDialog}
+        />
+      ) : null}
+
+      <RequestReceiveContractButton
+        label={labels.whenReceiveContract}
+        actionType={card.actionType}
+        contractId={card.contractId}
+        contractUuid={card.uuid}
+        completePaymentLabel={labels.completePayment}
+        completePaymentLoadingLabel={labels.completePaymentLoading}
+        paymentFlowLabels={labels.paymentFlow}
+        dialogLabels={labels.receiveContractDialog}
+      />
+
+      {card.actionType === "complete-payment" ? (
         <RequestCompletePaymentButton
           contractId={card.contractId}
           contractUuid={card.uuid}
@@ -45,44 +80,7 @@ export default function RequestCardActions({
           payingLabel={labels.completePaymentLoading}
           paymentFlowLabels={labels.paymentFlow}
         />
-      </div>
-    );
-  }
-
-  if (card.actionType === "dual-actions") {
-    return (
-      <div className="space-y-3">
-        {editButton}
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-[#f0f7f6] px-3 text-xs font-bold text-brand transition-colors hover:bg-[#e4f2ef] md:text-sm"
-          >
-            <Headphones className="size-4 shrink-0" aria-hidden="true" />
-            <span className="truncate">{labels.helpCenter}</span>
-          </button>
-          <button
-            type="button"
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-[#f5f5f5] px-3 text-xs font-bold text-foreground/75 transition-colors hover:bg-[#ececec] md:text-sm"
-          >
-            <CircleHelp className="size-4 shrink-0" aria-hidden="true" />
-            <span className="truncate">{labels.whenReceiveContract}</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      {editButton}
-      <button
-        type="button"
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f0f7f6] px-4 text-sm font-bold text-brand transition-colors hover:bg-[#e4f2ef]"
-      >
-        <Headphones className="size-4" aria-hidden="true" />
-        {labels.helpCenter}
-      </button>
+      ) : null}
     </div>
   );
 }
