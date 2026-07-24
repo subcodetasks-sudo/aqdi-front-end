@@ -20,8 +20,10 @@ export function toSaudiMobileInputValue(raw: string) {
     digits = digits.slice(3);
   }
 
-  // User retyped/pasted "05" after the fixed prefix: 0505... → 05...
-  while (digits.startsWith("0505")) {
+  // User retyped/pasted the full number after the fixed prefix (e.g. "05" + "0501234567" → "050501234567").
+  // Only collapse once there are more digits than a real number can hold - a legitimate subscriber that
+  // happens to start with 05 (e.g. 0505123456) is exactly SAUDI_MOBILE_LENGTH digits and must be kept as-is.
+  while (digits.length > SAUDI_MOBILE_LENGTH && digits.startsWith("0505")) {
     digits = `05${digits.slice(4)}`;
   }
 
@@ -45,7 +47,13 @@ export function toSaudiMobileInputValue(raw: string) {
 export function toSaudiMobileFromSubscriberInput(raw: string) {
   let digits = raw.replace(/\D/g, "");
 
-  while (digits.startsWith(SAUDI_MOBILE_PREFIX)) {
+  // Only strip a leading 05 once there are more digits than a subscriber can hold - that means the
+  // user pasted/retyped the full local number. A subscriber that legitimately starts with 05 (e.g.
+  // typing "05123456" for the full number 0505123456) must never be stripped down to nothing.
+  while (
+    digits.length > SAUDI_MOBILE_SUBSCRIBER_LENGTH &&
+    digits.startsWith(SAUDI_MOBILE_PREFIX)
+  ) {
     digits = digits.slice(SAUDI_MOBILE_PREFIX.length);
   }
 
