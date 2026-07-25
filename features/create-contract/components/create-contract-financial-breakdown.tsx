@@ -87,8 +87,8 @@ function SummaryRow({
             className={cn(
               "text-sm",
               primary
-                ? "font-bold text-[#222222]"
-                : "font-medium text-[#555555]",
+                ? "font-bold text-[#222222] dark:text-[#e8f0ee]"
+                : "font-medium text-[#555555] dark:text-[#9eb5af]",
             )}
           >
             {label}
@@ -105,7 +105,7 @@ function SummaryRow({
         )}
       </div>
       {subtitle ? (
-        <p className="mt-1 text-xs text-[#8a8a8a]">{subtitle}</p>
+        <p className="mt-1 text-xs text-[#8a8a8a] dark:text-[#9eb5af]">{subtitle}</p>
       ) : null}
     </div>
   );
@@ -123,7 +123,7 @@ function BreakdownShell({
       {sectionTitle ? (
         <p className="text-base font-extrabold text-brand">{sectionTitle}</p>
       ) : null}
-      <div className="space-y-1 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3">
+      <div className="space-y-1 rounded-2xl border border-[#e8e8e8] bg-[#ffffff] px-4 py-3 dark:bg-[#141b19]">
         {children}
       </div>
     </div>
@@ -133,8 +133,8 @@ function BreakdownShell({
 function SummarySkeletonRow() {
   return (
     <div className="flex items-center justify-between gap-4 py-2">
-      <span className="h-4 w-32 animate-pulse rounded bg-[#e2e2e2]" />
-      <span className="h-4 w-16 animate-pulse rounded bg-[#e2e2e2]" />
+      <span className="h-4 w-32 animate-pulse rounded bg-[#e2e2e2] dark:bg-[#243430]" />
+      <span className="h-4 w-16 animate-pulse rounded bg-[#e2e2e2] dark:bg-[#243430]" />
     </div>
   );
 }
@@ -157,7 +157,7 @@ export default function CreateContractFinancialBreakdown({
         <SummarySkeletonRow />
         <SummarySkeletonRow />
         <SummarySkeletonRow />
-        <div className="border-t border-dashed border-[#d4d4d4] pt-3">
+        <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
           <SummarySkeletonRow />
         </div>
       </BreakdownShell>
@@ -190,7 +190,7 @@ export default function CreateContractFinancialBreakdown({
               primary={!isCustomDuration}
             />
             {!isCustomDuration ? (
-              <div className="border-t border-dashed border-[#d4d4d4]" />
+              <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
             ) : null}
           </>
         ) : null}
@@ -230,12 +230,12 @@ export default function CreateContractFinancialBreakdown({
               subtitle={feeSubtitle}
               primary
             />
-            <div className="border-t border-dashed border-[#d4d4d4]" />
+            <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
           </>
         ) : null}
 
         {isCustomDuration && docFeeLines.length > 0 ? (
-          <div className="rounded-xl border border-[#d9eadf] bg-[#f3faf5] px-4 py-3 text-sm leading-7 text-[#333333]">
+          <div className="rounded-xl border border-[#d9eadf] bg-[#f3faf5] px-4 py-3 text-sm leading-7 text-[#333333] dark:border-[#1f3a2e] dark:bg-[#12211b]">
             {docFeeLines.map((line, index) => (
               <p key={`${line}-${index}`}>{line}</p>
             ))}
@@ -243,7 +243,7 @@ export default function CreateContractFinancialBreakdown({
         ) : null}
 
         {visibleServices.length > 0 ? (
-          <div className="space-y-1 border-t border-dashed border-[#d4d4d4] pt-2">
+          <div className="space-y-1 border-t border-dashed border-[#d4d4d4] pt-2 dark:border-[#2f403b]">
             <div className="flex items-center justify-between gap-4 py-2">
               <span className="text-sm font-bold text-[#333333]">
                 {labels.services}
@@ -271,7 +271,7 @@ export default function CreateContractFinancialBreakdown({
         ) : null}
 
         {appliedCoupon ? (
-          <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-2">
+          <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-2 dark:border-[#2f403b]">
             {hasDisplayAmount(appliedCoupon.totalPriceBeforeCoupon) ? (
               <SummaryRow
                 label={labels.priceBeforeCoupon}
@@ -287,7 +287,7 @@ export default function CreateContractFinancialBreakdown({
           </div>
         ) : null}
 
-        <div className="border-t border-dashed border-[#d4d4d4] pt-3">
+        <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
           <div className="flex items-center justify-between gap-4">
             <span className="text-base font-extrabold text-[#333333]">
               {appliedCoupon ? labels.priceAfterCoupon : labels.total}
@@ -298,7 +298,7 @@ export default function CreateContractFinancialBreakdown({
                   ? appliedCoupon.totalPriceAfterCoupon
                   : data.total_price
               }
-              className="text-xl font-extrabold text-brand!"
+              className="text-xl font-extrabold text-brand! dark:text-[#7dccc0]!"
               iconClassName="text-brand"
               iconSize={22}
             />
@@ -334,7 +334,7 @@ export default function CreateContractFinancialBreakdown({
             subtitle={feeSubtitle}
             primary
           />
-          <div className="border-t border-dashed border-[#d4d4d4]" />
+          <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
         </>
       ) : null}
 
@@ -351,14 +351,14 @@ export default function CreateContractFinancialBreakdown({
         />
       ) : null}
 
-      <div className="border-t border-dashed border-[#d4d4d4] pt-3">
+      <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
         <div className="flex items-center justify-between gap-4">
           <span className="text-base font-extrabold text-[#333333]">
             {labels.total}
           </span>
           <PaymentAmount
             amount={breakdown.total}
-            className="text-xl font-extrabold text-brand!"
+            className="text-xl font-extrabold text-brand! dark:text-[#7dccc0]!"
             iconClassName="text-brand"
             iconSize={22}
           />

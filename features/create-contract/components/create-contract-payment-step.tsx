@@ -149,7 +149,7 @@ export default function CreateContractPaymentStep({
                 <span className="text-sm font-semibold leading-relaxed text-brand">
                   {labels.savePropertyData.label}
                 </span>
-                <span className="text-xs leading-relaxed text-[#7f9c93]">
+                <span className="text-xs leading-relaxed text-[#7f7f7f] dark:text-[#9eb5af]">
                   {labels.savePropertyData.description}
                 </span>
               </span>
