@@ -71,7 +71,7 @@ function ExistingFileRow({ fileUrl, labels }: ExistingFileRowProps) {
   const fileName = fileUrl.split("/").pop() ?? labels.preview;
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-3 py-2">
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#d4d4d4] bg-white px-3 py-2">
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
           <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />
@@ -123,7 +123,7 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
   }, [previewUrl]);
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-full border border-[#e8e8e8] bg-brand-background px-3 py-2">
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#d4d4d4] bg-white px-3 py-2">
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
           <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />

@@ -855,6 +855,36 @@
         "currency": "SAR",
         "areaUnit": "m²"
       },
+      "contractDialog": {
+        "title": "Contract details #{number}",
+        "subtitle": "Your documented contract data (owner, tenant, unit, and financial data).",
+        "close": "Close",
+        "loading": "Loading data...",
+        "emptyValue": "—",
+        "ownerSection": "Owner (lessor) data",
+        "tenantSection": "Tenant data",
+        "unitSection": "Leased unit data",
+        "financeSection": "Financial data",
+        "fields": {
+          "idNumber": "ID number",
+          "unitType": "Unit type",
+          "usage": "Usage",
+          "area": "Area",
+          "floor": "Floor",
+          "electricityMeter": "Electricity meter",
+          "waterMeter": "Water meter",
+          "contractDuration": "Contract duration",
+          "docFee": "Contract service fee",
+          "totalPrice": "Total"
+        },
+        "duration": {
+          "oneYear": "One year",
+          "years": "{count} years",
+          "months": "{count} months"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²"
+      },
       "completePayment": "Pay now",
       "completePaymentLoading": "Redirecting to payment...",
       "whenReceiveContract": "When will I receive the contract?",

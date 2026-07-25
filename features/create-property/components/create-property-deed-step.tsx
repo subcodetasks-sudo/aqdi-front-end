@@ -326,7 +326,7 @@ export default function CreatePropertyDeedStep({
             ) : null}
           </div>
 
-          {canContinueDeed ? (
+          {selectedDeedType ? (
             <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
               <CreatePropertyStepPhaseHeader
                 title={addressLabels.title}

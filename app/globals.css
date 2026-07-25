@@ -190,29 +190,31 @@
     scrollbar-width: none; /* Firefox */
   }
 
-  /* Printing a specific element: hide everything else in the document,
-     reveal only the node marked #print-area, and let it lay out from the
-     top of the page regardless of where it sits on screen. */
+  /* Printing a specific element: remove everything else in the document
+     from layout (not just hide it), reveal only the node marked
+     #print-area, and let it lay out from the top of the page regardless of
+     where it sits on screen. #print-area is portalled as a direct child of
+     <body>, so its siblings are the entire rest of the app. Using
+     visibility: hidden here (instead of display: none) used to leave the
+     rest of the app's layout height intact, which made the print engine
+     paginate the whole (possibly long) underlying page and emit blank
+     trailing pages after the invoice. */
   @media print {
-    body * {
-      visibility: hidden;
-    }
-    #print-area,
-    #print-area * {
-      visibility: visible;
-    }
-    #print-area {
-      position: absolute;
-      inset: 0;
-      height: auto;
+    @page {
+      margin: 10mm 12mm;
     }
 
-    /* Belt-and-suspenders: Radix dialogs use position: fixed, which some
-       browsers' print engines still paint even under visibility: hidden.
-       Force them out of the render tree entirely. */
-    [data-slot="dialog-overlay"],
-    [data-slot="dialog-content"] {
+    body > *:not(#print-area) {
       display: none !important;
+    }
+    #print-area {
+      display: block;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    #print-area * {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
   }
 

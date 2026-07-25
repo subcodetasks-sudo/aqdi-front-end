@@ -142,19 +142,32 @@ function InvoicePrintDocument({ invoice, labels }: InvoiceDocumentProps) {
   const statusColor = invoice.status_color || "#2f9e6f";
 
   return (
-    <div className="mx-auto max-w-3xl bg-white text-[#222222]">
-      <div className="h-2 w-full bg-linear-to-r from-brand to-brand-secondary" />
+    <div className="relative mx-auto max-w-3xl overflow-hidden bg-white text-[#222222]">
+      <div className="h-3 w-full bg-linear-to-r from-brand to-brand-secondary" />
 
-      <div className="px-10 py-10">
+      <Image
+        src="/images/logo.png"
+        alt=""
+        width={480}
+        height={480}
+        priority
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 w-80 -translate-x-1/2 -translate-y-1/2 -rotate-12 object-contain opacity-[0.06] grayscale"
+      />
+
+      <div className="relative px-10 py-8">
         <div className="flex flex-wrap items-start justify-between gap-6 border-b-2 border-brand-background-green pb-6">
           <div className="flex min-w-0 items-center gap-3 text-start">
-            <Image
-              src="/images/logo.png"
-              alt=""
-              width={100}
-              height={100}
-              className="w-12 shrink-0 object-contain"
-            />
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-brand-background-green">
+              <Image
+                src="/images/logo.png"
+                alt=""
+                width={100}
+                height={100}
+                priority
+                className="w-9 object-contain"
+              />
+            </div>
             <div className="min-w-0">
               {invoice.platform_name ? (
                 <p className="text-2xl font-extrabold text-brand">
@@ -168,9 +181,9 @@ function InvoicePrintDocument({ invoice, labels }: InvoiceDocumentProps) {
               ) : null}
             </div>
           </div>
-          <div className="space-y-1 text-end text-xs text-[#6f6f6f]">
+          <div className="space-y-1.5 rounded-2xl bg-brand-background-green/60 px-4 py-3 text-end text-xs text-[#5c6b68]">
             {invoice.invoice_number ? (
-              <p className="text-base font-bold text-brand">
+              <p className="text-base font-extrabold text-brand">
                 {invoice.invoice_number}
               </p>
             ) : null}
@@ -181,27 +194,29 @@ function InvoicePrintDocument({ invoice, labels }: InvoiceDocumentProps) {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-3 gap-6 rounded-2xl bg-brand-background-green/60 px-5 py-4 text-sm">
+        <div className="mt-6 grid grid-cols-3 gap-4 text-sm">
           {invoice.customer_name ? (
-            <div className="min-w-0 space-y-1 text-start">
+            <div className="min-w-0 space-y-1 rounded-xl border-s-4 border-brand bg-[#f7f7f7] px-4 py-3 text-start">
               <p className="text-xs text-[#6f6f6f]">{labels.customerLabel}</p>
-              <p className="font-bold text-[#222222]">
+              <p className="truncate font-bold text-[#222222]">
                 {invoice.customer_name}
               </p>
             </div>
           ) : null}
-          <div className="min-w-0 space-y-1 text-start">
+          <div className="min-w-0 space-y-1 rounded-xl border-s-4 border-brand bg-[#f7f7f7] px-4 py-3 text-start">
             <p className="text-xs text-[#6f6f6f]">
               {labels.requestNumberLabel}
             </p>
-            <p className="font-bold text-[#222222]">{invoice.order_number}</p>
+            <p className="truncate font-bold text-[#222222]">
+              {invoice.order_number}
+            </p>
           </div>
           {invoice.contract_type_label ? (
-            <div className="min-w-0 space-y-1 text-start">
+            <div className="min-w-0 space-y-1 rounded-xl border-s-4 border-brand bg-[#f7f7f7] px-4 py-3 text-start">
               <p className="text-xs text-[#6f6f6f]">
                 {labels.contractTypeLabel}
               </p>
-              <p className="font-bold text-[#222222]">
+              <p className="truncate font-bold text-[#222222]">
                 {invoice.contract_type_label}
               </p>
             </div>
@@ -209,29 +224,35 @@ function InvoicePrintDocument({ invoice, labels }: InvoiceDocumentProps) {
         </div>
 
         {invoice.items.length > 0 ? (
-          <table className="mt-8 w-full border-collapse text-sm">
+          <table className="mt-8 w-full border-collapse overflow-hidden rounded-2xl text-sm">
             <thead>
-              <tr className="border-b-2 border-brand text-xs font-bold tracking-wide text-brand uppercase">
-                <th className="py-2 pe-3 text-start">{labels.tableIndex}</th>
-                <th className="py-2 pe-3 text-start">
+              <tr className="bg-brand text-xs font-bold tracking-wide text-white uppercase">
+                <th className="rounded-s-xl py-3 ps-4 pe-3 text-start">
+                  {labels.tableIndex}
+                </th>
+                <th className="py-3 pe-3 text-start">
                   {labels.tableDescription}
                 </th>
-                <th className="py-2 ps-3 text-end">{labels.tableAmount}</th>
+                <th className="rounded-e-xl py-3 ps-3 pe-4 text-end">
+                  {labels.tableAmount}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {invoice.items.map((item) => (
+              {invoice.items.map((item, itemIndex) => (
                 <tr
                   key={`${item.index}-${item.description}`}
-                  className="border-b border-[#e5e5e5]"
+                  className={
+                    itemIndex % 2 === 0 ? "bg-white" : "bg-brand-background"
+                  }
                 >
-                  <td className="py-3 pe-3 align-top font-bold text-brand-secondary">
+                  <td className="py-3 ps-4 pe-3 align-top font-bold text-brand-secondary">
                     {item.index}
                   </td>
                   <td className="py-3 pe-3 align-top text-[#333333]">
                     {item.description}
                   </td>
-                  <td className="py-3 ps-3 text-end align-top font-bold text-[#222222]">
+                  <td className="py-3 ps-3 pe-4 text-end align-top font-bold text-[#222222]">
                     {item.amount_label}
                   </td>
                 </tr>
@@ -241,27 +262,37 @@ function InvoicePrintDocument({ invoice, labels }: InvoiceDocumentProps) {
         ) : null}
 
         {invoice.total_due_label || invoice.total_amount_label ? (
-          <div className="mt-4 flex items-center justify-between border-t-2 border-brand pt-4">
-            <span className="text-sm font-bold text-[#555555]">
+          <div className="mt-5 flex items-center justify-between rounded-2xl border-2 border-brand bg-brand-background-green/60 px-5 py-4">
+            <span className="text-sm font-bold text-[#3f4d4a]">
               {invoice.total_due_label}
             </span>
-            <span className="text-lg font-extrabold text-brand">
+            <span className="text-xl font-extrabold text-brand">
               {invoice.total_amount_label}
             </span>
           </div>
         ) : null}
 
         {invoice.status_label ? (
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center">
             <span
-              className="inline-flex items-center rounded-full border-2 px-4 py-1.5 text-sm font-bold"
-              style={{ color: statusColor, borderColor: statusColor }}
+              className="inline-flex items-center rounded-full border-2 px-5 py-1.5 text-sm font-bold"
+              style={{
+                color: statusColor,
+                borderColor: statusColor,
+                backgroundColor: `${statusColor}14`,
+              }}
             >
               {invoice.status_label}
             </span>
           </div>
         ) : null}
+
+        <div className="mt-10 border-t border-[#ececec] pt-4 text-center text-[11px] text-[#9a9a9a]">
+          {invoice.platform_name}
+        </div>
       </div>
+
+      <div className="h-3 w-full bg-linear-to-r from-brand to-brand-secondary" />
     </div>
   );
 }

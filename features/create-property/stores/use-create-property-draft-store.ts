@@ -167,7 +167,7 @@ function createInitialPropertyDraft() {
     deedGuardiansPoaPersistedFiles: [] as PersistedFile[],
     useManualDeedEntry: false,
     manualDeedEntry: { ...EMPTY_MANUAL_DEED_ENTRY },
-    addressMethod: "" as PropertyNationalAddressMethodId | "",
+    addressMethod: "link" as PropertyNationalAddressMethodId | "",
     addressPhotoFiles: [] as File[],
     addressPhotoPersistedFiles: [] as PersistedFile[],
     addressLinkUrl: "",

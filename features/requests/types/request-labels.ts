@@ -2,6 +2,7 @@ import type { ContractPaymentMethodLabels } from "@/features/create-contract/hoo
 import type { RequestIncompleteProgressDialogLabels } from "@/features/requests/components/request-incomplete-progress-dialog";
 import type { RequestReceiveContractDialogLabels } from "@/features/requests/components/request-receive-contract-dialog";
 import type { RequestDetailsDialogLabels } from "@/features/requests/utils/map-contract-to-request-details";
+import type { RequestContractDialogLabels } from "@/features/requests/utils/map-completed-contract-to-details";
 import type { RequestInvoiceDialogLabels } from "@/features/requests/types/request-invoice-labels";
 
 export type RequestCardLabels = {
@@ -26,6 +27,7 @@ export type RequestCardLabels = {
   incompleteValidityNotice: string;
   editError: string;
   detailsDialog: RequestDetailsDialogLabels;
+  contractDialog: RequestContractDialogLabels;
   receiveContractDialog: RequestReceiveContractDialogLabels;
   invoiceDialog: RequestInvoiceDialogLabels;
   incompleteProgressDialog: RequestIncompleteProgressDialogLabels;

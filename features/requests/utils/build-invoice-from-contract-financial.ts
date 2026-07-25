@@ -15,8 +15,9 @@ export type InvoiceChromeLabels = {
   paidStatusLabel: string;
 };
 
-function formatAmountLabel(amount: number) {
-  return amount.toLocaleString("en-US");
+function formatAmountLabel(amount: number, locale: string) {
+  const currency = locale === "ar" ? "ريال" : "SAR";
+  return `${amount.toLocaleString("en-US")} ${currency}`;
 }
 
 export function buildInvoiceFromContractAndFinancial({
@@ -57,7 +58,7 @@ export function buildInvoiceFromContractAndFinancial({
       return {
         index: index + 1,
         description: getContractFinancialServiceLabel(service, locale),
-        amount_label: formatAmountLabel(amount),
+        amount_label: formatAmountLabel(amount, locale),
       };
     })
     .filter((item): item is NonNullable<typeof item> => Boolean(item))
@@ -92,7 +93,7 @@ export function buildInvoiceFromContractAndFinancial({
     contract_type_label: contractTypeLabel,
     items,
     total_due_label: chrome.totalDueLabel,
-    total_amount_label: formatAmountLabel(total),
+    total_amount_label: formatAmountLabel(total, locale),
     status: isCompleted ? "paid" : "unpaid",
     status_label: statusLabel,
     status_color: statusColor,

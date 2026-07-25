@@ -166,7 +166,7 @@ export function useCreateContractDeedStep() {
                   (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
                 : hasSingleImage)));
 
-  const showNationalAddress = isDeedComplete && !isLeaseRenewal;
+  const showNationalAddress = deed.selectedDeedType !== "" && !isLeaseRenewal;
 
   const isAddressComplete =
     isInstrumentTypeLocked ||

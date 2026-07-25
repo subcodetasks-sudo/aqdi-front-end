@@ -4,6 +4,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import RequestCompletePaymentButton from "@/features/requests/components/request-complete-payment-button";
 import RequestInvoiceButton from "@/features/requests/components/request-invoice-button";
 import RequestReceiveContractButton from "@/features/requests/components/request-receive-contract-button";
+import RequestViewContractButton from "@/features/requests/components/request-view-contract-button";
 import RequestViewDataButton from "@/features/requests/components/request-view-data-button";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
@@ -52,7 +53,16 @@ export default function RequestCardActions({
           loadErrorLabel={labels.editError}
           detailsLabels={labels.detailsDialog}
         />
-      ) : null}
+      ) : (
+        <RequestViewContractButton
+          contractId={card.contractId}
+          uuid={card.uuid}
+          requestNumber={card.requestNumber}
+          label={labels.viewData}
+          loadErrorLabel={labels.editError}
+          detailsLabels={labels.contractDialog}
+        />
+      )}
 
       {card.showDownloadInvoice ? (
         <RequestInvoiceButton

@@ -881,6 +881,36 @@
         "currency": "ريال",
         "areaUnit": "م²"
       },
+      "contractDialog": {
+        "title": "تفاصيل العقد #{number}",
+        "subtitle": "بيانات العقد الموثق (المالك، المستأجر، الوحدة، والبيانات المالية).",
+        "close": "إغلاق",
+        "loading": "جاري تحميل البيانات...",
+        "emptyValue": "—",
+        "ownerSection": "بيانات المالك (المؤجر)",
+        "tenantSection": "بيانات المستأجر",
+        "unitSection": "بيانات الوحدة المؤجرة",
+        "financeSection": "البيانات المالية",
+        "fields": {
+          "idNumber": "رقم الهوية",
+          "unitType": "نوع الوحدة",
+          "usage": "الاستخدام",
+          "area": "المساحة",
+          "floor": "الطابق",
+          "electricityMeter": "عداد الكهرباء",
+          "waterMeter": "عداد الماء",
+          "contractDuration": "مدة العقد",
+          "docFee": "المقابل المالي لعقدي",
+          "totalPrice": "الإجمالي"
+        },
+        "duration": {
+          "oneYear": "سنة واحدة",
+          "years": "{count} سنوات",
+          "months": "{count} أشهر"
+        },
+        "currency": "ريال",
+        "areaUnit": "م²"
+      },
       "completePayment": "دفع المقابل المالي",
       "completePaymentLoading": "جاري التوجيه للدفع...",
       "whenReceiveContract": "متى أستلم العقد؟",
