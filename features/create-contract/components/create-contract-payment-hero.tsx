@@ -33,7 +33,7 @@ export default function CreateContractPaymentHero({
       <button
         type="button"
         onClick={onReviewOrder}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-[#e8e8e8] bg-white px-4 text-sm font-bold text-brand transition-colors hover:bg-brand-background"
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-background-green px-4 text-sm font-bold text-brand transition-colors hover:opacity-90"
       >
         <span>{reviewOrderLabel}</span>
         <Search className="size-4 shrink-0 text-brand" aria-hidden="true" />

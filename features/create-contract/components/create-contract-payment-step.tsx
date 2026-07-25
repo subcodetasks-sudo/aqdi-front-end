@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -143,10 +143,15 @@ export default function CreateContractPaymentStep({
             appliedCoupon={appliedCoupon}
           />
 
-          <div className="flex items-center justify-between gap-3 rounded-2xl bg-brand-background px-4 py-4">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4">
             <label className="flex w-full cursor-pointer items-center justify-between gap-3">
-              <span className="text-sm font-semibold leading-relaxed text-brand">
-                {labels.savePropertyData.label}
+              <span className="flex flex-col gap-1">
+                <span className="text-sm font-semibold leading-relaxed text-brand">
+                  {labels.savePropertyData.label}
+                </span>
+                <span className="text-xs leading-relaxed text-[#7f9c93]">
+                  {labels.savePropertyData.description}
+                </span>
               </span>
               <Switch
                 dir="ltr"
@@ -176,29 +181,23 @@ export default function CreateContractPaymentStep({
             />
           </div>
 
-          <div className="flex items-start gap-2">
-            <Info
-              className="mt-0.5 size-4 shrink-0 text-[#bdbdbd]"
-              aria-hidden="true"
-            />
-            <p className="text-xs leading-relaxed text-[#7f7f7f]">
-              {labels.disclaimer.prefix}{" "}
-              <Link
-                href={labels.disclaimer.termsHref}
-                className="font-semibold text-brand-secondary underline underline-offset-2"
-              >
-                {labels.disclaimer.termsLink}
-              </Link>{" "}
-              {labels.disclaimer.and}{" "}
-              <Link
-                href={labels.disclaimer.privacyHref}
-                className="font-semibold text-brand-secondary underline underline-offset-2"
-              >
-                {labels.disclaimer.privacyLink}
-              </Link>
-              .
-            </p>
-          </div>
+          <p className="text-center text-xs leading-relaxed text-[#7f7f7f]">
+            {labels.disclaimer.prefix}{" "}
+            <Link
+              href={labels.disclaimer.termsHref}
+              className="font-semibold text-brand-secondary underline underline-offset-2"
+            >
+              {labels.disclaimer.termsLink}
+            </Link>{" "}
+            {labels.disclaimer.and}{" "}
+            <Link
+              href={labels.disclaimer.privacyHref}
+              className="font-semibold text-brand-secondary underline underline-offset-2"
+            >
+              {labels.disclaimer.privacyLink}
+            </Link>
+            .
+          </p>
         </div>
       </div>
 

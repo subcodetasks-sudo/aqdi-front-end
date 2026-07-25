@@ -28,6 +28,7 @@ type CreateContractFinancialBreakdownProps = {
   isLoading: boolean;
   appliedCoupon?: AppliedContractCoupon | null;
   sectionTitle?: string;
+  feeSubtitle?: string;
 };
 
 type PaymentAmountProps = {
@@ -59,20 +60,53 @@ type SummaryRowProps = {
   label: string;
   amount: number;
   icon?: ReactNode;
+  freeLabel?: string;
+  subtitle?: string;
+  primary?: boolean;
 };
 
 function hasDisplayAmount(amount: number | null | undefined): amount is number {
   return typeof amount === "number" && Number.isFinite(amount) && amount > 0;
 }
 
-function SummaryRow({ label, amount, icon }: SummaryRowProps) {
+function SummaryRow({
+  label,
+  amount,
+  icon,
+  freeLabel,
+  subtitle,
+  primary = false,
+}: SummaryRowProps) {
+  const isFree = freeLabel !== undefined && amount <= 0;
+
   return (
-    <div className="flex items-center justify-between gap-4 py-2.5">
-      <div className="flex min-w-0 items-center gap-2">
-        <span className="text-sm font-medium text-[#555555]">{label}</span>
-        {icon}
+    <div className="py-2.5">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-2">
+          <span
+            className={cn(
+              "text-sm",
+              primary
+                ? "font-bold text-[#222222]"
+                : "font-medium text-[#555555]",
+            )}
+          >
+            {label}
+          </span>
+          {icon}
+        </div>
+        {isFree ? (
+          <span className="text-sm font-bold text-brand-secondary">{freeLabel}</span>
+        ) : (
+          <PaymentAmount
+            amount={amount}
+            className={cn("text-sm font-bold", primary ? "text-brand" : "text-[#333333]")}
+          />
+        )}
       </div>
-      <PaymentAmount amount={amount} className="text-sm font-bold text-[#333333]" />
+      {subtitle ? (
+        <p className="mt-1 text-xs text-[#8a8a8a]">{subtitle}</p>
+      ) : null}
     </div>
   );
 }
@@ -112,6 +146,7 @@ export default function CreateContractFinancialBreakdown({
   isLoading,
   appliedCoupon = null,
   sectionTitle,
+  feeSubtitle,
 }: CreateContractFinancialBreakdownProps) {
   const locale = useLocale();
   const breakdown = PAYMENT_BREAKDOWN[contractType];
@@ -147,10 +182,17 @@ export default function CreateContractFinancialBreakdown({
     return (
       <BreakdownShell sectionTitle={sectionTitle}>
         {hasDisplayAmount(data.price_details.contract_period_price) ? (
-          <SummaryRow
-            label={labels.contractPeriodPrice}
-            amount={data.price_details.contract_period_price}
-          />
+          <>
+            <SummaryRow
+              label={labels.contractPeriodPrice}
+              amount={data.price_details.contract_period_price}
+              subtitle={!isCustomDuration ? feeSubtitle : undefined}
+              primary={!isCustomDuration}
+            />
+            {!isCustomDuration ? (
+              <div className="border-t border-dashed border-[#d4d4d4]" />
+            ) : null}
+          </>
         ) : null}
 
         {hasDisplayAmount(data.price_details.application_fees) ? (
@@ -160,9 +202,11 @@ export default function CreateContractFinancialBreakdown({
           />
         ) : null}
 
-        {hasDisplayAmount(data.price_details.tax) ? (
-          <SummaryRow label={labels.vat} amount={data.price_details.tax} />
-        ) : null}
+        <SummaryRow
+          label={labels.vat}
+          amount={data.price_details.tax}
+          freeLabel={labels.free}
+        />
 
         {hasDisplayAmount(data.price_details.electricity_meter_fee) ? (
           <SummaryRow
@@ -179,7 +223,15 @@ export default function CreateContractFinancialBreakdown({
         ) : null}
 
         {isCustomDuration && hasDisplayAmount(docFeeAmount) ? (
-          <SummaryRow label={labels.docFee} amount={docFeeAmount} />
+          <>
+            <SummaryRow
+              label={labels.docFee}
+              amount={docFeeAmount}
+              subtitle={feeSubtitle}
+              primary
+            />
+            <div className="border-t border-dashed border-[#d4d4d4]" />
+          </>
         ) : null}
 
         {isCustomDuration && docFeeLines.length > 0 ? (
@@ -275,15 +327,22 @@ export default function CreateContractFinancialBreakdown({
       ) : null}
 
       {hasDisplayAmount(breakdown.contractPeriodPrice) ? (
-        <SummaryRow
-          label={labels.contractPeriodPrice}
-          amount={breakdown.contractPeriodPrice}
-        />
+        <>
+          <SummaryRow
+            label={labels.contractPeriodPrice}
+            amount={breakdown.contractPeriodPrice}
+            subtitle={feeSubtitle}
+            primary
+          />
+          <div className="border-t border-dashed border-[#d4d4d4]" />
+        </>
       ) : null}
 
-      {hasDisplayAmount(breakdown.vat) ? (
-        <SummaryRow label={labels.vat} amount={breakdown.vat} />
-      ) : null}
+      <SummaryRow
+        label={labels.vat}
+        amount={breakdown.vat}
+        freeLabel={labels.free}
+      />
 
       {hasDisplayAmount(breakdown.applicationFees) ? (
         <SummaryRow

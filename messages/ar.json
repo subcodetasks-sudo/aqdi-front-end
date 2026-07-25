@@ -1067,7 +1067,7 @@
       "title": "وثيقة الملكية",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح !",
       "deedType": {
-        "label": "حدد نوع الصك :",
+        "label": "حدد نوع المستند :",
         "placeholder": "إختر من هنا ...",
         "clearSelection": "إزالة نوع الصك",
         "types": {
@@ -1343,6 +1343,8 @@
     "backLabel": "رجوع",
     "pageTitle": "إنشاء وحدة جديدة",
     "editPageTitle": "تعديل الوحدة",
+    "fieldRequired": "هذا الحقل مطلوب",
+    "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
     "navigation": {
       "previous": "السابق",
       "continue": "متابعة",
@@ -1474,6 +1476,7 @@
   },
   "createContract": {
     "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
+    "fieldRequired": "هذا الحقل مطلوب",
     "backLabel": "رجوع",
     "pageTitleResidential": "عقد إيجار سكني",
     "pageTitleCommercial": "عقد إيجار تجاري",
@@ -2090,6 +2093,10 @@
         "feeLabel": "إجمالي الرسوم",
         "currency": "ريال",
         "custom": {
+          "yearsLabel": "السنوات",
+          "yearsPlaceholder": "اختر عدد السنوات",
+          "monthsLabel": "الأشهر",
+          "monthsPlaceholder": "اختر عدد الأشهر",
           "yearOption": "'{'count'}' سنة",
           "monthOption": "+ '{'count'}' شهر",
           "monthOptionZero": "بدون أشهر",
@@ -2099,7 +2106,8 @@
       },
       "totalRentAmount": {
         "label": "مبلغ الإيجار الإجمالي",
-        "placeholder": "أكتب هنا .."
+        "placeholder": "أكتب هنا ..",
+        "amountInWords": "إجمالي قيمة العقد: '{'amount'}'"
       },
       "paymentMethod": {
         "label": "طريقة الدفعات",
@@ -2161,10 +2169,16 @@
         "discount": "قيمة الخصم :",
         "priceAfterCoupon": "الإجمالي بعد الخصم :",
         "currency": "ر.س",
-        "ejarLogoAlt": "إيجار"
+        "ejarLogoAlt": "إيجار",
+        "free": "مجانًا",
+        "contractTypeResidential": "عقد سكني",
+        "contractTypeCommercial": "عقد تجاري",
+        "yearsCount": "'{'count'}' سنة",
+        "monthsCount": "'{'count'}' شهر"
       },
       "savePropertyData": {
-        "label": "هل تود حفظ بيانات العقار - حتى تستطيع انشاء العقود مستقبلا بسرعة وسهولة",
+        "label": "هل تود حفظ بيانات العقار؟",
+        "description": "حتى تستطيع إنشاء العقود مستقبلاً بسرعة وسهولة",
         "dialog": {
           "title": "حفظ بيانات العقار",
           "close": "إغلاق",

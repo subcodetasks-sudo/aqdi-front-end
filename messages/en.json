@@ -1317,6 +1317,8 @@
     "backLabel": "Back",
     "pageTitle": "Create a new unit",
     "editPageTitle": "Edit unit",
+    "fieldRequired": "This field is required",
+    "incompleteContinue": "Please complete all required fields before continuing",
     "navigation": {
       "previous": "Previous",
       "continue": "Continue",
@@ -1448,6 +1450,7 @@
   },
   "createContract": {
     "incompleteContinue": "Please complete all required fields before continuing",
+    "fieldRequired": "This field is required",
     "backLabel": "Back",
     "pageTitleResidential": "Residential lease contract",
     "pageTitleCommercial": "Commercial lease contract",
@@ -2064,6 +2067,10 @@
         "feeLabel": "Total fees",
         "currency": "SAR",
         "custom": {
+          "yearsLabel": "Years",
+          "yearsPlaceholder": "Select years",
+          "monthsLabel": "Months",
+          "monthsPlaceholder": "Select months",
           "yearOption": "'{'count'}' year(s)",
           "monthOption": "+ '{'count'}' month(s)",
           "monthOptionZero": "No months",
@@ -2073,7 +2080,8 @@
       },
       "totalRentAmount": {
         "label": "Total rent amount",
-        "placeholder": "Type here..."
+        "placeholder": "Type here...",
+        "amountInWords": "Total contract value: '{'amount'}'"
       },
       "paymentMethod": {
         "label": "Payment method",
@@ -2135,10 +2143,16 @@
         "discount": "Discount amount:",
         "priceAfterCoupon": "Total after discount:",
         "currency": "SAR",
-        "ejarLogoAlt": "Ejar"
+        "ejarLogoAlt": "Ejar",
+        "free": "Free",
+        "contractTypeResidential": "Residential contract",
+        "contractTypeCommercial": "Commercial contract",
+        "yearsCount": "'{'count'}' year(s)",
+        "monthsCount": "'{'count'}' month(s)"
       },
       "savePropertyData": {
-        "label": "Would you like to save the property data so you can create contracts quickly and easily in the future?",
+        "label": "Would you like to save the property data?",
+        "description": "So you can create contracts quickly and easily in the future",
         "dialog": {
           "title": "Save property data",
           "close": "Close",

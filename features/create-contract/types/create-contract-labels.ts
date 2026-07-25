@@ -332,6 +332,7 @@ export type CreateContractLabels = {
     rentedUnit: {
       selectPlaceholder: string;
       optionsError: string;
+      fieldRequired: string;
       unitType: {
         label: string;
       };
@@ -500,6 +501,10 @@ export type CreateContractLabels = {
       feeLabel: string;
       currency: string;
       custom: {
+        yearsLabel: string;
+        yearsPlaceholder: string;
+        monthsLabel: string;
+        monthsPlaceholder: string;
         yearOption: string;
         monthOption: string;
         monthOptionZero: string;
@@ -510,6 +515,7 @@ export type CreateContractLabels = {
     totalRentAmount: {
       label: string;
       placeholder: string;
+      amountInWords: string;
     };
     paymentMethod: {
       label: string;
@@ -572,9 +578,15 @@ export type CreateContractLabels = {
       priceAfterCoupon: string;
       currency: string;
       ejarLogoAlt: string;
+      free: string;
+      contractTypeResidential: string;
+      contractTypeCommercial: string;
+      yearsCount: string;
+      monthsCount: string;
     };
     savePropertyData: {
       label: string;
+      description: string;
       dialog: {
         title: string;
         close: string;

@@ -458,6 +458,7 @@ export default async function CreateContractPage({
       rentedUnit: {
         selectPlaceholder: t("tenant.rentedUnit.selectPlaceholder"),
         optionsError: t("tenant.rentedUnit.optionsError"),
+        fieldRequired: t("fieldRequired"),
         unitType: {
           label: t("tenant.rentedUnit.unitType.label"),
         },
@@ -640,6 +641,14 @@ export default async function CreateContractPage({
         feeLabel: t("finance.contractDuration.feeLabel"),
         currency: t("finance.contractDuration.currency"),
         custom: {
+          yearsLabel: t("finance.contractDuration.custom.yearsLabel"),
+          yearsPlaceholder: t(
+            "finance.contractDuration.custom.yearsPlaceholder",
+          ),
+          monthsLabel: t("finance.contractDuration.custom.monthsLabel"),
+          monthsPlaceholder: t(
+            "finance.contractDuration.custom.monthsPlaceholder",
+          ),
           yearOption: t("finance.contractDuration.custom.yearOption"),
           monthOption: t("finance.contractDuration.custom.monthOption"),
           monthOptionZero: t("finance.contractDuration.custom.monthOptionZero"),
@@ -650,6 +659,7 @@ export default async function CreateContractPage({
       totalRentAmount: {
         label: t("finance.totalRentAmount.label"),
         placeholder: t("finance.totalRentAmount.placeholder"),
+        amountInWords: t("finance.totalRentAmount.amountInWords"),
       },
       paymentMethod: {
         label: t("finance.paymentMethod.label"),
@@ -714,9 +724,15 @@ export default async function CreateContractPage({
         priceAfterCoupon: t("payment.summary.priceAfterCoupon"),
         currency: t("payment.summary.currency"),
         ejarLogoAlt: t("payment.summary.ejarLogoAlt"),
+        free: t("payment.summary.free"),
+        contractTypeResidential: t("payment.summary.contractTypeResidential"),
+        contractTypeCommercial: t("payment.summary.contractTypeCommercial"),
+        yearsCount: t("payment.summary.yearsCount"),
+        monthsCount: t("payment.summary.monthsCount"),
       },
       savePropertyData: {
         label: t("payment.savePropertyData.label"),
+        description: t("payment.savePropertyData.description"),
         dialog: {
           title: t("payment.savePropertyData.dialog.title"),
           close: t("payment.savePropertyData.dialog.close"),
