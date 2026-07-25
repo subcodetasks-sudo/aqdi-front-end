@@ -10,6 +10,10 @@ import {
   type ManualDeedEntryData,
 } from "@/features/shared/types/manual-deed-entry";
 import { getInstrumentHistoryYearOptions } from "@/lib/validation/instrument-history-year-options";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
 import { cn } from "@/lib/utils";
 
 type FormSelectProps = {
@@ -21,6 +25,7 @@ type FormSelectProps = {
   required?: boolean;
   hideLabel?: boolean;
   variant?: "default" | "compact";
+  invalid?: boolean;
   valid?: boolean;
 };
 
@@ -34,6 +39,7 @@ type ManualDeedEntryFormProps = {
   onChange: (value: ManualDeedEntryData) => void;
   FormSelect: ComponentType<FormSelectProps>;
   FieldLabel: ComponentType<FieldLabelProps>;
+  showFieldErrors?: boolean;
 };
 
 function padOptions(count: number) {
@@ -43,10 +49,23 @@ function padOptions(count: number) {
   });
 }
 
-function RequiredFieldLabel({ label }: { label: string }) {
+function RequiredFieldLabel({
+  label,
+  invalid = false,
+}: {
+  label: string;
+  invalid?: boolean;
+}) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-sm font-semibold text-[#333333]">{label}</span>
+      <span
+        className={cn(
+          "text-sm font-semibold",
+          invalid ? "text-[#c62828]" : "text-[#333333]",
+        )}
+      >
+        {label}
+      </span>
       <span className="text-red-500" aria-hidden="true">
         *
       </span>
@@ -59,6 +78,7 @@ export default function ManualDeedEntryForm({
   value,
   onChange,
   FormSelect,
+  showFieldErrors = false,
 }: ManualDeedEntryFormProps) {
   const inputId = useId();
   const dayCount = value.typeInstrumentHistory === "hijri" ? 30 : 31;
@@ -68,6 +88,15 @@ export default function ManualDeedEntryForm({
     : "";
   const instrumentNumberValid =
     value.instrumentNumber.length === INSTRUMENT_NUMBER_LENGTH;
+  const instrumentNumberInvalid = showFieldErrors && !instrumentNumberValid;
+  const dayInvalid = showFieldErrors && value.instrumentHistoryDay === "";
+  const monthInvalid = showFieldErrors && value.instrumentHistoryMonth === "";
+  const yearInvalid = showFieldErrors && selectedYear === "";
+  const instrumentDateInvalid = dayInvalid || monthInvalid || yearInvalid;
+  const instrumentNumberChrome = resolveFieldChromeState({
+    invalid: instrumentNumberInvalid,
+    valid: instrumentNumberValid,
+  });
 
   function updateField<K extends keyof ManualDeedEntryData>(
     field: K,
@@ -87,9 +116,12 @@ export default function ManualDeedEntryForm({
   }
 
   return (
-    <div className="space-y-6 rounded-3xl bg-brand-background p-4 sm:p-5 md:p-6">
+    <div className="space-y-6">
       <div className="space-y-2">
-        <RequiredFieldLabel label={labels.instrumentNumber.label} />
+        <RequiredFieldLabel
+          label={labels.instrumentNumber.label}
+          invalid={instrumentNumberInvalid}
+        />
 
         <div className="relative">
           <Input
@@ -98,6 +130,7 @@ export default function ManualDeedEntryForm({
             maxLength={INSTRUMENT_NUMBER_LENGTH}
             value={value.instrumentNumber}
             placeholder={labels.instrumentNumber.placeholder}
+            aria-invalid={instrumentNumberInvalid}
             onChange={(event) =>
               updateField(
                 "instrumentNumber",
@@ -106,9 +139,9 @@ export default function ManualDeedEntryForm({
             }
             className={cn(
               "h-12 rounded-2xl ps-4 pe-14 text-start text-sm font-semibold tracking-[0.2em] placeholder:tracking-[0.2em] placeholder:text-[#cfcfcf] md:text-sm",
-              instrumentNumberValid
-                ? "border-brand bg-brand-background-green"
-                : "border-[#e8e8e8] bg-white",
+              fieldChromeSurfaceClass(instrumentNumberChrome, {
+                defaultBgClassName: "bg-white",
+              }),
             )}
           />
 
@@ -122,7 +155,10 @@ export default function ManualDeedEntryForm({
 
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
-          <RequiredFieldLabel label={labels.instrumentDate.label} />
+          <RequiredFieldLabel
+            label={labels.instrumentDate.label}
+            invalid={instrumentDateInvalid}
+          />
 
           <div className="inline-flex shrink-0 items-center rounded-full bg-[#f0f0f0] p-1">
             {(["hijri", "gregorian"] as const).map((calendarType) => (
@@ -153,6 +189,7 @@ export default function ManualDeedEntryForm({
             hideLabel
             variant="compact"
             valid={value.instrumentHistoryDay !== ""}
+            invalid={dayInvalid}
           />
 
           <FormSelect
@@ -164,6 +201,7 @@ export default function ManualDeedEntryForm({
             hideLabel
             variant="compact"
             valid={value.instrumentHistoryMonth !== ""}
+            invalid={monthInvalid}
           />
 
           <FormSelect
@@ -175,6 +213,7 @@ export default function ManualDeedEntryForm({
             hideLabel
             variant="compact"
             valid={selectedYear !== ""}
+            invalid={yearInvalid}
           />
         </div>
       </div>

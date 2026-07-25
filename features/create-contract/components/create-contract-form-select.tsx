@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
   fieldChromeSurfaceClass,
@@ -41,6 +43,7 @@ export default function CreateContractFormSelect({
   invalid = false,
   valid = false,
 }: CreateContractFormSelectProps) {
+  const t = useTranslations("createContract");
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,7 +68,7 @@ export default function CreateContractFormSelect({
   }
 
   return (
-    <div className="min-w-0">
+    <div className="min-w-0" data-field-invalid={invalid ? "true" : undefined}>
       {!hideLabel ? (
         required ? (
           <CreateContractFieldLabel label={label} invalid={invalid} />
@@ -157,6 +160,8 @@ export default function CreateContractFormSelect({
           </SelectContent>
         </Select>
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
     </div>
   );
 }

@@ -1,20 +1,16 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
-import { useRef, useState } from "react";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import { useContractDocFee } from "@/features/create-contract/hooks/use-contract-doc-fee";
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 
 export const CUSTOM_CONTRACT_DURATION_VALUE = "other";
 
 type CustomDurationLabels = {
+  yearsLabel: string;
+  yearsPlaceholder: string;
+  monthsLabel: string;
+  monthsPlaceholder: string;
   yearOption: string;
   monthOption: string;
   monthOptionZero: string;
@@ -43,94 +39,6 @@ function withTemplate(
   return Object.entries(values).reduce(
     (result, [key, value]) => result.replaceAll(`{${key}}`, String(value)),
     template,
-  );
-}
-
-function DurationFormSelect({
-  value,
-  options,
-  onChange,
-}: {
-  value: string;
-  options: { value: string; label: string }[];
-  onChange: (value: string) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const [contentWidth, setContentWidth] = useState<number>();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const selectedLabel =
-    options.find((option) => option.value === value)?.label ?? "";
-
-  function handleOpenChange(nextOpen: boolean) {
-    if (nextOpen && containerRef.current) {
-      setContentWidth(containerRef.current.offsetWidth);
-    }
-
-    setOpen(nextOpen);
-  }
-
-  function openSelect() {
-    if (containerRef.current) {
-      setContentWidth(containerRef.current.offsetWidth);
-    }
-
-    setOpen(true);
-  }
-
-  return (
-    <div className="min-w-0 flex-1">
-      <div
-        ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
-      >
-        <div
-          className="flex min-w-0 flex-1 items-center px-2"
-          onClick={openSelect}
-        >
-          <span className="truncate text-sm font-semibold text-[#333333]">
-            {selectedLabel}
-          </span>
-        </div>
-
-        <Select
-          open={open}
-          onOpenChange={handleOpenChange}
-          value={value || undefined}
-          onValueChange={(nextValue) => {
-            onChange(nextValue);
-            setOpen(false);
-          }}
-        >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand-secondary p-0! text-white shadow-none focus-visible:ring-brand-secondary/20 [&>svg:last-child]:hidden">
-            <ChevronLeft
-              className="size-5 -rotate-90 text-white!"
-              aria-hidden="true"
-            />
-          </SelectTrigger>
-
-          <SelectContent
-            position="popper"
-            align="end"
-            side="bottom"
-            className="max-h-72 rounded-2xl"
-            style={{
-              width: contentWidth,
-              minWidth: contentWidth,
-            }}
-          >
-            {options.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                className="text-base!"
-              >
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
   );
 }
 
@@ -175,15 +83,21 @@ export default function CreateContractCustomDurationFields({
   return (
     <div className="space-y-3">
       <div className="flex gap-3">
-        <DurationFormSelect
-          value={String(resolvedYears)}
+        <CreateContractFormSelect
+          label={labels.yearsLabel}
+          placeholder={labels.yearsPlaceholder}
           options={yearOptions}
+          value={String(resolvedYears)}
           onChange={(nextYears) => onYearsChange(Number(nextYears))}
+          variant="compact"
         />
-        <DurationFormSelect
-          value={String(resolvedMonths)}
+        <CreateContractFormSelect
+          label={labels.monthsLabel}
+          placeholder={labels.monthsPlaceholder}
           options={monthOptions}
+          value={String(resolvedMonths)}
           onChange={(nextMonths) => onMonthsChange(Number(nextMonths))}
+          variant="compact"
         />
       </div>
 

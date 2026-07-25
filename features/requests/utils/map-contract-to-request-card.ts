@@ -89,7 +89,7 @@ export function mapContractToRequestCard(
   const status = resolveStatus(contract);
   const contractType =
     contract.contract_type === "commercial" ? "commercial" : "residential";
-  const requestNumber = String(contract.id);
+  const requestNumber = String(contract.uuid);
   const snapshot = normalizeContractStatusSnapshot(
     contract as unknown as Record<string, unknown>,
     contract.id,

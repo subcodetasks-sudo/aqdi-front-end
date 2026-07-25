@@ -49,7 +49,6 @@ export default function LoginForm() {
   async function onSubmit(values: LoginFormValues) {
     const fcmToken = await getFcmToken({ requestPermission: true });
     const response = await loginUser({ ...values, fcmToken });
-console.log("fcmToken", fcmToken);
 
     if (!response.ok) {
       toast.error(response.error || t("submitError"));

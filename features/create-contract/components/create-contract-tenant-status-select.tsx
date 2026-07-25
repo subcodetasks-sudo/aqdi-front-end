@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import {
   TENANT_STATUS_OPTIONS,
   type TenantStatusOption,
@@ -20,10 +23,11 @@ export default function CreateContractTenantStatusSelect({
   onChange,
   invalid = false,
 }: CreateContractTenantStatusSelectProps) {
+  const t = useTranslations("createContract");
   const selectedValue = value || "individual";
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-3" data-field-invalid={invalid ? "true" : undefined}>
       <label
         className={cn(
           "shrink-0 text-sm font-semibold",
@@ -37,6 +41,7 @@ export default function CreateContractTenantStatusSelect({
       <div
         role="radiogroup"
         aria-label={labels.label}
+        aria-invalid={invalid}
         className={cn(
           "flex min-w-0 items-center rounded-full bg-[#f0f0f0] p-1",
           invalid && "ring-1 ring-[#e57373]",
@@ -64,6 +69,8 @@ export default function CreateContractTenantStatusSelect({
           );
         })}
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
     </div>
   );
 }

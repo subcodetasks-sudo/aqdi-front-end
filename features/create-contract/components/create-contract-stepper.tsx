@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Image from "next/image";
 
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
@@ -30,8 +31,17 @@ function getStepPillClassName(
     isActive
       ? "bg-brand text-white ring-2 ring-brand-secondary ring-offset-2"
       : isCompleted
-        ? "bg-brand text-white"
+        ? "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"
         : "bg-brand-background text-[#666666] dark:bg-[#16352f] dark:text-[#9eb5af]",
+  );
+}
+
+function getConnectorClassName(isCompleted: boolean) {
+  return cn(
+    "h-0 w-3 shrink-0 border-t-2 sm:w-5",
+    isCompleted
+      ? "border-solid border-brand-secondary"
+      : "border-dashed border-[#d9d9d9] dark:border-[#2f403b]",
   );
 }
 
@@ -45,27 +55,61 @@ export default function CreateContractStepper({
   return (
     <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5 dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
-        {CREATE_CONTRACT_STEPPER_STEPS.map((step) => {
+        {CREATE_CONTRACT_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
           const isCompleted = stepIndex < currentStepIndex;
           const isActive = stepIndex === currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
+          const isIntro = step === "intro";
 
           return (
-            <button
-              key={step}
-              type="button"
-              title={labels.steps[step]}
-              aria-label={labels.steps[step]}
-              aria-current={isActive ? "step" : undefined}
-              disabled={!isUnlocked}
-              onClick={() => goToStep(step)}
-              className={getStepPillClassName(isActive, isCompleted, isUnlocked)}
-            >
-              {labels.steps[step]}
-            </button>
+            <Fragment key={step}>
+              {index > 0 && (
+                <span
+                  aria-hidden="true"
+                  className={getConnectorClassName(isActive || isCompleted)}
+                />
+              )}
+
+              <button
+                type="button"
+                title={labels.steps[step]}
+                aria-label={labels.steps[step]}
+                aria-current={isActive ? "step" : undefined}
+                disabled={!isUnlocked}
+                onClick={() => goToStep(step)}
+                className={
+                  isIntro
+                    ? cn(
+                        stepPillClassName,
+                        "gap-1.5 border border-brand/15 bg-white px-3 text-brand shadow-sm dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]",
+                        isUnlocked
+                          ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
+                          : "cursor-not-allowed opacity-50",
+                      )
+                    : getStepPillClassName(isActive, isCompleted, isUnlocked)
+                }
+              >
+                {isIntro && (
+                  <Image
+                    src="/images/logo.png"
+                    alt=""
+                    width={20}
+                    height={22}
+                    aria-hidden="true"
+                    className="h-5 w-auto shrink-0 object-contain"
+                  />
+                )}
+                <span>{labels.steps[step]}</span>
+              </button>
+            </Fragment>
           );
         })}
+
+        <span
+          aria-hidden="true"
+          className={getConnectorClassName(isPaymentStep)}
+        />
 
         <button
           type="button"

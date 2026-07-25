@@ -4,12 +4,14 @@ import { useState } from "react";
 
 import { submitPropertyStep3 } from "@/features/create-unit/services/submit-property-step3";
 import { updatePropertyStep3 } from "@/features/create-unit/services/update-property-step3";
+import { updateUnit } from "@/features/create-unit/services/update-unit";
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import { areAllUnitsComplete } from "@/features/create-unit/types/unit-data";
 
 export function useSubmitUnit(
   propertyId: number | null,
   propertyHasUnits: boolean,
+  isEditMode: boolean,
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const units = useCreateUnitDraftStore((state) => state.units);
@@ -37,11 +39,21 @@ export function useSubmitUnit(
       ...unit,
       contractType: unit.contractType ?? contractType,
     }));
-    const payloadUnits = [...preservedUnits, ...stampedUnits];
 
     setIsSubmitting(true);
 
     try {
+      if (isEditMode && stampedUnits.length === 1 && stampedUnits[0].unitId) {
+        return await updateUnit({
+          unitId: stampedUnits[0].unitId,
+          propertyId,
+          contractType,
+          unitData: stampedUnits[0],
+        });
+      }
+
+      const payloadUnits = [...preservedUnits, ...stampedUnits];
+
       if (propertyHasUnits) {
         return await updatePropertyStep3({
           propertyId,

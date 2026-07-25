@@ -1,6 +1,7 @@
 "use client";
 
 import { IdCard, Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractIconInputField from "@/features/create-contract/components/create-contract-icon-input-field";
@@ -30,6 +31,8 @@ export default function CreateContractTenantIndividualDataPhase({
   onChange,
   showFieldErrors = false,
 }: CreateContractTenantIndividualDataPhaseProps) {
+  const t = useTranslations("createContract");
+
   function updateField<K extends keyof IndividualTenantData>(
     field: K,
     fieldValue: IndividualTenantData[K],
@@ -54,7 +57,11 @@ export default function CreateContractTenantIndividualDataPhase({
           dir="ltr"
           inputMode="numeric"
           maxLength={10}
-          invalid={showFieldErrors && !isIdNumberComplete(value.idNumber)}
+          errorMessage={
+            showFieldErrors && !isIdNumberComplete(value.idNumber)
+              ? t("fieldRequired")
+              : undefined
+          }
           valid={isIdNumberComplete(value.idNumber)}
         />
 
@@ -66,7 +73,11 @@ export default function CreateContractTenantIndividualDataPhase({
             updateField("phone", toSaudiMobileInputValue(phone))
           }
           icon={Phone}
-          invalid={showFieldErrors && !isPhoneComplete(value.phone)}
+          errorMessage={
+            showFieldErrors && !isPhoneComplete(value.phone)
+              ? t("fieldRequired")
+              : undefined
+          }
           valid={isPhoneComplete(value.phone)}
         />
       </div>

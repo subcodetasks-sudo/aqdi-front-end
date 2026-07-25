@@ -4,6 +4,11 @@ import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreateUnitFieldLabel from "@/features/create-unit/components/create-unit-field-label";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateUnitAreaFieldProps = {
   label: string;
@@ -11,6 +16,7 @@ type CreateUnitAreaFieldProps = {
   suffix: string;
   value: string;
   onChange: (value: string) => void;
+  errorMessage?: string;
 };
 
 export default function CreateUnitAreaField({
@@ -19,14 +25,22 @@ export default function CreateUnitAreaField({
   suffix,
   value,
   onChange,
+  errorMessage,
 }: CreateUnitAreaFieldProps) {
   const inputId = useId();
+  const showInvalid = Boolean(errorMessage);
+  const chrome = resolveFieldChromeState({ invalid: showInvalid });
 
   return (
     <div>
-      <CreateUnitFieldLabel label={label} />
+      <CreateUnitFieldLabel label={label} invalid={showInvalid} />
 
-      <div className="flex h-14 w-full items-center gap-2 rounded-2xl border border-[#e8e8e8] bg-brand-background px-4">
+      <div
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-4",
+          fieldChromeSurfaceClass(chrome),
+        )}
+      >
         <Input
           id={inputId}
           type="text"
@@ -37,11 +51,16 @@ export default function CreateUnitAreaField({
             onChange(nextValue);
           }}
           placeholder={placeholder}
-          className="h-auto border-0 bg-transparent px-0 text-sm font-semibold shadow-none focus-visible:ring-0"
+          aria-invalid={showInvalid}
+          className="h-auto border-0 bg-transparent px-0 text-sm font-semibold shadow-none focus-visible:ring-0 dark:text-[#e8f0ee]"
         />
 
         <span className="shrink-0 text-sm font-bold text-brand">{suffix}</span>
       </div>
+
+      {errorMessage ? (
+        <p className="mt-1.5 text-xs font-medium text-[#c62828]">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }

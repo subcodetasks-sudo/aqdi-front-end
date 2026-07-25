@@ -55,7 +55,7 @@ export default function CreateUnitIconInputField({
           <Icon className="size-5" aria-hidden="true" />
         </span>
 
-        <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
+        <span className="h-6 w-px shrink-0 bg-[#dcdcdc] dark:bg-[#2f403b]" aria-hidden="true" />
 
         <Input
           id={inputId}
@@ -66,7 +66,7 @@ export default function CreateUnitIconInputField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
-          className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
+          className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0 dark:text-[#e8f0ee]"
         />
       </div>
     </div>

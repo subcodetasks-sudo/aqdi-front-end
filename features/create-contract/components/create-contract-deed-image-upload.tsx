@@ -9,6 +9,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { cn } from "@/lib/utils";
@@ -179,6 +181,7 @@ export default function CreateContractDeedImageUpload({
   hint,
   invalid = false,
 }: CreateContractDeedImageUploadProps) {
+  const t = useTranslations("createContract");
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
@@ -190,6 +193,7 @@ export default function CreateContractDeedImageUpload({
     .filter(Boolean);
   const showInvalid = invalid && value.length === 0 && !showExistingImage;
   const pdfOnly = accept === PDF_ONLY_ACCEPT;
+  const hideUploadArea = value.length > 0;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -230,7 +234,7 @@ export default function CreateContractDeedImageUpload({
   const isAreaUpload = isDropzone || isDashed;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-field-invalid={showInvalid ? "true" : undefined}>
       {isDropzone ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
@@ -262,67 +266,72 @@ export default function CreateContractDeedImageUpload({
         <CreateContractFieldLabel label={resolvedLabel} invalid={showInvalid} />
       )}
 
-      <label
-        htmlFor={inputId}
-        className={cn(
-          "flex w-full cursor-pointer items-center gap-3 transition-colors",
-          isDashedPill
-            ? "h-14 justify-center rounded-full border border-dashed bg-white px-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
-            : isAreaUpload
-              ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
-              : "h-14 rounded-full border bg-brand-background px-2 ps-4",
-          showInvalid
-            ? "border-[#e57373]"
-            : isDashedPill || isAreaUpload
-              ? "border-[#d4d4d4]"
-              : "border-[#e8e8e8]",
-        )}
-      >
-        <input
-          ref={inputRef}
-          id={inputId}
-          type="file"
-          multiple={!single}
-          accept={accept}
-          className="sr-only"
-          onChange={handleFileChange}
-        />
+      {!hideUploadArea ? (
+        <label
+          htmlFor={inputId}
+          className={cn(
+            "flex w-full cursor-pointer items-center gap-3 transition-colors",
+            isDashedPill
+              ? "h-14 justify-center rounded-full border border-dashed bg-white px-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+              : isAreaUpload
+                ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
+                : "h-14 rounded-full border bg-brand-background px-2 ps-4",
+            showInvalid
+              ? "border-[#e57373]"
+              : isDashedPill || isAreaUpload
+                ? "border-[#d4d4d4]"
+                : "border-[#e8e8e8]",
+          )}
+        >
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="file"
+            multiple={!single}
+            accept={accept}
+            className="sr-only"
+            aria-invalid={showInvalid}
+            onChange={handleFileChange}
+          />
 
-        {isDashed || isDashedPill ? (
-          <div className="space-y-1">
+          {isDashed || isDashedPill ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-[#666666]">
+                <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
+                <span>{labels.chooseFile}</span>
+              </p>
+              {isDashed && !hint && labels.acceptedFormats ? (
+                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+              ) : null}
+            </div>
+          ) : isDropzone ? (
             <p className="text-sm font-medium text-[#666666]">
               <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
               <span>{labels.chooseFile}</span>
             </p>
-            {isDashed && !hint && labels.acceptedFormats ? (
-              <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
-            ) : null}
-          </div>
-        ) : isDropzone ? (
-          <p className="text-sm font-medium text-[#666666]">
-            <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
-            <span>{labels.chooseFile}</span>
-          </p>
-        ) : (
-          <>
-            <div className="min-w-0 flex-1 text-start">
-              <p className="text-sm leading-snug font-semibold">
-                <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
-                <span className="text-gray-600">{labels.chooseFile}</span>
-              </p>
-              <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
-            </div>
+          ) : (
+            <>
+              <div className="min-w-0 flex-1 text-start">
+                <p className="text-sm leading-snug font-semibold">
+                  <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
+                  <span className="text-gray-600">{labels.chooseFile}</span>
+                </p>
+                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+              </div>
 
-            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
-              <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
-            </span>
-          </>
-        )}
-      </label>
+              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
+                <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
+              </span>
+            </>
+          )}
+        </label>
+      ) : null}
 
       {hint ? (
         <p className="text-xs leading-relaxed text-[#9a9a9a]">{hint}</p>
       ) : null}
+
+      {showInvalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
       {showExistingImage && existingImageUrl ? (
         <ExistingImageRow
@@ -357,7 +366,7 @@ export default function CreateContractDeedImageUpload({
       >
         <DialogContent
           showCloseButton={false}
-          className="min-w-3xl gap-0 overflow-hidden rounded-3xl p-0 no-scrollbar"
+          className="w-full gap-0 overflow-hidden rounded-3xl p-0 no-scrollbar sm:max-w-2xl"
         >
           <div className="flex items-center justify-between border-b border-[#ececec] px-4 py-3">
             <DialogTitle className="text-base font-bold">

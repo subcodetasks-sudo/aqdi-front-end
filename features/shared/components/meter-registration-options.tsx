@@ -12,6 +12,7 @@ type MeterRegistrationOptionsProps = {
   fee: number;
   value: MeterRegistrationParty | "";
   onChange: (value: MeterRegistrationParty) => void;
+  errorMessage?: string;
 };
 
 function withFeeTemplate(
@@ -29,7 +30,9 @@ export default function MeterRegistrationOptions({
   fee,
   value,
   onChange,
+  errorMessage,
 }: MeterRegistrationOptionsProps) {
+  const showInvalid = Boolean(errorMessage);
   const feeBadge = withFeeTemplate(labels.tenant.feeBadge, fee, labels.currency);
   const feeFooter = withFeeTemplate(
     labels.tenant.feeFooter,
@@ -44,20 +47,38 @@ export default function MeterRegistrationOptions({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-bold text-brand">
+      <p
+        className={cn(
+          "text-sm font-bold",
+          showInvalid ? "text-[#c62828]" : "text-brand",
+        )}
+      >
         {labels.title}
         <span className="text-red-500"> *</span>
       </p>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div
+        role="radiogroup"
+        aria-label={labels.title}
+        aria-invalid={showInvalid}
+        data-field-invalid={showInvalid ? "true" : undefined}
+        className={cn(
+          "grid gap-3 sm:grid-cols-2 rounded-2xl",
+          showInvalid && "ring-1 ring-[#e57373]",
+        )}
+      >
         <button
           type="button"
+          role="radio"
+          aria-checked={value === "owner"}
           onClick={() => onChange("owner")}
           className={cn(
             "relative rounded-2xl border bg-white px-4 py-5 text-start transition-colors",
             value === "owner"
               ? "border-brand-secondary bg-brand-background-green/40"
-              : "border-[#e8e8e8]",
+              : showInvalid
+                ? "border-[#e57373]"
+                : "border-[#e8e8e8]",
           )}
         >
           <p className="text-sm font-extrabold text-brand">
@@ -71,15 +92,19 @@ export default function MeterRegistrationOptions({
 
         <button
           type="button"
+          role="radio"
+          aria-checked={value === "tenant"}
           onClick={() => onChange("tenant")}
           className={cn(
             "relative rounded-2xl border bg-white px-4 pb-5 pt-7 text-start transition-colors",
             value === "tenant"
               ? "border-brand-secondary bg-brand-background-green/40"
-              : "border-[#e8e8e8]",
+              : showInvalid
+                ? "border-[#e57373]"
+                : "border-[#e8e8e8]",
           )}
         >
-          <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-[#f3ead7] px-2.5 py-1 text-[10px] font-bold text-[#8a6a3a] whitespace-nowrap">
+          <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-[#f3ead7] px-2.5 py-1 text-[10px] font-bold text-[#8a6a3a] whitespace-nowrap dark:bg-[#3a2a1c] dark:text-[#f0b27a]">
             {feeBadge}
           </span>
           <p className="text-sm font-extrabold text-brand">
@@ -92,19 +117,25 @@ export default function MeterRegistrationOptions({
         </button>
       </div>
 
-      <div className="rounded-2xl bg-[#f7f1e6] px-4 py-3 text-sm leading-7 text-[#6f5b3d]">
-        {labels.notice.beforeFee}{" "}
-        <span className="font-extrabold text-[#8a6a3a]">{noticeFee}</span>{" "}
-        {labels.notice.afterFee}{" "}
-        <span className="font-extrabold text-[#8a6a3a]">
-          {labels.notice.nonRefundable}
-        </span>{" "}
-        {labels.notice.afterNonRefundable}{" "}
-        <span className="font-extrabold text-[#8a6a3a]">
-          {labels.notice.lessThanMonth}
-        </span>{" "}
-        {labels.notice.afterLessThanMonth}
-      </div>
+      {value === "tenant" ? (
+        <div className="rounded-2xl bg-[#f7f1e6] px-4 py-3 text-sm leading-7 text-[#6f5b3d] dark:bg-[#3a2a1c] dark:text-[#d9b98a]">
+          {labels.notice.beforeFee}{" "}
+          <span className="font-extrabold text-[#8a6a3a] dark:text-[#f0b27a]">{noticeFee}</span>{" "}
+          {labels.notice.afterFee}{" "}
+          <span className="font-extrabold text-[#8a6a3a] dark:text-[#f0b27a]">
+            {labels.notice.nonRefundable}
+          </span>{" "}
+          {labels.notice.afterNonRefundable}{" "}
+          <span className="font-extrabold text-[#8a6a3a] dark:text-[#f0b27a]">
+            {labels.notice.lessThanMonth}
+          </span>{" "}
+          {labels.notice.afterLessThanMonth}
+        </div>
+      ) : null}
+
+      {errorMessage ? (
+        <p className="text-xs font-medium text-[#c62828]">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }

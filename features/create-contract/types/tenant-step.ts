@@ -32,7 +32,7 @@ export type IndividualTenantData = {
 export const EMPTY_INDIVIDUAL_TENANT_DATA: IndividualTenantData = {
   idNumber: "",
   birthDate: EMPTY_BIRTH_DATE,
-  phone: "05",
+  phone: "",
 };
 
 export type OrganizationTenantData = {
@@ -49,7 +49,7 @@ export const EMPTY_ORGANIZATION_TENANT_DATA: OrganizationTenantData = {
   unifiedRecordNumber: "7",
   ownerIdNumber: "",
   ownerBirthDate: EMPTY_BIRTH_DATE,
-  ownerPhone: "05",
+  ownerPhone: "",
   powerOfAttorneyFiles: [],
 };
 

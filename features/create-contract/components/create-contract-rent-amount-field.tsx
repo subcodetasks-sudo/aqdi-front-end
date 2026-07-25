@@ -1,9 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
+import { numberToArabicWords } from "@/features/create-contract/utils/number-to-arabic-words";
 import {
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
@@ -14,6 +17,7 @@ type CreateContractRentAmountFieldProps = {
   label: string;
   placeholder: string;
   currency?: string;
+  amountInWordsLabel?: string;
   value: string;
   onChange: (value: string) => void;
   invalid?: boolean;
@@ -34,13 +38,23 @@ export default function CreateContractRentAmountField({
   label,
   placeholder,
   currency = "ريال",
+  amountInWordsLabel,
   value,
   onChange,
   invalid = false,
   valid = false,
 }: CreateContractRentAmountFieldProps) {
+  const t = useTranslations("createContract");
   const inputId = useId();
   const chrome = resolveFieldChromeState({ invalid, valid });
+  const numericValue = Number(value.replace(/\D/g, ""));
+  const amountInWords =
+    amountInWordsLabel && numericValue > 0
+      ? amountInWordsLabel.replace(
+          "{amount}",
+          `${numberToArabicWords(numericValue)} ${currency}`,
+        )
+      : null;
 
   return (
     <div>
@@ -73,6 +87,16 @@ export default function CreateContractRentAmountField({
           className="h-auto border-0 bg-transparent px-1 text-sm font-semibold shadow-none focus-visible:ring-0"
         />
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
+
+      {amountInWords ? (
+        <div className="mt-3 rounded-2xl bg-brand-background-green px-3.5 py-3">
+          <p className="text-sm leading-6 font-semibold text-brand">
+            {amountInWords}
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -6,10 +6,8 @@ import { useId } from "react";
 import { Input } from "@/components/ui/input";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
-  getSaudiMobileSubscriber,
   SAUDI_MOBILE_LENGTH,
-  SAUDI_MOBILE_PREFIX,
-  toSaudiMobileFromSubscriberInput,
+  toSaudiMobileInputValue,
 } from "@/lib/validation/format-saudi-mobile-for-form";
 import {
   fieldChromeIconClass,
@@ -40,7 +38,6 @@ export default function CreateContractSaudiMobileField({
   valid = false,
 }: CreateContractSaudiMobileFieldProps) {
   const inputId = useId();
-  const subscriber = getSaudiMobileSubscriber(value);
   const showInvalid = invalid || Boolean(errorMessage);
   const chrome = resolveFieldChromeState({
     invalid: showInvalid,
@@ -69,19 +66,15 @@ export default function CreateContractSaudiMobileField({
 
         <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
 
-        <span className="shrink-0 ps-1 text-sm font-semibold text-foreground">
-          {SAUDI_MOBILE_PREFIX}
-        </span>
-
         <Input
           id={inputId}
           type="tel"
           dir="ltr"
           inputMode="tel"
           maxLength={SAUDI_MOBILE_LENGTH}
-          value={subscriber}
+          value={value}
           onChange={(event) => {
-            onChange(toSaudiMobileFromSubscriberInput(event.target.value));
+            onChange(toSaudiMobileInputValue(event.target.value));
           }}
           placeholder={placeholder}
           aria-invalid={showInvalid}

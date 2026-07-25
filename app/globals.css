@@ -190,6 +190,32 @@
     scrollbar-width: none; /* Firefox */
   }
 
+  /* Printing a specific element: hide everything else in the document,
+     reveal only the node marked #print-area, and let it lay out from the
+     top of the page regardless of where it sits on screen. */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #print-area,
+    #print-area * {
+      visibility: visible;
+    }
+    #print-area {
+      position: absolute;
+      inset: 0;
+      height: auto;
+    }
+
+    /* Belt-and-suspenders: Radix dialogs use position: fixed, which some
+       browsers' print engines still paint even under visibility: hidden.
+       Force them out of the render tree entirely. */
+    [data-slot="dialog-overlay"],
+    [data-slot="dialog-content"] {
+      display: none !important;
+    }
+  }
+
   .auth-phone-input--readonly .react-international-phone-input-container {
     background-color: #f0f0f0;
     cursor: not-allowed;
@@ -443,10 +469,21 @@
 .create-property-dark-shell.dark .bg-\[\#f0f0f0\],
 .create-contract-dark-shell.dark .bg-\[\#f0f0f0\],
 .create-flow-dark-shell.dark .bg-\[\#f0f0f0\],
+.services-dark-shell.dark .bg-\[\#f0f0f0\],
 .create-property-flow.dark .bg-\[\#f0f0f0\],
 .create-contract-flow.dark .bg-\[\#f0f0f0\],
 .create-flow-dark.dark .bg-\[\#f0f0f0\] {
   background-color: #24302c !important;
+}
+
+.create-property-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-contract-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-flow-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-property-flow.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-contract-flow.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-flow-dark.dark .hover\:bg-\[\#e8e8e8\]:hover {
+  background-color: #2f403b !important;
 }
 
 .create-property-dark-shell.dark .ring-offset-2,

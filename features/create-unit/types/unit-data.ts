@@ -59,11 +59,11 @@ export const EMPTY_UNIT_DATA: UnitDataState = {
   waterMeterRegistration: "",
 };
 
-function isSelectFilled(value: string) {
+export function isSelectFilled(value: string) {
   return value !== "";
 }
 
-function isPositiveNumber(value: string) {
+export function isPositiveNumber(value: string) {
   const normalized = value.replace(/,/g, "").trim();
   if (normalized === "") {
     return false;
@@ -71,6 +71,10 @@ function isPositiveNumber(value: string) {
 
   const number = Number(normalized);
   return Number.isFinite(number) && number > 0;
+}
+
+export function isUnitNumberFilled(value: string) {
+  return value.trim() !== "";
 }
 
 export function isUnitDataComplete(

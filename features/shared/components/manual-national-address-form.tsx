@@ -59,6 +59,10 @@ function FieldLabel({
   );
 }
 
+function FieldError({ message }: { message: string }) {
+  return <p className="mt-1.5 text-xs font-medium text-[#c62828]">{message}</p>;
+}
+
 function AddressSelect({
   label,
   placeholder,
@@ -68,6 +72,7 @@ function AddressSelect({
   disabled = false,
   invalid = false,
   valid = false,
+  requiredMessage,
 }: {
   label: string;
   placeholder: string;
@@ -77,6 +82,7 @@ function AddressSelect({
   disabled?: boolean;
   invalid?: boolean;
   valid?: boolean;
+  requiredMessage?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
@@ -109,7 +115,7 @@ function AddressSelect({
   }
 
   return (
-    <div className="min-w-0">
+    <div className="min-w-0" data-field-invalid={invalid ? "true" : undefined}>
       <FieldLabel label={label} invalid={invalid} />
 
       <div
@@ -182,6 +188,8 @@ function AddressSelect({
           </SelectContent>
         </Select>
       </div>
+
+      {invalid && requiredMessage ? <FieldError message={requiredMessage} /> : null}
     </div>
   );
 }
@@ -196,6 +204,7 @@ function AddressTextField({
   align = "start",
   invalid = false,
   valid = false,
+  requiredMessage,
 }: {
   label: string;
   placeholder: string;
@@ -206,6 +215,7 @@ function AddressTextField({
   align?: "start" | "end";
   invalid?: boolean;
   valid?: boolean;
+  requiredMessage?: string;
 }) {
   const inputId = useId();
   const chrome = resolveFieldChromeState({ invalid, valid });
@@ -229,6 +239,8 @@ function AddressTextField({
           align === "end" ? "text-end" : "text-start",
         )}
       />
+
+      {invalid && requiredMessage ? <FieldError message={requiredMessage} /> : null}
     </div>
   );
 }
@@ -282,6 +294,7 @@ export default function ManualNationalAddressForm({
         }}
         invalid={showFieldErrors && value.propertyPlaceId === ""}
         valid={value.propertyPlaceId !== ""}
+        requiredMessage={labels.fieldRequired}
       />
 
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -302,6 +315,7 @@ export default function ManualNationalAddressForm({
           disabled={cityDisabled}
           invalid={showFieldErrors && value.propertyCityId === ""}
           valid={value.propertyCityId !== ""}
+          requiredMessage={labels.fieldRequired}
         />
 
         <AddressTextField
@@ -311,6 +325,7 @@ export default function ManualNationalAddressForm({
           onChange={(neighborhood) => updateField("neighborhood", neighborhood)}
           invalid={showFieldErrors && value.neighborhood.trim() === ""}
           valid={value.neighborhood.trim() !== ""}
+          requiredMessage={labels.fieldRequired}
         />
 
         <AddressTextField
@@ -320,6 +335,7 @@ export default function ManualNationalAddressForm({
           onChange={(street) => updateField("street", street)}
           invalid={showFieldErrors && value.street.trim() === ""}
           valid={value.street.trim() !== ""}
+          requiredMessage={labels.fieldRequired}
         />
 
         <AddressTextField
@@ -333,6 +349,7 @@ export default function ManualNationalAddressForm({
           align="end"
           invalid={showFieldErrors && value.buildingNumber.trim() === ""}
           valid={value.buildingNumber.trim() !== ""}
+          requiredMessage={labels.fieldRequired}
         />
 
         <AddressTextField
@@ -344,6 +361,7 @@ export default function ManualNationalAddressForm({
           align="end"
           invalid={showFieldErrors && value.postalCode.trim() === ""}
           valid={value.postalCode.trim() !== ""}
+          requiredMessage={labels.fieldRequired}
         />
 
         <AddressTextField
@@ -355,6 +373,7 @@ export default function ManualNationalAddressForm({
           align="end"
           invalid={showFieldErrors && value.extraFigure.trim() === ""}
           valid={value.extraFigure.trim() !== ""}
+          requiredMessage={labels.fieldRequired}
         />
       </div>
     </div>

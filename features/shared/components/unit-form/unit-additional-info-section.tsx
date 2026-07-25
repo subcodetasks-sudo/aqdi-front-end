@@ -19,17 +19,17 @@ export default function UnitAdditionalInfoSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white">
+    <div className="overflow-hidden rounded-2xl border-brand/90 border-3 bg-white dark:border-brand-secondary/70">
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
         className="flex h-12 w-full items-center justify-between gap-3 px-4 text-sm font-semibold text-brand"
       >
         <span>{toggleLabel}</span>
-        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[#e8e8e8]">
+        <span className="inline-flex bg-brand-background-green size-8 shrink-0 items-center justify-center rounded-full border">
           <ChevronDown
             className={cn(
-              "size-4 text-brand transition-transform",
+              "size-4 text-brand transition-transform ",
               open ? "rotate-180" : "rotate-0",
             )}
             aria-hidden="true"
@@ -38,7 +38,7 @@ export default function UnitAdditionalInfoSection({
       </button>
 
       {open ? (
-        <div className="space-y-4 border-t border-[#f0f0f0] px-4 py-4">
+        <div className="space-y-4 border-t border-[#f0f0f0] px-4 py-4 dark:border-[#2f403b]">
           {children}
         </div>
       ) : null}

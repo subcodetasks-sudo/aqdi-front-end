@@ -136,6 +136,7 @@ export default function CreateContractOwnerDataPhase({
           onCheckedChange={(checked) =>
             updateField("hasAgent", checked ? "yes" : "no")
           }
+          aria-invalid={hasAgentInvalid}
           className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
         />
       </label>

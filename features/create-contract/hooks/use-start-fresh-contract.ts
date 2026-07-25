@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useHandleUnauthenticated } from "@/features/auth/hooks/use-handle-unauthenticated";
 import { startContract } from "@/features/create-contract/services/start-contract";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import {
@@ -13,6 +14,7 @@ import {
 
 export function useStartFreshContract(contractType: ContractTypeId) {
   const t = useTranslations("createContract.intro");
+  const handleUnauthenticated = useHandleUnauthenticated();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const setFreshContractSession = useCreateContractDraftStore(
     (state) => state.setFreshContractSession,
@@ -45,6 +47,11 @@ export function useStartFreshContract(contractType: ContractTypeId) {
       });
 
       if (!result.ok) {
+        if (result.status === 401) {
+          handleUnauthenticated();
+          return;
+        }
+
         toast.error(result.error || t("startContractError"));
         return;
       }

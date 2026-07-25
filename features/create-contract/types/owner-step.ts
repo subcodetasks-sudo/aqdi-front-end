@@ -46,7 +46,7 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
   fullName: "",
   idNumber: "",
   birthDate: EMPTY_BIRTH_DATE,
-  phone: "05",
+  phone: "",
   iban: "",
   hasAgent: "no",
 };
@@ -54,7 +54,7 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
 export const EMPTY_AGENT_DATA: AgentDataState = {
   idNumber: "",
   birthDate: { ...EMPTY_BIRTH_DATE, calendarType: "gregorian" },
-  phone: "05",
+  phone: "",
   powerOfAttorneyFiles: [],
 };
 

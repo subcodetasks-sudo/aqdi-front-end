@@ -30,6 +30,7 @@ import { isOrganizationTenantStatus } from "@/features/create-contract/types/ten
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
+import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractTenantStepProps = {
   labels: CreateContractLabels["tenant"];
@@ -101,6 +102,7 @@ export default function CreateContractTenantStep({
     if (!canContinue) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 
@@ -285,6 +287,7 @@ export default function CreateContractTenantStep({
             labels={labels.rentedUnit}
             units={rentedUnits}
             onChange={setRentedUnits}
+            showFieldErrors={showFieldErrors}
           />
         ) : null}
       </div>

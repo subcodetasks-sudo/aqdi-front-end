@@ -10,6 +10,10 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import CreateUnitFieldLabel from "@/features/create-unit/components/create-unit-field-label";
+import {
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
 import { cn } from "@/lib/utils";
 
 type CreateUnitFormSelectProps = {
@@ -19,6 +23,8 @@ type CreateUnitFormSelectProps = {
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
+  invalid?: boolean;
+  errorMessage?: string;
 };
 
 export default function CreateUnitFormSelect({
@@ -28,7 +34,11 @@ export default function CreateUnitFormSelect({
   value,
   onChange,
   required = true,
+  invalid = false,
+  errorMessage,
 }: CreateUnitFormSelectProps) {
+  const showInvalid = invalid || Boolean(errorMessage);
+  const chrome = resolveFieldChromeState({ invalid: showInvalid });
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,16 +63,26 @@ export default function CreateUnitFormSelect({
   return (
     <div>
       {required ? (
-        <CreateUnitFieldLabel label={label} />
+        <CreateUnitFieldLabel label={label} invalid={showInvalid} />
       ) : (
-        <label className="mb-2 block text-sm font-semibold text-brand">
+        <label
+          className={cn(
+            "mb-2 block text-sm font-semibold",
+            showInvalid ? "text-[#c62828]" : "text-brand",
+          )}
+        >
           {label}
         </label>
       )}
 
       <div
         ref={containerRef}
-        className="flex h-14 w-full items-center gap-2 rounded-2xl border border-[#e8e8e8] bg-brand-background px-3"
+        aria-invalid={showInvalid}
+        data-field-invalid={showInvalid ? "true" : undefined}
+        className={cn(
+          "flex h-14 w-full items-center gap-2 rounded-2xl border px-3",
+          fieldChromeSurfaceClass(chrome),
+        )}
       >
         <div
           className="flex min-w-0 flex-1 items-center"
@@ -123,6 +143,10 @@ export default function CreateUnitFormSelect({
           </SelectContent>
         </Select>
       </div>
+
+      {errorMessage ? (
+        <p className="mt-1.5 text-xs font-medium text-[#c62828]">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }

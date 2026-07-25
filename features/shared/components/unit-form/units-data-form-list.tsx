@@ -47,8 +47,8 @@ function UnitFormCard({
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white">
-      <div className="flex items-center gap-2 border-b border-[#f0f0f0] px-4 py-3">
+    <div className="overflow-hidden rounded-2xl border border-brand-secondary/30 bg-white dark:border-brand-secondary/50">
+      <div className="flex items-center gap-2 border-b border-[#f0f0f0] px-4 py-3 dark:border-[#2f403b]">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
           <p className="shrink-0 text-base font-extrabold text-brand">{title}</p>
 
@@ -64,7 +64,7 @@ function UnitFormCard({
             <button
               type="button"
               onClick={onRemove}
-              className="rounded-full border border-[#e57373] px-3 py-1.5 text-xs font-bold text-[#c62828] transition-colors hover:bg-[#fff5f5]"
+              className="rounded-full border border-[#e57373] px-3 py-1.5 text-xs font-bold text-[#c62828] transition-colors hover:bg-[#fff5f5] dark:border-red-400/40 dark:text-red-300 dark:hover:bg-red-500/10"
             >
               {removeLabel}
             </button>
@@ -75,7 +75,7 @@ function UnitFormCard({
             onClick={() => setOpen((current) => !current)}
             aria-expanded={open}
             aria-label={title}
-            className="inline-flex size-8 items-center justify-center rounded-full border border-[#e8e8e8] text-brand"
+            className="inline-flex size-8 items-center justify-center rounded-full bg-brand-background-green border text-brand"
           >
             <ChevronUp
               className={cn(
@@ -155,7 +155,7 @@ export default function UnitsDataFormList({
           <button
             type="button"
             onClick={handleAddUnit}
-            className="flex h-14 w-full items-center justify-center rounded-2xl border border-dashed border-brand bg-brand-background text-sm font-bold text-brand transition-colors hover:bg-[#eef6f3]"
+            className="flex h-14 w-full items-center justify-center rounded-2xl border border-dashed border-brand bg-brand-background text-sm font-bold text-brand transition-colors hover:bg-[#eef6f3] dark:border-brand-secondary/60 dark:hover:bg-[#1c2f29]"
           >
             + {addUnitLabel}
           </button>

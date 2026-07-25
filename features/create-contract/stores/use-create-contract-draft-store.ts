@@ -223,7 +223,7 @@ const INITIAL_DEED: DeedDraftState = {
   deedGuardiansPoaPersistedFiles: [],
   useManualDeedEntry: false,
   manualDeedEntry: { ...EMPTY_MANUAL_DEED_ENTRY },
-  nationalAddressMethod: "" as NationalAddressMethodId | "",
+  nationalAddressMethod: "link" as NationalAddressMethodId | "",
   nationalAddressPhotoFiles: [],
   nationalAddressPhotoPersistedFiles: [],
   nationalAddressLinkUrl: "",
@@ -255,7 +255,7 @@ function buildDeedDraftFromProperty(
       : "manual"
     : property.image_address
       ? "photo"
-      : "";
+      : "link";
 
   return {
     ...INITIAL_DEED,
@@ -284,7 +284,7 @@ function buildDeedDraftFromUncompleted(
       : "manual"
     : imageAddress
       ? "photo"
-      : "";
+      : "link";
 
   const latitude = step2?.latitude ?? step1?.latitude ?? null;
   const longitude = step2?.longitude ?? step1?.longitude ?? null;
@@ -724,30 +724,47 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           };
         }),
       setAgentData: (data) => {
-        void filesToPersisted(data.powerOfAttorneyFiles).then((agentPersistedFiles) => {
-          set((state) => ({
-            owner: {
-              ...state.owner,
-              agentData: data,
-              agentPersistedFiles,
-            },
-          }));
+        set((state) => {
+          const filesChanged =
+            data.powerOfAttorneyFiles !== state.owner.agentData.powerOfAttorneyFiles;
+
+          if (filesChanged) {
+            void filesToPersisted(data.powerOfAttorneyFiles).then(
+              (agentPersistedFiles) => {
+                set((current) => ({
+                  owner: { ...current.owner, agentPersistedFiles },
+                }));
+              },
+            );
+          }
+
+          return {
+            owner: { ...state.owner, agentData: data },
+          };
         });
       },
       setTenantPhaseIndex: (index) =>
         set((state) => ({ tenant: { ...state.tenant, currentPhaseIndex: index } })),
       setTenantData: (data) => {
-        void filesToPersisted(data.organization.powerOfAttorneyFiles).then(
-          (tenantPersistedFiles) => {
-            set((state) => ({
-              tenant: {
-                ...state.tenant,
-                tenantData: data,
-                tenantPersistedFiles,
+        set((state) => {
+          const filesChanged =
+            data.organization.powerOfAttorneyFiles !==
+            state.tenant.tenantData.organization.powerOfAttorneyFiles;
+
+          if (filesChanged) {
+            void filesToPersisted(data.organization.powerOfAttorneyFiles).then(
+              (tenantPersistedFiles) => {
+                set((current) => ({
+                  tenant: { ...current.tenant, tenantPersistedFiles },
+                }));
               },
-            }));
-          },
-        );
+            );
+          }
+
+          return {
+            tenant: { ...state.tenant, tenantData: data },
+          };
+        });
       },
       setRentedUnits: (units) =>
         set((state) => ({ tenant: { ...state.tenant, rentedUnits: units } })),

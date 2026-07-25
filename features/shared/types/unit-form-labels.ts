@@ -1,5 +1,6 @@
 export type UnitFormLabels = {
   selectPlaceholder: string;
+  fieldRequired: string;
   contractType?: {
     label: string;
     linkedLabel?: string;

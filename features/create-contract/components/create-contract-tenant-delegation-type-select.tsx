@@ -1,8 +1,10 @@
 "use client";
 
 import { Briefcase, ScrollText } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
   DELEGATION_TYPE_OPTIONS,
@@ -33,6 +35,8 @@ export default function CreateContractTenantDelegationTypeSelect({
   onChange,
   invalid = false,
 }: CreateContractTenantDelegationTypeSelectProps) {
+  const t = useTranslations("createContract");
+
   return (
     <div>
       <CreateContractFieldLabel label={labels.label} invalid={invalid} />
@@ -40,6 +44,8 @@ export default function CreateContractTenantDelegationTypeSelect({
       <div
         role="radiogroup"
         aria-label={labels.label}
+        aria-invalid={invalid}
+        data-field-invalid={invalid ? "true" : undefined}
         className="grid grid-cols-1 gap-3 sm:grid-cols-2"
       >
         {DELEGATION_TYPE_OPTIONS.map((delegationType) => {
@@ -81,6 +87,8 @@ export default function CreateContractTenantDelegationTypeSelect({
           );
         })}
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
     </div>
   );
 }

@@ -333,7 +333,7 @@ export default function CreatePropertyDeedImageUpload({
       >
         <DialogContent
           showCloseButton={false}
-          className="min-w-3xl gap-0 overflow-hidden rounded-3xl p-0 no-scrollbar"
+          className="w-full gap-0 overflow-hidden rounded-3xl p-0 no-scrollbar sm:max-w-2xl"
         >
           <div className="flex items-center justify-between border-b border-[#ececec] px-4 py-3">
             <DialogTitle className="text-base font-bold">

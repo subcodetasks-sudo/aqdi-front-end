@@ -148,6 +148,7 @@ export default function CreatePropertyDeedStep({
         FormSelect={CreatePropertyFormSelect}
         FieldLabel={CreatePropertyFieldLabel}
         upload={upload}
+        showFieldErrors={showFieldErrors}
       />
     );
   }
@@ -325,27 +326,29 @@ export default function CreatePropertyDeedStep({
             ) : null}
           </div>
 
-          <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
-            <CreatePropertyStepPhaseHeader
-              title={addressLabels.title}
-              subtitle={addressLabels.subtitle}
-              showIcon={false}
-            />
+          {canContinueDeed ? (
+            <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
+              <CreatePropertyStepPhaseHeader
+                title={addressLabels.title}
+                subtitle={addressLabels.subtitle}
+                showIcon={false}
+              />
 
-            <CreatePropertyNationalAddress
-              labels={addressLabels.nationalAddress}
-              method={method}
-              onMethodChange={setMethod}
-              photoFiles={photoFiles}
-              onPhotoFilesChange={setPhotoFiles}
-              existingPhotoUrl={existingAddressImageUrl}
-              linkUrl={linkUrl}
-              onLinkUrlChange={setLinkUrl}
-              manualAddress={manualAddress}
-              onManualAddressChange={setManualAddress}
-              showFieldErrors={showFieldErrors}
-            />
-          </div>
+              <CreatePropertyNationalAddress
+                labels={addressLabels.nationalAddress}
+                method={method}
+                onMethodChange={setMethod}
+                photoFiles={photoFiles}
+                onPhotoFilesChange={setPhotoFiles}
+                existingPhotoUrl={existingAddressImageUrl}
+                linkUrl={linkUrl}
+                onLinkUrlChange={setLinkUrl}
+                manualAddress={manualAddress}
+                onManualAddressChange={setManualAddress}
+                showFieldErrors={showFieldErrors}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
 

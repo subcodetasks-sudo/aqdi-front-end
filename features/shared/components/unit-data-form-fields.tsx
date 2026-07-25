@@ -7,7 +7,12 @@ import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-
 import CreateUnitIconInputField from "@/features/create-unit/components/create-unit-icon-input-field";
 import CreateUnitNumberField from "@/features/create-unit/components/create-unit-number-field";
 import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
-import type { UnitDataState } from "@/features/create-unit/types/unit-data";
+import {
+  isPositiveNumber,
+  isSelectFilled,
+  isUnitNumberFilled,
+  type UnitDataState,
+} from "@/features/create-unit/types/unit-data";
 import MeterRegistrationOptions from "@/features/shared/components/meter-registration-options";
 import UnitAdditionalInfoSection from "@/features/shared/components/unit-form/unit-additional-info-section";
 import UnitBasicSection from "@/features/shared/components/unit-form/unit-basic-section";
@@ -27,6 +32,8 @@ type UnitDataFormFieldsProps = {
   onContractTypeChange?: (contractType: PropertyContractType) => void;
   electricityMeterFee?: number;
   waterMeterFee?: number;
+  showFieldErrors?: boolean;
+  requireMeterRegistration?: boolean;
 };
 
 function toSelectOptions(options: UnitLookupOption[]) {
@@ -66,7 +73,7 @@ function FurnishingTypeToggle({
                 "h-12 rounded-xl text-sm font-bold transition-colors",
                 selected
                   ? "bg-brand text-white"
-                  : "border border-[#e8e8e8] bg-white text-[#b0b0b0] hover:border-[#d4d4d4] hover:text-[#8a8a8a]",
+                  : "border border-[#e8e8e8] bg-white text-[#b0b0b0] hover:border-[#d4d4d4] hover:text-[#8a8a8a] dark:text-[#6b7d78] dark:hover:border-[#3a4d47] dark:hover:text-[#9eb5af]",
               )}
             >
               {furnishingType === "new" ? newLabel : usedLabel}
@@ -88,7 +95,19 @@ export default function UnitDataFormFields({
   onContractTypeChange,
   electricityMeterFee = 0,
   waterMeterFee = 0,
+  showFieldErrors = false,
+  requireMeterRegistration = false,
 }: UnitDataFormFieldsProps) {
+  const electricityMeterRegistrationInvalid =
+    showFieldErrors &&
+    requireMeterRegistration &&
+    value.addElectricityMeter &&
+    value.electricityMeterRegistration === "";
+  const waterMeterRegistrationInvalid =
+    showFieldErrors &&
+    requireMeterRegistration &&
+    value.addWaterMeter &&
+    value.waterMeterRegistration === "";
   const floorOptions = [
     { value: "ground", label: labels.floorOptions.ground },
     ...Array.from({ length: 50 }, (_, index) => {
@@ -119,6 +138,11 @@ export default function UnitDataFormFields({
           options={toSelectOptions(unitTypeOptions)}
           value={value.unitTypeId}
           onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
+          errorMessage={
+            showFieldErrors && !isSelectFilled(value.unitTypeId)
+              ? labels.fieldRequired
+              : undefined
+          }
         />
 
         <CreateUnitFormSelect
@@ -127,6 +151,11 @@ export default function UnitDataFormFields({
           options={toSelectOptions(unitUsageOptions)}
           value={value.unitUsageId}
           onChange={(unitUsageId) => updateField("unitUsageId", unitUsageId)}
+          errorMessage={
+            showFieldErrors && !isSelectFilled(value.unitUsageId)
+              ? labels.fieldRequired
+              : undefined
+          }
         />
 
         <CreateUnitFormSelect
@@ -135,6 +164,11 @@ export default function UnitDataFormFields({
           options={floorOptions}
           value={value.floorNumber}
           onChange={(floorNumber) => updateField("floorNumber", floorNumber)}
+          errorMessage={
+            showFieldErrors && !isSelectFilled(value.floorNumber)
+              ? labels.fieldRequired
+              : undefined
+          }
         />
       </div>
 
@@ -144,6 +178,11 @@ export default function UnitDataFormFields({
           placeholder={labels.unitNumber.placeholder}
           value={value.unitNumber}
           onChange={(unitNumber) => updateField("unitNumber", unitNumber)}
+          errorMessage={
+            showFieldErrors && !isUnitNumberFilled(value.unitNumber)
+              ? labels.fieldRequired
+              : undefined
+          }
         />
 
         <CreateUnitAreaField
@@ -152,6 +191,11 @@ export default function UnitDataFormFields({
           suffix={labels.totalArea.suffix}
           value={value.totalArea}
           onChange={(totalArea) => updateField("totalArea", totalArea)}
+          errorMessage={
+            showFieldErrors && !isPositiveNumber(value.totalArea)
+              ? labels.fieldRequired
+              : undefined
+          }
         />
       </div>
 
@@ -345,6 +389,11 @@ export default function UnitDataFormFields({
                     electricityMeterRegistration,
                   )
                 }
+                errorMessage={
+                  electricityMeterRegistrationInvalid
+                    ? labels.fieldRequired
+                    : undefined
+                }
               />
             ) : null}
           </div>
@@ -389,6 +438,9 @@ export default function UnitDataFormFields({
                 value={value.waterMeterRegistration}
                 onChange={(waterMeterRegistration) =>
                   updateField("waterMeterRegistration", waterMeterRegistration)
+                }
+                errorMessage={
+                  waterMeterRegistrationInvalid ? labels.fieldRequired : undefined
                 }
               />
             ) : null}

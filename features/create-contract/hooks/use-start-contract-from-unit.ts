@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useHandleUnauthenticated } from "@/features/auth/hooks/use-handle-unauthenticated";
 import { startContract } from "@/features/create-contract/services/start-contract";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -20,10 +21,12 @@ function toContractTypeId(
 export function useStartContractFromUnit() {
   const router = useRouter();
   const t = useTranslations("propertyUnits.card");
+  const handleUnauthenticated = useHandleUnauthenticated();
   const startExistingPropertyContractFlow = useCreateContractDraftStore(
     (state) => state.startExistingPropertyContractFlow,
   );
-  const [isStarting, setIsStarting] = useState(false);
+  const [startingUnitIds, setStartingUnitIds] = useState<number[]>([]);
+  const isStarting = startingUnitIds.length > 0;
 
   async function handleStartContract(
     selectedUnits: PropertyUnitCardData[],
@@ -44,7 +47,7 @@ export function useStartContractFromUnit() {
 
     const contractType = selectedUnits[0].contractType;
 
-    setIsStarting(true);
+    setStartingUnitIds(unitIds);
 
     try {
       const result = await startContract({
@@ -56,6 +59,11 @@ export function useStartContractFromUnit() {
       });
 
       if (!result.ok) {
+        if (result.status === 401) {
+          handleUnauthenticated();
+          return;
+        }
+
         toast.error(result.error || t("startContractError"));
         return;
       }
@@ -82,12 +90,13 @@ export function useStartContractFromUnit() {
 
       router.push(`/create-contract?id=${toContractTypeId(contractType)}`);
     } finally {
-      setIsStarting(false);
+      setStartingUnitIds([]);
     }
   }
 
   return {
     startContract: handleStartContract,
     isStarting,
+    startingUnitIds,
   };
 }

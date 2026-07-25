@@ -17,6 +17,7 @@ type PropertyUnitCardProps = {
   selected: boolean;
   onSelectedChange: (selected: boolean) => void;
   isStarting: boolean;
+  disabled?: boolean;
   onCreateContract: (unit: PropertyUnitCardData) => void;
 };
 
@@ -25,6 +26,7 @@ export default function PropertyUnitCard({
   selected,
   onSelectedChange,
   isStarting,
+  disabled,
   onCreateContract,
 }: PropertyUnitCardProps) {
   const tFields = useTranslations("propertyUnits.card.fields");
@@ -55,6 +57,7 @@ export default function PropertyUnitCard({
       <PropertyUnitCardFooter
         unit={unit}
         isStarting={isStarting}
+        disabled={disabled}
         onCreateContract={onCreateContract}
       />
     </article>

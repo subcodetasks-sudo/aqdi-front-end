@@ -1,7 +1,9 @@
 "use client";
 
 import { Hand } from "lucide-react";
+import { useTranslations } from "next-intl";
 
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +36,8 @@ export default function CreateContractFinanceDurationSelect({
   invalid = false,
   onChange,
 }: CreateContractFinanceDurationSelectProps) {
+  const t = useTranslations("createContract");
+
   return (
     <div>
       <CreateContractFieldLabel label={label} invalid={invalid} />
@@ -41,6 +45,8 @@ export default function CreateContractFinanceDurationSelect({
       <div
         role="radiogroup"
         aria-label={label}
+        aria-invalid={invalid}
+        data-field-invalid={invalid ? "true" : undefined}
         className="flex flex-wrap gap-2"
       >
         {options.map((option) => {
@@ -95,6 +101,8 @@ export default function CreateContractFinanceDurationSelect({
           );
         })}
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
       {note ? (
         <p className="mt-3 flex items-start gap-2 text-sm leading-6 text-[#555555]">

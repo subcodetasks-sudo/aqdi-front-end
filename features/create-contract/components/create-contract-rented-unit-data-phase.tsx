@@ -17,12 +17,14 @@ type CreateContractRentedUnitDataPhaseProps = {
   labels: CreateContractLabels["tenant"]["rentedUnit"];
   units: RentedUnitDataState[];
   onChange: (units: RentedUnitDataState[]) => void;
+  showFieldErrors?: boolean;
 };
 
 export default function CreateContractRentedUnitDataPhase({
   labels,
   units,
   onChange,
+  showFieldErrors = false,
 }: CreateContractRentedUnitDataPhaseProps) {
   const contractType =
     useCreateContractDraftStore((state) => state.contractSession?.contractType) ??
@@ -97,6 +99,8 @@ export default function CreateContractRentedUnitDataPhase({
           contractType={contractType}
           electricityMeterFee={electricityMeterFee}
           waterMeterFee={waterMeterFee}
+          showFieldErrors={showFieldErrors}
+          requireMeterRegistration
         />
       )}
     />

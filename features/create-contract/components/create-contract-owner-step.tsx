@@ -11,6 +11,7 @@ import CreateContractStepPhaseHeader from "@/features/create-contract/components
 import { useCreateContractOwnerStep } from "@/features/create-contract/hooks/use-create-contract-owner-step";
 import { useSubmitContractStep3 } from "@/features/create-contract/hooks/use-submit-contract-step3";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractOwnerStepProps = {
   labels: CreateContractLabels["owner"];
@@ -45,6 +46,7 @@ export default function CreateContractOwnerStep({
     if (!canContinue) {
       setShowFieldErrors(true);
       toast.error(t("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 

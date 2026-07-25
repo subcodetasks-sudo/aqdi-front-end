@@ -1,6 +1,7 @@
 "use client";
 
 import { Building2, ChevronDown, Lock, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState, type MouseEvent } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +11,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -36,6 +38,7 @@ export default function CreateContractDeedTypeSelect({
   locked = false,
   invalid = false,
 }: CreateContractDeedTypeSelectProps) {
+  const t = useTranslations("createContract");
   const [selectKey, setSelectKey] = useState(0);
   const [open, setOpen] = useState(false);
   const [contentWidth, setContentWidth] = useState<number>();
@@ -83,7 +86,7 @@ export default function CreateContractDeedTypeSelect({
   }
 
   return (
-    <div>
+    <div data-field-invalid={invalid ? "true" : undefined}>
       <CreateContractFieldLabel label={labels.label} invalid={invalid} />
 
       <div
@@ -184,6 +187,8 @@ export default function CreateContractDeedTypeSelect({
           </Select>
         )}
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
     </div>
   );
 }

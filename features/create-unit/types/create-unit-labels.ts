@@ -18,6 +18,8 @@ export type CreateUnitLabels = {
   subtitle: string;
   editSubtitle: string;
   selectPlaceholder: string;
+  fieldRequired: string;
+  incompleteContinue: string;
   contractType: {
     label: string;
     linkedLabel: string;

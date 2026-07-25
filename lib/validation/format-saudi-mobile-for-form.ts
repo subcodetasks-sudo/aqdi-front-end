@@ -3,15 +3,17 @@ export const SAUDI_MOBILE_SUBSCRIBER_LENGTH = 8;
 export const SAUDI_MOBILE_LENGTH = 10;
 
 /**
- * Normalize any phone input to 05xxxxxxxx.
- * Collapses duplicated 05 prefixes (e.g. 0505... → 05...).
- * Preserves a legitimate subscriber that starts with 0 (e.g. 0501234567).
+ * Normalize any phone input to 05xxxxxxxx, live as the user types.
+ * Collapses a duplicated/pasted 05 prefix (e.g. 0505...0501234567 → 0501234567) but only once
+ * there are more digits than a real number can hold, so a legitimate subscriber that happens to
+ * start with 05 (e.g. 0505123456) is preserved instead of being stripped.
+ * Forces the result to start with 05 otherwise (e.g. 5xxxxxxxx → 05xxxxxxxx).
  */
 export function toSaudiMobileInputValue(raw: string) {
   let digits = raw.replace(/\D/g, "");
 
   if (!digits) {
-    return SAUDI_MOBILE_PREFIX;
+    return "";
   }
 
   if (digits.startsWith("00966")) {
@@ -20,9 +22,17 @@ export function toSaudiMobileInputValue(raw: string) {
     digits = digits.slice(3);
   }
 
-  // User retyped/pasted the full number after the fixed prefix (e.g. "05" + "0501234567" → "050501234567").
-  // Only collapse once there are more digits than a real number can hold - a legitimate subscriber that
-  // happens to start with 05 (e.g. 0505123456) is exactly SAUDI_MOBILE_LENGTH digits and must be kept as-is.
+  // Still typing a valid partial "05" prefix - don't force anything onto it yet.
+  if (digits === "0") {
+    return digits;
+  }
+
+  // Started with 0 but the second digit isn't 5 (typo, e.g. "09...") - fix that digit to 5
+  // instead of shoving an extra "05" in front of what was typed.
+  if (digits[0] === "0" && digits[1] !== "5") {
+    digits = `05${digits.slice(2)}`;
+  }
+
   while (digits.length > SAUDI_MOBILE_LENGTH && digits.startsWith("0505")) {
     digits = `05${digits.slice(4)}`;
   }
@@ -32,49 +42,21 @@ export function toSaudiMobileInputValue(raw: string) {
     return `${SAUDI_MOBILE_PREFIX}${subscriber.slice(0, SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
   }
 
-  // National form without leading 0: 5xxxxxxxx
-  if (digits.startsWith("5") && digits.length >= 9) {
+  // National form without a leading 0: 5xxxxxxxx → 05xxxxxxxx
+  if (digits.startsWith("5")) {
     return `${SAUDI_MOBILE_PREFIX}${digits.slice(1, 1 + SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
   }
 
   return `${SAUDI_MOBILE_PREFIX}${digits.slice(0, SAUDI_MOBILE_SUBSCRIBER_LENGTH)}`;
 }
 
-/**
- * Normalize digits typed into the subscriber input (after the fixed 05 prefix).
- * Strips a leading 05 if the user pasted or retyped the full local number.
- */
-export function toSaudiMobileFromSubscriberInput(raw: string) {
-  let digits = raw.replace(/\D/g, "");
-
-  // Only strip a leading 05 once there are more digits than a subscriber can hold - that means the
-  // user pasted/retyped the full local number. A subscriber that legitimately starts with 05 (e.g.
-  // typing "05123456" for the full number 0505123456) must never be stripped down to nothing.
-  while (
-    digits.length > SAUDI_MOBILE_SUBSCRIBER_LENGTH &&
-    digits.startsWith(SAUDI_MOBILE_PREFIX)
-  ) {
-    digits = digits.slice(SAUDI_MOBILE_PREFIX.length);
-  }
-
-  return toSaudiMobileInputValue(`${SAUDI_MOBILE_PREFIX}${digits}`);
-}
-
 /** Format API phone values for create-flow inputs as 05xxxxxxxx. */
 export function formatSaudiMobileForForm(phone: string | null | undefined) {
   if (!phone) {
-    return SAUDI_MOBILE_PREFIX;
+    return "";
   }
 
   return toSaudiMobileInputValue(phone);
-}
-
-/** Editable digits after the fixed 05 prefix. */
-export function getSaudiMobileSubscriber(phone: string) {
-  const full = toSaudiMobileInputValue(phone);
-  return full.startsWith(SAUDI_MOBILE_PREFIX)
-    ? full.slice(SAUDI_MOBILE_PREFIX.length)
-    : full;
 }
 
 export function isSaudiMobilePrefixOnly(phone: string) {

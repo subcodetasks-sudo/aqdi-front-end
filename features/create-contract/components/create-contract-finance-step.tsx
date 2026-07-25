@@ -11,6 +11,7 @@ import { useSubmitContractStep6 } from "@/features/create-contract/hooks/use-sub
 import { useCreateContractFinanceStep } from "@/features/create-contract/hooks/use-create-contract-finance-step";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractFinanceStepProps = {
   labels: CreateContractLabels["finance"];
@@ -39,6 +40,7 @@ export default function CreateContractFinanceStep({
     if (!canContinue) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 

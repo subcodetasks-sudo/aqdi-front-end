@@ -35,7 +35,8 @@ export default function PropertyUnitsTabs({
   commercialItems,
 }: PropertyUnitsTabsProps) {
   const t = useTranslations("propertyUnits.card");
-  const { startContract, isStarting } = useStartContractFromUnit();
+  const { startContract, isStarting, startingUnitIds } =
+    useStartContractFromUnit();
   const [selectedUnitIds, setSelectedUnitIds] = useState<number[]>([]);
 
   const items =
@@ -121,6 +122,7 @@ export default function PropertyUnitsTabs({
           items={items}
           selectedUnitIds={selectedUnitIds}
           isStarting={isStarting}
+          startingUnitIds={startingUnitIds}
           onToggleUnit={handleToggleUnit}
           onCreateContract={(unit) => void handleCreateFromUnits([unit])}
         />

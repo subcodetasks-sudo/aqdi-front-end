@@ -36,6 +36,10 @@ type CreateUnitDraftStore = {
   resetDraft: () => void;
 };
 
+function unitIdsSignature(units: UnitDataState[]) {
+  return units.map((unit) => unit.unitId ?? "new").join(",");
+}
+
 function normalizePersistedUnitData(
   unitData: Partial<UnitDataState> & {
     unitType?: string;
@@ -109,11 +113,18 @@ export const useCreateUnitDraftStore = create<CreateUnitDraftStore>()(
           options.initialUnits && options.initialUnits.length > 0
             ? options.initialUnits
             : [{ ...EMPTY_UNIT_DATA, contractType }];
+        const currentEditingUnitIds = state.isEditMode
+          ? unitIdsSignature(state.units)
+          : null;
+        const nextEditingUnitIds = nextIsEditMode
+          ? unitIdsSignature(nextUnits)
+          : null;
         const sessionChanged =
           state.propertyId !== propertyId ||
           state.isEditMode !== nextIsEditMode ||
           state.contractType !== contractType ||
-          state.currentStep === "success";
+          state.currentStep === "success" ||
+          (nextIsEditMode && currentEditingUnitIds !== nextEditingUnitIds);
 
         if (!sessionChanged) {
           if (options.preservedUnits) {

@@ -59,7 +59,7 @@ export default function UnitCountStepper({
 
       <div
         dir="ltr"
-        className="flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-[#f1f7f5] px-1.5"
+        className="flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-[#f1f7f5] px-1.5 dark:bg-[#16352f]"
       >
         <button
           type="button"
@@ -68,13 +68,13 @@ export default function UnitCountStepper({
           onClick={() => setCount(currentCount - 1)}
           className={cn(
             "inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-white transition-colors",
-            canDecrease ? "bg-brand" : "bg-[#c8d6d2]",
+            canDecrease ? "bg-brand" : "bg-[#c8d6d2] dark:bg-[#2f403b]",
           )}
         >
           <Minus className="size-4" />
         </button>
 
-        <span className="min-w-6 text-center text-sm font-bold text-[#1a1a1a]">
+        <span className="min-w-6 text-center text-sm font-bold text-[#1a1a1a] dark:text-[#e8f0ee]">
           {currentCount}
         </span>
 
@@ -85,7 +85,7 @@ export default function UnitCountStepper({
           onClick={() => setCount(currentCount + 1)}
           className={cn(
             "inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-white transition-colors",
-            canIncrease ? "bg-brand" : "bg-[#c8d6d2]",
+            canIncrease ? "bg-brand" : "bg-[#c8d6d2] dark:bg-[#2f403b]",
           )}
         >
           <Plus className="size-4" />

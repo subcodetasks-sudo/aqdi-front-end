@@ -49,7 +49,7 @@ export default function UnitOptionalCheckboxField({
           checked={checked}
           disabled={disabled}
           onCheckedChange={onCheckedChange}
-          className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
+          className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] dark:data-unchecked:bg-[#2f403b]"
         />
       </label>
 

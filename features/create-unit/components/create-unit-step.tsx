@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useSubmitUnit } from "@/features/create-unit/hooks/use-submit-unit";
 import {
   useUnitTypeOptions,
@@ -14,6 +16,7 @@ import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-
 import UnitDataFormFields from "@/features/shared/components/unit-data-form-fields";
 import UnitsDataFormList from "@/features/shared/components/unit-form/units-data-form-list";
 import { buildUnitFormSummary } from "@/features/shared/utils/build-unit-form-summary";
+import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 import { toast } from "sonner";
 
 type CreateUnitStepProps = {
@@ -41,15 +44,24 @@ export default function CreateUnitStep({
   const { isSubmitting, submitUnit } = useSubmitUnit(
     propertyId,
     propertyHasUnits,
+    isEditMode,
   );
   const unitTypesQuery = useUnitTypeOptions(contractType);
   const unitUsageQuery = useUnitUsageOptions(contractType);
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   const isLoadingOptions = unitTypesQuery.isLoading || unitUsageQuery.isLoading;
   const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
 
   async function handleContinue() {
-    if (!canContinue || isSubmitting || isLoadingOptions || optionsError) {
+    if (isSubmitting || isLoadingOptions || optionsError) {
+      return;
+    }
+
+    if (!canContinue) {
+      setShowFieldErrors(true);
+      toast.error(labels.incompleteContinue);
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 
@@ -126,6 +138,7 @@ export default function CreateUnitStep({
                 unitUsageOptions={unitUsageQuery.data ?? []}
                 value={unit}
                 onChange={onUnitChange}
+                showFieldErrors={showFieldErrors}
               />
             )}
           />
@@ -141,10 +154,9 @@ export default function CreateUnitStep({
               ? labels.navigation.save
               : labels.navigation.continue
         }
-        canContinue={canContinue && !isLoadingOptions && !optionsError}
-        isSubmitting={isSubmitting}
+        isSubmitting={isSubmitting || isLoadingOptions || Boolean(optionsError)}
         onPrevious={onBack}
-        onContinue={handleContinue}
+        onContinue={() => void handleContinue()}
       />
     </div>
   );

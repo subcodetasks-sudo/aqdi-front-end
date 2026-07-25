@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +30,8 @@ export default function CreateContractFinancePaymentMethodSelect({
   invalid = false,
   onChange,
 }: CreateContractFinancePaymentMethodSelectProps) {
+  const t = useTranslations("createContract");
+
   return (
     <div>
       <CreateContractFieldLabel label={label} invalid={invalid} />
@@ -34,6 +39,8 @@ export default function CreateContractFinancePaymentMethodSelect({
       <div
         role="radiogroup"
         aria-label={label}
+        aria-invalid={invalid}
+        data-field-invalid={invalid ? "true" : undefined}
         className="flex flex-wrap gap-2"
       >
         {options.map((option) => {
@@ -62,6 +69,8 @@ export default function CreateContractFinancePaymentMethodSelect({
           );
         })}
       </div>
+
+      {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
       {note ? (
         <div className="mt-3 flex items-start gap-2 rounded-2xl bg-brand-background-green px-3.5 py-3">

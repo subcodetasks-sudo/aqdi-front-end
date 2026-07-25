@@ -294,7 +294,7 @@ export function mapContractToRequestDetails(
   ].filter((section): section is RequestDetailsSection => section !== null);
 
   return {
-    requestNumber: String(data.contract_id),
+    requestNumber: String(data.uuid),
     sections,
   };
 }

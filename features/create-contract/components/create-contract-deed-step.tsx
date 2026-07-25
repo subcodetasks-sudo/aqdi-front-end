@@ -30,6 +30,7 @@ import InstrumentTypePopupDialog from "@/features/shared/components/instrument-t
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
 import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
 import { deedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
+import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractDeedStepProps = {
   labels: CreateContractLabels["deed"];
@@ -129,6 +130,7 @@ export default function CreateContractDeedStep({
     if (!canContinue) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 
@@ -217,7 +219,9 @@ export default function CreateContractDeedStep({
     }
 
     if (!nationalAddressMethod) {
+      setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
       return;
     }
 
@@ -263,6 +267,7 @@ export default function CreateContractDeedStep({
         FormSelect={CreateContractFormSelect}
         FieldLabel={CreateContractFieldLabel}
         upload={upload}
+        showFieldErrors={showFieldErrors}
       />
     );
   }
@@ -298,6 +303,7 @@ export default function CreateContractDeedStep({
                 value={deedFrontFiles}
                 onChange={setDeedFrontFiles}
                 existingImageUrl={existingInstrumentFrontImageUrl}
+                invalid={showFieldErrors}
               />
 
               <CreateContractDeedImageUpload
@@ -308,6 +314,7 @@ export default function CreateContractDeedStep({
                 value={deedBackFiles}
                 onChange={setDeedBackFiles}
                 existingImageUrl={existingInstrumentBackImageUrl}
+                invalid={showFieldErrors}
               />
             </div>,
           )}
@@ -350,6 +357,7 @@ export default function CreateContractDeedStep({
               value={deedFiles}
               onChange={setDeedFiles}
               existingImageUrl={existingInstrumentImageUrl}
+              invalid={showFieldErrors}
             />,
           )}
 
@@ -361,6 +369,7 @@ export default function CreateContractDeedStep({
             value={deedEndowmentCertFiles}
             onChange={setDeedEndowmentCertFiles}
             existingImageUrl={existingEndowmentCertImageUrl}
+            invalid={showFieldErrors}
           />
 
           <CreateContractDeedImageUpload
@@ -371,6 +380,7 @@ export default function CreateContractDeedStep({
             value={deedTrusteeshipFiles}
             onChange={setDeedTrusteeshipFiles}
             existingImageUrl={existingTrusteeshipImageUrl}
+            invalid={showFieldErrors}
           />
 
           <label className="flex cursor-pointer items-center justify-between gap-3">
@@ -394,6 +404,7 @@ export default function CreateContractDeedStep({
               value={deedGuardiansPoaFiles}
               onChange={setDeedGuardiansPoaFiles}
               existingImageUrl={existingGuardiansPoaImageUrl}
+              invalid={showFieldErrors}
             />
           ) : null}
         </div>
@@ -407,6 +418,7 @@ export default function CreateContractDeedStep({
         value={deedFiles}
         onChange={setDeedFiles}
         existingImageUrl={existingInstrumentImageUrl}
+        invalid={showFieldErrors}
       />,
     );
   }

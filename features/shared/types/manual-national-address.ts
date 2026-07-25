@@ -50,6 +50,7 @@ export type ManualNationalAddressLabels = {
     label: string;
     placeholder: string;
   };
+  fieldRequired?: string;
 };
 
 export function isManualNationalAddressComplete(

@@ -17,6 +17,7 @@ type RequestCardActionsProps = {
     | "contractType"
     | "requestNumber"
     | "showDownloadInvoice"
+    | "showViewEdit"
   >;
   labels: RequestCardLabels;
 };
@@ -43,13 +44,15 @@ export default function RequestCardActions({
         <FaWhatsapp className="size-5" aria-hidden="true" />
       </Link>
 
-      <RequestViewDataButton
-        uuid={card.uuid}
-        requestNumber={card.requestNumber}
-        label={labels.viewData}
-        loadErrorLabel={labels.editError}
-        detailsLabels={labels.detailsDialog}
-      />
+      {card.showViewEdit ? (
+        <RequestViewDataButton
+          uuid={card.uuid}
+          requestNumber={card.requestNumber}
+          label={labels.viewData}
+          loadErrorLabel={labels.editError}
+          detailsLabels={labels.detailsDialog}
+        />
+      ) : null}
 
       {card.showDownloadInvoice ? (
         <RequestInvoiceButton

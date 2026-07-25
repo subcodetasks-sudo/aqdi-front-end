@@ -1,6 +1,7 @@
 "use client";
 
 import { FilePenLine, IdCard, Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
@@ -46,6 +47,8 @@ export default function CreateContractTenantOrganizationDataPhase({
   onChange,
   showFieldErrors = false,
 }: CreateContractTenantOrganizationDataPhaseProps) {
+  const t = useTranslations("createContract");
+
   function updateField<K extends keyof OrganizationTenantData>(
     field: K,
     fieldValue: OrganizationTenantData[K],
@@ -89,9 +92,11 @@ export default function CreateContractTenantOrganizationDataPhase({
           updateField("unifiedRecordNumber", unifiedRecordNumber)
         }
         icon={FilePenLine}
-        invalid={
+        errorMessage={
           showFieldErrors &&
           !isUnifiedRecordNumberComplete(value.unifiedRecordNumber)
+            ? t("fieldRequired")
+            : undefined
         }
         valid={isUnifiedRecordNumberComplete(value.unifiedRecordNumber)}
       />
@@ -111,7 +116,11 @@ export default function CreateContractTenantOrganizationDataPhase({
           dir="ltr"
           inputMode="numeric"
           maxLength={10}
-          invalid={showFieldErrors && !isIdNumberComplete(value.ownerIdNumber)}
+          errorMessage={
+            showFieldErrors && !isIdNumberComplete(value.ownerIdNumber)
+              ? t("fieldRequired")
+              : undefined
+          }
           valid={isIdNumberComplete(value.ownerIdNumber)}
         />
 
@@ -123,7 +132,11 @@ export default function CreateContractTenantOrganizationDataPhase({
             updateField("ownerPhone", toSaudiMobileInputValue(ownerPhone))
           }
           icon={Phone}
-          invalid={showFieldErrors && !isPhoneComplete(value.ownerPhone)}
+          errorMessage={
+            showFieldErrors && !isPhoneComplete(value.ownerPhone)
+              ? t("fieldRequired")
+              : undefined
+          }
           valid={isPhoneComplete(value.ownerPhone)}
         />
       </div>

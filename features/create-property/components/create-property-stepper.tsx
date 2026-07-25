@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Image from "next/image";
 import { Save } from "lucide-react";
 
@@ -19,11 +20,7 @@ type CreatePropertyStepperProps = {
 const stepPillClassName =
   "inline-flex items-center justify-center rounded-full grow h-12 px-3 text-sm font-semibold whitespace-nowrap transition-all";
 
-function getStepPillClassName(
-  isActive: boolean,
-  isCompleted: boolean,
-  isUnlocked: boolean,
-) {
+function getStepPillClassName(isActive: boolean, isUnlocked: boolean) {
   return cn(
     stepPillClassName,
     isUnlocked
@@ -31,9 +28,16 @@ function getStepPillClassName(
       : "cursor-not-allowed opacity-50",
     isActive
       ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
-      : isCompleted
-        ? "bg-brand text-white"
-        : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]",
+      : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]",
+  );
+}
+
+function getConnectorClassName(isCompleted: boolean) {
+  return cn(
+    "h-0 w-3 shrink-0 border-t-2 sm:w-5",
+    isCompleted
+      ? "border-solid border-brand-secondary"
+      : "border-dashed border-[#d9d9d9] dark:border-[#2f403b]",
   );
 }
 
@@ -50,25 +54,33 @@ export default function CreatePropertyStepper({
   return (
     <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5 dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
-        {CREATE_PROPERTY_STEPPER_STEPS.map((step) => {
+        {CREATE_PROPERTY_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
-          const isCompleted = stepIndex < currentStepIndex;
           const isActive = stepIndex === currentStepIndex;
+          const isCompleted = stepIndex < currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
 
           return (
-            <button
-              key={step}
-              type="button"
-              title={labels.steps[step]}
-              aria-label={labels.steps[step]}
-              aria-current={isActive ? "step" : undefined}
-              disabled={!isUnlocked}
-              onClick={() => goToStep(step)}
-              className={getStepPillClassName(isActive, isCompleted, isUnlocked)}
-            >
-              {labels.steps[step]}
-            </button>
+            <Fragment key={step}>
+              {index > 0 && (
+                <span
+                  aria-hidden="true"
+                  className={getConnectorClassName(isActive || isCompleted)}
+                />
+              )}
+
+              <button
+                type="button"
+                title={labels.steps[step]}
+                aria-label={labels.steps[step]}
+                aria-current={isActive ? "step" : undefined}
+                disabled={!isUnlocked}
+                onClick={() => goToStep(step)}
+                className={getStepPillClassName(isActive, isUnlocked)}
+              >
+                {labels.steps[step]}
+              </button>
+            </Fragment>
           );
         })}
 

@@ -83,23 +83,36 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
           contractType,
       );
 
-      preservedUnits = unitsOfOtherType.map((unit) =>
-        mapApiUnitToUnitData(
-          unit,
-          resolveUnitContractType(unit, fallbackContractType, lookups),
-        ),
-      );
-
       if (isEditMode) {
-        initialUnits =
-          unitsOfSelectedType.length > 0
-            ? unitsOfSelectedType.map((unit) =>
-                mapApiUnitToUnitData(
-                  unit,
-                  resolveUnitContractType(unit, fallbackContractType, lookups),
-                ),
-              )
-            : null;
+        const editedUnit = unitsOfSelectedType.find(
+          (unit) => unit.id === unitId,
+        );
+        const siblingUnits = unitsOfSelectedType.filter(
+          (unit) => unit.id !== unitId,
+        );
+
+        preservedUnits = [...unitsOfOtherType, ...siblingUnits].map((unit) =>
+          mapApiUnitToUnitData(
+            unit,
+            resolveUnitContractType(unit, fallbackContractType, lookups),
+          ),
+        );
+
+        initialUnits = editedUnit
+          ? [
+              mapApiUnitToUnitData(
+                editedUnit,
+                resolveUnitContractType(editedUnit, fallbackContractType, lookups),
+              ),
+            ]
+          : null;
+      } else {
+        preservedUnits = unitsOfOtherType.map((unit) =>
+          mapApiUnitToUnitData(
+            unit,
+            resolveUnitContractType(unit, fallbackContractType, lookups),
+          ),
+        );
       }
     } catch {
       initialUnits = null;
@@ -126,6 +139,8 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
     subtitle: t("subtitle"),
     editSubtitle: t("editSubtitle"),
     selectPlaceholder: t("selectPlaceholder"),
+    fieldRequired: t("fieldRequired"),
+    incompleteContinue: t("incompleteContinue"),
     unitType: {
       label: t("unitType.label"),
     },

@@ -138,6 +138,11 @@ export default function CreateContractFinanceDataPhase({
     (value.totalRentAmount.replace(/\D/g, "").length === 0 ||
       Number(value.totalRentAmount.replace(/\D/g, "")) <= 0);
   const paymentInvalid = showFieldErrors && value.paymentTypeId === "";
+  const contractStartDateInvalid =
+    showFieldErrors &&
+    (value.contractStartDate.day === "" ||
+      value.contractStartDate.month === "" ||
+      value.contractStartDate.year === "");
   const rentValid =
     !rentInvalid &&
     value.totalRentAmount.replace(/\D/g, "").length > 0 &&
@@ -151,6 +156,7 @@ export default function CreateContractFinanceDataPhase({
         onChange={(contractStartDate) =>
           updateField("contractStartDate", contractStartDate)
         }
+        invalid={contractStartDateInvalid}
       />
 
       <div className="space-y-3">
@@ -200,6 +206,7 @@ export default function CreateContractFinanceDataPhase({
         label={labels.totalRentAmount.label}
         placeholder={labels.totalRentAmount.placeholder}
         currency={labels.contractDuration.currency}
+        amountInWordsLabel={labels.totalRentAmount.amountInWords}
         value={value.totalRentAmount}
         onChange={(totalRentAmount) =>
           updateField("totalRentAmount", totalRentAmount)

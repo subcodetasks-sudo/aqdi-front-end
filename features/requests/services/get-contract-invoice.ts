@@ -61,7 +61,6 @@ async function fetchDedicatedInvoice(
       method: "GET",
       cache: "no-store",
     });
-
     // Skip missing routes / 4xx without surfacing them to the UI.
     if (!response.ok) {
       continue;

@@ -26,6 +26,7 @@ type CreateContractContractStartDateFieldsProps = {
   labels: ContractStartDateLabels;
   value: BirthDateValue;
   onChange: (value: BirthDateValue) => void;
+  invalid?: boolean;
 };
 
 function padOptions(count: number) {
@@ -58,6 +59,7 @@ export default function CreateContractContractStartDateFields({
   labels,
   value,
   onChange,
+  invalid = false,
 }: CreateContractContractStartDateFieldsProps) {
   const dayCount = value.calendarType === "hijri" ? 30 : 31;
   const day = value.day.replace(/\D/g, "");
@@ -116,6 +118,7 @@ export default function CreateContractContractStartDateFields({
           value={value.day}
           onChange={(dayValue) => updateField("day", dayValue)}
           variant="compact"
+          invalid={invalid && value.day === ""}
         />
 
         <CreateContractFormSelect
@@ -125,6 +128,7 @@ export default function CreateContractContractStartDateFields({
           value={value.month}
           onChange={(monthValue) => updateField("month", monthValue)}
           variant="compact"
+          invalid={invalid && value.month === ""}
         />
 
         <CreateContractFormSelect
@@ -134,6 +138,7 @@ export default function CreateContractContractStartDateFields({
           value={value.year}
           onChange={(yearValue) => updateField("year", yearValue)}
           variant="compact"
+          invalid={invalid && value.year === ""}
         />
       </div>
 

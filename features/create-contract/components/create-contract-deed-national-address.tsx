@@ -2,10 +2,12 @@
 
 import { useId, type ReactNode } from "react";
 import { IdCard, Link2, MapPin, PenLine } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import { Input } from "@/components/ui/input";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
+import CreateContractFieldError from "@/features/create-contract/components/create-contract-field-error";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -66,6 +68,7 @@ export default function CreateContractDeedNationalAddress({
   existingPhotoUrl = null,
   showFieldErrors = false,
 }: CreateContractDeedNationalAddressProps) {
+  const t = useTranslations("createContract");
   const linkInputId = useId();
   const methodGroupId = useId();
   const methodInvalid = showFieldErrors && method === "";
@@ -88,6 +91,8 @@ export default function CreateContractDeedNationalAddress({
         <div
           role="radiogroup"
           aria-labelledby={methodGroupId}
+          aria-invalid={methodInvalid}
+          data-field-invalid={methodInvalid ? "true" : undefined}
           className="grid grid-cols-3 gap-2"
         >
           <span id={methodGroupId} className="sr-only">
@@ -127,6 +132,8 @@ export default function CreateContractDeedNationalAddress({
             );
           })}
         </div>
+
+        {methodInvalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
       </div>
 
       {method === "photo" ? (
@@ -174,6 +181,8 @@ export default function CreateContractDeedNationalAddress({
             />
           </div>
 
+          {linkInvalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
+
           {labels.link.hint ? (
             <p className="text-xs leading-relaxed text-[#9a9a9a]">
               {labels.link.hint}
@@ -184,7 +193,7 @@ export default function CreateContractDeedNationalAddress({
 
       {method === "manual" ? (
         <ManualNationalAddressForm
-          labels={labels.manual}
+          labels={{ ...labels.manual, fieldRequired: t("fieldRequired") }}
           value={manualAddress}
           onChange={onManualAddressChange}
           showFieldErrors={showFieldErrors}
