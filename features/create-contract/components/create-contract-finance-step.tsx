@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -9,8 +10,10 @@ import CreateContractStepNavigation from "@/features/create-contract/components/
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { useSubmitContractStep6 } from "@/features/create-contract/hooks/use-submit-contract-step6";
 import { useCreateContractFinanceStep } from "@/features/create-contract/hooks/use-create-contract-finance-step";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractFinanceStepProps = {
@@ -27,10 +30,18 @@ export default function CreateContractFinanceStep({
   onComplete,
 }: CreateContractFinanceStepProps) {
   const tIncomplete = useTranslations("createContract");
+  const tSubleaseAlert = useTranslations("createContract.finance.subleaseAlert");
   const { financeData, setFinanceData, canContinue } =
     useCreateContractFinanceStep();
   const { submitStep6, isSubmitting } = useSubmitContractStep6();
   const [showFieldErrors, setShowFieldErrors] = useState(false);
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const instrumentType = useCreateContractDraftStore(
+    (state) => state.contractStep1Data?.instrument_type,
+  );
+  const isSublease = isSubleaseContract({ selectedDeedType, instrumentType });
 
   async function handleContinue() {
     if (isSubmitting) {
@@ -61,6 +72,23 @@ export default function CreateContractFinanceStep({
           subtitle={labels.subtitle}
           icon="dollar"
         />
+
+        {isSublease ? (
+          <div
+            role="note"
+            className="mb-8 flex items-start gap-3 rounded-xl border border-[#bfd4ff] bg-[#edf5ff] px-4 py-3 text-[#2f6fed]"
+          >
+            <Info className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+            <p className="text-sm leading-relaxed">
+              <span className="font-bold">{tSubleaseAlert("title")}</span>{" "}
+              {tSubleaseAlert("bodyBefore")}{" "}
+              <span className="font-bold">{tSubleaseAlert("duration")}</span>{" "}
+              {tSubleaseAlert("bodyMiddle")}{" "}
+              <span className="font-bold">{tSubleaseAlert("startDate")}</span>{" "}
+              {tSubleaseAlert("bodyAfter")}
+            </p>
+          </div>
+        ) : null}
 
         <CreateContractFinanceDataPhase
           labels={labels}

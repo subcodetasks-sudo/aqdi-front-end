@@ -28,7 +28,6 @@ import {
   reviewEditTargetToStep,
 } from "@/features/create-contract/types/create-contract-review-order";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
-import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 
 type CreateContractReviewOrderDialogProps = {
   open: boolean;
@@ -109,12 +108,6 @@ export default function CreateContractReviewOrderDialog({
     deedTypeLabels,
     deedAttachmentLabels,
   );
-  const selectedDeedType = useCreateContractDraftStore(
-    (state) => state.deed.selectedDeedType,
-  );
-  const instrumentType = useCreateContractDraftStore(
-    (state) => state.contractStep1Data?.instrument_type,
-  );
   const setDeedPhaseIndex = useCreateContractDraftStore(
     (state) => state.setDeedPhaseIndex,
   );
@@ -126,8 +119,6 @@ export default function CreateContractReviewOrderDialog({
   );
 
   function handleEdit(target: CreateContractReviewEditTarget) {
-    const isSublease = isSubleaseContract({ selectedDeedType, instrumentType });
-
     switch (target) {
       case "deed":
         setDeedPhaseIndex(0);
@@ -142,7 +133,7 @@ export default function CreateContractReviewOrderDialog({
         setTenantPhaseIndex(0);
         break;
       case "unit":
-        setTenantPhaseIndex(isSublease ? 0 : 1);
+        setTenantPhaseIndex(1);
         break;
       default:
         break;

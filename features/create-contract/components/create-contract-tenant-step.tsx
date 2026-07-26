@@ -54,7 +54,6 @@ export default function CreateContractTenantStep({
     setLeaseRenewalAddNotes,
     setLeaseRenewalNotes,
     isLeaseRenewal,
-    isSublease,
     updateStatus,
     canContinue,
     isLastPhase,
@@ -70,10 +69,10 @@ export default function CreateContractTenantStep({
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
 
-  // Sublease skips tenant identity and lands on rented-unit copy (phases[1]).
-  const phase = labels.phases[isSublease ? 1 : currentPhaseIndex];
-  const isTenantDataPhase = !isSublease && currentPhaseIndex === 0;
-  const isRentedUnitPhase = isSublease || currentPhaseIndex === 1;
+  // Sublease uses the same tenant identity + rented-unit phases as a normal contract.
+  const phase = labels.phases[currentPhaseIndex];
+  const isTenantDataPhase = currentPhaseIndex === 0;
+  const isRentedUnitPhase = currentPhaseIndex === 1;
   const isLeaseRenewalBirthDatePhase = isLeaseRenewal && currentPhaseIndex === 0;
   const isLeaseRenewalAmendmentsPhase = isLeaseRenewal && currentPhaseIndex === 1;
 
@@ -85,7 +84,7 @@ export default function CreateContractTenantStep({
     : phase.subtitle;
 
   function handlePrevious() {
-    if (isSublease || currentPhaseIndex === 0) {
+    if (currentPhaseIndex === 0) {
       onBack();
       return;
     }

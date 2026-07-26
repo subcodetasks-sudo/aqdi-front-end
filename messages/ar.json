@@ -2124,6 +2124,14 @@
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
       "submitError": "فشل حفظ البيانات المالية",
       "missingContractSession": "يرجى بدء العقد أولاً",
+      "subleaseAlert": {
+        "title": "عقد من الباطن:",
+        "bodyBefore": "يجب ألا تتجاوز",
+        "duration": "مدة العقد",
+        "bodyMiddle": "ولا",
+        "startDate": "تاريخ بدايته",
+        "bodyAfter": "حدود عقد الإيجار الأساسي المرفق – لا تبدأ قبل بدايته ولا تنتهي بعد نهايته."
+      },
       "navigation": {
         "previous": "السابق",
         "continue": "متابعة",

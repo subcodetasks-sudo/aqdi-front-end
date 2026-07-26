@@ -2098,6 +2098,14 @@
       "subtitle": "Fill in your data correctly:",
       "submitError": "Failed to save finance data",
       "missingContractSession": "Please start the contract first",
+      "subleaseAlert": {
+        "title": "Sublease contract:",
+        "bodyBefore": "The",
+        "duration": "contract duration",
+        "bodyMiddle": "and",
+        "startDate": "its start date",
+        "bodyAfter": "must not exceed the limits of the attached original lease contract — it must not start before its start and must not end after its end."
+      },
       "navigation": {
         "previous": "Previous",
         "continue": "Continue",

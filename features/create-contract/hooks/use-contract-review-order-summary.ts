@@ -328,7 +328,7 @@ export function useContractReviewOrderSummary(
       });
     }
 
-    if (!isSublease) {
+    {
       const isOrganization = isOrganizationTenantStatus(tenantData.status);
       const tenantId = isOrganization
         ? tenantData.organization.ownerIdNumber
