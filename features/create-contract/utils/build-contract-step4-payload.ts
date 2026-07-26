@@ -59,21 +59,6 @@ export function buildContractStep4Body({
     id: contractId,
   };
 
-  if (isLeaseRenewal) {
-    const birthDate = tenantData.individual.birthDate;
-
-    body.tenant_dob_day = parseDatePart(birthDate.day);
-    body.tenant_dob_month = parseDatePart(birthDate.month);
-    body.tenant_dob_year = Number(formatPropertyOwnerYear(birthDate.year));
-    body.type_tenant_dob = birthDate.calendarType;
-
-    if (notes?.trim()) {
-      body.notes = notes.trim();
-    }
-
-    return body;
-  }
-
   if (tenantData.status === "individual") {
     const { individual } = tenantData;
 
@@ -84,11 +69,7 @@ export function buildContractStep4Body({
     body.tenant_dob_year = Number(formatPropertyOwnerYear(individual.birthDate.year));
     body.tenant_mobile = formatPropertyOwnerMobileForApi(individual.phone);
     body.type_tenant_dob = individual.birthDate.calendarType;
-
-    return body;
-  }
-
-  if (tenantData.status === "establishment-or-company") {
+  } else if (tenantData.status === "establishment-or-company") {
     const { organization } = tenantData;
 
     body.tenant_entity = "institution";
@@ -102,8 +83,10 @@ export function buildContractStep4Body({
       phone: organization.ownerPhone,
       birthDate: organization.ownerBirthDate,
     });
+  }
 
-    return body;
+  if (isLeaseRenewal && notes?.trim()) {
+    body.notes = notes.trim();
   }
 
   return body;

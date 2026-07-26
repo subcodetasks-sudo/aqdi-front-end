@@ -50,6 +50,10 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
     if ((state.contractStep4Data?.step ?? 0) >= 5) {
       maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
     }
+
+    if ((state.contractStep5Data?.step ?? 0) >= 6) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
   } else if (sublease) {
     // Sublease has no national address / owner steps — deed unlocks tenant.
     if (state.contractStep1Data) {

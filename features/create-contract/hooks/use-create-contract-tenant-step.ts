@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  isLeaseRenewalAmendmentsComplete,
-  isLeaseRenewalBirthDateComplete,
-  isTenantDataComplete,
-} from "@/features/create-contract/types/tenant-step";
+import { isTenantDataComplete } from "@/features/create-contract/types/tenant-step";
 import {
   areRentedUnitsComplete,
   TENANT_STEP_PHASE_COUNT,
@@ -16,6 +12,7 @@ import {
 import type { TenantStatusOption } from "@/features/create-contract/types/tenant-step";
 import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
 
+/** Tenant data → unit choice (same or edit) */
 export const LEASE_RENEWAL_TENANT_PHASE_COUNT = 2;
 
 export function useCreateContractTenantStep() {
@@ -31,11 +28,8 @@ export function useCreateContractTenantStep() {
   );
   const setTenantData = useCreateContractDraftStore((state) => state.setTenantData);
   const setRentedUnits = useCreateContractDraftStore((state) => state.setRentedUnits);
-  const setLeaseRenewalAddNotes = useCreateContractDraftStore(
-    (state) => state.setLeaseRenewalAddNotes,
-  );
-  const setLeaseRenewalNotes = useCreateContractDraftStore(
-    (state) => state.setLeaseRenewalNotes,
+  const setLeaseRenewalUnitMode = useCreateContractDraftStore(
+    (state) => state.setLeaseRenewalUnitMode,
   );
 
   const skipOwnerState = {
@@ -48,17 +42,19 @@ export function useCreateContractTenantStep() {
     ? LEASE_RENEWAL_TENANT_PHASE_COUNT
     : TENANT_STEP_PHASE_COUNT;
 
-  const currentPhaseIndex = tenant.currentPhaseIndex;
+  const currentPhaseIndex = Math.min(
+    tenant.currentPhaseIndex,
+    phaseCount - 1,
+  );
   const isLastPhase = currentPhaseIndex === phaseCount - 1;
+  const leaseRenewalUnitMode = tenant.leaseRenewalUnitMode ?? "same";
 
   const canContinue = isLeaseRenewal
-    ? tenant.currentPhaseIndex === 0
-      ? isLeaseRenewalBirthDateComplete(tenant.tenantData.individual.birthDate)
-      : isLeaseRenewalAmendmentsComplete({
-          addNotes: tenant.leaseRenewalAddNotes,
-          notes: tenant.leaseRenewalNotes,
-        })
-    : tenant.currentPhaseIndex === 0
+    ? currentPhaseIndex === 0
+      ? isTenantDataComplete(tenant.tenantData)
+      : leaseRenewalUnitMode === "same" ||
+        areRentedUnitsComplete(tenant.rentedUnits)
+    : currentPhaseIndex === 0
       ? isTenantDataComplete(tenant.tenantData)
       : areRentedUnitsComplete(tenant.rentedUnits);
 
@@ -69,14 +65,14 @@ export function useCreateContractTenantStep() {
   function goToNextPhase() {
     const maxPhaseIndex = phaseCount - 1;
 
-    if (tenant.currentPhaseIndex < maxPhaseIndex) {
-      setTenantPhaseIndex(tenant.currentPhaseIndex + 1);
+    if (currentPhaseIndex < maxPhaseIndex) {
+      setTenantPhaseIndex(currentPhaseIndex + 1);
     }
   }
 
   function goToPreviousPhase() {
-    if (tenant.currentPhaseIndex > 0) {
-      setTenantPhaseIndex(tenant.currentPhaseIndex - 1);
+    if (currentPhaseIndex > 0) {
+      setTenantPhaseIndex(currentPhaseIndex - 1);
     }
   }
 
@@ -87,10 +83,8 @@ export function useCreateContractTenantStep() {
     setTenantData,
     rentedUnits: tenant.rentedUnits,
     setRentedUnits,
-    leaseRenewalAddNotes: tenant.leaseRenewalAddNotes,
-    leaseRenewalNotes: tenant.leaseRenewalNotes,
-    setLeaseRenewalAddNotes,
-    setLeaseRenewalNotes,
+    leaseRenewalUnitMode,
+    setLeaseRenewalUnitMode,
     isLeaseRenewal,
     updateStatus,
     canContinue,

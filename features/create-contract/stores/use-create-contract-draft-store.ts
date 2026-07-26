@@ -11,6 +11,7 @@ import {
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
 import type { LeaseRenewalAddressMode } from "@/features/create-contract/types/lease-renewal-address-mode";
+import type { LeaseRenewalUnitMode } from "@/features/create-contract/types/lease-renewal-unit-mode";
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
 import {
   DEFAULT_NATIONAL_ADDRESS_LOCATION,
@@ -128,6 +129,7 @@ type TenantDraftState = {
   tenantData: TenantDataState;
   tenantPersistedFiles: PersistedFile[];
   rentedUnits: RentedUnitDataState[];
+  leaseRenewalUnitMode: LeaseRenewalUnitMode;
   leaseRenewalAddNotes: boolean;
   leaseRenewalNotes: string;
 };
@@ -181,6 +183,7 @@ type CreateContractDraftStore = {
   setTenantPhaseIndex: (index: number) => void;
   setTenantData: (data: TenantDataState) => void;
   setRentedUnits: (units: RentedUnitDataState[]) => void;
+  setLeaseRenewalUnitMode: (mode: LeaseRenewalUnitMode) => void;
   setLeaseRenewalAddNotes: (value: boolean) => void;
   setLeaseRenewalNotes: (value: string) => void;
   setFinanceData: (
@@ -410,6 +413,7 @@ const INITIAL_TENANT: TenantDraftState = {
   tenantData: EMPTY_TENANT_DATA,
   tenantPersistedFiles: [],
   rentedUnits: [{ ...EMPTY_RENTED_UNIT_DATA }],
+  leaseRenewalUnitMode: "same",
   leaseRenewalAddNotes: false,
   leaseRenewalNotes: "",
 };
@@ -796,6 +800,10 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       },
       setRentedUnits: (units) =>
         set((state) => ({ tenant: { ...state.tenant, rentedUnits: units } })),
+      setLeaseRenewalUnitMode: (mode) =>
+        set((state) => ({
+          tenant: { ...state.tenant, leaseRenewalUnitMode: mode },
+        })),
       setLeaseRenewalAddNotes: (value) =>
         set((state) => ({
           tenant: {
@@ -1075,6 +1083,9 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
           tenantPersistedFiles: state.tenant.tenantPersistedFiles,
           rentedUnits: state.tenant.rentedUnits,
+          leaseRenewalUnitMode: state.tenant.leaseRenewalUnitMode,
+          leaseRenewalAddNotes: state.tenant.leaseRenewalAddNotes,
+          leaseRenewalNotes: state.tenant.leaseRenewalNotes,
         },
         financeData: state.financeData,
         paymentData: state.paymentData,

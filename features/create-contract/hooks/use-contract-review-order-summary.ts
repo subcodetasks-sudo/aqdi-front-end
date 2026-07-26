@@ -151,6 +151,9 @@ export function useContractReviewOrderSummary(
   const leaseRenewalAddressMode = useCreateContractDraftStore(
     (state) => state.deed.leaseRenewalAddressMode,
   );
+  const leaseRenewalUnitMode = useCreateContractDraftStore(
+    (state) => state.tenant.leaseRenewalUnitMode,
+  );
   const nationalAddressMethod = useCreateContractDraftStore(
     (state) => state.deed.nationalAddressMethod,
   );
@@ -373,52 +376,62 @@ export function useContractReviewOrderSummary(
         (option) => String(option.id) === unit?.unitUsageId,
       )?.name ?? "";
 
+    const unitFields: CreateContractReviewField[] =
+      isLeaseRenewal && leaseRenewalUnitMode === "same"
+        ? [
+            {
+              label: labels.fields.unitType,
+              value: labels.sameUnit,
+            },
+          ]
+        : [
+            {
+              label: labels.fields.unitType,
+              value: displayValue(unitTypeName, empty),
+            },
+            {
+              label: labels.fields.unitUsage,
+              value: displayValue(unitUsageName, empty),
+            },
+            {
+              label: labels.fields.floor,
+              value: displayValue(unit?.floorNumber, empty),
+            },
+            {
+              label: labels.fields.unitNumber,
+              value: displayValue(unit?.unitNumber, empty),
+            },
+            {
+              label: labels.fields.area,
+              value: unit?.totalArea?.trim()
+                ? `${unit.totalArea} ${labels.areaUnit}`
+                : empty,
+            },
+            {
+              label: labels.fields.rooms,
+              value: displayValue(unit?.roomsCount, empty),
+            },
+            {
+              label: labels.fields.bathrooms,
+              value: displayValue(unit?.bathroomsCount, empty),
+            },
+            {
+              label: labels.fields.kitchens,
+              value: displayValue(unit?.kitchensCount, empty),
+            },
+            {
+              label: labels.fields.kitchenCabinets,
+              value: unit?.kitchenCabinetsInstalled
+                ? labels.kitchenCabinets.installed
+                : labels.kitchenCabinets.notInstalled,
+            },
+          ];
+
     sections.push({
       id: "unit",
       title: labels.sections.unit,
       editTarget: "unit",
-      fields: [
-        {
-          label: labels.fields.unitType,
-          value: displayValue(unitTypeName, empty),
-        },
-        {
-          label: labels.fields.unitUsage,
-          value: displayValue(unitUsageName, empty),
-        },
-        {
-          label: labels.fields.floor,
-          value: displayValue(unit?.floorNumber, empty),
-        },
-        {
-          label: labels.fields.unitNumber,
-          value: displayValue(unit?.unitNumber, empty),
-        },
-        {
-          label: labels.fields.area,
-          value: unit?.totalArea?.trim()
-            ? `${unit.totalArea} ${labels.areaUnit}`
-            : empty,
-        },
-        {
-          label: labels.fields.rooms,
-          value: displayValue(unit?.roomsCount, empty),
-        },
-        {
-          label: labels.fields.bathrooms,
-          value: displayValue(unit?.bathroomsCount, empty),
-        },
-        {
-          label: labels.fields.kitchens,
-          value: displayValue(unit?.kitchensCount, empty),
-        },
-        {
-          label: labels.fields.kitchenCabinets,
-          value: unit?.kitchenCabinetsInstalled
-            ? labels.kitchenCabinets.installed
-            : labels.kitchenCabinets.notInstalled,
-        },
-      ],
+      fields: unitFields,
     });
 
     const paymentTypeName =
@@ -493,6 +506,7 @@ export function useContractReviewOrderSummary(
     instrumentTypeTrans,
     labels,
     leaseRenewalAddressMode,
+    leaseRenewalUnitMode,
     nationalAddressLinkUrl,
     nationalAddressManual,
     nationalAddressMethod,

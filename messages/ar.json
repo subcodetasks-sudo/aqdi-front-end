@@ -2093,6 +2093,16 @@
         "addNotesToggle": "إضافة ملاحظات ؟",
         "edit": "تعديل",
         "confirmContinue": "تأكيد واستمرار",
+        "unitFieldLabel": "الوحدة في هذا التجديد",
+        "sameUnit": {
+          "title": "نفس الوحدة المذكورة في العقد",
+          "description": "لن تطلب إدخالها من جديد"
+        },
+        "changeUnit": {
+          "title": "أريد تعديل بيانات الوحدة",
+          "description": "تعبئة بيانات الوحدة كاملة"
+        },
+        "sameUnitConfirmation": "سيعتمد ما ورد في العقد الأصلي من بيانات الوحدة – لا حاجة لإدخالها من جديد.",
         "notesDialog": {
           "title": "التعديلات المطلوبة...",
           "close": "إغلاق",
@@ -2100,7 +2110,7 @@
           "subtitle": "يمكنك إضافة ما يلي :",
           "notesLabel": "يرجى كتابة التعديلات المطلوبة",
           "notesPlaceholder": "أكتب هنا ...",
-          "stepIndicator": "2 من 2",
+          "stepIndicator": "3 من 3",
           "save": "حفظ"
         }
       },
@@ -2274,6 +2284,7 @@
         "contractTypeResidential": "سكني",
         "contractTypeCommercial": "تجاري",
         "sameAddress": "نفس العنوان الوطني السابق",
+        "sameUnit": "نفس الوحدة المذكورة في العقد",
         "yearsCount": "'{'count'}' سنة",
         "monthsCount": "'{'count'}' شهراً",
         "paymentMethodPrefix": "طريقة الدفعات: '{'method'}'"

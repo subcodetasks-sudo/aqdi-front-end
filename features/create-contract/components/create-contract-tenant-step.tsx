@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
-import CreateContractLeaseRenewalAmendmentsSection from "@/features/create-contract/components/create-contract-lease-renewal-amendments-section";
+import CreateContractLeaseRenewalUnitChoice from "@/features/create-contract/components/create-contract-lease-renewal-unit-choice";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
 import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
@@ -25,7 +24,6 @@ import { resetCreateContractDraft } from "@/features/create-contract/utils/reset
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
-import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
 type CreateContractTenantStepProps = {
@@ -37,7 +35,6 @@ type CreateContractTenantStepProps = {
 
 export default function CreateContractTenantStep({
   labels,
-  contractType,
   onBack,
   onComplete,
 }: CreateContractTenantStepProps) {
@@ -49,10 +46,8 @@ export default function CreateContractTenantStep({
     setTenantData,
     rentedUnits,
     setRentedUnits,
-    leaseRenewalAddNotes,
-    leaseRenewalNotes,
-    setLeaseRenewalAddNotes,
-    setLeaseRenewalNotes,
+    leaseRenewalUnitMode,
+    setLeaseRenewalUnitMode,
     isLeaseRenewal,
     updateStatus,
     canContinue,
@@ -69,19 +64,21 @@ export default function CreateContractTenantStep({
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
 
-  // Sublease uses the same tenant identity + rented-unit phases as a normal contract.
-  const phase = labels.phases[currentPhaseIndex];
+  // Lease renewal: tenant → unit choice (+ form if editing) → finance.
+  // Sublease / normal: tenant identity → rented unit.
+  const rentedUnitPhaseLabels = labels.phases[1] ?? labels.phases[0];
   const isTenantDataPhase = currentPhaseIndex === 0;
-  const isRentedUnitPhase = currentPhaseIndex === 1;
-  const isLeaseRenewalBirthDatePhase = isLeaseRenewal && currentPhaseIndex === 0;
-  const isLeaseRenewalAmendmentsPhase = isLeaseRenewal && currentPhaseIndex === 1;
+  const isLeaseRenewalUnitPhase = isLeaseRenewal && currentPhaseIndex === 1;
+  const isRentedUnitPhase =
+    (!isLeaseRenewal && currentPhaseIndex === 1) ||
+    (isLeaseRenewalUnitPhase && leaseRenewalUnitMode === "change");
 
-  const phaseTitle = isLeaseRenewalAmendmentsPhase
-    ? labels.leaseRenewal.heading
-    : phase.title;
-  const phaseSubtitle = isLeaseRenewalAmendmentsPhase
-    ? labels.leaseRenewal.subtitle
-    : phase.subtitle;
+  const phaseTitle = isLeaseRenewalUnitPhase
+    ? rentedUnitPhaseLabels.title
+    : (labels.phases[currentPhaseIndex]?.title ?? labels.phases[0].title);
+  const phaseSubtitle = isLeaseRenewalUnitPhase
+    ? rentedUnitPhaseLabels.subtitle
+    : (labels.phases[currentPhaseIndex]?.subtitle ?? labels.phases[0].subtitle);
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
@@ -106,20 +103,27 @@ export default function CreateContractTenantStep({
 
     setShowFieldErrors(false);
 
-    if (isLeaseRenewalBirthDatePhase) {
+    if (isLeaseRenewal && isTenantDataPhase) {
       goToNextPhase();
       return;
     }
 
-    if (isLeaseRenewalAmendmentsPhase) {
-      const submitted = await submitStep4({
+    if (isLeaseRenewalUnitPhase) {
+      const submittedTenant = await submitStep4({
         tenantData,
         isLeaseRenewal: true,
-        notes: leaseRenewalAddNotes ? leaseRenewalNotes : undefined,
       });
 
-      if (!submitted) {
+      if (!submittedTenant) {
         return;
+      }
+
+      if (leaseRenewalUnitMode === "change") {
+        const submittedUnit = await submitStep5({ rentedUnits });
+
+        if (!submittedUnit) {
+          return;
+        }
       }
 
       onComplete();
@@ -156,6 +160,7 @@ export default function CreateContractTenantStep({
   }
 
   const showDraftActions = Boolean(contractSession) && !isLeaseRenewal;
+  const showBuildingIcon = isRentedUnitPhase || isLeaseRenewalUnitPhase;
 
   function handleOpenSaveLater() {
     if (isSavingDraft || isSubmitting) {
@@ -207,43 +212,10 @@ export default function CreateContractTenantStep({
         <CreateContractStepPhaseHeader
           title={phaseTitle}
           subtitle={phaseSubtitle}
-          icon={isRentedUnitPhase || isLeaseRenewalAmendmentsPhase ? "building" : "user"}
+          icon={showBuildingIcon ? "building" : "user"}
         />
 
-        {isLeaseRenewalBirthDatePhase ? (
-          <div className="rounded-3xl ">
-            <CreateContractBirthDateFields
-              labels={labels.birthDate}
-              value={tenantData.individual.birthDate}
-              onChange={(birthDate) =>
-                setTenantData({
-                  ...tenantData,
-                  status: "individual",
-                  individual: {
-                    ...tenantData.individual,
-                    birthDate,
-                  },
-                })
-              }
-              invalid={
-                showFieldErrors &&
-                !isAdultBirthDateComplete(tenantData.individual.birthDate)
-              }
-            />
-          </div>
-        ) : null}
-
-        {isLeaseRenewalAmendmentsPhase ? (
-          <CreateContractLeaseRenewalAmendmentsSection
-            labels={labels.leaseRenewal}
-            addNotes={leaseRenewalAddNotes}
-            notes={leaseRenewalNotes}
-            onAddNotesChange={setLeaseRenewalAddNotes}
-            onNotesChange={setLeaseRenewalNotes}
-          />
-        ) : null}
-
-        {isTenantDataPhase && !isLeaseRenewal ? (
+        {isTenantDataPhase ? (
           <>
             <CreateContractTenantStatusSelect
               labels={labels.tenantStatus}
@@ -278,7 +250,26 @@ export default function CreateContractTenantStep({
           </>
         ) : null}
 
-        {isRentedUnitPhase && !isLeaseRenewal ? (
+        {isLeaseRenewalUnitPhase ? (
+          <div className="space-y-5">
+            <CreateContractLeaseRenewalUnitChoice
+              labels={labels.leaseRenewal}
+              value={leaseRenewalUnitMode}
+              onChange={setLeaseRenewalUnitMode}
+            />
+
+            {leaseRenewalUnitMode === "change" ? (
+              <CreateContractRentedUnitDataPhase
+                labels={labels.rentedUnit}
+                units={rentedUnits}
+                onChange={setRentedUnits}
+                showFieldErrors={showFieldErrors}
+              />
+            ) : null}
+          </div>
+        ) : null}
+
+        {!isLeaseRenewal && isRentedUnitPhase ? (
           <CreateContractRentedUnitDataPhase
             labels={labels.rentedUnit}
             units={rentedUnits}
@@ -291,11 +282,7 @@ export default function CreateContractTenantStep({
       <CreateContractStepNavigation
         previousLabel={labels.navigation.previous}
         continueLabel={
-          isSubmitting
-            ? labels.navigation.submitting
-            : isLeaseRenewalAmendmentsPhase
-              ? labels.leaseRenewal.confirmContinue
-              : labels.navigation.continue
+          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
         saveLaterLabel={
           showDraftActions ? labels.navigation.saveLater : undefined

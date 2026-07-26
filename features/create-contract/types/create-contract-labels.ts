@@ -463,6 +463,16 @@ export type CreateContractLabels = {
       addNotesToggle: string;
       edit: string;
       confirmContinue: string;
+      unitFieldLabel: string;
+      sameUnit: {
+        title: string;
+        description: string;
+      };
+      changeUnit: {
+        title: string;
+        description: string;
+      };
+      sameUnitConfirmation: string;
       notesDialog: {
         title: string;
         close: string;
@@ -636,6 +646,7 @@ export type CreateContractLabels = {
       contractTypeResidential: string;
       contractTypeCommercial: string;
       sameAddress: string;
+      sameUnit: string;
       yearsCount: string;
       monthsCount: string;
       paymentMethodPrefix: string;

@@ -2067,6 +2067,16 @@
         "addNotesToggle": "Add notes?",
         "edit": "Edit",
         "confirmContinue": "Confirm and continue",
+        "unitFieldLabel": "Unit in this renewal",
+        "sameUnit": {
+          "title": "Same unit mentioned in the contract",
+          "description": "You will not be asked to enter it again"
+        },
+        "changeUnit": {
+          "title": "I want to edit the unit data",
+          "description": "Fill in the complete unit data"
+        },
+        "sameUnitConfirmation": "Unit data from the original contract will be used — no need to enter it again.",
         "notesDialog": {
           "title": "Required amendments...",
           "close": "Close",
@@ -2074,7 +2084,7 @@
           "subtitle": "You can add the following:",
           "notesLabel": "Please write the required amendments",
           "notesPlaceholder": "Write here...",
-          "stepIndicator": "2 of 2",
+          "stepIndicator": "3 of 3",
           "save": "Save"
         }
       },
@@ -2248,6 +2258,7 @@
         "contractTypeResidential": "Residential",
         "contractTypeCommercial": "Commercial",
         "sameAddress": "Same previous national address",
+        "sameUnit": "Same unit mentioned in the contract",
         "yearsCount": "'{'count'}' year(s)",
         "monthsCount": "'{'count'}' month(s)",
         "paymentMethodPrefix": "Payment method: '{'method'}'"

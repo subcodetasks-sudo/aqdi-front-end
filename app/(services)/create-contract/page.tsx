@@ -601,6 +601,16 @@ export default async function CreateContractPage({
         addNotesToggle: t("tenant.leaseRenewal.addNotesToggle"),
         edit: t("tenant.leaseRenewal.edit"),
         confirmContinue: t("tenant.leaseRenewal.confirmContinue"),
+        unitFieldLabel: t("tenant.leaseRenewal.unitFieldLabel"),
+        sameUnit: {
+          title: t("tenant.leaseRenewal.sameUnit.title"),
+          description: t("tenant.leaseRenewal.sameUnit.description"),
+        },
+        changeUnit: {
+          title: t("tenant.leaseRenewal.changeUnit.title"),
+          description: t("tenant.leaseRenewal.changeUnit.description"),
+        },
+        sameUnitConfirmation: t("tenant.leaseRenewal.sameUnitConfirmation"),
         notesDialog: {
           title: t("tenant.leaseRenewal.notesDialog.title"),
           close: t("tenant.leaseRenewal.notesDialog.close"),
@@ -788,6 +798,7 @@ export default async function CreateContractPage({
           "payment.reviewDialog.contractTypeCommercial",
         ),
         sameAddress: t("payment.reviewDialog.sameAddress"),
+        sameUnit: t("payment.reviewDialog.sameUnit"),
         yearsCount: t("payment.reviewDialog.yearsCount"),
         monthsCount: t("payment.reviewDialog.monthsCount"),
         paymentMethodPrefix: t("payment.reviewDialog.paymentMethodPrefix"),
