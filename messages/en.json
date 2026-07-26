@@ -886,6 +886,7 @@
         "areaUnit": "m²"
       },
       "completePayment": "Pay now",
+      "completePaymentWithAmount": "Pay '{'amount'}' SAR",
       "completePaymentLoading": "Redirecting to payment...",
       "whenReceiveContract": "When will I receive the contract?",
       "receiveContractDialog": {
@@ -925,7 +926,8 @@
       "whatsappLabel": "Contact via WhatsApp",
       "whatsappHref": "https://wa.me/",
       "status": {
-        "completed": "Completed request",
+        "completed": "Completed",
+        "completedWithAmount": "Completed · '{'amount'}' SAR",
         "incomplete": "Contract draft request",
         "inProgress": "In progress",
         "returned": "Returned"
@@ -1080,7 +1082,7 @@
           "old_handwritten": "Paper ownership deed",
           "property_ownership_owner_are_deceased_endowment": "Ownership deed with deceased owner",
           "property_ownership_owner_is_endowment": "Ownership deed with waqf owner",
-          "sale_agreement": "Sale agreement",
+          "sale_agreement": "Sales paper stamped by a real estate office",
           "economic_cities_authority_suspended": "Economic Cities Authority document",
           "strong_argument": "Adverse possession deed"
         }
@@ -1093,7 +1095,11 @@
         "heirsPoaLabel": "Heirs' power of attorney to the agent",
         "endowmentCertLabel": "Endowment registration certificate image",
         "trusteeshipLabel": "Trusteeship deed image",
-        "guardiansPoaLabel": "Guardians' power of attorney to the agent",
+        "guardiansPoaLabel": "Power of attorney from all trustees to one of them",
+        "salePaperLabel": "Image of the sales paper stamped by the real estate office",
+        "adversePossessionLabel": "Image of the adverse possession deed",
+        "economicCitiesLabel": "Image of the Economic Cities Authority document",
+        "paperLabel": "Image of the paper deed",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1103,7 +1109,8 @@
         "closePreview": "Close"
       },
       "waqf": {
-        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?",
+        "trusteesPoaHint": "To represent the endowment in the contract — only one representative is accepted"
       },
       "deceased": {
         "deedLabel": "Copy of the property deed",
@@ -1111,7 +1118,8 @@
         "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
         "najizHint": "Power of attorney issued by Najiz is accepted",
         "minorHeirsLabel": "Are any of the heirs minors?",
-        "guardiansPoaLabel": "Copy of the minor's guardian power of attorney",
+        "guardiansPoaLabel": "Minor guardianship deed",
+        "guardiansPoaHint": "Attach the guardianship deed issued to the legal guardian of the minor",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file"
       },
@@ -1274,7 +1282,7 @@
         },
         "phone": {
           "label": "Owner's mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "iban": {
           "label": "Owner's IBAN",
@@ -1296,7 +1304,7 @@
         "birthDateLabel": "Agent date of birth",
         "phone": {
           "label": "Agent mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney image",
@@ -1576,7 +1584,7 @@
           "paper": "Paper ownership deed",
           "deceased-owner": "Ownership deed with deceased owner",
           "waqf-owner": "Ownership deed with endowment owner",
-          "sale-paper": "Sale paper",
+          "sale-paper": "Sales paper stamped by a real estate office",
           "economic-cities-authority": "Economic Cities Authority document",
           "adverse-possession": "Adverse possession deed",
           "sublease-contract": "Sublease contract",
@@ -1591,7 +1599,11 @@
         "heirsPoaLabel": "Heirs' power of attorney to the agent",
         "endowmentCertLabel": "Endowment registration certificate image",
         "trusteeshipLabel": "Trusteeship deed image",
-        "guardiansPoaLabel": "Guardians' power of attorney to the agent",
+        "guardiansPoaLabel": "Power of attorney from all trustees to one of them",
+        "salePaperLabel": "Image of the sales paper stamped by the real estate office",
+        "adversePossessionLabel": "Image of the adverse possession deed",
+        "economicCitiesLabel": "Image of the Economic Cities Authority document",
+        "paperLabel": "Image of the paper deed",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1681,8 +1693,23 @@
           "closePreview": "Close"
         }
       },
+      "leaseRenewal": {
+        "noticeResidential": "You selected lease renewal and chose a residential contract type. If the contract you want to renew was originally commercial, please go back and select commercial instead of residential.",
+        "noticeCommercial": "You selected lease renewal and chose a commercial contract type. If the contract you want to renew was originally residential, please go back and select residential instead of commercial.",
+        "addressFieldLabel": "Property address for this renewal",
+        "sameAddress": {
+          "title": "Same address mentioned in the contract",
+          "description": "We will not ask you to enter it again"
+        },
+        "changeAddress": {
+          "title": "Change address",
+          "description": "Enter it using one of the three methods"
+        },
+        "sameAddressConfirmation": "The national address from the original contract will be used — no need to enter it again."
+      },
       "waqf": {
-        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?"
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?",
+        "trusteesPoaHint": "To represent the endowment in the contract — only one representative is accepted"
       },
       "deceased": {
         "deedLabel": "Copy of the property deed",
@@ -1690,7 +1717,8 @@
         "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
         "najizHint": "Power of attorney issued by Najiz is accepted",
         "minorHeirsLabel": "Are any of the heirs minors?",
-        "guardiansPoaLabel": "Copy of the minor's guardian power of attorney",
+        "guardiansPoaLabel": "Minor guardianship deed",
+        "guardiansPoaHint": "Attach the guardianship deed issued to the legal guardian of the minor",
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file"
       },
@@ -1775,7 +1803,7 @@
         },
         "phone": {
           "label": "Owner mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "iban": {
           "label": "Owner IBAN",
@@ -1797,7 +1825,7 @@
         "birthDateLabel": "Agent date of birth",
         "phone": {
           "label": "Agent mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -1860,7 +1888,7 @@
         },
         "phone": {
           "label": "Tenant mobile number",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         }
       },
       "organizationData": {
@@ -1901,7 +1929,7 @@
         "ownerBirthDateLabel": "Registry owner date of birth",
         "ownerPhone": {
           "label": "Registry owner mobile number",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "Attach power of attorney photo",
@@ -2148,6 +2176,74 @@
       "journeyMessage": "Your rental journey just got easier.",
       "securePaymentLabel": "Secure and encrypted payment",
       "reviewOrderLabel": "Review request – check all your details before paying",
+      "reviewDialog": {
+        "title": "Review order – review before payment",
+        "close": "Close",
+        "edit": "Edit",
+        "view": "View",
+        "confirm": "Done – details are correct",
+        "hint": "Click Edit on any section to go to its page and update it, then return to finish payment",
+        "emptyValue": "—",
+        "orderNumber": "Order number",
+        "share": "Share",
+        "copy": "Copy data",
+        "print": "Print",
+        "copySuccess": "Order details copied",
+        "copyError": "Failed to copy details",
+        "shareError": "Failed to share order",
+        "sections": {
+          "deed": "Ownership document",
+          "nationalAddress": "National address",
+          "ownerSelf": "Owner details (self)",
+          "ownerWithAgent": "Owner details (with agent)",
+          "tenantIndividual": "Tenant details (individual)",
+          "tenantOrganization": "Tenant details (organization)",
+          "unit": "Unit details",
+          "rent": "Rent amount"
+        },
+        "fields": {
+          "contractType": "Contract type",
+          "startDate": "Start date",
+          "duration": "Contract duration",
+          "documentType": "Document type",
+          "deedAttachment": "Document image",
+          "mapsLink": "Property location link from Google Maps",
+          "addressPhoto": "National address photo",
+          "addressManual": "National address",
+          "ownerId": "Owner ID number",
+          "ownerPhone": "Owner mobile number",
+          "ownerBirthDate": "Owner date of birth",
+          "tenantId": "Tenant ID number",
+          "tenantPhone": "Tenant mobile number",
+          "tenantBirthDate": "Tenant date of birth",
+          "unitType": "Unit type",
+          "unitUsage": "Unit usage",
+          "floor": "Floor",
+          "unitNumber": "Unit number",
+          "area": "Area",
+          "rooms": "Rooms",
+          "bathrooms": "Bathrooms",
+          "kitchens": "Kitchens",
+          "kitchenCabinets": "Kitchen cabinets",
+          "paymentMethod": "Payment method"
+        },
+        "kitchenCabinets": {
+          "installed": "Installed",
+          "notInstalled": "Not installed"
+        },
+        "calendar": {
+          "hijri": "Hijri",
+          "gregorian": "Gregorian"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²",
+        "contractTypeResidential": "Residential",
+        "contractTypeCommercial": "Commercial",
+        "sameAddress": "Same previous national address",
+        "yearsCount": "'{'count'}' year(s)",
+        "monthsCount": "'{'count'}' month(s)",
+        "paymentMethodPrefix": "Payment method: '{'method'}'"
+      },
       "navigation": {
         "previous": "Back",
         "pay": "Continue",
@@ -2158,9 +2254,9 @@
       },
       "summary": {
         "sectionTitle": "Your order fees",
-        "ejarFees": "Ejar fees:",
+        "ejarFees": "Contract documentation fees on Ejar",
         "contractPeriodPrice": "Contract period price:",
-        "vat": "VAT:",
+        "vat": "Value Added Tax (15%)",
         "applicationFees": "Application fees:",
         "electricityMeterFee": "Electricity meter fee:",
         "waterMeterFee": "Water meter fee:",
@@ -2168,10 +2264,10 @@
         "services": "Additional services:",
         "servicesTotal": "Services total:",
         "docFee": "Documentation fees:",
-        "total": "Total:",
-        "priceBeforeCoupon": "Total before discount:",
-        "discount": "Discount amount:",
-        "priceAfterCoupon": "Total after discount:",
+        "total": "Total",
+        "priceBeforeCoupon": "Total before discount",
+        "discount": "Discount amount",
+        "priceAfterCoupon": "Total after discount",
         "currency": "SAR",
         "ejarLogoAlt": "Ejar",
         "free": "Free",

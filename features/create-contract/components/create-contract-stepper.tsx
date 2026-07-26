@@ -1,14 +1,16 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import Image from "next/image";
 
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
+import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import {
   CREATE_CONTRACT_STEPPER_STEPS,
   CREATE_CONTRACT_STEPS,
 } from "@/features/create-contract/types/create-contract-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { cn } from "@/lib/utils";
 
 type CreateContractStepperProps = {
@@ -22,7 +24,17 @@ function getStepPillClassName(
   isActive: boolean,
   isCompleted: boolean,
   isUnlocked: boolean,
+  isSkipped: boolean,
+  isSkipAnimating: boolean,
 ) {
+  if (isSkipped) {
+    return cn(
+      stepPillClassName,
+      "cursor-not-allowed bg-[#f0f0f0] text-[#c4c4c4] opacity-30 grayscale dark:bg-[#24302c] dark:text-[#6a7a74]",
+      isSkipAnimating && "animate-contract-step-skip opacity-100",
+    );
+  }
+
   return cn(
     stepPillClassName,
     isUnlocked
@@ -50,24 +62,58 @@ export default function CreateContractStepper({
 }: CreateContractStepperProps) {
   const { currentStep, currentStepIndex, goToStep, isStepUnlocked } =
     useCreateContractSteps();
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const instrumentType = useCreateContractDraftStore(
+    (state) => state.contractStep1Data?.instrument_type,
+  );
+  const skippingOwnerStep = useCreateContractDraftStore(
+    (state) => state.skippingOwnerStep,
+  );
+  const clearSkippingOwnerStep = useCreateContractDraftStore(
+    (state) => state.clearSkippingOwnerStep,
+  );
   const isPaymentStep = currentStep === "payment";
+  const ownerSkipped = isOwnerStepSkipped({
+    selectedDeedType,
+    instrumentType,
+  });
+
+  useEffect(() => {
+    if (!skippingOwnerStep) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      clearSkippingOwnerStep();
+    }, 750);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [skippingOwnerStep, clearSkippingOwnerStep]);
 
   return (
     <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5 dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
         {CREATE_CONTRACT_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
-          const isCompleted = stepIndex < currentStepIndex;
+          const isSkipped = step === "owner" && ownerSkipped;
+          const isPassed = stepIndex < currentStepIndex;
+          const isCompleted = isPassed && !isSkipped;
           const isActive = stepIndex === currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
           const isIntro = step === "intro";
+          const connectorCompleted =
+            isActive || isCompleted || (isSkipped && isPassed);
 
           return (
             <Fragment key={step}>
               {index > 0 && (
                 <span
                   aria-hidden="true"
-                  className={getConnectorClassName(isActive || isCompleted)}
+                  className={getConnectorClassName(connectorCompleted)}
                 />
               )}
 
@@ -76,7 +122,8 @@ export default function CreateContractStepper({
                 title={labels.steps[step]}
                 aria-label={labels.steps[step]}
                 aria-current={isActive ? "step" : undefined}
-                disabled={!isUnlocked}
+                aria-disabled={isSkipped || !isUnlocked}
+                disabled={isSkipped || !isUnlocked}
                 onClick={() => goToStep(step)}
                 className={
                   isIntro
@@ -87,7 +134,13 @@ export default function CreateContractStepper({
                           ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
                           : "cursor-not-allowed opacity-50",
                       )
-                    : getStepPillClassName(isActive, isCompleted, isUnlocked)
+                    : getStepPillClassName(
+                        isActive,
+                        isCompleted,
+                        isUnlocked,
+                        isSkipped,
+                        isSkipped && skippingOwnerStep,
+                      )
                 }
               >
                 {isIntro && (

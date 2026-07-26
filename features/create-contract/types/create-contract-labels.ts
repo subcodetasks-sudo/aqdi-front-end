@@ -88,6 +88,10 @@ export type CreateContractLabels = {
       endowmentCertLabel?: string;
       trusteeshipLabel?: string;
       guardiansPoaLabel?: string;
+      salePaperLabel?: string;
+      adversePossessionLabel?: string;
+      economicCitiesLabel?: string;
+      paperLabel?: string;
       clickHere: string;
       chooseFile: string;
       acceptedFormats: string;
@@ -109,6 +113,7 @@ export type CreateContractLabels = {
       najizHint: string;
       minorHeirsLabel: string;
       guardiansPoaLabel: string;
+      guardiansPoaHint: string;
       clickHere: string;
       chooseFile: string;
     };
@@ -167,8 +172,23 @@ export type CreateContractLabels = {
       };
       photo: CreateContractLabels["deed"]["deedImage"];
     };
+    leaseRenewal: {
+      noticeResidential: string;
+      noticeCommercial: string;
+      addressFieldLabel: string;
+      sameAddress: {
+        title: string;
+        description: string;
+      };
+      changeAddress: {
+        title: string;
+        description: string;
+      };
+      sameAddressConfirmation: string;
+    };
     waqf: {
       multipleTrusteesLabel: string;
+      trusteesPoaHint: string;
     };
     manualEntry: ManualDeedEntryLabels;
   };
@@ -552,6 +572,74 @@ export type CreateContractLabels = {
     journeyMessage: string;
     securePaymentLabel: string;
     reviewOrderLabel: string;
+    reviewDialog: {
+      title: string;
+      close: string;
+      edit: string;
+      view: string;
+      confirm: string;
+      hint: string;
+      emptyValue: string;
+      orderNumber: string;
+      share: string;
+      copy: string;
+      print: string;
+      copySuccess: string;
+      copyError: string;
+      shareError: string;
+      sections: {
+        deed: string;
+        nationalAddress: string;
+        ownerSelf: string;
+        ownerWithAgent: string;
+        tenantIndividual: string;
+        tenantOrganization: string;
+        unit: string;
+        rent: string;
+      };
+      fields: {
+        contractType: string;
+        startDate: string;
+        duration: string;
+        documentType: string;
+        deedAttachment: string;
+        mapsLink: string;
+        addressPhoto: string;
+        addressManual: string;
+        ownerId: string;
+        ownerPhone: string;
+        ownerBirthDate: string;
+        tenantId: string;
+        tenantPhone: string;
+        tenantBirthDate: string;
+        unitType: string;
+        unitUsage: string;
+        floor: string;
+        unitNumber: string;
+        area: string;
+        rooms: string;
+        bathrooms: string;
+        kitchens: string;
+        kitchenCabinets: string;
+        paymentMethod: string;
+      };
+      kitchenCabinets: {
+        installed: string;
+        notInstalled: string;
+      };
+      calendar: {
+        hijri: string;
+        gregorian: string;
+      };
+      currency: string;
+      areaUnit: string;
+      contractTypeResidential: string;
+      contractTypeCommercial: string;
+      sameAddress: string;
+      yearsCount: string;
+      monthsCount: string;
+      paymentMethodPrefix: string;
+    };
     navigation: {
       previous: string;
       pay: string;

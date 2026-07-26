@@ -15,6 +15,7 @@ import { useStartFreshContract } from "@/features/create-contract/hooks/use-star
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 
@@ -36,6 +37,19 @@ export default function CreateContractWizard({
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const instrumentType = useCreateContractDraftStore(
+    (state) => state.contractStep1Data?.instrument_type,
+  );
+  const skipOwnerToTenant = useCreateContractDraftStore(
+    (state) => state.skipOwnerToTenant,
+  );
+  const ownerSkipped = isOwnerStepSkipped({
+    selectedDeedType,
+    instrumentType,
+  });
   const pageTitle =
     contractType === "residential"
       ? labels.pageTitleResidential
@@ -50,6 +64,12 @@ export default function CreateContractWizard({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (currentStep === "owner" && ownerSkipped) {
+      skipOwnerToTenant();
+    }
+  }, [currentStep, ownerSkipped, skipOwnerToTenant]);
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4">
@@ -82,7 +102,7 @@ export default function CreateContractWizard({
         />
       ) : null}
 
-      {currentStep === "owner" ? (
+      {currentStep === "owner" && !ownerSkipped ? (
         <CreateContractOwnerStep
           labels={labels.owner}
           onBack={goBack}
@@ -112,9 +132,14 @@ export default function CreateContractWizard({
         <CreateContractPaymentStep
           labels={labels.payment}
           saveLaterDialogLabels={labels.tenant.saveLaterDialog}
+          deedTypeLabels={labels.deed.deedType.types}
+          deedAttachmentLabels={{
+            label: labels.deed.deedImage.label,
+            salePaperLabel: labels.deed.deedImage.salePaperLabel,
+          }}
           contractType={contractType}
           onBack={goBack}
-          onReviewOrder={() => goToStep("deed")}
+          onEditStep={goToStep}
         />
       ) : null}
     </div>

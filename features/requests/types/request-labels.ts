@@ -32,6 +32,7 @@ export type RequestCardLabels = {
   invoiceDialog: RequestInvoiceDialogLabels;
   incompleteProgressDialog: RequestIncompleteProgressDialogLabels;
   completePayment: string;
+  completePaymentWithAmount: string;
   completePaymentLoading: string;
   paymentFlow: ContractPaymentMethodLabels;
   whenReceiveContract: string;
@@ -40,6 +41,7 @@ export type RequestCardLabels = {
   whatsappHref: string;
   status: {
     completed: string;
+    completedWithAmount: string;
     incomplete: string;
     inProgress: string;
     returned: string;

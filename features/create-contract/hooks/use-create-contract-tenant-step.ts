@@ -15,8 +15,10 @@ import {
 } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { TenantStatusOption } from "@/features/create-contract/types/tenant-step";
 import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
+import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 
 export const LEASE_RENEWAL_TENANT_PHASE_COUNT = 2;
+export const SUBLEASE_TENANT_PHASE_COUNT = 1;
 
 export function useCreateContractTenantStep() {
   const tenant = useCreateContractDraftStore((state) => state.tenant);
@@ -38,14 +40,23 @@ export function useCreateContractTenantStep() {
     (state) => state.setLeaseRenewalNotes,
   );
 
-  const isLeaseRenewal = isLeaseRenewalContract({
+  const skipOwnerState = {
     selectedDeedType,
     instrumentType: contractStep1Data?.instrument_type,
-  });
+  };
+  const isLeaseRenewal = isLeaseRenewalContract(skipOwnerState);
+  const isSublease = isSubleaseContract(skipOwnerState);
 
-  const isLastPhase = isLeaseRenewal
-    ? tenant.currentPhaseIndex === LEASE_RENEWAL_TENANT_PHASE_COUNT - 1
-    : tenant.currentPhaseIndex === TENANT_STEP_PHASE_COUNT - 1;
+  const phaseCount = isLeaseRenewal
+    ? LEASE_RENEWAL_TENANT_PHASE_COUNT
+    : isSublease
+      ? SUBLEASE_TENANT_PHASE_COUNT
+      : TENANT_STEP_PHASE_COUNT;
+
+  // Sublease skips tenant identity and goes straight to rented-unit data.
+  const currentPhaseIndex = isSublease ? 0 : tenant.currentPhaseIndex;
+
+  const isLastPhase = currentPhaseIndex === phaseCount - 1;
 
   const canContinue = isLeaseRenewal
     ? tenant.currentPhaseIndex === 0
@@ -54,18 +65,22 @@ export function useCreateContractTenantStep() {
           addNotes: tenant.leaseRenewalAddNotes,
           notes: tenant.leaseRenewalNotes,
         })
-    : tenant.currentPhaseIndex === 0
-      ? isTenantDataComplete(tenant.tenantData)
-      : areRentedUnitsComplete(tenant.rentedUnits);
+    : isSublease
+      ? areRentedUnitsComplete(tenant.rentedUnits)
+      : tenant.currentPhaseIndex === 0
+        ? isTenantDataComplete(tenant.tenantData)
+        : areRentedUnitsComplete(tenant.rentedUnits);
 
   function updateStatus(status: TenantStatusOption | "") {
     setTenantData(updateContractTenantStatus(tenant.tenantData, status));
   }
 
   function goToNextPhase() {
-    const maxPhaseIndex = isLeaseRenewal
-      ? LEASE_RENEWAL_TENANT_PHASE_COUNT - 1
-      : TENANT_STEP_PHASE_COUNT - 1;
+    if (isSublease) {
+      return;
+    }
+
+    const maxPhaseIndex = phaseCount - 1;
 
     if (tenant.currentPhaseIndex < maxPhaseIndex) {
       setTenantPhaseIndex(tenant.currentPhaseIndex + 1);
@@ -73,13 +88,18 @@ export function useCreateContractTenantStep() {
   }
 
   function goToPreviousPhase() {
+    if (isSublease) {
+      return;
+    }
+
     if (tenant.currentPhaseIndex > 0) {
       setTenantPhaseIndex(tenant.currentPhaseIndex - 1);
     }
   }
 
   return {
-    currentPhaseIndex: tenant.currentPhaseIndex,
+    currentPhaseIndex,
+    phaseCount,
     tenantData: tenant.tenantData,
     setTenantData,
     rentedUnits: tenant.rentedUnits,
@@ -89,6 +109,7 @@ export function useCreateContractTenantStep() {
     setLeaseRenewalAddNotes,
     setLeaseRenewalNotes,
     isLeaseRenewal,
+    isSublease,
     updateStatus,
     canContinue,
     isLastPhase,

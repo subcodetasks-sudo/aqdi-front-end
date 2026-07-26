@@ -29,6 +29,7 @@ export type RequestCardData = {
   journeyStatusLabel: string | null;
   paymentSuccessful: boolean;
   paymentStatusLabel: string | null;
+  payableAmount: number | null;
   isIncompleteDraft: boolean;
   showViewEdit: boolean;
   showDownloadInvoice: boolean;

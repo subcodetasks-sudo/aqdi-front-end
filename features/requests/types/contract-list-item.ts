@@ -29,6 +29,10 @@ export type ContractListItem = {
   journey?: ContractJourneyStep[] | null;
   created_at: string;
   time_to_documentation_contract: string | null;
+  total_price?: number | null;
+  doc_fee?: number | null;
+  amount?: number | null;
+  payable_amount?: number | null;
 };
 
 export type ContractsPagination = {

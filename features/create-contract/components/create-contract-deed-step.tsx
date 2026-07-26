@@ -10,6 +10,8 @@ import CreateContractDeedNationalAddress from "@/features/create-contract/compon
 import CreateContractDeedTypeSelect from "@/features/create-contract/components/create-contract-deed-type-select";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
+import CreateContractLeaseRenewalAddressChoice from "@/features/create-contract/components/create-contract-lease-renewal-address-choice";
+import CreateContractLeaseRenewalNotice from "@/features/create-contract/components/create-contract-lease-renewal-notice";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
 import { Switch } from "@/components/ui/switch";
@@ -19,7 +21,11 @@ import { useCreateContractDraftStore } from "@/features/create-contract/stores/u
 import { useSubmitContractStep2 } from "@/features/create-contract/hooks/use-submit-contract-step2";
 import { type DeedTypeId } from "@/features/create-contract/types/deed-type";
 import {
+  deedTypeIsAdversePossession,
+  deedTypeIsEconomicCitiesAuthority,
   deedTypeIsLeaseRenewal,
+  deedTypeIsPaper,
+  deedTypeIsSalePaper,
   deedTypeIsSublease,
 } from "@/features/create-contract/types/deed-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -92,13 +98,20 @@ export default function CreateContractDeedStep({
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
     isLeaseRenewal,
+    leaseRenewalAddressMode,
+    setLeaseRenewalAddressMode,
     useManualDeedEntry,
     setUseManualDeedEntry,
     manualDeedEntry,
     setManualDeedEntry,
   } = useCreateContractDeedStep();
   const isSublease = deedTypeIsSublease(selectedDeedType);
-  const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
+  const skipOwnerToTenant = useCreateContractDraftStore(
+    (state) => state.skipOwnerToTenant,
+  );
+  const contractType =
+    useCreateContractDraftStore((state) => state.contractSession?.contractType) ??
+    "housing";
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
   const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
@@ -108,6 +121,13 @@ export default function CreateContractDeedStep({
 
   const deedPhase = labels.phases[0];
   const addressPhase = labels.phases[1];
+  const leaseRenewalNotice =
+    contractType === "commercial"
+      ? labels.leaseRenewal?.noticeCommercial
+      : labels.leaseRenewal?.noticeResidential;
+  const showChangeAddressMethods =
+    isLeaseRenewal && leaseRenewalAddressMode === "change";
+  const showStandardAddressMethods = !isLeaseRenewal && !isSublease;
 
   function handleDeedTypeChange(value: DeedTypeId | "") {
     setSelectedDeedType(value);
@@ -141,7 +161,27 @@ export default function CreateContractDeedStep({
         return;
       }
 
-      setCurrentStep("tenant");
+      if (leaseRenewalAddressMode === "change") {
+        if (!nationalAddressMethod) {
+          setShowFieldErrors(true);
+          toast.error(tIncomplete("incompleteContinue"));
+          setTimeout(scrollToFirstInvalidField, 0);
+          return;
+        }
+
+        const submittedAddress = await submitStep2({
+          addressMethod: nationalAddressMethod,
+          photoFiles: nationalAddressPhotoFiles,
+          linkUrl: nationalAddressLinkUrl,
+          manualAddress: nationalAddressManual,
+        });
+
+        if (!submittedAddress) {
+          return;
+        }
+      }
+
+      skipOwnerToTenant();
       return;
     }
 
@@ -215,6 +255,11 @@ export default function CreateContractDeedStep({
         return;
       }
     } else if (!isInstrumentTypeLocked && !isDeedAlreadySubmitted) {
+      return;
+    }
+
+    if (isSublease) {
+      skipOwnerToTenant();
       return;
     }
 
@@ -405,6 +450,7 @@ export default function CreateContractDeedStep({
               onChange={setDeedGuardiansPoaFiles}
               existingImageUrl={existingGuardiansPoaImageUrl}
               invalid={showFieldErrors}
+              hint={labels.waqf.trusteesPoaHint}
             />
           ) : null}
         </div>
@@ -414,6 +460,21 @@ export default function CreateContractDeedStep({
     return renderInstrumentUpload(
       <CreateContractDeedImageUpload
         labels={labels.deedImage}
+        fieldLabel={
+          deedTypeIsSalePaper(selectedDeedType)
+            ? labels.deedImage.salePaperLabel
+            : deedTypeIsAdversePossession(selectedDeedType)
+              ? labels.deedImage.adversePossessionLabel
+              : deedTypeIsEconomicCitiesAuthority(selectedDeedType)
+                ? labels.deedImage.economicCitiesLabel
+                : deedTypeIsPaper(selectedDeedType)
+                  ? labels.deedImage.paperLabel
+                  : undefined
+        }
+        single={
+          deedTypeIsAdversePossession(selectedDeedType) ||
+          deedTypeIsPaper(selectedDeedType)
+        }
         variant="dropzone"
         value={deedFiles}
         onChange={setDeedFiles}
@@ -442,6 +503,10 @@ export default function CreateContractDeedStep({
               invalid={showFieldErrors && selectedDeedType === ""}
             />
 
+            {isLeaseRenewal && leaseRenewalNotice ? (
+              <CreateContractLeaseRenewalNotice message={leaseRenewalNotice} />
+            ) : null}
+
             {renderDeedInstrumentContent()}
           </div>
 
@@ -453,19 +518,29 @@ export default function CreateContractDeedStep({
                 showIcon={false}
               />
 
-              <CreateContractDeedNationalAddress
-                labels={labels.nationalAddress}
-                method={nationalAddressMethod}
-                onMethodChange={setNationalAddressMethod}
-                photoFiles={nationalAddressPhotoFiles}
-                onPhotoFilesChange={setNationalAddressPhotoFiles}
-                linkUrl={nationalAddressLinkUrl}
-                onLinkUrlChange={setNationalAddressLinkUrl}
-                manualAddress={nationalAddressManual}
-                onManualAddressChange={setNationalAddressManual}
-                existingPhotoUrl={existingAddressImageUrl}
-                showFieldErrors={showFieldErrors}
-              />
+              {isLeaseRenewal && labels.leaseRenewal ? (
+                <CreateContractLeaseRenewalAddressChoice
+                  labels={labels.leaseRenewal}
+                  value={leaseRenewalAddressMode}
+                  onChange={setLeaseRenewalAddressMode}
+                />
+              ) : null}
+
+              {showStandardAddressMethods || showChangeAddressMethods ? (
+                <CreateContractDeedNationalAddress
+                  labels={labels.nationalAddress}
+                  method={nationalAddressMethod}
+                  onMethodChange={setNationalAddressMethod}
+                  photoFiles={nationalAddressPhotoFiles}
+                  onPhotoFilesChange={setNationalAddressPhotoFiles}
+                  linkUrl={nationalAddressLinkUrl}
+                  onLinkUrlChange={setNationalAddressLinkUrl}
+                  manualAddress={nationalAddressManual}
+                  onManualAddressChange={setNationalAddressManual}
+                  existingPhotoUrl={existingAddressImageUrl}
+                  showFieldErrors={showFieldErrors}
+                />
+              ) : null}
             </div>
           ) : null}
         </div>

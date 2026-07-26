@@ -16,16 +16,12 @@ import CreateContractStepPhaseProgress from "@/features/create-contract/componen
 import CreateContractTenantIndividualDataPhase from "@/features/create-contract/components/create-contract-tenant-individual-data-phase";
 import CreateContractTenantOrganizationDataPhase from "@/features/create-contract/components/create-contract-tenant-organization-data-phase";
 import CreateContractTenantStatusSelect from "@/features/create-contract/components/create-contract-tenant-status-select";
-import {
-  LEASE_RENEWAL_TENANT_PHASE_COUNT,
-  useCreateContractTenantStep,
-} from "@/features/create-contract/hooks/use-create-contract-tenant-step";
+import { useCreateContractTenantStep } from "@/features/create-contract/hooks/use-create-contract-tenant-step";
 import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
 import { useSubmitContractStep4 } from "@/features/create-contract/hooks/use-submit-contract-step4";
 import { useSubmitContractStep5 } from "@/features/create-contract/hooks/use-submit-contract-step5";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
-import { TENANT_STEP_PHASE_COUNT } from "@/features/create-contract/types/rented-unit-step";
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -48,6 +44,7 @@ export default function CreateContractTenantStep({
   const tIncomplete = useTranslations("createContract");
   const {
     currentPhaseIndex,
+    phaseCount,
     tenantData,
     setTenantData,
     rentedUnits,
@@ -57,6 +54,7 @@ export default function CreateContractTenantStep({
     setLeaseRenewalAddNotes,
     setLeaseRenewalNotes,
     isLeaseRenewal,
+    isSublease,
     updateStatus,
     canContinue,
     isLastPhase,
@@ -72,11 +70,12 @@ export default function CreateContractTenantStep({
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
 
-  const phase = labels.phases[currentPhaseIndex];
-  const isTenantDataPhase = currentPhaseIndex === 0;
-  const isRentedUnitPhase = currentPhaseIndex === 1;
-  const isLeaseRenewalBirthDatePhase = isLeaseRenewal && isTenantDataPhase;
-  const isLeaseRenewalAmendmentsPhase = isLeaseRenewal && isRentedUnitPhase;
+  // Sublease skips tenant identity and lands on rented-unit copy (phases[1]).
+  const phase = labels.phases[isSublease ? 1 : currentPhaseIndex];
+  const isTenantDataPhase = !isSublease && currentPhaseIndex === 0;
+  const isRentedUnitPhase = isSublease || currentPhaseIndex === 1;
+  const isLeaseRenewalBirthDatePhase = isLeaseRenewal && currentPhaseIndex === 0;
+  const isLeaseRenewalAmendmentsPhase = isLeaseRenewal && currentPhaseIndex === 1;
 
   const phaseTitle = isLeaseRenewalAmendmentsPhase
     ? labels.leaseRenewal.heading
@@ -86,7 +85,7 @@ export default function CreateContractTenantStep({
     : phase.subtitle;
 
   function handlePrevious() {
-    if (currentPhaseIndex === 0) {
+    if (isSublease || currentPhaseIndex === 0) {
       onBack();
       return;
     }
@@ -192,9 +191,7 @@ export default function CreateContractTenantStep({
   return (
     <div className="space-y-4">
       <CreateContractStepPhaseProgress
-        totalPhases={
-          isLeaseRenewal ? LEASE_RENEWAL_TENANT_PHASE_COUNT : TENANT_STEP_PHASE_COUNT
-        }
+        totalPhases={phaseCount}
         currentPhaseIndex={currentPhaseIndex}
       />
 
@@ -211,7 +208,7 @@ export default function CreateContractTenantStep({
         <CreateContractStepPhaseHeader
           title={phaseTitle}
           subtitle={phaseSubtitle}
-          icon={currentPhaseIndex === 0 ? "user" : "building"}
+          icon={isRentedUnitPhase || isLeaseRenewalAmendmentsPhase ? "building" : "user"}
         />
 
         {isLeaseRenewalBirthDatePhase ? (
@@ -247,7 +244,7 @@ export default function CreateContractTenantStep({
           />
         ) : null}
 
-        {currentPhaseIndex === 0 && !isLeaseRenewal ? (
+        {isTenantDataPhase && !isLeaseRenewal ? (
           <>
             <CreateContractTenantStatusSelect
               labels={labels.tenantStatus}

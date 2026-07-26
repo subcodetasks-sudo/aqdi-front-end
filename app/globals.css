@@ -48,6 +48,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-contract-step-skip: contract-step-skip 0.7s ease-out both;
   @keyframes marquee {
   from {
     transform: translateX(0);
@@ -62,6 +63,23 @@
     }
   to {
     transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes contract-step-skip {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      filter: grayscale(0);
+    }
+    45% {
+      opacity: 0.55;
+      transform: scale(0.94);
+      filter: grayscale(0.4);
+    }
+    100% {
+      opacity: 0.28;
+      transform: scale(1);
+      filter: grayscale(0.85);
     }
   }
 }

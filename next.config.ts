@@ -1,12 +1,17 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+const MAX_UPLOAD_BODY_SIZE = 50 * 1024 * 1024; // 50 MB
+
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      // 50 MB in bytes — avoids string parse issues at config load time
-      bodySizeLimit: 50 * 1024 * 1024,
+      // Avoid string parse issues at config load time
+      bodySizeLimit: MAX_UPLOAD_BODY_SIZE,
     },
+    // Proxy clones the request body and defaults to 10MB.
+    // Large deed/sublease PDFs were truncated → "Unexpected end of form".
+    proxyClientMaxBodySize: MAX_UPLOAD_BODY_SIZE,
   },
   images: {
     remotePatterns: [

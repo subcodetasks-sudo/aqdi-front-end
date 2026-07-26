@@ -16,6 +16,7 @@ type RequestReceiveContractButtonProps = {
   contractId: number;
   contractUuid: string;
   completePaymentLabel: string;
+  completePaymentWithAmountLabel: string;
   completePaymentLoadingLabel: string;
   paymentFlowLabels: ContractPaymentMethodLabels;
   dialogLabels: RequestReceiveContractDialogLabels;
@@ -28,6 +29,7 @@ export default function RequestReceiveContractButton({
   contractId,
   contractUuid,
   completePaymentLabel,
+  completePaymentWithAmountLabel,
   completePaymentLoadingLabel,
   paymentFlowLabels,
   dialogLabels,
@@ -56,6 +58,7 @@ export default function RequestReceiveContractButton({
         contractUuid={contractUuid}
         actionType={actionType}
         completePaymentLabel={completePaymentLabel}
+        completePaymentWithAmountLabel={completePaymentWithAmountLabel}
         completePaymentLoadingLabel={completePaymentLoadingLabel}
         paymentFlowLabels={paymentFlowLabels}
         labels={dialogLabels}

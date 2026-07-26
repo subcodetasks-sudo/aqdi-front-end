@@ -1,7 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { Building2, Home, Info } from "lucide-react";
 
+import { contractFinanceSummaryKeys } from "@/features/create-contract/query-keys";
+import { getContractFinanceSummary } from "@/features/create-contract/services/get-contract-finance-summary";
+import { formatPaymentAmount } from "@/features/create-contract/types/payment-step";
 import RequestCardActions from "@/features/requests/components/request-card-actions";
 import RequestCopyIdButton from "@/features/requests/components/request-copy-id-button";
 import RequestIncompleteActions from "@/features/requests/components/request-incomplete-actions";
@@ -15,36 +19,57 @@ type RequestCardProps = {
   labels: RequestCardLabels;
 };
 
-function resolveStatusLabel(
-  card: RequestCardData,
+function resolveCompletedLabel(
+  amount: number | null,
   labels: RequestCardLabels,
-  liveStatusLabel?: string,
 ) {
-  if (card.isIncompleteDraft) {
-    return labels.draftIncompleteBadge;
-  }
-
-  if (liveStatusLabel) {
-    return liveStatusLabel;
-  }
-
-  if (card.statusName) {
-    return card.statusName;
-  }
-
-  if (card.status === "completed") {
+  if (amount == null) {
     return labels.status.completed;
   }
 
-  if (card.status === "incomplete") {
-    return labels.status.incomplete;
-  }
+  return labels.status.completedWithAmount.replaceAll(
+    "{amount}",
+    formatPaymentAmount(amount),
+  );
+}
 
-  if (card.status === "in-progress") {
-    return labels.status.inProgress;
-  }
+/** Completion badge is driven by payment (`is_completed`), not employee status. */
+function PaymentCompletionBadge({
+  card,
+  labels,
+}: {
+  card: RequestCardData;
+  labels: RequestCardLabels;
+}) {
+  const financeQuery = useQuery({
+    queryKey: contractFinanceSummaryKeys.detail(card.uuid),
+    queryFn: () => getContractFinanceSummary(card.uuid),
+    enabled: card.paymentSuccessful && card.payableAmount == null,
+  });
 
-  return labels.status.returned;
+  const amount =
+    card.payableAmount ??
+    (typeof financeQuery.data?.total_price === "number" &&
+    Number.isFinite(financeQuery.data.total_price)
+      ? financeQuery.data.total_price
+      : null);
+
+  const label = card.paymentSuccessful
+    ? resolveCompletedLabel(amount, labels)
+    : labels.draftIncompleteBadge;
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-bold",
+        card.paymentSuccessful
+          ? "bg-brand-background-green text-brand"
+          : "bg-[#fff1e6] text-[#e67e22]",
+      )}
+    >
+      {label}
+    </span>
+  );
 }
 
 export default function RequestCard({ card, labels }: RequestCardProps) {
@@ -54,8 +79,6 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
     ? labels.unitType.commercial
     : labels.unitType.residential;
 
-  const liveStatusLabel = livePatch?.status_label || livePatch?.journey_status_label;
-  const statusLabel = resolveStatusLabel(card, labels, liveStatusLabel);
   const statusColor = livePatch?.status_color || card.statusColor;
   const statusType = livePatch?.status_type || card.statusType;
   const journeyLabel =
@@ -63,7 +86,9 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
     livePatch?.status_label ||
     card.journeyStatusLabel ||
     card.paymentStatusLabel ||
-    statusLabel;
+    (card.paymentSuccessful
+      ? labels.status.completed
+      : labels.draftIncompleteBadge);
 
   const contractTypeFullLabel = isCommercial
     ? labels.contractTypes.commercial
@@ -111,37 +136,7 @@ export default function RequestCard({ card, labels }: RequestCardProps) {
                 {unitLabel}
               </span>
 
-              <span
-                className={cn(
-                  "inline-flex items-center rounded-full px-3 py-1 text-xs font-bold",
-                  card.isIncompleteDraft
-                    ? "bg-[#fff1e6] text-[#e67e22]"
-                    : "text-white",
-                  !card.isIncompleteDraft &&
-                    !statusColor &&
-                    card.status === "completed" &&
-                    "bg-[#2f9e6f]",
-                  !card.isIncompleteDraft &&
-                    !statusColor &&
-                    card.status === "incomplete" &&
-                    "bg-[#8b5cf6]",
-                  !card.isIncompleteDraft &&
-                    !statusColor &&
-                    card.status === "in-progress" &&
-                    "bg-brand-secondary",
-                  !card.isIncompleteDraft &&
-                    !statusColor &&
-                    card.status === "returned" &&
-                    "bg-[#8b5cf6]",
-                )}
-                style={
-                  !card.isIncompleteDraft && statusColor
-                    ? { backgroundColor: statusColor }
-                    : undefined
-                }
-              >
-                {statusLabel}
-              </span>
+              <PaymentCompletionBadge card={card} labels={labels} />
 
               {!card.isIncompleteDraft && statusType === "draft" ? (
                 <span className="inline-flex items-center rounded-full bg-[#fff1e6] px-3 py-1 text-xs font-bold text-[#e67e22]">

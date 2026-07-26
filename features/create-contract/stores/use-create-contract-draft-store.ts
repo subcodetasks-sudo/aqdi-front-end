@@ -9,6 +9,8 @@ import {
   type PersistedFile,
 } from "@/lib/storage/persisted-files";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
+import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
+import type { LeaseRenewalAddressMode } from "@/features/create-contract/types/lease-renewal-address-mode";
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
 import {
   DEFAULT_NATIONAL_ADDRESS_LOCATION,
@@ -79,7 +81,7 @@ import {
   buildOwnerDataFromStep3,
   mapBackendStepToWizardStep,
 } from "@/features/create-contract/utils/build-uncompleted-contract-draft";
-import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
+import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import type { UncompletedContractData } from "@/features/create-contract/types/uncompleted-contract";
 
 type DeedDraftState = {
@@ -105,6 +107,7 @@ type DeedDraftState = {
   deedGuardiansPoaPersistedFiles: PersistedFile[];
   useManualDeedEntry: boolean;
   manualDeedEntry: ManualDeedEntryData;
+  leaseRenewalAddressMode: LeaseRenewalAddressMode;
   nationalAddressMethod: NationalAddressMethodId | "";
   nationalAddressPhotoFiles: File[];
   nationalAddressPhotoPersistedFiles: PersistedFile[];
@@ -146,9 +149,12 @@ type CreateContractDraftStore = {
   tenant: TenantDraftState;
   financeData: FinanceDataState;
   paymentData: PaymentDataState;
+  skippingOwnerStep: boolean;
   setCurrentStep: (step: CreateContractStep) => void;
   goNextStep: () => void;
   goBackStep: () => void;
+  skipOwnerToTenant: () => void;
+  clearSkippingOwnerStep: () => void;
   setDeedPhaseIndex: (index: number) => void;
   setSelectedDeedType: (value: DeedTypeId | "") => void;
   setDeedFiles: (files: File[]) => Promise<void>;
@@ -163,6 +169,7 @@ type CreateContractDraftStore = {
   setDeedGuardiansPoaFiles: (files: File[]) => Promise<void>;
   setUseManualDeedEntry: (value: boolean) => void;
   setManualDeedEntry: (value: ManualDeedEntryData) => void;
+  setLeaseRenewalAddressMode: (mode: LeaseRenewalAddressMode) => void;
   setNationalAddressMethod: (method: NationalAddressMethodId) => void;
   setNationalAddressPhotoFiles: (files: File[]) => Promise<void>;
   setNationalAddressLinkUrl: (url: string) => void;
@@ -223,6 +230,7 @@ const INITIAL_DEED: DeedDraftState = {
   deedGuardiansPoaPersistedFiles: [],
   useManualDeedEntry: false,
   manualDeedEntry: { ...EMPTY_MANUAL_DEED_ENTRY },
+  leaseRenewalAddressMode: "same",
   nationalAddressMethod: "link" as NationalAddressMethodId | "",
   nationalAddressPhotoFiles: [],
   nationalAddressPhotoPersistedFiles: [],
@@ -445,6 +453,7 @@ function createInitialState() {
     },
     financeData: createEmptyFinanceData(),
     paymentData: { ...EMPTY_PAYMENT_DATA },
+    skippingOwnerStep: false,
   };
 }
 
@@ -452,11 +461,14 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
   persist(
     (set, get) => ({
       ...createInitialState(),
-      setCurrentStep: (step) => set({ currentStep: step }),
+      setCurrentStep: (step) => set({ currentStep: step, skippingOwnerStep: false }),
       goNextStep: () => {
         const index = CREATE_CONTRACT_STEPS.indexOf(get().currentStep);
         if (index < CREATE_CONTRACT_STEPS.length - 1) {
-          set({ currentStep: CREATE_CONTRACT_STEPS[index + 1] });
+          set({
+            currentStep: CREATE_CONTRACT_STEPS[index + 1],
+            skippingOwnerStep: false,
+          });
         }
       },
       goBackStep: () => {
@@ -464,19 +476,28 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
 
         if (
           state.currentStep === "tenant" &&
-          isLeaseRenewalContract({
+          isOwnerStepSkipped({
             selectedDeedType: state.deed.selectedDeedType,
             instrumentType: state.contractStep1Data?.instrument_type,
           })
         ) {
-          set({ currentStep: "deed" });
+          set({ currentStep: "deed", skippingOwnerStep: false });
           return;
         }
 
         const index = CREATE_CONTRACT_STEPS.indexOf(state.currentStep);
         if (index > 0) {
-          set({ currentStep: CREATE_CONTRACT_STEPS[index - 1] });
+          set({
+            currentStep: CREATE_CONTRACT_STEPS[index - 1],
+            skippingOwnerStep: false,
+          });
         }
+      },
+      skipOwnerToTenant: () => {
+        set({ currentStep: "tenant", skippingOwnerStep: true });
+      },
+      clearSkippingOwnerStep: () => {
+        set({ skippingOwnerStep: false });
       },
       setDeedPhaseIndex: (index) =>
         set((state) => ({ deed: { ...state.deed, currentPhaseIndex: index } })),
@@ -527,6 +548,9 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
                 value === ""
                   ? { ...EMPTY_MANUAL_DEED_ENTRY }
                   : state.deed.manualDeedEntry,
+              leaseRenewalAddressMode: deedTypeIsLeaseRenewal(value)
+                ? state.deed.leaseRenewalAddressMode || "same"
+                : "same",
             },
             contractStep1Data: shouldClearStep1 ? null : state.contractStep1Data,
             contractStep2Data: shouldClearStep1 ? null : state.contractStep2Data,
@@ -671,6 +695,10 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       setManualDeedEntry: (value) =>
         set((state) => ({
           deed: { ...state.deed, manualDeedEntry: value },
+        })),
+      setLeaseRenewalAddressMode: (mode) =>
+        set((state) => ({
+          deed: { ...state.deed, leaseRenewalAddressMode: mode },
         })),
       setNationalAddressMethod: (method) =>
         set((state) => ({
@@ -1011,6 +1039,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           isMultipleTrusteeshipDeedCopy: state.deed.isMultipleTrusteeshipDeedCopy,
           hasMinorHeirs: state.deed.hasMinorHeirs,
           deedGuardiansPoaPersistedFiles: state.deed.deedGuardiansPoaPersistedFiles,
+          leaseRenewalAddressMode: state.deed.leaseRenewalAddressMode,
           nationalAddressMethod: state.deed.nationalAddressMethod,
           nationalAddressPhotoPersistedFiles:
             state.deed.nationalAddressPhotoPersistedFiles,

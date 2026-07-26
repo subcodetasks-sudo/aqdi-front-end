@@ -40,6 +40,10 @@ export type CreatePropertyLabels = {
       endowmentCertLabel?: string;
       trusteeshipLabel?: string;
       guardiansPoaLabel?: string;
+      salePaperLabel?: string;
+      adversePossessionLabel?: string;
+      economicCitiesLabel?: string;
+      paperLabel?: string;
       clickHere: string;
       chooseFile: string;
       acceptedFormats: string;
@@ -50,6 +54,18 @@ export type CreatePropertyLabels = {
     };
     waqf: {
       multipleTrusteesLabel: string;
+      trusteesPoaHint: string;
+    };
+    deceased: {
+      deedLabel: string;
+      inheritanceLabel: string;
+      heirsPoaLabel: string;
+      najizHint: string;
+      minorHeirsLabel: string;
+      guardiansPoaLabel: string;
+      guardiansPoaHint: string;
+      clickHere: string;
+      chooseFile: string;
     };
     manualEntry: ManualDeedEntryLabels;
   };

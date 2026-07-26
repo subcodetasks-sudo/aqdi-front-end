@@ -16,6 +16,12 @@ import { useCreatePropertyAddressStep } from "@/features/create-property/hooks/u
 import { useCreatePropertyDeedStep } from "@/features/create-property/hooks/use-create-property-deed-step";
 import { useSubmitPropertyStep1 } from "@/features/create-property/hooks/use-submit-property-step1";
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
+import {
+  propertyDeedTypeIsAdversePossession,
+  propertyDeedTypeIsEconomicCitiesAuthority,
+  propertyDeedTypeIsPaper,
+  propertyDeedTypeIsSalePaper,
+} from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
@@ -55,6 +61,8 @@ export default function CreatePropertyDeedStep({
     setDeedTrusteeshipFiles,
     isMultipleTrusteeshipDeedCopy,
     setIsMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
+    setHasMinorHeirs,
     deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
     useManualDeedEntry,
@@ -193,6 +201,17 @@ export default function CreatePropertyDeedStep({
     return (
       <CreatePropertyDeedImageUpload
         labels={labels.deedImage}
+        fieldLabel={
+          propertyDeedTypeIsSalePaper(selectedDeedType)
+            ? labels.deedImage.salePaperLabel
+            : propertyDeedTypeIsAdversePossession(selectedDeedType)
+              ? labels.deedImage.adversePossessionLabel
+              : propertyDeedTypeIsEconomicCitiesAuthority(selectedDeedType)
+                ? labels.deedImage.economicCitiesLabel
+                : propertyDeedTypeIsPaper(selectedDeedType)
+                  ? labels.deedImage.paperLabel
+                  : undefined
+        }
         value={deedFiles}
         onChange={setDeedFiles}
         existingFileUrl={existingDeedImageUrl}
@@ -231,11 +250,35 @@ export default function CreatePropertyDeedStep({
               </div>
             ) : selectedDeedType && isDeceasedOwner ? (
               <div className="space-y-6">
-                {renderInstrumentEntry(renderSingleUpload())}
+                {renderInstrumentEntry(
+                  <CreatePropertyDeedImageUpload
+                    labels={{
+                      ...labels.deedImage,
+                      clickHere: labels.deceased.clickHere,
+                      chooseFile: labels.deceased.chooseFile,
+                      acceptedFormats: "",
+                    }}
+                    fieldLabel={labels.deceased.deedLabel}
+                    value={deedFiles}
+                    onChange={setDeedFiles}
+                    existingFileUrl={existingDeedImageUrl}
+                    variant="dropzone"
+                    invalid={
+                      showFieldErrors &&
+                      deedFiles.length === 0 &&
+                      !existingDeedImageUrl
+                    }
+                  />,
+                )}
 
                 <CreatePropertyDeedImageUpload
-                  labels={labels.deedImage}
-                  fieldLabel={labels.deedImage.inheritanceLabel}
+                  labels={{
+                    ...labels.deedImage,
+                    clickHere: labels.deceased.clickHere,
+                    chooseFile: labels.deceased.chooseFile,
+                    acceptedFormats: "",
+                  }}
+                  fieldLabel={labels.deceased.inheritanceLabel}
                   value={deedInheritanceFiles}
                   onChange={setDeedInheritanceFiles}
                   existingFileUrl={existingInheritanceImageUrl}
@@ -247,19 +290,66 @@ export default function CreatePropertyDeedStep({
                   }
                 />
 
-                <CreatePropertyDeedImageUpload
-                  labels={labels.deedImage}
-                  fieldLabel={labels.deedImage.heirsPoaLabel}
-                  value={deedHeirsPoaFiles}
-                  onChange={setDeedHeirsPoaFiles}
-                  existingFileUrl={existingHeirsPoaImageUrl}
-                  variant="dropzone"
-                  invalid={
-                    showFieldErrors &&
-                    deedHeirsPoaFiles.length === 0 &&
-                    !existingHeirsPoaImageUrl
-                  }
-                />
+                <div className="space-y-2">
+                  <CreatePropertyDeedImageUpload
+                    labels={{
+                      ...labels.deedImage,
+                      clickHere: labels.deceased.clickHere,
+                      chooseFile: labels.deceased.chooseFile,
+                      acceptedFormats: "",
+                    }}
+                    fieldLabel={labels.deceased.heirsPoaLabel}
+                    value={deedHeirsPoaFiles}
+                    onChange={setDeedHeirsPoaFiles}
+                    existingFileUrl={existingHeirsPoaImageUrl}
+                    variant="dropzone"
+                    invalid={
+                      showFieldErrors &&
+                      deedHeirsPoaFiles.length === 0 &&
+                      !existingHeirsPoaImageUrl
+                    }
+                  />
+                  <p className="text-xs leading-relaxed text-[#9a9a9a]">
+                    {labels.deceased.najizHint}
+                  </p>
+                </div>
+
+                <label className="flex cursor-pointer items-center justify-between gap-3 rounded-[24px] border border-[#ececec] bg-white px-4 py-4 md:px-5">
+                  <span className="text-sm font-semibold text-[#333333]">
+                    {labels.deceased.minorHeirsLabel}
+                  </span>
+                  <Switch
+                    dir="ltr"
+                    checked={hasMinorHeirs}
+                    onCheckedChange={setHasMinorHeirs}
+                    className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
+                  />
+                </label>
+
+                {hasMinorHeirs ? (
+                  <div className="space-y-2">
+                    <CreatePropertyDeedImageUpload
+                      labels={{
+                        ...labels.deedImage,
+                        clickHere: labels.deceased.clickHere,
+                        chooseFile: labels.deceased.chooseFile,
+                      }}
+                      fieldLabel={labels.deceased.guardiansPoaLabel}
+                      value={deedGuardiansPoaFiles}
+                      onChange={setDeedGuardiansPoaFiles}
+                      existingFileUrl={existingGuardiansPoaImageUrl}
+                      variant="dropzone"
+                      invalid={
+                        showFieldErrors &&
+                        deedGuardiansPoaFiles.length === 0 &&
+                        !existingGuardiansPoaImageUrl
+                      }
+                    />
+                    <p className="text-xs leading-relaxed text-[#9a9a9a]">
+                      {labels.deceased.guardiansPoaHint}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             ) : selectedDeedType && isWaqfOwner ? (
               <div className="space-y-6">
@@ -306,19 +396,24 @@ export default function CreatePropertyDeedStep({
                 </label>
 
                 {isMultipleTrusteeshipDeedCopy ? (
-                  <CreatePropertyDeedImageUpload
-                    labels={labels.deedImage}
-                    fieldLabel={labels.deedImage.guardiansPoaLabel}
-                    value={deedGuardiansPoaFiles}
-                    onChange={setDeedGuardiansPoaFiles}
-                    existingFileUrl={existingGuardiansPoaImageUrl}
-                    variant="dropzone"
-                    invalid={
-                      showFieldErrors &&
-                      deedGuardiansPoaFiles.length === 0 &&
-                      !existingGuardiansPoaImageUrl
-                    }
-                  />
+                  <div className="space-y-2">
+                    <CreatePropertyDeedImageUpload
+                      labels={labels.deedImage}
+                      fieldLabel={labels.deedImage.guardiansPoaLabel}
+                      value={deedGuardiansPoaFiles}
+                      onChange={setDeedGuardiansPoaFiles}
+                      existingFileUrl={existingGuardiansPoaImageUrl}
+                      variant="dropzone"
+                      invalid={
+                        showFieldErrors &&
+                        deedGuardiansPoaFiles.length === 0 &&
+                        !existingGuardiansPoaImageUrl
+                      }
+                    />
+                    <p className="text-xs leading-relaxed text-[#9a9a9a]">
+                      {labels.waqf.trusteesPoaHint}
+                    </p>
+                  </div>
                 ) : null}
               </div>
             ) : selectedDeedType ? (

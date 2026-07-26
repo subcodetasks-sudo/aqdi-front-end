@@ -39,6 +39,7 @@ export function useSubmitPropertyStep1() {
   const isMultipleTrusteeshipDeedCopy = useCreatePropertyDraftStore(
     (state) => state.isMultipleTrusteeshipDeedCopy,
   );
+  const hasMinorHeirs = useCreatePropertyDraftStore((state) => state.hasMinorHeirs);
   const deedGuardiansPoaFiles = useCreatePropertyDraftStore(
     (state) => state.deedGuardiansPoaFiles,
   );
@@ -94,6 +95,7 @@ export function useSubmitPropertyStep1() {
       deedTrusteeshipFiles,
       deedGuardiansPoaFiles,
       isMultipleTrusteeshipDeedCopy,
+      hasMinorHeirs,
       useManualDeedEntry,
       manualDeedEntry,
       existingImages: {
@@ -159,7 +161,8 @@ export function useSubmitPropertyStep1() {
           ? isMultipleTrusteeshipDeedCopy
           : undefined,
         copyOfGuardiansPowerOfAttorneyForAgent:
-          isWaqfOwner && isMultipleTrusteeshipDeedCopy
+          (isWaqfOwner && isMultipleTrusteeshipDeedCopy) ||
+          (isDeceasedOwner && hasMinorHeirs)
             ? deedGuardiansPoaFiles[0]
             : undefined,
         addressMethod,

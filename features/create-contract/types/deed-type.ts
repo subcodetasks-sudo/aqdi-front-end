@@ -15,15 +15,20 @@ export type DeedTypeId = (typeof DEED_TYPES)[number];
 
 export const DEED_STEP_PHASE_COUNT = 2;
 
-// Deed types that require separate front and back instrument images
-// (paper ownership deed / adverse possession).
-export const FRONT_BACK_DEED_TYPES: readonly DeedTypeId[] = [
-  "paper",
-  "adverse-possession",
-];
+// Deed types that require separate front and back instrument images.
+// Currently none — paper deeds use a single instrument image.
+export const FRONT_BACK_DEED_TYPES: readonly DeedTypeId[] = [];
 
 export function deedTypeNeedsFrontBack(deedType: DeedTypeId | ""): boolean {
   return deedType !== "" && FRONT_BACK_DEED_TYPES.includes(deedType);
+}
+
+export function deedTypeIsPaper(deedType: DeedTypeId | ""): boolean {
+  return deedType === "paper";
+}
+
+export function deedTypeIsAdversePossession(deedType: DeedTypeId | ""): boolean {
+  return deedType === "adverse-possession";
 }
 
 // Deceased-owner deed requires three images: the ownership deed, the
@@ -44,4 +49,14 @@ export function deedTypeIsLeaseRenewal(deedType: DeedTypeId | ""): boolean {
 
 export function deedTypeIsSublease(deedType: DeedTypeId | ""): boolean {
   return deedType === "sublease-contract";
+}
+
+export function deedTypeIsSalePaper(deedType: DeedTypeId | ""): boolean {
+  return deedType === "sale-paper";
+}
+
+export function deedTypeIsEconomicCitiesAuthority(
+  deedType: DeedTypeId | "",
+): boolean {
+  return deedType === "economic-cities-authority";
 }

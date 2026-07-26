@@ -14,6 +14,7 @@ import CreateContractDiscountCodeField from "@/features/create-contract/componen
 import CreateContractPaymentHero from "@/features/create-contract/components/create-contract-payment-hero";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
 import CreateContractPaymentSummary from "@/features/create-contract/components/create-contract-payment-summary";
+import CreateContractReviewOrderDialog from "@/features/create-contract/components/create-contract-review-order-dialog";
 import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
@@ -24,22 +25,31 @@ import { useSaveProperty } from "@/features/create-contract/hooks/use-save-prope
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
+import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 
 type CreateContractPaymentStepProps = {
   labels: CreateContractLabels["payment"];
   saveLaterDialogLabels: CreateContractLabels["tenant"]["saveLaterDialog"];
+  deedTypeLabels: Record<DeedTypeId, string>;
+  deedAttachmentLabels: {
+    label: string;
+    salePaperLabel?: string;
+  };
   contractType: ContractTypeId;
   onBack: () => void;
-  onReviewOrder: () => void;
+  onEditStep: (step: CreateContractStep) => void;
 };
 
 export default function CreateContractPaymentStep({
   labels,
   saveLaterDialogLabels,
+  deedTypeLabels,
+  deedAttachmentLabels,
   contractType,
   onBack,
-  onReviewOrder,
+  onEditStep,
 }: CreateContractPaymentStepProps) {
   const tFooter = useTranslations("footer");
   const router = useRouter();
@@ -58,6 +68,7 @@ export default function CreateContractPaymentStep({
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
+  const [reviewOrderDialogOpen, setReviewOrderDialogOpen] = useState(false);
 
   const paymentFlow = useContractPaymentMethodFlow(
     contractSession?.contractId,
@@ -134,7 +145,7 @@ export default function CreateContractPaymentStep({
             journeyMessage={labels.journeyMessage}
             securePaymentLabel={labels.securePaymentLabel}
             reviewOrderLabel={labels.reviewOrderLabel}
-            onReviewOrder={onReviewOrder}
+            onReviewOrder={() => setReviewOrderDialogOpen(true)}
           />
 
           <CreateContractPaymentSummary
@@ -232,6 +243,16 @@ export default function CreateContractPaymentStep({
         orderNumber={contractId}
         isSaving={isSavingDraft}
         onConfirm={() => void handleConfirmSaveLater()}
+      />
+
+      <CreateContractReviewOrderDialog
+        open={reviewOrderDialogOpen}
+        onOpenChange={setReviewOrderDialogOpen}
+        labels={labels.reviewDialog}
+        contractType={contractType}
+        deedTypeLabels={deedTypeLabels}
+        deedAttachmentLabels={deedAttachmentLabels}
+        onEditStep={onEditStep}
       />
 
       <CreateContractPaymentNavigation

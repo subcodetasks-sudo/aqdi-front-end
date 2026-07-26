@@ -912,6 +912,7 @@
         "areaUnit": "م²"
       },
       "completePayment": "دفع المقابل المالي",
+      "completePaymentWithAmount": "دفع '{'amount'}' ر.س",
       "completePaymentLoading": "جاري التوجيه للدفع...",
       "whenReceiveContract": "متى أستلم العقد؟",
       "receiveContractDialog": {
@@ -951,7 +952,8 @@
       "whatsappLabel": "تواصل عبر واتساب",
       "whatsappHref": "https://wa.me/",
       "status": {
-        "completed": "طلب مكتمل",
+        "completed": "مكتمل",
+        "completedWithAmount": "مكتمل · '{'amount'}' ر.س",
         "incomplete": "طلب مسودة عقد",
         "inProgress": "قيد التنفيذ",
         "returned": "مسترجع"
@@ -1106,7 +1108,7 @@
           "old_handwritten": "صك ملكية ورقي",
           "property_ownership_owner_are_deceased_endowment": "صك ملكية والمالك متوفي",
           "property_ownership_owner_is_endowment": "صك ملكية والمالك وقف",
-          "sale_agreement": "ورقة مبايعة",
+          "sale_agreement": "ورقة مبايعة مختومة من مكتب عقاري",
           "economic_cities_authority_suspended": "وثيقة هيئة المدن الاقتصادية",
           "strong_argument": "حجة استحكام"
         }
@@ -1119,7 +1121,11 @@
         "heirsPoaLabel": "صورة من وكالة الورثة للوكيل",
         "endowmentCertLabel": "صورة من شهادة تسجيل الوقف",
         "trusteeshipLabel": "صورة من صك النظارة",
-        "guardiansPoaLabel": "صورة من وكالة النظار للوكيل",
+        "guardiansPoaLabel": "صورة من وكالة جميع النظار إلى أحدهم",
+        "salePaperLabel": "صورة من ورقة المبايعة المختومة من المكتب العقاري",
+        "adversePossessionLabel": "صورة من حجة الاستحكام",
+        "economicCitiesLabel": "صورة من وثيقة هيئة المدن الاقتصادية",
+        "paperLabel": "صورة من الصك الورقي",
         "clickHere": "إضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1129,7 +1135,8 @@
         "closePreview": "إغلاق"
       },
       "waqf": {
-        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
+        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟",
+        "trusteesPoaHint": "لتمثيل الوقف في العقد - لا يُقبل أكثر من ممثل واحد في العقد"
       },
       "deceased": {
         "deedLabel": "صورة من صك الملكية",
@@ -1137,7 +1144,8 @@
         "heirsPoaLabel": "صورة من الوكالة الشرعية عن الورثة",
         "najizHint": "تُقبل الوكالة الصادرة من ناجز",
         "minorHeirsLabel": "هل يوجد من الورثة قاصر؟",
-        "guardiansPoaLabel": "صورة من وكالة ولي القاصر",
+        "guardiansPoaLabel": "صك ولاية قاصر",
+        "guardiansPoaHint": "يُرفق صك الولاية الصادر للولي الشرعي على القاصر",
         "clickHere": "اضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف"
       },
@@ -1300,7 +1308,7 @@
         },
         "phone": {
           "label": "رقم جوال المالك",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "iban": {
           "label": "رقم الآيبان للمالك",
@@ -1322,7 +1330,7 @@
         "birthDateLabel": "تاريخ ميلاد الوكيل",
         "phone": {
           "label": "رقم جوال الوكيل",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1602,7 +1610,7 @@
           "paper": "صك ملكيه ورقي",
           "deceased-owner": "صك ملكيه والمالك متوفي",
           "waqf-owner": "صك ملكيه والمالك وقف",
-          "sale-paper": "ورقة مبايعه",
+          "sale-paper": "ورقة مبايعة مختومة من مكتب عقاري",
           "economic-cities-authority": "وثيقة هيئة المدن الاقتصاديه",
           "adverse-possession": "حجة استحكام",
           "sublease-contract": "عقد ايجار من الباطن",
@@ -1617,7 +1625,11 @@
         "heirsPoaLabel": "صورة من وكالة الورثة للوكيل",
         "endowmentCertLabel": "صورة من شهادة تسجيل الوقف",
         "trusteeshipLabel": "صورة من صك النظارة",
-        "guardiansPoaLabel": "صورة من وكالة النظار للوكيل",
+        "guardiansPoaLabel": "صورة من وكالة جميع النظار إلى أحدهم",
+        "salePaperLabel": "صورة من ورقة المبايعة المختومة من المكتب العقاري",
+        "adversePossessionLabel": "صورة من حجة الاستحكام",
+        "economicCitiesLabel": "صورة من وثيقة هيئة المدن الاقتصادية",
+        "paperLabel": "صورة من الصك الورقي",
         "clickHere": "اضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
@@ -1707,8 +1719,23 @@
           "closePreview": "إغلاق"
         }
       },
+      "leaseRenewal": {
+        "noticeResidential": "لقد قمت بتحديد تجديد عقد إيجار واخترت نوع العقد سكني. في حال كان العقد المرغوب تجديده تجاري بالأصل، يرجى الرجوع وتحديد نوع العقد تجاري بدلاً من سكني.",
+        "noticeCommercial": "لقد قمت بتحديد تجديد عقد إيجار واخترت نوع العقد تجاري. في حال كان العقد المرغوب تجديده سكني بالأصل، يرجى الرجوع وتحديد نوع العقد سكني بدلاً من تجاري.",
+        "addressFieldLabel": "عنوان العقار في هذا التجديد",
+        "sameAddress": {
+          "title": "نفس العنوان المذكور في العقد",
+          "description": "لن نطلب إدخاله من جديد"
+        },
+        "changeAddress": {
+          "title": "تغيير العنوان",
+          "description": "أدخله بإحدى الطرق الثلاث"
+        },
+        "sameAddressConfirmation": "سيُعتمد العنوان الوطني المذكور في العقد الأصلي – لا حاجة لإدخاله من جديد."
+      },
       "waqf": {
-        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟"
+        "multipleTrusteesLabel": "هل يوجد أكثر من ناظر للوقف ؟",
+        "trusteesPoaHint": "لتمثيل الوقف في العقد - لا يُقبل أكثر من ممثل واحد في العقد"
       },
       "deceased": {
         "deedLabel": "صورة من صك الملكية",
@@ -1716,7 +1743,8 @@
         "heirsPoaLabel": "صورة من الوكالة الشرعية عن الورثة",
         "najizHint": "تُقبل الوكالة الصادرة من ناجز",
         "minorHeirsLabel": "هل يوجد من الورثة قاصر؟",
-        "guardiansPoaLabel": "صورة من وكالة ولي القاصر",
+        "guardiansPoaLabel": "صك ولاية قاصر",
+        "guardiansPoaHint": "يُرفق صك الولاية الصادر للولي الشرعي على القاصر",
         "clickHere": "اضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف"
       },
@@ -1801,7 +1829,7 @@
         },
         "phone": {
           "label": "رقم جوال المالك",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "iban": {
           "label": "رقم الآيبان للمالك",
@@ -1823,7 +1851,7 @@
         "birthDateLabel": "تاريخ ميلاد الوكيل",
         "phone": {
           "label": "رقم جوال الوكيل",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -1886,7 +1914,7 @@
         },
         "phone": {
           "label": "رقم جوال المستأجر",
-          "placeholder": "05 xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         }
       },
       "organizationData": {
@@ -1927,7 +1955,7 @@
         "ownerBirthDateLabel": "تاريخ ميلاد مالك السجل",
         "ownerPhone": {
           "label": "رقم جوال مالك السجل",
-          "placeholder": "xxxxxxxx"
+          "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
           "label": "إرفاق صورة الوكالة",
@@ -2174,6 +2202,74 @@
       "journeyMessage": "رحلتك الإيجارية أصبحت أسهل.",
       "securePaymentLabel": "دفع آمن ومشفر",
       "reviewOrderLabel": "استعراض الطلب – راجع كل بياناتك قبل الدفع",
+      "reviewDialog": {
+        "title": "استعراض الطلب – راجع قبل الدفع",
+        "close": "إغلاق",
+        "edit": "تعديل",
+        "view": "عرض",
+        "confirm": "تمام – البيانات صحيحة",
+        "hint": "اضغط تعديل عند أي قسم للانتقال لصفحته وتعديله ثم ارجع لإنهاء الدفع",
+        "emptyValue": "—",
+        "orderNumber": "رقم الطلب",
+        "share": "مشاركة",
+        "copy": "نسخ البيانات",
+        "print": "طباعة",
+        "copySuccess": "تم نسخ بيانات الطلب",
+        "copyError": "تعذر نسخ البيانات",
+        "shareError": "تعذر مشاركة الطلب",
+        "sections": {
+          "deed": "وثيقة الملكية",
+          "nationalAddress": "العنوان الوطني",
+          "ownerSelf": "بيانات المالك (بنفسه)",
+          "ownerWithAgent": "بيانات المالك (بوكيل)",
+          "tenantIndividual": "بيانات المستأجر (فرد)",
+          "tenantOrganization": "بيانات المستأجر (منشأة)",
+          "unit": "بيانات الوحدة",
+          "rent": "مبلغ الإيجار"
+        },
+        "fields": {
+          "contractType": "نوع العقد",
+          "startDate": "تاريخ البداية",
+          "duration": "مدة العقد",
+          "documentType": "نوع المستند",
+          "deedAttachment": "صورة المستند",
+          "mapsLink": "رابط موقع العقار من قوقل ماب",
+          "addressPhoto": "صورة العنوان الوطني",
+          "addressManual": "العنوان الوطني",
+          "ownerId": "رقم هوية المالك",
+          "ownerPhone": "رقم جوال المالك",
+          "ownerBirthDate": "تاريخ ميلاد المالك",
+          "tenantId": "رقم هوية المستأجر",
+          "tenantPhone": "رقم جوال المستأجر",
+          "tenantBirthDate": "تاريخ ميلاد المستأجر",
+          "unitType": "نوع الوحدة",
+          "unitUsage": "استخدام الوحدة",
+          "floor": "الطابق",
+          "unitNumber": "رقم الوحدة",
+          "area": "المساحة",
+          "rooms": "عدد الغرف",
+          "bathrooms": "دورات المياه",
+          "kitchens": "المطابخ",
+          "kitchenCabinets": "خزائن المطبخ",
+          "paymentMethod": "طريقة الدفعات"
+        },
+        "kitchenCabinets": {
+          "installed": "مركبة",
+          "notInstalled": "غير مركبة"
+        },
+        "calendar": {
+          "hijri": "هجري",
+          "gregorian": "ميلادي"
+        },
+        "currency": "ريال",
+        "areaUnit": "م²",
+        "contractTypeResidential": "سكني",
+        "contractTypeCommercial": "تجاري",
+        "sameAddress": "نفس العنوان الوطني السابق",
+        "yearsCount": "'{'count'}' سنة",
+        "monthsCount": "'{'count'}' شهراً",
+        "paymentMethodPrefix": "طريقة الدفعات: '{'method'}'"
+      },
       "navigation": {
         "previous": "عودة",
         "pay": "متابعة",
@@ -2184,9 +2280,9 @@
       },
       "summary": {
         "sectionTitle": "رسوم طلبك",
-        "ejarFees": "رسوم إيجار :",
+        "ejarFees": "رسوم توثيق العقد في منصة إيجار",
         "contractPeriodPrice": "سعر فترة العقد :",
-        "vat": "قيمة الضريبة :",
+        "vat": "ضريبة القيمة المضافة (15%)",
         "applicationFees": "رسوم التطبيق :",
         "electricityMeterFee": "رسوم عداد الكهرباء :",
         "waterMeterFee": "رسوم عداد المياه :",
@@ -2194,13 +2290,13 @@
         "services": "الخدمات الإضافية :",
         "servicesTotal": "إجمالي الخدمات :",
         "docFee": "رسوم التوثيق :",
-        "total": "الاجمالي :",
-        "priceBeforeCoupon": "الإجمالي قبل الخصم :",
-        "discount": "قيمة الخصم :",
-        "priceAfterCoupon": "الإجمالي بعد الخصم :",
+        "total": "الإجمالي",
+        "priceBeforeCoupon": "الإجمالي قبل الخصم",
+        "discount": "قيمة الخصم",
+        "priceAfterCoupon": "الإجمالي بعد الخصم",
         "currency": "ر.س",
         "ejarLogoAlt": "إيجار",
-        "free": "مجانًا",
+        "free": "مجاناً",
         "contractTypeResidential": "عقد سكني",
         "contractTypeCommercial": "عقد تجاري",
         "yearsCount": "'{'count'}' سنة",

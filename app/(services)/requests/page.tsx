@@ -147,6 +147,7 @@ export default async function RequestsPage() {
         areaUnit: t("card.contractDialog.areaUnit"),
       },
       completePayment: t("card.completePayment"),
+      completePaymentWithAmount: t("card.completePaymentWithAmount"),
       completePaymentLoading: t("card.completePaymentLoading"),
       paymentFlow: {
         methodDialog: {
@@ -223,6 +224,7 @@ export default async function RequestsPage() {
       whatsappHref: t("card.whatsappHref"),
       status: {
         completed: t("card.status.completed"),
+        completedWithAmount: t("card.status.completedWithAmount"),
         incomplete: t("card.status.incomplete"),
         inProgress: t("card.status.inProgress"),
         returned: t("card.status.returned"),

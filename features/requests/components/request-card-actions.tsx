@@ -80,6 +80,7 @@ export default function RequestCardActions({
         contractId={card.contractId}
         contractUuid={card.uuid}
         completePaymentLabel={labels.completePayment}
+        completePaymentWithAmountLabel={labels.completePaymentWithAmount}
         completePaymentLoadingLabel={labels.completePaymentLoading}
         paymentFlowLabels={labels.paymentFlow}
         dialogLabels={labels.receiveContractDialog}
@@ -90,6 +91,7 @@ export default function RequestCardActions({
           contractId={card.contractId}
           contractUuid={card.uuid}
           label={labels.completePayment}
+          labelWithAmount={labels.completePaymentWithAmount}
           payingLabel={labels.completePaymentLoading}
           paymentFlowLabels={labels.paymentFlow}
         />

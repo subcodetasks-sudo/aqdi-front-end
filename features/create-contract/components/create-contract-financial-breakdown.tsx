@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { useLocale } from "next-intl";
 import type { ReactNode } from "react";
 
 import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
@@ -12,10 +10,6 @@ import {
   PAYMENT_BREAKDOWN,
   formatPaymentAmount,
 } from "@/features/create-contract/types/payment-step";
-import {
-  getContractFinancialServiceLabel,
-  getContractFinancialServicePrice,
-} from "@/features/create-contract/utils/contract-financial-display";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import { cn } from "@/lib/utils";
 
@@ -59,7 +53,6 @@ function PaymentAmount({
 type SummaryRowProps = {
   label: string;
   amount: number;
-  icon?: ReactNode;
   freeLabel?: string;
   subtitle?: string;
   primary?: boolean;
@@ -72,7 +65,6 @@ function hasDisplayAmount(amount: number | null | undefined): amount is number {
 function SummaryRow({
   label,
   amount,
-  icon,
   freeLabel,
   subtitle,
   primary = false,
@@ -93,7 +85,6 @@ function SummaryRow({
           >
             {label}
           </span>
-          {icon}
         </div>
         {isFree ? (
           <span className="text-sm font-bold text-brand-secondary">{freeLabel}</span>
@@ -139,6 +130,30 @@ function SummarySkeletonRow() {
   );
 }
 
+function TotalRow({
+  label,
+  amount,
+}: {
+  label: string;
+  amount: number;
+}) {
+  return (
+    <div className="border-t border-[#1a5c4a] pt-3 dark:border-[#7dccc0]">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-base font-extrabold text-brand dark:text-[#7dccc0]">
+          {label}
+        </span>
+        <PaymentAmount
+          amount={amount}
+          className="text-xl font-extrabold text-brand! dark:text-[#7dccc0]!"
+          iconClassName="text-brand"
+          iconSize={22}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function CreateContractFinancialBreakdown({
   labels,
   contractType,
@@ -148,7 +163,6 @@ export default function CreateContractFinancialBreakdown({
   sectionTitle,
   feeSubtitle,
 }: CreateContractFinancialBreakdownProps) {
-  const locale = useLocale();
   const breakdown = PAYMENT_BREAKDOWN[contractType];
 
   if (isLoading) {
@@ -156,8 +170,7 @@ export default function CreateContractFinancialBreakdown({
       <BreakdownShell sectionTitle={sectionTitle}>
         <SummarySkeletonRow />
         <SummarySkeletonRow />
-        <SummarySkeletonRow />
-        <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
+        <div className="border-t border-[#1a5c4a] pt-3 dark:border-[#7dccc0]">
           <SummarySkeletonRow />
         </div>
       </BreakdownShell>
@@ -165,110 +178,37 @@ export default function CreateContractFinancialBreakdown({
   }
 
   if (data) {
-    const services =
-      (data.additional_services?.length ?? 0) > 0
-        ? data.additional_services
-        : (data.services ?? []);
-    const docFeeLines = Array.isArray(data.doc_fee_lines)
-      ? data.doc_fee_lines.filter((line) => line.trim() !== "")
-      : [];
-    const docFeeAmount =
-      typeof data.doc_fee === "number" ? data.doc_fee : null;
-    const isCustomDuration = data.duration_preset === "other";
-    const visibleServices = services.filter((service) =>
-      hasDisplayAmount(getContractFinancialServicePrice(service)),
-    );
+    const tax =
+      typeof data.price_details.tax === "number" &&
+      Number.isFinite(data.price_details.tax) &&
+      data.price_details.tax > 0
+        ? data.price_details.tax
+        : 0;
+    const baseTotal = appliedCoupon
+      ? appliedCoupon.totalPriceBeforeCoupon
+      : data.total_price;
+    // Fees line = total minus tax so the breakdown adds up; free tax leaves fees unchanged.
+    const documentationFeeAmount = Math.max(0, baseTotal - tax);
+    const payableTotal = appliedCoupon
+      ? appliedCoupon.totalPriceAfterCoupon
+      : data.total_price;
 
     return (
       <BreakdownShell sectionTitle={sectionTitle}>
-        {hasDisplayAmount(data.price_details.contract_period_price) ? (
-          <>
-            <SummaryRow
-              label={labels.contractPeriodPrice}
-              amount={data.price_details.contract_period_price}
-              subtitle={!isCustomDuration ? feeSubtitle : undefined}
-              primary={!isCustomDuration}
-            />
-            {!isCustomDuration ? (
-              <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
-            ) : null}
-          </>
-        ) : null}
+        <SummaryRow
+          label={labels.ejarFees}
+          amount={documentationFeeAmount}
+          subtitle={feeSubtitle}
+          primary
+        />
 
-        {hasDisplayAmount(data.price_details.application_fees) ? (
-          <SummaryRow
-            label={labels.applicationFees}
-            amount={data.price_details.application_fees}
-          />
-        ) : null}
+        <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
 
         <SummaryRow
           label={labels.vat}
-          amount={data.price_details.tax}
+          amount={tax}
           freeLabel={labels.free}
         />
-
-        {hasDisplayAmount(data.price_details.electricity_meter_fee) ? (
-          <SummaryRow
-            label={labels.electricityMeterFee}
-            amount={data.price_details.electricity_meter_fee}
-          />
-        ) : null}
-
-        {hasDisplayAmount(data.price_details.water_meter_fee) ? (
-          <SummaryRow
-            label={labels.waterMeterFee}
-            amount={data.price_details.water_meter_fee}
-          />
-        ) : null}
-
-        {isCustomDuration && hasDisplayAmount(docFeeAmount) ? (
-          <>
-            <SummaryRow
-              label={labels.docFee}
-              amount={docFeeAmount}
-              subtitle={feeSubtitle}
-              primary
-            />
-            <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
-          </>
-        ) : null}
-
-        {isCustomDuration && docFeeLines.length > 0 ? (
-          <div className="rounded-xl border border-[#d9eadf] bg-[#f3faf5] px-4 py-3 text-sm leading-7 text-[#333333] dark:border-[#1f3a2e] dark:bg-[#12211b]">
-            {docFeeLines.map((line, index) => (
-              <p key={`${line}-${index}`}>{line}</p>
-            ))}
-          </div>
-        ) : null}
-
-        {visibleServices.length > 0 ? (
-          <div className="space-y-1 border-t border-dashed border-[#d4d4d4] pt-2 dark:border-[#2f403b]">
-            <div className="flex items-center justify-between gap-4 py-2">
-              <span className="text-sm font-bold text-[#333333]">
-                {labels.services}
-              </span>
-              {hasDisplayAmount(data.services_total) ? (
-                <PaymentAmount
-                  amount={data.services_total}
-                  className="text-sm font-bold text-[#333333]"
-                />
-              ) : null}
-            </div>
-            {visibleServices.map((service, index) => (
-              <SummaryRow
-                key={service.id ?? `${service.service_name}-${index}`}
-                label={getContractFinancialServiceLabel(service, locale)}
-                amount={getContractFinancialServicePrice(service)}
-              />
-            ))}
-          </div>
-        ) : hasDisplayAmount(data.services_total) ? (
-          <SummaryRow
-            label={labels.servicesTotal}
-            amount={data.services_total}
-          />
-        ) : null}
 
         {appliedCoupon ? (
           <div className="space-y-0 border-t border-dashed border-[#d4d4d4] pt-2 dark:border-[#2f403b]">
@@ -287,83 +227,35 @@ export default function CreateContractFinancialBreakdown({
           </div>
         ) : null}
 
-        <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-base font-extrabold text-[#333333]">
-              {appliedCoupon ? labels.priceAfterCoupon : labels.total}
-            </span>
-            <PaymentAmount
-              amount={
-                appliedCoupon
-                  ? appliedCoupon.totalPriceAfterCoupon
-                  : data.total_price
-              }
-              className="text-xl font-extrabold text-brand! dark:text-[#7dccc0]!"
-              iconClassName="text-brand"
-              iconSize={22}
-            />
-          </div>
-        </div>
+        <TotalRow
+          label={appliedCoupon ? labels.priceAfterCoupon : labels.total}
+          amount={payableTotal}
+        />
       </BreakdownShell>
     );
   }
 
+  const fallbackTax =
+    Number.isFinite(breakdown.vat) && breakdown.vat > 0 ? breakdown.vat : 0;
+
   return (
     <BreakdownShell sectionTitle={sectionTitle}>
-      {hasDisplayAmount(breakdown.ejarFees) ? (
-        <SummaryRow
-          label={labels.ejarFees}
-          amount={breakdown.ejarFees}
-          icon={
-            <Image
-              src="/images/ejar.png"
-              alt={labels.ejarLogoAlt}
-              width={48}
-              height={18}
-              className="h-4 w-auto shrink-0 object-contain"
-            />
-          }
-        />
-      ) : null}
+      <SummaryRow
+        label={labels.ejarFees}
+        amount={Math.max(0, breakdown.total - fallbackTax)}
+        subtitle={feeSubtitle}
+        primary
+      />
 
-      {hasDisplayAmount(breakdown.contractPeriodPrice) ? (
-        <>
-          <SummaryRow
-            label={labels.contractPeriodPrice}
-            amount={breakdown.contractPeriodPrice}
-            subtitle={feeSubtitle}
-            primary
-          />
-          <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
-        </>
-      ) : null}
+      <div className="border-t border-dashed border-[#d4d4d4] dark:border-[#2f403b]" />
 
       <SummaryRow
         label={labels.vat}
-        amount={breakdown.vat}
+        amount={fallbackTax}
         freeLabel={labels.free}
       />
 
-      {hasDisplayAmount(breakdown.applicationFees) ? (
-        <SummaryRow
-          label={labels.applicationFees}
-          amount={breakdown.applicationFees}
-        />
-      ) : null}
-
-      <div className="border-t border-dashed border-[#d4d4d4] pt-3 dark:border-[#2f403b]">
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-base font-extrabold text-[#333333]">
-            {labels.total}
-          </span>
-          <PaymentAmount
-            amount={breakdown.total}
-            className="text-xl font-extrabold text-brand! dark:text-[#7dccc0]!"
-            iconClassName="text-brand"
-            iconSize={22}
-          />
-        </div>
-      </div>
+      <TotalRow label={labels.total} amount={breakdown.total} />
     </BreakdownShell>
   );
 }

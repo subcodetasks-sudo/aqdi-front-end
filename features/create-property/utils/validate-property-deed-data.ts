@@ -32,6 +32,7 @@ export type PropertyDeedFilesState = {
   deedTrusteeshipFiles: File[];
   deedGuardiansPoaFiles: File[];
   isMultipleTrusteeshipDeedCopy: boolean;
+  hasMinorHeirs: boolean;
   useManualDeedEntry: boolean;
   manualDeedEntry: ManualDeedEntryData;
   existingImages: PropertyDeedExistingImages;
@@ -72,6 +73,7 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
     deedTrusteeshipFiles,
     deedGuardiansPoaFiles,
     isMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
     existingImages,
   } = state;
 
@@ -82,7 +84,9 @@ export function isPropertyDeedDataComplete(state: PropertyDeedFilesState) {
   if (propertyDeedTypeIsDeceasedOwner(selectedDeedType)) {
     return (
       hasFileOrUrl(deedInheritanceFiles, existingImages.inheritance) &&
-      hasFileOrUrl(deedHeirsPoaFiles, existingImages.heirsPoa)
+      hasFileOrUrl(deedHeirsPoaFiles, existingImages.heirsPoa) &&
+      (!hasMinorHeirs ||
+        hasFileOrUrl(deedGuardiansPoaFiles, existingImages.guardiansPoa))
     );
   }
 

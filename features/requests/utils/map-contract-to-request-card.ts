@@ -82,6 +82,23 @@ function resolveActionType(
   return "dual-actions";
 }
 
+function resolvePayableAmount(contract: ContractListItem): number | null {
+  const candidates = [
+    contract.total_price,
+    contract.payable_amount,
+    contract.amount,
+    contract.doc_fee,
+  ];
+
+  for (const value of candidates) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
 export function mapContractToRequestCard(
   contract: ContractListItem,
   labels: ContractCardLabels,
@@ -120,6 +137,7 @@ export function mapContractToRequestCard(
     paymentSuccessful: contract.is_completed,
     paymentStatusLabel:
       snapshot.journey_status_label || snapshot.status_label || null,
+    payableAmount: resolvePayableAmount(contract),
     isIncompleteDraft,
     showViewEdit: contract.step !== 7,
     showDownloadInvoice: !isIncompleteDraft,

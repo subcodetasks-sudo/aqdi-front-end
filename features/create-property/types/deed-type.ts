@@ -11,15 +11,24 @@ export const PROPERTY_DEED_TYPES = [
 
 export type PropertyDeedTypeId = (typeof PROPERTY_DEED_TYPES)[number];
 
-export const FRONT_BACK_PROPERTY_DEED_TYPES: readonly PropertyDeedTypeId[] = [
-  "old_handwritten",
-  "strong_argument",
-];
+export const FRONT_BACK_PROPERTY_DEED_TYPES: readonly PropertyDeedTypeId[] = [];
 
 export function propertyDeedTypeNeedsFrontBack(
   deedType: PropertyDeedTypeId | "",
 ): boolean {
   return deedType !== "" && FRONT_BACK_PROPERTY_DEED_TYPES.includes(deedType);
+}
+
+export function propertyDeedTypeIsPaper(
+  deedType: PropertyDeedTypeId | "",
+): boolean {
+  return deedType === "old_handwritten";
+}
+
+export function propertyDeedTypeIsAdversePossession(
+  deedType: PropertyDeedTypeId | "",
+): boolean {
+  return deedType === "strong_argument";
 }
 
 export function propertyDeedTypeIsDeceasedOwner(
@@ -30,4 +39,16 @@ export function propertyDeedTypeIsDeceasedOwner(
 
 export function propertyDeedTypeIsWaqfOwner(deedType: PropertyDeedTypeId | ""): boolean {
   return deedType === "property_ownership_owner_is_endowment";
+}
+
+export function propertyDeedTypeIsSalePaper(
+  deedType: PropertyDeedTypeId | "",
+): boolean {
+  return deedType === "sale_agreement";
+}
+
+export function propertyDeedTypeIsEconomicCitiesAuthority(
+  deedType: PropertyDeedTypeId | "",
+): boolean {
+  return deedType === "economic_cities_authority_suspended";
 }

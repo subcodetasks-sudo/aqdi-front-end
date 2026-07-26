@@ -30,6 +30,9 @@ export function useCreatePropertyDeedStep() {
   const isMultipleTrusteeshipDeedCopy = useCreatePropertyDraftStore(
     (state) => state.isMultipleTrusteeshipDeedCopy,
   );
+  const hasMinorHeirs = useCreatePropertyDraftStore(
+    (state) => state.hasMinorHeirs,
+  );
   const deedGuardiansPoaFiles = useCreatePropertyDraftStore(
     (state) => state.deedGuardiansPoaFiles,
   );
@@ -80,6 +83,9 @@ export function useCreatePropertyDeedStep() {
   const setIsMultipleTrusteeshipDeedCopy = useCreatePropertyDraftStore(
     (state) => state.setIsMultipleTrusteeshipDeedCopy,
   );
+  const setHasMinorHeirs = useCreatePropertyDraftStore(
+    (state) => state.setHasMinorHeirs,
+  );
   const setDeedGuardiansPoaFiles = useCreatePropertyDraftStore(
     (state) => state.setDeedGuardiansPoaFiles,
   );
@@ -109,6 +115,7 @@ export function useCreatePropertyDeedStep() {
     deedTrusteeshipFiles,
     deedGuardiansPoaFiles,
     isMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
     useManualDeedEntry,
     manualDeedEntry,
     existingImages: {
@@ -142,6 +149,8 @@ export function useCreatePropertyDeedStep() {
     setDeedTrusteeshipFiles,
     isMultipleTrusteeshipDeedCopy,
     setIsMultipleTrusteeshipDeedCopy,
+    hasMinorHeirs,
+    setHasMinorHeirs,
     deedGuardiansPoaFiles,
     setDeedGuardiansPoaFiles,
     useManualDeedEntry,

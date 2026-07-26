@@ -39,6 +39,7 @@ type RequestReceiveContractDialogProps = {
   contractUuid: string;
   actionType: RequestActionType;
   completePaymentLabel: string;
+  completePaymentWithAmountLabel: string;
   completePaymentLoadingLabel: string;
   paymentFlowLabels: ContractPaymentMethodLabels;
   labels: RequestReceiveContractDialogLabels;
@@ -73,6 +74,7 @@ export default function RequestReceiveContractDialog({
   contractUuid,
   actionType,
   completePaymentLabel,
+  completePaymentWithAmountLabel,
   completePaymentLoadingLabel,
   paymentFlowLabels,
   labels,
@@ -239,6 +241,7 @@ export default function RequestReceiveContractDialog({
               contractId={contractId}
               contractUuid={contractUuid}
               label={completePaymentLabel}
+              labelWithAmount={completePaymentWithAmountLabel}
               payingLabel={completePaymentLoadingLabel}
               paymentFlowLabels={paymentFlowLabels}
               className="h-12 w-full rounded-2xl"

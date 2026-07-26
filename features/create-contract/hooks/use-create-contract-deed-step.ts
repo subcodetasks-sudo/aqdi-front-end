@@ -3,6 +3,7 @@
 import {
   deedTypeIsDeceasedOwner,
   deedTypeIsLeaseRenewal,
+  deedTypeIsSublease,
   deedTypeIsWaqfOwner,
   deedTypeNeedsFrontBack,
 } from "@/features/create-contract/types/deed-type";
@@ -78,6 +79,9 @@ export function useCreateContractDeedStep() {
   const setManualDeedEntry = useCreateContractDraftStore(
     (state) => state.setManualDeedEntry,
   );
+  const setLeaseRenewalAddressMode = useCreateContractDraftStore(
+    (state) => state.setLeaseRenewalAddressMode,
+  );
   const setMapLocation = useCreateContractDraftStore((state) => state.setMapLocation);
 
   const existingInstrumentImageUrl = resolveContractAssetUrl(
@@ -109,6 +113,7 @@ export function useCreateContractDeedStep() {
   );
   const isInstrumentTypeLocked = existingPropertyContext !== null;
   const isLeaseRenewal = deedTypeIsLeaseRenewal(deed.selectedDeedType);
+  const isSublease = deedTypeIsSublease(deed.selectedDeedType);
   const needsFrontBack = deedTypeNeedsFrontBack(deed.selectedDeedType);
   const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
   const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
@@ -166,24 +171,29 @@ export function useCreateContractDeedStep() {
                   (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
                 : hasSingleImage)));
 
-  const showNationalAddress = deed.selectedDeedType !== "" && !isLeaseRenewal;
+  const showNationalAddress =
+    deed.selectedDeedType !== "" && !isSublease;
+
+  const isStandardAddressComplete = canContinueNationalAddress(
+    deed.nationalAddressMethod,
+    deed.nationalAddressPhotoFiles,
+    deed.nationalAddressLinkUrl,
+    {
+      hasExistingPhoto: existingAddressImageUrl !== null,
+      manualAddress: deed.nationalAddressManual,
+    },
+  );
 
   const isAddressComplete =
     isInstrumentTypeLocked ||
     isAddressAlreadySubmitted ||
-    canContinueNationalAddress(
-      deed.nationalAddressMethod,
-      deed.nationalAddressPhotoFiles,
-      deed.nationalAddressLinkUrl,
-      {
-        hasExistingPhoto: existingAddressImageUrl !== null,
-        manualAddress: deed.nationalAddressManual,
-      },
-    );
+    isSublease ||
+    (isLeaseRenewal
+      ? deed.leaseRenewalAddressMode === "same" ||
+        (deed.leaseRenewalAddressMode === "change" && isStandardAddressComplete)
+      : isStandardAddressComplete);
 
-  const canContinue = isLeaseRenewal
-    ? isDeedComplete
-    : isDeedComplete && isAddressComplete;
+  const canContinue = isDeedComplete && isAddressComplete;
 
   return {
     selectedDeedType: deed.selectedDeedType,
@@ -212,6 +222,8 @@ export function useCreateContractDeedStep() {
     setUseManualDeedEntry,
     manualDeedEntry: deed.manualDeedEntry,
     setManualDeedEntry,
+    leaseRenewalAddressMode: deed.leaseRenewalAddressMode,
+    setLeaseRenewalAddressMode,
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,
@@ -239,5 +251,6 @@ export function useCreateContractDeedStep() {
     isInstrumentTypeLocked,
     isDeedAlreadySubmitted,
     isLeaseRenewal,
+    isSublease,
   };
 }

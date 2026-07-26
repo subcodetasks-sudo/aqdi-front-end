@@ -119,6 +119,7 @@ export default function CreateContractDeceasedOwnerSection({
           value={guardiansPoaFiles}
           onChange={onGuardiansPoaFilesChange}
           existingImageUrl={existingGuardiansPoaImageUrl}
+          hint={labels.guardiansPoaHint}
           invalid={
             showFieldErrors &&
             guardiansPoaFiles.length === 0 &&

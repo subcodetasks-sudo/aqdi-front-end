@@ -9,6 +9,8 @@ import type { ContractStep4ApiData } from "@/features/create-contract/types/cont
 import type { ContractStep5ApiData } from "@/features/create-contract/types/contract-step5-api";
 import type { ContractStep6ApiData } from "@/features/create-contract/types/contract-step6-api";
 import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
+import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
+import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 
 type ContractStepProgressState = {
   currentStep: CreateContractStep;
@@ -22,15 +24,21 @@ type ContractStepProgressState = {
   contractStep6Data: ContractStep6ApiData | null;
 };
 
+function getSkipOwnerProgressState(state: ContractStepProgressState) {
+  return {
+    selectedDeedType: state.selectedDeedType,
+    instrumentType: state.contractStep1Data?.instrument_type,
+  };
+}
+
 export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState) {
   if (!state.contractSession) {
     return 0;
   }
 
-  const leaseRenewal = isLeaseRenewalContract({
-    selectedDeedType: state.selectedDeedType,
-    instrumentType: state.contractStep1Data?.instrument_type,
-  });
+  const skipState = getSkipOwnerProgressState(state);
+  const leaseRenewal = isLeaseRenewalContract(skipState);
+  const sublease = isSubleaseContract(skipState);
 
   let maxIndex = CREATE_CONTRACT_STEPS.indexOf("deed");
 
@@ -40,6 +48,19 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
     }
 
     if ((state.contractStep4Data?.step ?? 0) >= 5) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
+  } else if (sublease) {
+    // Sublease has no national address / owner steps — deed unlocks tenant.
+    if (state.contractStep1Data) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("tenant");
+    }
+
+    if ((state.contractStep4Data?.step ?? 0) >= 5) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
+
+    if ((state.contractStep5Data?.step ?? 0) >= 6) {
       maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
     }
   } else {
@@ -69,6 +90,10 @@ export function canNavigateToContractStep(
   step: CreateContractStep,
   state: ContractStepProgressState,
 ) {
+  if (step === "owner" && isOwnerStepSkipped(getSkipOwnerProgressState(state))) {
+    return false;
+  }
+
   const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
   return stepIndex <= getMaxUnlockedContractStepIndex(state);
 }
