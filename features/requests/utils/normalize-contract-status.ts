@@ -14,6 +14,32 @@ function asNullableString(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
+function asLocalizedString(value: unknown) {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const localized =
+      record.ar ?? record.en ?? record.ar_SA ?? record["ar-SA"];
+    if (typeof localized === "string") {
+      return localized.trim();
+    }
+  }
+
+  return "";
+}
+
+function resolveJourneyStepDescription(row: Record<string, unknown>) {
+  return (
+    asLocalizedString(row.description) ||
+    asLocalizedString(row.client_explanation) ||
+    asLocalizedString(row.status_client_explanation) ||
+    asLocalizedString(row.status_description)
+  );
+}
+
 function asNullableNumber(value: unknown) {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
@@ -54,7 +80,7 @@ export function normalizeJourneySteps(raw: unknown): ContractJourneyStep[] {
       key,
       status: asString(row.status) || key,
       status_label: asString(row.status_label) || key,
-      description: asString(row.description),
+      description: resolveJourneyStepDescription(row),
       state: normalizeJourneyState(row.state),
     };
   });
