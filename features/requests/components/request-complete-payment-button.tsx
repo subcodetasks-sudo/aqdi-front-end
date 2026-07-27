@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CreditCard } from "lucide-react";
+import { CreditCard, Loader2 } from "lucide-react";
 
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
@@ -62,7 +62,7 @@ export default function RequestCompletePaymentButton({
       >
         <CreditCard className="size-4 shrink-0" aria-hidden="true" />
         <span className="truncate">
-          {paymentFlow.isSubmitting ? payingLabel : idleLabel}
+          {paymentFlow.isSubmitting ? <Loader2 className="size-4 shrink-0" aria-hidden="true" /> : idleLabel}
         </span>
       </button>
 
@@ -74,6 +74,8 @@ export default function RequestCompletePaymentButton({
         onDraftSuccessDialogOpenChange={paymentFlow.setIsDraftSuccessDialogOpen}
         draftOrderUuid={paymentFlow.draftOrderUuid}
         isSubmitting={paymentFlow.isSubmitting}
+        totalPrice={hasAmount ? totalPrice : 0}
+        selectedMethod={paymentFlow.selectedPaymentMethod}
         onSelect={paymentFlow.handlePaymentMethodSelect}
       />
     </>

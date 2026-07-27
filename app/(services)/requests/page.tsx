@@ -5,10 +5,14 @@ import { getContracts } from "@/features/requests/services/get-contracts";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestLabels } from "@/features/requests/types/request-labels";
 import { mapContractToRequestCard } from "@/features/requests/utils/map-contract-to-request-card";
+import { getWhatsappHref } from "@/features/settings/services/get-whatsapp-href";
 
 export default async function RequestsPage() {
-  const t = await getTranslations("requests");
-  const tPayment = await getTranslations("createContract.payment");
+  const [t, tPayment, whatsappHref] = await Promise.all([
+    getTranslations("requests"),
+    getTranslations("createContract.payment"),
+    getWhatsappHref(),
+  ]);
 
   const labels: RequestLabels = {
     backLabel: t("backLabel"),
@@ -25,6 +29,19 @@ export default async function RequestsPage() {
     contractTypes: {
       housing: t("contractTypes.housing"),
       commercial: t("contractTypes.commercial"),
+    },
+    filtersDialog: {
+      title: t("filtersDialog.title"),
+      close: t("filtersDialog.close"),
+      contractTypeLabel: t("filtersDialog.contractTypeLabel"),
+      requestTypeLabel: t("filtersDialog.requestTypeLabel"),
+      all: t("filtersDialog.all"),
+      allTypes: t("filtersDialog.allTypes"),
+      completed: t("filtersDialog.completed"),
+      draftContract: t("filtersDialog.draftContract"),
+      incomplete: t("filtersDialog.incomplete"),
+      cancelled: t("filtersDialog.cancelled"),
+      showResults: t("filtersDialog.showResults"),
     },
     card: {
       requestNumberLabel: t("card.requestNumberLabel"),
@@ -152,18 +169,42 @@ export default async function RequestsPage() {
       paymentFlow: {
         methodDialog: {
           title: tPayment("methodDialog.title"),
-          question: tPayment("methodDialog.question"),
+          subtitle: tPayment("methodDialog.subtitle"),
           submitting: tPayment("methodDialog.submitting"),
           draft: {
             title: tPayment("methodDialog.draft.title"),
             description: tPayment("methodDialog.draft.description"),
+            steps: tPayment.raw("methodDialog.draft.steps") as string[],
+            note: tPayment("methodDialog.draft.note"),
           },
           payNow: {
             title: tPayment("methodDialog.payNow.title"),
             description: tPayment("methodDialog.payNow.description"),
+            badge: tPayment("methodDialog.payNow.badge"),
+            discountBadge: tPayment("methodDialog.payNow.discountBadge"),
+            steps: tPayment.raw("methodDialog.payNow.steps") as string[],
+            note: tPayment("methodDialog.payNow.note"),
           },
+          selected: {
+            draft: {
+              title: tPayment("methodDialog.selected.draft.title"),
+              description: tPayment("methodDialog.selected.draft.description"),
+            },
+            payNow: {
+              title: tPayment("methodDialog.selected.payNow.title"),
+              description: tPayment("methodDialog.selected.payNow.description"),
+              savings: tPayment("methodDialog.selected.payNow.savings"),
+            },
+          },
+          footerNote: tPayment("methodDialog.footerNote"),
+          footerNoteTitle: tPayment("methodDialog.footerNoteTitle"),
+          afterDiscount: tPayment("methodDialog.afterDiscount"),
+          total: tPayment("methodDialog.total"),
+          currency: tPayment("methodDialog.currency"),
+          close: tPayment("methodDialog.close"),
           missingContractSession: tPayment("methodDialog.missingContractSession"),
           draftError: tPayment("methodDialog.draftError"),
+          changeMethod: tPayment("methodDialog.changeMethod"),
         },
         draftSuccessDialog: {
           title: tPayment("draftSuccessDialog.title"),
@@ -179,7 +220,7 @@ export default async function RequestsPage() {
             "draftSuccessDialog.preparationDescription",
           ),
           whatsappCta: tPayment("draftSuccessDialog.whatsappCta"),
-          whatsappHref: tPayment("draftSuccessDialog.whatsappHref"),
+          whatsappHref,
         },
         payError: tPayment("navigation.payError"),
       },
@@ -198,7 +239,7 @@ export default async function RequestsPage() {
         expectedDurationBody: t("card.receiveContractDialog.expectedDurationBody"),
         contactPrompt: t("card.receiveContractDialog.contactPrompt"),
         whatsappCta: t("card.receiveContractDialog.whatsappCta"),
-        whatsappHref: t("card.receiveContractDialog.whatsappHref"),
+        whatsappHref,
       },
       downloadInvoice: t("card.downloadInvoice"),
       invoiceDialog: {
@@ -221,7 +262,7 @@ export default async function RequestsPage() {
         paidStatusLabel: t("card.invoiceDialog.paidStatusLabel"),
       },
       whatsappLabel: t("card.whatsappLabel"),
-      whatsappHref: t("card.whatsappHref"),
+      whatsappHref,
       status: {
         completed: t("card.status.completed"),
         completedWithAmount: t("card.status.completedWithAmount"),

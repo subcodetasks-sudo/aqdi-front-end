@@ -159,7 +159,8 @@ export default function CreateContractTenantStep({
     goToNextPhase();
   }
 
-  const showDraftActions = Boolean(contractSession) && !isLeaseRenewal;
+  const showSaveLaterActions = Boolean(contractSession);
+  const showCancelRequestActions = Boolean(contractSession) && !isLeaseRenewal;
   const showBuildingIcon = isRentedUnitPhase || isLeaseRenewalUnitPhase;
 
   function handleOpenSaveLater() {
@@ -200,7 +201,7 @@ export default function CreateContractTenantStep({
       />
 
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        {showDraftActions && contractSession ? (
+        {showCancelRequestActions && contractSession ? (
           <div className="mb-4 flex justify-end">
             <CreateContractCancelRequestButton
               contractId={contractSession.contractId}
@@ -285,12 +286,12 @@ export default function CreateContractTenantStep({
           isSubmitting ? labels.navigation.submitting : labels.navigation.continue
         }
         saveLaterLabel={
-          showDraftActions ? labels.navigation.saveLater : undefined
+          showSaveLaterActions ? labels.navigation.saveLater : undefined
         }
         isSubmitting={isSubmitting || isSavingDraft}
         onPrevious={handlePrevious}
         onContinue={() => void handleContinue()}
-        onSaveLater={showDraftActions ? handleOpenSaveLater : undefined}
+        onSaveLater={showSaveLaterActions ? handleOpenSaveLater : undefined}
       />
 
       <CreateContractSaveLaterDialog

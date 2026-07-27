@@ -8,6 +8,7 @@ import RequestViewContractButton from "@/features/requests/components/request-vi
 import RequestViewDataButton from "@/features/requests/components/request-view-data-button";
 import type { RequestCardData } from "@/features/requests/types/request";
 import type { RequestCardLabels } from "@/features/requests/types/request-labels";
+import { cn } from "@/lib/utils";
 
 type RequestCardActionsProps = {
   card: Pick<
@@ -21,26 +22,29 @@ type RequestCardActionsProps = {
     | "showViewEdit"
   >;
   labels: RequestCardLabels;
+  isIncompleteDraft: boolean;
 };
 
 export default function RequestCardActions({
   card,
   labels,
+  isIncompleteDraft = false,
 }: RequestCardActionsProps) {
   const contractTypeLabel =
+  
     card.contractType === "commercial"
       ? labels.contractTypes.commercial
       : labels.contractTypes.housing;
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#f0f0f0] pt-4">
+    <div className={cn("flex flex-wrap items-center justify-end gap-2 border-[#f0f0f0] pt-4 dark:border-[#262d2c]", isIncompleteDraft ? "" : " border-t")}>
       {/* RTL visual (right → left): WhatsApp, View, Invoice?, When, Pay? */}
       <Link
         href={labels.whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={labels.whatsappLabel}
-        className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f8ee] text-[#25D366] transition-opacity hover:opacity-90"
+        className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f8ee] text-[#25D366] transition-opacity hover:opacity-90 dark:bg-[#00a67e] dark:text-white"
       >
         <FaWhatsapp className="size-5" aria-hidden="true" />
       </Link>

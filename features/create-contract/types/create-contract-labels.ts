@@ -95,6 +95,7 @@ export type CreateContractLabels = {
       clickHere: string;
       chooseFile: string;
       acceptedFormats: string;
+      hint?: string;
       preview: string;
       delete: string;
       previewTitle: string;
@@ -175,6 +176,8 @@ export type CreateContractLabels = {
     leaseRenewal: {
       noticeResidential: string;
       noticeCommercial: string;
+      uploadLabel: string;
+      pdfHint: string;
       addressFieldLabel: string;
       sameAddress: {
         title: string;
@@ -590,6 +593,7 @@ export type CreateContractLabels = {
       confirm: string;
       hint: string;
       emptyValue: string;
+      unitIncomplete: string;
       orderNumber: string;
       share: string;
       copy: string;
@@ -613,15 +617,21 @@ export type CreateContractLabels = {
         duration: string;
         documentType: string;
         deedAttachment: string;
+        leaseRenewalAttachment: string;
         mapsLink: string;
         addressPhoto: string;
         addressManual: string;
         ownerId: string;
         ownerPhone: string;
         ownerBirthDate: string;
+        tenantDelegation: string;
+        tenantUnifiedRecord: string;
         tenantId: string;
         tenantPhone: string;
         tenantBirthDate: string;
+        tenantOwnerId: string;
+        tenantOwnerPhone: string;
+        tenantOwnerBirthDate: string;
         unitType: string;
         unitUsage: string;
         floor: string;
@@ -632,6 +642,10 @@ export type CreateContractLabels = {
         kitchens: string;
         kitchenCabinets: string;
         paymentMethod: string;
+      };
+      delegation: {
+        "owner-representative": string;
+        "agent-authorized": string;
       };
       kitchenCabinets: {
         installed: string;
@@ -654,6 +668,8 @@ export type CreateContractLabels = {
     navigation: {
       previous: string;
       pay: string;
+      payWithAmount: string;
+      sendDraft: string;
       paying: string;
       payError: string;
       save: string;
@@ -723,18 +739,42 @@ export type CreateContractLabels = {
     };
     methodDialog: {
       title: string;
-      question: string;
+      subtitle: string;
       submitting: string;
       draft: {
         title: string;
         description: string;
+        steps: string[];
+        note: string;
       };
       payNow: {
         title: string;
         description: string;
+        badge: string;
+        discountBadge: string;
+        steps: string[];
+        note: string;
       };
+      selected: {
+        draft: {
+          title: string;
+          description: string;
+        };
+        payNow: {
+          title: string;
+          description: string;
+          savings: string;
+        };
+      };
+      footerNote: string;
+      footerNoteTitle: string;
+      afterDiscount: string;
+      total: string;
+      currency: string;
+      close: string;
       missingContractSession: string;
       draftError: string;
+      changeMethod: string;
     };
     draftSuccessDialog: {
       title: string;

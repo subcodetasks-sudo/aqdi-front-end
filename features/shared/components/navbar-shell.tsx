@@ -1,12 +1,23 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations } from "next-intl/server";
 
 import Navbar from "@/features/shared/components/navbar";
+import { appSettingsKeys } from "@/features/settings/query-keys";
+import { getAppSettings } from "@/features/settings/services/get-app-settings";
+import { getQueryClient } from "@/lib/react-query/get-query-client";
 
 export default async function NavbarShell() {
   const dialogT = await getTranslations("startWithAqdi.dialog");
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: appSettingsKeys.detail(),
+    queryFn: () => getAppSettings(),
+  });
 
   return (
-    <Navbar
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Navbar
       dialogLabels={{
         title: dialogT("title"),
         close: dialogT("close"),
@@ -50,5 +61,6 @@ export default async function NavbarShell() {
         },
       }}
     />
+    </HydrationBoundary>
   );
 }

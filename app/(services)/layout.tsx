@@ -1,5 +1,4 @@
 import FooterBottomBar from "@/features/footer/components/footer-bottom-bar";
-import ServicesFloatingSidebar from "@/features/services/components/services-floating-sidebar";
 import { ServicesPageProvider } from "@/features/services/components/services-page-provider";
 import ServicesSideBackNav from "@/features/services/components/services-side-back-nav";
 import { getTranslations } from "next-intl/server";
@@ -10,7 +9,6 @@ export default async function ServicesLayout({
   children: React.ReactNode;
 }>) {
   const footer = await getTranslations("footer");
-  const hero = await getTranslations("hero");
 
   return (
     <div
@@ -23,12 +21,6 @@ export default async function ServicesLayout({
             <ServicesSideBackNav />
             <main className="mx-auto w-full">{children}</main>
           </div>
-
-          <ServicesFloatingSidebar
-            appleLabel={hero("appStore")}
-            googlePlayLabel={hero("googlePlay")}
-            whatsappLabel={hero("whatsapp")}
-          />
         </div>
       </ServicesPageProvider>
 

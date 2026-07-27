@@ -32,7 +32,7 @@ export default function RequestViewDataButton({
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#e8e8e8] bg-white px-4 text-sm font-bold text-brand transition-colors hover:bg-[#fafafa]",
+          "inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#e8e8e8] bg-white px-4 text-sm font-bold text-brand transition-colors hover:bg-[#fafafa] dark:border-[#262d2c] dark:bg-[#151c1b] dark:text-white dark:hover:bg-[#1a2221]",
           className,
         )}
       >

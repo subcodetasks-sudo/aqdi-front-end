@@ -13,6 +13,10 @@ type ContractPaymentMethodFlowDialogsProps = {
   onDraftSuccessDialogOpenChange: (open: boolean) => void;
   draftOrderUuid: string | null;
   isSubmitting?: boolean;
+  hasDiscount?: boolean;
+  totalPrice?: number;
+  discountedPrice?: number | null;
+  selectedMethod?: PaymentMethod | null;
   onSelect: (method: PaymentMethod) => void | Promise<void>;
 };
 
@@ -24,6 +28,10 @@ export default function ContractPaymentMethodFlowDialogs({
   onDraftSuccessDialogOpenChange,
   draftOrderUuid,
   isSubmitting = false,
+  hasDiscount = false,
+  totalPrice = 0,
+  discountedPrice = null,
+  selectedMethod = null,
   onSelect,
 }: ContractPaymentMethodFlowDialogsProps) {
   return (
@@ -33,6 +41,10 @@ export default function ContractPaymentMethodFlowDialogs({
         open={isMethodDialogOpen}
         onOpenChange={onMethodDialogOpenChange}
         isSubmitting={isSubmitting}
+        hasDiscount={hasDiscount}
+        totalPrice={totalPrice}
+        discountedPrice={discountedPrice}
+        selectedMethod={selectedMethod}
         onSelect={onSelect}
       />
 

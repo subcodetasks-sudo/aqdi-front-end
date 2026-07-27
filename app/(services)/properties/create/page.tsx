@@ -203,6 +203,7 @@ export default async function CreatePropertyPage({
           clickHere: t("address.nationalAddress.photo.clickHere"),
           chooseFile: t("address.nationalAddress.photo.chooseFile"),
           acceptedFormats: t("address.nationalAddress.photo.acceptedFormats"),
+          hint: t("address.nationalAddress.photo.hint"),
           preview: t("address.nationalAddress.photo.preview"),
           delete: t("address.nationalAddress.photo.delete"),
           previewTitle: t("address.nationalAddress.photo.previewTitle"),

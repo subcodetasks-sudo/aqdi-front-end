@@ -63,21 +63,26 @@ export function useSubmitContractStep1() {
         hasManualEntry,
     );
     const isLeaseRenewal = deedTypeIsLeaseRenewal(selectedDeedType);
-
-    if (!hasNewFile && !isLeaseRenewal) {
-      // Existing-property contracts already have the deed data stored on the
-      // backend from /contract/start, so allow continuing without re-uploading.
-      return isExistingPropertyContract;
-    }
-
     const instrumentType = mapDeedTypeToInstrumentType(selectedDeedType);
     const minSubmittedStep = isLeaseRenewal ? 4 : 2;
-
-    if (
+    const isAlreadySubmitted =
       contractStep1Data &&
       contractStep1Data.instrument_type === instrumentType &&
-      contractStep1Data.step >= minSubmittedStep
-    ) {
+      contractStep1Data.step >= minSubmittedStep;
+
+    if (!hasNewFile) {
+      if (isAlreadySubmitted) {
+        return true;
+      }
+
+      if (isExistingPropertyContract && !isLeaseRenewal) {
+        return true;
+      }
+
+      return false;
+    }
+
+    if (isAlreadySubmitted) {
       return true;
     }
 

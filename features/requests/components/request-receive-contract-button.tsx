@@ -43,7 +43,7 @@ export default function RequestReceiveContractButton({
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#f3f3f3] px-4 text-sm font-bold text-[#555555] transition-colors hover:bg-[#ebebeb]",
+          "inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-transparent bg-[#f3f3f3] px-4 text-sm font-bold text-[#555555] transition-colors hover:bg-[#ebebeb] dark:border-[#262d2c] dark:bg-[#151c1b] dark:text-white dark:hover:bg-[#1a2221]",
           className,
         )}
       >

@@ -1,9 +1,9 @@
 "use client";
 
 import {
+  ClipboardList,
   Copy,
   Eye,
-  FileText,
   Pencil,
   Printer,
   Search,
@@ -24,10 +24,9 @@ import type { CreateContractLabels } from "@/features/create-contract/types/crea
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import type { CreateContractReviewEditTarget } from "@/features/create-contract/types/create-contract-review-order";
-import {
-  reviewEditTargetToStep,
-} from "@/features/create-contract/types/create-contract-review-order";
+import { reviewEditTargetToStep } from "@/features/create-contract/types/create-contract-review-order";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
+import { cn } from "@/lib/utils";
 
 type CreateContractReviewOrderDialogProps = {
   open: boolean;
@@ -85,10 +84,32 @@ function EditButton({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-white px-3 py-1.5 text-xs font-bold text-brand shadow-sm transition-colors hover:bg-[#f7f7f7] ${className}`}
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-white px-3 py-1.5 text-xs font-bold text-brand shadow-sm transition-colors hover:bg-[#f7f7f7]",
+        className,
+      )}
     >
       <Pencil className="size-3.5" aria-hidden="true" />
       <span>{label}</span>
+    </button>
+  );
+}
+
+function OverviewEditIcon({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className=" inline-flex  items-center justify-center rounded-lg  cursor-pointer"
+    >
+      <Pencil className="size-3.5" aria-hidden="true" />
     </button>
   );
 }
@@ -173,13 +194,34 @@ export default function CreateContractReviewOrderDialog({
     window.print();
   }
 
+  const overviewItems = [
+    {
+      key: "contractType",
+      label: labels.fields.contractType,
+      value: summary.overview.contractType,
+      editable: false,
+    },
+    {
+      key: "startDate",
+      label: labels.fields.startDate,
+      value: summary.overview.startDate,
+      editable: true,
+    },
+    {
+      key: "duration",
+      label: labels.fields.duration,
+      value: summary.overview.duration,
+      editable: true,
+    },
+  ] as const;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-[28px] border-0 bg-[#f3f4f6] p-4 sm:max-w-xl md:p-5"
+        className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5"
       >
-        <div className="relative mb-4 flex items-center justify-center">
+        <div className="relative mb-4 flex items-center justify-between">
           <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base">
             <Search className="size-4 shrink-0" aria-hidden="true" />
             <span>{labels.title}</span>
@@ -189,93 +231,76 @@ export default function CreateContractReviewOrderDialog({
             <button
               type="button"
               aria-label={labels.close}
-              className="absolute start-0 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666]"
+              className=" inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666]"
             >
               <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
             </button>
           </DialogClose>
         </div>
 
-        <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <div className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-sm">
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#eef6f3] text-brand">
-              <FileText className="size-4" aria-hidden="true" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-[11px] text-[#8a8a8a]">{labels.orderNumber}</p>
-              <p className="truncate text-sm font-extrabold text-[#222]">
-                {summary.orderNumber}
-              </p>
-            </div>
+        <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4  border-b pb-4">
+          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center">
+            <p className="text-lg font-extrabold leading-none text-brand md:text-xl">
+              {summary.orderNumber}
+            </p>
+            <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76]">
+              <ClipboardList className="size-3" aria-hidden="true" />
+              <span>{labels.orderNumber}</span>
+            </p>
           </div>
 
           <button
             type="button"
             onClick={() => void handleShare()}
-            className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 text-start shadow-sm transition-colors hover:bg-[#fafafa]"
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
           >
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#eef6f3] text-brand">
-              <Share2 className="size-4" aria-hidden="true" />
-            </span>
-            <span className="text-sm font-bold text-brand">{labels.share}</span>
+            <Share2 className="size-4" aria-hidden="true" />
+            <span className="text-xs font-bold">{labels.share}</span>
           </button>
 
           <button
             type="button"
             onClick={() => void handleCopy()}
-            className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 text-start shadow-sm transition-colors hover:bg-[#fafafa]"
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
           >
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#eef6f3] text-brand">
-              <Copy className="size-4" aria-hidden="true" />
-            </span>
-            <span className="text-sm font-bold text-brand">{labels.copy}</span>
+            <Copy className="size-4" aria-hidden="true" />
+            <span className="text-xs font-bold">{labels.copy}</span>
           </button>
 
           <button
             type="button"
             onClick={handlePrint}
-            className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 text-start shadow-sm transition-colors hover:bg-[#fafafa]"
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
           >
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#eef6f3] text-brand">
-              <Printer className="size-4" aria-hidden="true" />
-            </span>
-            <span className="text-sm font-bold text-brand">{labels.print}</span>
+            <Printer className="size-4" aria-hidden="true" />
+            <span className="text-xs font-bold">{labels.print}</span>
           </button>
         </div>
 
         <div className="space-y-3">
-          <section className="relative rounded-2xl bg-white p-4 shadow-sm">
-            <div className="mb-3 flex justify-start">
-              <EditButton
-                label={labels.edit}
-                onClick={() => handleEdit("overview")}
-              />
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-3">
-              <div className="space-y-1 text-center sm:text-start">
-                <p className="text-xs text-[#8a8a8a]">
-                  {labels.fields.contractType}
-                </p>
-                <p className="text-sm font-extrabold text-brand">
-                  {summary.overview.contractType}
-                </p>
-              </div>
-              <div className="space-y-1 text-center sm:text-start">
-                <p className="text-xs text-[#8a8a8a]">
-                  {labels.fields.startDate}
-                </p>
-                <p className="text-sm font-extrabold text-brand">
-                  {summary.overview.startDate}
-                </p>
-              </div>
-              <div className="space-y-1 text-center sm:text-start">
-                <p className="text-xs text-[#8a8a8a]">
-                  {labels.fields.duration}
-                </p>
-                <p className="text-sm font-extrabold text-brand">
-                  {summary.overview.duration}
-                </p>
-              </div>
+          <section className="rounded-lg border border-[#cfe8dd] bg-[#f5fbf8] p-3 shadow-sm">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {overviewItems.map((item) => (
+                <div
+                  key={item.key}
+                  className="relative flex  flex-col items-start rounded-lg border border-[#dfe7e3] bg-white px-4 py-3 text-start shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                >
+                  {item.editable ? (
+                    <div className="absolute inset-e-3 top-3">
+                    <OverviewEditIcon
+                        label={`${labels.edit} ${item.label}`}
+                        onClick={() => handleEdit("overview")}
+                      />
+                    </div>
+                  ) :null}
+                  <p className="mb-1 text-xs font-bold text-[#8a8a8a]">
+                    {item.label}
+                  </p>
+                  <p className="text-sm font-extrabold leading-tight text-brand">
+                    {item.value}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -295,9 +320,9 @@ export default function CreateContractReviewOrderDialog({
                   <EditButton
                     label={labels.edit}
                     onClick={() => handleEdit(section.editTarget)}
-                    className="absolute start-3 top-3 border-0 bg-white/15 text-white hover:bg-white/25"
+                    className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25"
                   />
-                  <div className="space-y-2 pt-8 text-center">
+                  <div className="space-y-2  text-start">
                     <p className="text-sm font-bold opacity-90">
                       {section.title}
                     </p>
@@ -312,12 +337,10 @@ export default function CreateContractReviewOrderDialog({
               );
             }
 
-            const isUnit = section.id === "unit";
-
             return (
               <section
                 key={section.id}
-                className="relative rounded-2xl bg-white p-4 shadow-sm"
+                className="relative rounded-2xl border border-[#ececec] bg-gray-200/10 p-4 shadow-sm"
               >
                 <div className="mb-3 flex items-start justify-between gap-3">
                   <h3 className="text-sm font-extrabold text-brand">
@@ -329,49 +352,51 @@ export default function CreateContractReviewOrderDialog({
                   />
                 </div>
 
-                <div
-                  className={
-                    isUnit
-                      ? "grid grid-cols-1 gap-3 sm:grid-cols-2"
-                      : "space-y-3"
-                  }
-                >
-                  {section.fields.map((field) => (
-                    <div
-                      key={`${section.id}-${field.label}`}
-                      className="flex items-start justify-between gap-3"
-                    >
-                      <div className="min-w-0 space-y-0.5">
-                        <p className="text-xs text-[#8a8a8a]">{field.label}</p>
-                        {field.href ? (
-                          <a
-                            href={field.href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="block break-all text-sm font-bold text-brand underline-offset-2 hover:underline"
-                          >
-                            {field.value}
-                          </a>
-                        ) : (
-                          <p className="break-words text-sm font-bold text-[#222]">
-                            {field.value}
-                          </p>
-                        )}
-                      </div>
+                {section.incomplete ? (
+                  <p className="text-sm font-medium text-[#e11d48]">
+                    {labels.unitIncomplete}
+                  </p>
+                ) : (
+                  <div className="divide-y divide-dashed divide-[#e5e5e5]">
+                    {section.fields.map((field) => (
+                      <div
+                        key={`${section.id}-${field.label}`}
+                        className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                      >
+                        <div className="min-w-0 text-sm">
+                          <span className="font-medium text-[#8a8a8a]">
+                            {field.label}:{" "}
+                          </span>
+                          {field.href ? (
+                            <a
+                              href={field.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="break-all font-bold text-brand underline-offset-2 hover:underline"
+                            >
+                              {field.value}
+                            </a>
+                          ) : (
+                            <span className="wrap-break-word font-bold text-[#222]">
+                              {field.value}
+                            </span>
+                          )}
+                        </div>
 
-                      {field.viewUrl ? (
-                        <button
-                          type="button"
-                          onClick={() => openAttachment(field.viewUrl)}
-                          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb]"
-                        >
-                          <Eye className="size-3.5" aria-hidden="true" />
-                          <span>{labels.view}</span>
-                        </button>
-                      ) : null}
-                    </div>
-                  ))}
-                </div>
+                        {field.viewUrl ? (
+                          <button
+                            type="button"
+                            onClick={() => openAttachment(field.viewUrl)}
+                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb]"
+                          >
+                            <Eye className="size-3.5" aria-hidden="true" />
+                            <span>{labels.view}</span>
+                          </button>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </section>
             );
           })}
@@ -384,7 +409,7 @@ export default function CreateContractReviewOrderDialog({
         <button
           type="button"
           onClick={() => onOpenChange(false)}
-          className="mt-3 flex h-12 w-full items-center justify-center rounded-full bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+          className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
         >
           {labels.confirm}
         </button>

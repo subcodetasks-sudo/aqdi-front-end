@@ -237,7 +237,14 @@ export function useContractReviewOrderSummary(
       },
     ];
 
-    if (!isLeaseRenewal) {
+    if (isLeaseRenewal) {
+      const leaseAttachmentLabel = labels.fields.leaseRenewalAttachment;
+      deedFields.push({
+        label: leaseAttachmentLabel,
+        value: deedImageUrl ? leaseAttachmentLabel : empty,
+        viewUrl: deedImageUrl,
+      });
+    } else {
       deedFields.push({
         label: deedAttachmentLabel,
         value: deedImageUrl ? deedAttachmentLabel : empty,
@@ -333,15 +340,62 @@ export function useContractReviewOrderSummary(
 
     {
       const isOrganization = isOrganizationTenantStatus(tenantData.status);
-      const tenantId = isOrganization
-        ? tenantData.organization.ownerIdNumber
-        : tenantData.individual.idNumber;
-      const tenantPhone = isOrganization
-        ? tenantData.organization.ownerPhone
-        : tenantData.individual.phone;
-      const tenantBirthDate = isOrganization
-        ? tenantData.organization.ownerBirthDate
-        : tenantData.individual.birthDate;
+      const tenantFields: CreateContractReviewField[] = isOrganization
+        ? [
+            {
+              label: labels.fields.tenantDelegation,
+              value: displayValue(
+                tenantData.organization.delegationType
+                  ? labels.delegation[tenantData.organization.delegationType]
+                  : "",
+                empty,
+              ),
+            },
+            {
+              label: labels.fields.tenantUnifiedRecord,
+              value: displayValue(
+                tenantData.organization.unifiedRecordNumber,
+                empty,
+              ),
+            },
+            {
+              label: labels.fields.tenantOwnerId,
+              value: displayValue(
+                tenantData.organization.ownerIdNumber,
+                empty,
+              ),
+            },
+            {
+              label: labels.fields.tenantOwnerPhone,
+              value: displayValue(tenantData.organization.ownerPhone, empty),
+            },
+            {
+              label: labels.fields.tenantOwnerBirthDate,
+              value: formatBirthDate(
+                tenantData.organization.ownerBirthDate,
+                labels.calendar,
+                empty,
+              ),
+            },
+          ]
+        : [
+            {
+              label: labels.fields.tenantId,
+              value: displayValue(tenantData.individual.idNumber, empty),
+            },
+            {
+              label: labels.fields.tenantPhone,
+              value: displayValue(tenantData.individual.phone, empty),
+            },
+            {
+              label: labels.fields.tenantBirthDate,
+              value: formatBirthDate(
+                tenantData.individual.birthDate,
+                labels.calendar,
+                empty,
+              ),
+            },
+          ];
 
       sections.push({
         id: "tenant",
@@ -349,20 +403,7 @@ export function useContractReviewOrderSummary(
           ? labels.sections.tenantOrganization
           : labels.sections.tenantIndividual,
         editTarget: "tenant",
-        fields: [
-          {
-            label: labels.fields.tenantId,
-            value: displayValue(tenantId, empty),
-          },
-          {
-            label: labels.fields.tenantPhone,
-            value: displayValue(tenantPhone, empty),
-          },
-          {
-            label: labels.fields.tenantBirthDate,
-            value: formatBirthDate(tenantBirthDate, labels.calendar, empty),
-          },
-        ],
+        fields: tenantFields,
       });
     }
 
@@ -376,14 +417,26 @@ export function useContractReviewOrderSummary(
         (option) => String(option.id) === unit?.unitUsageId,
       )?.name ?? "";
 
-    const unitFields: CreateContractReviewField[] =
-      isLeaseRenewal && leaseRenewalUnitMode === "same"
-        ? [
-            {
-              label: labels.fields.unitType,
-              value: labels.sameUnit,
-            },
-          ]
+    const isSameUnit = isLeaseRenewal && leaseRenewalUnitMode === "same";
+    const unitIncomplete =
+      !isSameUnit &&
+      !(
+        unit?.unitTypeId ||
+        unit?.unitUsageId ||
+        unit?.unitNumber?.trim() ||
+        unit?.floorNumber?.trim() ||
+        unit?.totalArea?.trim()
+      );
+
+    const unitFields: CreateContractReviewField[] = isSameUnit
+      ? [
+          {
+            label: labels.fields.unitType,
+            value: labels.sameUnit,
+          },
+        ]
+      : unitIncomplete
+        ? []
         : [
             {
               label: labels.fields.unitType,
@@ -432,6 +485,7 @@ export function useContractReviewOrderSummary(
       title: labels.sections.unit,
       editTarget: "unit",
       fields: unitFields,
+      incomplete: unitIncomplete,
     });
 
     const paymentTypeName =

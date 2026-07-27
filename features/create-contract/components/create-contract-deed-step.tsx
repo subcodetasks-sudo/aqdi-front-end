@@ -11,6 +11,7 @@ import CreateContractDeedTypeSelect from "@/features/create-contract/components/
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
 import CreateContractLeaseRenewalAddressChoice from "@/features/create-contract/components/create-contract-lease-renewal-address-choice";
+import CreateContractLeaseRenewalInstrumentUpload from "@/features/create-contract/components/create-contract-lease-renewal-instrument-upload";
 import CreateContractLeaseRenewalNotice from "@/features/create-contract/components/create-contract-lease-renewal-notice";
 import CreateContractStepNavigation from "@/features/create-contract/components/create-contract-step-navigation";
 import CreateContractStepPhaseHeader from "@/features/create-contract/components/create-contract-step-phase-header";
@@ -155,7 +156,9 @@ export default function CreateContractDeedStep({
     }
 
     if (selectedDeedType && deedTypeIsLeaseRenewal(selectedDeedType)) {
-      const submitted = await submitStep1(selectedDeedType, {});
+      const submitted = await submitStep1(selectedDeedType, {
+        instrument: deedFiles[0],
+      });
 
       if (!submitted) {
         return;
@@ -505,6 +508,17 @@ export default function CreateContractDeedStep({
 
             {isLeaseRenewal && leaseRenewalNotice ? (
               <CreateContractLeaseRenewalNotice message={leaseRenewalNotice} />
+            ) : null}
+
+            {isLeaseRenewal && labels.leaseRenewal ? (
+              <CreateContractLeaseRenewalInstrumentUpload
+                labels={labels.leaseRenewal}
+                deedImageLabels={labels.deedImage}
+                value={deedFiles}
+                onChange={setDeedFiles}
+                existingImageUrl={existingInstrumentImageUrl}
+                showFieldErrors={showFieldErrors}
+              />
             ) : null}
 
             {renderDeedInstrumentContent()}

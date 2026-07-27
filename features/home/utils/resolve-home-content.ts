@@ -20,6 +20,7 @@ import type {
   HomePricingPlanResolved,
   HomePricingResolved,
 } from "@/features/home/types/home-content";
+import { buildWhatsappHref } from "@/features/settings/utils/build-whatsapp-href";
 
 export type HomeStaticContent = {
   hero: {
@@ -106,26 +107,6 @@ function splitMainTitle(
   }
 
   return { titlePrefix: title, titleAccent: "" };
-}
-
-function buildWhatsappHref(contactNumber: string | null | undefined, fallback: string) {
-  const raw = typeof contactNumber === "string" ? contactNumber.trim() : "";
-  if (!raw) {
-    return fallback;
-  }
-
-  const digits = raw.replace(/\D/g, "");
-  if (!digits) {
-    return fallback;
-  }
-
-  const normalized = digits.startsWith("966")
-    ? digits
-    : digits.startsWith("0")
-      ? `966${digits.slice(1)}`
-      : `966${digits}`;
-
-  return `https://wa.me/${normalized}`;
 }
 
 function splitHeroTitleParts(
@@ -376,6 +357,7 @@ function resolvePricing(
 function resolveContact(
   api: HomeContentSections["contact"],
   staticContent: HomeStaticContent["contact"],
+  settingsWhatsappNumber?: string | null,
 ): HomeContactResolved {
   const staticTitle = [
     staticContent.titleLine1,
@@ -395,7 +377,7 @@ function resolveContact(
     imageAlt: staticContent.imageAlt,
     imageUrl: textOrFallback(api?.image_url, staticContent.imageUrl),
     whatsappHref: buildWhatsappHref(
-      api?.contact_number,
+      settingsWhatsappNumber ?? api?.contact_number,
       staticContent.whatsappHref,
     ),
   };
@@ -423,8 +405,13 @@ function resolveApp(
 export function resolveHomeContent(
   api: HomeContentSections | null,
   staticContent: HomeStaticContent,
+  options?: { whatsappNumber?: string | null },
 ): HomeContentResolved {
-  const contact = resolveContact(api?.contact, staticContent.contact);
+  const contact = resolveContact(
+    api?.contact,
+    staticContent.contact,
+    options?.whatsappNumber,
+  );
   const hero = resolveHero(api?.hero, staticContent.hero);
 
   return {

@@ -13,6 +13,8 @@ import { getHomeContent } from "@/features/home/services/get-home-content";
 import { resolveHomeContent } from "@/features/home/utils/resolve-home-content";
 import PricingSection from "@/features/pricing/components/pricing-section";
 import ServicesSection from "@/features/services/components/services-section";
+import { getAppSettings } from "@/features/settings/services/get-app-settings";
+import { resolveSettingsWhatsappNumber } from "@/features/settings/utils/build-whatsapp-href";
 import SupportSection from "@/features/support/components/support-section";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,9 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [apiSections, tHero, tTrusted, tAdvantages, tPricing, tSupport, tApp] =
+  const [apiSections, settings, tHero, tTrusted, tAdvantages, tPricing, tSupport, tApp] =
     await Promise.all([
       getHomeContent(),
+      getAppSettings(),
       getTranslations("hero"),
       getTranslations("trustedEntities"),
       getTranslations("advantages"),
@@ -35,7 +38,9 @@ export default async function Home() {
       getTranslations("appSection"),
     ]);
 
-  const content = resolveHomeContent(apiSections, {
+  const content = resolveHomeContent(
+    apiSections,
+    {
     hero: {
       badge: tHero("badge"),
       titleLine1Accent: tHero("titleLine1Accent"),
@@ -110,7 +115,9 @@ export default async function Home() {
       imageAlt: tApp("imageAlt"),
       imageUrl: "/images/app-banner.png",
     },
-  });
+    },
+    { whatsappNumber: resolveSettingsWhatsappNumber(settings) },
+  );
 
   return (
     <main>

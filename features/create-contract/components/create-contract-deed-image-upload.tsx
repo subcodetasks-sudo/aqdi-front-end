@@ -300,7 +300,7 @@ export default function CreateContractDeedImageUpload({
                 <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
                 <span>{labels.chooseFile}</span>
               </p>
-              {isDashed && !hint && labels.acceptedFormats ? (
+              {isDashed && labels.acceptedFormats ? (
                 <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
               ) : null}
             </div>

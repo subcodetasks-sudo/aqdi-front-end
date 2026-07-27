@@ -136,7 +136,8 @@ export default function CreatePropertyNationalAddress({
           value={photoFiles}
           onChange={onPhotoFilesChange}
           existingFileUrl={existingPhotoUrl}
-          variant="dropzone"
+          variant="dashed"
+          hint={labels.photo.hint}
           invalid={photoInvalid}
         />
       ) : null}

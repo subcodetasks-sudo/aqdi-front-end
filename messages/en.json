@@ -377,8 +377,22 @@
     "copyright": "All rights reserved Aqadi 2024 ©",
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
-    "termsHref": "#",
-    "privacyHref": "#"
+    "termsHref": "/terms",
+    "privacyHref": "/privacy"
+  },
+  "legal": {
+    "terms": {
+      "title": "Terms and Conditions",
+      "metaTitle": "Terms and Conditions | Aqadi",
+      "metaDescription": "Read the terms and conditions for using Aqadi electronic lease documentation platform.",
+      "empty": "Terms and conditions are not available at the moment."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "metaTitle": "Privacy Policy | Aqadi",
+      "metaDescription": "Read Aqadi privacy policy and how we protect your data.",
+      "empty": "Privacy policy is not available at the moment."
+    }
   },
   "faq": {
     "badge": "FAQ",
@@ -762,6 +776,19 @@
     "pageSubtitle": "Track the status of your requests and rental contracts step by step until documentation on the Ejar platform.",
     "searchPlaceholder": "Search by request number or ID",
     "filtersLabel": "Filters",
+    "filtersDialog": {
+      "title": "Request filters",
+      "close": "Close",
+      "contractTypeLabel": "Contract type",
+      "requestTypeLabel": "Request type",
+      "all": "All",
+      "allTypes": "All types",
+      "completed": "Completed request",
+      "draftContract": "Contract draft request",
+      "incomplete": "Draft (incomplete)",
+      "cancelled": "Cancelled",
+      "showResults": "Show results"
+    },
     "requestsCount": "{count} requests",
     "filterAll": "All",
     "emptyState": "You do not have any requests yet.",
@@ -1214,10 +1241,11 @@
           }
         },
         "photo": {
-          "label": "Attach national address image",
+          "label": "Property national address card photo",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
+          "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
           "preview": "Preview",
           "delete": "Delete",
           "previewTitle": "File preview",
@@ -1683,10 +1711,11 @@
           }
         },
         "photo": {
-          "label": "Attach national address photo",
+          "label": "Property national address card photo",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
+          "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
           "preview": "Preview",
           "delete": "Delete",
           "previewTitle": "File preview",
@@ -1696,6 +1725,8 @@
       "leaseRenewal": {
         "noticeResidential": "You selected lease renewal and chose a residential contract type. If the contract you want to renew was originally commercial, please go back and select commercial instead of residential.",
         "noticeCommercial": "You selected lease renewal and chose a commercial contract type. If the contract you want to renew was originally residential, please go back and select residential instead of commercial.",
+        "uploadLabel": "Attach the rental contract you want to renew (PDF)",
+        "pdfHint": "PDF only — verify the actual file type, not just the extension",
         "addressFieldLabel": "Property address for this renewal",
         "sameAddress": {
           "title": "Same address mentioned in the contract",
@@ -2200,8 +2231,9 @@
         "edit": "Edit",
         "view": "View",
         "confirm": "Done – details are correct",
-        "hint": "Click Edit on any section to go to its page and update it, then return to finish payment",
+        "hint": "Click 'Edit' on any section to go to its page and fix it, then return to complete payment",
         "emptyValue": "—",
+        "unitIncomplete": "Not entered yet – tap Edit to complete",
         "orderNumber": "Order number",
         "share": "Share",
         "copy": "Copy data",
@@ -2211,11 +2243,11 @@
         "shareError": "Failed to share order",
         "sections": {
           "deed": "Ownership document",
-          "nationalAddress": "National address",
+          "nationalAddress": "National address (attach address card)",
           "ownerSelf": "Owner details (self)",
           "ownerWithAgent": "Owner details (with agent)",
           "tenantIndividual": "Tenant details (individual)",
-          "tenantOrganization": "Tenant details (organization)",
+          "tenantOrganization": "Tenant details (establishment or company)",
           "unit": "Unit details",
           "rent": "Rent amount"
         },
@@ -2225,15 +2257,21 @@
           "duration": "Contract duration",
           "documentType": "Document type",
           "deedAttachment": "Document image",
+          "leaseRenewalAttachment": "Attach the lease contract you want to renew (PDF)",
           "mapsLink": "Property location link from Google Maps",
           "addressPhoto": "National address photo",
           "addressManual": "National address",
           "ownerId": "Owner ID number",
           "ownerPhone": "Owner mobile number",
           "ownerBirthDate": "Owner date of birth",
+          "tenantDelegation": "Authorization",
+          "tenantUnifiedRecord": "Registration number",
           "tenantId": "Tenant ID number",
           "tenantPhone": "Tenant mobile number",
           "tenantBirthDate": "Tenant date of birth",
+          "tenantOwnerId": "Owner ID",
+          "tenantOwnerPhone": "Owner mobile",
+          "tenantOwnerBirthDate": "Owner date of birth",
           "unitType": "Unit type",
           "unitUsage": "Unit usage",
           "floor": "Floor",
@@ -2244,6 +2282,10 @@
           "kitchens": "Kitchens",
           "kitchenCabinets": "Kitchen cabinets",
           "paymentMethod": "Payment method"
+        },
+        "delegation": {
+          "owner-representative": "I am the record owner and its representative",
+          "agent-authorized": "Authorized agent"
         },
         "kitchenCabinets": {
           "installed": "Installed",
@@ -2265,7 +2307,9 @@
       },
       "navigation": {
         "previous": "Back",
-        "pay": "Continue",
+        "pay": "Pay & Notarize Contract",
+        "payWithAmount": "Pay & Notarize Contract – '{'amount'}' SAR",
+        "sendDraft": "Send contract draft via WhatsApp for review",
         "paying": "Redirecting to payment...",
         "payError": "Failed to start payment. Please try again.",
         "save": "Save",
@@ -2335,18 +2379,42 @@
       },
       "methodDialog": {
         "title": "Choose how to receive the contract",
-        "question": "Choose receipt type?",
+        "subtitle": "The difference is in the order of steps only – the draft reaches you via WhatsApp in both cases",
         "submitting": "Processing...",
         "draft": {
-          "title": "I want to receive the contract draft first",
-          "description": "We will send the contract draft via WhatsApp before payment"
+          "title": "Receive the contract draft first, then I'll pay",
+          "description": "We send you the contract draft via WhatsApp first",
+          "steps": ["Contract draft", "Your review", "Payment", "Ejar notarization"],
+          "note": "Ideal for those who want to review their contract before completing payment."
         },
         "payNow": {
-          "title": "I want to pay now",
-          "description": "We will send the contract draft via WhatsApp after payment"
+          "title": "Pay first, then receive the contract draft",
+          "description": "Pay then we send you the contract draft via WhatsApp",
+          "badge": "2x Faster",
+          "discountBadge": "5% off",
+          "steps": ["Payment", "Contract draft", "Your review", "Ejar notarization"],
+          "note": "Ideal for those who want to save time. The contract draft is sent via WhatsApp for review before notarization in all cases."
         },
+        "selected": {
+          "draft": {
+            "title": "Draft first, then payment",
+            "description": "You will receive the contract draft via WhatsApp for review before payment"
+          },
+          "payNow": {
+            "title": "Pay first, then draft",
+            "description": "You will receive the contract draft via WhatsApp after payment",
+            "savings": "You saved '{'percent'}'% ('{'amount'}' SAR) and your documentation is 2x faster"
+          }
+        },
+        "afterDiscount": "After discount",
+        "total": "Total",
+        "currency": "SAR",
+        "close": "Close",
+        "footerNoteTitle": "In short:",
+        "footerNote": "In both options, you will receive the contract draft via WhatsApp for review before notarization on Ejar – paying now gets you a discount and faster draft delivery.",
         "missingContractSession": "Contract session is missing. Please restart the contract flow.",
-        "draftError": "Could not save the contract draft. Please try again."
+        "draftError": "Could not save the contract draft. Please try again.",
+        "changeMethod": "Change"
       },
       "draftSuccessDialog": {
         "title": "Congratulations, your request was received successfully!",

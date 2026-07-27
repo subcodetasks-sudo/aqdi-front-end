@@ -158,7 +158,9 @@ export default function CreateContractDeedTypeSelect({
               position="popper"
               align="end"
               side="bottom"
-              className="max-h-72 rounded-2xl"
+              sideOffset={6}
+              avoidCollisions={false}
+              className="max-h-48 rounded-2xl"
               style={{
                 width: contentWidth,
                 minWidth: contentWidth,

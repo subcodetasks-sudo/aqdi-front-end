@@ -15,7 +15,12 @@ import { useCreateContractDraftStore } from "@/features/create-contract/stores/u
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { toPropertyContractType } from "@/features/create-contract/types/contract-type";
-import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
+import {
+  isFinancePaymentMethodComplete,
+  isFinanceRentComplete,
+  isFinanceScheduleComplete,
+  type FinanceDataState,
+} from "@/features/create-contract/types/finance-step";
 import { getDocFeeLinesFromStep6 } from "@/features/create-contract/utils/build-finance-data-from-step6";
 import { parseContractPeriodLabel } from "@/features/create-contract/utils/parse-contract-period-label";
 
@@ -147,6 +152,10 @@ export default function CreateContractFinanceDataPhase({
     !rentInvalid &&
     value.totalRentAmount.replace(/\D/g, "").length > 0 &&
     Number(value.totalRentAmount.replace(/\D/g, "")) > 0;
+  const showRentAmount = isFinanceScheduleComplete(value);
+  const showPaymentMethod = showRentAmount && isFinanceRentComplete(value);
+  const showRemainingSections =
+    showPaymentMethod && isFinancePaymentMethodComplete(value);
 
   return (
     <div className="space-y-5">
@@ -202,77 +211,85 @@ export default function CreateContractFinanceDataPhase({
         </p>
       ) : null}
 
-      <CreateContractRentAmountField
-        label={labels.totalRentAmount.label}
-        placeholder={labels.totalRentAmount.placeholder}
-        currency={labels.contractDuration.currency}
-        amountInWordsLabel={labels.totalRentAmount.amountInWords}
-        value={value.totalRentAmount}
-        onChange={(totalRentAmount) =>
-          updateField("totalRentAmount", totalRentAmount)
-        }
-        invalid={rentInvalid}
-        valid={rentValid}
-      />
-
-      <CreateContractFinancePaymentMethodSelect
-        label={labels.paymentMethod.label}
-        options={paymentTypeOptions}
-        value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
-        note={selectedPaymentTypeNotes}
-        disabled={paymentTypesQuery.isLoading}
-        invalid={paymentInvalid}
-        onChange={(paymentTypeId) =>
-          updateField("paymentTypeId", Number(paymentTypeId))
-        }
-      />
-
-      {paymentTypesQuery.error ? (
-        <p className="text-sm text-destructive">
-          {labels.paymentMethod.optionsError}
-        </p>
+      {showRentAmount ? (
+        <CreateContractRentAmountField
+          label={labels.totalRentAmount.label}
+          placeholder={labels.totalRentAmount.placeholder}
+          currency={labels.contractDuration.currency}
+          amountInWordsLabel={labels.totalRentAmount.amountInWords}
+          value={value.totalRentAmount}
+          onChange={(totalRentAmount) =>
+            updateField("totalRentAmount", totalRentAmount)
+          }
+          invalid={rentInvalid}
+          valid={rentValid}
+        />
       ) : null}
 
-      <div className="space-y-4 pt-2">
-        <CreateContractFinancePermissionsSection
-          labels={labels.tenantPermissions}
-          value={value.selectedTenantRoleIds}
-          values={value.tenantRoleValues}
-          onChange={({ selectedTenantRoleIds, tenantRoleValues }) =>
-            onChange({
-              ...value,
-              selectedTenantRoleIds,
-              tenantRoleValues,
-              addTenantPermissions: selectedTenantRoleIds.length > 0,
-            })
-          }
-        />
+      {showPaymentMethod ? (
+        <>
+          <CreateContractFinancePaymentMethodSelect
+            label={labels.paymentMethod.label}
+            options={paymentTypeOptions}
+            value={value.paymentTypeId === "" ? "" : String(value.paymentTypeId)}
+            note={selectedPaymentTypeNotes}
+            disabled={paymentTypesQuery.isLoading}
+            invalid={paymentInvalid}
+            onChange={(paymentTypeId) =>
+              updateField("paymentTypeId", Number(paymentTypeId))
+            }
+          />
 
-        <CreateContractFinanceConditionsSection
-          labels={labels.otherConditions}
-          enabled={value.addOtherConditions}
-          value={value.otherConditionsList}
-          onEnabledChange={(addOtherConditions) =>
-            onChange({
-              ...value,
-              addOtherConditions,
-              otherConditionsList:
-                addOtherConditions && value.otherConditionsList.length === 0
-                  ? [""]
-                  : value.otherConditionsList,
-            })
-          }
-          onChange={(otherConditionsList) =>
-            onChange({
-              ...value,
-              otherConditionsList,
-              addOtherConditions:
-                otherConditionsList.some((item) => item.trim() !== "") ||
-                otherConditionsList.length > 0,
-            })
-          }
-        />
-      </div>
+          {paymentTypesQuery.error ? (
+            <p className="text-sm text-destructive">
+              {labels.paymentMethod.optionsError}
+            </p>
+          ) : null}
+        </>
+      ) : null}
+
+      {showRemainingSections ? (
+        <div className="space-y-4 pt-2">
+          <CreateContractFinancePermissionsSection
+            labels={labels.tenantPermissions}
+            value={value.selectedTenantRoleIds}
+            values={value.tenantRoleValues}
+            onChange={({ selectedTenantRoleIds, tenantRoleValues }) =>
+              onChange({
+                ...value,
+                selectedTenantRoleIds,
+                tenantRoleValues,
+                addTenantPermissions: selectedTenantRoleIds.length > 0,
+              })
+            }
+          />
+
+          <CreateContractFinanceConditionsSection
+            labels={labels.otherConditions}
+            enabled={value.addOtherConditions}
+            value={value.otherConditionsList}
+            onEnabledChange={(addOtherConditions) =>
+              onChange({
+                ...value,
+                addOtherConditions,
+                otherConditionsList:
+                  addOtherConditions && value.otherConditionsList.length === 0
+                    ? [""]
+                    : value.otherConditionsList,
+              })
+            }
+            onChange={(otherConditionsList) =>
+              onChange({
+                ...value,
+                otherConditionsList,
+                addOtherConditions:
+                  otherConditionsList.some((item) => item.trim() !== "") ||
+                  otherConditionsList.length > 0,
+              })
+            }
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

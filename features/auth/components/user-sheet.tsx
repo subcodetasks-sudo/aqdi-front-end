@@ -23,6 +23,7 @@ import UserSheetSectionCard from "@/features/auth/components/user-sheet-section-
 import UserSheetSocialBar from "@/features/auth/components/user-sheet-social-bar";
 import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { useWhatsappHref } from "@/features/settings/hooks/use-whatsapp-href";
 
 type UserSheetProps = {
   children: ReactNode;
@@ -32,6 +33,7 @@ export default function UserSheet({ children }: UserSheetProps) {
   const t = useTranslations("userSheet");
   const user = useAuthStore((state) => state.user);
   const { logout, isLoading: isLoggingOut } = useLogout();
+  const whatsappHref = useWhatsappHref(t("helpCenter.whatsappHref"));
   const [sheetOpen, setSheetOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -98,7 +100,7 @@ export default function UserSheet({ children }: UserSheetProps) {
               <UserSheetMenuRow
                 label={t("helpCenter.whatsapp")}
                 icon={<FaWhatsapp className="size-4" aria-hidden="true" />}
-                href={t("helpCenter.whatsappHref")}
+                href={whatsappHref}
                 external
               />
             </UserSheetSectionCard>

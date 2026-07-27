@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import type { HomeContactResolved } from "@/features/home/types/home-content";
+import { getWhatsappHref } from "@/features/settings/services/get-whatsapp-href";
 
 type SupportSectionProps = {
   content?: HomeContactResolved;
@@ -13,7 +14,10 @@ export default async function SupportSection({ content }: SupportSectionProps) {
   const resolved =
     content ??
     (await (async () => {
-      const t = await getTranslations("support");
+      const [t, whatsappHref] = await Promise.all([
+        getTranslations("support"),
+        getWhatsappHref(),
+      ]);
       return {
         eyebrow: t("eyebrow"),
         title: [t("titleLine1"), t("titleLine2"), t("titleLine3")]
@@ -25,7 +29,7 @@ export default async function SupportSection({ content }: SupportSectionProps) {
         responseTime: t("responseTime"),
         imageAlt: t("imageAlt"),
         imageUrl: "/images/support-banner.png",
-        whatsappHref: "https://wa.me/",
+        whatsappHref,
       } satisfies HomeContactResolved;
     })());
 

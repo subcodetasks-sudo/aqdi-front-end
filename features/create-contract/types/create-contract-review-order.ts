@@ -22,6 +22,7 @@ export type CreateContractReviewSection = {
   editTarget: CreateContractReviewEditTarget;
   fields: CreateContractReviewField[];
   variant?: "default" | "rent";
+  incomplete?: boolean;
 };
 
 export type CreateContractReviewOrderSummary = {

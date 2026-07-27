@@ -18,20 +18,28 @@ type CreateContractStepperProps = {
 };
 
 const stepPillClassName =
-  "inline-flex items-center justify-center rounded-full grow h-12 text-sm font-semibold whitespace-nowrap transition-all";
+  "relative inline-flex items-center justify-center rounded-full grow h-12 text-sm font-semibold whitespace-nowrap transition-all";
+
+const skippedStrikeClassName =
+  "after:pointer-events-none after:absolute after:inset-x-1.5 after:top-1/2 after:h-[1.5px] after:[transform-origin:right_center] after:rounded-full after:bg-brand after:content-['']";
 
 function getStepPillClassName(
   isActive: boolean,
   isCompleted: boolean,
   isUnlocked: boolean,
   isSkipped: boolean,
+  showStrike: boolean,
   isSkipAnimating: boolean,
 ) {
   if (isSkipped) {
     return cn(
       stepPillClassName,
-      "cursor-not-allowed bg-[#f0f0f0] text-[#c4c4c4] opacity-30 grayscale dark:bg-[#24302c] dark:text-[#6a7a74]",
-      isSkipAnimating && "animate-contract-step-skip opacity-100",
+      "cursor-not-allowed bg-[#f0f0f0] text-[#c4c4c4] dark:bg-[#24302c] dark:text-[#6a7a74]",
+      showStrike && skippedStrikeClassName,
+      showStrike &&
+        (isSkipAnimating
+          ? "after:animate-strike-in"
+          : "after:[transform:translateY(-50%)_scaleX(1)]"),
     );
   }
 
@@ -105,6 +113,8 @@ export default function CreateContractStepper({
           const isActive = stepIndex === currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
           const isIntro = step === "intro";
+          const showOwnerStrike =
+            isSkipped && (isPassed || skippingOwnerStep);
           const connectorCompleted =
             isActive || isCompleted || (isSkipped && isPassed);
 
@@ -139,6 +149,7 @@ export default function CreateContractStepper({
                         isCompleted,
                         isUnlocked,
                         isSkipped,
+                        showOwnerStrike,
                         isSkipped && skippingOwnerStep,
                       )
                 }

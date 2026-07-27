@@ -142,7 +142,9 @@ export default function CreateContractDeedNationalAddress({
           value={photoFiles}
           onChange={onPhotoFilesChange}
           existingImageUrl={existingPhotoUrl}
-          variant="dropzone"
+          variant="dashed"
+          single
+          hint={labels.photo.hint}
           invalid={photoInvalid}
         />
       ) : null}

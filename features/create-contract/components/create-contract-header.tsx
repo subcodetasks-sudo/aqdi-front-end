@@ -39,13 +39,16 @@ export default function CreateContractHeader({
       state.contractStep1Data?.contract_id ??
       null,
   );
+  const contractUuid = useCreateContractDraftStore(
+    (state) => state.contractSession?.uuid ?? null,
+  );
 
   async function handleCopyRequest() {
-    if (!contractId) {
+    if (!contractUuid) {
       return;
     }
 
-    const text = `${labels.requestPrefix} #${contractId}`;
+    const text = `${labels.requestPrefix} ${contractUuid}`;
 
     try {
       await navigator.clipboard.writeText(text);
@@ -106,7 +109,7 @@ export default function CreateContractHeader({
           {pageTitle}
         </span>
 
-        {contractId ? (
+        {contractUuid ? (
           <button
             type="button"
             onClick={() => void handleCopyRequest()}
@@ -116,7 +119,7 @@ export default function CreateContractHeader({
             )}
           >
             <Copy className="size-4 shrink-0" aria-hidden />
-            {labels.requestPrefix} #{contractId}
+            {labels.requestPrefix} {contractUuid}
           </button>
         ) : null}
 

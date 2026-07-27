@@ -146,8 +146,9 @@ export function useCreateContractDeedStep() {
     isInstrumentTypeLocked ||
     isDeedAlreadySubmitted ||
     (deed.selectedDeedType !== "" &&
-      (isLeaseRenewal ||
-        (hasManualInstrumentEntry
+      (isLeaseRenewal
+        ? hasSingleImage
+        : hasManualInstrumentEntry
           ? isDeceasedOwner
             ? hasInheritanceImage &&
               hasHeirsPoaImage &&
@@ -169,7 +170,7 @@ export function useCreateContractDeedStep() {
                   hasEndowmentCertImage &&
                   hasTrusteeshipImage &&
                   (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-                : hasSingleImage)));
+                : hasSingleImage));
 
   const showNationalAddress =
     deed.selectedDeedType !== "" && !isSublease;

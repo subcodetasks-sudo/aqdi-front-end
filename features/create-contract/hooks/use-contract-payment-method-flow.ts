@@ -24,6 +24,8 @@ export function useContractPaymentMethodFlow(
   const [isDraftSuccessDialogOpen, setIsDraftSuccessDialogOpen] = useState(false);
   const [draftOrderUuid, setDraftOrderUuid] = useState<string | null>(null);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod | null>(null);
 
   const isSubmitting = isPaying || isSavingDraft;
 
@@ -36,7 +38,14 @@ export function useContractPaymentMethodFlow(
     setIsMethodDialogOpen(true);
   }
 
-  async function handlePaymentMethodSelect(method: PaymentMethod) {
+  function selectPaymentMethod(method: PaymentMethod) {
+    setSelectedPaymentMethod(method);
+    setIsMethodDialogOpen(false);
+  }
+
+  async function executeSelectedPaymentMethod(
+    method: PaymentMethod = selectedPaymentMethod ?? "pay-now",
+  ) {
     if (method === "draft") {
       if (!contractId) {
         toast.error(labels.methodDialog.missingContractSession);
@@ -53,7 +62,6 @@ export function useContractPaymentMethodFlow(
           return;
         }
 
-        setIsMethodDialogOpen(false);
         setDraftOrderUuid(result.data?.uuid ?? contractUuid ?? null);
         setIsDraftSuccessDialogOpen(true);
       } finally {
@@ -68,8 +76,21 @@ export function useContractPaymentMethodFlow(
       return;
     }
 
-    setIsMethodDialogOpen(false);
     await startPayment(contractUuid, labels.payError);
+  }
+
+  async function handlePaymentMethodSelect(method: PaymentMethod) {
+    selectPaymentMethod(method);
+    await executeSelectedPaymentMethod(method);
+  }
+
+  async function handlePrimaryAction() {
+    if (!selectedPaymentMethod) {
+      openMethodDialog();
+      return;
+    }
+
+    await executeSelectedPaymentMethod(selectedPaymentMethod);
   }
 
   return {
@@ -79,8 +100,12 @@ export function useContractPaymentMethodFlow(
     setIsDraftSuccessDialogOpen,
     draftOrderUuid,
     isSubmitting,
+    selectedPaymentMethod,
     openMethodDialog,
+    selectPaymentMethod,
     handlePaymentMethodSelect,
+    handlePrimaryAction,
+    executeSelectedPaymentMethod,
   };
 }
 

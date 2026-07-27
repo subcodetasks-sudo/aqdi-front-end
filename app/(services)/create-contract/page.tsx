@@ -19,6 +19,7 @@ import { DEED_TYPES } from "@/features/create-contract/types/deed-type";
 import { meterFeeSettingsKeys, settingContractsKeys } from "@/features/shared/query-keys";
 import { getMeterFeeSettings } from "@/features/shared/services/get-meter-fee-settings";
 import { getSettingContracts } from "@/features/shared/services/get-setting-contracts";
+import { getWhatsappHref } from "@/features/settings/services/get-whatsapp-href";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
 import {
   DELEGATION_TYPE_OPTIONS,
@@ -33,7 +34,10 @@ export default async function CreateContractPage({
   searchParams,
 }: CreateContractPageProps) {
   const { id } = await searchParams;
-  const t = await getTranslations("createContract");
+  const [t, whatsappHref] = await Promise.all([
+    getTranslations("createContract"),
+    getWhatsappHref(),
+  ]);
 
   const contractType: ContractTypeId =
     id === "residential" ? "residential" : "commercial";
@@ -76,7 +80,7 @@ export default async function CreateContractPage({
       requestPrefix: t("header.requestPrefix"),
       copySuccess: t("header.copySuccess"),
       copyError: t("header.copyError"),
-      whatsappHref: t("header.whatsappHref"),
+      whatsappHref,
       exitHomeDialog: {
         title: t("header.exitHomeDialog.title"),
         close: t("header.exitHomeDialog.close"),
@@ -235,6 +239,7 @@ export default async function CreateContractPage({
           clickHere: t("deed.nationalAddress.photo.clickHere"),
           chooseFile: t("deed.nationalAddress.photo.chooseFile"),
           acceptedFormats: t("deed.nationalAddress.photo.acceptedFormats"),
+          hint: t("deed.nationalAddress.photo.hint"),
           preview: t("deed.nationalAddress.photo.preview"),
           delete: t("deed.nationalAddress.photo.delete"),
           previewTitle: t("deed.nationalAddress.photo.previewTitle"),
@@ -244,6 +249,8 @@ export default async function CreateContractPage({
       leaseRenewal: {
         noticeResidential: t("deed.leaseRenewal.noticeResidential"),
         noticeCommercial: t("deed.leaseRenewal.noticeCommercial"),
+        uploadLabel: t("deed.leaseRenewal.uploadLabel"),
+        pdfHint: t("deed.leaseRenewal.pdfHint"),
         addressFieldLabel: t("deed.leaseRenewal.addressFieldLabel"),
         sameAddress: {
           title: t("deed.leaseRenewal.sameAddress.title"),
@@ -736,6 +743,7 @@ export default async function CreateContractPage({
         confirm: t("payment.reviewDialog.confirm"),
         hint: t("payment.reviewDialog.hint"),
         emptyValue: t("payment.reviewDialog.emptyValue"),
+        unitIncomplete: t("payment.reviewDialog.unitIncomplete"),
         orderNumber: t("payment.reviewDialog.orderNumber"),
         share: t("payment.reviewDialog.share"),
         copy: t("payment.reviewDialog.copy"),
@@ -761,15 +769,27 @@ export default async function CreateContractPage({
           duration: t("payment.reviewDialog.fields.duration"),
           documentType: t("payment.reviewDialog.fields.documentType"),
           deedAttachment: t("payment.reviewDialog.fields.deedAttachment"),
+          leaseRenewalAttachment: t(
+            "payment.reviewDialog.fields.leaseRenewalAttachment",
+          ),
           mapsLink: t("payment.reviewDialog.fields.mapsLink"),
           addressPhoto: t("payment.reviewDialog.fields.addressPhoto"),
           addressManual: t("payment.reviewDialog.fields.addressManual"),
           ownerId: t("payment.reviewDialog.fields.ownerId"),
           ownerPhone: t("payment.reviewDialog.fields.ownerPhone"),
           ownerBirthDate: t("payment.reviewDialog.fields.ownerBirthDate"),
+          tenantDelegation: t("payment.reviewDialog.fields.tenantDelegation"),
+          tenantUnifiedRecord: t(
+            "payment.reviewDialog.fields.tenantUnifiedRecord",
+          ),
           tenantId: t("payment.reviewDialog.fields.tenantId"),
           tenantPhone: t("payment.reviewDialog.fields.tenantPhone"),
           tenantBirthDate: t("payment.reviewDialog.fields.tenantBirthDate"),
+          tenantOwnerId: t("payment.reviewDialog.fields.tenantOwnerId"),
+          tenantOwnerPhone: t("payment.reviewDialog.fields.tenantOwnerPhone"),
+          tenantOwnerBirthDate: t(
+            "payment.reviewDialog.fields.tenantOwnerBirthDate",
+          ),
           unitType: t("payment.reviewDialog.fields.unitType"),
           unitUsage: t("payment.reviewDialog.fields.unitUsage"),
           floor: t("payment.reviewDialog.fields.floor"),
@@ -780,6 +800,14 @@ export default async function CreateContractPage({
           kitchens: t("payment.reviewDialog.fields.kitchens"),
           kitchenCabinets: t("payment.reviewDialog.fields.kitchenCabinets"),
           paymentMethod: t("payment.reviewDialog.fields.paymentMethod"),
+        },
+        delegation: {
+          "owner-representative": t(
+            "payment.reviewDialog.delegation.owner-representative",
+          ),
+          "agent-authorized": t(
+            "payment.reviewDialog.delegation.agent-authorized",
+          ),
         },
         kitchenCabinets: {
           installed: t("payment.reviewDialog.kitchenCabinets.installed"),
@@ -806,6 +834,8 @@ export default async function CreateContractPage({
       navigation: {
         previous: t("payment.navigation.previous"),
         pay: t("payment.navigation.pay"),
+        payWithAmount: t("payment.navigation.payWithAmount"),
+        sendDraft: t("payment.navigation.sendDraft"),
         paying: t("payment.navigation.paying"),
         payError: t("payment.navigation.payError"),
         save: t("payment.navigation.save"),
@@ -877,18 +907,42 @@ export default async function CreateContractPage({
       },
       methodDialog: {
         title: t("payment.methodDialog.title"),
-        question: t("payment.methodDialog.question"),
+        subtitle: t("payment.methodDialog.subtitle"),
         submitting: t("payment.methodDialog.submitting"),
         draft: {
           title: t("payment.methodDialog.draft.title"),
           description: t("payment.methodDialog.draft.description"),
+          steps: t.raw("payment.methodDialog.draft.steps") as string[],
+          note: t("payment.methodDialog.draft.note"),
         },
         payNow: {
           title: t("payment.methodDialog.payNow.title"),
           description: t("payment.methodDialog.payNow.description"),
+          badge: t("payment.methodDialog.payNow.badge"),
+          discountBadge: t("payment.methodDialog.payNow.discountBadge"),
+          steps: t.raw("payment.methodDialog.payNow.steps") as string[],
+          note: t("payment.methodDialog.payNow.note"),
         },
+        selected: {
+          draft: {
+            title: t("payment.methodDialog.selected.draft.title"),
+            description: t("payment.methodDialog.selected.draft.description"),
+          },
+          payNow: {
+            title: t("payment.methodDialog.selected.payNow.title"),
+            description: t("payment.methodDialog.selected.payNow.description"),
+            savings: t("payment.methodDialog.selected.payNow.savings"),
+          },
+        },
+        footerNote: t("payment.methodDialog.footerNote"),
+        footerNoteTitle: t("payment.methodDialog.footerNoteTitle"),
+        afterDiscount: t("payment.methodDialog.afterDiscount"),
+        total: t("payment.methodDialog.total"),
+        currency: t("payment.methodDialog.currency"),
+        close: t("payment.methodDialog.close"),
         missingContractSession: t("payment.methodDialog.missingContractSession"),
         draftError: t("payment.methodDialog.draftError"),
+        changeMethod: t("payment.methodDialog.changeMethod"),
       },
       draftSuccessDialog: {
         title: t("payment.draftSuccessDialog.title"),
@@ -903,8 +957,8 @@ export default async function CreateContractPage({
         preparationDescription: t(
           "payment.draftSuccessDialog.preparationDescription",
         ),
-        whatsappCta: t("payment.draftSuccessDialog.whatsappCta"),
-        whatsappHref: t("payment.draftSuccessDialog.whatsappHref"),
+          whatsappCta: t("payment.draftSuccessDialog.whatsappCta"),
+          whatsappHref,
       },
     },
     prices: {

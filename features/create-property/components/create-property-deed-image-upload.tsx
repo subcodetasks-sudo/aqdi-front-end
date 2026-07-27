@@ -30,7 +30,8 @@ type CreatePropertyDeedImageUploadProps = {
   multiple?: boolean;
   fieldLabel?: string;
   existingFileUrl?: string | null;
-  variant?: "default" | "dropzone";
+  variant?: "default" | "dropzone" | "dashed";
+  hint?: string;
   invalid?: boolean;
 };
 
@@ -170,6 +171,7 @@ export default function CreatePropertyDeedImageUpload({
   fieldLabel,
   existingFileUrl = null,
   variant = "default",
+  hint,
   invalid = false,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
@@ -261,12 +263,12 @@ export default function CreatePropertyDeedImageUpload({
           htmlFor={inputId}
           className={cn(
             "flex w-full cursor-pointer items-center gap-3 transition-colors",
-            variant === "dropzone"
+            variant === "dashed" || variant === "dropzone"
               ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
               : "h-14 rounded-full border bg-brand-background px-2 ps-4",
             showInvalid
               ? "border-[#e57373]"
-              : variant === "dropzone"
+              : variant === "dashed" || variant === "dropzone"
                 ? "border-[#d4d4d4]"
                 : "border-[#e8e8e8]",
           )}
@@ -281,11 +283,16 @@ export default function CreatePropertyDeedImageUpload({
             onChange={handleFileChange}
           />
 
-          {variant === "dropzone" ? (
-            <p className="text-sm font-medium text-[#666666]">
-              <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
-              <span>{labels.chooseFile}</span>
-            </p>
+          {variant === "dashed" || variant === "dropzone" ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-[#666666]">
+                <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
+                <span>{labels.chooseFile}</span>
+              </p>
+              {variant === "dashed" && labels.acceptedFormats ? (
+                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+              ) : null}
+            </div>
           ) : (
             <>
               <div className="min-w-0 flex-1 text-start">
@@ -305,6 +312,10 @@ export default function CreatePropertyDeedImageUpload({
             </>
           )}
         </label>
+      ) : null}
+
+      {hint ? (
+        <p className="text-xs leading-relaxed text-[#9a9a9a]">{hint}</p>
       ) : null}
 
       {value.length > 0 ? (

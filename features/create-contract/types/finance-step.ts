@@ -162,7 +162,7 @@ function isRentAmountComplete(totalRentAmount: string) {
   return digits.length > 0 && Number(digits) > 0;
 }
 
-function isDurationComplete(financeData: FinanceDataState) {
+export function isDurationComplete(financeData: FinanceDataState) {
   if (financeData.isCustomDuration) {
     return (
       typeof financeData.customDurationYears === "number" &&
@@ -175,6 +175,21 @@ function isDurationComplete(financeData: FinanceDataState) {
   }
 
   return financeData.contractPeriodId !== "";
+}
+
+export function isFinanceScheduleComplete(financeData: FinanceDataState) {
+  return (
+    isContractStartDateComplete(financeData.contractStartDate) &&
+    isDurationComplete(financeData)
+  );
+}
+
+export function isFinanceRentComplete(financeData: FinanceDataState) {
+  return isRentAmountComplete(financeData.totalRentAmount);
+}
+
+export function isFinancePaymentMethodComplete(financeData: FinanceDataState) {
+  return financeData.paymentTypeId !== "";
 }
 
 export function isFinanceDataComplete(financeData: FinanceDataState) {

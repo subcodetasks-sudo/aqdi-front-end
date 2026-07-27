@@ -64,5 +64,18 @@ export type RequestLabels = {
     housing: string;
     commercial: string;
   };
+  filtersDialog: {
+    title: string;
+    close: string;
+    contractTypeLabel: string;
+    requestTypeLabel: string;
+    all: string;
+    allTypes: string;
+    completed: string;
+    draftContract: string;
+    incomplete: string;
+    cancelled: string;
+    showResults: string;
+  };
   card: RequestCardLabels;
 };

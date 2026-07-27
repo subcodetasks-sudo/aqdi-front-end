@@ -5,12 +5,14 @@ type ServicesFloatingSidebarProps = {
   appleLabel: string;
   googlePlayLabel: string;
   whatsappLabel: string;
+  whatsappHref: string;
 };
 
 export default function ServicesFloatingSidebar({
   appleLabel,
   googlePlayLabel,
   whatsappLabel,
+  whatsappHref,
 }: ServicesFloatingSidebarProps) {
   return (
     <div className="fixed bottom-[15%] z-40 flex  flex-col gap-3 inset-e-3 max-lg:hidden lg:inset-e-6">
@@ -35,7 +37,7 @@ export default function ServicesFloatingSidebar({
       </Link>
 
       <Link
-        href="https://wa.me/"
+        href={whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={whatsappLabel}

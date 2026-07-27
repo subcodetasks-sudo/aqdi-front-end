@@ -49,6 +49,7 @@
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-contract-step-skip: contract-step-skip 0.7s ease-out both;
+  --animate-strike-in: strike-in 0.45s ease-out both;
   @keyframes marquee {
   from {
     transform: translateX(0);
@@ -80,6 +81,14 @@
       opacity: 0.28;
       transform: scale(1);
       filter: grayscale(0.85);
+    }
+  }
+  @keyframes strike-in {
+    from {
+      transform: translateY(-50%) scaleX(0);
+    }
+    to {
+      transform: translateY(-50%) scaleX(1);
     }
   }
 }
@@ -513,4 +522,103 @@
 .create-contract-flow.dark .ring-offset-2,
 .create-flow-dark.dark .ring-offset-2 {
   --tw-ring-offset-color: #101614;
+}
+
+/* Requests / services dark palette — match product dark mock */
+.services-dark-shell.dark {
+  --color-brand: #00a67e;
+  --color-brand-secondary: #00a67e;
+  --color-brand-background: #0d1413;
+  --color-brand-background-green: #0e312a;
+  background-color: #0d1413;
+}
+
+.services-dark-shell.dark .bg-white {
+  background-color: #151c1b !important;
+}
+
+.services-dark-shell.dark .bg-brand-background {
+  background-color: #0d1413 !important;
+}
+
+.services-dark-shell.dark .bg-brand-background-green {
+  background-color: #0e312a !important;
+}
+
+.services-dark-shell.dark .bg-brand {
+  background-color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-brand {
+  color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-\[\#7f7f7f\],
+.services-dark-shell.dark .text-\[\#7a7a7a\],
+.services-dark-shell.dark .text-\[\#8a8a8a\],
+.services-dark-shell.dark .text-\[\#9a9a9a\],
+.services-dark-shell.dark .text-\[\#666666\],
+.services-dark-shell.dark .text-\[\#555555\],
+.services-dark-shell.dark .text-\[\#bdbdbd\],
+.services-dark-shell.dark .text-\[\#b0b0b0\] {
+  color: #a3adac !important;
+}
+
+.services-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#222222\] {
+  color: #ffffff !important;
+}
+
+.services-dark-shell.dark .border-\[\#e8e8e8\],
+.services-dark-shell.dark .border-\[\#ececec\],
+.services-dark-shell.dark .border-\[\#e4e4e4\],
+.services-dark-shell.dark .border-\[\#d9d9d9\],
+.services-dark-shell.dark .border-\[\#f0f0f0\] {
+  border-color: #262d2c !important;
+}
+
+.services-dark-shell.dark .bg-\[\#f7f7f7\],
+.services-dark-shell.dark .bg-\[\#fafafa\],
+.services-dark-shell.dark .bg-\[\#f3f3f3\] {
+  background-color: #1a2221 !important;
+}
+
+.services-dark-shell.dark .hover\:bg-\[\#fafafa\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#f0f0f0\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#ebebeb\]:hover {
+  background-color: #1a2221 !important;
+}
+
+.services-dark-shell.dark .bg-\[\#fff1e6\] {
+  background-color: #3d2e1d !important;
+}
+
+.services-dark-shell.dark .text-\[\#e67e22\],
+.services-dark-shell.dark .text-\[\#b45309\] {
+  color: #dfa88d !important;
+}
+
+.services-dark-shell.dark .bg-\[\#e8f1ff\] {
+  background-color: #1d2d3d !important;
+}
+
+.services-dark-shell.dark .text-\[\#3b82f6\] {
+  color: #8daddf !important;
+}
+
+.services-dark-shell.dark .bg-\[\#e8f8ee\] {
+  background-color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-\[\#25D366\] {
+  color: #ffffff !important;
+}
+
+.services-dark-shell.dark .shadow-\[0_2px_24px_rgba\(0\,0\,0\,0\.04\)\],
+.services-dark-shell.dark .shadow-sm {
+  box-shadow: none !important;
+}
+
+.services-dark-shell.dark .text-muted-foreground {
+  color: #a3adac !important;
 }
