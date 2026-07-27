@@ -2235,6 +2235,7 @@
         "emptyValue": "—",
         "unitIncomplete": "Not entered yet – tap Edit to complete",
         "orderNumber": "Order number",
+        "contractUuid": "Contract UUID",
         "share": "Share",
         "copy": "Copy data",
         "print": "Print",

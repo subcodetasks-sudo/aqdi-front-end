@@ -745,6 +745,7 @@ export default async function CreateContractPage({
         emptyValue: t("payment.reviewDialog.emptyValue"),
         unitIncomplete: t("payment.reviewDialog.unitIncomplete"),
         orderNumber: t("payment.reviewDialog.orderNumber"),
+        contractUuid: t("payment.reviewDialog.contractUuid"),
         share: t("payment.reviewDialog.share"),
         copy: t("payment.reviewDialog.copy"),
         print: t("payment.reviewDialog.print"),

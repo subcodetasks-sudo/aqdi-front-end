@@ -41,6 +41,14 @@ type CreateContractPaymentStepProps = {
   deedAttachmentLabels: {
     label: string;
     salePaperLabel?: string;
+    frontLabel?: string;
+    backLabel?: string;
+    inheritanceLabel?: string;
+    heirsPoaLabel?: string;
+    endowmentCertLabel?: string;
+    trusteeshipLabel?: string;
+    guardiansPoaLabel?: string;
+    deceasedDeedLabel?: string;
   };
   contractType: ContractTypeId;
   onBack: () => void;

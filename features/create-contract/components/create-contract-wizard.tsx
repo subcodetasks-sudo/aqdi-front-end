@@ -136,6 +136,14 @@ export default function CreateContractWizard({
           deedAttachmentLabels={{
             label: labels.deed.deedImage.label,
             salePaperLabel: labels.deed.deedImage.salePaperLabel,
+            frontLabel: labels.deed.deedImage.frontLabel,
+            backLabel: labels.deed.deedImage.backLabel,
+            inheritanceLabel: labels.deed.deedImage.inheritanceLabel,
+            heirsPoaLabel: labels.deed.deedImage.heirsPoaLabel,
+            endowmentCertLabel: labels.deed.deedImage.endowmentCertLabel,
+            trusteeshipLabel: labels.deed.deedImage.trusteeshipLabel,
+            guardiansPoaLabel: labels.deed.deedImage.guardiansPoaLabel,
+            deceasedDeedLabel: labels.deed.deceased.deedLabel,
           }}
           contractType={contractType}
           onBack={goBack}

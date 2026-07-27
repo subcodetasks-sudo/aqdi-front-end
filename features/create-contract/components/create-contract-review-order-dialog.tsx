@@ -37,6 +37,14 @@ type CreateContractReviewOrderDialogProps = {
   deedAttachmentLabels: {
     label: string;
     salePaperLabel?: string;
+    frontLabel?: string;
+    backLabel?: string;
+    inheritanceLabel?: string;
+    heirsPoaLabel?: string;
+    endowmentCertLabel?: string;
+    trusteeshipLabel?: string;
+    guardiansPoaLabel?: string;
+    deceasedDeedLabel?: string;
   };
   onEditStep: (step: CreateContractStep) => void;
 };
@@ -46,6 +54,32 @@ function openAttachment(viewUrl: string | null | undefined) {
     return;
   }
 
+  const localMatch = /^local:([a-z0-9-]+):(\d+)$/i.exec(viewUrl);
+  if (localMatch) {
+    const [, kind, indexRaw] = localMatch;
+    const index = Number(indexRaw);
+    const deed = useCreateContractDraftStore.getState().deed;
+    const filesByKind: Record<string, File[] | undefined> = {
+      deed: deed.deedFiles,
+      "deed-front": deed.deedFrontFiles,
+      "deed-back": deed.deedBackFiles,
+      "deed-inheritance": deed.deedInheritanceFiles,
+      "deed-heirs-poa": deed.deedHeirsPoaFiles,
+      "deed-endowment": deed.deedEndowmentCertFiles,
+      "deed-trusteeship": deed.deedTrusteeshipFiles,
+      "deed-guardians-poa": deed.deedGuardiansPoaFiles,
+      "address-photo": deed.nationalAddressPhotoFiles,
+    };
+    const file = filesByKind[kind]?.[index];
+    if (!file) {
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    window.open(objectUrl, "_blank", "noopener,noreferrer");
+    return;
+  }
+
+  // Legacy single-file local markers
   if (viewUrl === "local:deed") {
     const deed = useCreateContractDraftStore.getState().deed;
     const file = deed.deedFiles[0] ?? deed.deedFrontFiles[0];
@@ -241,7 +275,7 @@ export default function CreateContractReviewOrderDialog({
         <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4  border-b pb-4">
           <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center">
             <p className="text-lg font-extrabold leading-none text-brand md:text-xl">
-              {summary.orderNumber}
+              {summary.contractUuid}
             </p>
             <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76]">
               <ClipboardList className="size-3" aria-hidden="true" />
@@ -358,9 +392,9 @@ export default function CreateContractReviewOrderDialog({
                   </p>
                 ) : (
                   <div className="divide-y divide-dashed divide-[#e5e5e5]">
-                    {section.fields.map((field) => (
+                    {section.fields.map((field, fieldIndex) => (
                       <div
-                        key={`${section.id}-${field.label}`}
+                        key={`${section.id}-${fieldIndex}-${field.label}`}
                         className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
                       >
                         <div className="min-w-0 text-sm">

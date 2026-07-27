@@ -595,6 +595,7 @@ export type CreateContractLabels = {
       emptyValue: string;
       unitIncomplete: string;
       orderNumber: string;
+      contractUuid: string;
       share: string;
       copy: string;
       print: string;

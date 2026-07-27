@@ -17,7 +17,7 @@ export type CreateContractReviewField = {
 };
 
 export type CreateContractReviewSection = {
-  id: CreateContractReviewEditTarget;
+  id: string;
   title: string;
   editTarget: CreateContractReviewEditTarget;
   fields: CreateContractReviewField[];
@@ -27,6 +27,7 @@ export type CreateContractReviewSection = {
 
 export type CreateContractReviewOrderSummary = {
   orderNumber: string;
+  contractUuid: string;
   overview: {
     contractType: string;
     startDate: string;

@@ -130,12 +130,12 @@ function formatDuration(
   return null;
 }
 
-function resolveUnit(contract: CompletedContractDetails["contract"]) {
+function resolveUnits(contract: CompletedContractDetails["contract"]) {
   if (Array.isArray(contract.units) && contract.units.length > 0) {
-    return contract.units[0];
+    return contract.units;
   }
 
-  return null;
+  return [];
 }
 
 export function mapCompletedContractToDetails(
@@ -144,7 +144,7 @@ export function mapCompletedContractToDetails(
 ): RequestContractDetailsViewModel {
   const empty = labels.emptyValue;
   const { contract, financial } = data;
-  const unit = resolveUnit(contract);
+  const units = resolveUnits(contract);
 
   const ownerRows: RequestContractDetailsRow[] = [];
   pushRow(
@@ -160,38 +160,47 @@ export function mapCompletedContractToDetails(
     toDisplayValue(contract.tenant_id_num, empty),
   );
 
-  const unitRows: RequestContractDetailsRow[] = [];
-  pushRow(
-    unitRows,
-    labels.fields.unitType,
-    toDisplayValue(unit?.unit_type_name, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.usage,
-    toDisplayValue(unit?.unit_usage_name, empty),
-  );
-  const area = toDisplayValue(unit?.unit_area, empty);
-  pushRow(
-    unitRows,
-    labels.fields.area,
-    area ? `${area} ${labels.areaUnit}` : null,
-  );
-  pushRow(
-    unitRows,
-    labels.fields.floor,
-    toDisplayValue(unit?.floor_number, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.electricityMeter,
-    toDisplayValue(unit?.electricity_meter_number, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.waterMeter,
-    toDisplayValue(unit?.water_meter_number, empty),
-  );
+  const unitSections = units.map((unit, index) => {
+    const unitRows: RequestContractDetailsRow[] = [];
+    pushRow(
+      unitRows,
+      labels.fields.unitType,
+      toDisplayValue(unit.unit_type_name, empty),
+    );
+    pushRow(
+      unitRows,
+      labels.fields.usage,
+      toDisplayValue(unit.unit_usage_name, empty),
+    );
+    const area = toDisplayValue(unit.unit_area, empty);
+    pushRow(
+      unitRows,
+      labels.fields.area,
+      area ? `${area} ${labels.areaUnit}` : null,
+    );
+    pushRow(
+      unitRows,
+      labels.fields.floor,
+      toDisplayValue(unit.floor_number, empty),
+    );
+    pushRow(
+      unitRows,
+      labels.fields.electricityMeter,
+      toDisplayValue(unit.electricity_meter_number, empty),
+    );
+    pushRow(
+      unitRows,
+      labels.fields.waterMeter,
+      toDisplayValue(unit.water_meter_number, empty),
+    );
+
+    return buildSection(
+      units.length > 1
+        ? `${labels.unitSection} (${index + 1})`
+        : labels.unitSection,
+      unitRows,
+    );
+  });
 
   const financeRows: RequestContractDetailsRow[] = [];
   pushRow(
@@ -213,7 +222,7 @@ export function mapCompletedContractToDetails(
   const sections = [
     buildSection(labels.ownerSection, ownerRows),
     buildSection(labels.tenantSection, tenantRows),
-    buildSection(labels.unitSection, unitRows),
+    ...unitSections,
     buildSection(labels.financeSection, financeRows),
   ].filter(
     (section): section is RequestContractDetailsSection => section !== null,

@@ -154,16 +154,20 @@ function formatPayments(
   }
 }
 
-function resolveUnit(data: UncompletedContractData) {
+function resolveUnits(data: UncompletedContractData) {
   if (Array.isArray(data.units) && data.units.length > 0) {
-    return data.units[0];
+    return data.units;
   }
 
   if (Array.isArray(data.step5?.units) && data.step5.units.length > 0) {
-    return data.step5.units[0];
+    return data.step5.units;
   }
 
-  return data.step5 ?? null;
+  if (data.step5) {
+    return [data.step5];
+  }
+
+  return [];
 }
 
 function buildSection(
@@ -177,6 +181,46 @@ function buildSection(
   return { title, rows };
 }
 
+function buildUnitRows(
+  unit: NonNullable<ReturnType<typeof resolveUnits>[number]>,
+  labels: RequestDetailsDialogLabels,
+  empty: string,
+) {
+  const unitRows: { label: string; value: string }[] = [];
+  pushRow(
+    unitRows,
+    labels.fields.unitType,
+    toDisplayValue(unit.unit_type_name, empty),
+  );
+  pushRow(
+    unitRows,
+    labels.fields.usage,
+    toDisplayValue(unit.unit_usage_name, empty),
+  );
+  const area = toDisplayValue(unit.unit_area, empty);
+  pushRow(
+    unitRows,
+    labels.fields.area,
+    area ? `${area} ${labels.areaUnit}` : null,
+  );
+  pushRow(
+    unitRows,
+    labels.fields.floor,
+    toDisplayValue(unit.floor_number, empty),
+  );
+  pushRow(
+    unitRows,
+    labels.fields.electricityMeter,
+    toDisplayValue(unit.electricity_meter_number, empty),
+  );
+  pushRow(
+    unitRows,
+    labels.fields.waterMeter,
+    toDisplayValue(unit.water_meter_number, empty),
+  );
+  return unitRows;
+}
+
 export function mapContractToRequestDetails(
   data: UncompletedContractData,
   labels: RequestDetailsDialogLabels,
@@ -184,7 +228,7 @@ export function mapContractToRequestDetails(
   const empty = labels.emptyValue;
   const owner = data.step3;
   const tenant = data.step4;
-  const unit = resolveUnit(data);
+  const units = resolveUnits(data);
   const finance = data.step6;
 
   const ownerRows: { label: string; value: string }[] = [];
@@ -227,37 +271,13 @@ export function mapContractToRequestDetails(
     toDisplayValue(tenant?.tenant_mobile, empty),
   );
 
-  const unitRows: { label: string; value: string }[] = [];
-  pushRow(
-    unitRows,
-    labels.fields.unitType,
-    toDisplayValue(unit?.unit_type_name, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.usage,
-    toDisplayValue(unit?.unit_usage_name, empty),
-  );
-  const area = toDisplayValue(unit?.unit_area, empty);
-  pushRow(
-    unitRows,
-    labels.fields.area,
-    area ? `${area} ${labels.areaUnit}` : null,
-  );
-  pushRow(
-    unitRows,
-    labels.fields.floor,
-    toDisplayValue(unit?.floor_number, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.electricityMeter,
-    toDisplayValue(unit?.electricity_meter_number, empty),
-  );
-  pushRow(
-    unitRows,
-    labels.fields.waterMeter,
-    toDisplayValue(unit?.water_meter_number, empty),
+  const unitSections = units.map((unit, index) =>
+    buildSection(
+      units.length > 1
+        ? `${labels.unitSection} (${index + 1})`
+        : labels.unitSection,
+      buildUnitRows(unit, labels, empty),
+    ),
   );
 
   const financeRows: { label: string; value: string }[] = [];
@@ -289,7 +309,7 @@ export function mapContractToRequestDetails(
   const sections = [
     buildSection(labels.ownerSection, ownerRows),
     buildSection(labels.tenantSection, tenantRows),
-    buildSection(labels.unitSection, unitRows),
+    ...unitSections,
     buildSection(labels.financeSection, financeRows),
   ].filter((section): section is RequestDetailsSection => section !== null);
 
