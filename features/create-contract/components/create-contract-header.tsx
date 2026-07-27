@@ -22,7 +22,7 @@ type CreateContractHeaderProps = {
 };
 
 const pillBaseClassName =
-  "inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-bold transition-colors";
+  "inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-bold transition-colors sm:h-11 sm:gap-2 sm:px-4";
 
 export default function CreateContractHeader({
   pageTitle,
@@ -92,69 +92,103 @@ export default function CreateContractHeader({
 
   return (
     <>
-      <div className="flex w-full flex-wrap items-center gap-2 rounded-full bg-white p-2 shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
-        <button
-          type="button"
-          onClick={handleHomeClick}
-          className={cn(
-            pillBaseClassName,
-            "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
-          )}
-        >
-          <Home className="size-4 shrink-0" aria-hidden />
-          {labels.home}
-        </button>
-
-        <span className={cn(pillBaseClassName, "bg-brand text-white")}>
-          {pageTitle}
-        </span>
-
-        {contractUuid ? (
+      <div className="flex w-full flex-col gap-2 rounded-3xl bg-white p-2 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:rounded-full dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
+        <div className="flex min-w-0 items-center gap-2">
           <button
             type="button"
-            onClick={() => void handleCopyRequest()}
+            onClick={handleHomeClick}
             className={cn(
               pillBaseClassName,
               "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
             )}
           >
-            <Copy className="size-4 shrink-0" aria-hidden />
-            {labels.requestPrefix} {contractUuid}
+            <Home className="size-4 shrink-0" aria-hidden />
+            <span className="truncate">{labels.home}</span>
           </button>
-        ) : null}
 
-        <Link
-          href={labels.whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            pillBaseClassName,
-            "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
-          )}
-        >
-          <FaWhatsapp className="size-4 shrink-0 text-[#25D366]" aria-hidden />
-          {labels.help}
-        </Link>
+          <span
+            className={cn(
+              pillBaseClassName,
+              "min-w-0 flex-1 justify-center truncate bg-brand text-white sm:flex-none sm:justify-start",
+            )}
+            title={pageTitle}
+          >
+            <span className="truncate">{pageTitle}</span>
+          </span>
 
-        <button
-          type="button"
-          aria-label={isDarkMode ? labels.light : labels.dark}
-          aria-pressed={isDarkMode}
-          onClick={onToggleDarkMode}
-          className={cn(
-            pillBaseClassName,
-            "ms-auto border border-[#e4e4e4] bg-white text-brand hover:bg-brand-background",
-            isDarkMode &&
-              "border-brand-secondary/40 bg-brand text-white hover:bg-brand/90",
-          )}
-        >
-          {isDarkMode ? (
-            <Sun className="size-4 shrink-0" aria-hidden />
-          ) : (
-            <Moon className="size-4 shrink-0" aria-hidden />
-          )}
-          {isDarkMode ? labels.light : labels.dark}
-        </button>
+          <button
+            type="button"
+            aria-label={isDarkMode ? labels.light : labels.dark}
+            aria-pressed={isDarkMode}
+            onClick={onToggleDarkMode}
+            className={cn(
+              pillBaseClassName,
+              "ms-auto size-10 justify-center px-0 border border-[#e4e4e4] bg-white text-brand hover:bg-brand-background sm:hidden",
+              isDarkMode &&
+                "border-brand-secondary/40 bg-brand text-white hover:bg-brand/90",
+            )}
+          >
+            {isDarkMode ? (
+              <Sun className="size-4 shrink-0" aria-hidden />
+            ) : (
+              <Moon className="size-4 shrink-0" aria-hidden />
+            )}
+          </button>
+        </div>
+
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:ms-auto">
+          {contractUuid ? (
+            <button
+              type="button"
+              onClick={() => void handleCopyRequest()}
+              className={cn(
+                pillBaseClassName,
+                "max-w-full bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
+              )}
+            >
+              <Copy className="size-4 shrink-0" aria-hidden />
+              <span className="truncate">
+                {labels.requestPrefix} {contractUuid}
+              </span>
+            </button>
+          ) : null}
+
+          <Link
+            href={labels.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              pillBaseClassName,
+              "bg-brand-background-green text-brand hover:bg-brand-background-green/80 dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1c4039]",
+            )}
+          >
+            <FaWhatsapp
+              className="size-4 shrink-0 text-[#25D366]"
+              aria-hidden
+            />
+            {labels.help}
+          </Link>
+
+          <button
+            type="button"
+            aria-label={isDarkMode ? labels.light : labels.dark}
+            aria-pressed={isDarkMode}
+            onClick={onToggleDarkMode}
+            className={cn(
+              pillBaseClassName,
+              "hidden border border-[#e4e4e4] bg-white text-brand hover:bg-brand-background sm:inline-flex",
+              isDarkMode &&
+                "border-brand-secondary/40 bg-brand text-white hover:bg-brand/90",
+            )}
+          >
+            {isDarkMode ? (
+              <Sun className="size-4 shrink-0" aria-hidden />
+            ) : (
+              <Moon className="size-4 shrink-0" aria-hidden />
+            )}
+            {isDarkMode ? labels.light : labels.dark}
+          </button>
+        </div>
       </div>
 
       <CreateContractExitHomeDialog
