@@ -65,7 +65,6 @@ export default function CreateContractOwnerStep({
         <CreateContractStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
-          showIcon={false}
         />
 
         <div className="space-y-5">

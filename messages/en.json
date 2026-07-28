@@ -1537,6 +1537,7 @@
         "saveThenExit": "Save the request then exit",
         "saving": "Saving...",
         "exitWithoutSaving": "Exit without saving",
+        "exitingWithoutSaving": "Cancelling request...",
         "continue": "Go back - Complete my request",
         "saveError": "Could not save the request, please try again",
         "missingContractSession": "There is no active request to save"
@@ -2415,7 +2416,8 @@
         "footerNote": "In both options, you will receive the contract draft via WhatsApp for review before notarization on Ejar – paying now gets you a discount and faster draft delivery.",
         "missingContractSession": "Contract session is missing. Please restart the contract flow.",
         "draftError": "Could not save the contract draft. Please try again.",
-        "changeMethod": "Change"
+        "changeMethod": "Change",
+        "confirmPayNow": "Confirm pay first"
       },
       "draftSuccessDialog": {
         "title": "Congratulations, your request was received successfully!",

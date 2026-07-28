@@ -67,7 +67,6 @@ export default function CreatePropertyAddressStep({
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
-          icon="location"
         />
 
         <CreatePropertyNationalAddress

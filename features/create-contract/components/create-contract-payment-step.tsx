@@ -323,6 +323,15 @@ export default function CreateContractPaymentStep({
         }
         selectedMethod={paymentFlow.selectedPaymentMethod}
         onSelect={paymentFlow.selectPaymentMethod}
+        payNowExtra={
+          <CreateContractDiscountCodeField
+            labels={labels.discountCode}
+            appliedCoupon={appliedCoupon}
+            isApplying={isApplying}
+            onApply={applyCoupon}
+            onClear={clearCouponDraft}
+          />
+        }
       />
 
       <CreateContractSaveLaterDialog

@@ -493,7 +493,6 @@ export default function CreateContractDeedStep({
         <CreateContractStepPhaseHeader
           title={deedPhase.title}
           subtitle={deedPhase.subtitle}
-          showIcon={false}
         />
 
         <div className="space-y-8">
@@ -529,7 +528,6 @@ export default function CreateContractDeedStep({
               <CreateContractStepPhaseHeader
                 title={addressPhase.title}
                 subtitle={addressPhase.subtitle}
-                showIcon={false}
               />
 
               {isLeaseRenewal && labels.leaseRenewal ? (

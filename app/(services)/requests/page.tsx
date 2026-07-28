@@ -205,6 +205,7 @@ export default async function RequestsPage() {
           missingContractSession: tPayment("methodDialog.missingContractSession"),
           draftError: tPayment("methodDialog.draftError"),
           changeMethod: tPayment("methodDialog.changeMethod"),
+          confirmPayNow: tPayment("methodDialog.confirmPayNow"),
         },
         draftSuccessDialog: {
           title: tPayment("draftSuccessDialog.title"),

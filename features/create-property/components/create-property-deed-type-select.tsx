@@ -145,7 +145,7 @@ export default function CreatePropertyDeedTypeSelect({
             side="bottom"
             sideOffset={6}
             avoidCollisions={false}
-            className="max-h-48 rounded-2xl"
+            className="max-h-80 rounded-2xl"
             style={{
               width: contentWidth,
               minWidth: contentWidth,

@@ -26,6 +26,7 @@ export type CreateContractLabels = {
       saveThenExit: string;
       saving: string;
       exitWithoutSaving: string;
+      exitingWithoutSaving: string;
       continue: string;
       saveError: string;
       missingContractSession: string;
@@ -776,6 +777,7 @@ export type CreateContractLabels = {
       missingContractSession: string;
       draftError: string;
       changeMethod: string;
+      confirmPayNow: string;
     };
     draftSuccessDialog: {
       title: string;

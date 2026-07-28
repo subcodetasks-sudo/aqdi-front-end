@@ -70,7 +70,6 @@ export default function CreateContractFinanceStep({
         <CreateContractStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
-          icon="dollar"
         />
 
         {isSublease ? (

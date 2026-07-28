@@ -57,7 +57,6 @@ export default function CreatePropertyReviewStep({
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
-          icon="tag"
         />
 
         <CreatePropertyNameField

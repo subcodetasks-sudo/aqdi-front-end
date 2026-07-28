@@ -18,6 +18,7 @@ type CreateContractExitHomeDialogProps = {
   onOpenChange: (open: boolean) => void;
   orderNumber?: string | number | null;
   isSaving?: boolean;
+  isExiting?: boolean;
   onSaveThenExit: () => void;
   onExitWithoutSaving: () => void;
 };
@@ -56,10 +57,12 @@ export default function CreateContractExitHomeDialog({
   onOpenChange,
   orderNumber,
   isSaving = false,
+  isExiting = false,
   onSaveThenExit,
   onExitWithoutSaving,
 }: CreateContractExitHomeDialogProps) {
   const t = useTranslations("createContract.header.exitHomeDialog");
+  const isBusy = isSaving || isExiting;
   const resolvedOrderNumber =
     orderNumber != null && String(orderNumber).trim() !== ""
       ? String(orderNumber)
@@ -83,7 +86,7 @@ export default function CreateContractExitHomeDialog({
             <button
               type="button"
               aria-label={labels.close}
-              disabled={isSaving}
+              disabled={isBusy}
               className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0f0f0] text-[#9a9a9a] transition-colors hover:bg-[#e8e8e8] hover:text-[#666] disabled:opacity-50"
             >
               <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
@@ -107,7 +110,7 @@ export default function CreateContractExitHomeDialog({
         <div className="mt-7 flex flex-col gap-3">
           <Button
             type="button"
-            disabled={isSaving}
+            disabled={isBusy}
             onClick={onSaveThenExit}
             className="h-12 w-full rounded-xl bg-brand text-[15px] font-bold text-white hover:bg-brand/90"
           >
@@ -117,17 +120,17 @@ export default function CreateContractExitHomeDialog({
           <Button
             type="button"
             variant="outline"
-            disabled={isSaving}
+            disabled={isBusy}
             onClick={onExitWithoutSaving}
             className="h-12 w-full rounded-xl border-[#e6e6e6] bg-white text-[15px] font-bold text-[#e05a45] hover:bg-[#fafafa] hover:text-[#e05a45]"
           >
-            {labels.exitWithoutSaving}
+            {isExiting ? labels.exitingWithoutSaving : labels.exitWithoutSaving}
           </Button>
 
           <Button
             type="button"
             variant="outline"
-            disabled={isSaving}
+            disabled={isBusy}
             onClick={() => onOpenChange(false)}
             className="h-12 w-full rounded-xl border-brand bg-white text-[15px] font-bold text-brand hover:bg-brand-background-green/40 hover:text-brand"
           >

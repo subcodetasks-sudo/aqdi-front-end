@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import CreateContractCancelRequestButton from "@/features/create-contract/components/create-contract-cancel-request-button";
 import CreateContractLeaseRenewalUnitChoice from "@/features/create-contract/components/create-contract-lease-renewal-unit-choice";
 import CreateContractRentedUnitDataPhase from "@/features/create-contract/components/create-contract-rented-unit-data-phase";
 import CreateContractSaveLaterDialog from "@/features/create-contract/components/create-contract-save-later-dialog";
@@ -160,8 +159,6 @@ export default function CreateContractTenantStep({
   }
 
   const showSaveLaterActions = Boolean(contractSession);
-  const showCancelRequestActions = Boolean(contractSession) && !isLeaseRenewal;
-  const showBuildingIcon = isRentedUnitPhase || isLeaseRenewalUnitPhase;
 
   function handleOpenSaveLater() {
     if (isSavingDraft || isSubmitting) {
@@ -201,19 +198,9 @@ export default function CreateContractTenantStep({
       />
 
       <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-        {showCancelRequestActions && contractSession ? (
-          <div className="mb-4 flex justify-end">
-            <CreateContractCancelRequestButton
-              contractId={contractSession.contractId}
-              label={labels.cancelRequest}
-            />
-          </div>
-        ) : null}
-
         <CreateContractStepPhaseHeader
           title={phaseTitle}
           subtitle={phaseSubtitle}
-          icon={showBuildingIcon ? "building" : "user"}
         />
 
         {isTenantDataPhase ? (

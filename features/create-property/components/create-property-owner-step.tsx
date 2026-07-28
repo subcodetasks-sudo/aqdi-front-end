@@ -53,7 +53,6 @@ export default function CreatePropertyOwnerStep({
         <CreatePropertyStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
-          showIcon={false}
         />
 
         <div className="space-y-5">

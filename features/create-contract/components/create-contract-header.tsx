@@ -3,6 +3,7 @@
 import { Copy, Home, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FaWhatsapp } from "react-icons/fa";
@@ -12,6 +13,7 @@ import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
+import { deleteContract } from "@/features/requests/services/delete-contract";
 import { cn } from "@/lib/utils";
 
 type CreateContractHeaderProps = {
@@ -31,8 +33,10 @@ export default function CreateContractHeader({
   onToggleDarkMode,
 }: CreateContractHeaderProps) {
   const router = useRouter();
+  const tDelete = useTranslations("requests.card");
   const { saveDraft, isSaving } = useSaveContractDraft();
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const contractId = useCreateContractDraftStore(
     (state) =>
       state.contractSession?.contractId ??
@@ -84,10 +88,31 @@ export default function CreateContractHeader({
     router.push("/");
   }
 
-  function handleExitWithoutSaving() {
-    setExitDialogOpen(false);
-    resetCreateContractDraft();
-    router.push("/");
+  async function handleExitWithoutSaving() {
+    if (!contractId) {
+      setExitDialogOpen(false);
+      resetCreateContractDraft();
+      router.push("/");
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const result = await deleteContract(contractId);
+
+      if (!result.ok) {
+        toast.error(result.error || tDelete("deleteDialog.error"));
+        return;
+      }
+
+      toast.success(result.message || tDelete("deleteDialog.success"));
+      setExitDialogOpen(false);
+      resetCreateContractDraft();
+      router.push("/");
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -123,7 +148,7 @@ export default function CreateContractHeader({
             onClick={onToggleDarkMode}
             className={cn(
               pillBaseClassName,
-              "ms-auto size-10 justify-center px-0 border border-[#e4e4e4] bg-white text-brand hover:bg-brand-background sm:hidden",
+              "ms-auto size-10 justify-center border border-[#e4e4e4] bg-white px-0 text-brand hover:bg-brand-background sm:hidden",
               isDarkMode &&
                 "border-brand-secondary/40 bg-brand text-white hover:bg-brand/90",
             )}
@@ -197,8 +222,9 @@ export default function CreateContractHeader({
         onOpenChange={setExitDialogOpen}
         orderNumber={contractId}
         isSaving={isSaving}
+        isExiting={isDeleting}
         onSaveThenExit={() => void handleSaveThenExit()}
-        onExitWithoutSaving={handleExitWithoutSaving}
+        onExitWithoutSaving={() => void handleExitWithoutSaving()}
       />
     </>
   );

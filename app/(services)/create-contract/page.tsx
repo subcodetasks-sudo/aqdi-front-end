@@ -91,6 +91,7 @@ export default async function CreateContractPage({
         saveThenExit: t("header.exitHomeDialog.saveThenExit"),
         saving: t("header.exitHomeDialog.saving"),
         exitWithoutSaving: t("header.exitHomeDialog.exitWithoutSaving"),
+        exitingWithoutSaving: t("header.exitHomeDialog.exitingWithoutSaving"),
         continue: t("header.exitHomeDialog.continue"),
         saveError: t("header.exitHomeDialog.saveError"),
         missingContractSession: t("header.exitHomeDialog.missingContractSession"),
@@ -944,6 +945,7 @@ export default async function CreateContractPage({
         missingContractSession: t("payment.methodDialog.missingContractSession"),
         draftError: t("payment.methodDialog.draftError"),
         changeMethod: t("payment.methodDialog.changeMethod"),
+        confirmPayNow: t("payment.methodDialog.confirmPayNow"),
       },
       draftSuccessDialog: {
         title: t("payment.draftSuccessDialog.title"),

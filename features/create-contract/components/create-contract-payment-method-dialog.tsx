@@ -7,6 +7,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import {
   Dialog,
@@ -30,6 +31,8 @@ type CreateContractPaymentMethodDialogProps = {
   discountedPrice?: number | null;
   selectedMethod?: PaymentMethod | null;
   onSelect: (method: PaymentMethod) => void | Promise<void>;
+  /** Shown under "pay first" when that option is selected. */
+  payNowExtra?: ReactNode;
 };
 
 function isPaymentStep(step: string) {
@@ -125,18 +128,47 @@ export default function CreateContractPaymentMethodDialog({
   discountedPrice = null,
   selectedMethod = null,
   onSelect,
+  payNowExtra,
 }: CreateContractPaymentMethodDialogProps) {
+  const [pendingMethod, setPendingMethod] = useState<PaymentMethod | null>(
+    selectedMethod,
+  );
+  const showPayNowCoupon = Boolean(payNowExtra);
+  const isPayNowPending = pendingMethod === "pay-now";
   const payNowAmount =
     hasDiscount && typeof discountedPrice === "number"
       ? discountedPrice
       : totalPrice;
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    setPendingMethod(selectedMethod);
+  }, [open, selectedMethod]);
 
   async function handleSelect(method: PaymentMethod) {
     if (isSubmitting) {
       return;
     }
 
+    if (method === "pay-now" && showPayNowCoupon) {
+      setPendingMethod("pay-now");
+      return;
+    }
+
+    setPendingMethod(method);
     await onSelect(method);
+  }
+
+  async function handleConfirmPayNow() {
+    if (isSubmitting) {
+      return;
+    }
+
+    setPendingMethod("pay-now");
+    await onSelect("pay-now");
   }
 
   return (
@@ -167,76 +199,84 @@ export default function CreateContractPaymentMethodDialog({
         </div>
 
         <div className="space-y-3">
-          <button
-            type="button"
-            disabled={isSubmitting}
-            aria-pressed={selectedMethod === "pay-now"}
-            onClick={() => void handleSelect("pay-now")}
-            className={cn(
-              "w-full rounded-[22px] border-2 bg-white px-3.5 py-3.5 text-start transition-colors",
-              selectedMethod === "pay-now"
-                ? "border-brand bg-[#f7fcf9]"
-                : "border-[#e8e8e8] hover:border-[#d5d5d5]",
-              "disabled:cursor-not-allowed disabled:opacity-60",
-            )}
-          >
-            <div className="flex items-start gap-3">
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#e0e0e0] bg-white text-brand">
-                <CreditCard className="size-5" aria-hidden="true" />
-              </span>
+          <div className="space-y-3">
+            <button
+              type="button"
+              disabled={isSubmitting}
+              aria-pressed={pendingMethod === "pay-now"}
+              onClick={() => void handleSelect("pay-now")}
+              className={cn(
+                "w-full rounded-[22px] border-2 bg-white px-3.5 py-3.5 text-start transition-colors",
+                pendingMethod === "pay-now"
+                  ? "border-brand bg-[#f7fcf9]"
+                  : "border-[#e8e8e8] hover:border-[#d5d5d5]",
+                "disabled:cursor-not-allowed disabled:opacity-60",
+              )}
+            >
+              <div className="flex items-start gap-3">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#e0e0e0] bg-white text-brand">
+                  <CreditCard className="size-5" aria-hidden="true" />
+                </span>
 
-              <div className="min-w-0 flex-1">
-                <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
-                  {hasDiscount ? (
-                    <span className="inline-flex items-center rounded-full bg-[#ffe8d6] px-2 py-0.5 text-[11px] font-extrabold text-[#b45f1a]">
-                      {labels.payNow.discountBadge}
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+                    {hasDiscount ? (
+                      <span className="inline-flex items-center rounded-full bg-[#ffe8d6] px-2 py-0.5 text-[11px] font-extrabold text-[#b45f1a]">
+                        {labels.payNow.discountBadge}
+                      </span>
+                    ) : null}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand px-2 py-0.5 text-[11px] font-extrabold text-white">
+                      <Zap className="size-3" aria-hidden="true" />
+                      {labels.payNow.badge}
                     </span>
+                  </div>
+
+                  <p className="text-sm font-extrabold leading-snug text-[#1a1a1a]">
+                    {labels.payNow.title}
+                  </p>
+                  <p className="mt-0.5 text-xs text-[#7f7f7f]">
+                    {labels.payNow.description}
+                  </p>
+
+                  <FlowSteps steps={labels.payNow.steps} />
+
+                  {labels.payNow.note ? (
+                    <p className="mt-3 rounded-xl bg-[#e8f5ee] px-3 py-2 text-[11px] leading-relaxed text-[#2a6644]">
+                      {labels.payNow.note}
+                    </p>
                   ) : null}
-                  <span className="inline-flex items-center gap-1 rounded-full bg-brand px-2 py-0.5 text-[11px] font-extrabold text-white">
-                    <Zap className="size-3" aria-hidden="true" />
-                    {labels.payNow.badge}
-                  </span>
+
+                  {totalPrice > 0 ? (
+                    <MethodPrice
+                      label={
+                        hasDiscount ? labels.afterDiscount : labels.total
+                      }
+                      amount={payNowAmount}
+                      currency={labels.currency}
+                      originalAmount={hasDiscount ? totalPrice : null}
+                    />
+                  ) : null}
                 </div>
 
-                <p className="text-sm font-extrabold leading-snug text-[#1a1a1a]">
-                  {labels.payNow.title}
-                </p>
-                <p className="mt-0.5 text-xs text-[#7f7f7f]">
-                  {labels.payNow.description}
-                </p>
-
-                <FlowSteps steps={labels.payNow.steps} />
-
-                {labels.payNow.note ? (
-                  <p className="mt-3 rounded-xl bg-[#e8f5ee] px-3 py-2 text-[11px] leading-relaxed text-[#2a6644]">
-                    {labels.payNow.note}
-                  </p>
-                ) : null}
-
-                {totalPrice > 0 ? (
-                  <MethodPrice
-                    label={
-                      hasDiscount ? labels.afterDiscount : labels.total
-                    }
-                    amount={payNowAmount}
-                    currency={labels.currency}
-                    originalAmount={hasDiscount ? totalPrice : null}
-                  />
-                ) : null}
+                <RadioIndicator selected={pendingMethod === "pay-now"} />
               </div>
+            </button>
 
-              <RadioIndicator selected={selectedMethod === "pay-now"} />
-            </div>
-          </button>
+            {isPayNowPending && payNowExtra ? (
+              <div className="rounded-[22px] border border-brand/20 bg-[#f7fcf9] p-3">
+                {payNowExtra}
+              </div>
+            ) : null}
+          </div>
 
           <button
             type="button"
             disabled={isSubmitting}
-            aria-pressed={selectedMethod === "draft"}
+            aria-pressed={pendingMethod === "draft"}
             onClick={() => void handleSelect("draft")}
             className={cn(
               "w-full rounded-[22px] border-2 bg-white px-3.5 py-3.5 text-start transition-colors",
-              selectedMethod === "draft"
+              pendingMethod === "draft"
                 ? "border-brand bg-[#f7fcf9]"
                 : "border-[#e8e8e8] hover:border-[#d5d5d5]",
               "disabled:cursor-not-allowed disabled:opacity-60",
@@ -272,10 +312,21 @@ export default function CreateContractPaymentMethodDialog({
                 ) : null}
               </div>
 
-              <RadioIndicator selected={selectedMethod === "draft"} />
+              <RadioIndicator selected={pendingMethod === "draft"} />
             </div>
           </button>
         </div>
+
+        {isPayNowPending && showPayNowCoupon ? (
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={() => void handleConfirmPayNow()}
+            className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {labels.confirmPayNow}
+          </button>
+        ) : null}
 
         <div className="mt-4 rounded-2xl bg-[#eef8f3] px-4 py-3 text-[11px] leading-relaxed text-[#35584a]">
           <span className="font-extrabold">{labels.footerNoteTitle}</span>{" "}

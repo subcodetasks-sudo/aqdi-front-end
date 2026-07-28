@@ -232,7 +232,6 @@ export default function CreatePropertyDeedStep({
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
-          showIcon={false}
         />
 
         <div className="space-y-8">
@@ -426,7 +425,6 @@ export default function CreatePropertyDeedStep({
               <CreatePropertyStepPhaseHeader
                 title={addressLabels.title}
                 subtitle={addressLabels.subtitle}
-                showIcon={false}
               />
 
               <CreatePropertyNationalAddress

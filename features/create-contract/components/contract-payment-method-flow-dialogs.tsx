@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import CreateContractDraftSuccessDialog from "@/features/create-contract/components/create-contract-draft-success-dialog";
 import CreateContractPaymentMethodDialog from "@/features/create-contract/components/create-contract-payment-method-dialog";
 import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
@@ -18,6 +20,7 @@ type ContractPaymentMethodFlowDialogsProps = {
   discountedPrice?: number | null;
   selectedMethod?: PaymentMethod | null;
   onSelect: (method: PaymentMethod) => void | Promise<void>;
+  payNowExtra?: ReactNode;
 };
 
 export default function ContractPaymentMethodFlowDialogs({
@@ -33,6 +36,7 @@ export default function ContractPaymentMethodFlowDialogs({
   discountedPrice = null,
   selectedMethod = null,
   onSelect,
+  payNowExtra,
 }: ContractPaymentMethodFlowDialogsProps) {
   return (
     <>
@@ -46,6 +50,7 @@ export default function ContractPaymentMethodFlowDialogs({
         discountedPrice={discountedPrice}
         selectedMethod={selectedMethod}
         onSelect={onSelect}
+        payNowExtra={payNowExtra}
       />
 
       <CreateContractDraftSuccessDialog
