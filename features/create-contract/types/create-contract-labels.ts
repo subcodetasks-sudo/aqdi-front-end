@@ -97,6 +97,7 @@ export type CreateContractLabels = {
       chooseFile: string;
       acceptedFormats: string;
       hint?: string;
+      attached: string;
       preview: string;
       delete: string;
       previewTitle: string;
@@ -577,6 +578,11 @@ export type CreateContractLabels = {
       placeholder: string;
       add: string;
       remove: string;
+      clearSummary: string;
+      addedSummaryOne: string;
+      addedSummaryTwo: string;
+      addedSummaryFew: string;
+      addedSummaryMany: string;
     };
   };
   payment: {
@@ -591,6 +597,7 @@ export type CreateContractLabels = {
       close: string;
       edit: string;
       view: string;
+      linkPreview: string;
       confirm: string;
       hint: string;
       emptyValue: string;
@@ -600,6 +607,8 @@ export type CreateContractLabels = {
       share: string;
       copy: string;
       print: string;
+      download: string;
+      attachmentPreviewTitle: string;
       copySuccess: string;
       copyError: string;
       shareError: string;

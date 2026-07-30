@@ -8,8 +8,6 @@ export type ManualDeedEntryData = {
   instrumentHistoryYear: string;
 };
 
-export const INSTRUMENT_NUMBER_LENGTH = 12;
-
 export const EMPTY_MANUAL_DEED_ENTRY: ManualDeedEntryData = {
   instrumentNumber: "",
   typeInstrumentHistory: "hijri",
@@ -19,7 +17,7 @@ export const EMPTY_MANUAL_DEED_ENTRY: ManualDeedEntryData = {
 };
 
 export function normalizeInstrumentNumber(value: string) {
-  return value.replace(/\D/g, "").slice(0, INSTRUMENT_NUMBER_LENGTH);
+  return value.replace(/\D/g, "");
 }
 
 function formatInstrumentHistoryPart(value: string) {
@@ -37,7 +35,7 @@ export function isManualDeedEntryComplete(value: ManualDeedEntryData) {
   const year = value.instrumentHistoryYear.replace(/\D/g, "");
 
   return (
-    value.instrumentNumber.length === INSTRUMENT_NUMBER_LENGTH &&
+    value.instrumentNumber.trim().length > 0 &&
     day !== "" &&
     month !== "" &&
     year !== ""

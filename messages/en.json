@@ -381,6 +381,7 @@
     "privacyHref": "/privacy"
   },
   "legal": {
+    "close": "Close",
     "terms": {
       "title": "Terms and Conditions",
       "metaTitle": "Terms and Conditions | Aqadi",
@@ -1094,7 +1095,7 @@
     },
     "deed": {
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue"
       },
       "title": "Ownership document",
@@ -1130,8 +1131,9 @@
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
-        "preview": "Preview",
-        "delete": "Delete",
+        "attached": "Attached",
+        "preview": "View",
+        "delete": "Remove",
         "previewTitle": "File preview",
         "closePreview": "Close"
       },
@@ -1155,8 +1157,8 @@
         "toggleLabel": "Enter deed data manually instead of an image",
         "instrumentNumber": {
           "label": "Deed number",
-          "placeholder": "XXXXXXXXXXXX",
-          "hint": "The deed number consists of 12 digits"
+          "placeholder": "Numbers only",
+          "hint": "Numbers only - no length limit"
         },
         "instrumentDate": {
           "label": "First registration date",
@@ -1173,7 +1175,7 @@
     },
     "address": {
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "submitting": "Saving...",
         "submitError": "Could not save property data. Please try again."
@@ -1246,8 +1248,9 @@
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
           "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
-          "preview": "Preview",
-          "delete": "Delete",
+          "attached": "Attached",
+          "preview": "View",
+          "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
@@ -1339,8 +1342,9 @@
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "Preview",
-          "delete": "Delete",
+          "attached": "Attached",
+          "preview": "View",
+          "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
@@ -1348,7 +1352,7 @@
     },
     "review": {
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "submitting": "Saving...",
         "submitError": "Could not save owner data. Please try again.",
@@ -1386,7 +1390,7 @@
     "fieldRequired": "This field is required",
     "incompleteContinue": "Please complete all required fields before continuing",
     "navigation": {
-      "previous": "Previous",
+      "previous": "Back",
       "continue": "Continue",
       "save": "Save changes",
       "submitting": "Saving...",
@@ -1586,7 +1590,7 @@
     },
     "deed": {
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "submitting": "Saving..."
       },
@@ -1636,8 +1640,9 @@
         "clickHere": "Click here",
         "chooseFile": "to choose an image or file",
         "acceptedFormats": "png - jpeg - pdf",
-        "preview": "Preview",
-        "delete": "Delete",
+        "attached": "Attached",
+        "preview": "View",
+        "delete": "Remove",
         "previewTitle": "File preview",
         "closePreview": "Close"
       },
@@ -1695,7 +1700,7 @@
             "placeholder": "... Select"
           },
           "street": {
-            "label": "Street",
+            "label": "Street name",
             "placeholder": "Write here.."
           },
           "buildingNumber": {
@@ -1717,8 +1722,9 @@
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
           "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
-          "preview": "Preview",
-          "delete": "Delete",
+          "attached": "Attached",
+          "preview": "View",
+          "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
@@ -1759,8 +1765,8 @@
         "toggleLabel": "Enter deed data manually instead of an image",
         "instrumentNumber": {
           "label": "Deed number",
-          "placeholder": "XXXXXXXXXXXX",
-          "hint": "The deed number consists of 12 digits"
+          "placeholder": "Numbers only",
+          "hint": "Numbers only - no length limit"
         },
         "instrumentDate": {
           "label": "First registration date",
@@ -1778,7 +1784,7 @@
     "owner": {
       "cancelRequest": "Cancel request",
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "saveLater": "Save and complete later",
         "savingLater": "Saving...",
@@ -1864,8 +1870,9 @@
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "Preview",
-          "delete": "Delete",
+          "attached": "Attached",
+          "preview": "View",
+          "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
@@ -1878,7 +1885,7 @@
       "missingContractSession": "Please start the contract first",
       "saveLaterError": "Failed to save contract draft",
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "saveLater": "Save and complete later",
         "savingLater": "Saving...",
@@ -1964,12 +1971,14 @@
           "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
-          "label": "Attach power of attorney photo",
+          "label": "Attach power of attorney or authorization image",
           "clickHere": "Click here",
           "chooseFile": "to choose an image or file",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "Preview",
-          "delete": "Delete",
+          "hint": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause, or a certified authorization from the Chamber of Commerce, or an association agreement that grants the right to sign contracts",
+          "attached": "Attached",
+          "preview": "View",
+          "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
@@ -2149,7 +2158,7 @@
         "bodyAfter": "must not exceed the limits of the attached original lease contract — it must not start before its start and must not end after its end."
       },
       "navigation": {
-        "previous": "Previous",
+        "previous": "Back",
         "continue": "Continue",
         "submitting": "Saving..."
       },
@@ -2213,10 +2222,15 @@
       "otherConditions": {
         "title": "Would you like to add other conditions...?",
         "subtitle": "Additional conditions agreed by both parties and documented in the contract",
-        "instruction": "Add one or more conditions — each appears in the contract terms",
+        "instruction": "Add one condition per line – it appears in the contract terms",
         "placeholder": "Write the condition here",
         "add": "Add condition",
-        "remove": "Remove condition"
+        "remove": "Remove condition",
+        "clearSummary": "Clear conditions",
+        "addedSummaryOne": "1 condition added",
+        "addedSummaryTwo": "2 conditions added",
+        "addedSummaryFew": "{count} conditions added",
+        "addedSummaryMany": "{count} conditions added"
       }
     },
     "payment": {
@@ -2231,6 +2245,7 @@
         "close": "Close",
         "edit": "Edit",
         "view": "View",
+        "linkPreview": "Preview",
         "confirm": "Done – details are correct",
         "hint": "Click 'Edit' on any section to go to its page and fix it, then return to complete payment",
         "emptyValue": "—",
@@ -2240,6 +2255,8 @@
         "share": "Share",
         "copy": "Copy data",
         "print": "Print",
+        "download": "Download",
+        "attachmentPreviewTitle": "Attachment preview",
         "copySuccess": "Order details copied",
         "copyError": "Failed to copy details",
         "shareError": "Failed to share order",
@@ -2363,7 +2380,7 @@
       "discountCode": {
         "question": "Do you have a discount code?",
         "add": "Click to add",
-        "placeholder": "Enter discount code",
+        "placeholder": "Enter code here",
         "apply": "Apply",
         "applying": "Applying...",
         "clear": "Clear",

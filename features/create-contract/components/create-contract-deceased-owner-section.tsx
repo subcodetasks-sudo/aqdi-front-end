@@ -47,7 +47,6 @@ export default function CreateContractDeceasedOwnerSection({
     ...deedImageLabels,
     clickHere: labels.clickHere,
     chooseFile: labels.chooseFile,
-    acceptedFormats: "",
   };
 
   return (

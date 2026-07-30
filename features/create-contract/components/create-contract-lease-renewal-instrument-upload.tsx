@@ -28,7 +28,7 @@ export default function CreateContractLeaseRenewalInstrumentUpload({
       labels={{
         ...deedImageLabels,
         label: labels.uploadLabel,
-        acceptedFormats: labels.pdfHint,
+        acceptedFormats: "pdf",
       }}
       fieldLabel={labels.uploadLabel}
       value={value}

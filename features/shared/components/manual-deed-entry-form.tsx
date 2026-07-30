@@ -5,12 +5,12 @@ import { useId, type ComponentType } from "react";
 import { Input } from "@/components/ui/input";
 import type { ManualDeedEntryLabels } from "@/features/shared/types/manual-deed-entry-labels";
 import {
-  INSTRUMENT_NUMBER_LENGTH,
   normalizeInstrumentNumber,
   type ManualDeedEntryData,
 } from "@/features/shared/types/manual-deed-entry";
 import { getInstrumentHistoryYearOptions } from "@/lib/validation/instrument-history-year-options";
 import {
+  fieldChromeControlClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -86,8 +86,7 @@ export default function ManualDeedEntryForm({
   const selectedYear = yearOptions.some((option) => option.value === value.instrumentHistoryYear)
     ? value.instrumentHistoryYear
     : "";
-  const instrumentNumberValid =
-    value.instrumentNumber.length === INSTRUMENT_NUMBER_LENGTH;
+  const instrumentNumberValid = value.instrumentNumber.trim().length > 0;
   const instrumentNumberInvalid = showFieldErrors && !instrumentNumberValid;
   const dayInvalid = showFieldErrors && value.instrumentHistoryDay === "";
   const monthInvalid = showFieldErrors && value.instrumentHistoryMonth === "";
@@ -123,32 +122,25 @@ export default function ManualDeedEntryForm({
           invalid={instrumentNumberInvalid}
         />
 
-        <div className="relative">
-          <Input
-            id={inputId}
-            inputMode="numeric"
-            maxLength={INSTRUMENT_NUMBER_LENGTH}
-            value={value.instrumentNumber}
-            placeholder={labels.instrumentNumber.placeholder}
-            aria-invalid={instrumentNumberInvalid}
-            onChange={(event) =>
-              updateField(
-                "instrumentNumber",
-                normalizeInstrumentNumber(event.target.value),
-              )
-            }
-            className={cn(
-              "h-12 rounded-2xl ps-4 pe-14 text-start text-sm font-semibold tracking-[0.2em] placeholder:tracking-[0.2em] placeholder:text-[#cfcfcf] md:text-sm",
-              fieldChromeSurfaceClass(instrumentNumberChrome, {
-                defaultBgClassName: "bg-white",
-              }),
-            )}
-          />
-
-          <span className="pointer-events-none absolute inset-y-0 end-4 flex items-center text-xs text-[#bdbdbd]">
-            {value.instrumentNumber.length}/{INSTRUMENT_NUMBER_LENGTH}
-          </span>
-        </div>
+        <Input
+          id={inputId}
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={value.instrumentNumber}
+          placeholder={labels.instrumentNumber.placeholder}
+          aria-invalid={instrumentNumberInvalid}
+          onChange={(event) =>
+            updateField(
+              "instrumentNumber",
+              normalizeInstrumentNumber(event.target.value),
+            )
+          }
+          className={cn(
+            "h-12 rounded-2xl px-4 text-start text-sm font-semibold placeholder:text-[#cfcfcf] md:text-sm",
+            fieldChromeControlClass,
+            fieldChromeSurfaceClass(instrumentNumberChrome),
+          )}
+        />
 
         <p className="text-xs text-[#8a8a8a]">{labels.instrumentNumber.hint}</p>
       </div>

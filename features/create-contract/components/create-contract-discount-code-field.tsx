@@ -1,19 +1,12 @@
 "use client";
 
-import { Tag, X } from "lucide-react";
-import {
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from "react";
+import { Tag } from "lucide-react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
-import { cn } from "@/lib/utils";
 
 type CreateContractDiscountCodeFieldProps = {
   labels: CreateContractLabels["payment"]["discountCode"];
@@ -67,16 +60,6 @@ export default function CreateContractDiscountCodeField({
     await onApply(draft.trim());
   }
 
-  function handleClear() {
-    if (isLocked) {
-      return;
-    }
-
-    setDraft("");
-    onClear();
-    setIsExpanded(false);
-  }
-
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (isLocked || isApplying) {
       return;
@@ -89,7 +72,9 @@ export default function CreateContractDiscountCodeField({
 
     if (event.key === "Escape") {
       event.preventDefault();
-      handleClear();
+      setDraft("");
+      onClear();
+      setIsExpanded(false);
     }
   }
 
@@ -108,12 +93,18 @@ export default function CreateContractDiscountCodeField({
   }
 
   return (
-    <div className="rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3">
-      <div className="mb-2 flex items-center gap-2">
+    <div
+      dir="rtl"
+      className="rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3"
+    >
+      <div className="mb-3 flex items-center gap-2">
         <Tag className="size-5 shrink-0 text-brand" aria-hidden="true" />
         <label htmlFor={inputId} className="text-sm font-bold text-brand">
           {labels.question}
         </label>
+        {!isLocked ? (
+          <span className="text-sm text-[#9a9a9a]">{labels.add}</span>
+        ) : null}
       </div>
 
       <div className="flex items-center gap-2">
@@ -127,7 +118,7 @@ export default function CreateContractDiscountCodeField({
           placeholder={labels.placeholder}
           autoComplete="off"
           disabled={isLocked || isApplying}
-          className="h-11 flex-1 rounded-xl border-[#e8e8e8] bg-brand-background px-3 text-sm focus-visible:border-brand-secondary focus-visible:ring-brand-secondary/20 disabled:cursor-not-allowed disabled:opacity-70"
+          className="h-11 flex-1 rounded-xl border-[#e8e8e8] bg-white px-3 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:cursor-not-allowed disabled:opacity-70"
         />
 
         {!isLocked ? (
@@ -135,34 +126,15 @@ export default function CreateContractDiscountCodeField({
             type="button"
             onClick={() => void handleApply()}
             disabled={!draft.trim() || isApplying}
-            className="h-11 shrink-0 rounded-xl bg-brand px-4 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
+            className="h-11 shrink-0 rounded-xl bg-brand px-5 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
           >
             {isApplying ? labels.applying : labels.apply}
-          </Button>
-        ) : null}
-
-        {!isLocked ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={handleClear}
-            disabled={isApplying}
-            aria-label={labels.clear}
-            className="size-11 shrink-0 rounded-xl text-[#9a9a9a] hover:bg-brand-background hover:text-brand"
-          >
-            <X className="size-4" aria-hidden="true" />
           </Button>
         ) : null}
       </div>
 
       {appliedCoupon ? (
-        <p
-          className={cn(
-            "mt-2 text-sm font-medium text-brand-secondary",
-            "leading-relaxed",
-          )}
-        >
+        <p className="mt-2 text-sm font-medium leading-relaxed text-brand-secondary">
           {appliedCoupon.message}
         </p>
       ) : null}

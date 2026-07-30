@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone } from "lucide-react";
+import { IdCard } from "lucide-react";
 
 import { Switch } from "@/components/ui/switch";
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
@@ -93,7 +93,6 @@ export default function CreateContractOwnerDataPhase({
           onChange={(phone) =>
             updateField("phone", toSaudiMobileInputValue(phone))
           }
-          icon={Phone}
           errorMessage={phoneError}
           invalid={phoneInvalid}
           valid={phoneValid}
@@ -112,7 +111,7 @@ export default function CreateContractOwnerDataPhase({
           "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
           hasAgentInvalid
             ? "border-[#e57373] bg-white"
-            : value.hasAgent !== ""
+            : hasAgentChecked
               ? "border-brand bg-brand-background-green"
               : "border-[#e8e8e8] bg-white",
         )}

@@ -5,6 +5,8 @@ import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreateUnitFieldLabel from "@/features/create-unit/components/create-unit-field-label";
+import { fieldChromeNestedInputClass } from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateUnitIconInputFieldProps = {
   label: string;
@@ -49,7 +51,7 @@ export default function CreateUnitIconInputField({
 
       <div
         dir={dir}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2"
+        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2"
       >
         <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
           <Icon className="size-5" aria-hidden="true" />
@@ -66,7 +68,10 @@ export default function CreateUnitIconInputField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
-          className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0 dark:text-[#e8f0ee]"
+          className={cn(
+            "h-auto px-2 text-sm dark:text-[#e8f0ee]",
+            fieldChromeNestedInputClass,
+          )}
         />
       </div>
     </div>

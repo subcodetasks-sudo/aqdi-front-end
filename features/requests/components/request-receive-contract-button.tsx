@@ -50,6 +50,7 @@ export default function RequestReceiveContractButton({
         <Clock3 className="size-4 shrink-0" aria-hidden="true" />
         <span className="truncate">{label}</span>
       </button>
+      
 
       <RequestReceiveContractDialog
         open={open}

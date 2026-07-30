@@ -2,7 +2,6 @@
 
 import { Lock } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -33,6 +32,9 @@ import {
   PAYMENT_BREAKDOWN,
 } from "@/features/create-contract/types/payment-step";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
+import LegalDocumentDialog, {
+  type LegalDocumentKind,
+} from "@/features/settings/components/legal-document-dialog";
 
 type CreateContractPaymentStepProps = {
   labels: CreateContractLabels["payment"];
@@ -93,6 +95,9 @@ export default function CreateContractPaymentStep({
   const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
   const [reviewOrderDialogOpen, setReviewOrderDialogOpen] = useState(false);
+  const [legalDocument, setLegalDocument] = useState<LegalDocumentKind | null>(
+    null,
+  );
 
   const paymentFlow = useContractPaymentMethodFlow(
     contractSession?.contractId,
@@ -189,7 +194,7 @@ export default function CreateContractPaymentStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
         <div className="space-y-5">
           <CreateContractPaymentHero
             journeyMessage={labels.journeyMessage}
@@ -273,23 +278,47 @@ export default function CreateContractPaymentStep({
 
           <p className="text-center text-xs leading-relaxed text-[#7f7f7f]">
             {labels.disclaimer.prefix}{" "}
-            <Link
-              href={labels.disclaimer.termsHref}
+            <button
+              type="button"
+              onClick={() => setLegalDocument("terms")}
               className="font-semibold text-brand-secondary underline underline-offset-2"
             >
               {labels.disclaimer.termsLink}
-            </Link>{" "}
+            </button>{" "}
             {labels.disclaimer.and}{" "}
-            <Link
-              href={labels.disclaimer.privacyHref}
+            <button
+              type="button"
+              onClick={() => setLegalDocument("privacy")}
               className="font-semibold text-brand-secondary underline underline-offset-2"
             >
               {labels.disclaimer.privacyLink}
-            </Link>
+            </button>
             .
           </p>
+
+          <CreateContractPaymentNavigation
+            previousLabel={labels.navigation.previous}
+            payLabel={payLabel}
+            payingLabel={labels.navigation.paying}
+            saveLabel={labels.navigation.save}
+            isPaying={paymentFlow.isSubmitting}
+            isSaving={isSavingDraft}
+            onPrevious={onBack}
+            onPay={() => void paymentFlow.handlePrimaryAction()}
+            onSave={() => setSaveLaterDialogOpen(true)}
+          />
         </div>
       </div>
+
+      <LegalDocumentDialog
+        document={legalDocument}
+        open={legalDocument != null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setLegalDocument(null);
+          }
+        }}
+      />
 
       <CreateContractSavePropertyDialog
         labels={labels.savePropertyData.dialog}
@@ -351,18 +380,6 @@ export default function CreateContractPaymentStep({
         deedTypeLabels={deedTypeLabels}
         deedAttachmentLabels={deedAttachmentLabels}
         onEditStep={onEditStep}
-      />
-
-      <CreateContractPaymentNavigation
-        previousLabel={labels.navigation.previous}
-        payLabel={payLabel}
-        payingLabel={labels.navigation.paying}
-        saveLabel={labels.navigation.save}
-        isPaying={paymentFlow.isSubmitting}
-        isSaving={isSavingDraft}
-        onPrevious={onBack}
-        onPay={() => void paymentFlow.handlePrimaryAction()}
-        onSave={() => setSaveLaterDialogOpen(true)}
       />
 
       <p className="flex items-center justify-center gap-2 text-xs text-[#9a9a9a]">

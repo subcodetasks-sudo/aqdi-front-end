@@ -66,7 +66,7 @@ export default function CreateContractFinanceStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -96,17 +96,19 @@ export default function CreateContractFinanceStep({
           onChange={setFinanceData}
           showFieldErrors={showFieldErrors}
         />
-      </div>
 
-      <CreateContractStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
-        }
-        isSubmitting={isSubmitting}
-        onPrevious={onBack}
-        onContinue={() => void handleContinue()}
-      />
+        <CreateContractStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? labels.navigation.submitting
+              : labels.navigation.continue
+          }
+          isSubmitting={isSubmitting}
+          onPrevious={onBack}
+          onContinue={() => void handleContinue()}
+        />
+      </div>
     </div>
   );
 }

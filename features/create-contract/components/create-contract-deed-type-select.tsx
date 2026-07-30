@@ -93,9 +93,7 @@ export default function CreateContractDeedTypeSelect({
         ref={containerRef}
         className={cn(
           "flex h-14 w-full items-center gap-2 rounded-2xl border px-3 transition-colors",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          fieldChromeSurfaceClass(chrome),
           open && chrome === "default" && "border-brand",
         )}
       >
@@ -160,7 +158,7 @@ export default function CreateContractDeedTypeSelect({
               side="bottom"
               sideOffset={6}
               avoidCollisions={false}
-              className="max-h-80 rounded-2xl"
+              className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl"
               style={{
                 width: contentWidth,
                 minWidth: contentWidth,

@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone } from "lucide-react";
+import { IdCard } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
@@ -72,7 +72,6 @@ export default function CreateContractTenantIndividualDataPhase({
           onChange={(phone) =>
             updateField("phone", toSaudiMobileInputValue(phone))
           }
-          icon={Phone}
           errorMessage={
             showFieldErrors && !isPhoneComplete(value.phone)
               ? t("fieldRequired")

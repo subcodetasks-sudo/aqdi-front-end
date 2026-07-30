@@ -1,6 +1,7 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, X } from "lucide-react";
+import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreateContractFinanceAccordion from "@/features/create-contract/components/create-contract-finance-accordion";
@@ -18,6 +19,25 @@ type CreateContractFinanceConditionsSectionProps = {
   onChange: (value: string[]) => void;
 };
 
+function formatAddedSummary(
+  count: number,
+  labels: CreateContractLabels["finance"]["otherConditions"],
+) {
+  if (count === 1) {
+    return labels.addedSummaryOne;
+  }
+
+  if (count === 2) {
+    return labels.addedSummaryTwo;
+  }
+
+  if (count >= 3 && count <= 10) {
+    return labels.addedSummaryFew.replace("{count}", String(count));
+  }
+
+  return labels.addedSummaryMany.replace("{count}", String(count));
+}
+
 export default function CreateContractFinanceConditionsSection({
   labels,
   enabled,
@@ -25,20 +45,23 @@ export default function CreateContractFinanceConditionsSection({
   onEnabledChange,
   onChange,
 }: CreateContractFinanceConditionsSectionProps) {
-  const conditions = value.length > 0 ? value : [""];
-  const canAdd = conditions.length < MAX_OTHER_CONDITIONS;
+  const conditions = value;
+  const filledCount = getFilledOtherConditions(value).length;
+  const [draft, setDraft] = useState("");
+  const canAdd = filledCount < MAX_OTHER_CONDITIONS;
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen) {
       onEnabledChange(true);
-      if (value.length === 0) {
-        onChange([""]);
+      const sanitized = getFilledOtherConditions(value);
+      if (sanitized.length !== value.length) {
+        onChange(sanitized);
       }
       return;
     }
 
     // Collapse only — keep drafted conditions. Disable flag only if nothing filled.
-    if (getFilledOtherConditions(value).length === 0) {
+    if (filledCount === 0) {
       onEnabledChange(false);
     }
   }
@@ -49,62 +72,106 @@ export default function CreateContractFinanceConditionsSection({
     onChange(next);
   }
 
-  function addCondition() {
-    if (!canAdd) {
-      return;
-    }
-
-    onChange([...conditions, ""]);
-  }
-
-  function removeCondition(index: number) {
-    if (conditions.length <= 1) {
-      onChange([""]);
+  function commitCondition(index: number) {
+    if (conditions[index]?.trim()) {
       return;
     }
 
     onChange(conditions.filter((_, i) => i !== index));
   }
 
+  function addCondition() {
+    const nextValue = draft.trim();
+    if (!nextValue || !canAdd) {
+      return;
+    }
+
+    onChange([...getFilledOtherConditions(conditions), nextValue]);
+    setDraft("");
+  }
+
+  function removeCondition(index: number) {
+    onChange(conditions.filter((_, i) => i !== index));
+  }
+
+  function clearConditions() {
+    onChange([]);
+    setDraft("");
+    onEnabledChange(false);
+  }
+
   return (
     <CreateContractFinanceAccordion
       title={labels.title}
       subtitle={labels.subtitle}
-      defaultOpen={enabled || getFilledOtherConditions(value).length > 0}
+      defaultOpen={enabled && filledCount === 0}
       onOpenChange={handleOpenChange}
+      collapsedSummary={
+        filledCount > 0 ? (
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand-secondary/40 bg-brand-background-green px-3 py-1.5 text-xs font-bold text-brand">
+            {formatAddedSummary(filledCount, labels)}
+            <button
+              type="button"
+              onClick={clearConditions}
+              aria-label={labels.clearSummary}
+              className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand hover:bg-brand/20"
+            >
+              <X className="size-2.5" strokeWidth={3} aria-hidden />
+            </button>
+          </span>
+        ) : null
+      }
     >
       <p className="text-xs leading-5 text-[#9a9a9a]">{labels.instruction}</p>
 
-      <ul className="space-y-2">
+      <ul className="space-y-3">
         {conditions.map((condition, index) => (
-          <li key={index} className="flex items-center gap-2">
+          <li
+            key={index}
+            className="flex items-center gap-2 rounded-xl border border-[#e8e8e8] bg-white px-3 py-1"
+          >
             <Input
               value={condition}
               onChange={(event) => updateCondition(index, event.target.value)}
-              placeholder={labels.placeholder}
-              className="h-12 flex-1 rounded-xl border-[#1a1a1a] bg-white px-4 text-sm shadow-none focus-visible:border-brand focus-visible:ring-brand/20"
+              onBlur={() => commitCondition(index)}
+              className="h-10 flex-1 border-0 bg-transparent px-1 text-sm shadow-none focus-visible:ring-0"
             />
             <button
               type="button"
               onClick={() => removeCondition(index)}
               aria-label={labels.remove}
-              className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl text-[#c62828] hover:bg-[#fff0f0]"
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-[#c62828] hover:bg-[#fff0f0]"
             >
-              <Trash2 className="size-5" aria-hidden />
+              <X className="size-4" aria-hidden />
             </button>
           </li>
         ))}
-      </ul>
 
-      <button
-        type="button"
-        onClick={addCondition}
-        disabled={!canAdd}
-        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-brand-secondary bg-brand-background-green/40 text-sm font-semibold text-brand disabled:opacity-40"
-      >
-        <Plus className="size-4" aria-hidden />
-        {labels.add}
-      </button>
+        <li className="flex items-center gap-2">
+          <Input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addCondition();
+              }
+            }}
+            placeholder={labels.placeholder}
+            disabled={!canAdd}
+            className="h-12 flex-1 rounded-xl border border-dashed border-[#d6d6d6] bg-white px-4 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:opacity-40"
+          />
+          <button
+            type="button"
+            onClick={addCondition}
+            disabled={!canAdd || draft.trim() === ""}
+            aria-label={labels.add}
+            className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-background-green text-brand disabled:opacity-40"
+          >
+            <Plus className="size-5" aria-hidden />
+          </button>
+        </li>
+      </ul>
     </CreateContractFinanceAccordion>
   );
 }

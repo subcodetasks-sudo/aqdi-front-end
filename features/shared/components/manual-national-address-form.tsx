@@ -19,6 +19,7 @@ import type {
   ManualNationalAddressLabels,
 } from "@/features/shared/types/manual-national-address";
 import {
+  fieldChromeControlClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -122,9 +123,7 @@ function AddressSelect({
         ref={containerRef}
         className={cn(
           "flex h-12 w-full items-center gap-2 rounded-2xl border px-3",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          fieldChromeSurfaceClass(chrome),
           disabled && "opacity-70",
         )}
       >
@@ -234,10 +233,9 @@ function AddressTextField({
         inputMode={inputMode}
         aria-invalid={invalid}
         className={cn(
-          "h-12 rounded-2xl px-4 text-sm font-medium text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand/40 focus-visible:ring-brand/15",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          "h-12 rounded-2xl px-4 text-sm font-medium text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand/40",
+          fieldChromeControlClass,
+          fieldChromeSurfaceClass(chrome),
           align === "end" ? "text-end" : "text-start",
         )}
       />
@@ -280,26 +278,26 @@ export default function ManualNationalAddressForm({
 
   return (
     <div className="space-y-4">
-      <AddressSelect
-        label={labels.place.label}
-        placeholder={
-          isRegionsLoading ? labels.place.loading : labels.place.placeholder
-        }
-        options={regionOptions}
-        value={value.propertyPlaceId === "" ? "" : String(value.propertyPlaceId)}
-        onChange={(placeId) => {
-          onChange({
-            ...value,
-            propertyPlaceId: placeId ? Number(placeId) : "",
-            propertyCityId: "",
-          });
-        }}
-        invalid={showFieldErrors && value.propertyPlaceId === ""}
-        valid={value.propertyPlaceId !== ""}
-        requiredMessage={labels.fieldRequired}
-      />
-
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <AddressSelect
+          label={labels.place.label}
+          placeholder={
+            isRegionsLoading ? labels.place.loading : labels.place.placeholder
+          }
+          options={regionOptions}
+          value={value.propertyPlaceId === "" ? "" : String(value.propertyPlaceId)}
+          onChange={(placeId) => {
+            onChange({
+              ...value,
+              propertyPlaceId: placeId ? Number(placeId) : "",
+              propertyCityId: "",
+            });
+          }}
+          invalid={showFieldErrors && value.propertyPlaceId === ""}
+          valid={value.propertyPlaceId !== ""}
+          requiredMessage={labels.fieldRequired}
+        />
+
         <AddressSelect
           label={labels.city.label}
           placeholder={
@@ -331,16 +329,6 @@ export default function ManualNationalAddressForm({
         />
 
         <AddressTextField
-          label={labels.street.label}
-          placeholder={labels.street.placeholder}
-          value={value.street}
-          onChange={(street) => updateField("street", street)}
-          invalid={showFieldErrors && value.street.trim() === ""}
-          valid={value.street.trim() !== ""}
-          requiredMessage={labels.fieldRequired}
-        />
-
-        <AddressTextField
           label={labels.buildingNumber.label}
           placeholder={labels.buildingNumber.placeholder}
           value={value.buildingNumber}
@@ -355,6 +343,17 @@ export default function ManualNationalAddressForm({
         />
 
         <AddressTextField
+          label={labels.extraFigure.label}
+          placeholder={labels.extraFigure.placeholder}
+          value={value.extraFigure}
+          onChange={(extraFigure) => updateField("extraFigure", extraFigure)}
+          inputMode="numeric"
+          align="end"
+          required={false}
+          valid={value.extraFigure.trim() !== ""}
+        />
+
+        <AddressTextField
           label={labels.postalCode.label}
           placeholder={labels.postalCode.placeholder}
           value={value.postalCode}
@@ -365,19 +364,17 @@ export default function ManualNationalAddressForm({
           valid={value.postalCode.trim() !== ""}
           requiredMessage={labels.fieldRequired}
         />
-
-        <AddressTextField
-          label={labels.extraFigure.label}
-          placeholder={labels.extraFigure.placeholder}
-          value={value.extraFigure}
-          onChange={(extraFigure) => updateField("extraFigure", extraFigure)}
-          inputMode="numeric"
-          align="end"
-          invalid={showFieldErrors && value.extraFigure.trim() === ""}
-          valid={value.extraFigure.trim() !== ""}
-          requiredMessage={labels.fieldRequired}
-        />
       </div>
+
+      <AddressTextField
+        label={labels.street.label}
+        placeholder={labels.street.placeholder}
+        value={value.street}
+        onChange={(street) => updateField("street", street)}
+        invalid={showFieldErrors && value.street.trim() === ""}
+        valid={value.street.trim() !== ""}
+        requiredMessage={labels.fieldRequired}
+      />
     </div>
   );
 }

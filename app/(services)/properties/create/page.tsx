@@ -85,6 +85,7 @@ export default async function CreatePropertyPage({
         clickHere: t("deed.deedImage.clickHere"),
         chooseFile: t("deed.deedImage.chooseFile"),
         acceptedFormats: t("deed.deedImage.acceptedFormats"),
+        attached: t("deed.deedImage.attached"),
         preview: t("deed.deedImage.preview"),
         delete: t("deed.deedImage.delete"),
         previewTitle: t("deed.deedImage.previewTitle"),
@@ -204,6 +205,7 @@ export default async function CreatePropertyPage({
           chooseFile: t("address.nationalAddress.photo.chooseFile"),
           acceptedFormats: t("address.nationalAddress.photo.acceptedFormats"),
           hint: t("address.nationalAddress.photo.hint"),
+          attached: t("address.nationalAddress.photo.attached"),
           preview: t("address.nationalAddress.photo.preview"),
           delete: t("address.nationalAddress.photo.delete"),
           previewTitle: t("address.nationalAddress.photo.previewTitle"),
@@ -279,6 +281,7 @@ export default async function CreatePropertyPage({
           acceptedFormats: t(
             "owner.agentData.powerOfAttorney.acceptedFormats",
           ),
+          attached: t("owner.agentData.powerOfAttorney.attached"),
           preview: t("owner.agentData.powerOfAttorney.preview"),
           delete: t("owner.agentData.powerOfAttorney.delete"),
           previewTitle: t("owner.agentData.powerOfAttorney.previewTitle"),

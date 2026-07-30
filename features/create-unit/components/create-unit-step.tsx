@@ -143,21 +143,23 @@ export default function CreateUnitStep({
             )}
           />
         )}
-      </div>
 
-      <CreateUnitStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting
-            ? labels.navigation.submitting
-            : isEditMode
-              ? labels.navigation.save
-              : labels.navigation.continue
-        }
-        isSubmitting={isSubmitting || isLoadingOptions || Boolean(optionsError)}
-        onPrevious={onBack}
-        onContinue={() => void handleContinue()}
-      />
+        <CreateUnitStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? labels.navigation.submitting
+              : isEditMode
+                ? labels.navigation.save
+                : labels.navigation.continue
+          }
+          isSubmitting={
+            isSubmitting || isLoadingOptions || Boolean(optionsError)
+          }
+          onPrevious={onBack}
+          onContinue={() => void handleContinue()}
+        />
+      </div>
     </div>
   );
 }

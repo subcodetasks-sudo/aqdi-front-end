@@ -53,7 +53,7 @@ export default function CreatePropertyReviewStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
+      <div className="rounded-b-[28px] bg-white p-5 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -71,18 +71,19 @@ export default function CreatePropertyReviewStep({
           invalid={showFieldErrors && reviewData.propertyName.trim() === ""}
           valid={reviewData.propertyName.trim() !== ""}
         />
-      </div>
 
-      <CreatePropertyStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
-        }
-        isSubmitting={isSubmitting}
-        variant="stacked"
-        onPrevious={onBack}
-        onContinue={handleContinue}
-      />
+        <CreatePropertyStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? labels.navigation.submitting
+              : labels.navigation.continue
+          }
+          isSubmitting={isSubmitting}
+          onPrevious={onBack}
+          onContinue={handleContinue}
+        />
+      </div>
     </div>
   );
 }

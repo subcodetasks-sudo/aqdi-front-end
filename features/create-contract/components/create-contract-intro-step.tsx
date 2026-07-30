@@ -76,7 +76,7 @@ export default function CreateContractIntroStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
         <div className="mb-6 flex flex-col items-center gap-3 text-center">
           <span className="inline-flex text-brand mb-4">
             <Hand className="size-6" aria-hidden="true" />

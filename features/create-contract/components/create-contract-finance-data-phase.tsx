@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import CreateContractContractStartDateFields from "@/features/create-contract/components/create-contract-contract-start-date-fields";
 import CreateContractCustomDurationFields, {
   CUSTOM_CONTRACT_DURATION_VALUE,
@@ -23,6 +25,11 @@ import {
 } from "@/features/create-contract/types/finance-step";
 import { getDocFeeLinesFromStep6 } from "@/features/create-contract/utils/build-finance-data-from-step6";
 import { parseContractPeriodLabel } from "@/features/create-contract/utils/parse-contract-period-label";
+import {
+  classifyPaymentTypeName,
+  isPaymentTypeAllowedForDuration,
+  resolveContractDurationMonths,
+} from "@/features/create-contract/utils/payment-type-availability";
 
 type CreateContractFinanceDataPhaseProps = {
   labels: CreateContractLabels["finance"];
@@ -72,17 +79,35 @@ export default function CreateContractFinanceDataPhase({
     },
   ];
 
-  const selectedPeriodNote = value.isCustomDuration
+  const selectedPeriod = value.isCustomDuration
     ? undefined
     : (contractPeriodsQuery.data ?? []).find(
         (period) => period.id === value.contractPeriodId,
-      )?.note;
+      );
+  const selectedPeriodNote = selectedPeriod?.note;
 
-  const paymentTypeOptions = (paymentTypesQuery.data ?? []).map(
-    (paymentType) => ({
-      value: String(paymentType.id),
-      title: paymentType.name,
-    }),
+  const durationMonths = resolveContractDurationMonths({
+    isCustomDuration: value.isCustomDuration,
+    periodLabel: selectedPeriod
+      ? parseContractPeriodLabel(selectedPeriod.period).title
+      : null,
+    customYears: value.customDurationYears,
+    customMonths: value.customDurationMonths,
+  });
+
+  const paymentTypeOptions = useMemo(
+    () =>
+      (paymentTypesQuery.data ?? []).map((paymentType) => {
+        const kind = classifyPaymentTypeName(paymentType.name);
+        const allowed = isPaymentTypeAllowedForDuration(kind, durationMonths);
+
+        return {
+          value: String(paymentType.id),
+          title: paymentType.name,
+          disabled: !allowed,
+        };
+      }),
+    [paymentTypesQuery.data, durationMonths],
   );
 
   const selectedPaymentTypeNotes = (paymentTypesQuery.data ?? [])
@@ -113,6 +138,7 @@ export default function CreateContractFinanceDataPhase({
           value.customDurationYears === "" ? 1 : value.customDurationYears,
         customDurationMonths:
           value.customDurationMonths === "" ? 0 : value.customDurationMonths,
+        paymentTypeId: "",
       });
       return;
     }
@@ -121,6 +147,7 @@ export default function CreateContractFinanceDataPhase({
       ...value,
       isCustomDuration: false,
       contractPeriodId: Number(nextValue),
+      paymentTypeId: "",
     });
   }
 
@@ -272,10 +299,6 @@ export default function CreateContractFinanceDataPhase({
               onChange({
                 ...value,
                 addOtherConditions,
-                otherConditionsList:
-                  addOtherConditions && value.otherConditionsList.length === 0
-                    ? [""]
-                    : value.otherConditionsList,
               })
             }
             onChange={(otherConditionsList) =>
@@ -284,7 +307,7 @@ export default function CreateContractFinanceDataPhase({
                 otherConditionsList,
                 addOtherConditions:
                   otherConditionsList.some((item) => item.trim() !== "") ||
-                  otherConditionsList.length > 0,
+                  value.addOtherConditions,
               })
             }
           />

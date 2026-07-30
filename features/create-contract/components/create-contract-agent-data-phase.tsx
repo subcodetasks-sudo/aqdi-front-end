@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone } from "lucide-react";
+import { IdCard } from "lucide-react";
 
 import CreateContractBirthDateFields from "@/features/create-contract/components/create-contract-birth-date-fields";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
@@ -98,7 +98,6 @@ export default function CreateContractAgentDataPhase({
           onChange={(phone) =>
             updateField("phone", toSaudiMobileInputValue(phone))
           }
-          icon={Phone}
           errorMessage={phoneError}
           invalid={phoneInvalid}
           valid={phoneValid}

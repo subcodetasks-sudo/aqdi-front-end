@@ -197,7 +197,7 @@ export default function CreateContractTenantStep({
         currentPhaseIndex={currentPhaseIndex}
       />
 
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={phaseTitle}
           subtitle={phaseSubtitle}
@@ -265,21 +265,23 @@ export default function CreateContractTenantStep({
             showFieldErrors={showFieldErrors}
           />
         ) : null}
-      </div>
 
-      <CreateContractStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
-        }
-        saveLaterLabel={
-          showSaveLaterActions ? labels.navigation.saveLater : undefined
-        }
-        isSubmitting={isSubmitting || isSavingDraft}
-        onPrevious={handlePrevious}
-        onContinue={() => void handleContinue()}
-        onSaveLater={showSaveLaterActions ? handleOpenSaveLater : undefined}
-      />
+        <CreateContractStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? labels.navigation.submitting
+              : labels.navigation.continue
+          }
+          saveLaterLabel={
+            showSaveLaterActions ? labels.navigation.saveLater : undefined
+          }
+          isSubmitting={isSubmitting || isSavingDraft}
+          onPrevious={handlePrevious}
+          onContinue={() => void handleContinue()}
+          onSaveLater={showSaveLaterActions ? handleOpenSaveLater : undefined}
+        />
+      </div>
 
       <CreateContractSaveLaterDialog
         labels={labels.saveLaterDialog}

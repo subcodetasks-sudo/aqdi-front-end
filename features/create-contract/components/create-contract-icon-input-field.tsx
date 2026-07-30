@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import {
   fieldChromeIconClass,
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -80,7 +81,7 @@ export default function CreateContractIconInputField({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           aria-invalid={showInvalid}
-          className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
+          className={cn("h-auto px-2 text-sm", fieldChromeNestedInputClass)}
         />
       </div>
 

@@ -46,7 +46,7 @@ export default function DeedInstrumentEntrySection({
   showFieldErrors = false,
 }: DeedInstrumentEntrySectionProps) {
   return (
-    <div className="space-y-5 rounded-[24px] border border-[#ececec] bg-brand-background p-4 md:p-5">
+    <div className="space-y-5 rounded-[24px] border border-[#ececec] bg-[#FAFBFB] p-4 md:p-5">
       {!useManualDeedEntry ? (
         <>
           {upload}

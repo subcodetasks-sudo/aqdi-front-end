@@ -103,7 +103,7 @@ export default function CreateContractStepper({
   }, [skippingOwnerStep, clearSkippingOwnerStep]);
 
   return (
-    <div className="sticky top-0 z-20 rounded-3xl bg-white p-4 shadow-sm md:p-5 dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
+    <div className="sticky top-0 z-20 rounded-t-3xl bg-white p-4 shadow-sm [clip-path:inset(-8px_-8px_0_-8px)] md:p-5 dark:border dark:border-b-0 dark:border-[#2f403b] dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
         {CREATE_CONTRACT_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);

@@ -251,7 +251,7 @@ export default function UnitDataFormFields({
             {contractTypeLabel}
           </label>
 
-          <div className="flex h-14 w-full items-center rounded-full border border-[#e8e8e8] bg-brand-background px-4">
+          <div className="flex h-14 w-full items-center rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4">
             <span className="text-sm font-semibold text-[#333333]">
               {contractType === "housing"
                 ? labels.contractType.options.housing

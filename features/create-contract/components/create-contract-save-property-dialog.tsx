@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { fieldChromeNestedInputClass } from "@/lib/ui/field-chrome";
 import { cn } from "@/lib/utils";
 
 type CreateContractSavePropertyDialogProps = {
@@ -92,7 +93,7 @@ export default function CreateContractSavePropertyDialog({
             {labels.nameLabel}
           </label>
 
-          <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-2">
+          <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2">
             <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
               <Building2 className="size-5" aria-hidden="true" />
             </span>
@@ -105,7 +106,7 @@ export default function CreateContractSavePropertyDialog({
               onChange={(event) => setPropertyName(event.target.value)}
               placeholder={labels.namePlaceholder}
               disabled={isSaving}
-              className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
+              className={cn("h-auto px-2 text-sm", fieldChromeNestedInputClass)}
             />
           </div>
 

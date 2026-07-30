@@ -62,8 +62,7 @@ export function isManualNationalAddressComplete(
     value.neighborhood.trim().length > 0 &&
     value.street.trim().length > 0 &&
     value.buildingNumber.trim().length > 0 &&
-    value.postalCode.trim().length > 0 &&
-    value.extraFigure.trim().length > 0
+    value.postalCode.trim().length > 0
   );
 }
 

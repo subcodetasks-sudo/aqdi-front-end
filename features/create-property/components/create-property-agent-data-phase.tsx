@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone } from "lucide-react";
+import { IdCard } from "lucide-react";
 
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
@@ -106,7 +106,6 @@ export default function CreatePropertyAgentDataPhase({
           onChange={(phone) =>
             updateField("phone", toSaudiMobileInputValue(phone))
           }
-          icon={Phone}
           errorMessage={phoneError}
           invalid={phoneInvalid}
           valid={phoneValid}

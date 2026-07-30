@@ -8,6 +8,7 @@ import CreatePropertyFieldLabel from "@/features/create-property/components/crea
 import CustomIcon from "@/features/shared/components/custom-icon";
 import {
   fieldChromeIconClass,
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -44,9 +45,7 @@ export default function CreatePropertyNameField({
       <div
         className={cn(
           "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          fieldChromeSurfaceClass(chrome),
         )}
       >
         <span
@@ -67,7 +66,7 @@ export default function CreatePropertyNameField({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           aria-invalid={invalid}
-          className="h-auto border-0 bg-transparent px-2 text-sm shadow-none focus-visible:ring-0"
+          className={cn("h-auto px-2 text-sm", fieldChromeNestedInputClass)}
         />
       </div>
 

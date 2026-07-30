@@ -1,6 +1,6 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import { Smartphone } from "lucide-react";
 import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import {
 } from "@/lib/validation/format-saudi-mobile-for-form";
 import {
   fieldChromeIconClass,
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -21,7 +22,6 @@ type CreatePropertySaudiMobileFieldProps = {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
-  icon: LucideIcon;
   errorMessage?: string;
   invalid?: boolean;
   valid?: boolean;
@@ -32,7 +32,6 @@ export default function CreatePropertySaudiMobileField({
   placeholder,
   value,
   onChange,
-  icon: Icon,
   errorMessage,
   invalid = false,
   valid = false,
@@ -61,7 +60,7 @@ export default function CreatePropertySaudiMobileField({
             fieldChromeIconClass(chrome),
           )}
         >
-          <Icon className="size-5" aria-hidden="true" />
+          <Smartphone className="size-5" aria-hidden="true" />
         </span>
 
         <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
@@ -78,7 +77,7 @@ export default function CreatePropertySaudiMobileField({
           }}
           placeholder={placeholder}
           aria-invalid={showInvalid}
-          className="h-auto border-0 bg-transparent px-1 text-sm shadow-none focus-visible:ring-0"
+          className={cn("h-auto px-1 text-sm", fieldChromeNestedInputClass)}
         />
       </div>
 

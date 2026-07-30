@@ -5,12 +5,10 @@ import {
   CloudDownload,
   Eye,
   ImageIcon,
-  Trash2,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { RiImageCircleFill } from "react-icons/ri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -72,30 +70,26 @@ function ExistingFileRow({ fileUrl, labels }: ExistingFileRowProps) {
   const fileName = fileUrl.split("/").pop() ?? labels.preview;
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#d4d4d4] bg-white px-3 py-2">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
-          <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand">
+          <Check className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.attached}</span>
         </span>
 
-        <div className="min-w-0 text-end">
-          <p className="truncate text-sm font-bold text-[#333333]">{fileName}</p>
-          <p className="text-xs text-[#bdbdbd]">{labels.preview}</p>
-        </div>
-
-        <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-white">
-          <Check className="size-3" aria-hidden="true" />
-        </span>
+        <p className="min-w-0 truncate text-sm font-semibold text-[#333333]">
+          {fileName}
+        </p>
       </div>
 
       <a
         href={fileUrl}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-[#666666] shadow-sm"
-        aria-label={labels.preview}
+        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand"
       >
-        <Eye className="size-4" aria-hidden="true" />
+        <Eye className="size-4 shrink-0" aria-hidden="true" />
+        <span>{labels.preview}</span>
       </a>
     </div>
   );
@@ -124,39 +118,36 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
   }, [previewUrl]);
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#d4d4d4] bg-white px-3 py-2">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand">
-          <RiImageCircleFill className="size-5 text-white" aria-hidden="true" />
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand">
+          <Check className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.attached}</span>
         </span>
 
-        <div className="min-w-0 text-end">
-          <p className="truncate text-sm font-bold text-[#333333]">{name}</p>
-          <p className="text-xs text-[#bdbdbd]">{extension}</p>
-        </div>
-
-        <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-white">
-          <Check className="size-3" aria-hidden="true" />
-        </span>
+        <p className="min-w-0 truncate text-sm font-semibold text-[#333333]">
+          {name}
+          {extension ? `.${extension}` : ""}
+        </p>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
           onClick={onPreview}
-          className="inline-flex size-9 items-center justify-center rounded-full bg-white text-[#666666] shadow-sm"
-          aria-label={labels.preview}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand"
         >
-          <Eye className="size-4" aria-hidden="true" />
+          <Eye className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.preview}</span>
         </button>
 
         <button
           type="button"
           onClick={onDelete}
-          className="inline-flex size-9 items-center justify-center rounded-full bg-[#ffe8e8] text-red-500"
-          aria-label={labels.delete}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500"
         >
-          <Trash2 className="size-4" aria-hidden="true" />
+          <X className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.delete}</span>
         </button>
       </div>
     </div>
@@ -179,10 +170,6 @@ export default function CreatePropertyDeedImageUpload({
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const canUploadMore = multiple || value.length === 0;
   const showExistingFile = Boolean(existingFileUrl) && value.length === 0;
-  const formatChips = labels.acceptedFormats
-    .split(/[-,|]/)
-    .map((format) => format.trim())
-    .filter(Boolean);
   const showInvalid = invalid && value.length === 0 && !showExistingFile;
   const resolvedLabel = fieldLabel ?? labels.label;
 
@@ -228,31 +215,18 @@ export default function CreatePropertyDeedImageUpload({
   return (
     <div className="space-y-3">
       {variant === "dropzone" ? (
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "text-sm font-semibold",
-                showInvalid ? "text-[#c62828]" : "text-[#333333]",
-              )}
-            >
-              {resolvedLabel}
-            </span>
-            <span className="text-red-500" aria-hidden="true">
-              *
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            {formatChips.map((format) => (
-              <span
-                key={format}
-                className="rounded-lg bg-brand-background-green px-2.5 py-1 text-[11px] font-semibold lowercase text-brand"
-              >
-                {format}
-              </span>
-            ))}
-          </div>
+        <div className="flex items-center gap-1.5">
+          <span
+            className={cn(
+              "text-sm font-semibold",
+              showInvalid ? "text-[#c62828]" : "text-[#333333]",
+            )}
+          >
+            {resolvedLabel}
+          </span>
+          <span className="text-red-500" aria-hidden="true">
+            *
+          </span>
         </div>
       ) : (
         <CreatePropertyFieldLabel label={resolvedLabel} invalid={showInvalid} />
@@ -264,13 +238,9 @@ export default function CreatePropertyDeedImageUpload({
           className={cn(
             "flex w-full cursor-pointer items-center gap-3 transition-colors",
             variant === "dashed" || variant === "dropzone"
-              ? "min-h-16 flex-col justify-center rounded-2xl border border-dashed bg-white px-4 py-4 text-center hover:border-brand/40 hover:bg-[#fafafa]"
-              : "h-14 rounded-full border bg-brand-background px-2 ps-4",
-            showInvalid
-              ? "border-[#e57373]"
-              : variant === "dashed" || variant === "dropzone"
-                ? "border-[#d4d4d4]"
-                : "border-[#e8e8e8]",
+              ? "min-h-16 flex-col justify-center rounded-2xl border-[1.5px] border-dashed bg-[#FBFDFC] px-4 py-4 text-center hover:border-brand/40"
+              : "h-14 rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-2 ps-4 hover:border-brand/40",
+            showInvalid ? "border-[#e57373]" : "border-[#BFE0D4]",
           )}
         >
           <input
@@ -283,13 +253,13 @@ export default function CreatePropertyDeedImageUpload({
             onChange={handleFileChange}
           />
 
-          {variant === "dashed" || variant === "dropzone" ? (
+          {variant === "dropzone" || variant === "dashed" ? (
             <div className="space-y-1">
               <p className="text-sm font-medium text-[#666666]">
                 <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
                 <span>{labels.chooseFile}</span>
               </p>
-              {variant === "dashed" && labels.acceptedFormats ? (
+              {labels.acceptedFormats ? (
                 <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
               ) : null}
             </div>
@@ -300,7 +270,9 @@ export default function CreatePropertyDeedImageUpload({
                   <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
                   <span className="text-gray-600">{labels.chooseFile}</span>
                 </p>
-                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+                {labels.acceptedFormats ? (
+                  <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+                ) : null}
               </div>
 
               <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">

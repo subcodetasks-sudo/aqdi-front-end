@@ -3,13 +3,18 @@
 import {
   ClipboardList,
   Copy,
+  Download,
   Eye,
+  ExternalLink,
+  FileText,
   Pencil,
   Printer,
   Search,
   Share2,
   X,
 } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -49,11 +54,75 @@ type CreateContractReviewOrderDialogProps = {
   onEditStep: (step: CreateContractStep) => void;
 };
 
-function openAttachment(viewUrl: string | null | undefined) {
-  if (!viewUrl) {
+type AttachmentPreview = {
+  title: string;
+  fileName: string;
+  url: string;
+  isObjectUrl: boolean;
+  kind: "image" | "pdf" | "other";
+};
+
+function fileNameFromUrl(url: string) {
+  try {
+    const path = new URL(url, "https://local.invalid").pathname;
+    const name = path.split("/").filter(Boolean).pop();
+    return name ? decodeURIComponent(name) : "";
+  } catch {
+    return "";
+  }
+}
+
+function downloadAttachment(url: string, fileName: string) {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName || "attachment";
+  link.rel = "noopener";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+async function downloadAttachmentRobust(url: string, fileName: string) {
+  try {
+    if (url.startsWith("blob:") || url.startsWith("data:")) {
+      downloadAttachment(url, fileName);
+      return;
+    }
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("download failed");
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    downloadAttachment(objectUrl, fileName);
+    URL.revokeObjectURL(objectUrl);
+  } catch {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+function printAttachment(url: string) {
+  const printWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (!printWindow) {
     return;
   }
 
+  const triggerPrint = () => {
+    try {
+      printWindow.focus();
+      printWindow.print();
+    } catch {
+      // Browser may block print until the document finishes loading.
+    }
+  };
+
+  printWindow.addEventListener("load", triggerPrint);
+  window.setTimeout(triggerPrint, 600);
+}
+
+function getLocalFile(viewUrl: string): File | null {
   const localMatch = /^local:([a-z0-9-]+):(\d+)$/i.exec(viewUrl);
   if (localMatch) {
     const [, kind, indexRaw] = localMatch;
@@ -70,50 +139,83 @@ function openAttachment(viewUrl: string | null | undefined) {
       "deed-guardians-poa": deed.deedGuardiansPoaFiles,
       "address-photo": deed.nationalAddressPhotoFiles,
     };
-    const file = filesByKind[kind]?.[index];
-    if (!file) {
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    window.open(objectUrl, "_blank", "noopener,noreferrer");
-    return;
+    return filesByKind[kind]?.[index] ?? null;
   }
 
-  // Legacy single-file local markers
   if (viewUrl === "local:deed") {
     const deed = useCreateContractDraftStore.getState().deed;
-    const file = deed.deedFiles[0] ?? deed.deedFrontFiles[0];
-    if (!file) {
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    window.open(objectUrl, "_blank", "noopener,noreferrer");
-    return;
+    return deed.deedFiles[0] ?? deed.deedFrontFiles[0] ?? null;
   }
 
   if (viewUrl === "local:address-photo") {
-    const file =
-      useCreateContractDraftStore.getState().deed.nationalAddressPhotoFiles[0];
-    if (!file) {
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    window.open(objectUrl, "_blank", "noopener,noreferrer");
-    return;
+    return (
+      useCreateContractDraftStore.getState().deed.nationalAddressPhotoFiles[0] ??
+      null
+    );
   }
 
-  window.open(viewUrl, "_blank", "noopener,noreferrer");
+  return null;
+}
+
+function resolveAttachmentKind(
+  mimeType: string | undefined,
+  url: string,
+): AttachmentPreview["kind"] {
+  if (
+    mimeType?.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|bmp|svg)(\?|$)/i.test(url)
+  ) {
+    return "image";
+  }
+
+  if (mimeType === "application/pdf" || /\.pdf(\?|$)/i.test(url)) {
+    return "pdf";
+  }
+
+  return "other";
+}
+
+function resolveAttachmentPreview(
+  viewUrl: string,
+  title: string,
+): AttachmentPreview | null {
+  const localFile = getLocalFile(viewUrl);
+  if (localFile) {
+    return {
+      title,
+      fileName: localFile.name,
+      url: URL.createObjectURL(localFile),
+      isObjectUrl: true,
+      kind: resolveAttachmentKind(localFile.type, localFile.name),
+    };
+  }
+
+  if (viewUrl.startsWith("local:")) {
+    return null;
+  }
+
+  return {
+    title,
+    fileName: fileNameFromUrl(viewUrl) || title,
+    url: viewUrl,
+    isObjectUrl: false,
+    kind: resolveAttachmentKind(undefined, viewUrl),
+  };
 }
 
 function EditButton({
   label,
   onClick,
   className = "",
+  iconPosition = "start",
 }: {
   label: string;
   onClick: () => void;
   className?: string;
+  iconPosition?: "start" | "end";
 }) {
+  const icon = <Pencil className="size-3.5" aria-hidden="true" />;
+
   return (
     <button
       type="button"
@@ -123,8 +225,9 @@ function EditButton({
         className,
       )}
     >
-      <Pencil className="size-3.5" aria-hidden="true" />
+      {iconPosition === "start" ? icon : null}
       <span>{label}</span>
+      {iconPosition === "end" ? icon : null}
     </button>
   );
 }
@@ -141,9 +244,57 @@ function OverviewEditIcon({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className=" inline-flex  items-center justify-center rounded-lg  cursor-pointer"
+      className="inline-flex cursor-pointer items-center justify-center rounded-lg"
     >
       <Pencil className="size-3.5" aria-hidden="true" />
+    </button>
+  );
+}
+
+function ExternalLinkPreview({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1.5 font-bold text-brand underline-offset-2 hover:underline"
+    >
+      <span>{label}</span>
+      <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+    </a>
+  );
+}
+
+function ViewAttachmentButton({
+  label,
+  viewUrl,
+  fieldLabel,
+  onPreview,
+}: {
+  label: string;
+  viewUrl: string;
+  fieldLabel: string;
+  onPreview: (preview: AttachmentPreview) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        const preview = resolveAttachmentPreview(viewUrl, fieldLabel);
+        if (preview) {
+          onPreview(preview);
+        }
+      }}
+      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb]"
+    >
+      <Eye className="size-3.5" aria-hidden="true" />
+      <span>{label}</span>
     </button>
   );
 }
@@ -172,6 +323,20 @@ export default function CreateContractReviewOrderDialog({
   const setTenantPhaseIndex = useCreateContractDraftStore(
     (state) => state.setTenantPhaseIndex,
   );
+  const [attachmentPreview, setAttachmentPreview] =
+    useState<AttachmentPreview | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (attachmentPreview?.isObjectUrl) {
+        URL.revokeObjectURL(attachmentPreview.url);
+      }
+    };
+  }, [attachmentPreview]);
+
+  function closeAttachmentPreview() {
+    setAttachmentPreview(null);
+  }
 
   function handleEdit(target: CreateContractReviewEditTarget) {
     switch (target) {
@@ -250,204 +415,356 @@ export default function CreateContractReviewOrderDialog({
   ] as const;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        showCloseButton={false}
-        className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5"
-      >
-        <div className="relative mb-4 flex items-center justify-between">
-          <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base">
-            <Search className="size-4 shrink-0" aria-hidden="true" />
-            <span>{labels.title}</span>
-          </DialogTitle>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent
+          showCloseButton={false}
+          className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5"
+        >
+          <div className="relative mb-4 flex items-center justify-between">
+            <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base">
+              <Search className="size-4 shrink-0" aria-hidden="true" />
+              <span>{labels.title}</span>
+            </DialogTitle>
 
-          <DialogClose asChild>
-            <button
-              type="button"
-              aria-label={labels.close}
-              className=" inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666]"
-            >
-              <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
-            </button>
-          </DialogClose>
-        </div>
-
-        <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4  border-b pb-4">
-          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center">
-            <p className="text-lg font-extrabold leading-none text-brand md:text-xl">
-              {summary.contractUuid}
-            </p>
-            <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76]">
-              <ClipboardList className="size-3" aria-hidden="true" />
-              <span>{labels.orderNumber}</span>
-            </p>
+            <DialogClose asChild>
+              <button
+                type="button"
+                aria-label={labels.close}
+                className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666]"
+              >
+                <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
+              </button>
+            </DialogClose>
           </div>
 
-          <button
-            type="button"
-            onClick={() => void handleShare()}
-            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
-          >
-            <Share2 className="size-4" aria-hidden="true" />
-            <span className="text-xs font-bold">{labels.share}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => void handleCopy()}
-            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
-          >
-            <Copy className="size-4" aria-hidden="true" />
-            <span className="text-xs font-bold">{labels.copy}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
-          >
-            <Printer className="size-4" aria-hidden="true" />
-            <span className="text-xs font-bold">{labels.print}</span>
-          </button>
-        </div>
-
-        <div className="space-y-3">
-          <section className="rounded-lg border border-[#cfe8dd] bg-[#f5fbf8] p-3 shadow-sm">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {overviewItems.map((item) => (
-                <div
-                  key={item.key}
-                  className="relative flex  flex-col items-start rounded-lg border border-[#dfe7e3] bg-white px-4 py-3 text-start shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
-                >
-                  {item.editable ? (
-                    <div className="absolute inset-e-3 top-3">
-                    <OverviewEditIcon
-                        label={`${labels.edit} ${item.label}`}
-                        onClick={() => handleEdit("overview")}
-                      />
-                    </div>
-                  ) :null}
-                  <p className="mb-1 text-xs font-bold text-[#8a8a8a]">
-                    {item.label}
-                  </p>
-                  <p className="text-sm font-extrabold leading-tight text-brand">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
+          <div className="mb-4 grid grid-cols-2 gap-2 border-b pb-4 sm:grid-cols-4">
+            <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center">
+              <p className="text-lg font-extrabold leading-none text-brand md:text-xl">
+                {summary.contractUuid}
+              </p>
+              <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76]">
+                <ClipboardList className="size-3" aria-hidden="true" />
+                <span>{labels.orderNumber}</span>
+              </p>
             </div>
-          </section>
 
-          {summary.sections.map((section) => {
-            if (section.variant === "rent") {
-              const amountField = section.fields[1];
-              const paymentMethodField = section.fields[0];
-              const amount = amountField?.value ?? labels.emptyValue;
-              const paymentMethod =
-                paymentMethodField?.value ?? labels.emptyValue;
+            <button
+              type="button"
+              onClick={() => void handleShare()}
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+            >
+              <Share2 className="size-4" aria-hidden="true" />
+              <span className="text-xs font-bold">{labels.share}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => void handleCopy()}
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+            >
+              <Copy className="size-4" aria-hidden="true" />
+              <span className="text-xs font-bold">{labels.copy}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+            >
+              <Printer className="size-4" aria-hidden="true" />
+              <span className="text-xs font-bold">{labels.print}</span>
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            <section className="rounded-lg border border-[#cfe8dd] bg-[#f5fbf8] p-3 shadow-sm">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {overviewItems.map((item) => (
+                  <div
+                    key={item.key}
+                    className="relative flex flex-col items-start rounded-lg border border-[#dfe7e3] bg-white px-4 py-3 text-start shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                  >
+                    {item.editable ? (
+                      <div className="absolute inset-e-3 top-3">
+                        <OverviewEditIcon
+                          label={`${labels.edit} ${item.label}`}
+                          onClick={() => handleEdit("overview")}
+                        />
+                      </div>
+                    ) : null}
+                    <p className="mb-1 text-xs font-bold text-[#8a8a8a]">
+                      {item.label}
+                    </p>
+                    <p className="text-sm font-extrabold leading-tight text-brand">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {summary.sections.map((section) => {
+              if (section.variant === "rent") {
+                const amountField = section.fields[1];
+                const paymentMethodField = section.fields[0];
+                const amount = amountField?.value ?? labels.emptyValue;
+                const paymentMethod =
+                  paymentMethodField?.value ?? labels.emptyValue;
+
+                return (
+                  <section
+                    key={section.id}
+                    className="relative overflow-hidden rounded-2xl bg-brand px-4 py-5 text-white shadow-sm"
+                  >
+                    <EditButton
+                      label={labels.edit}
+                      onClick={() => handleEdit(section.editTarget)}
+                      className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25"
+                    />
+                    <div className="space-y-2 text-start">
+                      <p className="text-sm font-bold opacity-90">
+                        {section.title}
+                      </p>
+                      <p className="text-2xl font-extrabold tracking-tight md:text-3xl">
+                        {amount}
+                      </p>
+                      <p className="text-sm font-medium opacity-90">
+                        {paymentMethod}
+                      </p>
+                    </div>
+                  </section>
+                );
+              }
+
+              const isUnitSection = section.editTarget === "unit";
 
               return (
                 <section
                   key={section.id}
-                  className="relative overflow-hidden rounded-2xl bg-brand px-4 py-5 text-white shadow-sm"
+                  className="relative rounded-2xl border border-[#ececec] bg-gray-200/10 p-4 shadow-sm"
                 >
-                  <EditButton
-                    label={labels.edit}
-                    onClick={() => handleEdit(section.editTarget)}
-                    className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25"
-                  />
-                  <div className="space-y-2  text-start">
-                    <p className="text-sm font-bold opacity-90">
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <h3 className="text-sm font-extrabold text-brand">
                       {section.title}
-                    </p>
-                    <p className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                      {amount}
-                    </p>
-                    <p className="text-sm font-medium opacity-90">
-                      {paymentMethod}
-                    </p>
+                    </h3>
+                    <EditButton
+                      label={labels.edit}
+                      onClick={() => handleEdit(section.editTarget)}
+                      className={
+                        isUnitSection
+                          ? "border-[#cfe8dd] hover:bg-[#f5fbf8]"
+                          : ""
+                      }
+                      iconPosition={isUnitSection ? "end" : "start"}
+                    />
                   </div>
+
+                  {section.incomplete ? (
+                    <p className="text-sm font-medium text-[#e11d48]">
+                      {labels.unitIncomplete}
+                    </p>
+                  ) : isUnitSection ? (
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {section.fields.map((field, fieldIndex) => (
+                        <div
+                          key={`${section.id}-${fieldIndex}-${field.label}`}
+                          className="rounded-xl border border-[#f0f0f0] bg-white px-3.5 py-2.5 text-start"
+                        >
+                          <p className="text-[11px] font-medium text-[#9a9a9a]">
+                            {field.label}
+                          </p>
+
+                          {field.href ? (
+                            <div className="mt-0.5">
+                              <ExternalLinkPreview
+                                href={field.href}
+                                label={labels.linkPreview}
+                              />
+                            </div>
+                          ) : (
+                            <p className="mt-0.5 text-sm font-bold wrap-break-word text-[#2b2b2b]">
+                              {field.value}
+                            </p>
+                          )}
+
+                          {field.viewUrl ? (
+                            <div className="mt-2">
+                              <ViewAttachmentButton
+                                label={labels.view}
+                                viewUrl={field.viewUrl}
+                                fieldLabel={field.label}
+                                onPreview={setAttachmentPreview}
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-dashed divide-[#e5e5e5]">
+                      {section.fields.map((field, fieldIndex) => (
+                        <div
+                          key={`${section.id}-${fieldIndex}-${field.label}`}
+                          className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                        >
+                          <div className="min-w-0 text-sm">
+                            <span className="font-medium text-[#8a8a8a]">
+                              {field.label}:{" "}
+                            </span>
+                            {field.href ? (
+                              <ExternalLinkPreview
+                                href={field.href}
+                                label={labels.linkPreview}
+                              />
+                            ) : (
+                              <span className="wrap-break-word font-bold text-[#222]">
+                                {field.value}
+                              </span>
+                            )}
+                          </div>
+
+                          {field.viewUrl ? (
+                            <ViewAttachmentButton
+                              label={labels.view}
+                              viewUrl={field.viewUrl}
+                              fieldLabel={field.label}
+                              onPreview={setAttachmentPreview}
+                            />
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </section>
               );
-            }
+            })}
+          </div>
 
-            return (
-              <section
-                key={section.id}
-                className="relative rounded-2xl border border-[#ececec] bg-gray-200/10 p-4 shadow-sm"
-              >
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <h3 className="text-sm font-extrabold text-brand">
-                    {section.title}
-                  </h3>
-                  <EditButton
-                    label={labels.edit}
-                    onClick={() => handleEdit(section.editTarget)}
-                  />
-                </div>
+          <p className="mt-4 text-center text-xs leading-5 text-[#8a8a8a]">
+            {labels.hint}
+          </p>
 
-                {section.incomplete ? (
-                  <p className="text-sm font-medium text-[#e11d48]">
-                    {labels.unitIncomplete}
-                  </p>
-                ) : (
-                  <div className="divide-y divide-dashed divide-[#e5e5e5]">
-                    {section.fields.map((field, fieldIndex) => (
-                      <div
-                        key={`${section.id}-${fieldIndex}-${field.label}`}
-                        className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
-                      >
-                        <div className="min-w-0 text-sm">
-                          <span className="font-medium text-[#8a8a8a]">
-                            {field.label}:{" "}
-                          </span>
-                          {field.href ? (
-                            <a
-                              href={field.href}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="break-all font-bold text-brand underline-offset-2 hover:underline"
-                            >
-                              {field.value}
-                            </a>
-                          ) : (
-                            <span className="wrap-break-word font-bold text-[#222]">
-                              {field.value}
-                            </span>
-                          )}
-                        </div>
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+          >
+            {labels.confirm}
+          </button>
+        </DialogContent>
+      </Dialog>
 
-                        {field.viewUrl ? (
-                          <button
-                            type="button"
-                            onClick={() => openAttachment(field.viewUrl)}
-                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb]"
-                          >
-                            <Eye className="size-3.5" aria-hidden="true" />
-                            <span>{labels.view}</span>
-                          </button>
-                        ) : null}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </section>
-            );
-          })}
-        </div>
-
-        <p className="mt-4 text-center text-xs leading-5 text-[#8a8a8a]">
-          {labels.hint}
-        </p>
-
-        <button
-          type="button"
-          onClick={() => onOpenChange(false)}
-          className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+      <Dialog
+        open={attachmentPreview !== null}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) {
+            closeAttachmentPreview();
+          }
+        }}
+      >
+        <DialogContent
+          showCloseButton={false}
+          className="gap-0 overflow-hidden rounded-3xl border-0 bg-white p-0 sm:max-w-lg"
         >
-          {labels.confirm}
-        </button>
-      </DialogContent>
-    </Dialog>
+          <div className="flex items-center justify-between gap-3 border-b border-[#ececec] px-4 py-3">
+            <div className="min-w-0 space-y-0.5 text-start">
+              <DialogTitle className="text-sm font-extrabold text-[#1a1a1a] md:text-base">
+                {labels.attachmentPreviewTitle}
+              </DialogTitle>
+              {attachmentPreview?.fileName ? (
+                <p className="truncate text-xs text-[#9a9a9a]">
+                  {attachmentPreview.fileName}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                aria-label={labels.download}
+                disabled={!attachmentPreview}
+                onClick={() => {
+                  if (!attachmentPreview) {
+                    return;
+                  }
+
+                  void downloadAttachmentRobust(
+                    attachmentPreview.url,
+                    attachmentPreview.fileName,
+                  );
+                }}
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50"
+              >
+                <Download className="size-4" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                aria-label={labels.print}
+                disabled={!attachmentPreview}
+                onClick={() => {
+                  if (!attachmentPreview) {
+                    return;
+                  }
+
+                  printAttachment(attachmentPreview.url);
+                }}
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50"
+              >
+                <Printer className="size-4" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                aria-label={labels.close}
+                onClick={closeAttachmentPreview}
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef]"
+              >
+                <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex min-h-64 items-center justify-center overflow-hidden bg-[#fafafa] p-4">
+            {attachmentPreview?.kind === "image" ? (
+              <div className="relative mx-auto aspect-4/3 w-full max-w-md overflow-hidden rounded-xl bg-white">
+                <Image
+                  src={attachmentPreview.url}
+                  alt={attachmentPreview.title}
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            ) : attachmentPreview?.kind === "pdf" ? (
+              <iframe
+                src={attachmentPreview.url}
+                title={attachmentPreview.title}
+                className="h-[55vh] w-full rounded-xl bg-white"
+              />
+            ) : attachmentPreview ? (
+              <div className="flex flex-col items-center gap-3 py-8 text-center">
+                <FileText
+                  className="size-12 text-[#b8b0d9]"
+                  aria-hidden="true"
+                />
+                <p className="text-sm font-bold text-[#2b2b2b]">
+                  {attachmentPreview.title}
+                </p>
+                <a
+                  href={attachmentPreview.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-semibold text-brand underline-offset-2 hover:underline"
+                >
+                  {labels.view}
+                </a>
+              </div>
+            ) : null}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

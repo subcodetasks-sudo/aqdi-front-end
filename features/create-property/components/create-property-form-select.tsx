@@ -85,9 +85,7 @@ export default function CreatePropertyFormSelect({
         ref={containerRef}
         className={cn(
           "flex w-full items-center gap-2 rounded-2xl border px-3",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          fieldChromeSurfaceClass(chrome),
           isCompact ? "h-12" : "h-14",
         )}
       >
@@ -109,7 +107,7 @@ export default function CreatePropertyFormSelect({
               type="button"
               aria-label={label}
               className={cn(
-                "w-full text-start text-[#bdbdbd]",
+                "w-full text-start text-black",
                 isCompact ? "text-xs sm:text-sm" : "text-sm",
               )}
               onClick={openSelect}
@@ -141,7 +139,7 @@ export default function CreatePropertyFormSelect({
             side="bottom"
             sideOffset={6}
             avoidCollisions={false}
-            className="max-h-80 rounded-2xl"
+            className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl"
             style={{
               width: contentWidth,
               minWidth: contentWidth,

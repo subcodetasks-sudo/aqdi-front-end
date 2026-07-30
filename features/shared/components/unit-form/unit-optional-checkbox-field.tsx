@@ -32,15 +32,13 @@ export default function UnitOptionalCheckboxField({
           disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer",
         )}
       >
-        <span className="min-w-0 space-y-1 text-start">
+        <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-start">
           <span className="flex items-center gap-2 text-sm font-semibold text-brand">
             {icon}
             {label}
           </span>
           {warning ? (
-            <span className="block text-xs font-medium text-red-500">
-              {warning}
-            </span>
+            <span className="text-xs font-medium text-red-500">{warning}</span>
           ) : null}
         </span>
 

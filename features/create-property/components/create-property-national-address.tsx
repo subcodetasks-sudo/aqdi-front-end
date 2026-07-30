@@ -169,12 +169,12 @@ export default function CreatePropertyNationalAddress({
               placeholder={labels.link.placeholder}
               aria-invalid={linkInvalid}
               className={cn(
-                "h-14 rounded-2xl ps-11 pe-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand focus-visible:ring-brand/15",
+                "h-14 rounded-2xl ps-11 pe-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] shadow-none focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0",
                 linkInvalid
-                  ? "border-[#e57373] bg-white"
+                  ? "border-[#e57373] bg-[#FBFBFA] aria-invalid:border-[#e57373]"
                   : linkValid
                     ? "border-brand bg-brand-background-green"
-                    : "border-[#e4e4e4] bg-white",
+                    : "border-[#e4e4e4] bg-[#FBFBFA]",
               )}
             />
           </div>

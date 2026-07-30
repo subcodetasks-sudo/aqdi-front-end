@@ -4,6 +4,8 @@ import { useId } from "react";
 
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { Input } from "@/components/ui/input";
+import { fieldChromeNestedInputClass } from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
 
 type CreateContractRentedUnitAreaFieldProps = {
   label: string;
@@ -26,7 +28,7 @@ export default function CreateContractRentedUnitAreaField({
     <div>
       <CreateContractFieldLabel label={label} />
 
-      <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-brand-background px-4">
+      <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4">
         <Input
           id={inputId}
           type="text"
@@ -37,7 +39,7 @@ export default function CreateContractRentedUnitAreaField({
             onChange(nextValue);
           }}
           placeholder={placeholder}
-          className="h-auto border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
+          className={cn("h-auto px-0 text-sm", fieldChromeNestedInputClass)}
         />
 
         <span className="shrink-0 text-sm font-semibold text-brand-secondary">

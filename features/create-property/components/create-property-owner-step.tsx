@@ -49,7 +49,7 @@ export default function CreatePropertyOwnerStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
         <CreatePropertyStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
@@ -77,15 +77,14 @@ export default function CreatePropertyOwnerStep({
             />
           ) : null}
         </div>
-      </div>
 
-      <CreatePropertyStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={labels.navigation.continue}
-        variant="stacked"
-        onPrevious={onBack}
-        onContinue={handleContinue}
-      />
+        <CreatePropertyStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={labels.navigation.continue}
+          onPrevious={onBack}
+          onContinue={handleContinue}
+        />
+      </div>
     </div>
   );
 }

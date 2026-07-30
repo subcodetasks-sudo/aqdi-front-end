@@ -98,41 +98,44 @@ export default function CreatePropertyWizard({
       )}
 
       {showStepper ? (
-        <>
-          <CreatePropertyHeader
-            pageTitle={pageTitle}
-            labels={labels.header}
-            isDarkMode={isDarkMode}
-            onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
-          />
+        <CreatePropertyHeader
+          pageTitle={pageTitle}
+          labels={labels.header}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
+        />
+      ) : null}
+
+      <div>
+        {showStepper ? (
           <CreatePropertyStepper labels={labels.stepper} />
-        </>
-      ) : null}
+        ) : null}
 
-      {currentStep === "deed" ? (
-        <CreatePropertyDeedStep
-          labels={labels.deed}
-          addressLabels={labels.address}
-          onBack={() => router.back()}
-          onComplete={goNext}
-        />
-      ) : null}
+        {currentStep === "deed" ? (
+          <CreatePropertyDeedStep
+            labels={labels.deed}
+            addressLabels={labels.address}
+            onBack={() => router.back()}
+            onComplete={goNext}
+          />
+        ) : null}
 
-      {currentStep === "owner" ? (
-        <CreatePropertyOwnerStep
-          labels={labels.owner}
-          onBack={goBack}
-          onComplete={goNext}
-        />
-      ) : null}
+        {currentStep === "owner" ? (
+          <CreatePropertyOwnerStep
+            labels={labels.owner}
+            onBack={goBack}
+            onComplete={goNext}
+          />
+        ) : null}
 
-      {currentStep === "review" ? (
-        <CreatePropertyReviewStep
-          labels={labels.review}
-          onBack={goBack}
-          onComplete={handleReviewComplete}
-        />
-      ) : null}
+        {currentStep === "review" ? (
+          <CreatePropertyReviewStep
+            labels={labels.review}
+            onBack={goBack}
+            onComplete={handleReviewComplete}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

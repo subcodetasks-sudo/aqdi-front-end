@@ -8,6 +8,7 @@ import CreateContractFieldError from "@/features/create-contract/components/crea
 import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
 import { numberToArabicWords } from "@/features/create-contract/utils/number-to-arabic-words";
 import {
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -64,9 +65,7 @@ export default function CreateContractRentAmountField({
         dir="ltr"
         className={cn(
           "flex h-14 w-full items-center gap-2 rounded-2xl border px-4",
-          fieldChromeSurfaceClass(chrome, {
-            defaultBgClassName: "bg-white",
-          }),
+          fieldChromeSurfaceClass(chrome),
         )}
       >
         <span className="shrink-0 text-sm font-bold text-brand">{currency}</span>
@@ -84,18 +83,17 @@ export default function CreateContractRentAmountField({
           }}
           placeholder={placeholder}
           aria-invalid={invalid}
-          className="h-auto border-0 bg-transparent px-1 text-sm font-semibold shadow-none focus-visible:ring-0"
+          className={cn(
+            "h-auto px-1 text-sm font-semibold",
+            fieldChromeNestedInputClass,
+          )}
         />
       </div>
 
       {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
       {amountInWords ? (
-        <div className="mt-3 rounded-2xl bg-brand-background-green px-3.5 py-3">
-          <p className="text-sm leading-6 font-semibold text-brand">
-            {amountInWords}
-          </p>
-        </div>
+        <p className="mt-2 text-xs leading-5 text-[#9a9a9a]">{amountInWords}</p>
       ) : null}
     </div>
   );

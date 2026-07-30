@@ -489,7 +489,7 @@ export default function CreateContractDeedStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
+      <div className="rounded-b-[28px] bg-white p-5 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={deedPhase.title}
           subtitle={deedPhase.subtitle}
@@ -556,18 +556,19 @@ export default function CreateContractDeedStep({
             </div>
           ) : null}
         </div>
-      </div>
 
-      <CreateContractStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting ? labels.navigation.submitting : labels.navigation.continue
-        }
-        isSubmitting={isSubmitting}
-        variant="stacked"
-        onPrevious={onBack}
-        onContinue={() => void handleContinue()}
-      />
+        <CreateContractStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? labels.navigation.submitting
+              : labels.navigation.continue
+          }
+          isSubmitting={isSubmitting}
+          onPrevious={onBack}
+          onContinue={() => void handleContinue()}
+        />
+      </div>
 
       <InstrumentTypePopupDialog
         open={deedTypePopup.open}

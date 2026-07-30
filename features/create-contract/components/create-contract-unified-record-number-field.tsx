@@ -14,6 +14,7 @@ import {
 } from "@/lib/validation/format-unified-record-number-for-form";
 import {
   fieldChromeIconClass,
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -94,7 +95,10 @@ export default function CreateContractUnifiedRecordNumberField({
           }}
           placeholder={placeholder}
           aria-invalid={showInvalid}
-          className="h-auto min-w-0 flex-1 border-0 bg-transparent px-1 text-sm shadow-none focus-visible:ring-0"
+          className={cn(
+            "h-auto min-w-0 flex-1 px-1 text-sm",
+            fieldChromeNestedInputClass,
+          )}
         />
 
         <span className="shrink-0 pe-2 text-xs font-semibold text-[#9a9a9a]">

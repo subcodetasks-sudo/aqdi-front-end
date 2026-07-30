@@ -5,6 +5,7 @@ import { useId } from "react";
 import { Input } from "@/components/ui/input";
 import CreateUnitFieldLabel from "@/features/create-unit/components/create-unit-field-label";
 import {
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -51,7 +52,10 @@ export default function CreateUnitNumberField({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           aria-invalid={showInvalid}
-          className="h-auto border-0 bg-transparent px-0 text-sm font-semibold shadow-none focus-visible:ring-0 dark:text-[#e8f0ee]"
+          className={cn(
+            "h-auto px-0 text-sm font-semibold dark:text-[#e8f0ee]",
+            fieldChromeNestedInputClass,
+          )}
         />
       </div>
 

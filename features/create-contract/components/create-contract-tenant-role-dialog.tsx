@@ -17,11 +17,11 @@ import type { TenantRole } from "@/features/create-contract/types/tenant-role";
 import {
   getTenantRoleTitle,
   isDailyFineRole,
-  isSecurityDepositRole,
   resolveTenantRoleIcon,
 } from "@/features/create-contract/utils/tenant-role-helpers";
 import {
   fieldChromeIconClass,
+  fieldChromeNestedInputClass,
   fieldChromeSurfaceClass,
   resolveFieldChromeState,
 } from "@/lib/ui/field-chrome";
@@ -76,7 +76,6 @@ export default function CreateContractTenantRoleDialog({
       ? labels.currencyPerDay
       : labels.currency
     : null;
-  const showDepositNote = isSecurityDepositRole(role);
   const definition = role.service_definition?.trim() ?? "";
   const inputLabel =
     role.input_field_label?.trim() || labels.inputFallbackLabel;
@@ -144,23 +143,10 @@ export default function CreateContractTenantRoleDialog({
             <p className="text-sm font-extrabold text-brand">
               {labels.serviceDefinitionLabel}
             </p>
-            <div className="rounded-2xl bg-brand-background px-3.5 py-3">
-              <p className="whitespace-pre-line text-sm leading-7 text-[#555555]">
-                {definition}
-              </p>
-            </div>
-          </div>
-        ) : null}
-
-        {showDepositNote ? (
-          <div className="mt-3 flex items-start gap-2 rounded-2xl border border-[#f0d9a8] bg-[#fff8eb] px-3.5 py-3">
-            <span
-              className="mt-1.5 size-2 shrink-0 rounded-full bg-[#e39b2d]"
-              aria-hidden="true"
+            <div
+              className="rounded-2xl bg-brand-background px-3.5 py-3"
+              dangerouslySetInnerHTML={{ __html: definition }}
             />
-            <p className="text-sm leading-6 text-[#555555]">
-              {labels.depositNote}
-            </p>
           </div>
         ) : null}
 
@@ -169,9 +155,7 @@ export default function CreateContractTenantRoleDialog({
             <div
               className={cn(
                 "flex h-14 w-full items-center gap-2 rounded-2xl border px-3",
-                fieldChromeSurfaceClass(chrome, {
-                  defaultBgClassName: "bg-white",
-                }),
+                fieldChromeSurfaceClass(chrome),
               )}
             >
               <span
@@ -200,7 +184,10 @@ export default function CreateContractTenantRoleDialog({
                 }}
                 placeholder={inputLabel}
                 aria-invalid={showError}
-                className="h-auto flex-1 border-0 bg-transparent px-1 text-center text-sm font-semibold shadow-none focus-visible:ring-0"
+                className={cn(
+                  "h-auto flex-1 px-1 text-center text-sm font-semibold",
+                  fieldChromeNestedInputClass,
+                )}
               />
 
               {currencySuffix ? (

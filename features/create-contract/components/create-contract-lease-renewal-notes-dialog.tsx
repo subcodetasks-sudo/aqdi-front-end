@@ -94,7 +94,7 @@ export default function CreateContractLeaseRenewalNotesDialog({
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             placeholder={labels.notesPlaceholder}
-            className="min-h-36 rounded-2xl border-[#e8e8e8] bg-brand-background px-4 py-3 text-sm shadow-none focus-visible:border-brand-secondary focus-visible:ring-brand-secondary/20"
+            className="min-h-36 rounded-2xl border-[#e8e8e8] bg-[#FBFBFA] px-4 py-3 text-sm shadow-none focus-visible:border-brand-secondary focus-visible:ring-brand-secondary/20"
           />
         </div>
 

@@ -48,6 +48,7 @@ export type CreatePropertyLabels = {
       chooseFile: string;
       acceptedFormats: string;
       hint?: string;
+      attached: string;
       preview: string;
       delete: string;
       previewTitle: string;

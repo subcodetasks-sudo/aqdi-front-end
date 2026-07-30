@@ -8,10 +8,7 @@ import CreateContractTenantRoleDialog from "@/features/create-contract/component
 import { useTenantRoles } from "@/features/create-contract/hooks/use-tenant-roles";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { TenantRole } from "@/features/create-contract/types/tenant-role";
-import {
-  onToggleTenantRole,
-  resolveTenantRoleIcon,
-} from "@/features/create-contract/utils/tenant-role-helpers";
+import { onToggleTenantRole } from "@/features/create-contract/utils/tenant-role-helpers";
 import { cn } from "@/lib/utils";
 
 type CreateContractFinancePermissionsSectionProps = {
@@ -103,20 +100,17 @@ export default function CreateContractFinancePermissionsSection({
             <div className="h-12 animate-pulse rounded-2xl bg-brand-background" />
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {tenantRoles.map((role) => {
               const checked = value.includes(role.id);
-              const Icon = resolveTenantRoleIcon(role.icon);
               const savedValue = values[String(role.id)]?.trim();
 
               return (
                 <div
                   key={role.id}
                   className={cn(
-                    "flex items-center gap-3 rounded-2xl border px-4 py-3",
-                    checked
-                      ? "border-brand/25 bg-brand-background-green"
-                      : "border-[#e8e8e8] bg-white",
+                    "flex items-center gap-3 rounded-2xl border bg-white px-4 py-3.5",
+                    checked ? "border-brand/30" : "border-[#e8e8e8]",
                   )}
                 >
                   <Checkbox
@@ -124,7 +118,7 @@ export default function CreateContractFinancePermissionsSection({
                     onCheckedChange={(nextValue) =>
                       applyToggle(role, nextValue === true)
                     }
-                    className="size-5 rounded-md border-brand data-checked:border-brand data-checked:bg-brand"
+                    className="size-5 rounded-[6px] border-[#c8c8c8] data-checked:border-brand data-checked:bg-brand"
                   />
 
                   <button
@@ -139,11 +133,7 @@ export default function CreateContractFinancePermissionsSection({
                       applyToggle(role, !checked);
                     }}
                   >
-                    <Icon
-                      className="size-4 shrink-0 text-brand"
-                      aria-hidden="true"
-                    />
-                    <span className="flex-1 text-sm font-semibold text-brand">
+                    <span className="flex-1 text-sm font-bold text-[#1a1a1a]">
                       {role.text_of_reason}
                     </span>
                     {checked && savedValue ? (

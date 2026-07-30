@@ -66,8 +66,8 @@ export default function CreateContractFinanceDurationSelect({
                 selected
                   ? "border-brand bg-brand text-white"
                   : invalid
-                    ? "border-[#e57373] bg-brand-background text-brand"
-                    : "border-[#e8e8e8] bg-brand-background text-[#555555] hover:border-brand/30",
+                    ? "border-[#e57373] bg-[#FBFBFA] text-brand"
+                    : "border-[#e8e8e8] bg-[#FBFBFA] text-[#555555] hover:border-brand/30",
                 disabled && "pointer-events-none opacity-60",
               )}
             >

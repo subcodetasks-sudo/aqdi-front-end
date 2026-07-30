@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 export type FinancePaymentMethodOption = {
   value: string;
   title: string;
+  disabled?: boolean;
 };
 
 type CreateContractFinancePaymentMethodSelectProps = {
@@ -45,6 +46,7 @@ export default function CreateContractFinancePaymentMethodSelect({
       >
         {options.map((option) => {
           const selected = value === option.value;
+          const optionDisabled = disabled || Boolean(option.disabled);
 
           return (
             <button
@@ -52,16 +54,24 @@ export default function CreateContractFinancePaymentMethodSelect({
               type="button"
               role="radio"
               aria-checked={selected}
-              disabled={disabled}
-              onClick={() => onChange(option.value)}
+              aria-disabled={optionDisabled}
+              disabled={optionDisabled}
+              onClick={() => {
+                if (optionDisabled) {
+                  return;
+                }
+
+                onChange(option.value);
+              }}
               className={cn(
                 "min-h-11 rounded-2xl border px-3.5 py-2.5 text-center text-xs font-bold transition-colors sm:text-sm",
                 selected
                   ? "border-brand bg-brand text-white"
                   : invalid
-                    ? "border-[#e57373] bg-brand-background text-brand"
-                    : "border-[#e8e8e8] bg-brand-background text-[#555555] hover:border-brand/30",
-                disabled && "pointer-events-none opacity-60",
+                    ? "border-[#e57373] bg-[#FBFBFA] text-brand"
+                    : "border-[#e8e8e8] bg-[#FBFBFA] text-[#555555] hover:border-brand/30",
+                optionDisabled &&
+                  "pointer-events-none cursor-not-allowed opacity-40",
               )}
             >
               {option.title}

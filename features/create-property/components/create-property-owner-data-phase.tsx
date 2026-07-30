@@ -1,6 +1,6 @@
 "use client";
 
-import { IdCard, Phone } from "lucide-react";
+import { IdCard } from "lucide-react";
 
 import { Switch } from "@/components/ui/switch";
 import CreatePropertyBirthDateFields from "@/features/create-property/components/create-property-birth-date-fields";
@@ -94,7 +94,6 @@ export default function CreatePropertyOwnerDataPhase({
           onChange={(phone) =>
             updateField("phone", toSaudiMobileInputValue(phone))
           }
-          icon={Phone}
           errorMessage={phoneError}
           invalid={phoneInvalid}
           valid={phoneValid}

@@ -228,7 +228,7 @@ export default function CreatePropertyDeedStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[28px] bg-white p-5 shadow-sm md:p-8">
+      <div className="rounded-b-[28px] bg-white p-5 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -255,7 +255,6 @@ export default function CreatePropertyDeedStep({
                       ...labels.deedImage,
                       clickHere: labels.deceased.clickHere,
                       chooseFile: labels.deceased.chooseFile,
-                      acceptedFormats: "",
                     }}
                     fieldLabel={labels.deceased.deedLabel}
                     value={deedFiles}
@@ -275,7 +274,6 @@ export default function CreatePropertyDeedStep({
                     ...labels.deedImage,
                     clickHere: labels.deceased.clickHere,
                     chooseFile: labels.deceased.chooseFile,
-                    acceptedFormats: "",
                   }}
                   fieldLabel={labels.deceased.inheritanceLabel}
                   value={deedInheritanceFiles}
@@ -295,7 +293,6 @@ export default function CreatePropertyDeedStep({
                       ...labels.deedImage,
                       clickHere: labels.deceased.clickHere,
                       chooseFile: labels.deceased.chooseFile,
-                      acceptedFormats: "",
                     }}
                     fieldLabel={labels.deceased.heirsPoaLabel}
                     value={deedHeirsPoaFiles}
@@ -443,20 +440,19 @@ export default function CreatePropertyDeedStep({
             </div>
           ) : null}
         </div>
-      </div>
 
-      <CreatePropertyStepNavigation
-        previousLabel={labels.navigation.previous}
-        continueLabel={
-          isSubmitting
-            ? addressLabels.navigation.submitting
-            : labels.navigation.continue
-        }
-        isSubmitting={isSubmitting}
-        variant="stacked"
-        onPrevious={onBack}
-        onContinue={() => void handleContinue()}
-      />
+        <CreatePropertyStepNavigation
+          previousLabel={labels.navigation.previous}
+          continueLabel={
+            isSubmitting
+              ? addressLabels.navigation.submitting
+              : labels.navigation.continue
+          }
+          isSubmitting={isSubmitting}
+          onPrevious={onBack}
+          onContinue={() => void handleContinue()}
+        />
+      </div>
 
       <InstrumentTypePopupDialog
         open={deedTypePopup.open}

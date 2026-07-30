@@ -403,6 +403,7 @@
     "privacyHref": "/privacy"
   },
   "legal": {
+    "close": "إغلاق",
     "terms": {
       "title": "الشروط والأحكام",
       "metaTitle": "الشروط والأحكام | عقدي",
@@ -1120,7 +1121,7 @@
     },
     "deed": {
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة"
       },
       "title": "وثيقة الملكية",
@@ -1156,8 +1157,9 @@
         "clickHere": "إضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
-        "preview": "معاينة",
-        "delete": "حذف",
+        "attached": "تم الإرفاق",
+        "preview": "عرض",
+        "delete": "إزالة",
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
       },
@@ -1181,8 +1183,8 @@
         "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
         "instrumentNumber": {
           "label": "رقم الصك",
-          "placeholder": "XXXXXXXXXXXX",
-          "hint": "رقم الصك يتكون من 12 رقمًا"
+          "placeholder": "أرقام فقط",
+          "hint": "أرقام فقط - غير مقيد بعدد"
         },
         "instrumentDate": {
           "label": "تاريخ التسجيل الأول",
@@ -1199,7 +1201,7 @@
     },
     "address": {
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "submitting": "جاري الحفظ...",
         "submitError": "تعذر حفظ بيانات العقار. حاول مرة أخرى."
@@ -1250,7 +1252,7 @@
             "placeholder": "... إختر"
           },
           "street": {
-            "label": "الشارع",
+            "label": "اسم الشارع",
             "placeholder": "أكتب هنا .."
           },
           "buildingNumber": {
@@ -1272,8 +1274,9 @@
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
           "hint": "تحصل عليها من تطبيق سبل أو العنوان الوطني — تحتوي المدينة والحي والرمز البريدي كاملة",
-          "preview": "معاينة",
-          "delete": "حذف",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
@@ -1365,8 +1368,9 @@
           "clickHere": "اضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "معاينة",
-          "delete": "حذف",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
@@ -1374,7 +1378,7 @@
     },
     "review": {
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "submitting": "جاري الحفظ...",
         "submitError": "تعذر حفظ بيانات المالك. حاول مرة أخرى.",
@@ -1412,7 +1416,7 @@
     "fieldRequired": "هذا الحقل مطلوب",
     "incompleteContinue": "يرجى إكمال جميع البيانات المطلوبة قبل المتابعة",
     "navigation": {
-      "previous": "السابق",
+      "previous": "عودة",
       "continue": "متابعة",
       "save": "حفظ التعديلات",
       "submitting": "جاري الحفظ...",
@@ -1612,7 +1616,7 @@
     },
     "deed": {
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "submitting": "جاري الحفظ..."
       },
@@ -1662,8 +1666,9 @@
         "clickHere": "اضغط هنا",
         "chooseFile": "لاختيار صورة أو ملف",
         "acceptedFormats": "png - jpeg - pdf",
-        "preview": "معاينة",
-        "delete": "حذف",
+        "attached": "تم الإرفاق",
+        "preview": "عرض",
+        "delete": "إزالة",
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
       },
@@ -1721,7 +1726,7 @@
             "placeholder": "... إختر"
           },
           "street": {
-            "label": "الشارع",
+            "label": "اسم الشارع",
             "placeholder": "أكتب هنا .."
           },
           "buildingNumber": {
@@ -1743,8 +1748,9 @@
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
           "hint": "تحصل عليها من تطبيق سبل أو العنوان الوطني — تحتوي المدينة والحي والرمز البريدي كاملة",
-          "preview": "معاينة",
-          "delete": "حذف",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
@@ -1785,8 +1791,8 @@
         "toggleLabel": "إدخال بيانات الصك يدويًا بدل الصورة",
         "instrumentNumber": {
           "label": "رقم الصك",
-          "placeholder": "XXXXXXXXXXXX",
-          "hint": "رقم الصك يتكون من 12 رقمًا"
+          "placeholder": "أرقام فقط",
+          "hint": "أرقام فقط - غير مقيد بعدد"
         },
         "instrumentDate": {
           "label": "تاريخ التسجيل الأول",
@@ -1804,7 +1810,7 @@
     "owner": {
       "cancelRequest": "إلغاء الطلب",
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "saveLater": "حفظ وإكمال لاحقاً",
         "savingLater": "جاري الحفظ...",
@@ -1890,8 +1896,9 @@
           "clickHere": "اضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "معاينة",
-          "delete": "حذف",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
@@ -1904,7 +1911,7 @@
       "missingContractSession": "يرجى بدء العقد أولاً",
       "saveLaterError": "فشل حفظ مسودة العقد",
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "saveLater": "حفظ وإكمال لاحقاً",
         "savingLater": "جاري الحفظ...",
@@ -1990,12 +1997,14 @@
           "placeholder": "05xxxxxxxxx"
         },
         "powerOfAttorney": {
-          "label": "إرفاق صورة الوكالة",
-          "clickHere": "إضغط هنا",
+          "label": "إرفاق صورة الوكالة أو التفويض",
+          "clickHere": "اضغط هنا",
           "chooseFile": "لاختيار صورة أو ملف",
           "acceptedFormats": "png - jpeg - pdf",
-          "preview": "معاينة",
-          "delete": "حذف",
+          "hint": "يتم قبول الوكالات الإلكترونية في نظام إيجار في حال كانت الوكالة مضافاً لها بند \"شبكة إيجار الإلكترونية\"، أو تفويض معتمد من الغرفة التجارية، أو عقد تأسيس مقيد فيه حق توقيع العقود",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
@@ -2175,7 +2184,7 @@
         "bodyAfter": "حدود عقد الإيجار الأساسي المرفق – لا تبدأ قبل بدايته ولا تنتهي بعد نهايته."
       },
       "navigation": {
-        "previous": "السابق",
+        "previous": "عودة",
         "continue": "متابعة",
         "submitting": "جاري الحفظ..."
       },
@@ -2239,10 +2248,15 @@
       "otherConditions": {
         "title": "هل ترغب بإضافة شروط أخرى... ؟",
         "subtitle": "شروط إضافية يتفق عليها الطرفان وتُوثّق في العقد",
-        "instruction": "أضف شرطًا أو أكثر — يظهر كل شرط ضمن بنود العقد",
+        "instruction": "أضف شرطًا واحدًا في كل سطر – يظهر ضمن بنود العقد",
         "placeholder": "اكتب الشرط هنا",
         "add": "إضافة شرط",
-        "remove": "حذف الشرط"
+        "remove": "حذف الشرط",
+        "clearSummary": "مسح الشروط",
+        "addedSummaryOne": "تم إضافة شرط",
+        "addedSummaryTwo": "تم إضافة شرطين",
+        "addedSummaryFew": "تم إضافة {count} شروط",
+        "addedSummaryMany": "تم إضافة {count} شرط"
       }
     },
     "payment": {
@@ -2257,6 +2271,7 @@
         "close": "إغلاق",
         "edit": "تعديل",
         "view": "عرض",
+        "linkPreview": "معاينة",
         "confirm": "تمام – البيانات صحيحة",
         "hint": "اضغط 'تعديل' عند أي قسم للانتقال لصفحته وتصحيحه ثم ارجع لإتمام الدفع",
         "emptyValue": "—",
@@ -2266,6 +2281,8 @@
         "share": "مشاركة",
         "copy": "نسخ البيانات",
         "print": "طباعة",
+        "download": "تحميل",
+        "attachmentPreviewTitle": "معاينة المرفق",
         "copySuccess": "تم نسخ بيانات الطلب",
         "copyError": "تعذر نسخ البيانات",
         "shareError": "تعذر مشاركة الطلب",
@@ -2389,7 +2406,7 @@
       "discountCode": {
         "question": "هل لديك كود خصم؟",
         "add": "اضغط للإضافة",
-        "placeholder": "أدخل كود الخصم",
+        "placeholder": "أدخل الكود هنا",
         "apply": "تطبيق",
         "applying": "جاري التطبيق...",
         "clear": "مسح",

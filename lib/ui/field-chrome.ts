@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 
 export type FieldChromeState = "default" | "invalid" | "valid";
 
@@ -23,7 +23,7 @@ export function fieldChromeSurfaceClass(
     defaultBgClassName?: string;
   },
 ) {
-  const defaultBg = options?.defaultBgClassName ?? "bg-brand-background";
+  const defaultBg = options?.defaultBgClassName ?? "bg-[#FBFBFA]";
 
   return cn(
     state === "invalid" && "border-[#e57373]",
@@ -32,6 +32,14 @@ export function fieldChromeSurfaceClass(
     state === "invalid" && defaultBg,
   );
 }
+
+/** Nested Input inside a chrome wrapper — keep a11y invalid, kill extra border/ring. */
+export const fieldChromeNestedInputClass =
+  "border-0 bg-transparent shadow-none focus-visible:border-0 focus-visible:ring-0 aria-invalid:border-0 aria-invalid:ring-0 dark:aria-invalid:border-0 dark:aria-invalid:ring-0";
+
+/** Input/textarea that is itself the chrome surface — one border only. */
+export const fieldChromeControlClass =
+  "shadow-none focus-visible:ring-0 aria-invalid:border-[#e57373] aria-invalid:ring-0 dark:aria-invalid:border-[#e57373] dark:aria-invalid:ring-0";
 
 export function fieldChromeIconClass(state: FieldChromeState) {
   if (state === "invalid") {
