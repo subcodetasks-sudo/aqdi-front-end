@@ -61,7 +61,7 @@ function RequiredFieldLabel({
       <span
         className={cn(
           "text-sm font-semibold",
-          invalid ? "text-[#c62828]" : "text-[#333333]",
+          invalid ? "text-[#c62828]" : "text-[#333333] dark:text-white",
         )}
       >
         {label}

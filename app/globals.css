@@ -491,6 +491,20 @@
 .create-property-flow.dark .bg-\[\#FBFBFA\],
 .create-contract-flow.dark .bg-\[\#FBFBFA\],
 .create-flow-dark.dark .bg-\[\#FBFBFA\],
+.create-property-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-contract-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-flow-dark-shell.dark .bg-\[\#FAFBFB\],
+.services-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-property-flow.dark .bg-\[\#FAFBFB\],
+.create-contract-flow.dark .bg-\[\#FAFBFB\],
+.create-flow-dark.dark .bg-\[\#FAFBFB\],
+.create-property-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-contract-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-flow-dark-shell.dark .bg-\[\#FBFDFC\],
+.services-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-property-flow.dark .bg-\[\#FBFDFC\],
+.create-contract-flow.dark .bg-\[\#FBFDFC\],
+.create-flow-dark.dark .bg-\[\#FBFDFC\],
 .create-property-dark-shell.dark .bg-\[\#f1f7f5\],
 .create-contract-dark-shell.dark .bg-\[\#f1f7f5\],
 .create-flow-dark-shell.dark .bg-\[\#f1f7f5\],
@@ -501,29 +515,68 @@
   background-color: #0d1614 !important;
 }
 
+.create-property-dark-shell.dark .bg-\[\#f3faf7\],
+.create-contract-dark-shell.dark .bg-\[\#f3faf7\],
+.create-flow-dark-shell.dark .bg-\[\#f3faf7\],
+.services-dark-shell.dark .bg-\[\#f3faf7\],
+.create-property-flow.dark .bg-\[\#f3faf7\],
+.create-contract-flow.dark .bg-\[\#f3faf7\],
+.create-flow-dark.dark .bg-\[\#f3faf7\] {
+  background-color: #16352f !important;
+}
+
+.create-property-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-contract-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-flow-dark-shell.dark .bg-\[\#e7f4ef\],
+.services-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-property-flow.dark .bg-\[\#e7f4ef\],
+.create-contract-flow.dark .bg-\[\#e7f4ef\],
+.create-flow-dark.dark .bg-\[\#e7f4ef\] {
+  background-color: #0f2a24 !important;
+}
+
 .create-property-dark-shell.dark .border-\[\#e8e8e8\],
 .create-property-dark-shell.dark .border-\[\#ececec\],
 .create-property-dark-shell.dark .border-\[\#e4e4e4\],
 .create-property-dark-shell.dark .border-\[\#d9d9d9\],
+.create-property-dark-shell.dark .border-\[\#BFE0D4\],
+.create-property-dark-shell.dark .border-\[\#cfe8e0\],
 .create-contract-dark-shell.dark .border-\[\#e8e8e8\],
+.create-contract-dark-shell.dark .border-\[\#ececec\],
 .create-contract-dark-shell.dark .border-\[\#e4e4e4\],
 .create-contract-dark-shell.dark .border-\[\#d9d9d9\],
+.create-contract-dark-shell.dark .border-\[\#BFE0D4\],
+.create-contract-dark-shell.dark .border-\[\#cfe8e0\],
 .create-flow-dark-shell.dark .border-\[\#e8e8e8\],
+.create-flow-dark-shell.dark .border-\[\#ececec\],
 .create-flow-dark-shell.dark .border-\[\#e4e4e4\],
 .create-flow-dark-shell.dark .border-\[\#d9d9d9\],
+.create-flow-dark-shell.dark .border-\[\#BFE0D4\],
+.create-flow-dark-shell.dark .border-\[\#cfe8e0\],
 .services-dark-shell.dark .border-\[\#e8e8e8\],
 .services-dark-shell.dark .border-\[\#ececec\],
 .services-dark-shell.dark .border-\[\#e4e4e4\],
 .services-dark-shell.dark .border-\[\#d9d9d9\],
+.services-dark-shell.dark .border-\[\#BFE0D4\],
+.services-dark-shell.dark .border-\[\#cfe8e0\],
 .create-property-flow.dark .border-\[\#e8e8e8\],
+.create-property-flow.dark .border-\[\#ececec\],
 .create-property-flow.dark .border-\[\#e4e4e4\],
 .create-property-flow.dark .border-\[\#d9d9d9\],
+.create-property-flow.dark .border-\[\#BFE0D4\],
+.create-property-flow.dark .border-\[\#cfe8e0\],
 .create-contract-flow.dark .border-\[\#e8e8e8\],
+.create-contract-flow.dark .border-\[\#ececec\],
 .create-contract-flow.dark .border-\[\#e4e4e4\],
 .create-contract-flow.dark .border-\[\#d9d9d9\],
+.create-contract-flow.dark .border-\[\#BFE0D4\],
+.create-contract-flow.dark .border-\[\#cfe8e0\],
 .create-flow-dark.dark .border-\[\#e8e8e8\],
+.create-flow-dark.dark .border-\[\#ececec\],
 .create-flow-dark.dark .border-\[\#e4e4e4\],
-.create-flow-dark.dark .border-\[\#d9d9d9\] {
+.create-flow-dark.dark .border-\[\#d9d9d9\],
+.create-flow-dark.dark .border-\[\#BFE0D4\],
+.create-flow-dark.dark .border-\[\#cfe8e0\] {
   border-color: #2f403b !important;
 }
 

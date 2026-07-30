@@ -81,14 +81,14 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
   }, [previewUrl]);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5 dark:border-[#2f403b] dark:bg-[#16352f]">
       <div className="flex min-w-0 flex-1 items-center gap-2.5">
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand">
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
           <Check className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.attached}</span>
         </span>
 
-        <p className="min-w-0 truncate text-sm font-semibold text-[#333333]">
+        <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
           {name}
           {extension ? `.${extension}` : ""}
         </p>
@@ -98,7 +98,7 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
         <button
           type="button"
           onClick={onPreview}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
         >
           <Eye className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.preview}</span>
@@ -107,7 +107,7 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
         <button
           type="button"
           onClick={onDelete}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500 dark:bg-[#2a1818] dark:text-[#f87171]"
         >
           <X className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.delete}</span>
@@ -133,14 +133,14 @@ function ExistingImageRow({
   const name = extension ? fileName.slice(0, -(extension.length + 1)) : fileName;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5 dark:border-[#2f403b] dark:bg-[#16352f]">
       <div className="flex min-w-0 flex-1 items-center gap-2.5">
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand">
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
           <Check className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.attached}</span>
         </span>
 
-        <p className="min-w-0 truncate text-sm font-semibold text-[#333333]">
+        <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
           {name}
           {extension ? `.${extension}` : ""}
         </p>
@@ -150,7 +150,7 @@ function ExistingImageRow({
         <button
           type="button"
           onClick={onPreview}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
         >
           <Eye className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.preview}</span>
@@ -227,7 +227,7 @@ export default function CreateContractDeedImageUpload({
           <span
             className={cn(
               "text-sm font-semibold",
-              showInvalid ? "text-[#c62828]" : "text-black",
+              showInvalid ? "text-[#c62828]" : "text-black dark:text-white",
             )}
           >
             {resolvedLabel}
@@ -246,13 +246,13 @@ export default function CreateContractDeedImageUpload({
           className={cn(
             "flex w-full cursor-pointer items-center gap-3 transition-colors",
             isDashedPill
-              ? "h-14 justify-center rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-4 text-center hover:border-brand/40"
+              ? "h-14 justify-center rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-4 text-center hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40"
               : isAreaUpload
-                ? "min-h-16 flex-col justify-center rounded-2xl border-[1.5px] border-dashed bg-[#FBFDFC] px-4 py-4 text-center hover:border-brand/40"
-                : "h-14 rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-2 ps-4 hover:border-brand/40",
+                ? "min-h-16 flex-col justify-center rounded-2xl border-[1.5px] border-dashed bg-[#FBFDFC] px-4 py-4 text-center hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40"
+                : "h-14 rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-2 ps-4 hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40",
             showInvalid
               ? "border-[#e57373]"
-              : "border-[#BFE0D4]",
+              : "border-[#BFE0D4] dark:border-[#2f403b]",
           )}
         >
           <input
@@ -268,28 +268,41 @@ export default function CreateContractDeedImageUpload({
 
           {isDashed || isDashedPill || isDropzone ? (
             <div className="space-y-1">
-              <p className="text-sm font-medium text-[#666666]">
-                <span className="font-bold text-brand">{labels.clickHere}</span>{" "}
+              <p className="text-sm font-medium text-[#666666] dark:text-[#9eb5af]">
+                <span className="font-bold text-brand dark:text-[#7dccc0]">
+                  {labels.clickHere}
+                </span>{" "}
                 <span>{labels.chooseFile}</span>
               </p>
               {labels.acceptedFormats ? (
-                <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+                <p className="text-xs text-[#bdbdbd] dark:text-[#6b7d78]">
+                  {labels.acceptedFormats}
+                </p>
               ) : null}
             </div>
           ) : (
             <>
               <div className="min-w-0 flex-1 text-start">
                 <p className="text-sm leading-snug font-semibold">
-                  <span className="text-brand-secondary">{labels.clickHere}</span>{" "}
-                  <span className="text-gray-600">{labels.chooseFile}</span>
+                  <span className="text-brand-secondary dark:text-[#7dccc0]">
+                    {labels.clickHere}
+                  </span>{" "}
+                  <span className="text-gray-600 dark:text-[#9eb5af]">
+                    {labels.chooseFile}
+                  </span>
                 </p>
                 {labels.acceptedFormats ? (
-                  <p className="text-xs text-[#bdbdbd]">{labels.acceptedFormats}</p>
+                  <p className="text-xs text-[#bdbdbd] dark:text-[#6b7d78]">
+                    {labels.acceptedFormats}
+                  </p>
                 ) : null}
               </div>
 
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white">
-                <CloudDownload className="size-5 text-[#bdbdbd]" aria-hidden="true" />
+              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-[#1a2421]">
+                <CloudDownload
+                  className="size-5 text-[#bdbdbd] dark:text-[#6b7d78]"
+                  aria-hidden="true"
+                />
               </span>
             </>
           )}
@@ -297,7 +310,9 @@ export default function CreateContractDeedImageUpload({
       ) : null}
 
       {hint ? (
-        <p className="text-xs leading-relaxed text-[#9a9a9a]">{hint}</p>
+        <p className="text-xs leading-relaxed text-[#9a9a9a] dark:text-[#9eb5af]">
+          {hint}
+        </p>
       ) : null}
 
       {showInvalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
@@ -335,10 +350,10 @@ export default function CreateContractDeedImageUpload({
       >
         <DialogContent
           showCloseButton={false}
-          className="w-full gap-0 overflow-hidden rounded-3xl p-0 no-scrollbar sm:max-w-2xl"
+          className="w-full gap-0 overflow-hidden rounded-3xl border-0 bg-white p-0 no-scrollbar sm:max-w-2xl dark:bg-[#1a2421]"
         >
-          <div className="flex items-center justify-between border-b border-[#ececec] px-4 py-3">
-            <DialogTitle className="text-base font-bold">
+          <div className="flex items-center justify-between border-b border-[#ececec] px-4 py-3 dark:border-[#2f403b]">
+            <DialogTitle className="text-base font-bold dark:text-white">
               {labels.previewTitle}
             </DialogTitle>
 
@@ -347,7 +362,7 @@ export default function CreateContractDeedImageUpload({
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                className="text-red-500 hover:bg-red-50 hover:text-red-600"
+                className="text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-[#2a1818]"
                 aria-label={labels.closePreview}
               >
                 <X className="size-4" aria-hidden="true" />
@@ -355,9 +370,9 @@ export default function CreateContractDeedImageUpload({
             </DialogClose>
           </div>
 
-          <div className="max-h-[85vh] overflow-auto no-scrollbar bg-[#f7f7f7] p-4">
+          <div className="max-h-[85vh] overflow-auto bg-[#f7f7f7] p-4 no-scrollbar dark:bg-[#121a18]">
             {previewExistingUrl ? (
-              <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white">
+              <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white dark:bg-[#1a2421]">
                 <Image
                   src={previewExistingUrl}
                   alt={labels.previewTitle}
@@ -371,10 +386,10 @@ export default function CreateContractDeedImageUpload({
                 <iframe
                   src={previewUrl}
                   title={previewFile.name}
-                  className="h-[65vh] w-full rounded-2xl bg-white"
+                  className="h-[65vh] w-full rounded-2xl bg-white dark:bg-[#1a2421]"
                 />
               ) : isImageFile(previewFile) ? (
-                <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white">
+                <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white dark:bg-[#1a2421]">
                   <Image
                     src={previewUrl}
                     alt={previewFile.name}
@@ -385,8 +400,10 @@ export default function CreateContractDeedImageUpload({
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3 py-12 text-center">
-                  <ImageIcon className="size-10 text-[#bdbdbd]" />
-                  <p className="text-sm text-[#666666]">{previewFile.name}</p>
+                  <ImageIcon className="size-10 text-[#bdbdbd] dark:text-[#6b7d78]" />
+                  <p className="text-sm text-[#666666] dark:text-[#9eb5af]">
+                    {previewFile.name}
+                  </p>
                 </div>
               )
             ) : null}
