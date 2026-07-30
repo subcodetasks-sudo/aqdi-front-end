@@ -1166,15 +1166,9 @@ export function updateContractTenantStatus(
   tenantData: TenantDataState,
   status: TenantStatusOption | "",
 ): TenantDataState {
+  // Keep both forms' drafts when toggling status so switching back restores input.
   return {
+    ...tenantData,
     status,
-    individual:
-      status === "individual"
-        ? tenantData.individual
-        : { ...EMPTY_TENANT_DATA.individual },
-    organization:
-      status === "establishment-or-company"
-        ? tenantData.organization
-        : { ...EMPTY_TENANT_DATA.organization, powerOfAttorneyFiles: [] },
   };
 }

@@ -142,7 +142,7 @@ export default function CreateContractFormSelect({
             side="bottom"
             sideOffset={6}
             avoidCollisions={false}
-            className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl border border-[#2f403b] bg-[#1a2421] text-white"
+            className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl border border-[#e8e8e8] bg-white text-[#1a1a1a] dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-white"
             style={{
               width: contentWidth,
               minWidth: contentWidth,
@@ -152,7 +152,7 @@ export default function CreateContractFormSelect({
               <SelectItem
                 key={option.value}
                 value={option.value}
-                className="text-base!"
+                className="text-base! focus:bg-[#f0f0f0] focus:text-[#1a1a1a] dark:focus:bg-[#16352f] dark:focus:text-white"
               >
                 {option.label}
               </SelectItem>
