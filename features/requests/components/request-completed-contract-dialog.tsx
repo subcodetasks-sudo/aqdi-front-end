@@ -128,9 +128,20 @@ export default function RequestCompletedContractDialog({
                       <span className="shrink-0 text-sm text-[#8a8a8a]">
                         {row.label}
                       </span>
-                      <span className="min-w-0 text-end text-sm font-bold text-[#222222]">
-                        {row.value}
-                      </span>
+                      {row.href ? (
+                        <a
+                          href={row.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="min-w-0 text-end text-sm font-bold text-brand underline underline-offset-2 hover:opacity-80"
+                        >
+                          {row.value}
+                        </a>
+                      ) : (
+                        <span className="min-w-0 text-end text-sm font-bold text-[#222222]">
+                          {row.value}
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>

@@ -105,6 +105,7 @@ export default function CreateContractPaymentStep({
     {
       methodDialog: labels.methodDialog,
       draftSuccessDialog: labels.draftSuccessDialog,
+      discountCode: labels.discountCode,
       payError: labels.navigation.payError,
     },
   );
@@ -333,6 +334,7 @@ export default function CreateContractPaymentStep({
         labels={{
           methodDialog: labels.methodDialog,
           draftSuccessDialog: labels.draftSuccessDialog,
+          discountCode: labels.discountCode,
           payError: labels.navigation.payError,
         }}
         isMethodDialogOpen={paymentFlow.isMethodDialogOpen}

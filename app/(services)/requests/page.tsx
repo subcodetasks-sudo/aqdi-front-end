@@ -137,12 +137,50 @@ export default async function RequestsPage() {
         close: t("card.contractDialog.close"),
         loading: t("card.contractDialog.loading"),
         emptyValue: t("card.contractDialog.emptyValue"),
+        linkPreview: t("card.contractDialog.linkPreview"),
         overviewSection: t("card.contractDialog.overviewSection"),
         ownerSection: t("card.contractDialog.ownerSection"),
         tenantSection: t("card.contractDialog.tenantSection"),
         unitSection: t("card.contractDialog.unitSection"),
         financeSection: t("card.contractDialog.financeSection"),
         servicesSection: t("card.contractDialog.servicesSection"),
+        instrumentTypes: {
+          electronic: t("card.contractDialog.instrumentTypes.electronic"),
+          electronic_deed_from_the_ministry_of_justice: t(
+            "card.contractDialog.instrumentTypes.electronic_deed_from_the_ministry_of_justice",
+          ),
+          electronic_tax_register: t(
+            "card.contractDialog.instrumentTypes.electronic_tax_register",
+          ),
+          old_handwritten: t(
+            "card.contractDialog.instrumentTypes.old_handwritten",
+          ),
+          property_ownership_owner_are_deceased_endowment: t(
+            "card.contractDialog.instrumentTypes.property_ownership_owner_are_deceased_endowment",
+          ),
+          property_ownership_owner_is_endowment: t(
+            "card.contractDialog.instrumentTypes.property_ownership_owner_is_endowment",
+          ),
+          sale_agreement: t(
+            "card.contractDialog.instrumentTypes.sale_agreement",
+          ),
+          economic_cities_authority_suspended: t(
+            "card.contractDialog.instrumentTypes.economic_cities_authority_suspended",
+          ),
+          strong_argument: t(
+            "card.contractDialog.instrumentTypes.strong_argument",
+          ),
+          sublease_agreement: t(
+            "card.contractDialog.instrumentTypes.sublease_agreement",
+          ),
+          lease_renewal: t("card.contractDialog.instrumentTypes.lease_renewal"),
+          property_ownership_owner_are_suspended: t(
+            "card.contractDialog.instrumentTypes.property_ownership_owner_are_suspended",
+          ),
+          property_ownership_owner_are_deceased: t(
+            "card.contractDialog.instrumentTypes.property_ownership_owner_are_deceased",
+          ),
+        },
         fields: {
           requestNumber: t("card.contractDialog.fields.requestNumber"),
           contractType: t("card.contractDialog.fields.contractType"),
@@ -150,11 +188,7 @@ export default async function RequestsPage() {
           instrumentType: t("card.contractDialog.fields.instrumentType"),
           propertyName: t("card.contractDialog.fields.propertyName"),
           createdAt: t("card.contractDialog.fields.createdAt"),
-          documentationDeadline: t(
-            "card.contractDialog.fields.documentationDeadline",
-          ),
           addressUrl: t("card.contractDialog.fields.addressUrl"),
-          location: t("card.contractDialog.fields.location"),
           name: t("card.contractDialog.fields.name"),
           idNumber: t("card.contractDialog.fields.idNumber"),
           mobile: t("card.contractDialog.fields.mobile"),
@@ -263,6 +297,19 @@ export default async function RequestsPage() {
           ),
           whatsappCta: tPayment("draftSuccessDialog.whatsappCta"),
           whatsappHref,
+        },
+        discountCode: {
+          question: tPayment("discountCode.question"),
+          add: tPayment("discountCode.add"),
+          placeholder: tPayment("discountCode.placeholder"),
+          apply: tPayment("discountCode.apply"),
+          applying: tPayment("discountCode.applying"),
+          clear: tPayment("discountCode.clear"),
+          applyError: tPayment("discountCode.applyError"),
+          alreadyApplied: tPayment("discountCode.alreadyApplied"),
+          missingContractSession: tPayment(
+            "discountCode.missingContractSession",
+          ),
         },
         payError: tPayment("navigation.payError"),
       },

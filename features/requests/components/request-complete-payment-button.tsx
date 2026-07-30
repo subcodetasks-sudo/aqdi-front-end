@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { CreditCard, Loader2 } from "lucide-react";
 
 import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
+import CreateContractDiscountCodeField from "@/features/create-contract/components/create-contract-discount-code-field";
+import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { contractFinanceSummaryKeys } from "@/features/create-contract/query-keys";
@@ -35,6 +37,8 @@ export default function RequestCompletePaymentButton({
     contractUuid,
     paymentFlowLabels,
   );
+  const { appliedCoupon, isApplying, applyCoupon, clearCouponDraft } =
+    useApplyContractCoupon(contractUuid);
 
   const financeQuery = useQuery({
     queryKey: contractFinanceSummaryKeys.detail(contractUuid),
@@ -42,11 +46,18 @@ export default function RequestCompletePaymentButton({
     enabled: Boolean(contractUuid),
   });
 
-  const totalPrice = financeQuery.data?.total_price;
+  const totalPrice =
+    appliedCoupon?.totalPriceBeforeCoupon ?? financeQuery.data?.total_price;
+  const payableTotal =
+    appliedCoupon?.totalPriceAfterCoupon ?? financeQuery.data?.total_price;
+  const hasDiscount =
+    Boolean(appliedCoupon) &&
+    typeof appliedCoupon?.discount === "number" &&
+    appliedCoupon.discount > 0;
   const hasAmount =
-    typeof totalPrice === "number" && Number.isFinite(totalPrice);
+    typeof payableTotal === "number" && Number.isFinite(payableTotal);
   const idleLabel = hasAmount
-    ? labelWithAmount.replaceAll("{amount}", formatPaymentAmount(totalPrice))
+    ? labelWithAmount.replaceAll("{amount}", formatPaymentAmount(payableTotal))
     : label;
 
   return (
@@ -62,7 +73,11 @@ export default function RequestCompletePaymentButton({
       >
         <CreditCard className="size-4 shrink-0" aria-hidden="true" />
         <span className="truncate">
-          {paymentFlow.isSubmitting ? <Loader2 className="size-4 shrink-0" aria-hidden="true" /> : idleLabel}
+          {paymentFlow.isSubmitting ? (
+            <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden="true" />
+          ) : (
+            idleLabel
+          )}
         </span>
       </button>
 
@@ -74,9 +89,22 @@ export default function RequestCompletePaymentButton({
         onDraftSuccessDialogOpenChange={paymentFlow.setIsDraftSuccessDialogOpen}
         draftOrderUuid={paymentFlow.draftOrderUuid}
         isSubmitting={paymentFlow.isSubmitting}
-        totalPrice={hasAmount ? totalPrice : 0}
+        hasDiscount={hasDiscount}
+        totalPrice={typeof totalPrice === "number" ? totalPrice : 0}
+        discountedPrice={
+          hasDiscount ? (appliedCoupon?.totalPriceAfterCoupon ?? null) : null
+        }
         selectedMethod={paymentFlow.selectedPaymentMethod}
         onSelect={paymentFlow.handlePaymentMethodSelect}
+        payNowExtra={
+          <CreateContractDiscountCodeField
+            labels={paymentFlowLabels.discountCode}
+            appliedCoupon={appliedCoupon}
+            isApplying={isApplying}
+            onApply={applyCoupon}
+            onClear={clearCouponDraft}
+          />
+        }
       />
     </>
   );

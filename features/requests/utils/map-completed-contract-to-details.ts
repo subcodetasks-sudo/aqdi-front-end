@@ -1,7 +1,11 @@
 import type { CompletedContractDetails } from "@/features/requests/services/get-completed-contract-details";
 import type { CompletedContractUnit } from "@/features/requests/types/completed-contract";
 
-export type RequestContractDetailsRow = { label: string; value: string };
+export type RequestContractDetailsRow = {
+  label: string;
+  value: string;
+  href?: string;
+};
 
 export type RequestContractDetailsSection = {
   title: string;
@@ -19,12 +23,14 @@ export type RequestContractDialogLabels = {
   close: string;
   loading: string;
   emptyValue: string;
+  linkPreview: string;
   overviewSection: string;
   ownerSection: string;
   tenantSection: string;
   unitSection: string;
   financeSection: string;
   servicesSection: string;
+  instrumentTypes: Record<string, string>;
   fields: {
     requestNumber: string;
     contractType: string;
@@ -32,9 +38,7 @@ export type RequestContractDialogLabels = {
     instrumentType: string;
     propertyName: string;
     createdAt: string;
-    documentationDeadline: string;
     addressUrl: string;
-    location: string;
     name: string;
     idNumber: string;
     mobile: string;
@@ -111,9 +115,10 @@ function pushRow(
   rows: RequestContractDetailsRow[],
   label: string,
   value: string | null,
+  href?: string,
 ) {
   if (value) {
-    rows.push({ label, value });
+    rows.push(href ? { label, value, href } : { label, value });
   }
 }
 
@@ -194,6 +199,24 @@ function resolveUnits(contract: CompletedContractDetails["contract"]) {
   }
 
   return [];
+}
+
+function formatInstrumentType(
+  instrumentType: string | null | undefined,
+  instrumentTypeTrans: string | null | undefined,
+  labels: RequestContractDialogLabels,
+) {
+  const translated = toDisplayValue(instrumentTypeTrans, labels.emptyValue);
+  if (translated) {
+    return translated;
+  }
+
+  const raw = toDisplayValue(instrumentType, labels.emptyValue);
+  if (!raw) {
+    return null;
+  }
+
+  return labels.instrumentTypes[raw] ?? raw;
 }
 
 function formatContractType(
@@ -335,8 +358,11 @@ export function mapCompletedContractToDetails(
   pushRow(
     overviewRows,
     labels.fields.instrumentType,
-    toDisplayValue(contract.instrument_type_trans, empty) ??
-      toDisplayValue(contract.instrument_type, empty),
+    formatInstrumentType(
+      contract.instrument_type,
+      contract.instrument_type_trans,
+      labels,
+    ),
   );
   pushRow(
     overviewRows,
@@ -348,22 +374,12 @@ export function mapCompletedContractToDetails(
     labels.fields.createdAt,
     toDisplayValue(contract.created_at, empty),
   );
-  pushRow(
-    overviewRows,
-    labels.fields.documentationDeadline,
-    toDisplayValue(contract.time_to_documentation_contract, empty),
-  );
+  const addressUrl = toDisplayValue(contract.address_url, empty);
   pushRow(
     overviewRows,
     labels.fields.addressUrl,
-    toDisplayValue(contract.address_url, empty),
-  );
-  const lat = toDisplayValue(contract.latitude, empty);
-  const lng = toDisplayValue(contract.longitude, empty);
-  pushRow(
-    overviewRows,
-    labels.fields.location,
-    lat && lng ? `${lat}, ${lng}` : lat ?? lng,
+    addressUrl ? labels.linkPreview : null,
+    addressUrl ?? undefined,
   );
 
   const ownerRows: RequestContractDetailsRow[] = [];

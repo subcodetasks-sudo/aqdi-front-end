@@ -2,7 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { contractFinanceSummaryKeys } from "@/features/create-contract/query-keys";
@@ -15,6 +15,23 @@ export function useApplyContractCoupon(contractUuid: string | null) {
   const paymentData = useCreateContractDraftStore((state) => state.paymentData);
   const setPaymentData = useCreateContractDraftStore((state) => state.setPaymentData);
   const [isApplying, setIsApplying] = useState(false);
+  const [couponContractUuid, setCouponContractUuid] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (!contractUuid) {
+      return;
+    }
+
+    if (couponContractUuid && couponContractUuid !== contractUuid) {
+      setPaymentData({
+        ...useCreateContractDraftStore.getState().paymentData,
+        appliedCoupon: null,
+      });
+      setCouponContractUuid(null);
+    }
+  }, [contractUuid, couponContractUuid, setPaymentData]);
 
   async function applyCoupon(code: string): Promise<boolean> {
     const trimmedCode = code.trim();
@@ -23,7 +40,16 @@ export function useApplyContractCoupon(contractUuid: string | null) {
       return false;
     }
 
-    if (paymentData.appliedCoupon) {
+    if (paymentData.appliedCoupon && couponContractUuid === contractUuid) {
+      toast.error(t("alreadyApplied"));
+      return false;
+    }
+
+    if (
+      paymentData.appliedCoupon &&
+      couponContractUuid === null &&
+      contractUuid
+    ) {
       toast.error(t("alreadyApplied"));
       return false;
     }
@@ -44,9 +70,10 @@ export function useApplyContractCoupon(contractUuid: string | null) {
       }
 
       setPaymentData({
-        ...paymentData,
+        ...useCreateContractDraftStore.getState().paymentData,
         appliedCoupon: result.coupon,
       });
+      setCouponContractUuid(contractUuid);
 
       await queryClient.invalidateQueries({
         queryKey: contractFinanceSummaryKeys.detail(contractUuid),
@@ -60,18 +87,23 @@ export function useApplyContractCoupon(contractUuid: string | null) {
   }
 
   function clearCouponDraft() {
-    if (paymentData.appliedCoupon) {
+    if (paymentData.appliedCoupon && couponContractUuid === contractUuid) {
       return;
     }
 
     setPaymentData({
-      ...paymentData,
+      ...useCreateContractDraftStore.getState().paymentData,
       appliedCoupon: null,
     });
   }
 
   return {
-    appliedCoupon: paymentData.appliedCoupon,
+    appliedCoupon:
+      !paymentData.appliedCoupon
+        ? null
+        : couponContractUuid === null || couponContractUuid === contractUuid
+          ? paymentData.appliedCoupon
+          : null,
     isApplying,
     applyCoupon,
     clearCouponDraft,

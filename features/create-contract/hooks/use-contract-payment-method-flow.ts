@@ -11,6 +11,7 @@ import type { CreateContractLabels } from "@/features/create-contract/types/crea
 type ContractPaymentMethodLabels = {
   methodDialog: CreateContractLabels["payment"]["methodDialog"];
   draftSuccessDialog: CreateContractLabels["payment"]["draftSuccessDialog"];
+  discountCode: CreateContractLabels["payment"]["discountCode"];
   payError: string;
 };
 
