@@ -221,7 +221,7 @@ function EditButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-white px-3 py-1.5 text-xs font-bold text-brand shadow-sm transition-colors hover:bg-[#f7f7f7]",
+        "inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-white px-3 py-1.5 text-xs font-bold text-brand shadow-sm transition-colors hover:bg-[#f7f7f7] dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#7dccc0] dark:hover:bg-[#24302c]",
         className,
       )}
     >
@@ -244,7 +244,7 @@ function OverviewEditIcon({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="inline-flex cursor-pointer items-center justify-center rounded-lg"
+      className="inline-flex cursor-pointer items-center justify-center rounded-lg text-brand dark:text-[#7dccc0]"
     >
       <Pencil className="size-3.5" aria-hidden="true" />
     </button>
@@ -263,7 +263,7 @@ function ExternalLinkPreview({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 font-bold text-brand underline-offset-2 hover:underline"
+      className="inline-flex items-center gap-1.5 font-bold text-brand underline-offset-2 hover:underline dark:text-[#7dccc0]"
     >
       <span>{label}</span>
       <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
@@ -291,7 +291,7 @@ function ViewAttachmentButton({
           onPreview(preview);
         }
       }}
-      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb]"
+      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#eef6f3] px-3 py-1.5 text-xs font-bold text-brand transition-colors hover:bg-[#e3f0eb] dark:bg-[#16352f] dark:text-[#7dccc0] dark:hover:bg-[#1d453d]"
     >
       <Eye className="size-3.5" aria-hidden="true" />
       <span>{label}</span>
@@ -419,10 +419,10 @@ export default function CreateContractReviewOrderDialog({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           showCloseButton={false}
-          className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5"
+          className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5 dark:bg-[#1a2421] dark:text-white"
         >
           <div className="relative mb-4 flex items-center justify-between">
-            <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base">
+            <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base dark:text-[#7dccc0]">
               <Search className="size-4 shrink-0" aria-hidden="true" />
               <span>{labels.title}</span>
             </DialogTitle>
@@ -431,19 +431,19 @@ export default function CreateContractReviewOrderDialog({
               <button
                 type="button"
                 aria-label={labels.close}
-                className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666]"
+                className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-[#9a9a9a] shadow-sm transition-colors hover:bg-[#f0f0f0] hover:text-[#666] dark:bg-[#121a18] dark:text-[#9eb5af] dark:hover:bg-[#24302c] dark:hover:text-white"
               >
                 <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
               </button>
             </DialogClose>
           </div>
 
-          <div className="mb-4 grid grid-cols-2 gap-2 border-b pb-4 sm:grid-cols-4">
-            <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center">
-              <p className="text-lg font-extrabold leading-none text-brand md:text-xl">
+          <div className="mb-4 grid grid-cols-2 gap-2 border-b border-[#ececec] pb-4 sm:grid-cols-4 dark:border-[#2f403b]">
+            <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#dce8e3] bg-[#eef6f3] px-2 py-3 text-center dark:border-[#2f403b] dark:bg-[#16352f]">
+              <p className="text-lg font-extrabold leading-none text-brand md:text-xl dark:text-[#7dccc0]">
                 {summary.contractUuid}
               </p>
-              <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76]">
+              <p className="inline-flex items-center gap-1 text-[11px] font-medium text-[#6b7c76] dark:text-[#9eb5af]">
                 <ClipboardList className="size-3" aria-hidden="true" />
                 <span>{labels.orderNumber}</span>
               </p>
@@ -452,7 +452,7 @@ export default function CreateContractReviewOrderDialog({
             <button
               type="button"
               onClick={() => void handleShare()}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa] dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#7dccc0] dark:hover:bg-[#24302c]"
             >
               <Share2 className="size-4" aria-hidden="true" />
               <span className="text-xs font-bold">{labels.share}</span>
@@ -461,7 +461,7 @@ export default function CreateContractReviewOrderDialog({
             <button
               type="button"
               onClick={() => void handleCopy()}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa] dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#7dccc0] dark:hover:bg-[#24302c]"
             >
               <Copy className="size-4" aria-hidden="true" />
               <span className="text-xs font-bold">{labels.copy}</span>
@@ -470,7 +470,7 @@ export default function CreateContractReviewOrderDialog({
             <button
               type="button"
               onClick={handlePrint}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa]"
+              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[#e8e8e8] bg-white px-2 py-3 text-brand transition-colors hover:bg-[#fafafa] dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#7dccc0] dark:hover:bg-[#24302c]"
             >
               <Printer className="size-4" aria-hidden="true" />
               <span className="text-xs font-bold">{labels.print}</span>
@@ -478,12 +478,12 @@ export default function CreateContractReviewOrderDialog({
           </div>
 
           <div className="space-y-3">
-            <section className="rounded-lg border border-[#cfe8dd] bg-[#f5fbf8] p-3 shadow-sm">
+            <section className="rounded-lg border border-[#cfe8dd] bg-[#f5fbf8] p-3 shadow-sm dark:border-[#2f403b] dark:bg-[#121a18] dark:shadow-none">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {overviewItems.map((item) => (
                   <div
                     key={item.key}
-                    className="relative flex flex-col items-start rounded-lg border border-[#dfe7e3] bg-white px-4 py-3 text-start shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                    className="relative flex flex-col items-start rounded-lg border border-[#dfe7e3] bg-white px-4 py-3 text-start shadow-[0_1px_2px_rgba(15,23,42,0.04)] dark:border-[#2f403b] dark:bg-[#1a2421] dark:shadow-none"
                   >
                     {item.editable ? (
                       <div className="absolute inset-e-3 top-3">
@@ -493,10 +493,10 @@ export default function CreateContractReviewOrderDialog({
                         />
                       </div>
                     ) : null}
-                    <p className="mb-1 text-xs font-bold text-[#8a8a8a]">
+                    <p className="mb-1 text-xs font-bold text-[#8a8a8a] dark:text-[#9eb5af]">
                       {item.label}
                     </p>
-                    <p className="text-sm font-extrabold leading-tight text-brand">
+                    <p className="text-sm font-extrabold leading-tight text-brand dark:text-[#7dccc0]">
                       {item.value}
                     </p>
                   </div>
@@ -515,12 +515,12 @@ export default function CreateContractReviewOrderDialog({
                 return (
                   <section
                     key={section.id}
-                    className="relative overflow-hidden rounded-2xl bg-brand px-4 py-5 text-white shadow-sm"
+                    className="relative overflow-hidden rounded-2xl bg-brand px-4 py-5 text-white shadow-sm dark:bg-[#0f6b5c] dark:shadow-none"
                   >
                     <EditButton
                       label={labels.edit}
                       onClick={() => handleEdit(section.editTarget)}
-                      className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25"
+                      className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25 dark:border-white/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
                     />
                     <div className="space-y-2 text-start">
                       <p className="text-sm font-bold opacity-90">
@@ -542,10 +542,10 @@ export default function CreateContractReviewOrderDialog({
               return (
                 <section
                   key={section.id}
-                  className="relative rounded-2xl border border-[#ececec] bg-gray-200/10 p-4 shadow-sm"
+                  className="relative rounded-2xl border border-[#ececec] bg-gray-200/10 p-4 shadow-sm dark:border-[#2f403b] dark:bg-[#121a18] dark:shadow-none"
                 >
                   <div className="mb-3 flex items-start justify-between gap-3">
-                    <h3 className="text-sm font-extrabold text-brand">
+                    <h3 className="text-sm font-extrabold text-brand dark:text-[#7dccc0]">
                       {section.title}
                     </h3>
                     <EditButton
@@ -553,7 +553,7 @@ export default function CreateContractReviewOrderDialog({
                       onClick={() => handleEdit(section.editTarget)}
                       className={
                         isUnitSection
-                          ? "border-[#cfe8dd] hover:bg-[#f5fbf8]"
+                          ? "border-[#cfe8dd] hover:bg-[#f5fbf8] dark:border-[#2f403b] dark:hover:bg-[#24302c]"
                           : ""
                       }
                       iconPosition={isUnitSection ? "end" : "start"}
@@ -561,7 +561,7 @@ export default function CreateContractReviewOrderDialog({
                   </div>
 
                   {section.incomplete ? (
-                    <p className="text-sm font-medium text-[#e11d48]">
+                    <p className="text-sm font-medium text-[#e11d48] dark:text-[#f87171]">
                       {labels.unitIncomplete}
                     </p>
                   ) : isUnitSection ? (
@@ -569,9 +569,9 @@ export default function CreateContractReviewOrderDialog({
                       {section.fields.map((field, fieldIndex) => (
                         <div
                           key={`${section.id}-${fieldIndex}-${field.label}`}
-                          className="rounded-xl border border-[#f0f0f0] bg-white px-3.5 py-2.5 text-start"
+                          className="rounded-xl border border-[#f0f0f0] bg-white px-3.5 py-2.5 text-start dark:border-[#2f403b] dark:bg-[#1a2421]"
                         >
-                          <p className="text-[11px] font-medium text-[#9a9a9a]">
+                          <p className="text-[11px] font-medium text-[#9a9a9a] dark:text-[#9eb5af]">
                             {field.label}
                           </p>
 
@@ -583,7 +583,7 @@ export default function CreateContractReviewOrderDialog({
                               />
                             </div>
                           ) : (
-                            <p className="mt-0.5 text-sm font-bold wrap-break-word text-[#2b2b2b]">
+                            <p className="mt-0.5 text-sm font-bold wrap-break-word text-[#2b2b2b] dark:text-white">
                               {field.value}
                             </p>
                           )}
@@ -602,14 +602,14 @@ export default function CreateContractReviewOrderDialog({
                       ))}
                     </div>
                   ) : (
-                    <div className="divide-y divide-dashed divide-[#e5e5e5]">
+                    <div className="divide-y divide-dashed divide-[#e5e5e5] dark:divide-[#2f403b]">
                       {section.fields.map((field, fieldIndex) => (
                         <div
                           key={`${section.id}-${fieldIndex}-${field.label}`}
                           className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
                         >
                           <div className="min-w-0 text-sm">
-                            <span className="font-medium text-[#8a8a8a]">
+                            <span className="font-medium text-[#8a8a8a] dark:text-[#9eb5af]">
                               {field.label}:{" "}
                             </span>
                             {field.href ? (
@@ -618,7 +618,7 @@ export default function CreateContractReviewOrderDialog({
                                 label={labels.linkPreview}
                               />
                             ) : (
-                              <span className="wrap-break-word font-bold text-[#222]">
+                              <span className="wrap-break-word font-bold text-[#222] dark:text-white">
                                 {field.value}
                               </span>
                             )}
@@ -641,14 +641,14 @@ export default function CreateContractReviewOrderDialog({
             })}
           </div>
 
-          <p className="mt-4 text-center text-xs leading-5 text-[#8a8a8a]">
+          <p className="mt-4 text-center text-xs leading-5 text-[#8a8a8a] dark:text-[#9eb5af]">
             {labels.hint}
           </p>
 
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+            className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-brand px-4 text-sm font-extrabold text-white transition-opacity hover:opacity-90 dark:bg-[#0f6b5c]"
           >
             {labels.confirm}
           </button>
@@ -665,15 +665,15 @@ export default function CreateContractReviewOrderDialog({
       >
         <DialogContent
           showCloseButton={false}
-          className="gap-0 overflow-hidden rounded-3xl border-0 bg-white p-0 sm:max-w-lg"
+          className="gap-0 overflow-hidden rounded-3xl border-0 bg-white p-0 sm:max-w-lg dark:bg-[#1a2421]"
         >
-          <div className="flex items-center justify-between gap-3 border-b border-[#ececec] px-4 py-3">
+          <div className="flex items-center justify-between gap-3 border-b border-[#ececec] px-4 py-3 dark:border-[#2f403b]">
             <div className="min-w-0 space-y-0.5 text-start">
-              <DialogTitle className="text-sm font-extrabold text-[#1a1a1a] md:text-base">
+              <DialogTitle className="text-sm font-extrabold text-[#1a1a1a] md:text-base dark:text-white">
                 {labels.attachmentPreviewTitle}
               </DialogTitle>
               {attachmentPreview?.fileName ? (
-                <p className="truncate text-xs text-[#9a9a9a]">
+                <p className="truncate text-xs text-[#9a9a9a] dark:text-[#9eb5af]">
                   {attachmentPreview.fileName}
                 </p>
               ) : null}
@@ -694,7 +694,7 @@ export default function CreateContractReviewOrderDialog({
                     attachmentPreview.fileName,
                   );
                 }}
-                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50"
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50 dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#9eb5af] dark:hover:bg-[#24302c]"
               >
                 <Download className="size-4" aria-hidden="true" />
               </button>
@@ -710,7 +710,7 @@ export default function CreateContractReviewOrderDialog({
 
                   printAttachment(attachmentPreview.url);
                 }}
-                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50"
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] disabled:opacity-50 dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#9eb5af] dark:hover:bg-[#24302c]"
               >
                 <Printer className="size-4" aria-hidden="true" />
               </button>
@@ -719,16 +719,16 @@ export default function CreateContractReviewOrderDialog({
                 type="button"
                 aria-label={labels.close}
                 onClick={closeAttachmentPreview}
-                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef]"
+                className="inline-flex size-9 items-center justify-center rounded-xl border border-[#e8e8e8] bg-[#f7f7f7] text-[#555555] transition-colors hover:bg-[#efefef] dark:border-[#2f403b] dark:bg-[#121a18] dark:text-[#9eb5af] dark:hover:bg-[#24302c]"
               >
                 <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
               </button>
             </div>
           </div>
 
-          <div className="flex min-h-64 items-center justify-center overflow-hidden bg-[#fafafa] p-4">
+          <div className="flex min-h-64 items-center justify-center overflow-hidden bg-[#fafafa] p-4 dark:bg-[#121a18]">
             {attachmentPreview?.kind === "image" ? (
-              <div className="relative mx-auto aspect-4/3 w-full max-w-md overflow-hidden rounded-xl bg-white">
+              <div className="relative mx-auto aspect-4/3 w-full max-w-md overflow-hidden rounded-xl bg-white dark:bg-[#1a2421]">
                 <Image
                   src={attachmentPreview.url}
                   alt={attachmentPreview.title}
@@ -741,22 +741,22 @@ export default function CreateContractReviewOrderDialog({
               <iframe
                 src={attachmentPreview.url}
                 title={attachmentPreview.title}
-                className="h-[55vh] w-full rounded-xl bg-white"
+                className="h-[55vh] w-full rounded-xl bg-white dark:bg-[#1a2421]"
               />
             ) : attachmentPreview ? (
               <div className="flex flex-col items-center gap-3 py-8 text-center">
                 <FileText
-                  className="size-12 text-[#b8b0d9]"
+                  className="size-12 text-[#b8b0d9] dark:text-[#7dccc0]"
                   aria-hidden="true"
                 />
-                <p className="text-sm font-bold text-[#2b2b2b]">
+                <p className="text-sm font-bold text-[#2b2b2b] dark:text-white">
                   {attachmentPreview.title}
                 </p>
                 <a
                   href={attachmentPreview.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm font-semibold text-brand underline-offset-2 hover:underline"
+                  className="text-sm font-semibold text-brand underline-offset-2 hover:underline dark:text-[#7dccc0]"
                 >
                   {labels.view}
                 </a>

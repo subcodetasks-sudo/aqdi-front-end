@@ -155,7 +155,7 @@ export default function UnitsDataFormList({
           <button
             type="button"
             onClick={handleAddUnit}
-            className="flex h-14 w-full items-center justify-center rounded-2xl border border-dashed border-brand bg-brand-background text-sm font-bold text-brand transition-colors hover:bg-[#eef6f3] dark:border-brand-secondary/60 dark:hover:bg-[#1c2f29]"
+            className="flex h-14 w-full items-center justify-center rounded-2xl border border-dashed border-brand bg-brand-background text-sm font-bold text-brand transition-colors hover:bg-[#eef6f3] dark:border-brand-secondary/60 dark:bg-[#121a18] dark:text-white dark:hover:bg-[#1c2f29]"
           >
             + {addUnitLabel}
           </button>

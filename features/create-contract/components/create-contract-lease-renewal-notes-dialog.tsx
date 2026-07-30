@@ -86,7 +86,7 @@ export default function CreateContractLeaseRenewalNotesDialog({
         </div>
 
         <div className="mt-6">
-          <label className="mb-2 block text-sm font-semibold text-brand">
+          <label className="mb-2 block text-sm font-semibold text-black">
             {labels.notesLabel}
           </label>
 

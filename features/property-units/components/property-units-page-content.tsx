@@ -14,19 +14,14 @@ type PropertyUnitsPageContentProps = {
   labels: PropertyUnitsLabels;
   propertyId: number | null;
   initialTab: PropertyUnitTab;
-  propertyName: string | null;
   property: PropertyWithUnitsApiData | null;
   residentialItems: PropertyUnitCardData[];
   commercialItems: PropertyUnitCardData[];
 };
 
-function buildCreateUnitHref(
-  propertyId: number,
-  contractType: "housing" | "commercial",
-) {
+function buildCreateUnitHref(propertyId: number) {
   const params = new URLSearchParams({
     propertyId: String(propertyId),
-    contract_type: contractType,
   });
 
   return `/properties/create-unit?${params.toString()}`;
@@ -36,39 +31,21 @@ export default function PropertyUnitsPageContent({
   labels,
   propertyId,
   initialTab,
-  propertyName,
   property,
   residentialItems,
   commercialItems,
 }: PropertyUnitsPageContentProps) {
   const { activeTab, selectTab } = usePropertyUnitsTabs(initialTab);
 
-  const pageTitle = propertyName
-    ? `${labels.pageTitle} - ${propertyName}`
-    : labels.pageTitle;
-
-  const isResidential = activeTab === "residential";
-  const pageBadge = isResidential
-    ? labels.residentialUnitsCount
-    : labels.commercialUnitsCount;
-  const createUnitLabel = isResidential
-    ? labels.createResidentialUnit
-    : labels.createCommercialUnit;
+  const createUnitLabel = labels.createResidentialUnit;
   const createUnitHref =
-    propertyId !== null
-      ? buildCreateUnitHref(
-          propertyId,
-          isResidential ? "housing" : "commercial",
-        )
-      : null;
+    propertyId !== null ? buildCreateUnitHref(propertyId) : null;
 
   return (
     <>
       <ServicesPageBackConfig
         backLabel={labels.backLabel}
         backHref="/properties/my-properties"
-        pageTitle={pageTitle}
-        pageBadge={pageBadge}
         pageAction={
           createUnitHref
             ? {
@@ -79,15 +56,27 @@ export default function PropertyUnitsPageContent({
         }
       />
 
-      <PropertyUnitsTabs
-        labels={labels}
-        propertyId={propertyId}
-        activeTab={activeTab}
-        onTabChange={selectTab}
-        property={property}
-        residentialItems={residentialItems}
-        commercialItems={commercialItems}
-      />
+      <div className="space-y-6">
+        <header className="space-y-2">
+          <h1 className="text-3xl font-extrabold text-brand md:text-4xl">
+            {labels.pageTitle}
+          </h1>
+          <p className="max-w-2xl text-sm leading-7 text-[#7a7a7a] md:text-base">
+            {labels.pageSubtitle}
+          </p>
+        </header>
+
+        <PropertyUnitsTabs
+          labels={labels}
+          propertyId={propertyId}
+          activeTab={activeTab}
+          onTabChange={selectTab}
+          property={property}
+          residentialItems={residentialItems}
+          commercialItems={commercialItems}
+          createUnitHref={createUnitHref}
+        />
+      </div>
     </>
   );
 }

@@ -35,6 +35,10 @@ export function buildContractStep6Body({
     financeData.selectedTenantRoleIds,
     financeData.tenantRoleValues,
   );
+  const otherConditionsList = getFilledOtherConditions(
+    financeData.otherConditionsList,
+  );
+  const hasOtherConditions = otherConditionsList.length > 0;
 
   const body: Record<
     string,
@@ -48,9 +52,9 @@ export function buildContractStep6Body({
     ),
     contract_starting_date_year: formatPropertyOwnerYear(contractStartDate.year),
     payment_type_id: financeData.paymentTypeId,
-    conditions: financeData.addOtherConditions,
+    conditions: hasOtherConditions,
     tenant_roles: tenantPayload.tenant_roles,
-    additional_terms: financeData.addOtherConditions,
+    additional_terms: hasOtherConditions,
   };
 
   if (financeData.isCustomDuration && hasCustomDuration) {
@@ -69,15 +73,7 @@ export function buildContractStep6Body({
     body.tenant_role_values = tenantPayload.tenant_role_values;
   }
 
-  if (financeData.addOtherConditions) {
-    const otherConditionsList = getFilledOtherConditions(
-      financeData.otherConditionsList,
-    );
-
-    if (otherConditionsList.length === 0) {
-      throw new Error("At least one other condition is required");
-    }
-
+  if (hasOtherConditions) {
     body.other_conditions_list = otherConditionsList;
   }
 

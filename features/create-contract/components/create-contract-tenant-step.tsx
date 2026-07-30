@@ -59,6 +59,9 @@ export default function CreateContractTenantStep({
   const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
+  const existingPropertyContext = useCreateContractDraftStore(
+    (state) => state.existingPropertyContext,
+  );
   const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
@@ -81,6 +84,11 @@ export default function CreateContractTenantStep({
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
+      if (existingPropertyContext) {
+        router.back();
+        return;
+      }
+
       onBack();
       return;
     }
@@ -191,13 +199,14 @@ export default function CreateContractTenantStep({
   }
 
   return (
-    <div className="space-y-4">
-      <CreateContractStepPhaseProgress
-        totalPhases={phaseCount}
-        currentPhaseIndex={currentPhaseIndex}
-      />
+    <>
+      <div className="p-6 md:p-8">
+        <CreateContractStepPhaseProgress
+          totalPhases={phaseCount}
+          currentPhaseIndex={currentPhaseIndex}
+          className="mb-5"
+        />
 
-      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
         <CreateContractStepPhaseHeader
           title={phaseTitle}
           subtitle={phaseSubtitle}
@@ -291,6 +300,6 @@ export default function CreateContractTenantStep({
         isSaving={isSavingDraft}
         onConfirm={() => void handleConfirmSaveLater()}
       />
-    </div>
+    </>
   );
 }

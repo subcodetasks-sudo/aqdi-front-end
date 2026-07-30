@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { useServicesPageMeta } from "@/features/services/components/services-page-provider";
+import { setServicesFlowDarkMode } from "@/lib/ui/set-services-flow-dark-mode";
 import { cn } from "@/lib/utils";
 
 const pillBaseClassName =
@@ -19,20 +20,16 @@ export default function ServicesSideBackNav() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const shell = document.querySelector<HTMLElement>("[data-services-layout]");
-
-    if (!shell) {
-      return;
-    }
-
-    if (isDarkMode) {
-      shell.classList.add("dark", "services-dark-shell");
-    } else {
-      shell.classList.remove("dark", "services-dark-shell");
-    }
+    setServicesFlowDarkMode({
+      enabled: isDarkMode,
+      shellClass: "services-dark-shell",
+    });
 
     return () => {
-      shell.classList.remove("dark", "services-dark-shell");
+      setServicesFlowDarkMode({
+        enabled: false,
+        shellClass: "services-dark-shell",
+      });
     };
   }, [isDarkMode]);
 

@@ -61,7 +61,7 @@ export default function CreateContractOwnerStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="p-6 md:p-8">
         <CreateContractStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}

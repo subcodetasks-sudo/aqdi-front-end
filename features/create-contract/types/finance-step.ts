@@ -103,7 +103,9 @@ export function normalizeFinanceData(
       LEGACY_PAYMENT_METHOD_TO_TYPE_ID[financeData.paymentMethod] ?? "";
   }
 
-  const otherConditionsList = resolveOtherConditionsList(financeData);
+  const otherConditionsList = getFilledOtherConditions(
+    resolveOtherConditionsList(financeData),
+  );
 
   const selectedTenantRoleIds = Array.isArray(financeData.selectedTenantRoleIds)
     ? financeData.selectedTenantRoleIds.filter(
@@ -140,12 +142,10 @@ export function normalizeFinanceData(
       typeof paymentTypeId === "number" && paymentTypeId > 0 ? paymentTypeId : "",
     selectedTenantRoleIds,
     tenantRoleValues,
-    addTenantPermissions:
-      financeData.addTenantPermissions === true ||
-      selectedTenantRoleIds.length > 0,
+    // Optional sections: only mark enabled when there is real content.
+    addTenantPermissions: selectedTenantRoleIds.length > 0,
     otherConditionsList,
-    addOtherConditions:
-      financeData.addOtherConditions === true || otherConditionsList.length > 0,
+    addOtherConditions: otherConditionsList.length > 0,
   };
 }
 
@@ -192,6 +192,51 @@ export function isFinancePaymentMethodComplete(financeData: FinanceDataState) {
   return financeData.paymentTypeId !== "";
 }
 
+/**
+ * Drop incomplete optional selections so opening an accordion (or a half-filled
+ * tenant role) cannot permanently block continue.
+ */
+export function sanitizeFinanceDataForContinue(
+  financeData: FinanceDataState,
+): FinanceDataState {
+  const otherConditionsList = getFilledOtherConditions(
+    financeData.otherConditionsList,
+  );
+
+  const selectedTenantRoleIds: number[] = [];
+  const tenantRoleValues: Record<string, string> = {};
+
+  for (const id of financeData.selectedTenantRoleIds) {
+    const key = String(id);
+
+    if (!(key in financeData.tenantRoleValues)) {
+      selectedTenantRoleIds.push(id);
+      continue;
+    }
+
+    const raw = financeData.tenantRoleValues[key]?.trim() ?? "";
+    if (!raw) {
+      continue;
+    }
+
+    if (/^\d+(\.\d+)?$/.test(raw) && !(Number(raw) > 0)) {
+      continue;
+    }
+
+    selectedTenantRoleIds.push(id);
+    tenantRoleValues[key] = financeData.tenantRoleValues[key] ?? raw;
+  }
+
+  return {
+    ...financeData,
+    selectedTenantRoleIds,
+    tenantRoleValues,
+    addTenantPermissions: selectedTenantRoleIds.length > 0,
+    otherConditionsList,
+    addOtherConditions: otherConditionsList.length > 0,
+  };
+}
+
 export function isFinanceDataComplete(financeData: FinanceDataState) {
   const baseComplete =
     isContractStartDateComplete(financeData.contractStartDate) &&
@@ -203,28 +248,10 @@ export function isFinanceDataComplete(financeData: FinanceDataState) {
     return false;
   }
 
-  if (
-    financeData.addTenantPermissions &&
-    financeData.selectedTenantRoleIds.length === 0
-  ) {
-    return false;
-  }
-
-  if (
-    !areTenantRoleValuesComplete(
-      financeData.selectedTenantRoleIds,
-      financeData.tenantRoleValues,
-    )
-  ) {
-    return false;
-  }
-
-  if (
-    financeData.addOtherConditions &&
-    getFilledOtherConditions(financeData.otherConditionsList).length === 0
-  ) {
-    return false;
-  }
-
-  return true;
+  // Permissions / other conditions are optional. Opening their accordion
+  // must not block continue — only incomplete selected role values do.
+  return areTenantRoleValuesComplete(
+    financeData.selectedTenantRoleIds,
+    financeData.tenantRoleValues,
+  );
 }

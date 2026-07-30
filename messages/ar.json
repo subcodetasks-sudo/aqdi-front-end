@@ -915,21 +915,56 @@
         "close": "إغلاق",
         "loading": "جاري تحميل البيانات...",
         "emptyValue": "—",
+        "overviewSection": "بيانات الطلب",
         "ownerSection": "بيانات المالك (المؤجر)",
         "tenantSection": "بيانات المستأجر",
         "unitSection": "بيانات الوحدة المؤجرة",
         "financeSection": "البيانات المالية",
+        "servicesSection": "الخدمات",
         "fields": {
+          "requestNumber": "رقم الطلب",
+          "contractType": "نوع العقد",
+          "status": "حالة الطلب",
+          "instrumentType": "نوع الصك",
+          "propertyName": "اسم العقار",
+          "createdAt": "تاريخ الإنشاء",
+          "documentationDeadline": "موعد التوثيق المتوقع",
+          "addressUrl": "رابط العنوان",
+          "location": "الموقع",
+          "name": "الاسم",
           "idNumber": "رقم الهوية",
+          "mobile": "رقم الجوال",
+          "unitNumber": "رقم الوحدة",
           "unitType": "نوع الوحدة",
           "usage": "الاستخدام",
           "area": "المساحة",
           "floor": "الطابق",
+          "rooms": "الغرف",
+          "halls": "الصالات",
+          "kitchens": "المطابخ",
+          "toilets": "دورات المياه",
           "electricityMeter": "عداد الكهرباء",
           "waterMeter": "عداد الماء",
+          "furnished": "مفروشة",
+          "kitchenTank": "خزان المطبخ",
+          "parking": "مواقف السيارات",
+          "gasMeter": "عداد الغاز",
           "contractDuration": "مدة العقد",
+          "annualRent": "قيمة الإيجار السنوي",
+          "paymentType": "طريقة الدفع",
+          "contractPeriodPrice": "سعر مدة العقد",
+          "applicationFees": "رسوم التطبيق",
+          "tax": "الضريبة",
+          "electricityMeterFee": "رسوم عداد الكهرباء",
+          "waterMeterFee": "رسوم عداد الماء",
+          "servicesTotal": "إجمالي الخدمات",
+          "meterFeesTotal": "إجمالي رسوم العدادات",
           "docFee": "المقابل المالي لعقدي",
-          "totalPrice": "الإجمالي"
+          "totalPrice": "الإجمالي",
+          "yes": "نعم",
+          "no": "لا",
+          "housing": "سكني",
+          "commercial": "تجاري"
         },
         "duration": {
           "oneYear": "سنة واحدة",
@@ -1027,9 +1062,11 @@
       "viewDeed": "عرض الصك",
       "ejarLogoAlt": "شعار إيجار",
       "deedDialog": {
-        "title": "صورة الصك",
+        "title": "معاينة المرفق",
         "close": "إغلاق",
-        "imageAlt": "صورة صك الملكية"
+        "print": "طباعة",
+        "download": "تحميل",
+        "view": "عرض"
       },
       "actions": {
         "viewEdit": "عرض وتعديل العقار",
@@ -1041,12 +1078,13 @@
   },
   "propertyUnits": {
     "backLabel": "رجوع",
-    "pageTitle": "عرض وحدات العقار",
-    "emptyState": "لا توجد وحدات لهذا العقار.",
-    "residentialUnitsCount": "عدد الوحدات السكنية: {count}",
-    "commercialUnitsCount": "عدد الوحدات التجارية: {count}",
-    "createResidentialUnit": "إضافة وحدة سكنية",
-    "createCommercialUnit": "إضافة وحدة تجارية",
+    "pageTitle": "وحدات العقار",
+    "pageSubtitle": "استعرض الوحدات المحفوظة وأنشئ عقودك عليها.",
+    "pageSubtitleWithName": "{propertyName} – استعرض الوحدات المحفوظة وأنشئ عقودك عليها.",
+    "emptyResidential": "لا توجد وحدات سكنية محفوظة بعد.",
+    "emptyCommercial": "لا توجد وحدات تجارية محفوظة بعد.",
+    "createResidentialUnit": "إضافة وحدة جديدة",
+    "createCommercialUnit": "إضافة وحدة جديدة",
     "tabs": {
       "residential": "وحدات سكنية",
       "commercial": "وحدات تجارية"
@@ -1060,7 +1098,7 @@
     },
     "card": {
       "unitNumberLabel": "رقم الوحدة",
-      "editUnit": "تعديل الوحدة",
+      "editUnit": "تعديل",
       "deleteUnit": "حذف الوحدة",
       "deleteDialog": {
         "title": "حذف الوحدة",
@@ -1113,6 +1151,7 @@
     "stepper": {
       "journey": "رحلتك الإيجارية أصبحت أسهل.",
       "saveAlt": "حفظ",
+      "brand": "عقدي",
       "steps": {
         "deed": "الصك",
         "owner": "المالك",
@@ -1187,7 +1226,7 @@
           "hint": "أرقام فقط - غير مقيد بعدد"
         },
         "instrumentDate": {
-          "label": "تاريخ التسجيل الأول",
+          "label": "تاريخ الصك",
           "hijri": "هجري",
           "gregorian": "ميلادي",
           "day": "اليوم",
@@ -1380,6 +1419,8 @@
       "navigation": {
         "previous": "عودة",
         "continue": "متابعة",
+        "save": "حفظ",
+        "saveSuccess": "تم حفظ المسودة بنجاح",
         "submitting": "جاري الحفظ...",
         "submitError": "تعذر حفظ بيانات المالك. حاول مرة أخرى.",
         "updateSuccess": "تم تحديث العقار بنجاح."
@@ -1387,25 +1428,21 @@
       "title": "إسم العقار",
       "subtitle": "قم بتعبئة بياناتك بشكل صحيح :",
       "propertyName": {
-        "label": "إسم العقار",
-        "placeholder": "... أكتب هنا",
-        "hint": "يرجى إضافة اسم للعقار ليسهل عليك الرجوع اليه او تميزه :",
-        "example": "مثلاً - استراحة اللؤلؤة - عمارتي بحي الريان... إلخ"
+        "label": "اسم العقار",
+        "placeholder": "...أكتب هنا",
+        "hint": "يرجى إضافة اسم للعقار ليسهل عليك الرجوع إليه أو تمييزه:",
+        "example": "مثلًا — استراحة اللؤلؤة · عمارتي بحي الربيع · مكتبي بالعليا… إلخ"
       }
     },
     "success": {
-      "title": "تهانينا، تم حفظ بيانات العقار بنجاح !",
+      "title": "تهانينا، تم حفظ «{propertyName}» بنجاح !",
       "description": "الآن تستطيع حفظ بيانات العقار وإعادة إنشاء العقود عليها بكل سهولة ودون الحاجة لتعبئة البيانات.",
-      "mainMenu": "العودة للقائمة الرئيسية",
-      "mainMenuHref": "/",
+      "mainMenu": "عرض قائمة عقاراتي",
+      "mainMenuHref": "/properties/my-properties",
       "actions": {
         "viewProperty": "عرض وتعديل العقار",
-        "viewPropertyHref": "/properties",
         "addUnit": "إضافة وحدة جديدة للعقار",
-        "addUnitHref": "/properties/create-unit",
-        "createContract": "إنشاء عقد إيجار على هذا العقار",
-        "createContractHref": "/create-contract",
-        "ejarLogoAlt": "إيجار"
+        "createContract": "إنشاء عقد إيجار على العقار"
       }
     }
   },
@@ -1430,11 +1467,15 @@
     "editSubtitle": "قم بتحديث بيانات الوحدة أدناه:",
     "selectPlaceholder": "... إختر من هنا",
     "contractType": {
-      "label": "نوع العقد المرتبط بالعقار",
+      "label": "ما نوع استخدام الوحدة: سكني أم تجاري؟",
       "linkedLabel": "نوع العقد المرتبط بالعقار",
       "options": {
         "housing": "سكني",
         "commercial": "تجاري"
+      },
+      "descriptions": {
+        "housing": "شقة، فيلا، دور، غرفة...",
+        "commercial": "محل، مكتب، مستودع، معرض..."
       }
     },
     "unitType": {
@@ -1795,7 +1836,7 @@
           "hint": "أرقام فقط - غير مقيد بعدد"
         },
         "instrumentDate": {
-          "label": "تاريخ التسجيل الأول",
+          "label": "تاريخ الصك",
           "hijri": "هجري",
           "gregorian": "ميلادي",
           "day": "اليوم",

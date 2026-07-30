@@ -118,7 +118,7 @@ export default function CreateContractBirthDateFields({
         <label
           className={cn(
             "text-sm font-semibold",
-            showInvalid ? "text-[#c62828]" : "text-brand",
+            showInvalid ? "text-[#c62828]" : "text-black",
           )}
         >
           {labels.label}

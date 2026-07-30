@@ -45,6 +45,7 @@ export default async function CreatePropertyPage({
     stepper: {
       journey: t("stepper.journey"),
       saveAlt: t("stepper.saveAlt"),
+      brand: t("stepper.brand"),
       steps: {
         deed: t("stepper.steps.deed"),
         owner: t("stepper.steps.owner"),
@@ -293,6 +294,8 @@ export default async function CreatePropertyPage({
       navigation: {
         previous: t("review.navigation.previous"),
         continue: t("review.navigation.continue"),
+        save: t("review.navigation.save"),
+        saveSuccess: t("review.navigation.saveSuccess"),
         submitting: t("review.navigation.submitting"),
         submitError: t("review.navigation.submitError"),
         updateSuccess: t("review.navigation.updateSuccess"),
@@ -307,18 +310,14 @@ export default async function CreatePropertyPage({
       },
     },
     success: {
-      title: t("success.title"),
+      title: t.raw("success.title") as string,
       description: t("success.description"),
       mainMenu: t("success.mainMenu"),
       mainMenuHref: t("success.mainMenuHref"),
       actions: {
         viewProperty: t("success.actions.viewProperty"),
-        viewPropertyHref: t("success.actions.viewPropertyHref"),
         addUnit: t("success.actions.addUnit"),
-        addUnitHref: t("success.actions.addUnitHref"),
         createContract: t("success.actions.createContract"),
-        createContractHref: t("success.actions.createContractHref"),
-        ejarLogoAlt: t("success.actions.ejarLogoAlt"),
       },
     },
   };
@@ -337,6 +336,7 @@ export default async function CreatePropertyPage({
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <CreatePropertyPageContent
+        key={propertyId ?? "create"}
         labels={labels}
         propertyType={propertyType}
         initialEditDraft={initialEditDraft}

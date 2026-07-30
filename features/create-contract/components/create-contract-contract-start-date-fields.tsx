@@ -86,7 +86,7 @@ export default function CreateContractContractStartDateFields({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-3">
-        <label className="text-sm font-semibold text-brand">
+        <label className="text-sm font-semibold text-black">
           {labels.label}
           <span className="text-red-500"> *</span>
         </label>

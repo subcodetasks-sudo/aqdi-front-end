@@ -242,6 +242,10 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
         housing: t("contractType.options.housing"),
         commercial: t("contractType.options.commercial"),
       },
+      descriptions: {
+        housing: t("contractType.descriptions.housing"),
+        commercial: t("contractType.descriptions.commercial"),
+      },
     },
   };
 

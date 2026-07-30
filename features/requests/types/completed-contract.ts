@@ -1,4 +1,5 @@
 export type CompletedContractUnit = {
+  id?: number | null;
   unit_type_name?: string | null;
   unit_usage_name?: string | null;
   unit_number?: string | null;
@@ -6,20 +7,59 @@ export type CompletedContractUnit = {
   floor_number?: number | string | null;
   electricity_meter_number?: string | null;
   water_meter_number?: string | null;
+  tootal_rooms?: number | string | null;
+  number_of_rooms?: number | string | null;
+  The_number_of_halls?: number | string | null;
+  The_number_of_kitchens?: number | string | null;
+  The_number_of_toilets?: number | string | null;
+  The_number_of_the_toilet?: number | string | null;
+  kitchen_tank?: boolean | number | null;
+  furnished?: boolean | number | null;
+  type_furnished?: string | null;
+  electricity_meter?: boolean | number | null;
+  water_meter?: boolean | number | null;
+  window_ac?: number | string | null;
+  split_ac?: number | string | null;
+  number_of_unit_air_conditioners?: number | string | null;
+  Number_parking_spaces?: number | string | null;
+  Gasmeter?: string | null;
 };
 
 export type CompletedContractData = {
   id: number;
   uuid: string;
   contract_type: string;
+  contract_type_trans?: string | null;
   property_owner_id_num: string | null;
+  name_owner?: string | null;
+  name_real_estate?: string | null;
+  property_owner_mobile?: string | null;
   tenant_id_num: string | null;
+  tenant_name?: string | null;
+  tenant_mobile?: string | null;
+  instrument_type: string | null;
+  instrument_type_trans?: string | null;
   duration_preset: string | null;
   duration_years: number | null;
   duration_months: number | null;
   total_months: number | null;
+  annual_rent_amount_for_the_unit?: number | null;
+  payment_type_id?: number | null;
+  payment_type_name?: string | null;
+  address_url?: string | null;
+  latitude?: string | number | null;
+  longitude?: string | number | null;
+  tenant_roles?: boolean | number | null;
+  tenant_role_ids?: number[] | null;
+  tenant_role_values?: string[] | Record<string, string> | null;
+  additional_terms?: boolean | number | null;
+  text_additional_terms?: string | null;
+  status_label?: string | null;
+  status_description?: string | null;
   units: CompletedContractUnit[] | null;
+  units_count?: number | null;
   created_at: string;
+  time_to_documentation_contract?: string | null;
 };
 
 export type CompletedContractApiResponse = {

@@ -432,7 +432,7 @@ export default function CreateContractDeedStep({
           />
 
           <label className="flex cursor-pointer items-center justify-between gap-3">
-            <span className="text-sm font-semibold text-brand">
+            <span className="text-sm font-semibold text-black">
               {labels.waqf.multipleTrusteesLabel}
             </span>
             <Switch
@@ -488,15 +488,15 @@ export default function CreateContractDeedStep({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-b-[28px] bg-white p-5 shadow-sm md:p-8">
+    <>
+      <div className="p-5 md:p-8">
         <CreateContractStepPhaseHeader
           title={deedPhase.title}
           subtitle={deedPhase.subtitle}
         />
 
         <div className="space-y-8">
-          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
+          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5 dark:bg-transparent">
             <CreateContractDeedTypeSelect
               labels={labels.deedType}
               value={selectedDeedType}
@@ -576,6 +576,6 @@ export default function CreateContractDeedStep({
         popup={deedTypePopup.popup}
         deedTypeLabel={deedTypePopup.deedTypeLabel}
       />
-    </div>
+    </>
   );
 }

@@ -889,21 +889,56 @@
         "close": "Close",
         "loading": "Loading data...",
         "emptyValue": "—",
+        "overviewSection": "Request details",
         "ownerSection": "Owner (lessor) data",
         "tenantSection": "Tenant data",
         "unitSection": "Leased unit data",
         "financeSection": "Financial data",
+        "servicesSection": "Services",
         "fields": {
+          "requestNumber": "Request number",
+          "contractType": "Contract type",
+          "status": "Status",
+          "instrumentType": "Deed type",
+          "propertyName": "Property name",
+          "createdAt": "Created at",
+          "documentationDeadline": "Expected documentation date",
+          "addressUrl": "Address link",
+          "location": "Location",
+          "name": "Name",
           "idNumber": "ID number",
+          "mobile": "Mobile",
+          "unitNumber": "Unit number",
           "unitType": "Unit type",
           "usage": "Usage",
           "area": "Area",
           "floor": "Floor",
+          "rooms": "Rooms",
+          "halls": "Halls",
+          "kitchens": "Kitchens",
+          "toilets": "Bathrooms",
           "electricityMeter": "Electricity meter",
           "waterMeter": "Water meter",
+          "furnished": "Furnished",
+          "kitchenTank": "Kitchen tank",
+          "parking": "Parking spaces",
+          "gasMeter": "Gas meter",
           "contractDuration": "Contract duration",
+          "annualRent": "Annual rent",
+          "paymentType": "Payment method",
+          "contractPeriodPrice": "Contract period price",
+          "applicationFees": "Application fees",
+          "tax": "Tax",
+          "electricityMeterFee": "Electricity meter fee",
+          "waterMeterFee": "Water meter fee",
+          "servicesTotal": "Services total",
+          "meterFeesTotal": "Meter fees total",
           "docFee": "Contract service fee",
-          "totalPrice": "Total"
+          "totalPrice": "Total",
+          "yes": "Yes",
+          "no": "No",
+          "housing": "Residential",
+          "commercial": "Commercial"
         },
         "duration": {
           "oneYear": "One year",
@@ -1001,9 +1036,11 @@
       "viewDeed": "View deed",
       "ejarLogoAlt": "Ejar logo",
       "deedDialog": {
-        "title": "Deed image",
+        "title": "Attachment preview",
         "close": "Close",
-        "imageAlt": "Property deed document image"
+        "print": "Print",
+        "download": "Download",
+        "view": "View"
       },
       "actions": {
         "viewEdit": "View and edit property",
@@ -1015,12 +1052,13 @@
   },
   "propertyUnits": {
     "backLabel": "Back",
-    "pageTitle": "View property units",
-    "emptyState": "No units found for this property.",
-    "residentialUnitsCount": "Residential units: {count}",
-    "commercialUnitsCount": "Commercial units: {count}",
-    "createResidentialUnit": "Add residential unit",
-    "createCommercialUnit": "Add commercial unit",
+    "pageTitle": "Property units",
+    "pageSubtitle": "Browse saved units and create your contracts on them.",
+    "pageSubtitleWithName": "{propertyName} – browse saved units and create your contracts on them.",
+    "emptyResidential": "No residential units saved yet.",
+    "emptyCommercial": "No commercial units saved yet.",
+    "createResidentialUnit": "Add a new unit",
+    "createCommercialUnit": "Add a new unit",
     "tabs": {
       "residential": "Residential units",
       "commercial": "Commercial units"
@@ -1034,7 +1072,7 @@
     },
     "card": {
       "unitNumberLabel": "Unit number",
-      "editUnit": "Edit unit",
+      "editUnit": "Edit",
       "deleteUnit": "Delete unit",
       "deleteDialog": {
         "title": "Delete unit",
@@ -1087,6 +1125,7 @@
     "stepper": {
       "journey": "Your rental journey just got easier.",
       "saveAlt": "Save",
+      "brand": "Aqdi",
       "steps": {
         "deed": "Deed",
         "owner": "Owner",
@@ -1161,7 +1200,7 @@
           "hint": "Numbers only - no length limit"
         },
         "instrumentDate": {
-          "label": "First registration date",
+          "label": "Deed date",
           "hijri": "Hijri",
           "gregorian": "Gregorian",
           "day": "Day",
@@ -1354,6 +1393,8 @@
       "navigation": {
         "previous": "Back",
         "continue": "Continue",
+        "save": "Save",
+        "saveSuccess": "Draft saved successfully",
         "submitting": "Saving...",
         "submitError": "Could not save owner data. Please try again.",
         "updateSuccess": "Property updated successfully."
@@ -1362,24 +1403,20 @@
       "subtitle": "Fill in your details correctly:",
       "propertyName": {
         "label": "Property name",
-        "placeholder": "Write here...",
+        "placeholder": "...Write here",
         "hint": "Please add a name for the property to make it easier to find or distinguish:",
-        "example": "For example - Al-Lulu Rest House - My building in Al-Rayyan district... etc."
+        "example": "For example — Pearl Rest House · My building in Al-Rabee' · My office in Al-Olaya… etc."
       }
     },
     "success": {
-      "title": "Congratulations, property data saved successfully!",
+      "title": "Congratulations, «{propertyName}» was saved successfully!",
       "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
-      "mainMenu": "Return to main menu",
-      "mainMenuHref": "/",
+      "mainMenu": "View my properties list",
+      "mainMenuHref": "/properties/my-properties",
       "actions": {
         "viewProperty": "View and edit property",
-        "viewPropertyHref": "/properties/create-unit",
         "addUnit": "Add a new unit to the property",
-        "addUnitHref": "/properties",
-        "createContract": "Create a rental contract for this property",
-        "createContractHref": "/create-contract",
-        "ejarLogoAlt": "Ejar"
+        "createContract": "Create a rental contract for the property"
       }
     }
   },
@@ -1404,11 +1441,15 @@
     "editSubtitle": "Update the unit details below:",
     "selectPlaceholder": "Choose from here...",
     "contractType": {
-      "label": "Property linked contract type",
+      "label": "What is the unit use type: residential or commercial?",
       "linkedLabel": "Property linked contract type",
       "options": {
         "housing": "Residential",
         "commercial": "Commercial"
+      },
+      "descriptions": {
+        "housing": "Apartment, villa, floor, room...",
+        "commercial": "Shop, office, warehouse, showroom..."
       }
     },
     "unitType": {
@@ -1769,7 +1810,7 @@
           "hint": "Numbers only - no length limit"
         },
         "instrumentDate": {
-          "label": "First registration date",
+          "label": "Deed date",
           "hijri": "Hijri",
           "gregorian": "Gregorian",
           "day": "Day",

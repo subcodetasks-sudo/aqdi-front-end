@@ -47,7 +47,7 @@ export function useSubmitUnit(
         return await updateUnit({
           unitId: stampedUnits[0].unitId,
           propertyId,
-          contractType,
+          contractType: stampedUnits[0].contractType ?? contractType,
           unitData: stampedUnits[0],
         });
       }

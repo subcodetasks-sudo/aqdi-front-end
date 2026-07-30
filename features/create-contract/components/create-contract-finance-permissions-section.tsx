@@ -49,14 +49,7 @@ export default function CreateContractFinancePermissionsSection({
       return;
     }
 
-    const role = openRole;
-    const key = String(role.id);
-    const saved = values[key]?.trim() ?? "";
-
-    if (role.has_user_input && !saved) {
-      applyToggle(role, false);
-    }
-
+    // Closing without confirm: role was never committed (see onToggleTenantRole).
     setOpenRole(null);
   }
 

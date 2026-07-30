@@ -68,8 +68,8 @@ export default function CreateContractFinancePaymentMethodSelect({
                 selected
                   ? "border-brand bg-brand text-white"
                   : invalid
-                    ? "border-[#e57373] bg-[#FBFBFA] text-brand"
-                    : "border-[#e8e8e8] bg-[#FBFBFA] text-[#555555] hover:border-brand/30",
+                    ? "border-[#e57373] bg-[#FBFBFA] text-brand dark:bg-[#121a18]"
+                    : "border-[#e8e8e8] bg-[#FBFBFA] text-[#555555] hover:border-brand/30 dark:border-[#2f403b] dark:bg-[#121a18] dark:text-white dark:hover:border-brand-secondary/50",
                 optionDisabled &&
                   "pointer-events-none cursor-not-allowed opacity-40",
               )}
@@ -83,12 +83,14 @@ export default function CreateContractFinancePaymentMethodSelect({
       {invalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
       {note ? (
-        <div className="mt-3 flex items-start gap-2 rounded-2xl bg-brand-background-green px-3.5 py-3">
+        <div className="mt-3 flex items-start gap-2 rounded-2xl bg-[#eafffc] px-3.5 py-3 dark:!bg-[#2b2118]">
           <span
             className="mt-1.5 size-2 shrink-0 rounded-full bg-[#e39b2d]"
             aria-hidden="true"
           />
-          <p className="text-sm leading-6 font-medium text-brand">{note}</p>
+          <p className="text-sm leading-6 font-medium text-[#0d5a50] dark:!text-[#cca352]">
+            {note}
+          </p>
         </div>
       ) : null}
     </div>

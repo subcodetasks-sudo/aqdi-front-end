@@ -228,7 +228,7 @@ export default function CreatePropertyDeedStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-[28px] bg-white p-5 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
+      <div className="rounded-b-[28px] bg-white p-5 md:p-8 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -380,7 +380,7 @@ export default function CreatePropertyDeedStep({
                 />
 
                 <label className="flex cursor-pointer items-center justify-between gap-3">
-                  <span className="text-sm font-semibold text-brand">
+                  <span className="text-sm font-semibold text-black">
                     {labels.waqf.multipleTrusteesLabel}
                   </span>
                   <Switch

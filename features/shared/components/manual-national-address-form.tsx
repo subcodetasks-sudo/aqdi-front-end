@@ -46,7 +46,7 @@ function FieldLabel({
       <label
         className={cn(
           "text-sm font-semibold",
-          invalid ? "text-[#c62828]" : "text-[#333333]",
+          invalid ? "text-[#c62828]" : "text-black",
         )}
       >
         {label}

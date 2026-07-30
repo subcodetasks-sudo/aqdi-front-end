@@ -31,7 +31,7 @@ export default function CreateContractTenantStatusSelect({
       <label
         className={cn(
           "shrink-0 text-sm font-semibold",
-          invalid ? "text-[#c62828]" : "text-brand",
+          invalid ? "text-[#c62828]" : "text-black",
         )}
       >
         {labels.label}

@@ -35,7 +35,9 @@ export default function CreatePropertyWizard({
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
   const resetDraft = useCreatePropertyDraftStore((state) => state.resetDraft);
-  const setCurrentStep = useCreatePropertyDraftStore((state) => state.setCurrentStep);
+  const setCurrentStep = useCreatePropertyDraftStore(
+    (state) => state.setCurrentStep,
+  );
   const initializeEditSession = useCreatePropertyDraftStore(
     (state) => state.initializeEditSession,
   );
@@ -45,11 +47,16 @@ export default function CreatePropertyWizard({
   const [completedPropertyId, setCompletedPropertyId] = useState<number | null>(
     null,
   );
+  const [completedPropertyName, setCompletedPropertyName] = useState("");
 
   useEffect(() => {
-    if (initialEditDraft) {
-      initializeEditSession(initialEditDraft);
+    if (!initialEditDraft) {
+      return;
     }
+
+    setCompletedPropertyId(null);
+    setCompletedPropertyName("");
+    initializeEditSession(initialEditDraft);
   }, [initialEditDraft, initializeEditSession]);
 
   useEffect(() => {
@@ -60,6 +67,9 @@ export default function CreatePropertyWizard({
 
   function handleReviewComplete(propertyId: number) {
     const isEditMode = initialEditDraft !== null;
+    const propertyName =
+      useCreatePropertyDraftStore.getState().reviewData.propertyName.trim();
+
     resetDraft();
 
     if (isEditMode) {
@@ -68,50 +78,47 @@ export default function CreatePropertyWizard({
       return;
     }
 
+    setCompletedPropertyName(propertyName);
     setCompletedPropertyId(propertyId);
   }
 
-  if (completedPropertyId) {
-    return (
-      <div className="mx-auto w-full max-w-4xl space-y-4">
-        <CreatePropertySuccessStep
-          labels={labels.success}
-          propertyType={propertyType}
-          propertyId={completedPropertyId}
-        />
-      </div>
-    );
-  }
-
-  const showStepper = currentStep !== "success";
   const isEditMode = initialEditDraft !== null;
   const pageTitle = isEditMode
     ? propertyType === "residential"
       ? labels.editPageTitleResidential
       : labels.editPageTitleCommercial
     : labels.pageTitle;
+  const isSuccess = completedPropertyId !== null;
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      {initialEditDraft ? null : (
+      {initialEditDraft || isSuccess ? null : (
         <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       )}
 
-      {showStepper ? (
-        <CreatePropertyHeader
-          pageTitle={pageTitle}
-          labels={labels.header}
-          isDarkMode={isDarkMode}
-          onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
-        />
-      ) : null}
+      <CreatePropertyHeader
+        pageTitle={pageTitle}
+        labels={labels.header}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
+      />
 
-      <div>
-        {showStepper ? (
-          <CreatePropertyStepper labels={labels.stepper} />
+      <div className="rounded-3xl bg-white shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
+        <CreatePropertyStepper
+          labels={labels.stepper}
+          completed={isSuccess}
+        />
+
+        {isSuccess && completedPropertyId ? (
+          <CreatePropertySuccessStep
+            labels={labels.success}
+            propertyType={propertyType}
+            propertyId={completedPropertyId}
+            propertyName={completedPropertyName}
+          />
         ) : null}
 
-        {currentStep === "deed" ? (
+        {!isSuccess && currentStep === "deed" ? (
           <CreatePropertyDeedStep
             labels={labels.deed}
             addressLabels={labels.address}
@@ -120,7 +127,7 @@ export default function CreatePropertyWizard({
           />
         ) : null}
 
-        {currentStep === "owner" ? (
+        {!isSuccess && currentStep === "owner" ? (
           <CreatePropertyOwnerStep
             labels={labels.owner}
             onBack={goBack}
@@ -128,7 +135,7 @@ export default function CreatePropertyWizard({
           />
         ) : null}
 
-        {currentStep === "review" ? (
+        {!isSuccess && currentStep === "review" ? (
           <CreatePropertyReviewStep
             labels={labels.review}
             onBack={goBack}

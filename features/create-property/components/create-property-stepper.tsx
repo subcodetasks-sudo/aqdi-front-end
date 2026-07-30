@@ -15,20 +15,28 @@ import { cn } from "@/lib/utils";
 
 type CreatePropertyStepperProps = {
   labels: CreatePropertyLabels["stepper"];
+  completed?: boolean;
 };
 
 const stepPillClassName =
   "inline-flex items-center justify-center rounded-full grow h-12 px-3 text-sm font-semibold whitespace-nowrap transition-all";
 
-function getStepPillClassName(isActive: boolean, isUnlocked: boolean) {
+function getStepPillClassName(
+  isActive: boolean,
+  isUnlocked: boolean,
+  completed: boolean,
+) {
   return cn(
     stepPillClassName,
-    isUnlocked
-      ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
-      : "cursor-not-allowed opacity-50",
-    isActive
-      ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
-      : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]",
+    completed
+      ? "cursor-default bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"
+      : isUnlocked
+        ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
+        : "cursor-not-allowed opacity-50",
+    !completed &&
+      (isActive
+        ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
+        : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"),
   );
 }
 
@@ -43,21 +51,46 @@ function getConnectorClassName(isCompleted: boolean) {
 
 export default function CreatePropertyStepper({
   labels,
+  completed = false,
 }: CreatePropertyStepperProps) {
   const { currentStepIndex, goToStep } = useCreatePropertySteps();
 
   function isStepUnlocked(step: CreatePropertyStepperStep) {
+    if (completed) {
+      return false;
+    }
+
     const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
     return stepIndex >= 0 && stepIndex <= currentStepIndex;
   }
 
   return (
-    <div className="sticky top-0 z-20 rounded-t-3xl bg-white p-4 shadow-sm [clip-path:inset(-8px_-8px_0_-8px)] md:p-5 dark:border dark:border-b-0 dark:border-[#2f403b] dark:bg-[#1a2421]">
+    <div className="sticky top-0 z-20 rounded-t-3xl bg-white p-4 md:p-5 dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
+        {completed ? (
+          <>
+            <span className="inline-flex h-12 shrink-0 items-center gap-1.5 rounded-full border border-brand/15 bg-white px-3 text-sm font-semibold text-brand shadow-sm dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]">
+              <Image
+                src="/images/logo.png"
+                alt=""
+                width={20}
+                height={22}
+                aria-hidden="true"
+                className="h-5 w-auto shrink-0 object-contain"
+              />
+              <span>{labels.brand}</span>
+            </span>
+            <span
+              aria-hidden="true"
+              className={getConnectorClassName(true)}
+            />
+          </>
+        ) : null}
+
         {CREATE_PROPERTY_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
-          const isActive = stepIndex === currentStepIndex;
-          const isCompleted = stepIndex < currentStepIndex;
+          const isActive = !completed && stepIndex === currentStepIndex;
+          const isStepCompleted = completed || stepIndex < currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
 
           return (
@@ -65,7 +98,7 @@ export default function CreatePropertyStepper({
               {index > 0 && (
                 <span
                   aria-hidden="true"
-                  className={getConnectorClassName(isActive || isCompleted)}
+                  className={getConnectorClassName(isActive || isStepCompleted)}
                 />
               )}
 
@@ -76,7 +109,7 @@ export default function CreatePropertyStepper({
                 aria-current={isActive ? "step" : undefined}
                 disabled={!isUnlocked}
                 onClick={() => goToStep(step)}
-                className={getStepPillClassName(isActive, isUnlocked)}
+                className={getStepPillClassName(isActive, isUnlocked, completed)}
               >
                 {labels.steps[step]}
               </button>
@@ -84,10 +117,22 @@ export default function CreatePropertyStepper({
           );
         })}
 
+        {completed ? (
+          <span
+            aria-hidden="true"
+            className={getConnectorClassName(true)}
+          />
+        ) : null}
+
         <span
           title={labels.saveAlt}
           aria-label={labels.saveAlt}
-          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-brand/40 bg-white text-brand dark:border-brand-secondary/50 dark:bg-[#16352f] dark:text-[#7dccc0]"
+          className={cn(
+            "inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 text-brand dark:text-[#7dccc0]",
+            completed
+              ? "border-brand bg-brand-background-green dark:border-brand-secondary dark:bg-[#16352f]"
+              : "border-dashed border-brand/40 bg-white dark:border-brand-secondary/50 dark:bg-[#16352f]",
+          )}
         >
           <Save className="size-5" aria-hidden="true" />
         </span>

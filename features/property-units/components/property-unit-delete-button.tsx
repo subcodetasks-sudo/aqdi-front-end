@@ -56,7 +56,7 @@ export default function PropertyUnitDeleteButton({
         <button
           type="button"
           aria-label={t("deleteUnit")}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-[#e53935] transition-colors hover:bg-red-50"
+          className="inline-flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#fdf2f2] text-[#e53935] transition-colors hover:bg-[#fce8e8]"
         >
           <Trash2 className="size-4" aria-hidden="true" />
         </button>

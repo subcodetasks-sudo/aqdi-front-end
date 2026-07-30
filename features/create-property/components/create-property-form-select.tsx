@@ -73,7 +73,7 @@ export default function CreatePropertyFormSelect({
           <label
             className={cn(
               "mb-2 block text-sm font-semibold",
-              invalid ? "text-[#c62828]" : "text-brand",
+              invalid ? "text-[#c62828]" : "text-black dark:text-white",
             )}
           >
             {label}
@@ -96,7 +96,7 @@ export default function CreatePropertyFormSelect({
           {value ? (
             <span
               className={cn(
-                "truncate font-semibold text-[#333333]",
+                "truncate font-semibold text-[#333333] dark:text-white",
                 isCompact ? "text-xs sm:text-sm" : "text-sm",
               )}
             >
@@ -107,7 +107,7 @@ export default function CreatePropertyFormSelect({
               type="button"
               aria-label={label}
               className={cn(
-                "w-full text-start text-black",
+                "w-full text-start text-[#bdbdbd] dark:text-[#6b7d78]",
                 isCompact ? "text-xs sm:text-sm" : "text-sm",
               )}
               onClick={openSelect}
@@ -128,9 +128,9 @@ export default function CreatePropertyFormSelect({
         >
           <SelectTrigger
             aria-label={label}
-            className="inline-flex size-7! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden"
+            className="inline-flex size-7! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 dark:text-white [&>svg:last-child]:hidden"
           >
-            <ChevronDown className="size-4 text-[#333333]" aria-hidden="true" />
+            <ChevronDown className="size-4 text-[#333333] dark:text-white" aria-hidden="true" />
           </SelectTrigger>
 
           <SelectContent
@@ -139,7 +139,7 @@ export default function CreatePropertyFormSelect({
             side="bottom"
             sideOffset={6}
             avoidCollisions={false}
-            className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl"
+            className="max-h-[min(20rem,var(--radix-select-content-available-height))] rounded-2xl border border-[#2f403b] bg-[#1a2421] text-white"
             style={{
               width: contentWidth,
               minWidth: contentWidth,

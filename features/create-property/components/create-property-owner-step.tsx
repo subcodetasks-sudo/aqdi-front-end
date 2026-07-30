@@ -49,7 +49,7 @@ export default function CreatePropertyOwnerStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-3xl bg-white p-6 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
+      <div className="rounded-b-3xl bg-white p-6 md:p-8 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}

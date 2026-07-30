@@ -83,75 +83,77 @@ export default function CreateContractWizard({
       />
 
       <div>
-        <CreateContractStepper labels={labels.stepper} />
+        <div className="overflow-hidden rounded-3xl bg-white shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
+          <CreateContractStepper labels={labels.stepper} />
 
-        {currentStep === "intro" ? (
-          <CreateContractIntroStep
-            labels={labels.intro}
-            stepperLabels={labels.stepper}
-            contractType={contractType}
-            prices={labels.prices}
-            onStart={handleStart}
-            isStarting={isStarting}
-          />
-        ) : null}
+          {currentStep === "intro" ? (
+            <CreateContractIntroStep
+              labels={labels.intro}
+              stepperLabels={labels.stepper}
+              contractType={contractType}
+              prices={labels.prices}
+              onStart={handleStart}
+              isStarting={isStarting}
+            />
+          ) : null}
 
-        {currentStep === "deed" ? (
-          <CreateContractDeedStep
-            labels={labels.deed}
-            onBack={goBack}
-            onComplete={goNext}
-          />
-        ) : null}
+          {currentStep === "deed" ? (
+            <CreateContractDeedStep
+              labels={labels.deed}
+              onBack={goBack}
+              onComplete={goNext}
+            />
+          ) : null}
 
-        {currentStep === "owner" && !ownerSkipped ? (
-          <CreateContractOwnerStep
-            labels={labels.owner}
-            onBack={goBack}
-            onComplete={goNext}
-          />
-        ) : null}
+          {currentStep === "owner" && !ownerSkipped ? (
+            <CreateContractOwnerStep
+              labels={labels.owner}
+              onBack={goBack}
+              onComplete={goNext}
+            />
+          ) : null}
 
-        {currentStep === "tenant" ? (
-          <CreateContractTenantStep
-            labels={labels.tenant}
-            contractType={contractType}
-            onBack={goBack}
-            onComplete={goNext}
-          />
-        ) : null}
+          {currentStep === "tenant" ? (
+            <CreateContractTenantStep
+              labels={labels.tenant}
+              contractType={contractType}
+              onBack={goBack}
+              onComplete={goNext}
+            />
+          ) : null}
 
-        {currentStep === "finance" ? (
-          <CreateContractFinanceStep
-            labels={labels.finance}
-            contractType={contractType}
-            onBack={goBack}
-            onComplete={goNext}
-          />
-        ) : null}
+          {currentStep === "finance" ? (
+            <CreateContractFinanceStep
+              labels={labels.finance}
+              contractType={contractType}
+              onBack={goBack}
+              onComplete={goNext}
+            />
+          ) : null}
 
-        {currentStep === "payment" ? (
-          <CreateContractPaymentStep
-            labels={labels.payment}
-            saveLaterDialogLabels={labels.tenant.saveLaterDialog}
-            deedTypeLabels={labels.deed.deedType.types}
-            deedAttachmentLabels={{
-              label: labels.deed.deedImage.label,
-              salePaperLabel: labels.deed.deedImage.salePaperLabel,
-              frontLabel: labels.deed.deedImage.frontLabel,
-              backLabel: labels.deed.deedImage.backLabel,
-              inheritanceLabel: labels.deed.deedImage.inheritanceLabel,
-              heirsPoaLabel: labels.deed.deedImage.heirsPoaLabel,
-              endowmentCertLabel: labels.deed.deedImage.endowmentCertLabel,
-              trusteeshipLabel: labels.deed.deedImage.trusteeshipLabel,
-              guardiansPoaLabel: labels.deed.deedImage.guardiansPoaLabel,
-              deceasedDeedLabel: labels.deed.deceased.deedLabel,
-            }}
-            contractType={contractType}
-            onBack={goBack}
-            onEditStep={goToStep}
-          />
-        ) : null}
+          {currentStep === "payment" ? (
+            <CreateContractPaymentStep
+              labels={labels.payment}
+              saveLaterDialogLabels={labels.tenant.saveLaterDialog}
+              deedTypeLabels={labels.deed.deedType.types}
+              deedAttachmentLabels={{
+                label: labels.deed.deedImage.label,
+                salePaperLabel: labels.deed.deedImage.salePaperLabel,
+                frontLabel: labels.deed.deedImage.frontLabel,
+                backLabel: labels.deed.deedImage.backLabel,
+                inheritanceLabel: labels.deed.deedImage.inheritanceLabel,
+                heirsPoaLabel: labels.deed.deedImage.heirsPoaLabel,
+                endowmentCertLabel: labels.deed.deedImage.endowmentCertLabel,
+                trusteeshipLabel: labels.deed.deedImage.trusteeshipLabel,
+                guardiansPoaLabel: labels.deed.deedImage.guardiansPoaLabel,
+                deceasedDeedLabel: labels.deed.deceased.deedLabel,
+              }}
+              contractType={contractType}
+              onBack={goBack}
+              onEditStep={goToStep}
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

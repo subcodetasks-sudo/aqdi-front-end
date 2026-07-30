@@ -16,6 +16,7 @@ export type CreatePropertyLabels = {
   stepper: {
     journey: string;
     saveAlt: string;
+    brand: string;
     steps: Record<CreatePropertyStepperStep, string>;
   };
   deed: {
@@ -219,6 +220,8 @@ export type CreatePropertyLabels = {
     navigation: {
       previous: string;
       continue: string;
+      save: string;
+      saveSuccess: string;
       submitting: string;
       submitError: string;
       updateSuccess: string;
@@ -239,12 +242,8 @@ export type CreatePropertyLabels = {
     mainMenuHref: string;
     actions: {
       viewProperty: string;
-      viewPropertyHref: string;
       addUnit: string;
-      addUnitHref: string;
       createContract: string;
-      createContractHref: string;
-      ejarLogoAlt: string;
     };
   };
 };

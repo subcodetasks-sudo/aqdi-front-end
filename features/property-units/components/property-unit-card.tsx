@@ -44,7 +44,7 @@ export default function PropertyUnitCard({
         onSelectedChange={onSelectedChange}
       />
 
-      <div className="border-t border-[#f0f0f0]">
+      <div className="pt-1">
         {PROPERTY_UNIT_DETAIL_FIELDS.map((field) => (
           <PropertyUnitDetailRow
             key={`${unit.id}-${field}`}

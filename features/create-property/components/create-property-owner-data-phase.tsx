@@ -121,7 +121,7 @@ export default function CreatePropertyOwnerDataPhase({
           <span
             className={cn(
               "block text-sm font-bold",
-              hasAgentInvalid ? "text-[#c62828]" : "text-brand",
+              hasAgentInvalid ? "text-[#c62828]" : "text-black",
             )}
           >
             {labels.hasAgent.title}

@@ -24,6 +24,9 @@ export function useCreateContractSteps() {
   );
   const contractStep5Data = useCreateContractDraftStore((state) => state.contractStep5Data);
   const contractStep6Data = useCreateContractDraftStore((state) => state.contractStep6Data);
+  const existingPropertyContext = useCreateContractDraftStore(
+    (state) => state.existingPropertyContext,
+  );
   const goNextStep = useCreateContractDraftStore((state) => state.goNextStep);
   const goBackStep = useCreateContractDraftStore((state) => state.goBackStep);
   const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
@@ -44,6 +47,13 @@ export function useCreateContractSteps() {
   const maxUnlockedStepIndex = getMaxUnlockedContractStepIndex(progressState);
 
   function goToStep(step: CreateContractStep) {
+    if (
+      existingPropertyContext &&
+      (step === "deed" || step === "owner")
+    ) {
+      return;
+    }
+
     if (!canNavigateToContractStep(step, progressState)) {
       return;
     }
@@ -52,6 +62,13 @@ export function useCreateContractSteps() {
   }
 
   function isStepUnlocked(step: CreateContractStep) {
+    if (
+      existingPropertyContext &&
+      (step === "deed" || step === "owner")
+    ) {
+      return false;
+    }
+
     return canNavigateToContractStep(step, progressState);
   }
 

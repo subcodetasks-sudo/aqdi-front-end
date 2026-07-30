@@ -89,7 +89,7 @@ export default function CreateContractSavePropertyDialog({
         </div>
 
         <div className="mt-6 space-y-3">
-          <label className="block text-sm font-semibold text-brand">
+          <label className="block text-sm font-semibold text-black">
             {labels.nameLabel}
           </label>
 

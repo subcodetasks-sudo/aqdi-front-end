@@ -53,7 +53,7 @@ export default function CreateUnitNumberField({
           placeholder={placeholder}
           aria-invalid={showInvalid}
           className={cn(
-            "h-auto px-0 text-sm font-semibold dark:text-[#e8f0ee]",
+            "h-auto px-0 text-sm font-semibold",
             fieldChromeNestedInputClass,
           )}
         />

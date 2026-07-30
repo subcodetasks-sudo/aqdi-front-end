@@ -49,7 +49,7 @@ export default function CreateContractLeaseRenewalAmendmentsSection({
               onCheckedChange={handleToggle}
               className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9]"
             />
-            <span className="text-sm font-semibold text-brand">
+            <span className="text-sm font-semibold text-black">
               {labels.addNotesToggle}
             </span>
           </label>

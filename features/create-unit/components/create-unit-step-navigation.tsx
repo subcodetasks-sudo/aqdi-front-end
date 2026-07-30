@@ -24,7 +24,7 @@ export default function CreateUnitStepNavigation({
         onClick={onPrevious}
         disabled={isSubmitting}
         variant="outline"
-        className="h-14 shrink-0 gap-1.5 rounded-2xl border-[#e4e4e4] bg-white px-5 text-sm font-semibold text-brand hover:bg-brand-background dark:border-[#2f403b] dark:bg-[#1a2421] dark:hover:bg-[#24302c]"
+        className="h-14 shrink-0 gap-1.5 rounded-2xl border-[#e4e4e4] bg-white px-5 text-sm font-semibold text-brand hover:bg-brand-background dark:border-[#2f403b] dark:bg-[#121a18] dark:text-white dark:hover:bg-[#1a2421]"
       >
         <ChevronRight className="size-4" aria-hidden="true" />
         {previousLabel}

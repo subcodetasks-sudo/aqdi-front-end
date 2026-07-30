@@ -50,7 +50,7 @@ export default function MeterRegistrationOptions({
       <p
         className={cn(
           "text-sm font-bold",
-          showInvalid ? "text-[#c62828]" : "text-brand",
+          showInvalid ? "text-[#c62828]" : "text-black",
         )}
       >
         {labels.title}

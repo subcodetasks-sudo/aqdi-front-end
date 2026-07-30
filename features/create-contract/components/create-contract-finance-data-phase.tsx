@@ -305,9 +305,9 @@ export default function CreateContractFinanceDataPhase({
               onChange({
                 ...value,
                 otherConditionsList,
-                addOtherConditions:
-                  otherConditionsList.some((item) => item.trim() !== "") ||
-                  value.addOtherConditions,
+                addOtherConditions: otherConditionsList.some(
+                  (item) => item.trim() !== "",
+                ),
               })
             }
           />

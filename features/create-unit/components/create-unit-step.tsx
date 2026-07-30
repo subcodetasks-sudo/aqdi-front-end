@@ -11,6 +11,7 @@ import { useCreateUnitStep } from "@/features/create-unit/hooks/use-create-unit-
 import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
 import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
 import { EMPTY_UNIT_DATA } from "@/features/create-unit/types/unit-data";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import CreateUnitStepNavigation from "@/features/create-unit/components/create-unit-step-navigation";
 import CreateUnitStepPhaseHeader from "@/features/create-unit/components/create-unit-step-phase-header";
 import UnitDataFormFields from "@/features/shared/components/unit-data-form-fields";
@@ -29,6 +30,17 @@ type CreateUnitStepProps = {
   onComplete: (message?: string) => void;
 };
 
+function clearHousingOnlyFields() {
+  return {
+    roomsCount: "",
+    bathroomsCount: "",
+    kitchensCount: "",
+    kitchenCabinetsInstalled: false,
+    furnished: false,
+    furnishingType: "" as const,
+  };
+}
+
 export default function CreateUnitStep({
   labels,
   propertyId,
@@ -39,19 +51,50 @@ export default function CreateUnitStep({
   onComplete,
 }: CreateUnitStepProps) {
   const { units, setUnits, canContinue } = useCreateUnitStep();
-  const contractType = useCreateUnitDraftStore((state) => state.contractType);
-  const setContractType = useCreateUnitDraftStore((state) => state.setContractType);
+  const defaultContractType = useCreateUnitDraftStore(
+    (state) => state.contractType,
+  );
   const { isSubmitting, submitUnit } = useSubmitUnit(
     propertyId,
     propertyHasUnits,
     isEditMode,
   );
-  const unitTypesQuery = useUnitTypeOptions(contractType);
-  const unitUsageQuery = useUnitUsageOptions(contractType);
+  const housingTypesQuery = useUnitTypeOptions("housing");
+  const commercialTypesQuery = useUnitTypeOptions("commercial");
+  const housingUsageQuery = useUnitUsageOptions("housing");
+  const commercialUsageQuery = useUnitUsageOptions("commercial");
   const [showFieldErrors, setShowFieldErrors] = useState(false);
 
-  const isLoadingOptions = unitTypesQuery.isLoading || unitUsageQuery.isLoading;
-  const optionsError = unitTypesQuery.error ?? unitUsageQuery.error;
+  const isLoadingOptions =
+    housingTypesQuery.isLoading ||
+    commercialTypesQuery.isLoading ||
+    housingUsageQuery.isLoading ||
+    commercialUsageQuery.isLoading;
+  const optionsError =
+    housingTypesQuery.error ??
+    commercialTypesQuery.error ??
+    housingUsageQuery.error ??
+    commercialUsageQuery.error;
+
+  function resolveUnitContractType(
+    unitContractType: PropertyContractType | undefined,
+  ): PropertyContractType {
+    return unitContractType ?? defaultContractType;
+  }
+
+  function getOptionsForContractType(contractType: PropertyContractType) {
+    if (contractType === "commercial") {
+      return {
+        unitTypeOptions: commercialTypesQuery.data ?? [],
+        unitUsageOptions: commercialUsageQuery.data ?? [],
+      };
+    }
+
+    return {
+      unitTypeOptions: housingTypesQuery.data ?? [],
+      unitUsageOptions: housingUsageQuery.data ?? [],
+    };
+  }
 
   async function handleContinue() {
     if (isSubmitting || isLoadingOptions || optionsError) {
@@ -104,7 +147,9 @@ export default function CreateUnitStep({
             unitSectionTitle={(index) => `${labels.unitListTitle} ${index + 1}`}
             getUnitSummary={(unit) =>
               buildUnitFormSummary(unit, {
-                unitTypeOptions: unitTypesQuery.data ?? [],
+                unitTypeOptions: getOptionsForContractType(
+                  resolveUnitContractType(unit.contractType),
+                ).unitTypeOptions,
                 groundFloorLabel: labels.floorOptions.ground,
                 floorPrefix: labels.floorSummaryPrefix,
               })
@@ -114,7 +159,7 @@ export default function CreateUnitStep({
               setUnits(
                 nextUnits.map((unit) => ({
                   ...unit,
-                  contractType: unit.contractType ?? contractType,
+                  contractType: resolveUnitContractType(unit.contractType),
                 })),
               )
             }
@@ -122,25 +167,51 @@ export default function CreateUnitStep({
             allowRemoveUnit
             createEmptyUnit={() => ({
               ...EMPTY_UNIT_DATA,
-              contractType,
+              contractType: defaultContractType,
             })}
-            renderUnitForm={(unit, _index, onUnitChange) => (
-              <UnitDataFormFields
-                labels={{
-                  ...labels,
-                  unitCardTitle: undefined,
-                }}
-                contractType={contractType}
-                onContractTypeChange={
-                  contractTypeLocked ? undefined : setContractType
-                }
-                unitTypeOptions={unitTypesQuery.data ?? []}
-                unitUsageOptions={unitUsageQuery.data ?? []}
-                value={unit}
-                onChange={onUnitChange}
-                showFieldErrors={showFieldErrors}
-              />
-            )}
+            renderUnitForm={(unit, _index, onUnitChange) => {
+              const unitContractType = resolveUnitContractType(
+                unit.contractType,
+              );
+              const { unitTypeOptions, unitUsageOptions } =
+                getOptionsForContractType(unitContractType);
+
+              return (
+                <UnitDataFormFields
+                  labels={{
+                    ...labels,
+                    unitCardTitle: undefined,
+                    contractType: {
+                      ...labels.contractType,
+                      linkedLabel: labels.contractType.label,
+                    },
+                  }}
+                  contractType={unitContractType}
+                  contractTypeSelectorVariant="cards"
+                  hideHousingOnlyFieldsForCommercial
+                  onContractTypeChange={
+                    contractTypeLocked
+                      ? undefined
+                      : (nextContractType) => {
+                          onUnitChange({
+                            ...unit,
+                            contractType: nextContractType,
+                            unitTypeId: "",
+                            unitUsageId: "",
+                            ...(nextContractType === "commercial"
+                              ? clearHousingOnlyFields()
+                              : {}),
+                          });
+                        }
+                  }
+                  unitTypeOptions={unitTypeOptions}
+                  unitUsageOptions={unitUsageOptions}
+                  value={unit}
+                  onChange={onUnitChange}
+                  showFieldErrors={showFieldErrors}
+                />
+              );
+            }}
           />
         )}
 

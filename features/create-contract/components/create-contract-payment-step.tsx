@@ -194,7 +194,7 @@ export default function CreateContractPaymentStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="p-6 md:p-8">
         <div className="space-y-5">
           <CreateContractPaymentHero
             journeyMessage={labels.journeyMessage}
@@ -210,14 +210,14 @@ export default function CreateContractPaymentStep({
           />
 
           {selectedMethod ? (
-            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#cfe8dd] bg-[#f5fbf8] px-4 py-3">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#cfe8dd] bg-[#f5fbf8] px-4 py-3 dark:border-[#2f403b] dark:bg-[#16352f]">
               <div className="min-w-0 space-y-0.5">
-                <p className="text-sm font-extrabold text-brand">
+                <p className="text-sm font-extrabold text-brand dark:text-[#7dccc0]">
                   {selectedMethod === "draft"
                     ? labels.methodDialog.selected.draft.title
                     : labels.methodDialog.selected.payNow.title}
                 </p>
-                <p className="text-xs leading-relaxed text-[#4f6b62]">
+                <p className="text-xs leading-relaxed text-[#4f6b62] dark:text-[#9eb5af]">
                   {selectedMethod === "draft"
                     ? labels.methodDialog.selected.draft.description
                     : hasDiscount
@@ -231,17 +231,17 @@ export default function CreateContractPaymentStep({
               <button
                 type="button"
                 onClick={paymentFlow.openMethodDialog}
-                className="shrink-0 text-xs font-bold text-brand underline underline-offset-2 transition-opacity hover:opacity-70"
+                className="shrink-0 text-xs font-bold text-brand underline underline-offset-2 transition-opacity hover:opacity-70 dark:text-[#7dccc0]"
               >
                 {labels.methodDialog.changeMethod}
               </button>
             </div>
           ) : null}
 
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4 dark:border-[#2f403b] dark:bg-[#121a18]">
             <label className="flex w-full cursor-pointer items-center justify-between gap-3">
               <span className="flex flex-col gap-1">
-                <span className="text-sm font-semibold leading-relaxed text-brand">
+                <span className="text-sm font-semibold leading-relaxed text-brand dark:text-[#7dccc0]">
                   {labels.savePropertyData.label}
                 </span>
                 <span className="text-xs leading-relaxed text-[#7f7f7f] dark:text-[#9eb5af]">
@@ -253,7 +253,7 @@ export default function CreateContractPaymentStep({
                 checked={paymentData.savePropertyData}
                 onCheckedChange={handleSwitchChange}
                 disabled={isSaving || paymentData.savePropertyData}
-                className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] disabled:cursor-not-allowed disabled:opacity-100"
+                className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] disabled:cursor-not-allowed disabled:opacity-100 dark:data-unchecked:bg-[#2f403b]"
               />
             </label>
           </div>
@@ -276,12 +276,12 @@ export default function CreateContractPaymentStep({
             />
           </div>
 
-          <p className="text-center text-xs leading-relaxed text-[#7f7f7f]">
+          <p className="text-center text-xs leading-relaxed text-[#7f7f7f] dark:text-[#9eb5af]">
             {labels.disclaimer.prefix}{" "}
             <button
               type="button"
               onClick={() => setLegalDocument("terms")}
-              className="font-semibold text-brand-secondary underline underline-offset-2"
+              className="font-semibold text-brand-secondary underline underline-offset-2 dark:text-[#7dccc0]"
             >
               {labels.disclaimer.termsLink}
             </button>{" "}
@@ -289,7 +289,7 @@ export default function CreateContractPaymentStep({
             <button
               type="button"
               onClick={() => setLegalDocument("privacy")}
-              className="font-semibold text-brand-secondary underline underline-offset-2"
+              className="font-semibold text-brand-secondary underline underline-offset-2 dark:text-[#7dccc0]"
             >
               {labels.disclaimer.privacyLink}
             </button>
@@ -382,7 +382,7 @@ export default function CreateContractPaymentStep({
         onEditStep={onEditStep}
       />
 
-      <p className="flex items-center justify-center gap-2 text-xs text-[#9a9a9a]">
+      <p className="flex items-center justify-center gap-2 text-xs text-[#9a9a9a] dark:text-[#9eb5af]">
         <Lock className="size-3.5 shrink-0" aria-hidden="true" />
         <span>{labels.encryptionNote}</span>
       </p>

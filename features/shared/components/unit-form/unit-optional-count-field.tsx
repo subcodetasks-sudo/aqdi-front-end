@@ -57,7 +57,7 @@ export default function UnitOptionalCountField({
           }}
           className="size-5 rounded-full border-brand-secondary data-checked:border-brand-secondary data-checked:bg-brand-secondary"
         />
-        <span className="text-sm font-semibold text-brand">{label}</span>
+        <span className="text-sm font-semibold text-black">{label}</span>
       </label>
 
       <div

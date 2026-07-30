@@ -74,7 +74,7 @@ export default function UnitCountStepper({
           <Minus className="size-4" />
         </button>
 
-        <span className="min-w-6 text-center text-sm font-bold text-[#1a1a1a] dark:text-[#e8f0ee]">
+        <span className="min-w-6 text-center text-sm font-bold text-[#1a1a1a] dark:text-white">
           {currentCount}
         </span>
 

@@ -27,6 +27,10 @@ export type CreateUnitLabels = {
       housing: string;
       commercial: string;
     };
+    descriptions: {
+      housing: string;
+      commercial: string;
+    };
   };
   unitType: {
     label: string;

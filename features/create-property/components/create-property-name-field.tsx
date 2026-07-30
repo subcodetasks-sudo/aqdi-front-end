@@ -5,7 +5,6 @@ import { useId } from "react";
 
 import { Input } from "@/components/ui/input";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
-import CustomIcon from "@/features/shared/components/custom-icon";
 import {
   fieldChromeIconClass,
   fieldChromeNestedInputClass,
@@ -70,16 +69,14 @@ export default function CreatePropertyNameField({
         />
       </div>
 
-      <div className="space-y-1">
-        <p className="flex items-start gap-1.5 text-sm text-[#333333]">
-          <CustomIcon
-            src="/icons/like.svg"
-            size={18}
-            className="mt-0.5 shrink-0 text-red-400"
-          />
+      <div className="space-y-1 text-sm leading-relaxed text-brand">
+        <p>
+          <span className="me-1 inline-block" aria-hidden="true">
+            ✋
+          </span>
           <span>{hint}</span>
         </p>
-        <p className="text-xs text-[#bdbdbd]">{example}</p>
+        {example ? <p>{example}</p> : null}
       </div>
     </div>
   );

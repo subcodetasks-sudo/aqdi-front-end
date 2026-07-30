@@ -219,7 +219,7 @@ export default function CreatePropertyDeedImageUpload({
           <span
             className={cn(
               "text-sm font-semibold",
-              showInvalid ? "text-[#c62828]" : "text-[#333333]",
+              showInvalid ? "text-[#c62828]" : "text-black",
             )}
           >
             {resolvedLabel}

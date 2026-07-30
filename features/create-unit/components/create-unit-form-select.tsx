@@ -68,7 +68,7 @@ export default function CreateUnitFormSelect({
         <label
           className={cn(
             "mb-2 block text-sm font-semibold",
-            showInvalid ? "text-[#c62828]" : "text-brand",
+            showInvalid ? "text-[#c62828]" : "text-black dark:text-white",
           )}
         >
           {label}
@@ -89,13 +89,13 @@ export default function CreateUnitFormSelect({
           onClick={openSelect}
         >
           {value ? (
-            <span className="truncate text-sm font-semibold text-[#333333]">
+            <span className="truncate text-sm font-semibold text-[#333333] dark:text-white">
               {selectedLabel}
             </span>
           ) : (
             <button
               type="button"
-              className="w-full text-start text-sm text-[#bdbdbd]"
+              className="w-full text-start text-sm text-[#bdbdbd] dark:text-[#6b7d78]"
               onClick={openSelect}
             >
               {placeholder}
@@ -118,7 +118,7 @@ export default function CreateUnitFormSelect({
               "inline-flex size-8! shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0! text-brand shadow-none focus-visible:ring-0 [&>svg:last-child]:hidden",
             )}
           >
-            <ChevronDown className="size-4 text-brand" aria-hidden="true" />
+            <ChevronDown className="size-4 text-brand dark:text-white" aria-hidden="true" />
           </SelectTrigger>
 
           <SelectContent
@@ -127,7 +127,7 @@ export default function CreateUnitFormSelect({
             side="bottom"
             sideOffset={6}
             avoidCollisions={false}
-            className="max-h-48 rounded-2xl"
+            className="max-h-48 rounded-2xl border border-[#2f403b] bg-[#1a2421] text-white dark:bg-[#1a2421] dark:text-white"
             style={{
               width: contentWidth,
               minWidth: contentWidth,

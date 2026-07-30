@@ -28,12 +28,12 @@ export default function UnitOptionalCheckboxField({
     <div dir="rtl" className="space-y-3">
       <label
         className={cn(
-          "flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3",
+          "flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3 dark:border-[#2f403b] dark:bg-[#121a18]",
           disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer",
         )}
       >
         <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-start">
-          <span className="flex items-center gap-2 text-sm font-semibold text-brand">
+          <span className="flex items-center gap-2 text-sm font-semibold text-black dark:text-white">
             {icon}
             {label}
           </span>

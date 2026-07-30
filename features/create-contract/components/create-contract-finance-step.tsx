@@ -13,6 +13,7 @@ import { useCreateContractFinanceStep } from "@/features/create-contract/hooks/u
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
+import { sanitizeFinanceDataForContinue } from "@/features/create-contract/types/finance-step";
 import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 import { scrollToFirstInvalidField } from "@/features/shared/utils/scroll-to-first-invalid-field";
 
@@ -48,6 +49,18 @@ export default function CreateContractFinanceStep({
       return;
     }
 
+    const nextFinanceData = sanitizeFinanceDataForContinue(financeData);
+
+    if (
+      nextFinanceData.addOtherConditions !== financeData.addOtherConditions ||
+      nextFinanceData.selectedTenantRoleIds.length !==
+        financeData.selectedTenantRoleIds.length ||
+      nextFinanceData.otherConditionsList.length !==
+        financeData.otherConditionsList.length
+    ) {
+      setFinanceData(nextFinanceData);
+    }
+
     if (!canContinue) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
@@ -55,7 +68,7 @@ export default function CreateContractFinanceStep({
       return;
     }
 
-    const submitted = await submitStep6({ financeData });
+    const submitted = await submitStep6({ financeData: nextFinanceData });
 
     if (!submitted) {
       return;
@@ -66,7 +79,7 @@ export default function CreateContractFinanceStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-3xl bg-white p-6 shadow-sm md:p-8">
+      <div className="p-6 md:p-8">
         <CreateContractStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}

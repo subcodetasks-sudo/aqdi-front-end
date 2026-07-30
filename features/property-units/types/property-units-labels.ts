@@ -1,9 +1,9 @@
 export type PropertyUnitsLabels = {
   backLabel: string;
   pageTitle: string;
-  emptyState: string;
-  residentialUnitsCount: string;
-  commercialUnitsCount: string;
+  pageSubtitle: string;
+  emptyResidential: string;
+  emptyCommercial: string;
   createResidentialUnit: string;
   createCommercialUnit: string;
   tabs: {

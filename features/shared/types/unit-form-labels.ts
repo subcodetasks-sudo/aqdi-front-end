@@ -8,6 +8,10 @@ export type UnitFormLabels = {
       housing: string;
       commercial: string;
     };
+    descriptions?: {
+      housing: string;
+      commercial: string;
+    };
   };
   unitType: { label: string };
   unitUsage: { label: string };

@@ -3,14 +3,16 @@ import { cn } from "@/lib/utils";
 type CreateContractStepPhaseProgressProps = {
   totalPhases: number;
   currentPhaseIndex: number;
+  className?: string;
 };
 
 export default function CreateContractStepPhaseProgress({
   totalPhases,
   currentPhaseIndex,
+  className,
 }: CreateContractStepPhaseProgressProps) {
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       {Array.from({ length: totalPhases }, (_, index) => (
         <div
           key={index}

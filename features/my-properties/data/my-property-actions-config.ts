@@ -43,7 +43,6 @@ export function buildPropertyActionHref(
   const { propertyId, contractType } = property;
   const unitParams = new URLSearchParams({
     propertyId: String(propertyId),
-    contract_type: contractType,
   });
   const unitsHref = `/properties/my-properties/units?propertyId=${propertyId}&contract_type=${contractType}`;
 

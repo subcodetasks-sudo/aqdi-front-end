@@ -6,6 +6,7 @@ import CreateContractWizard from "@/features/create-contract/components/create-c
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
+import { setServicesFlowDarkMode } from "@/lib/ui/set-services-flow-dark-mode";
 import { cn } from "@/lib/utils";
 
 type CreateContractPageContentProps = {
@@ -20,20 +21,16 @@ export default function CreateContractPageContent({
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const shell = document.querySelector<HTMLElement>("[data-services-layout]");
-
-    if (!shell) {
-      return;
-    }
-
-    if (isDarkMode) {
-      shell.classList.add("dark", "create-contract-dark-shell");
-    } else {
-      shell.classList.remove("dark", "create-contract-dark-shell");
-    }
+    setServicesFlowDarkMode({
+      enabled: isDarkMode,
+      shellClass: "create-contract-dark-shell",
+    });
 
     return () => {
-      shell.classList.remove("dark", "create-contract-dark-shell");
+      setServicesFlowDarkMode({
+        enabled: false,
+        shellClass: "create-contract-dark-shell",
+      });
     };
   }, [isDarkMode]);
 

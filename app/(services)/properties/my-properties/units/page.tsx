@@ -80,13 +80,11 @@ export default async function PropertyUnitsPage({
   const labels: PropertyUnitsLabels = {
     backLabel: t("backLabel"),
     pageTitle: t("pageTitle"),
-    emptyState: t("emptyState"),
-    residentialUnitsCount: t("residentialUnitsCount", {
-      count: residentialItems.length,
-    }),
-    commercialUnitsCount: t("commercialUnitsCount", {
-      count: commercialItems.length,
-    }),
+    pageSubtitle: propertyName
+      ? t("pageSubtitleWithName", { propertyName })
+      : t("pageSubtitle"),
+    emptyResidential: t("emptyResidential"),
+    emptyCommercial: t("emptyCommercial"),
     createResidentialUnit: t("createResidentialUnit"),
     createCommercialUnit: t("createCommercialUnit"),
     tabs: {
@@ -100,7 +98,6 @@ export default async function PropertyUnitsPage({
       labels={labels}
       propertyId={propertyId}
       initialTab={initialTab}
-      propertyName={propertyName}
       property={property}
       residentialItems={residentialItems}
       commercialItems={commercialItems}

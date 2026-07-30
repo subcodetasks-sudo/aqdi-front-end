@@ -343,7 +343,10 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         });
       },
       setReviewData: (data) => set({ reviewData: data }),
-      resetDraft: () => set(createInitialPropertyDraft()),
+      resetDraft: () => {
+        localStorage.removeItem("aqdi-create-property-draft");
+        set(createInitialPropertyDraft());
+      },
       initializeNewSession: () => {
         localStorage.removeItem("aqdi-create-property-draft");
         set(createInitialPropertyDraft());

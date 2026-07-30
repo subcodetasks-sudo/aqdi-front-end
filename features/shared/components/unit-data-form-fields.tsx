@@ -3,6 +3,7 @@
 import { Droplets, Hash, Zap } from "lucide-react";
 
 import CreateUnitAreaField from "@/features/create-unit/components/create-unit-area-field";
+import CreateUnitContractTypeCards from "@/features/create-unit/components/create-unit-contract-type-cards";
 import CreateUnitFormSelect from "@/features/create-unit/components/create-unit-form-select";
 import CreateUnitIconInputField from "@/features/create-unit/components/create-unit-icon-input-field";
 import CreateUnitNumberField from "@/features/create-unit/components/create-unit-number-field";
@@ -30,6 +31,8 @@ type UnitDataFormFieldsProps = {
   onChange: (value: UnitDataState) => void;
   contractType?: PropertyContractType;
   onContractTypeChange?: (contractType: PropertyContractType) => void;
+  contractTypeSelectorVariant?: "select" | "cards";
+  hideHousingOnlyFieldsForCommercial?: boolean;
   electricityMeterFee?: number;
   waterMeterFee?: number;
   showFieldErrors?: boolean;
@@ -58,7 +61,7 @@ function FurnishingTypeToggle({
 }) {
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-semibold text-brand">{label}</label>
+      <label className="block text-sm font-semibold text-black dark:text-white">{label}</label>
 
       <div className="grid grid-cols-2 gap-3">
         {(["new", "used"] as const).map((furnishingType) => {
@@ -93,6 +96,8 @@ export default function UnitDataFormFields({
   onChange,
   contractType,
   onContractTypeChange,
+  contractTypeSelectorVariant = "select",
+  hideHousingOnlyFieldsForCommercial = false,
   electricityMeterFee = 0,
   waterMeterFee = 0,
   showFieldErrors = false,
@@ -129,6 +134,12 @@ export default function UnitDataFormFields({
   const contractTypeLabel =
     labels.contractType?.linkedLabel ?? labels.contractType?.label ?? "";
   const kitchensSelected = value.kitchensCount !== "";
+  const showHousingOnlyFields =
+    !hideHousingOnlyFieldsForCommercial || contractType !== "commercial";
+  const useCardsSelector =
+    contractTypeSelectorVariant === "cards" &&
+    Boolean(labels.contractType?.descriptions);
+
   const basicFields = (
     <>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -199,60 +210,80 @@ export default function UnitDataFormFields({
         />
       </div>
 
-      <div className="space-y-2">
-        <div className="grid grid-cols-3 gap-3">
-          <UnitCountStepper
-            label={labels.roomsCount.label}
-            value={value.roomsCount}
-            onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
-            required
-          />
-          <UnitCountStepper
-            label={labels.bathroomsCount.label}
-            value={value.bathroomsCount}
-            onChange={(bathroomsCount) =>
-              updateField("bathroomsCount", bathroomsCount)
-            }
-          />
-          <UnitCountStepper
-            label={labels.kitchensCount.label}
-            value={value.kitchensCount}
-            onChange={(kitchensCount) =>
-              onChange({
-                ...value,
-                kitchensCount,
-                kitchenCabinetsInstalled:
-                  kitchensCount === ""
-                    ? false
-                    : value.kitchenCabinetsInstalled,
-              })
-            }
-          />
-        </div>
-
-        {labels.roomsCount.hint ? (
-          <p className="flex items-start gap-2 text-xs leading-5 text-[#9a9a9a]">
-            <span
-              className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-secondary"
-              aria-hidden="true"
+      {showHousingOnlyFields ? (
+        <div className="space-y-2">
+          <div className="grid grid-cols-3 gap-3">
+            <UnitCountStepper
+              label={labels.roomsCount.label}
+              value={value.roomsCount}
+              onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
+              required
             />
-            <span>{labels.roomsCount.hint}</span>
-          </p>
-        ) : null}
-      </div>
+            <UnitCountStepper
+              label={labels.bathroomsCount.label}
+              value={value.bathroomsCount}
+              onChange={(bathroomsCount) =>
+                updateField("bathroomsCount", bathroomsCount)
+              }
+            />
+            <UnitCountStepper
+              label={labels.kitchensCount.label}
+              value={value.kitchensCount}
+              onChange={(kitchensCount) =>
+                onChange({
+                  ...value,
+                  kitchensCount,
+                  kitchenCabinetsInstalled:
+                    kitchensCount === ""
+                      ? false
+                      : value.kitchenCabinetsInstalled,
+                })
+              }
+            />
+          </div>
+
+          {labels.roomsCount.hint ? (
+            <p className="flex items-start gap-2 text-xs leading-5 text-[#9a9a9a]">
+              <span
+                className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-secondary"
+                aria-hidden="true"
+              />
+              <span>{labels.roomsCount.hint}</span>
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </>
   );
 
   return (
     <div className="space-y-5">
-      {labels.contractType && contractType && !onContractTypeChange ? (
+      {labels.contractType && contractType && useCardsSelector ? (
+        <CreateUnitContractTypeCards
+          label={contractTypeLabel}
+          value={contractType}
+          onChange={onContractTypeChange}
+          options={{
+            housing: {
+              title: labels.contractType.options.housing,
+              description: labels.contractType.descriptions!.housing,
+            },
+            commercial: {
+              title: labels.contractType.options.commercial,
+              description: labels.contractType.descriptions!.commercial,
+            },
+          }}
+        />
+      ) : null}
+
+      {labels.contractType && contractType && !useCardsSelector && !onContractTypeChange ? (
         <div>
-          <label className="mb-2 block text-sm font-semibold text-brand">
+          <label className="mb-2 block text-sm font-semibold text-black dark:text-white">
             {contractTypeLabel}
           </label>
 
-          <div className="flex h-14 w-full items-center rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4">
-            <span className="text-sm font-semibold text-[#333333]">
+          <div className="flex h-14 w-full items-center rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4 dark:border-[#2f403b] dark:bg-[#0d1614]">
+            <span className="text-sm font-semibold text-[#333333] dark:text-white">
               {contractType === "housing"
                 ? labels.contractType.options.housing
                 : labels.contractType.options.commercial}
@@ -261,7 +292,10 @@ export default function UnitDataFormFields({
         </div>
       ) : null}
 
-      {labels.contractType && contractType && onContractTypeChange ? (
+      {labels.contractType &&
+      contractType &&
+      !useCardsSelector &&
+      onContractTypeChange ? (
         <CreateUnitFormSelect
           label={contractTypeLabel}
           placeholder={labels.selectPlaceholder}
@@ -308,41 +342,45 @@ export default function UnitDataFormFields({
           />
         </div>
 
-        <UnitOptionalCheckboxField
-          label={labels.kitchenCabinetsInstalled.label}
-          checked={value.kitchenCabinetsInstalled}
-          disabled={!kitchensSelected}
-          warning={
-            kitchensSelected
-              ? undefined
-              : labels.kitchenCabinetsInstalled.kitchensRequiredHint
-          }
-          onCheckedChange={(kitchenCabinetsInstalled) =>
-            updateField("kitchenCabinetsInstalled", kitchenCabinetsInstalled)
-          }
-        />
+        {showHousingOnlyFields ? (
+          <>
+            <UnitOptionalCheckboxField
+              label={labels.kitchenCabinetsInstalled.label}
+              checked={value.kitchenCabinetsInstalled}
+              disabled={!kitchensSelected}
+              warning={
+                kitchensSelected
+                  ? undefined
+                  : labels.kitchenCabinetsInstalled.kitchensRequiredHint
+              }
+              onCheckedChange={(kitchenCabinetsInstalled) =>
+                updateField("kitchenCabinetsInstalled", kitchenCabinetsInstalled)
+              }
+            />
 
-        <UnitOptionalCheckboxField
-          label={labels.furnished.label}
-          checked={value.furnished}
-          onCheckedChange={(furnished) =>
-            onChange({
-              ...value,
-              furnished,
-              furnishingType: furnished ? value.furnishingType : "",
-            })
-          }
-        >
-          <FurnishingTypeToggle
-            label={labels.furnishingType.label}
-            newLabel={labels.furnishingType.new}
-            usedLabel={labels.furnishingType.used}
-            value={value.furnishingType}
-            onChange={(furnishingType) =>
-              updateField("furnishingType", furnishingType)
-            }
-          />
-        </UnitOptionalCheckboxField>
+            <UnitOptionalCheckboxField
+              label={labels.furnished.label}
+              checked={value.furnished}
+              onCheckedChange={(furnished) =>
+                onChange({
+                  ...value,
+                  furnished,
+                  furnishingType: furnished ? value.furnishingType : "",
+                })
+              }
+            >
+              <FurnishingTypeToggle
+                label={labels.furnishingType.label}
+                newLabel={labels.furnishingType.new}
+                usedLabel={labels.furnishingType.used}
+                value={value.furnishingType}
+                onChange={(furnishingType) =>
+                  updateField("furnishingType", furnishingType)
+                }
+              />
+            </UnitOptionalCheckboxField>
+          </>
+        ) : null}
 
         <UnitOptionalCheckboxField
           label={labels.addElectricityMeter.label}

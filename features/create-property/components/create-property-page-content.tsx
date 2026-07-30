@@ -7,6 +7,7 @@ import ServicesPageBackConfig from "@/features/services/components/services-page
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import type { PropertyTypeId } from "@/features/properties/types/property-type";
 import type { PropertyEditDraftData } from "@/features/create-property/utils/map-property-api-to-draft";
+import { setServicesFlowDarkMode } from "@/lib/ui/set-services-flow-dark-mode";
 import { cn } from "@/lib/utils";
 
 type CreatePropertyPageContentProps = {
@@ -31,20 +32,16 @@ export default function CreatePropertyPageContent({
       : labels.pageTitleCommercial;
 
   useEffect(() => {
-    const shell = document.querySelector<HTMLElement>("[data-services-layout]");
-
-    if (!shell) {
-      return;
-    }
-
-    if (isDarkMode) {
-      shell.classList.add("dark", "create-property-dark-shell");
-    } else {
-      shell.classList.remove("dark", "create-property-dark-shell");
-    }
+    setServicesFlowDarkMode({
+      enabled: isDarkMode,
+      shellClass: "create-property-dark-shell",
+    });
 
     return () => {
-      shell.classList.remove("dark", "create-property-dark-shell");
+      setServicesFlowDarkMode({
+        enabled: false,
+        shellClass: "create-property-dark-shell",
+      });
     };
   }, [isDarkMode]);
 

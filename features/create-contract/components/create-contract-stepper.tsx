@@ -82,10 +82,21 @@ export default function CreateContractStepper({
   const clearSkippingOwnerStep = useCreateContractDraftStore(
     (state) => state.clearSkippingOwnerStep,
   );
+  const existingPropertyContext = useCreateContractDraftStore(
+    (state) => state.existingPropertyContext,
+  );
   const isPaymentStep = currentStep === "payment";
   const ownerSkipped = isOwnerStepSkipped({
     selectedDeedType,
     instrumentType,
+  });
+  const hideDeedAndOwner = existingPropertyContext !== null;
+  const visibleSteps = CREATE_CONTRACT_STEPPER_STEPS.filter((step) => {
+    if (hideDeedAndOwner && (step === "deed" || step === "owner")) {
+      return false;
+    }
+
+    return true;
   });
 
   useEffect(() => {
@@ -103,9 +114,9 @@ export default function CreateContractStepper({
   }, [skippingOwnerStep, clearSkippingOwnerStep]);
 
   return (
-    <div className="sticky top-0 z-20 rounded-t-3xl bg-white p-4 shadow-sm [clip-path:inset(-8px_-8px_0_-8px)] md:p-5 dark:border dark:border-b-0 dark:border-[#2f403b] dark:bg-[#1a2421]">
+    <div className="sticky top-0 z-20 bg-white p-4 md:p-5 dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
-        {CREATE_CONTRACT_STEPPER_STEPS.map((step, index) => {
+        {visibleSteps.map((step, index) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
           const isSkipped = step === "owner" && ownerSkipped;
           const isPassed = stepIndex < currentStepIndex;

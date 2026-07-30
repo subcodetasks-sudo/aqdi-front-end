@@ -79,19 +79,21 @@ export function onToggleTenantRole(
     };
   }
 
-  const selectedIds = [...new Set([...state.selectedIds, role.id])];
-  const values = role.has_user_input
-    ? {
-        ...state.values,
-        [String(role.id)]: state.values[String(role.id)] ?? "",
-      }
-    : state.values;
-
-  if (role.pop) {
-    return { selectedIds, values, openModal: role };
+  // Roles that need user input: open the dialog first; only commit on confirm.
+  // Avoids leaving an empty value that blocks "continue".
+  if (role.pop || role.has_user_input) {
+    return {
+      selectedIds: state.selectedIds,
+      values: state.values,
+      openModal: role,
+    };
   }
 
-  return { selectedIds, values, openModal: null };
+  return {
+    selectedIds: [...new Set([...state.selectedIds, role.id])],
+    values: state.values,
+    openModal: null,
+  };
 }
 
 export function buildStep6TenantPayload(

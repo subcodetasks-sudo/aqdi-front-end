@@ -52,11 +52,11 @@ export default function CreateContractFinanceConditionsSection({
 
   function handleOpenChange(nextOpen: boolean) {
     if (nextOpen) {
-      onEnabledChange(true);
       const sanitized = getFilledOtherConditions(value);
       if (sanitized.length !== value.length) {
         onChange(sanitized);
       }
+      // Do not flip enabled=true on open — conditions stay optional until added.
       return;
     }
 

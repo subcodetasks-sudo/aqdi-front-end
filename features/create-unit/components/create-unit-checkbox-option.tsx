@@ -26,7 +26,7 @@ export default function CreateUnitCheckboxOption({
           onCheckedChange={(value) => onCheckedChange(value === true)}
           className="size-5 rounded-full border-brand-secondary data-checked:border-brand-secondary data-checked:bg-brand-secondary"
         />
-        <span className="flex items-center gap-1.5 text-sm font-semibold text-brand">
+        <span className="flex items-center gap-1.5 text-sm font-semibold text-black">
           {label}
           <Info className="size-4 text-[#bdbdbd]" aria-hidden="true" />
         </span>
@@ -54,7 +54,7 @@ export function CreateUnitFurnishingTypeToggle({
 }: FurnishingTypeToggleProps) {
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-semibold text-brand">
+      <label className="block text-sm font-semibold text-black">
         {label}
         <span className="text-red-500"> *</span>
       </label>

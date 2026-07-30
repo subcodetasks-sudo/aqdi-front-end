@@ -480,10 +480,11 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
 
         if (
           state.currentStep === "tenant" &&
-          isOwnerStepSkipped({
-            selectedDeedType: state.deed.selectedDeedType,
-            instrumentType: state.contractStep1Data?.instrument_type,
-          })
+          (state.existingPropertyContext !== null ||
+            isOwnerStepSkipped({
+              selectedDeedType: state.deed.selectedDeedType,
+              instrumentType: state.contractStep1Data?.instrument_type,
+            }))
         ) {
           set({ currentStep: "deed", skippingOwnerStep: false });
           return;
@@ -900,7 +901,8 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
 
         set({
           ...base,
-          currentStep: "deed",
+          currentStep: "tenant",
+          skippingOwnerStep: true,
           contractSession: session,
           existingPropertyContext: context,
           deed: buildDeedDraftFromProperty(context.property),

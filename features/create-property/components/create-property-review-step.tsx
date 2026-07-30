@@ -53,7 +53,7 @@ export default function CreatePropertyReviewStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-[28px] bg-white p-5 shadow-sm [clip-path:inset(0_-8px_-8px_-8px)] md:p-8">
+      <div className="rounded-b-[28px] bg-white p-5 md:p-8 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -74,6 +74,7 @@ export default function CreatePropertyReviewStep({
 
         <CreatePropertyStepNavigation
           previousLabel={labels.navigation.previous}
+          saveLabel={labels.navigation.save}
           continueLabel={
             isSubmitting
               ? labels.navigation.submitting
@@ -81,6 +82,9 @@ export default function CreatePropertyReviewStep({
           }
           isSubmitting={isSubmitting}
           onPrevious={onBack}
+          onSave={() => {
+            toast.success(labels.navigation.saveSuccess);
+          }}
           onContinue={handleContinue}
         />
       </div>

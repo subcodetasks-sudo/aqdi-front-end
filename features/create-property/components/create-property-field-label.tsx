@@ -16,7 +16,7 @@ export default function CreatePropertyFieldLabel({
       <label
         className={cn(
           "text-sm font-semibold",
-          invalid ? "text-[#c62828]" : "text-brand",
+          invalid ? "text-[#c62828]" : "text-black dark:text-white",
         )}
       >
         {label}
