@@ -61,13 +61,13 @@ export default function CreateContractOwnerStep({
 
   return (
     <div className="space-y-4">
-      <div className="p-6 md:p-8">
+      <div className="p-3 md:p-5">
         <CreateContractStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
         />
 
-        <div className="space-y-5">
+        <div className="space-y-3">
           <CreateContractOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}

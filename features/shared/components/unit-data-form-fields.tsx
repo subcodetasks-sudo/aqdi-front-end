@@ -142,7 +142,7 @@ export default function UnitDataFormFields({
 
   const basicFields = (
     <>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
         <CreateUnitFormSelect
           label={labels.unitType.label}
           placeholder={labels.selectPlaceholder}
@@ -183,7 +183,7 @@ export default function UnitDataFormFields({
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1.5fr_1fr]">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-[1.5fr_1fr] sm:gap-3">
         <CreateUnitNumberField
           label={labels.unitNumber.label}
           placeholder={labels.unitNumber.placeholder}
@@ -257,7 +257,7 @@ export default function UnitDataFormFields({
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       {labels.contractType && contractType && useCardsSelector ? (
         <CreateUnitContractTypeCards
           label={contractTypeLabel}
@@ -278,11 +278,11 @@ export default function UnitDataFormFields({
 
       {labels.contractType && contractType && !useCardsSelector && !onContractTypeChange ? (
         <div>
-          <label className="mb-2 block text-sm font-semibold text-black dark:text-white">
+          <label className="mb-1 block text-sm font-semibold text-black dark:text-white">
             {contractTypeLabel}
           </label>
 
-          <div className="flex h-14 w-full items-center rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4 dark:border-[#2f403b] dark:bg-[#0d1614]">
+          <div className="flex h-10 w-full items-center rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4 dark:border-[#2f403b] dark:bg-[#0d1614]">
             <span className="text-sm font-semibold text-[#333333] dark:text-white">
               {contractType === "housing"
                 ? labels.contractType.options.housing

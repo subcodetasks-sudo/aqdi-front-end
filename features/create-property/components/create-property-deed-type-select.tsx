@@ -83,7 +83,7 @@ export default function CreatePropertyDeedTypeSelect({
       <div
         ref={containerRef}
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-2xl border px-3 transition-colors",
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-3 transition-colors",
           fieldChromeSurfaceClass(chrome),
           open && chrome === "default" && "border-brand",
         )}
@@ -133,8 +133,8 @@ export default function CreatePropertyDeedTypeSelect({
           value={value || undefined}
           onValueChange={handleValueChange}
         >
-          <SelectTrigger className="inline-flex size-9! shrink-0 items-center justify-center rounded-full border-0 bg-brand p-0! text-white shadow-none focus-visible:ring-brand/20 [&>svg:last-child]:hidden">
-            <ChevronDown className="size-4 text-white" aria-hidden="true" />
+          <SelectTrigger className="inline-flex size-7! shrink-0 items-center justify-center rounded-none border-0 bg-transparent p-0! text-[#333333] shadow-none focus-visible:ring-0 dark:text-white [&>svg:last-child]:hidden">
+            <ChevronDown className="size-4 text-[#333333] dark:text-white" aria-hidden="true" />
           </SelectTrigger>
 
           <SelectContent

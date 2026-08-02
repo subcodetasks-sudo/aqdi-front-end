@@ -165,7 +165,7 @@ export default function CreatePropertyDeedStep({
     const instrumentInvalid = showFieldErrors && !useManualDeedEntry;
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-3">
         <CreatePropertyDeedImageUpload
           labels={labels.deedImage}
           fieldLabel={labels.deedImage.frontLabel}
@@ -228,14 +228,14 @@ export default function CreatePropertyDeedStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-[28px] bg-white p-5 md:p-8 dark:bg-[#1a2421]">
+      <div className="rounded-b-[28px] bg-white p-3 md:p-5 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
         />
 
-        <div className="space-y-8">
-          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5">
+        <div className="space-y-4">
+          <div className="space-y-3 rounded-[24px] bg-white p-3 md:p-4">
             <CreatePropertyDeedTypeSelect
               labels={labels.deedType}
               value={selectedDeedType}
@@ -244,11 +244,11 @@ export default function CreatePropertyDeedStep({
             />
 
             {selectedDeedType && needsFrontBack ? (
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {renderInstrumentEntry(renderFrontBackUpload())}
               </div>
             ) : selectedDeedType && isDeceasedOwner ? (
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {renderInstrumentEntry(
                   <CreatePropertyDeedImageUpload
                     labels={{
@@ -348,7 +348,7 @@ export default function CreatePropertyDeedStep({
                 ) : null}
               </div>
             ) : selectedDeedType && isWaqfOwner ? (
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {renderInstrumentEntry(renderSingleUpload())}
 
                 <CreatePropertyDeedImageUpload
@@ -418,7 +418,7 @@ export default function CreatePropertyDeedStep({
           </div>
 
           {selectedDeedType ? (
-            <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
+            <div className="space-y-3 border-t border-dashed border-[#d9d9d9] pt-4">
               <CreatePropertyStepPhaseHeader
                 title={addressLabels.title}
                 subtitle={addressLabels.subtitle}

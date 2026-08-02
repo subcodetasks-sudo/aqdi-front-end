@@ -79,7 +79,7 @@ export default function CreateContractFinanceStep({
 
   return (
     <div className="space-y-4">
-      <div className="p-6 md:p-8">
+      <div className="p-3 md:p-5">
         <CreateContractStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}
@@ -88,7 +88,7 @@ export default function CreateContractFinanceStep({
         {isSublease ? (
           <div
             role="note"
-            className="mb-8 flex items-start gap-3 rounded-xl border border-[#bfd4ff] bg-[#edf5ff] px-4 py-3 text-[#2f6fed]"
+            className="mb-3 flex items-start gap-3 rounded-xl border border-[#bfd4ff] bg-[#edf5ff] px-4 py-3 text-[#2f6fed]"
           >
             <Info className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
             <p className="text-sm leading-relaxed">

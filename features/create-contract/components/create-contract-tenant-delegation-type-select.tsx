@@ -46,7 +46,7 @@ export default function CreateContractTenantDelegationTypeSelect({
         aria-label={labels.label}
         aria-invalid={invalid}
         data-field-invalid={invalid ? "true" : undefined}
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+        className="grid grid-cols-2 gap-2 sm:gap-3"
       >
         {DELEGATION_TYPE_OPTIONS.map((delegationType) => {
           const selected = value === delegationType;
@@ -60,7 +60,7 @@ export default function CreateContractTenantDelegationTypeSelect({
               aria-checked={selected}
               onClick={() => onChange(delegationType)}
               className={cn(
-                "relative flex flex-col items-center gap-2.5 rounded-2xl border px-4 py-5 text-center transition-colors",
+                "relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl border px-2 py-3 text-center transition-colors sm:gap-2.5 sm:px-4 sm:py-5",
                 selected
                   ? "border-brand bg-brand-background-green"
                   : invalid
@@ -69,18 +69,18 @@ export default function CreateContractTenantDelegationTypeSelect({
               )}
             >
               {"badge" in option && option.badge ? (
-                <span className="absolute inset-s-3 top-0 -translate-y-1/2 rounded-full bg-[#ffe8d6] px-2.5 py-1 text-[10px] font-bold text-[#b86a3a]">
+                <span className="absolute inset-s-1.5 top-0 -translate-y-1/2 rounded-full bg-[#ffe8d6] px-1.5 py-0.5 text-[9px] font-bold text-[#b86a3a] sm:inset-s-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
                   {option.badge}
                 </span>
               ) : null}
 
-              <span className="flex size-11 items-center justify-center">
+              <span className="flex size-9 items-center justify-center sm:size-11 [&_svg]:size-5 sm:[&_svg]:size-7">
                 {DELEGATION_ICONS[delegationType]}
               </span>
-              <span className="text-sm font-extrabold text-brand">
+              <span className="text-xs font-extrabold text-brand sm:text-sm">
                 {option.title}
               </span>
-              <span className="text-xs leading-5 text-[#9a9a9a]">
+              <span className="text-[11px] leading-4 text-[#9a9a9a] sm:text-xs sm:leading-5">
                 {option.description}
               </span>
             </button>

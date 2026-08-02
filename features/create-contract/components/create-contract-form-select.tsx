@@ -89,7 +89,7 @@ export default function CreateContractFormSelect({
         className={cn(
           "flex w-full items-center gap-2 rounded-2xl border px-3",
           fieldChromeSurfaceClass(chrome),
-          isCompact ? "h-12" : "h-14",
+          isCompact ? "h-9" : "h-10",
         )}
       >
         <div

@@ -35,7 +35,7 @@ export default function CreateContractPaymentNavigation({
           type="button"
           onClick={onPrevious}
           disabled={busy}
-          className="h-12 shrink-0 rounded-xl bg-[#666666] px-5 text-sm font-semibold text-white hover:bg-[#555555] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-11 shrink-0 rounded-xl bg-[#666666] px-5 text-sm font-semibold text-white hover:bg-[#555555] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <ChevronLeft className="size-4 -rotate-180" aria-hidden="true" />
           {previousLabel}
@@ -46,7 +46,7 @@ export default function CreateContractPaymentNavigation({
             type="button"
             onClick={onSave}
             disabled={busy}
-            className="h-12 shrink-0 gap-2 rounded-xl border border-brand-secondary bg-white px-3 text-xs font-semibold text-brand hover:bg-brand-background-green sm:px-4 sm:text-sm disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-11 shrink-0 gap-2 rounded-xl border border-brand-secondary bg-white px-3 text-xs font-semibold text-brand hover:bg-brand-background-green sm:px-4 sm:text-sm disabled:cursor-not-allowed disabled:opacity-60"
           >
             <CustomIcon
               src="/icons/file-write.svg"
@@ -61,7 +61,7 @@ export default function CreateContractPaymentNavigation({
           type="button"
           onClick={onPay}
           disabled={busy}
-          className="h-12 flex-1 rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-11 flex-1 rounded-xl bg-linear-to-br from-brand-secondary via-brand to-brand text-base font-extrabold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <CustomIcon src="/icons/arrow-r.svg" size={24} />
           {isPaying ? (payingLabel ?? payLabel) : payLabel}

@@ -44,7 +44,7 @@ export default function CreateContractTenantIndividualDataPhase({
   }
 
   return (
-    <div className="mt-5 space-y-5">
+    <div className="mt-3 space-y-3">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <CreateContractIconInputField
           label={labels.idNumber.label}

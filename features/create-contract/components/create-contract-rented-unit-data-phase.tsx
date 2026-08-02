@@ -51,8 +51,8 @@ export default function CreateContractRentedUnitDataPhase({
   if (isLoadingOptions) {
     return (
       <div className="space-y-3 py-4">
-        <div className="h-14 animate-pulse rounded-full bg-brand-background" />
-        <div className="h-14 animate-pulse rounded-full bg-brand-background" />
+        <div className="h-10 animate-pulse rounded-full bg-brand-background" />
+        <div className="h-10 animate-pulse rounded-full bg-brand-background" />
       </div>
     );
   }

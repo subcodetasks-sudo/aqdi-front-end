@@ -91,7 +91,7 @@ export default function CreatePropertyWizard({
   const isSuccess = completedPropertyId !== null;
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-4">
+    <div className="mx-auto w-full max-w-4xl space-y-2">
       {initialEditDraft || isSuccess ? null : (
         <CreateFlowDraftHydrator hydrate={hydrateFilesFromPersisted} />
       )}

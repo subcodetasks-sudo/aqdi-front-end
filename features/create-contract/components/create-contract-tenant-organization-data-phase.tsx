@@ -75,7 +75,7 @@ export default function CreateContractTenantOrganizationDataPhase({
   const delegationType = value.delegationType || "owner-representative";
 
   return (
-    <div className="mt-5 space-y-5">
+    <div className="mt-3 space-y-3">
       <CreateContractTenantDelegationTypeSelect
         labels={labels.delegationType}
         value={delegationType}

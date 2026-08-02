@@ -340,9 +340,9 @@ export default function CreateContractDeedStep({
 
     if (needsFrontBack) {
       return (
-        <div className="space-y-6">
+        <div className="space-y-3">
           {renderInstrumentUpload(
-            <div className="space-y-6">
+            <div className="space-y-3">
               <CreateContractDeedImageUpload
                 labels={labels.deedImage}
                 fieldLabel={labels.deedImage.frontLabel}
@@ -396,7 +396,7 @@ export default function CreateContractDeedStep({
 
     if (isWaqfOwner) {
       return (
-        <div className="space-y-6">
+        <div className="space-y-3">
           {renderInstrumentUpload(
             <CreateContractDeedImageUpload
               labels={labels.deedImage}
@@ -489,14 +489,14 @@ export default function CreateContractDeedStep({
 
   return (
     <>
-      <div className="p-5 md:p-8">
+      <div className="p-3 md:p-5">
         <CreateContractStepPhaseHeader
           title={deedPhase.title}
           subtitle={deedPhase.subtitle}
         />
 
-        <div className="space-y-8">
-          <div className="space-y-5 rounded-[24px] bg-white p-4 md:p-5 dark:bg-transparent">
+        <div className="space-y-4">
+          <div className="space-y-3 rounded-[24px] bg-white p-3 md:p-4 dark:bg-transparent">
             <CreateContractDeedTypeSelect
               labels={labels.deedType}
               value={selectedDeedType}
@@ -524,7 +524,7 @@ export default function CreateContractDeedStep({
           </div>
 
           {showNationalAddress ? (
-            <div className="space-y-6 border-t border-dashed border-[#d9d9d9] pt-8">
+            <div className="space-y-3 border-t border-dashed border-[#d9d9d9] pt-4">
               <CreateContractStepPhaseHeader
                 title={addressPhase.title}
                 subtitle={addressPhase.subtitle}

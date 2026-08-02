@@ -19,7 +19,7 @@ type CreatePropertyStepperProps = {
 };
 
 const stepPillClassName =
-  "inline-flex items-center justify-center rounded-full grow h-12 px-3 text-sm font-semibold whitespace-nowrap transition-all";
+  "inline-flex h-8 min-w-0 flex-1 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold transition-all sm:h-12 sm:grow sm:px-3 sm:text-sm";
 
 function getStepPillClassName(
   isActive: boolean,
@@ -35,14 +35,14 @@ function getStepPillClassName(
         : "cursor-not-allowed opacity-50",
     !completed &&
       (isActive
-        ? "bg-brand text-white shadow-md ring-2 ring-brand-secondary ring-offset-2"
+        ? "bg-brand text-white shadow-[0_0_0_2px_#ffffff,0_0_0_4px_#0db38b] dark:shadow-[0_0_0_2px_#1a2421,0_0_0_4px_#0db38b] sm:shadow-none sm:ring-2 sm:ring-brand-secondary sm:ring-offset-2"
         : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"),
   );
 }
 
 function getConnectorClassName(isCompleted: boolean) {
   return cn(
-    "h-0 w-3 shrink-0 border-t-2 sm:w-5",
+    "h-0 w-1 shrink-0 border-t-2 sm:w-5",
     isCompleted
       ? "border-solid border-brand-secondary"
       : "border-dashed border-[#d9d9d9] dark:border-[#2f403b]",
@@ -65,20 +65,20 @@ export default function CreatePropertyStepper({
   }
 
   return (
-    <div className="sticky top-0 z-20 rounded-t-3xl bg-white p-4 md:p-5 dark:bg-[#1a2421]">
-      <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
+    <div className="rounded-t-3xl bg-white px-2 py-2.5 sm:px-4 sm:py-4 md:p-5 dark:bg-[#1a2421]">
+      <div className="flex w-full min-w-0 items-center gap-0.5 py-0.5 sm:justify-evenly sm:gap-2">
         {completed ? (
           <>
-            <span className="inline-flex h-12 shrink-0 items-center gap-1.5 rounded-full border border-brand/15 bg-white px-3 text-sm font-semibold text-brand shadow-sm dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]">
+            <span className="inline-flex h-8 max-w-[4.5rem] shrink-0 items-center gap-0.5 rounded-full border border-brand/15 bg-white px-1.5 text-[10px] font-semibold text-brand shadow-sm sm:h-12 sm:max-w-none sm:gap-1.5 sm:px-3 sm:text-sm dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]">
               <Image
                 src="/images/logo.png"
                 alt=""
                 width={20}
                 height={22}
                 aria-hidden="true"
-                className="h-5 w-auto shrink-0 object-contain"
+                className="h-3.5 w-auto shrink-0 object-contain sm:h-5"
               />
-              <span>{labels.brand}</span>
+              <span className="truncate">{labels.brand}</span>
             </span>
             <span
               aria-hidden="true"
@@ -111,7 +111,7 @@ export default function CreatePropertyStepper({
                 onClick={() => goToStep(step)}
                 className={getStepPillClassName(isActive, isUnlocked, completed)}
               >
-                {labels.steps[step]}
+                <span className="truncate">{labels.steps[step]}</span>
               </button>
             </Fragment>
           );
@@ -122,23 +122,28 @@ export default function CreatePropertyStepper({
             aria-hidden="true"
             className={getConnectorClassName(true)}
           />
-        ) : null}
+        ) : (
+          <span
+            aria-hidden="true"
+            className={getConnectorClassName(false)}
+          />
+        )}
 
         <span
           title={labels.saveAlt}
           aria-label={labels.saveAlt}
           className={cn(
-            "inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 text-brand dark:text-[#7dccc0]",
+            "inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-brand sm:size-12 dark:text-[#7dccc0]",
             completed
               ? "border-brand bg-brand-background-green dark:border-brand-secondary dark:bg-[#16352f]"
               : "border-dashed border-brand/40 bg-white dark:border-brand-secondary/50 dark:bg-[#16352f]",
           )}
         >
-          <Save className="size-5" aria-hidden="true" />
+          <Save className="size-3.5 sm:size-5" aria-hidden="true" />
         </span>
       </div>
 
-      <div dir="rtl" className="mx-auto mt-4 flex w-[90%] items-end gap-2">
+      <div dir="rtl" className="mx-auto mt-2 flex w-full max-w-[95%] items-end gap-1.5 sm:mt-4 sm:w-[90%] sm:gap-2">
         <Image
           src="/images/contract-line-r.svg"
           alt=""
@@ -147,7 +152,7 @@ export default function CreatePropertyStepper({
           aria-hidden="true"
           className="h-auto min-w-0 flex-1 object-contain object-right dark:opacity-70"
         />
-        <p className="shrink-0 text-center text-xs font-medium text-brand md:text-sm dark:text-[#7dccc0]">
+        <p className="max-w-[55%] shrink-0 truncate text-center text-[10px] font-medium text-brand sm:max-w-none sm:text-xs md:text-sm dark:text-[#7dccc0]">
           {labels.journey}
         </p>
         <Image

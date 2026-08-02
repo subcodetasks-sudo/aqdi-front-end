@@ -62,7 +62,7 @@ export default function CreateContractFinanceDurationSelect({
               disabled={disabled}
               onClick={() => onChange(option.value)}
               className={cn(
-                "flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-2xl border px-3.5 py-2.5 text-center transition-colors",
+                "flex min-h-10 flex-col items-center justify-center gap-0.5 rounded-2xl border px-3.5 py-2.5 text-center transition-colors",
                 selected
                   ? "border-brand bg-brand text-white"
                   : invalid

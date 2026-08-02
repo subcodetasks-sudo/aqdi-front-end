@@ -24,7 +24,7 @@ export default function CreateContractSubleaseSection({
     showFieldErrors && value.length === 0 && !existingImageUrl;
 
   return (
-    <div className="space-y-5 rounded-[24px] border border-[#ececec] bg-white p-4 md:p-5">
+    <div className="space-y-3 rounded-[24px] border border-[#ececec] bg-white p-3 md:p-4">
       <div className="rounded-2xl bg-[#edf5ff] px-4 py-4 text-[#2f6fed] md:px-5">
         <p className="mb-2 text-sm font-extrabold">{labels.alertTitle}</p>
         <ol className="space-y-1.5 text-sm font-medium leading-relaxed">

@@ -118,7 +118,7 @@ export default function CreateContractDiscountCodeField({
           placeholder={labels.placeholder}
           autoComplete="off"
           disabled={isLocked || isApplying}
-          className="h-11 flex-1 rounded-xl border-[#e8e8e8] bg-white px-3 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:cursor-not-allowed disabled:opacity-70"
+          className="h-10 flex-1 rounded-xl border-[#e8e8e8] bg-white px-3 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:cursor-not-allowed disabled:opacity-70"
         />
 
         {!isLocked ? (
@@ -126,7 +126,7 @@ export default function CreateContractDiscountCodeField({
             type="button"
             onClick={() => void handleApply()}
             disabled={!draft.trim() || isApplying}
-            className="h-11 shrink-0 rounded-xl bg-brand px-5 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
+            className="h-10 shrink-0 rounded-xl bg-brand px-5 text-sm font-semibold text-white hover:bg-brand-secondary disabled:opacity-50"
           >
             {isApplying ? labels.applying : labels.apply}
           </Button>

@@ -51,7 +51,7 @@ export default function CreateUnitIconInputField({
 
       <div
         dir={dir}
-        className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2 dark:border-[#2f403b] dark:bg-[#0d1614]"
+        className="flex h-10 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2 dark:border-[#2f403b] dark:bg-[#0d1614]"
       >
         <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
           <Icon className="size-5" aria-hidden="true" />

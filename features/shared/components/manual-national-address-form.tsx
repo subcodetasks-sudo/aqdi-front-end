@@ -122,7 +122,7 @@ function AddressSelect({
       <div
         ref={containerRef}
         className={cn(
-          "flex h-12 w-full items-center gap-2 rounded-2xl border px-3",
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-3",
           fieldChromeSurfaceClass(chrome),
           disabled && "opacity-70",
         )}
@@ -233,7 +233,7 @@ function AddressTextField({
         inputMode={inputMode}
         aria-invalid={invalid}
         className={cn(
-          "h-12 rounded-2xl px-4 text-sm font-medium text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand/40",
+          "h-10 rounded-2xl px-4 text-sm font-medium text-[#333333] placeholder:text-[#bdbdbd] focus-visible:border-brand/40",
           fieldChromeControlClass,
           fieldChromeSurfaceClass(chrome),
           align === "end" ? "text-end" : "text-start",

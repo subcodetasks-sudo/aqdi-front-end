@@ -72,7 +72,7 @@ export default function CreatePropertyAgentDataPhase({
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <div className="space-y-1 text-center">
         <h3 className="text-lg font-extrabold text-brand md:text-xl">
           {labels.sectionTitle}

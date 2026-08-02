@@ -63,7 +63,7 @@ export default function CreatePropertyAddressStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-[28px] bg-white p-5 md:p-8 dark:bg-[#1a2421]">
+      <div className="rounded-b-[28px] bg-white p-3 md:p-5 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={labels.title}
           subtitle={labels.subtitle}

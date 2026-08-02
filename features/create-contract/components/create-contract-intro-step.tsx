@@ -70,7 +70,7 @@ export default function CreateContractIntroStep({
   const hasPricingItems = Boolean(servicesPricing && servicesPricing.length > 0);
 
   return (
-    <div className="space-y-5 p-6 md:space-y-6 md:p-8">
+    <div className="space-y-3 p-3 md:space-y-4 md:p-5">
       <div className="flex flex-col items-center gap-3 text-center">
         <span className="mb-2 inline-flex text-brand dark:text-[#7dccc0]">
           <Hand className="size-6" aria-hidden="true" />

@@ -81,7 +81,7 @@ export default function CreateContractDeedNationalAddress({
   const linkValid = method === "link" && linkUrl.trim() !== "";
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <div>
         <CreateContractFieldLabel
           label={labels.methodSelect.label}
@@ -173,7 +173,7 @@ export default function CreateContractDeedNationalAddress({
               placeholder={labels.link.placeholder}
               aria-invalid={linkInvalid}
               className={cn(
-                "h-14 rounded-2xl ps-11 pe-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] shadow-none focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0",
+                "h-10 rounded-2xl ps-11 pe-4 text-sm text-[#333333] placeholder:text-[#bdbdbd] shadow-none focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0",
                 linkInvalid
                   ? "border-[#e57373] bg-[#FBFBFA] aria-invalid:border-[#e57373]"
                   : linkValid

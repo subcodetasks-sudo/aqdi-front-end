@@ -80,7 +80,7 @@ export default function CreateUnitFormSelect({
         aria-invalid={showInvalid}
         data-field-invalid={showInvalid ? "true" : undefined}
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-2xl border px-3",
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-3",
           fieldChromeSurfaceClass(chrome),
         )}
       >

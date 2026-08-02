@@ -115,7 +115,7 @@ export default function ManualDeedEntryForm({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <div className="space-y-2">
         <RequiredFieldLabel
           label={labels.instrumentNumber.label}
@@ -136,7 +136,7 @@ export default function ManualDeedEntryForm({
             )
           }
           className={cn(
-            "h-12 rounded-2xl px-4 text-start text-sm font-semibold placeholder:text-[#cfcfcf] md:text-sm",
+            "h-10 rounded-2xl px-4 text-start text-sm font-semibold placeholder:text-[#cfcfcf] md:text-sm",
             fieldChromeControlClass,
             fieldChromeSurfaceClass(instrumentNumberChrome),
           )}

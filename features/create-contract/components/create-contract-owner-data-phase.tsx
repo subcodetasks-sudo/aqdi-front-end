@@ -68,7 +68,7 @@ export default function CreateContractOwnerDataPhase({
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <CreateContractIconInputField
           label={labels.idNumber.label}

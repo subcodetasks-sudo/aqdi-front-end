@@ -159,7 +159,7 @@ export default function CreateContractFinanceConditionsSection({
             }}
             placeholder={labels.placeholder}
             disabled={!canAdd}
-            className="h-12 flex-1 rounded-xl border border-dashed border-[#d6d6d6] bg-white px-4 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:opacity-40"
+            className="h-10 flex-1 rounded-xl border border-dashed border-[#d6d6d6] bg-white px-4 text-sm shadow-none placeholder:text-[#b0b0b0] focus-visible:border-brand focus-visible:ring-brand/20 disabled:opacity-40"
           />
           <button
             type="button"

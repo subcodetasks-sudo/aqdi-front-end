@@ -28,7 +28,7 @@ export default function CreateContractRentedUnitAreaField({
     <div>
       <CreateContractFieldLabel label={label} />
 
-      <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4">
+      <div className="flex h-10 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-4">
         <Input
           id={inputId}
           type="text"

@@ -49,13 +49,13 @@ export default function CreatePropertyOwnerStep({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-b-3xl bg-white p-6 md:p-8 dark:bg-[#1a2421]">
+      <div className="rounded-b-3xl bg-white p-3 md:p-5 dark:bg-[#1a2421]">
         <CreatePropertyStepPhaseHeader
           title={phase.title}
           subtitle={phase.subtitle}
         />
 
-        <div className="space-y-5">
+        <div className="space-y-3">
           <CreatePropertyOwnerDataPhase
             labels={labels.ownerData}
             birthDateLabels={labels.birthDate}

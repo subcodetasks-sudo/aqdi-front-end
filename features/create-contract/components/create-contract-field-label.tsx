@@ -14,7 +14,7 @@ export default function CreateContractFieldLabel({
   required = true,
 }: CreateContractFieldLabelProps) {
   return (
-    <div className="mb-2 flex items-center gap-1.5">
+    <div className="mb-1 flex items-center gap-1.5">
       <label
         className={cn(
           "text-sm font-semibold",

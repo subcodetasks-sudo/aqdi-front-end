@@ -18,7 +18,7 @@ type CreateContractStepperProps = {
 };
 
 const stepPillClassName =
-  "relative inline-flex items-center justify-center rounded-full grow h-12 text-sm font-semibold whitespace-nowrap transition-all";
+  "relative inline-flex h-9 shrink-0 items-center justify-center rounded-full px-2 text-[11px] font-semibold whitespace-nowrap transition-all sm:h-12 sm:grow sm:px-3 sm:text-sm";
 
 const skippedStrikeClassName =
   "after:pointer-events-none after:absolute after:inset-x-1.5 after:top-1/2 after:h-[1.5px] after:[transform-origin:right_center] after:rounded-full after:bg-brand after:content-['']";
@@ -49,7 +49,7 @@ function getStepPillClassName(
       ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
       : "cursor-not-allowed opacity-50",
     isActive
-      ? "bg-brand text-white ring-2 ring-brand-secondary ring-offset-2"
+      ? "bg-brand text-white shadow-[0_0_0_2px_#ffffff,0_0_0_4px_#0db38b] dark:shadow-[0_0_0_2px_#1a2421,0_0_0_4px_#0db38b] sm:shadow-none sm:ring-2 sm:ring-brand-secondary sm:ring-offset-2"
       : isCompleted
         ? "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"
         : "bg-brand-background text-[#666666] dark:bg-[#16352f] dark:text-[#9eb5af]",
@@ -58,7 +58,7 @@ function getStepPillClassName(
 
 function getConnectorClassName(isCompleted: boolean) {
   return cn(
-    "h-0 w-3 shrink-0 border-t-2 sm:w-5",
+    "h-0 w-1.5 shrink-0 border-t-2 sm:w-5",
     isCompleted
       ? "border-solid border-brand-secondary"
       : "border-dashed border-[#d9d9d9] dark:border-[#2f403b]",
@@ -114,8 +114,8 @@ export default function CreateContractStepper({
   }, [skippingOwnerStep, clearSkippingOwnerStep]);
 
   return (
-    <div className="sticky top-0 z-20 bg-white p-4 md:p-5 dark:bg-[#1a2421]">
-      <div className="flex w-full flex-nowrap items-center justify-evenly gap-1.5 sm:gap-2">
+    <div className="sticky top-0 z-20 rounded-t-3xl bg-white px-2.5 py-3 sm:px-4 sm:py-4 md:p-5 dark:bg-[#1a2421]">
+      <div className="flex w-full flex-nowrap items-center justify-between gap-0.5 py-1 sm:justify-evenly sm:gap-2">
         {visibleSteps.map((step, index) => {
           const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
           const isSkipped = step === "owner" && ownerSkipped;
@@ -150,7 +150,7 @@ export default function CreateContractStepper({
                   isIntro
                     ? cn(
                         stepPillClassName,
-                        "gap-1.5 border border-brand/15 bg-white px-3 text-brand shadow-sm dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]",
+                        "gap-0.5 border border-brand/15 bg-white text-brand shadow-sm sm:gap-1.5 dark:border-[#2f403b] dark:bg-[#1a2421] dark:text-[#7dccc0]",
                         isUnlocked
                           ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
                           : "cursor-not-allowed opacity-50",
@@ -172,7 +172,7 @@ export default function CreateContractStepper({
                     width={20}
                     height={22}
                     aria-hidden="true"
-                    className="h-5 w-auto shrink-0 object-contain"
+                    className="h-3.5 w-auto shrink-0 object-contain sm:h-5"
                   />
                 )}
                 <span>{labels.steps[step]}</span>
@@ -195,11 +195,12 @@ export default function CreateContractStepper({
           onClick={() => goToStep("payment")}
           className={cn(
             stepPillClassName,
+            "px-1.5 sm:grow-0 sm:px-3",
             isStepUnlocked("payment")
               ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
               : "cursor-not-allowed opacity-50",
             isPaymentStep
-              ? "bg-brand ring-2 ring-brand-secondary ring-offset-2"
+              ? "bg-brand shadow-[0_0_0_2px_#ffffff,0_0_0_4px_#0db38b] dark:shadow-[0_0_0_2px_#1a2421,0_0_0_4px_#0db38b] sm:shadow-none sm:ring-2 sm:ring-brand-secondary sm:ring-offset-2"
               : "bg-brand-background dark:bg-[#16352f]",
           )}
         >
@@ -209,7 +210,7 @@ export default function CreateContractStepper({
             width={88}
             height={32}
             className={cn(
-              "h-8 w-auto shrink-0 object-contain",
+              "h-5 w-auto shrink-0 object-contain sm:h-8",
               isPaymentStep && "brightness-0 invert",
               !isPaymentStep && "dark:brightness-125",
             )}
@@ -217,7 +218,7 @@ export default function CreateContractStepper({
         </button>
       </div>
 
-      <div dir="rtl" className="mx-auto mt-4 flex w-[90%] items-end gap-2">
+      <div dir="rtl" className="mx-auto mt-3 flex w-[90%] items-end gap-2 sm:mt-4">
         <Image
           src="/images/contract-line-r.svg"
           alt=""
@@ -226,7 +227,7 @@ export default function CreateContractStepper({
           aria-hidden="true"
           className="h-auto min-w-0 flex-1 object-contain object-right dark:opacity-70"
         />
-        <p className="shrink-0 text-center text-xs font-medium text-brand md:text-sm dark:text-[#7dccc0]">
+        <p className="shrink-0 text-center text-[11px] font-medium text-brand sm:text-xs md:text-sm dark:text-[#7dccc0]">
           {labels.journey}
         </p>
         <Image

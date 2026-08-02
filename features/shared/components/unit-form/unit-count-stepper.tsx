@@ -59,7 +59,7 @@ export default function UnitCountStepper({
 
       <div
         dir="ltr"
-        className="flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-[#f1f7f5] px-1.5 dark:bg-[#16352f]"
+        className="flex h-10 w-full items-center justify-center gap-3 rounded-2xl bg-[#f1f7f5] px-1.5 dark:bg-[#16352f]"
       >
         <button
           type="button"

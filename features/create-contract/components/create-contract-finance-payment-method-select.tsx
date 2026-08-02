@@ -64,7 +64,7 @@ export default function CreateContractFinancePaymentMethodSelect({
                 onChange(option.value);
               }}
               className={cn(
-                "min-h-11 rounded-2xl border px-3.5 py-2.5 text-center text-xs font-bold transition-colors sm:text-sm",
+                "min-h-10 rounded-2xl border px-3.5 py-2.5 text-center text-xs font-bold transition-colors sm:text-sm",
                 selected
                   ? "border-brand bg-brand text-white"
                   : invalid

@@ -38,7 +38,7 @@ export default function CreateUnitAreaField({
 
       <div
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-2xl border px-4",
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-4",
           fieldChromeSurfaceClass(chrome),
         )}
       >

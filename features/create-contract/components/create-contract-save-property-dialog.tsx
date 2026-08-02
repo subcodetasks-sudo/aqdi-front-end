@@ -93,7 +93,7 @@ export default function CreateContractSavePropertyDialog({
             {labels.nameLabel}
           </label>
 
-          <div className="flex h-14 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2">
+          <div className="flex h-10 w-full items-center gap-2 rounded-full border border-[#e8e8e8] bg-[#FBFBFA] px-2">
             <span className="inline-flex size-10 shrink-0 items-center justify-center text-brand-secondary">
               <Building2 className="size-5" aria-hidden="true" />
             </span>

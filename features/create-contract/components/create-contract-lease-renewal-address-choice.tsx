@@ -36,7 +36,7 @@ export default function CreateContractLeaseRenewalAddressChoice({
       <div
         role="radiogroup"
         aria-labelledby={groupId}
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+        className="grid grid-cols-2 gap-2 sm:gap-3"
       >
         <span id={groupId} className="sr-only">
           {labels.addressFieldLabel}
@@ -55,7 +55,7 @@ export default function CreateContractLeaseRenewalAddressChoice({
               aria-checked={selected}
               onClick={() => onChange(option.id)}
               className={cn(
-                "flex min-h-30 flex-col items-center justify-center gap-2 rounded-2xl border px-4 py-5 text-center transition-colors",
+                "flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border px-2 py-3 text-center transition-colors sm:min-h-30 sm:px-4 sm:py-5",
                 selected
                   ? "border-brand bg-brand-background-green/70 shadow-[0_0_0_1px_rgba(13,90,80,0.08)]"
                   : "border-[#e8e8e8] bg-white hover:border-brand/30",

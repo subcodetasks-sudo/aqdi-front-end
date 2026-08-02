@@ -195,8 +195,8 @@ export default function CreateContractPaymentStep({
 
   return (
     <div className="space-y-4">
-      <div className="p-6 md:p-8">
-        <div className="space-y-5">
+      <div className="p-3 md:p-5">
+        <div className="space-y-3">
           <CreateContractPaymentHero
             journeyMessage={labels.journeyMessage}
             securePaymentLabel={labels.securePaymentLabel}
@@ -384,7 +384,7 @@ export default function CreateContractPaymentStep({
         onEditStep={onEditStep}
       />
 
-      <p className="flex items-center justify-center gap-2 text-xs text-[#9a9a9a] dark:text-[#9eb5af]">
+      <p className="mb-6 flex items-center justify-center gap-2 text-xs text-[#9a9a9a] dark:text-[#9eb5af]">
         <Lock className="size-3.5 shrink-0" aria-hidden="true" />
         <span>{labels.encryptionNote}</span>
       </p>

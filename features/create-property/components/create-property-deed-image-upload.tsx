@@ -238,8 +238,8 @@ export default function CreatePropertyDeedImageUpload({
           className={cn(
             "flex w-full cursor-pointer items-center gap-3 transition-colors",
             variant === "dashed" || variant === "dropzone"
-              ? "min-h-16 flex-col justify-center rounded-2xl border-[1.5px] border-dashed bg-[#FBFDFC] px-4 py-4 text-center hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40"
-              : "h-14 rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-2 ps-4 hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40",
+              ? "min-h-10 flex-col justify-center rounded-2xl border-[1.5px] border-dashed bg-[#FBFDFC] px-3 py-2 text-center hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40"
+              : "h-10 rounded-full border-[1.5px] border-dashed bg-[#FBFDFC] px-2 ps-4 hover:border-brand/40 dark:bg-[#121a18] dark:hover:border-[#7dccc0]/40",
             showInvalid
               ? "border-[#e57373]"
               : "border-[#BFE0D4] dark:border-[#2f403b]",

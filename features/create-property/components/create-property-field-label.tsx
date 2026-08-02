@@ -1,4 +1,4 @@
-﻿import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type CreatePropertyFieldLabelProps = {
   label: string;
@@ -12,7 +12,7 @@ export default function CreatePropertyFieldLabel({
   required = true,
 }: CreatePropertyFieldLabelProps) {
   return (
-    <div className="mb-2 flex items-center gap-1.5">
+    <div className="mb-1 flex items-center gap-1.5">
       <label
         className={cn(
           "text-sm font-semibold",

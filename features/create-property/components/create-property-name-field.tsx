@@ -43,7 +43,7 @@ export default function CreatePropertyNameField({
 
       <div
         className={cn(
-          "flex h-14 w-full items-center gap-2 rounded-2xl border px-2",
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-2",
           fieldChromeSurfaceClass(chrome),
         )}
       >

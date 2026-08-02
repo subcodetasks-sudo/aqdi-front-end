@@ -17,7 +17,7 @@ export default async function ServicesLayout({
     >
       <ServicesPageProvider>
         <div className="relative flex-1">
-          <div className="container pt-4 pb-8 lg:pb-10">
+          <div className="container pt-3 pb-6 lg:pb-8">
             <ServicesSideBackNav />
             <main className="mx-auto w-full">{children}</main>
           </div>

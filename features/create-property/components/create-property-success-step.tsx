@@ -65,7 +65,7 @@ export default function CreatePropertySuccessStep({
   ];
 
   return (
-    <div className="rounded-b-[28px] bg-white p-5 md:p-8 dark:bg-[#1a2421]">
+    <div className="rounded-b-[28px] bg-white p-3 md:p-5 dark:bg-[#1a2421]">
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="relative flex items-center justify-center">
           <div className="flex size-20 items-center justify-center rounded-full bg-brand shadow-md shadow-brand/20">
@@ -87,12 +87,12 @@ export default function CreatePropertySuccessStep({
         </div>
       </div>
 
-      <div className="mt-8 space-y-3">
+      <div className="mt-4 space-y-3">
         <Button
           type="button"
           asChild
           variant="ghost"
-          className="h-14 w-full justify-center gap-3 rounded-2xl bg-brand-background-green px-4 text-sm font-semibold text-brand hover:bg-brand-background-green/80"
+          className="h-11 w-full justify-center gap-3 rounded-2xl bg-brand-background-green px-4 text-sm font-semibold text-brand hover:bg-brand-background-green/80"
         >
           <a href={viewEditHref}>
             <span>{labels.actions.viewProperty}</span>
@@ -106,7 +106,7 @@ export default function CreatePropertySuccessStep({
             type="button"
             asChild
             variant="ghost"
-            className="h-14 w-full justify-center gap-3 rounded-2xl bg-brand-background-green px-4 text-sm font-semibold text-brand hover:bg-brand-background-green/80"
+            className="h-11 w-full justify-center gap-3 rounded-2xl bg-brand-background-green px-4 text-sm font-semibold text-brand hover:bg-brand-background-green/80"
           >
             <Link href={action.href}>
               <span>{action.label}</span>
@@ -118,7 +118,7 @@ export default function CreatePropertySuccessStep({
         <Button
           type="button"
           asChild
-          className="h-14 w-full justify-center gap-3 rounded-2xl bg-brand text-base font-extrabold text-white hover:opacity-90"
+          className="h-11 w-full justify-center gap-3 rounded-2xl bg-brand text-base font-extrabold text-white hover:opacity-90"
         >
           <Link href={labels.mainMenuHref}>
             <span>{labels.mainMenu}</span>

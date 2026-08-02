@@ -185,7 +185,7 @@ export default function CreateContractFinanceDataPhase({
     showPaymentMethod && isFinancePaymentMethodComplete(value);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <CreateContractContractStartDateFields
         labels={labels.contractStartDate}
         value={value.contractStartDate}

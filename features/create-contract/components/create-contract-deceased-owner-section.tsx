@@ -50,8 +50,8 @@ export default function CreateContractDeceasedOwnerSection({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-5">
+    <div className="space-y-3">
+      <div className="space-y-3">
         <CreateContractDeedImageUpload
           labels={uploadLabels}
           fieldLabel={labels.deedLabel}

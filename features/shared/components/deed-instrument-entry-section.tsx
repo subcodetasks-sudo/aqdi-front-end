@@ -46,7 +46,7 @@ export default function DeedInstrumentEntrySection({
   showFieldErrors = false,
 }: DeedInstrumentEntrySectionProps) {
   return (
-    <div className="space-y-5 rounded-[24px] border border-[#ececec] bg-[#FAFBFB] p-4 md:p-5 dark:border-[#2f403b] dark:bg-[#121a18]">
+    <div className="space-y-3 rounded-[24px] border border-[#ececec] bg-[#FAFBFB] p-3 md:p-4 dark:border-[#2f403b] dark:bg-[#121a18]">
       {!useManualDeedEntry ? (
         <>
           {upload}
@@ -61,7 +61,7 @@ export default function DeedInstrumentEntrySection({
         </>
       ) : null}
 
-      <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-3.5 dark:border-[#2f403b] dark:bg-[#1a2421]">
+      <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-3 py-2.5 dark:border-[#2f403b] dark:bg-[#1a2421]">
         <span className="text-sm font-semibold text-[#333333] dark:text-white">
           {labels.toggleLabel}
         </span>

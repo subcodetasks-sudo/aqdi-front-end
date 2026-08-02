@@ -200,7 +200,7 @@ export default function CreateContractTenantStep({
 
   return (
     <>
-      <div className="p-6 md:p-8">
+      <div className="p-3 md:p-5">
         <CreateContractStepPhaseProgress
           totalPhases={phaseCount}
           currentPhaseIndex={currentPhaseIndex}
@@ -248,7 +248,7 @@ export default function CreateContractTenantStep({
         ) : null}
 
         {isLeaseRenewalUnitPhase ? (
-          <div className="space-y-5">
+          <div className="space-y-3">
             <CreateContractLeaseRenewalUnitChoice
               labels={labels.leaseRenewal}
               value={leaseRenewalUnitMode}

@@ -27,10 +27,10 @@ export default function CreateContractTenantStatusSelect({
   const selectedValue = value || "individual";
 
   return (
-    <div className="flex flex-wrap items-center gap-3" data-field-invalid={invalid ? "true" : undefined}>
+    <div className="flex flex-wrap items-center gap-2" data-field-invalid={invalid ? "true" : undefined}>
       <label
         className={cn(
-          "shrink-0 text-sm font-semibold",
+          "shrink-0 text-xs font-semibold sm:text-sm",
           invalid ? "text-[#c62828]" : "text-black",
         )}
       >
@@ -43,7 +43,7 @@ export default function CreateContractTenantStatusSelect({
         aria-label={labels.label}
         aria-invalid={invalid}
         className={cn(
-          "flex min-w-0 items-center rounded-full bg-[#f0f0f0] p-1",
+          "flex h-8 min-w-0 items-center rounded-full bg-[#f0f0f0] p-0.5",
           invalid && "ring-1 ring-[#e57373]",
         )}
       >
@@ -58,7 +58,7 @@ export default function CreateContractTenantStatusSelect({
               aria-checked={selected}
               onClick={() => onChange(status)}
               className={cn(
-                "rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap transition-colors",
+                "h-7 rounded-full px-2.5 text-[11px] font-bold whitespace-nowrap transition-colors sm:px-3 sm:text-xs",
                 selected
                   ? "bg-brand text-white shadow-sm"
                   : "text-[#7f7f7f] hover:text-[#555555]",
