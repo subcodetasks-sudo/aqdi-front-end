@@ -195,7 +195,7 @@ export default function CreateContractStepper({
           onClick={() => goToStep("payment")}
           className={cn(
             stepPillClassName,
-            "px-1.5 sm:grow-0 sm:px-3",
+            "shrink-0 grow-0 px-1.5 sm:px-3",
             isStepUnlocked("payment")
               ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
               : "cursor-not-allowed opacity-50",
@@ -204,13 +204,28 @@ export default function CreateContractStepper({
               : "bg-brand-background dark:bg-[#16352f]",
           )}
         >
+          {/* Mobile: icon only (crop text). Desktop: full EJAR mark. */}
+          <span className="relative block size-5 overflow-hidden sm:hidden">
+            <Image
+              src="/images/ejar.png"
+              alt=""
+              width={88}
+              height={32}
+              aria-hidden="true"
+              className={cn(
+                "absolute top-0 right-0 h-full w-auto max-w-none object-contain object-right",
+                isPaymentStep && "brightness-0 invert",
+                !isPaymentStep && "dark:brightness-125",
+              )}
+            />
+          </span>
           <Image
             src="/images/ejar.png"
             alt={labels.ejarLogoAlt}
             width={88}
             height={32}
             className={cn(
-              "h-5 w-auto shrink-0 object-contain sm:h-8",
+              "hidden h-8 w-auto shrink-0 object-contain sm:block",
               isPaymentStep && "brightness-0 invert",
               !isPaymentStep && "dark:brightness-125",
             )}
