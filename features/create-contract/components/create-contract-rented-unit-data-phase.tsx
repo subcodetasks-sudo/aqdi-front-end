@@ -10,6 +10,7 @@ import {
   useUnitUsageOptions,
 } from "@/features/create-unit/hooks/use-unit-lookup-options";
 import { useMeterFeeSettings } from "@/features/shared/hooks/use-meter-fee-settings";
+import { buildRentedUnitTypeOptions } from "@/features/create-contract/utils/build-rented-unit-type-options";
 import { buildUnitFormSummary } from "@/features/shared/utils/build-unit-form-summary";
 import { resolveMeterTransferFee } from "@/features/shared/utils/resolve-meter-transfer-fee";
 
@@ -29,16 +30,21 @@ export default function CreateContractRentedUnitDataPhase({
   const contractType =
     useCreateContractDraftStore((state) => state.contractSession?.contractType) ??
     "housing";
-  const unitTypesQuery = useUnitTypeOptions(contractType);
+  const housingUnitTypesQuery = useUnitTypeOptions("housing");
+  const commercialUnitTypesQuery = useUnitTypeOptions("commercial");
   const unitUsageQuery = useUnitUsageOptions(contractType);
   const meterFeesQuery = useMeterFeeSettings();
 
   const isLoadingOptions =
-    unitTypesQuery.isLoading ||
+    housingUnitTypesQuery.isLoading ||
+    commercialUnitTypesQuery.isLoading ||
     unitUsageQuery.isLoading ||
     meterFeesQuery.isLoading;
   const optionsError =
-    unitTypesQuery.error ?? unitUsageQuery.error ?? meterFeesQuery.error;
+    housingUnitTypesQuery.error ??
+    commercialUnitTypesQuery.error ??
+    unitUsageQuery.error ??
+    meterFeesQuery.error;
 
   if (optionsError) {
     return (
@@ -67,7 +73,17 @@ export default function CreateContractRentedUnitDataPhase({
     "water",
     contractType,
   );
-  const unitTypeOptions = unitTypesQuery.data ?? [];
+  const housingUnitTypes = housingUnitTypesQuery.data ?? [];
+  const commercialUnitTypes = commercialUnitTypesQuery.data ?? [];
+  // Combined list so an already-selected unit type name still resolves in the
+  // unit summary regardless of which contract type it belongs to.
+  const unitTypeOptions = [...housingUnitTypes, ...commercialUnitTypes];
+  const unitTypeSelectOptions = buildRentedUnitTypeOptions({
+    housingUnitTypes,
+    commercialUnitTypes,
+    contractType,
+    otherContractTypeNotice: labels.unitType.disabledGroupNotice[contractType],
+  });
 
   return (
     <UnitsDataFormList
@@ -93,6 +109,7 @@ export default function CreateContractRentedUnitDataPhase({
             unitCardTitle: undefined,
           }}
           unitTypeOptions={unitTypeOptions}
+          unitTypeSelectOptions={unitTypeSelectOptions}
           unitUsageOptions={unitUsageQuery.data ?? []}
           value={unit}
           onChange={onUnitChange}

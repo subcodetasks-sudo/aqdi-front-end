@@ -2043,6 +2043,10 @@
         "optionsError": "Failed to load unit options",
         "unitType": {
           "label": "Unit type",
+          "disabledGroupNotice": {
+            "housing": "The following options are for commercial contracts — your current contract is residential. To pick one, go back to the main menu and set the contract type to \"Commercial\".",
+            "commercial": "The following options are for residential contracts — your current contract is commercial. To pick one, go back to the main menu and set the contract type to \"Residential\"."
+          },
           "options": {
             "apartment": "Apartment",
             "villa": "Villa",

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 
 import {
   Select,
@@ -19,7 +19,12 @@ import { cn } from "@/lib/utils";
 type CreateUnitFormSelectProps = {
   label: string;
   placeholder: string;
-  options: { value: string; label: string }[];
+  options: {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    notice?: string;
+  }[];
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
@@ -134,13 +139,24 @@ export default function CreateUnitFormSelect({
             }}
           >
             {options.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                className="text-base! focus:bg-[#f0f0f0] focus:text-[#1a1a1a] dark:focus:bg-[#16352f] dark:focus:text-white"
-              >
-                {option.label}
-              </SelectItem>
+              <Fragment key={option.value}>
+                {option.notice ? (
+                  <div
+                    className="mx-1 my-1 rounded-xl bg-yellow-50 px-3 py-2 text-xs font-medium leading-5 text-yellow-600 dark:bg-yellow-950/40"
+                    role="note"
+                  >
+                    {option.notice}
+                  </div>
+                ) : null}
+
+                <SelectItem
+                  value={option.value}
+                  disabled={option.disabled}
+                  className="text-base! focus:bg-[#f0f0f0] focus:text-[#1a1a1a] dark:focus:bg-[#16352f] dark:focus:text-white"
+                >
+                  {option.label}
+                </SelectItem>
+              </Fragment>
             ))}
           </SelectContent>
         </Select>

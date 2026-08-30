@@ -23,9 +23,22 @@ import type { UnitFormLabels } from "@/features/shared/types/unit-form-labels";
 import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import { cn } from "@/lib/utils";
 
+type UnitTypeSelectOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  notice?: string;
+};
+
 type UnitDataFormFieldsProps = {
   labels: UnitFormLabels;
   unitTypeOptions: UnitLookupOption[];
+  /**
+   * Pre-built options for the unit-type select. When provided they replace the
+   * options derived from `unitTypeOptions` (used by the rented-unit step to sort
+   * by contract type and disable the other contract type's options).
+   */
+  unitTypeSelectOptions?: UnitTypeSelectOption[];
   unitUsageOptions: UnitLookupOption[];
   value: UnitDataState;
   onChange: (value: UnitDataState) => void;
@@ -91,6 +104,7 @@ function FurnishingTypeToggle({
 export default function UnitDataFormFields({
   labels,
   unitTypeOptions,
+  unitTypeSelectOptions,
   unitUsageOptions,
   value,
   onChange,
@@ -146,7 +160,7 @@ export default function UnitDataFormFields({
         <CreateUnitFormSelect
           label={labels.unitType.label}
           placeholder={labels.selectPlaceholder}
-          options={toSelectOptions(unitTypeOptions)}
+          options={unitTypeSelectOptions ?? toSelectOptions(unitTypeOptions)}
           value={value.unitTypeId}
           onChange={(unitTypeId) => updateField("unitTypeId", unitTypeId)}
           errorMessage={

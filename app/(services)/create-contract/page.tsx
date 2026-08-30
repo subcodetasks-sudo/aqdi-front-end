@@ -494,6 +494,14 @@ export default async function CreateContractPage({
         fieldRequired: t("fieldRequired"),
         unitType: {
           label: t("tenant.rentedUnit.unitType.label"),
+          disabledGroupNotice: {
+            housing: t(
+              "tenant.rentedUnit.unitType.disabledGroupNotice.housing",
+            ),
+            commercial: t(
+              "tenant.rentedUnit.unitType.disabledGroupNotice.commercial",
+            ),
+          },
         },
         unitUsage: {
           label: t("tenant.rentedUnit.unitUsage.label"),

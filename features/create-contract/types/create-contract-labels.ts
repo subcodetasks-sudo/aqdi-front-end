@@ -360,6 +360,10 @@ export type CreateContractLabels = {
       fieldRequired: string;
       unitType: {
         label: string;
+        disabledGroupNotice: {
+          housing: string;
+          commercial: string;
+        };
       };
       unitUsage: {
         label: string;
