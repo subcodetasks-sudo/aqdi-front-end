@@ -45,6 +45,7 @@ export function buildContractStep6Body({
     string | number | boolean | number[] | string[] | Record<string, string>
   > = {
     id: contractId,
+    app_or_web: "web",
     type_contract_starting_date: contractStartDate.calendarType,
     contract_starting_date_day: formatPropertyOwnerDatePart(contractStartDate.day),
     contract_starting_date_month: formatPropertyOwnerDatePart(

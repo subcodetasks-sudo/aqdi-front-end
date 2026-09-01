@@ -34,7 +34,7 @@ export async function startContract(payload: StartContractPayload) {
   const response = await apiRequest<StartContractApiResponse>("/contract/start", {
     method: "POST",
     cache: "no-store",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, app_or_web: "web" }),
   });
 
   if (!response.ok || !response.data?.success || !response.data.data) {
