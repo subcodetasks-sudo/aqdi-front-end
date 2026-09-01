@@ -1,14 +1,25 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { clearAuthToken, getToken } from "@/actions/auth";
-import { BASE_URL } from "@/lib/api/constants";
+import {
+  BASE_URL,
+  WEBSITE_CLIENT_HEADER,
+  WEBSITE_CLIENT_ID,
+  WEBSITE_CLOSED_PATH,
+} from "@/lib/api/constants";
 import { compressFormDataImages } from "@/lib/api/image-utils";
 import { getErrorMessage } from "@/lib/api/get-error-message";
 import type { ApiResponse } from "@/lib/api/types";
+import { isWebsiteClosedResponse } from "@/lib/api/is-website-closed-response";
 
 function buildAuthHeaders(token: string | null, isFormData: boolean): HeadersInit {
   const headers: Record<string, string> = {
     Accept: "application/json",
+    // Identifies the web SPA so the backend serves the "website closed" 503.
+    // Mobile clients must not send this.
+    [WEBSITE_CLIENT_HEADER]: WEBSITE_CLIENT_ID,
   };
 
   if (!isFormData) {
@@ -38,8 +49,11 @@ export async function apiRequest<T>(
     };
   }
 
+  let response: Response;
+  let data: unknown;
+
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    response = await fetch(`${BASE_URL}${endpoint}`, {
       ...requestOptions,
       headers: {
         ...buildAuthHeaders(token, isFormData),
@@ -47,25 +61,7 @@ export async function apiRequest<T>(
       },
     });
 
-    const data = await response.json().catch(() => null);
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        await clearAuthToken();
-      }
-
-      return {
-        ok: false,
-        status: response.status,
-        error: getErrorMessage(data),
-      };
-    }
-
-    return {
-      ok: true,
-      status: response.status,
-      data: data as T,
-    };
+    data = await response.json().catch(() => null);
   } catch {
     return {
       ok: false,
@@ -73,6 +69,31 @@ export async function apiRequest<T>(
       error: "Network error",
     };
   }
+
+  // Interceptor: the website was closed for maintenance mid-session — send the
+  // user to the full-screen closed page. Kept outside the try block so the
+  // redirect error is not swallowed.
+  if (isWebsiteClosedResponse(response.status, data)) {
+    redirect(WEBSITE_CLOSED_PATH);
+  }
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      await clearAuthToken();
+    }
+
+    return {
+      ok: false,
+      status: response.status,
+      error: getErrorMessage(data),
+    };
+  }
+
+  return {
+    ok: true,
+    status: response.status,
+    data: data as T,
+  };
 }
 
 export async function apiFormDataRequest<T>(
@@ -83,32 +104,17 @@ export async function apiFormDataRequest<T>(
   const token = await getToken();
   const compressedFormData = await compressFormDataImages(formData);
 
+  let response: Response;
+  let data: unknown;
+
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    response = await fetch(`${BASE_URL}${endpoint}`, {
       method,
       body: compressedFormData,
       headers: buildAuthHeaders(token, true),
     });
 
-    const data = await response.json().catch(() => null);
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        await clearAuthToken();
-      }
-
-      return {
-        ok: false,
-        status: response.status,
-        error: getErrorMessage(data),
-      };
-    }
-
-    return {
-      ok: true,
-      status: response.status,
-      data: data as T,
-    };
+    data = await response.json().catch(() => null);
   } catch {
     return {
       ok: false,
@@ -116,4 +122,26 @@ export async function apiFormDataRequest<T>(
       error: "Network error",
     };
   }
+
+  if (isWebsiteClosedResponse(response.status, data)) {
+    redirect(WEBSITE_CLOSED_PATH);
+  }
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      await clearAuthToken();
+    }
+
+    return {
+      ok: false,
+      status: response.status,
+      error: getErrorMessage(data),
+    };
+  }
+
+  return {
+    ok: true,
+    status: response.status,
+    data: data as T,
+  };
 }

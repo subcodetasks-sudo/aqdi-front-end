@@ -6,6 +6,9 @@ import { DirectionProvider } from "@/components/ui/direction";
 import Providers from "@/app/providers";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import WebsiteClosedScreen from "@/features/website-status/components/website-closed-screen";
+import { getWebsiteStatus } from "@/features/website-status/services/get-website-status";
+import { getWebsiteClosedView } from "@/features/website-status/utils/get-website-closed-view";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
@@ -55,6 +58,13 @@ export default async function RootLayout({
   const messages = await getMessages();
   const direction = getDirection(locale);
 
+  // Boot check — before rendering routes. When the backend reports the website
+  // as closed we render only the maintenance notice (no home / auth / contracts).
+  const websiteStatus = await getWebsiteStatus();
+  const closedView = websiteStatus.isOpen
+    ? null
+    : await getWebsiteClosedView(websiteStatus, locale);
+
   return (
     <html
       lang={locale}
@@ -63,14 +73,18 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Providers>
-          <DirectionProvider dir={direction} direction={direction}>
-            <NextIntlClientProvider locale={locale} messages={messages}>
-              {children}
-              <Toaster position="top-center" />
-            </NextIntlClientProvider>
-          </DirectionProvider>
-        </Providers>
+        {closedView ? (
+          <WebsiteClosedScreen view={closedView} />
+        ) : (
+          <Providers>
+            <DirectionProvider dir={direction} direction={direction}>
+              <NextIntlClientProvider locale={locale} messages={messages}>
+                {children}
+                <Toaster position="top-center" />
+              </NextIntlClientProvider>
+            </DirectionProvider>
+          </Providers>
+        )}
       </body>
     </html>
   );

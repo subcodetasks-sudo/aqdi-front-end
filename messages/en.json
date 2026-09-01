@@ -2575,5 +2575,12 @@
         }
       }
     }
+  },
+  "websiteClosed": {
+    "kicker": "Scheduled maintenance",
+    "headline": "The service is briefly down for maintenance",
+    "body": "Your contracts and data are saved. There is nothing you need to do right now — the service returns as soon as the work is done.",
+    "issuedOn": "Issued",
+    "autoNote": "We check every minute, and this page opens on its own once the service is back."
   }
 }
