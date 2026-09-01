@@ -3,7 +3,7 @@
 import { Home, Moon, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
+import { scheduleCreatePropertyDraftResetOnUnmount } from "@/features/create-property/utils/reset-create-property-draft";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { cn } from "@/lib/utils";
 
@@ -24,10 +24,9 @@ export default function CreatePropertyHeader({
   onToggleDarkMode,
 }: CreatePropertyHeaderProps) {
   const router = useRouter();
-  const resetDraft = useCreatePropertyDraftStore((state) => state.resetDraft);
 
   function handleHomeClick() {
-    resetDraft();
+    scheduleCreatePropertyDraftResetOnUnmount();
     router.push("/");
   }
 

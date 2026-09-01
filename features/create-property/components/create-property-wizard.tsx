@@ -15,7 +15,13 @@ import { useCreatePropertyDraftStore } from "@/features/create-property/stores/u
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import type { PropertyTypeId } from "@/features/properties/types/property-type";
 import type { PropertyEditDraftData } from "@/features/create-property/utils/map-property-api-to-draft";
+import {
+  resetCreatePropertyDraft,
+  resetCreatePropertyDraftIfScheduledOnUnmount,
+  scheduleCreatePropertyDraftResetOnUnmount,
+} from "@/features/create-property/utils/reset-create-property-draft";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
+import { usePersistStoreHydrated } from "@/features/shared/hooks/use-persist-store-hydrated";
 
 type CreatePropertyWizardProps = {
   labels: CreatePropertyLabels;
@@ -34,7 +40,6 @@ export default function CreatePropertyWizard({
 }: CreatePropertyWizardProps) {
   const router = useRouter();
   const { currentStep, goNext, goBack } = useCreatePropertySteps();
-  const resetDraft = useCreatePropertyDraftStore((state) => state.resetDraft);
   const setCurrentStep = useCreatePropertyDraftStore(
     (state) => state.setCurrentStep,
   );
@@ -65,30 +70,42 @@ export default function CreatePropertyWizard({
     }
   }, [completedPropertyId, currentStep, setCurrentStep]);
 
+  useEffect(() => {
+    return () => {
+      resetCreatePropertyDraftIfScheduledOnUnmount();
+    };
+  }, []);
+
+  const isEditMode = initialEditDraft !== null;
+  const isSuccess = completedPropertyId !== null;
+  const isPersistedDraftFlow = !isEditMode && !isSuccess;
+  const isDraftHydrated = usePersistStoreHydrated(
+    isPersistedDraftFlow ? useCreatePropertyDraftStore.persist : undefined,
+  );
+  const canRenderSteps = !isPersistedDraftFlow || isDraftHydrated;
+
   function handleReviewComplete(propertyId: number) {
     const isEditMode = initialEditDraft !== null;
     const propertyName =
       useCreatePropertyDraftStore.getState().reviewData.propertyName.trim();
 
-    resetDraft();
-
     if (isEditMode) {
+      scheduleCreatePropertyDraftResetOnUnmount();
       toast.success(labels.review.navigation.updateSuccess);
       router.push("/properties/my-properties");
       return;
     }
 
+    resetCreatePropertyDraft();
     setCompletedPropertyName(propertyName);
     setCompletedPropertyId(propertyId);
   }
 
-  const isEditMode = initialEditDraft !== null;
   const pageTitle = isEditMode
     ? propertyType === "residential"
       ? labels.editPageTitleResidential
       : labels.editPageTitleCommercial
     : labels.pageTitle;
-  const isSuccess = completedPropertyId !== null;
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-2">
@@ -104,44 +121,53 @@ export default function CreatePropertyWizard({
       />
 
       <div className="rounded-3xl bg-white shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
-        <CreatePropertyStepper
-          labels={labels.stepper}
-          completed={isSuccess}
-        />
+        {canRenderSteps ? (
+          <>
+            <CreatePropertyStepper
+              labels={labels.stepper}
+              completed={isSuccess}
+            />
 
-        {isSuccess && completedPropertyId ? (
-          <CreatePropertySuccessStep
-            labels={labels.success}
-            propertyType={propertyType}
-            propertyId={completedPropertyId}
-            propertyName={completedPropertyName}
-          />
-        ) : null}
+            {isSuccess && completedPropertyId ? (
+              <CreatePropertySuccessStep
+                labels={labels.success}
+                propertyType={propertyType}
+                propertyId={completedPropertyId}
+                propertyName={completedPropertyName}
+              />
+            ) : null}
 
-        {!isSuccess && currentStep === "deed" ? (
-          <CreatePropertyDeedStep
-            labels={labels.deed}
-            addressLabels={labels.address}
-            onBack={() => router.back()}
-            onComplete={goNext}
-          />
-        ) : null}
+            {!isSuccess && currentStep === "deed" ? (
+              <CreatePropertyDeedStep
+                labels={labels.deed}
+                addressLabels={labels.address}
+                onBack={() => router.back()}
+                onComplete={goNext}
+              />
+            ) : null}
 
-        {!isSuccess && currentStep === "owner" ? (
-          <CreatePropertyOwnerStep
-            labels={labels.owner}
-            onBack={goBack}
-            onComplete={goNext}
-          />
-        ) : null}
+            {!isSuccess && currentStep === "owner" ? (
+              <CreatePropertyOwnerStep
+                labels={labels.owner}
+                onBack={goBack}
+                onComplete={goNext}
+              />
+            ) : null}
 
-        {!isSuccess && currentStep === "review" ? (
-          <CreatePropertyReviewStep
-            labels={labels.review}
-            onBack={goBack}
-            onComplete={handleReviewComplete}
+            {!isSuccess && currentStep === "review" ? (
+              <CreatePropertyReviewStep
+                labels={labels.review}
+                onBack={goBack}
+                onComplete={handleReviewComplete}
+              />
+            ) : null}
+          </>
+        ) : (
+          <div
+            aria-busy="true"
+            className="min-h-112 bg-white dark:bg-[#1a2421]"
           />
-        ) : null}
+        )}
       </div>
     </div>
   );

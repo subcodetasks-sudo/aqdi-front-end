@@ -12,7 +12,7 @@ import CreateContractExitHomeDialog from "@/features/create-contract/components/
 import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
-import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
+import { scheduleCreateContractDraftResetOnUnmount } from "@/features/create-contract/utils/reset-create-contract-draft";
 import { deleteContract } from "@/features/requests/services/delete-contract";
 import { cn } from "@/lib/utils";
 
@@ -84,14 +84,14 @@ export default function CreateContractHeader({
     }
 
     setExitDialogOpen(false);
-    resetCreateContractDraft();
+    scheduleCreateContractDraftResetOnUnmount();
     router.push("/");
   }
 
   async function handleExitWithoutSaving() {
     if (!contractId) {
       setExitDialogOpen(false);
-      resetCreateContractDraft();
+      scheduleCreateContractDraftResetOnUnmount();
       router.push("/");
       return;
     }
@@ -108,7 +108,7 @@ export default function CreateContractHeader({
 
       toast.success(result.message || tDelete("deleteDialog.success"));
       setExitDialogOpen(false);
-      resetCreateContractDraft();
+      scheduleCreateContractDraftResetOnUnmount();
       router.push("/");
     } finally {
       setIsDeleting(false);
