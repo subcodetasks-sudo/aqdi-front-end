@@ -9,7 +9,7 @@ export default function PropertiesVisual({ alt }: PropertiesVisualProps) {
     <div className="w-full shrink-0 lg:w-[60%]">
       <div className="overflow-hidden ">
         <Image
-        src="/images/properties.webp"
+        src="/images/properties.png"
           alt={alt}
           width={1200}
           height={1040}

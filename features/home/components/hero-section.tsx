@@ -38,7 +38,7 @@ export default function HeroSection({ content }: HeroSectionProps) {
             />
           </div>
 
-          <div className="hidden w-full shrink-0 lg:block lg:w-[50%]">
+          <div className="w-full shrink-0 lg:w-[50%] max-lg:hidden">
             <HeroVisual alt={content.visualAlt} imageUrl={content.imageUrl} />
           </div>
         </div>

@@ -59,7 +59,7 @@ export default async function Home() {
       mostRequested: tHero("mostRequested"),
       whatsapp: tHero("whatsapp"),
       visualAlt: tHero("visualAlt"),
-      imageUrl: "/images/hero.webp",
+      imageUrl: "/images/hero.png",
     },
     authorities: {
       badge: tTrusted("badge"),
@@ -109,7 +109,7 @@ export default async function Home() {
       satisfaction: tSupport("satisfaction"),
       responseTime: tSupport("responseTime"),
       imageAlt: tSupport("imageAlt"),
-      imageUrl: "/images/support-banner.webp",
+      imageUrl: "/images/support-banner.png",
       whatsappHref: "https://wa.me/",
     },
     app: {
@@ -118,7 +118,7 @@ export default async function Home() {
       titleLine2: tApp("titleLine2"),
       description: tApp("description"),
       imageAlt: tApp("imageAlt"),
-      imageUrl: "/images/app-banner.webp",
+      imageUrl: "/images/app-banner.png",
     },
     },
     { whatsappNumber: resolveSettingsWhatsappNumber(settings) },

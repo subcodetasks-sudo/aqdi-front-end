@@ -29,8 +29,9 @@ function normalizeAssetPath(pathname: string) {
 
 /**
  * Resolve API-relative asset paths to absolute URLs.
- * Assets are served from the host root (e.g. /storage, /uploads), not from the
- * API path in BASE_URL (which may be suffixed with /api/v2).
+ * Absolute http(s) URLs are returned unchanged — rewriting their pathname
+ * (e.g. forcing /storage/) breaks already-correct CDN/API image links.
+ * Relative paths are resolved against the API host root (/storage, /uploads).
  */
 export function resolveAssetUrl(path: string | null | undefined) {
   if (!path) {
@@ -38,13 +39,7 @@ export function resolveAssetUrl(path: string | null | undefined) {
   }
 
   if (path.startsWith("http://") || path.startsWith("https://")) {
-    try {
-      const url = new URL(path);
-      url.pathname = `/${normalizeAssetPath(url.pathname)}`;
-      return url.toString();
-    } catch {
-      return path;
-    }
+    return path;
   }
 
   return `${getAssetOrigin()}/${normalizeAssetPath(path)}`;

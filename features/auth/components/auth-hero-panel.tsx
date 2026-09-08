@@ -7,7 +7,7 @@ export default async function AuthHeroPanel() {
   return (
     <aside className="relative hidden min-h-screen overflow-hidden   lg:block col-span-3">
       <Image
-        src="/images/hero.webp"
+        src="/images/hero.png"
         alt={t("imageAlt")}
         fill
         priority

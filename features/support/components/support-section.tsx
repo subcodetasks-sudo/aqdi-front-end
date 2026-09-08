@@ -28,7 +28,7 @@ export default async function SupportSection({ content }: SupportSectionProps) {
         satisfaction: t("satisfaction"),
         responseTime: t("responseTime"),
         imageAlt: t("imageAlt"),
-        imageUrl: "/images/support-banner.webp",
+        imageUrl: "/images/support-banner.png",
         whatsappHref,
       } satisfies HomeContactResolved;
     })());
@@ -74,6 +74,10 @@ export default async function SupportSection({ content }: SupportSectionProps) {
                 className="h-auto w-full rounded-[2.2rem] object-cover"
                 sizes="(max-width: 1023px) 100vw, 50vw"
                 quality={75}
+                unoptimized={
+                  resolved.imageUrl.startsWith("http://") ||
+                  resolved.imageUrl.startsWith("https://")
+                }
               />
 
               <span className="absolute inset-s-6 top-8 inline-flex -rotate-12 items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-extrabold text-white shadow-lg">

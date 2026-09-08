@@ -71,7 +71,7 @@ export default async function AboutPage() {
         eyebrow: tValues("vision.eyebrow"),
         title: tValues("vision.title"),
         description: tValues("vision.description"),
-        imageSrc: "/images/vision.webp",
+        imageSrc: "/images/vision.png",
         imageAlt: tValues("vision.imageAlt"),
       },
       mission: {
