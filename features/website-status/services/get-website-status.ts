@@ -1,5 +1,7 @@
 "use server";
 
+import { cache } from "react";
+
 import {
   BASE_URL,
   WEBSITE_CLIENT_HEADER,
@@ -25,7 +27,7 @@ const OPEN: WebsiteStatus = {
  *
  * Fails open: a network/parse error is not a closure signal.
  */
-export async function getWebsiteStatus(): Promise<WebsiteStatus> {
+const fetchWebsiteStatus = cache(async function fetchWebsiteStatus(): Promise<WebsiteStatus> {
   try {
     const response = await fetch(`${BASE_URL}${WEBSITE_STATUS_ENDPOINT}`, {
       method: "GET",
@@ -55,4 +57,8 @@ export async function getWebsiteStatus(): Promise<WebsiteStatus> {
   } catch {
     return OPEN;
   }
+});
+
+export async function getWebsiteStatus(): Promise<WebsiteStatus> {
+  return fetchWebsiteStatus();
 }
