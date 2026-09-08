@@ -18,11 +18,8 @@ import {
 } from "@/components/ui/sheet";
 import UserSheet from "@/features/auth/components/user-sheet";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import NotificationsNavButton from "@/features/notifications/components/notifications-nav-button";
 import CustomIcon from "@/features/shared/components/custom-icon";
-import {
-  isPropertiesNavActive,
-  usePropertiesNavHref,
-} from "@/features/shared/hooks/use-properties-nav-href";
 import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
 import { scrollToSection } from "@/features/shared/utils/scroll-to-section";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
@@ -80,7 +77,6 @@ export default function NavbarMobileSheet({
 }: NavbarMobileSheetProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const propertiesHref = usePropertiesNavHref();
   const { user } = useAuthStore();
 
   const navItems: NavItem[] = [
@@ -92,6 +88,12 @@ export default function NavbarMobileSheet({
       isActive: pathname === "/properties/my-properties",
     },
     { href: "/requests", label: requests, iconSrc: "/icons/bag.svg" },
+    {
+      href: "https://blogs.aqdi.sa/",
+      label: blog,
+      iconSrc: "/icons/news-letter.svg",
+      external: true,
+    },
     {
       href: `/#${APP_SECTION_ID}`,
       label: downloadApp,
@@ -206,11 +208,6 @@ export default function NavbarMobileSheet({
               </Link>
             </SheetClose>
             <SheetClose asChild>
-              <a href="https://blogs.aqdi.sa/" className={topLinkClassName}>
-                {blog}
-              </a>
-            </SheetClose>
-            <SheetClose asChild>
               <Link href="/faq" className={topLinkClassName}>
                 {faq}
               </Link>
@@ -244,18 +241,7 @@ export default function NavbarMobileSheet({
                 </Button>
               </UserSheet>
               <SheetClose asChild>
-                <Button
-                  variant="outline"
-                  className="h-12 w-full gap-2 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
-                  aria-label={notifications}
-                >
-                  <CustomIcon
-                    src="/icons/notification-bell.svg"
-                    size={16}
-                    className="text-gray-600"
-                  />
-                  <span className="leading-none">{notifications}</span>
-                </Button>
+                <NotificationsNavButton label={notifications} showLabel />
               </SheetClose>
             </div>
           )}

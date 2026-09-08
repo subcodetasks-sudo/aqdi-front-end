@@ -46,16 +46,13 @@ export default function NavbarNavLink({
     }
   }
 
-  return (
-    <Link
-      href={href}
-      onClick={handleClick}
-      className={cn(
-        "inline-flex items-center gap-2 font-bold text-black transition-colors hover:text-brand",
-        active ? "text-brand" : "",
-      )}
-      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-    >
+  const className = cn(
+    "inline-flex items-center gap-2 font-bold text-black transition-colors hover:text-brand",
+    active ? "text-brand" : "",
+  );
+
+  const content = (
+    <>
       <span className="inline-flex size-4 shrink-0 items-center justify-center">
         {icon}
       </span>
@@ -66,6 +63,25 @@ export default function NavbarNavLink({
           aria-hidden="true"
         />
       ) : null}
+    </>
+  );
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        className={className}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} onClick={handleClick} className={className}>
+      {content}
     </Link>
   );
 }

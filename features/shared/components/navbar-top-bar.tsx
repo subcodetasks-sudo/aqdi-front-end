@@ -16,6 +16,7 @@ type NavbarTopBarProps = {
   officialLinks: string;
   endWith: string;
   whatsappService: string;
+  whatsappHref: string;
   scrolled: boolean;
 };
 
@@ -26,6 +27,7 @@ export default function NavbarTopBar({
   httpsSecurity,
   officialLinks,
   whatsappService,
+  whatsappHref,
   httpfor,
   endWith,
   scrolled,
@@ -92,10 +94,15 @@ export default function NavbarTopBar({
             </span>
           </div>
 
-          <span className="inline-flex items-center gap-1.5 font-bold text-gray-600">
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 font-bold text-gray-600 transition-colors hover:text-brand"
+          >
             {whatsappService}
             <FaWhatsapp className="size-6 shrink-0 text-green-500" />
-          </span>
+          </a>
         </div>
       </div>
     </div>

@@ -9,13 +9,10 @@ import { HiBars2 } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import UserSheet from "@/features/auth/components/user-sheet";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import NotificationsNavButton from "@/features/notifications/components/notifications-nav-button";
 import CustomIcon from "@/features/shared/components/custom-icon";
 import NavbarMobileSheet from "@/features/shared/components/navbar-mobile-sheet";
 import NavbarNavLink from "@/features/shared/components/navbar-nav-link";
-import {
-  isPropertiesNavActive,
-  usePropertiesNavHref,
-} from "@/features/shared/hooks/use-properties-nav-href";
 import { APP_SECTION_ID } from "@/features/shared/constants/app-section";
 import StartWithAqdiDialog from "@/features/start-with-aqdi/components/start-with-aqdi-dialog";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
@@ -76,7 +73,6 @@ export default function NavbarMain({
   dialogLabels,
 }: NavbarMainProps) {
   const pathname = usePathname();
-  const propertiesHref = usePropertiesNavHref();
   const { user } = useAuthStore();
 
   const navItems: NavItem[] = [
@@ -95,6 +91,12 @@ export default function NavbarMain({
       href: "/requests",
       label: requests,
       icon: <CustomIcon src="/icons/bag.svg" size={16} />,
+    },
+    {
+      href: "https://blogs.aqdi.sa/",
+      label: blog,
+      icon: <CustomIcon src="/icons/news-letter.svg" size={16} />,
+      external: true,
     },
     {
       href: `/#${APP_SECTION_ID}`,
@@ -166,17 +168,7 @@ export default function NavbarMain({
 
           {user && (
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                className="size-12 rounded-full border-border/80 text-muted-foreground hover:border-brand/30 hover:text-brand"
-                aria-label={profile}
-              >
-                <CustomIcon
-                  src="/icons/notification-bell.svg"
-                  size={16}
-                  className="text-gray-600"
-                />
-              </Button>
+              <NotificationsNavButton label={notifications} />
 
               <UserSheet>
                 <Button

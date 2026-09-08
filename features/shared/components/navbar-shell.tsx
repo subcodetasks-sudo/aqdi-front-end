@@ -7,13 +7,14 @@ import { getAppSettings } from "@/features/settings/services/get-app-settings";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
 
 export default async function NavbarShell() {
-  const dialogT = await getTranslations("startWithAqdi.dialog");
   const queryClient = getQueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: appSettingsKeys.detail(),
-    queryFn: () => getAppSettings(),
-  });
+  const [dialogT] = await Promise.all([
+    getTranslations("startWithAqdi.dialog"),
+    queryClient.prefetchQuery({
+      queryKey: appSettingsKeys.detail(),
+      queryFn: () => getAppSettings(),
+    }),
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

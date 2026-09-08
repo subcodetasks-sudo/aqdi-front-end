@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import NavbarMain from "@/features/shared/components/navbar-main";
 import NavbarTopBar from "@/features/shared/components/navbar-top-bar";
+import { useWhatsappHref } from "@/features/settings/hooks/use-whatsapp-href";
 import type { StartWithAqdiDialogLabels } from "@/features/start-with-aqdi/types/start-with-aqdi-dialog-labels";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,7 @@ const SCROLL_THRESHOLD_PX = 80;
 
 export default function Navbar({ dialogLabels }: NavbarProps) {
   const t = useTranslations("navbar");
+  const whatsappHref = useWhatsappHref();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -124,6 +126,7 @@ export default function Navbar({ dialogLabels }: NavbarProps) {
             officialLinks={t("topBar.officialLinks")}
             endWith={t("topBar.endWith")}
             whatsappService={t("topBar.whatsappService")}
+            whatsappHref={whatsappHref}
             scrolled={scrolled}
           />
           <NavbarMain
