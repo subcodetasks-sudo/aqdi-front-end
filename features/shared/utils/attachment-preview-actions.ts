@@ -29,8 +29,14 @@ export async function downloadAttachmentRobust(url: string, fileName: string) {
   }
 }
 
-export function printAttachment(url: string) {
-  const printWindow = window.open(url, "_blank", "noopener,noreferrer");
+function isPdfUrl(url: string) {
+  return /\.pdf(\?|#|$)/i.test(url);
+}
+
+function printViaPopup(url: string) {
+  // Without a features string window.open returns a usable handle; "noopener"
+  // would null it and we could never call print().
+  const printWindow = window.open(url, "_blank");
   if (!printWindow) {
     return;
   }
@@ -40,12 +46,77 @@ export function printAttachment(url: string) {
       printWindow.focus();
       printWindow.print();
     } catch {
-      // Browser may block print until the document finishes loading.
+      // Cross-origin document — the user can still print from the new tab.
     }
   };
 
   printWindow.addEventListener("load", triggerPrint);
   window.setTimeout(triggerPrint, 600);
+}
+
+export function printAttachment(url: string) {
+  // PDFs: let the browser's PDF viewer handle it in a new tab.
+  if (isPdfUrl(url)) {
+    printViaPopup(url);
+    return;
+  }
+
+  // Images: render into a same-origin hidden iframe we control so print() is
+  // not blocked by the cross-origin policy that applies to window.open(imageUrl).
+  const iframe = document.createElement("iframe");
+  iframe.setAttribute("aria-hidden", "true");
+  iframe.style.position = "fixed";
+  iframe.style.right = "0";
+  iframe.style.bottom = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "0";
+
+  const cleanup = () => {
+    window.setTimeout(() => {
+      iframe.remove();
+    }, 1000);
+  };
+
+  iframe.onload = () => {
+    const frameWindow = iframe.contentWindow;
+    if (!frameWindow) {
+      cleanup();
+      return;
+    }
+
+    const image = iframe.contentDocument?.querySelector("img");
+
+    const runPrint = () => {
+      try {
+        frameWindow.focus();
+        frameWindow.print();
+      } catch {
+        printViaPopup(url);
+      } finally {
+        cleanup();
+      }
+    };
+
+    if (image && !image.complete) {
+      image.addEventListener("load", runPrint, { once: true });
+      image.addEventListener("error", () => {
+        printViaPopup(url);
+        cleanup();
+      }, { once: true });
+      return;
+    }
+
+    runPrint();
+  };
+
+  iframe.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><style>
+    @page { margin: 12mm; }
+    html, body { margin: 0; padding: 0; }
+    img { display: block; width: 100%; height: auto; }
+  </style></head><body><img src="${url.replace(/"/g, "&quot;")}" alt=""></body></html>`;
+
+  document.body.appendChild(iframe);
 }
 
 export function fileNameFromUrl(url: string) {

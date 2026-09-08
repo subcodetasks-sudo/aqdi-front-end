@@ -24,18 +24,24 @@ export async function getMyProperties(): Promise<RealEstateListItem[]> {
     },
   );
 
-  // A 403 ("ليس لديك صلاحية") just means the current user has no properties /
-  // isn't a landlord — that's an empty list, not a failure. Returning here also
-  // keeps the rejection from crossing the "use server" boundary and spamming
-  // the server console even though every caller already treats it as empty.
-  if (response.status === 403) {
+  // "ليس لديك صلاحية" means the current user has no properties / isn't a
+  // landlord — empty list, not a failure. The API may send this as HTTP 403,
+  // body `code: 403`, or HTTP 200 with `success: false` + that message.
+  // Returning here keeps the rejection from crossing the "use server" boundary
+  // (which otherwise surfaces as POST 500 even when callers catch it).
+  const permissionDeniedMessage = "ليس لديك صلاحية";
+  const message = response.error || response.data?.message;
+  const isPermissionDenied =
+    response.status === 403 ||
+    response.data?.code === 403 ||
+    message === permissionDeniedMessage;
+
+  if (isPermissionDenied) {
     return [];
   }
 
   if (!response.ok || !response.data?.success) {
-    throw new Error(
-      response.error || response.data?.message || "Failed to fetch properties",
-    );
+    throw new Error(message || "Failed to fetch properties");
   }
 
   return response.data.data;
