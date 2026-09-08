@@ -5,6 +5,8 @@ import AppSection from "@/features/app/components/app-section";
 import AdvantagesSection from "@/features/advantages/components/advantages-section";
 import { advantageItemsConfig } from "@/features/advantages/data/advantage-items";
 import type { AdvantageItemTranslations } from "@/features/advantages/types/advantage";
+import { getContentPageSeo } from "@/features/content-pages/services/get-content-pages";
+import { resolveContentPageMetadata } from "@/features/content-pages/utils/resolve-content-page-metadata";
 import FaqSectionBoundary from "@/features/faq/components/faq-section-boundary";
 import HeroSection from "@/features/home/components/hero-section";
 import TrustedEntitiesSection from "@/features/home/components/trusted-entities-section";
@@ -18,11 +20,14 @@ import { resolveSettingsWhatsappNumber } from "@/features/settings/utils/build-w
 import SupportSection from "@/features/support/components/support-section";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("site");
+  const [t, pageSeo] = await Promise.all([
+    getTranslations("site"),
+    getContentPageSeo("home"),
+  ]);
 
-  return {
+  return resolveContentPageMetadata(pageSeo, {
     description: t("metaDescription"),
-  };
+  });
 }
 
 export default async function Home() {
@@ -54,7 +59,7 @@ export default async function Home() {
       mostRequested: tHero("mostRequested"),
       whatsapp: tHero("whatsapp"),
       visualAlt: tHero("visualAlt"),
-      imageUrl: "/images/hero.png",
+      imageUrl: "/images/hero.webp",
     },
     authorities: {
       badge: tTrusted("badge"),
@@ -104,7 +109,7 @@ export default async function Home() {
       satisfaction: tSupport("satisfaction"),
       responseTime: tSupport("responseTime"),
       imageAlt: tSupport("imageAlt"),
-      imageUrl: "/images/support-banner.png",
+      imageUrl: "/images/support-banner.webp",
       whatsappHref: "https://wa.me/",
     },
     app: {
@@ -113,7 +118,7 @@ export default async function Home() {
       titleLine2: tApp("titleLine2"),
       description: tApp("description"),
       imageAlt: tApp("imageAlt"),
-      imageUrl: "/images/app-banner.png",
+      imageUrl: "/images/app-banner.webp",
     },
     },
     { whatsappNumber: resolveSettingsWhatsappNumber(settings) },

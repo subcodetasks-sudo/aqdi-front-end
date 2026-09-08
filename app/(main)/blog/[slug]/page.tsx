@@ -14,11 +14,12 @@ type BlogDetailPageProps = {
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { slug } = await params;
-  const t = await getTranslations("blog.detail");
 
   if (slug !== BLOG_POST_SLUG) {
     notFound();
   }
+
+  const t = await getTranslations("blog.detail");
 
   const labels: BlogDetailLabels = {
     shareArticle: t("shareArticle"),

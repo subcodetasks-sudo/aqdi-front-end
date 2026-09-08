@@ -13,15 +13,20 @@ import type {
   NumberStatTranslations,
 } from "@/features/about/types/number-stat";
 import { resolveAboutContent } from "@/features/about/utils/resolve-about-content";
+import { getContentPageSeo } from "@/features/content-pages/services/get-content-pages";
+import { resolveContentPageMetadata } from "@/features/content-pages/utils/resolve-content-page-metadata";
 import SupportSection from "@/features/support/components/support-section";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("site");
+  const [t, pageSeo] = await Promise.all([
+    getTranslations("site"),
+    getContentPageSeo("about"),
+  ]);
 
-  return {
+  return resolveContentPageMetadata(pageSeo, {
     title: t("aboutTitle"),
     description: t("aboutDescription"),
-  };
+  });
 }
 
 export default async function AboutPage() {
@@ -66,7 +71,7 @@ export default async function AboutPage() {
         eyebrow: tValues("vision.eyebrow"),
         title: tValues("vision.title"),
         description: tValues("vision.description"),
-        imageSrc: "/images/vision.png",
+        imageSrc: "/images/vision.webp",
         imageAlt: tValues("vision.imageAlt"),
       },
       mission: {
