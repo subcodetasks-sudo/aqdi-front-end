@@ -29,7 +29,7 @@ export default async function ServicesSection() {
           return (
             <ServicesShowcaseCard
               key={serviceType}
-              imageSrc={`/images/services-${index + 1}.png`}
+              imageSrc={`/images/services-${index + 1}.webp`}
               imageAlt={item.titleLine1}
               eyebrow={item.eyebrow}
               titleLine1={item.titleLine1}

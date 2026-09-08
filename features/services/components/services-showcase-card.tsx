@@ -65,6 +65,8 @@ export default function ServicesShowcaseCard({
           width={1024}
           height={1024}
           className="h-auto w-full object-cover"
+          sizes="(max-width: 1023px) 100vw, 50vw"
+          quality={75}
         />
     </article>
   );

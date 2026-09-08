@@ -12,8 +12,19 @@ const nextConfig: NextConfig = {
     // Proxy clones the request body and defaults to 10MB.
     // Large deed/sublease PDFs were truncated → "Unexpected end of form".
     proxyClientMaxBodySize: MAX_UPLOAD_BODY_SIZE,
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "radix-ui",
+      "recharts",
+      "leaflet",
+      "react-leaflet",
+      "firebase",
+      "date-fns",
+    ],
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

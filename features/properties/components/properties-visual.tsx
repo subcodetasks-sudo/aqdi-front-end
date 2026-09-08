@@ -9,11 +9,13 @@ export default function PropertiesVisual({ alt }: PropertiesVisualProps) {
     <div className="w-full shrink-0 lg:w-[60%]">
       <div className="overflow-hidden ">
         <Image
-          src="/images/properties.png"
+        src="/images/properties.webp"
           alt={alt}
-          width={3392}
-          height={2948}
+          width={1200}
+          height={1040}
           className="h-auto w-full object-contain"
+          sizes="(max-width: 1023px) 100vw, 60vw"
+          quality={75}
           priority
         />
       </div>

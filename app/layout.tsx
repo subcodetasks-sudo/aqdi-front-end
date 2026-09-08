@@ -12,8 +12,11 @@ import { getWebsiteClosedView } from "@/features/website-status/utils/get-websit
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  // Only weights used in UI (medium/semibold/bold/extrabold→700).
+  // Loading 100–300 roughly doubles Arabic font payload and hurts mobile TBT/LCP.
+  weight: ["400", "500", "600", "700"],
   subsets: ["arabic"],
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -54,13 +57,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const [locale, messages, websiteStatus] = await Promise.all([
+    getLocale(),
+    getMessages(),
+    getWebsiteStatus(),
+  ]);
   const direction = getDirection(locale);
 
   // Boot check — before rendering routes. When the backend reports the website
   // as closed we render only the maintenance notice (no home / auth / contracts).
-  const websiteStatus = await getWebsiteStatus();
   const closedView = websiteStatus.isOpen
     ? null
     : await getWebsiteClosedView(websiteStatus, locale);

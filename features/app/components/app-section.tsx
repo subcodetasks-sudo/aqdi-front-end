@@ -21,7 +21,7 @@ export default async function AppSection({ content }: AppSectionProps) {
         titleLine2: t("titleLine2"),
         description: t("description"),
         imageAlt: t("imageAlt"),
-        imageUrl: "/images/app-banner.png",
+        imageUrl: "/images/app-banner.webp",
       } satisfies HomeAppResolved;
     })());
 
@@ -50,10 +50,8 @@ export default async function AppSection({ content }: AppSectionProps) {
           width={1628}
           height={782}
           className="h-auto w-full  object-cover"
-          unoptimized={
-            resolved.imageUrl.startsWith("http://") ||
-            resolved.imageUrl.startsWith("https://")
-          }
+          sizes="100vw"
+          quality={75}
         />
 
         <div className="flex flex-col items-center gap-5">

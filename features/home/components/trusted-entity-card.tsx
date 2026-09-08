@@ -61,17 +61,19 @@ export default function TrustedEntityCard({
           <h3 className="text-lg font-bold text-foreground">{name}</h3>
           <p className="mt-1 text-xs text-muted-foreground">{nameEn}</p>
         </div>
-          <Image
-            src={logoSrc}
-            alt=""
-            width={100}
-            height={100}
-            className=" w-25  object-contain shrink-0"
-            aria-hidden="true"
-            unoptimized={
-              logoSrc.startsWith("http://") || logoSrc.startsWith("https://")
-            }
-          />
+          <span className="relative inline-block h-[100px] w-25 shrink-0">
+            <Image
+              src={logoSrc}
+              alt=""
+              fill
+              className="object-contain"
+              sizes="100px"
+              aria-hidden="true"
+              unoptimized={
+                logoSrc.startsWith("http://") || logoSrc.startsWith("https://")
+              }
+            />
+          </span>
       </div>
 
       <p className=" font-medium leading-relaxed text-gray-600">
