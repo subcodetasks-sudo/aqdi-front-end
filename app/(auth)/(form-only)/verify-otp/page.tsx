@@ -19,8 +19,10 @@ type VerifyOtpPageProps = {
 export default async function VerifyOtpPage({
   searchParams,
 }: VerifyOtpPageProps) {
-  const t = await getTranslations("auth.verifyOtp");
-  const { phone: rawPhone, flow } = await searchParams;
+  const [t, { phone: rawPhone, flow }] = await Promise.all([
+    getTranslations("auth.verifyOtp"),
+    searchParams,
+  ]);
   const phone = repairPhoneFromQueryParam(rawPhone);
   const displayPhone = formatPhoneDisplay(phone ?? rawPhone ?? t("defaultPhone"));
   const backHref = getVerifyOtpBackHref(flow);

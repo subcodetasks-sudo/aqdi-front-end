@@ -7,7 +7,10 @@ import type { MyPropertiesLabels } from "@/features/my-properties/types/my-prope
 import { mapRealEstateToCard } from "@/features/my-properties/utils/map-real-estate-to-card";
 
 export default async function MyPropertiesPage() {
-  const t = await getTranslations("myProperties");
+  const [t, properties] = await Promise.all([
+    getTranslations("myProperties"),
+    getMyProperties().catch(() => [] as Awaited<ReturnType<typeof getMyProperties>>),
+  ]);
   const labels: MyPropertiesLabels = {
     backLabel: t("backLabel"),
     pageTitle: t("pageTitle"),
@@ -23,16 +26,9 @@ export default async function MyPropertiesPage() {
     },
   };
 
-  let items: MyPropertyCardData[] = [];
-
-  try {
-    const properties = await getMyProperties();
-    items = properties.map((property) =>
-      mapRealEstateToCard(property, labels.contractTypes),
-    );
-  } catch {
-    items = [];
-  }
+  const items: MyPropertyCardData[] = properties.map((property) =>
+    mapRealEstateToCard(property, labels.contractTypes),
+  );
 
   labels.propertiesCountLabel = t("propertiesCount", { count: items.length });
 

@@ -28,53 +28,54 @@ export default async function PropertyUnitsPage({
   const propertyId = parseUnitPropertyId(params.propertyId);
   const contractType = parseUnitContractType(params.contract_type, params.type);
   const initialTab = contractType === "commercial" ? "commercial" : "residential";
-  const t = await getTranslations("propertyUnits");
+
+  const [t, propertyLookups] = await Promise.all([
+    getTranslations("propertyUnits"),
+    propertyId
+      ? Promise.all([
+          getPropertyUnits(propertyId),
+          getUnitTypes("housing"),
+          getUnitUsageOptions("housing"),
+          getUnitTypes("commercial"),
+          getUnitUsageOptions("commercial"),
+        ]).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
   let residentialItems: PropertyUnitCardData[] = [];
   let commercialItems: PropertyUnitCardData[] = [];
   let propertyName: string | null = null;
   let property: PropertyWithUnitsApiData | null = null;
 
-  if (propertyId) {
-    try {
-      property = await getPropertyUnits(propertyId);
-      const fallbackContractType =
-        property.contract_type === "commercial" ||
-        property.contract_type === "housing"
-          ? property.contract_type
-          : contractType;
+  if (propertyLookups && propertyId) {
+    const [
+      loadedProperty,
+      housingTypes,
+      housingUsages,
+      commercialTypes,
+      commercialUsages,
+    ] = propertyLookups;
+    property = loadedProperty;
+    const fallbackContractType =
+      property.contract_type === "commercial" ||
+      property.contract_type === "housing"
+        ? property.contract_type
+        : contractType;
 
-      const [
-        housingTypes,
-        housingUsages,
-        commercialTypes,
-        commercialUsages,
-      ] = await Promise.all([
-        getUnitTypes("housing"),
-        getUnitUsageOptions("housing"),
-        getUnitTypes("commercial"),
-        getUnitUsageOptions("commercial"),
-      ]);
+    propertyName = property.name_real_estate?.trim() || null;
 
-      propertyName = property.name_real_estate?.trim() || null;
+    const mapped = mapPropertyUnitsToCards(
+      property.units ?? [],
+      propertyId,
+      fallbackContractType,
+      {
+        housing: { types: housingTypes, usages: housingUsages },
+        commercial: { types: commercialTypes, usages: commercialUsages },
+      },
+    );
 
-      const mapped = mapPropertyUnitsToCards(
-        property.units ?? [],
-        propertyId,
-        fallbackContractType,
-        {
-          housing: { types: housingTypes, usages: housingUsages },
-          commercial: { types: commercialTypes, usages: commercialUsages },
-        },
-      );
-
-      residentialItems = mapped.residentialItems;
-      commercialItems = mapped.commercialItems;
-    } catch {
-      residentialItems = [];
-      commercialItems = [];
-      property = null;
-    }
+    residentialItems = mapped.residentialItems;
+    commercialItems = mapped.commercialItems;
   }
 
   const labels: PropertyUnitsLabels = {

@@ -15,8 +15,10 @@ type ResetPasswordPageProps = {
 export default async function ResetPasswordPage({
   searchParams,
 }: ResetPasswordPageProps) {
-  const t = await getTranslations("auth.resetPassword");
-  const { phone: rawPhone, code } = await searchParams;
+  const [t, { phone: rawPhone, code }] = await Promise.all([
+    getTranslations("auth.resetPassword"),
+    searchParams,
+  ]);
   const phone = repairPhoneFromQueryParam(rawPhone);
 
   return (

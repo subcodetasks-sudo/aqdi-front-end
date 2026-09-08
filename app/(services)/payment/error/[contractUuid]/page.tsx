@@ -10,9 +10,11 @@ type PaymentErrorPageProps = {
 };
 
 export default async function PaymentErrorPage({ params }: PaymentErrorPageProps) {
-  const { contractUuid } = await params;
-  const t = await getTranslations("paymentStatus");
-  const paymentContent = await getPaymentContent("failed");
+  const [{ contractUuid }, t, paymentContent] = await Promise.all([
+    params,
+    getTranslations("paymentStatus"),
+    getPaymentContent("failed"),
+  ]);
 
   return (
     <PaymentStatusVerifier

@@ -8,10 +8,11 @@ import { mapContractToRequestCard } from "@/features/requests/utils/map-contract
 import { getWhatsappHref } from "@/features/settings/services/get-whatsapp-href";
 
 export default async function RequestsPage() {
-  const [t, tPayment, whatsappHref] = await Promise.all([
+  const [t, tPayment, whatsappHref, contracts] = await Promise.all([
     getTranslations("requests"),
     getTranslations("createContract.payment"),
     getWhatsappHref(),
+    getContracts().catch(() => [] as Awaited<ReturnType<typeof getContracts>>),
   ]);
 
   const labels: RequestLabels = {
@@ -362,22 +363,14 @@ export default async function RequestsPage() {
     },
   };
 
-  let items: RequestCardData[] = [];
-
-  try {
-    const contracts = await getContracts();
-
-    items = contracts
-      .map((contract) =>
-        mapContractToRequestCard(contract, {
-          housing: labels.contractTypes.housing,
-          commercial: labels.contractTypes.commercial,
-        }),
-      )
-      .sort((a, b) => Number(b.contractId) - Number(a.contractId));
-  } catch {
-    items = [];
-  }
+  const items: RequestCardData[] = contracts
+    .map((contract) =>
+      mapContractToRequestCard(contract, {
+        housing: labels.contractTypes.housing,
+        commercial: labels.contractTypes.commercial,
+      }),
+    )
+    .sort((a, b) => Number(b.contractId) - Number(a.contractId));
 
   return <RequestsPageContent labels={labels} items={items} />;
 }

@@ -34,18 +34,15 @@ export default async function CreateContractPage({
   searchParams,
 }: CreateContractPageProps) {
   const { id } = await searchParams;
-  const [t, whatsappHref] = await Promise.all([
-    getTranslations("createContract"),
-    getWhatsappHref(),
-  ]);
-
   const contractType: ContractTypeId =
     id === "residential" ? "residential" : "commercial";
 
   const queryClient = getQueryClient();
   const propertyContractType = toPropertyContractType(contractType);
 
-  await Promise.all([
+  const [t, whatsappHref] = await Promise.all([
+    getTranslations("createContract"),
+    getWhatsappHref(),
     queryClient.prefetchQuery({
       queryKey: contractPaperworkKeys.list(propertyContractType),
       queryFn: () => getPaperwork(propertyContractType),

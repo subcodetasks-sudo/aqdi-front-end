@@ -36,88 +36,86 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
 
   const contractType = urlContractType;
   const contractTypeLocked = urlHasExplicitContractType || unitId !== null;
-  const t = await getTranslations("createUnit");
+  const isEditMode = unitId !== null;
+
+  const [t, propertyLookups] = await Promise.all([
+    getTranslations("createUnit"),
+    propertyId
+      ? Promise.all([
+          getRealEstateShow(propertyId),
+          getUnitTypes("housing"),
+          getUnitUsageOptions("housing"),
+          getUnitTypes("commercial"),
+          getUnitUsageOptions("commercial"),
+        ]).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
   let initialUnits: UnitDataState[] | null = null;
   let preservedUnits: UnitDataState[] = [];
   let propertyHasUnits = false;
-  const isEditMode = unitId !== null;
 
-  if (propertyId) {
-    try {
-      const property = await getRealEstateShow(propertyId);
-      const units = property.units ?? [];
-      propertyHasUnits = units.length > 0;
+  if (propertyLookups) {
+    const [
+      property,
+      housingTypes,
+      housingUsages,
+      commercialTypes,
+      commercialUsages,
+    ] = propertyLookups;
+    const units = property.units ?? [];
+    propertyHasUnits = units.length > 0;
 
-      const fallbackContractType =
-        property.contract_type === "commercial" ||
-        property.contract_type === "housing"
-          ? property.contract_type
-          : contractType;
+    const fallbackContractType =
+      property.contract_type === "commercial" ||
+      property.contract_type === "housing"
+        ? property.contract_type
+        : contractType;
 
-      const [
-        housingTypes,
-        housingUsages,
-        commercialTypes,
-        commercialUsages,
-      ] = await Promise.all([
-        getUnitTypes("housing"),
-        getUnitUsageOptions("housing"),
-        getUnitTypes("commercial"),
-        getUnitUsageOptions("commercial"),
-      ]);
+    const lookups = {
+      housing: { types: housingTypes, usages: housingUsages },
+      commercial: { types: commercialTypes, usages: commercialUsages },
+    };
 
-      const lookups = {
-        housing: { types: housingTypes, usages: housingUsages },
-        commercial: { types: commercialTypes, usages: commercialUsages },
-      };
+    const unitsOfSelectedType = units.filter(
+      (unit) =>
+        resolveUnitContractType(unit, fallbackContractType, lookups) ===
+        contractType,
+    );
+    const unitsOfOtherType = units.filter(
+      (unit) =>
+        resolveUnitContractType(unit, fallbackContractType, lookups) !==
+        contractType,
+    );
 
-      const unitsOfSelectedType = units.filter(
-        (unit) =>
-          resolveUnitContractType(unit, fallbackContractType, lookups) ===
-          contractType,
-      );
-      const unitsOfOtherType = units.filter(
-        (unit) =>
-          resolveUnitContractType(unit, fallbackContractType, lookups) !==
-          contractType,
+    if (isEditMode) {
+      const editedUnit = unitsOfSelectedType.find((unit) => unit.id === unitId);
+      const siblingUnits = unitsOfSelectedType.filter(
+        (unit) => unit.id !== unitId,
       );
 
-      if (isEditMode) {
-        const editedUnit = unitsOfSelectedType.find(
-          (unit) => unit.id === unitId,
-        );
-        const siblingUnits = unitsOfSelectedType.filter(
-          (unit) => unit.id !== unitId,
-        );
+      preservedUnits = [...unitsOfOtherType, ...siblingUnits].map((unit) =>
+        mapApiUnitToUnitData(
+          unit,
+          resolveUnitContractType(unit, fallbackContractType, lookups),
+        ),
+      );
 
-        preservedUnits = [...unitsOfOtherType, ...siblingUnits].map((unit) =>
-          mapApiUnitToUnitData(
-            unit,
-            resolveUnitContractType(unit, fallbackContractType, lookups),
-          ),
-        );
-
-        initialUnits = editedUnit
-          ? [
-              mapApiUnitToUnitData(
-                editedUnit,
-                resolveUnitContractType(editedUnit, fallbackContractType, lookups),
-              ),
-            ]
-          : null;
-      } else {
-        preservedUnits = unitsOfOtherType.map((unit) =>
-          mapApiUnitToUnitData(
-            unit,
-            resolveUnitContractType(unit, fallbackContractType, lookups),
-          ),
-        );
-      }
-    } catch {
-      initialUnits = null;
-      preservedUnits = [];
-      propertyHasUnits = false;
+      initialUnits = editedUnit
+        ? [
+            mapApiUnitToUnitData(
+              editedUnit,
+              resolveUnitContractType(editedUnit, fallbackContractType, lookups),
+            ),
+          ]
+        : null;
+    } else {
+      preservedUnits = unitsOfOtherType.map((unit) =>
+        mapApiUnitToUnitData(
+          unit,
+          resolveUnitContractType(unit, fallbackContractType, lookups),
+        ),
+      );
     }
   }
 

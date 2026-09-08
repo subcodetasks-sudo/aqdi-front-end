@@ -10,9 +10,11 @@ type PaymentSuccessPageProps = {
 };
 
 export default async function PaymentSuccessPage({ params }: PaymentSuccessPageProps) {
-  const { contractUuid } = await params;
-  const t = await getTranslations("paymentStatus");
-  const paymentContent = await getPaymentContent("success");
+  const [{ contractUuid }, t, paymentContent] = await Promise.all([
+    params,
+    getTranslations("paymentStatus"),
+    getPaymentContent("success"),
+  ]);
 
   return (
     <PaymentStatusVerifier
