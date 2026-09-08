@@ -1,17 +1,23 @@
-import { useState, useCallback } from "react";
+"use client";
 
-import { getFcmToken } from "@/features/notifications/services/get-fcm-token";
+import { useCallback, useEffect, useState } from "react";
 
-export const useFcm = () => {
+export function useFcm() {
+  // Keep SSR and the first client render identical — sync real permission after mount.
   const [token, setToken] = useState<string | null>(null);
   const [notificationPermission, setNotificationPermission] = useState<
-    NotificationPermission | "unsupported"
-  >(() => {
-    if (typeof window === "undefined") return "default";
-    if (!("Notification" in window)) return "unsupported";
-    return Notification.permission;
-  });
+    NotificationPermission | "unsupported" | null
+  >(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      setNotificationPermission("unsupported");
+      return;
+    }
+
+    setNotificationPermission(Notification.permission);
+  }, []);
 
   const requestPermission = useCallback(async () => {
     if (typeof window === "undefined" || !("Notification" in window)) {
@@ -21,6 +27,9 @@ export const useFcm = () => {
 
     setIsLoading(true);
     try {
+      const { getFcmToken } = await import(
+        "@/features/notifications/services/get-fcm-token"
+      );
       const deviceToken = await getFcmToken({ requestPermission: true });
       setNotificationPermission(Notification.permission);
       setToken(deviceToken);
@@ -37,4 +46,4 @@ export const useFcm = () => {
     requestPermission,
     isLoading,
   };
-};
+}

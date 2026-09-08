@@ -1,5 +1,5 @@
 // Public API surface for the notifications package
-export * from "./components/NotificationBell";
+export { default as NotificationsNavButton } from "./components/notifications-nav-button";
 export * from "./components/app-notification-provider";
 export { default as AppNotificationToast } from "./components/app-notification-toast";
 export * from "./constants/app-notification-toaster-id";

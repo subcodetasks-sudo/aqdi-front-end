@@ -1,5 +1,3 @@
-import { getToken } from "firebase/messaging";
-
 import {
   getFirebaseVapidKey,
   isFirebaseConfigured,
@@ -74,7 +72,10 @@ export async function getFcmToken(options?: { requestPermission?: boolean }) {
       return null;
     }
 
-    const messagingInstance = await getFirebaseMessagingAsync();
+    const [{ getToken }, messagingInstance] = await Promise.all([
+      import("firebase/messaging"),
+      getFirebaseMessagingAsync(),
+    ]);
     if (!messagingInstance) {
       console.warn("FCM: Messaging is not supported in this browser.");
       return null;

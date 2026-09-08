@@ -1,12 +1,6 @@
-import {
-  getMessaging,
-  isSupported,
-  onMessage,
-  type Messaging,
-  type MessagePayload,
-} from "firebase/messaging";
-import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import { getAnalytics, isSupported as isAnalyticsSupported, type Analytics } from "firebase/analytics";
+import type { Analytics } from "firebase/analytics";
+import type { FirebaseApp } from "firebase/app";
+import type { MessagePayload, Messaging } from "firebase/messaging";
 
 import {
   getFirebaseClientConfig,
@@ -17,15 +11,24 @@ let app: FirebaseApp | null = null;
 let analytics: Analytics | null = null;
 let messaging: Messaging | null = null;
 let messagingSupport: boolean | null = null;
+let onMessageFn:
+  | ((
+      messagingInstance: Messaging,
+      callback: (payload: MessagePayload) => void,
+    ) => () => void)
+  | null = null;
 
-function getFirebaseApp() {
+async function getFirebaseApp() {
   if (!isFirebaseConfigured()) {
     return null;
   }
 
   if (!app) {
+    const { initializeApp, getApps, getApp } = await import("firebase/app");
     app =
-      getApps().length === 0 ? initializeApp(getFirebaseClientConfig()) : getApp();
+      getApps().length === 0
+        ? initializeApp(getFirebaseClientConfig())
+        : getApp();
   }
 
   return app;
@@ -36,12 +39,13 @@ export async function initFirebaseAnalytics() {
     return analytics;
   }
 
-  const firebaseApp = getFirebaseApp();
+  const firebaseApp = await getFirebaseApp();
   if (!firebaseApp) {
     return null;
   }
 
-  const supported = await isAnalyticsSupported();
+  const { getAnalytics, isSupported } = await import("firebase/analytics");
+  const supported = await isSupported();
   if (!supported) {
     return null;
   }
@@ -50,33 +54,33 @@ export async function initFirebaseAnalytics() {
   return analytics;
 }
 
-async function isMessagingSupported() {
+export async function getFirebaseMessagingAsync(): Promise<Messaging | null> {
   if (typeof window === "undefined") {
-    return false;
+    return null;
   }
+
+  if (messaging) {
+    return messaging;
+  }
+
+  const { getMessaging, isSupported, onMessage } = await import(
+    "firebase/messaging"
+  );
 
   if (messagingSupport === null) {
     messagingSupport = await isSupported();
   }
 
-  return messagingSupport;
-}
-
-export async function getFirebaseMessagingAsync(): Promise<Messaging | null> {
-  if (typeof window === "undefined" || messaging) {
-    return messaging;
-  }
-
-  const supported = await isMessagingSupported();
-  if (!supported) {
+  if (!messagingSupport) {
     return null;
   }
 
-  const firebaseApp = getFirebaseApp();
+  const firebaseApp = await getFirebaseApp();
   if (!firebaseApp) {
     return null;
   }
 
+  onMessageFn = onMessage;
   messaging = getMessaging(firebaseApp);
   return messaging;
 }
@@ -87,10 +91,8 @@ export const onForegroundMessage = (
   callback: (payload: MessagePayload) => void,
 ) => {
   const messagingInstance = getFirebaseMessaging();
-  if (messagingInstance) {
-    return onMessage(messagingInstance, (payload: MessagePayload) => {
-      callback(payload);
-    });
+  if (messagingInstance && onMessageFn) {
+    return onMessageFn(messagingInstance, callback);
   }
 
   return () => {};
