@@ -353,11 +353,11 @@
         },
         {
           "label": "المدونة",
-          "href": "#"
+          "href": "https://blogs.aqdi.sa/"
         },
         {
           "label": "الأسئلة الشائعة",
-          "href": "#"
+          "href": "/faq"
         }
       ]
     },
@@ -366,15 +366,15 @@
       "items": [
         {
           "label": "توثيق عقد سكني",
-          "href": "#"
+          "href": "/create-contract?id=residential"
         },
         {
           "label": "توثيق عقد تجاري",
-          "href": "#"
+          "href": "/create-contract?id=commercial"
         },
         {
           "label": "العقود",
-          "href": "#"
+          "href": "/requests"
         }
       ]
     },
@@ -424,6 +424,21 @@
     "loading": "جاري تحميل الأسئلة...",
     "error": "تعذر تحميل الأسئلة حالياً، يرجى المحاولة لاحقاً.",
     "empty": "لا توجد أسئلة متاحة حالياً."
+  },
+  "notificationsPage": {
+    "metaTitle": "الإشعارات | عقدي",
+    "metaDescription": "اطلع على إشعارات عقدي وتنبيهات حالة العقود.",
+    "title": "الإشعارات",
+    "subtitle": "تنبيهات حالة العقود والإشعارات الواردة لحسابك.",
+    "emptyTitle": "لا توجد إشعارات حالياً",
+    "emptyDescription": "عند وصول إشعار جديد سيظهر هنا مباشرة.",
+    "clearAll": "مسح الكل",
+    "enableTitle": "تفعيل الإشعارات",
+    "enableDescription": "فعّل إشعارات المتصفح ليصلك تنبيه فوري عند تحديث حالة عقودك.",
+    "enableDenied": "تم رفض إذن الإشعارات من المتصفح. يمكنك تفعيله من إعدادات الموقع في المتصفح.",
+    "enableUnsupported": "هذا المتصفح لا يدعم إشعارات الويب.",
+    "enableAction": "تفعيل الإشعارات",
+    "enableLoading": "جاري التفعيل..."
   },
   "blog": {
     "latest": {
@@ -1212,6 +1227,7 @@
         "acceptedFormats": "png - jpeg - pdf",
         "attached": "تم الإرفاق",
         "preview": "عرض",
+        "change": "تغيير",
         "delete": "إزالة",
         "previewTitle": "معاينة الملف",
         "closePreview": "إغلاق"
@@ -1302,7 +1318,7 @@
           },
           "neighborhood": {
             "label": "الحي",
-            "placeholder": "... إختر"
+            "placeholder": "أدخل الحي"
           },
           "street": {
             "label": "اسم الشارع",
@@ -1329,6 +1345,7 @@
           "hint": "تحصل عليها من تطبيق سبل أو العنوان الوطني — تحتوي المدينة والحي والرمز البريدي كاملة",
           "attached": "تم الإرفاق",
           "preview": "عرض",
+          "change": "تغيير",
           "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
@@ -1423,6 +1440,7 @@
           "acceptedFormats": "png - jpeg - pdf",
           "attached": "تم الإرفاق",
           "preview": "عرض",
+          "change": "تغيير",
           "delete": "إزالة",
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
@@ -1778,7 +1796,7 @@
           },
           "neighborhood": {
             "label": "الحي",
-            "placeholder": "... إختر"
+            "placeholder": "أدخل الحي"
           },
           "street": {
             "label": "اسم الشارع",

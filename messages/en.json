@@ -348,16 +348,22 @@
       "title": "Quick links",
       "items": [
         { "label": "About us", "href": "/about" },
-        { "label": "Blog", "href": "#" },
-        { "label": "FAQ", "href": "#" }
+        { "label": "Blog", "href": "https://blogs.aqdi.sa/" },
+        { "label": "FAQ", "href": "/faq" }
       ]
     },
     "importantLinks": {
       "title": "Important links",
       "items": [
-        { "label": "Residential contract documentation", "href": "#" },
-        { "label": "Commercial contract documentation", "href": "#" },
-        { "label": "Contracts", "href": "#" }
+        {
+          "label": "Residential contract documentation",
+          "href": "/create-contract?id=residential"
+        },
+        {
+          "label": "Commercial contract documentation",
+          "href": "/create-contract?id=commercial"
+        },
+        { "label": "Contracts", "href": "/requests" }
       ]
     },
     "licenses": {
@@ -402,6 +408,21 @@
     "loading": "Loading questions...",
     "error": "Unable to load questions right now. Please try again later.",
     "empty": "No questions are available at the moment."
+  },
+  "notificationsPage": {
+    "metaTitle": "Notifications | Aqadi",
+    "metaDescription": "View your Aqadi notifications and contract status alerts.",
+    "title": "Notifications",
+    "subtitle": "Contract status alerts and notifications for your account.",
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "When a new notification arrives, it will show up here.",
+    "clearAll": "Clear all",
+    "enableTitle": "Enable notifications",
+    "enableDescription": "Enable browser notifications to get instant alerts when your contracts are updated.",
+    "enableDenied": "Notification permission was denied. You can enable it from your browser site settings.",
+    "enableUnsupported": "This browser does not support web notifications.",
+    "enableAction": "Enable notifications",
+    "enableLoading": "Enabling..."
   },
   "blog": {
     "latest": {
@@ -1186,6 +1207,7 @@
         "acceptedFormats": "png - jpeg - pdf",
         "attached": "Attached",
         "preview": "View",
+        "change": "Change",
         "delete": "Remove",
         "previewTitle": "File preview",
         "closePreview": "Close"
@@ -1276,7 +1298,7 @@
           },
           "neighborhood": {
             "label": "Neighborhood",
-            "placeholder": "Choose from here..."
+            "placeholder": "Enter the neighborhood"
           },
           "street": {
             "label": "Street name",
@@ -1303,6 +1325,7 @@
           "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
           "attached": "Attached",
           "preview": "View",
+          "change": "Change",
           "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
@@ -1397,6 +1420,7 @@
           "acceptedFormats": "png - jpeg - pdf",
           "attached": "Attached",
           "preview": "View",
+          "change": "Change",
           "delete": "Remove",
           "previewTitle": "File preview",
           "closePreview": "Close"
