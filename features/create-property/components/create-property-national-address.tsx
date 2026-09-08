@@ -20,6 +20,7 @@ type CreatePropertyNationalAddressProps = {
   photoFiles: File[];
   onPhotoFilesChange: (files: File[]) => void;
   existingPhotoUrl?: string | null;
+  onClearExistingPhoto?: () => void;
   linkUrl: string;
   onLinkUrlChange: (url: string) => void;
   manualAddress: ManualNationalAddressData;
@@ -60,6 +61,7 @@ export default function CreatePropertyNationalAddress({
   photoFiles,
   onPhotoFilesChange,
   existingPhotoUrl = null,
+  onClearExistingPhoto,
   linkUrl,
   onLinkUrlChange,
   manualAddress,
@@ -136,6 +138,7 @@ export default function CreatePropertyNationalAddress({
           value={photoFiles}
           onChange={onPhotoFilesChange}
           existingFileUrl={existingPhotoUrl}
+          onClearExisting={onClearExistingPhoto}
           variant="dashed"
           hint={labels.photo.hint}
           invalid={photoInvalid}

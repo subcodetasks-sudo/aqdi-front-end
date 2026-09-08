@@ -99,6 +99,9 @@ export function useCreatePropertyDeedStep() {
   const setManualDeedEntry = useCreatePropertyDraftStore(
     (state) => state.setManualDeedEntry,
   );
+  const clearExistingFileUrl = useCreatePropertyDraftStore(
+    (state) => state.clearExistingFileUrl,
+  );
 
   const needsFrontBack = propertyDeedTypeNeedsFrontBack(selectedDeedType);
   const isDeceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
@@ -168,6 +171,7 @@ export function useCreatePropertyDeedStep() {
     existingEndowmentCertImageUrl,
     existingTrusteeshipImageUrl,
     existingGuardiansPoaImageUrl,
+    clearExistingFileUrl,
     canContinue,
   };
 }

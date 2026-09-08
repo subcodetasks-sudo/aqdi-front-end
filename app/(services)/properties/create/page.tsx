@@ -22,13 +22,18 @@ export default async function CreatePropertyPage({
   const { type, propertyId: propertyIdParam } = await searchParams;
   const propertyType = parsePropertyType(type);
   const propertyId = parsePropertyId(propertyIdParam);
-  const t = await getTranslations("createProperty");
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: settingContractsKeys.list(),
-    queryFn: () => getSettingContracts(),
-  });
+  const [t, , property] = await Promise.all([
+    getTranslations("createProperty"),
+    queryClient.prefetchQuery({
+      queryKey: settingContractsKeys.list(),
+      queryFn: () => getSettingContracts(),
+    }),
+    propertyId
+      ? getPropertyUnits(propertyId).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
   const labels: CreatePropertyLabels = {
     backLabel: t("backLabel"),
@@ -88,6 +93,7 @@ export default async function CreatePropertyPage({
         acceptedFormats: t("deed.deedImage.acceptedFormats"),
         attached: t("deed.deedImage.attached"),
         preview: t("deed.deedImage.preview"),
+        change: t("deed.deedImage.change"),
         delete: t("deed.deedImage.delete"),
         previewTitle: t("deed.deedImage.previewTitle"),
         closePreview: t("deed.deedImage.closePreview"),
@@ -208,6 +214,7 @@ export default async function CreatePropertyPage({
           hint: t("address.nationalAddress.photo.hint"),
           attached: t("address.nationalAddress.photo.attached"),
           preview: t("address.nationalAddress.photo.preview"),
+          change: t("address.nationalAddress.photo.change"),
           delete: t("address.nationalAddress.photo.delete"),
           previewTitle: t("address.nationalAddress.photo.previewTitle"),
           closePreview: t("address.nationalAddress.photo.closePreview"),
@@ -284,6 +291,7 @@ export default async function CreatePropertyPage({
           ),
           attached: t("owner.agentData.powerOfAttorney.attached"),
           preview: t("owner.agentData.powerOfAttorney.preview"),
+          change: t("owner.agentData.powerOfAttorney.change"),
           delete: t("owner.agentData.powerOfAttorney.delete"),
           previewTitle: t("owner.agentData.powerOfAttorney.previewTitle"),
           closePreview: t("owner.agentData.powerOfAttorney.closePreview"),
@@ -324,9 +332,8 @@ export default async function CreatePropertyPage({
 
   let initialEditDraft = null;
 
-  if (propertyId) {
+  if (property) {
     try {
-      const property = await getPropertyUnits(propertyId);
       initialEditDraft = mapPropertyApiToEditDraft(property);
     } catch {
       initialEditDraft = null;

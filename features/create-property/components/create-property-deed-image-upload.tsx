@@ -5,10 +5,11 @@ import {
   CloudDownload,
   Eye,
   ImageIcon,
+  RefreshCw,
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import { resolveAssetUrl } from "@/features/shared/utils/resolve-asset-url";
 import { cn } from "@/lib/utils";
 
 type CreatePropertyDeedImageUploadProps = {
@@ -28,9 +30,18 @@ type CreatePropertyDeedImageUploadProps = {
   multiple?: boolean;
   fieldLabel?: string;
   existingFileUrl?: string | null;
+  onClearExisting?: () => void;
   variant?: "default" | "dropzone" | "dashed";
   hint?: string;
   invalid?: boolean;
+};
+
+type PreviewTarget = {
+  url: string;
+  isObjectUrl: boolean;
+  name: string;
+  isPdf: boolean;
+  isImage: boolean;
 };
 
 const ACCEPTED_FILE_TYPES = "image/png,image/jpeg,application/pdf";
@@ -61,36 +72,100 @@ function isAcceptedDeedFile(file: File) {
   return isImageFile(file) || isPdfFile(file);
 }
 
+function isPdfUrl(url: string) {
+  return /\.pdf(\?|#|$)/i.test(url);
+}
+
+function isImageUrl(url: string) {
+  return /\.(png|jpe?g|gif|webp|bmp|svg|avif)(\?|#|$)/i.test(url);
+}
+
 type ExistingFileRowProps = {
   fileUrl: string;
   labels: CreatePropertyLabels["deed"]["deedImage"];
+  onPreview: (target: PreviewTarget) => void;
+  onChangeFile: () => void;
+  onDelete: () => void;
 };
 
-function ExistingFileRow({ fileUrl, labels }: ExistingFileRowProps) {
-  const fileName = fileUrl.split("/").pop() ?? labels.preview;
+function ExistingFileRow({
+  fileUrl,
+  labels,
+  onPreview,
+  onChangeFile,
+  onDelete,
+}: ExistingFileRowProps) {
+  const fileName = fileUrl.split("/").pop()?.split("?")[0] ?? labels.preview;
+  const showThumbnail = isImageUrl(fileUrl);
+
+  function handlePreview() {
+    onPreview({
+      url: fileUrl,
+      isObjectUrl: false,
+      name: fileName,
+      isPdf: isPdfUrl(fileUrl),
+      isImage: isImageUrl(fileUrl) || !isPdfUrl(fileUrl),
+    });
+  }
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5 dark:border-[#2f403b] dark:bg-[#16352f]">
       <div className="flex min-w-0 flex-1 items-center gap-2.5">
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
-          <Check className="size-4 shrink-0" aria-hidden="true" />
-          <span>{labels.attached}</span>
-        </span>
+        {showThumbnail ? (
+          <button
+            type="button"
+            onClick={handlePreview}
+            className="relative size-12 shrink-0 overflow-hidden rounded-xl border border-[#cfe8e0] bg-white dark:border-[#2f403b] dark:bg-[#1a2421]"
+            aria-label={labels.preview}
+          >
+            <Image
+              src={fileUrl}
+              alt={labels.preview}
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </button>
+        ) : (
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
+            <Check className="size-4 shrink-0" aria-hidden="true" />
+            <span>{labels.attached}</span>
+          </span>
+        )}
 
         <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
           {fileName}
         </p>
       </div>
 
-      <a
-        href={fileUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
-      >
-        <Eye className="size-4 shrink-0" aria-hidden="true" />
-        <span>{labels.preview}</span>
-      </a>
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={handlePreview}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
+        >
+          <Eye className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.preview}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onChangeFile}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
+        >
+          <RefreshCw className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.change}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onDelete}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500 dark:bg-[#2a1818] dark:text-[#f87171]"
+        >
+          <X className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.delete}</span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -99,31 +174,59 @@ type DeedFileRowProps = {
   file: File;
   labels: CreatePropertyLabels["deed"]["deedImage"];
   onDelete: () => void;
-  onPreview: () => void;
+  onPreview: (target: PreviewTarget) => void;
 };
 
 function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
   const { name, extension } = getFileParts(file);
-  const previewUrl = useMemo(
-    () => (isImageFile(file) ? URL.createObjectURL(file) : null),
-    [file],
-  );
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    const objectUrl = isImageFile(file) ? URL.createObjectURL(file) : null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync object URL lifecycle with the selected file
+    setPreviewUrl(objectUrl);
+
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [previewUrl]);
+  }, [file]);
+
+  function handlePreview() {
+    onPreview({
+      url: URL.createObjectURL(file),
+      isObjectUrl: true,
+      name: file.name,
+      isPdf: isPdfFile(file),
+      isImage: isImageFile(file),
+    });
+  }
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-3 py-2.5 dark:border-[#2f403b] dark:bg-[#16352f]">
       <div className="flex min-w-0 flex-1 items-center gap-2.5">
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
-          <Check className="size-4 shrink-0" aria-hidden="true" />
-          <span>{labels.attached}</span>
-        </span>
+        {previewUrl ? (
+          <button
+            type="button"
+            onClick={handlePreview}
+            className="relative size-12 shrink-0 overflow-hidden rounded-xl border border-[#cfe8e0] bg-white dark:border-[#2f403b] dark:bg-[#1a2421]"
+            aria-label={labels.preview}
+          >
+            <Image
+              src={previewUrl}
+              alt={labels.preview}
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </button>
+        ) : (
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-bold text-brand dark:text-[#7dccc0]">
+            <Check className="size-4 shrink-0" aria-hidden="true" />
+            <span>{labels.attached}</span>
+          </span>
+        )}
 
         <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
           {name}
@@ -134,7 +237,7 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
       <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
-          onClick={onPreview}
+          onClick={handlePreview}
           className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
         >
           <Eye className="size-4 shrink-0" aria-hidden="true" />
@@ -161,33 +264,33 @@ export default function CreatePropertyDeedImageUpload({
   multiple = false,
   fieldLabel,
   existingFileUrl = null,
+  onClearExisting,
   variant = "default",
   hint,
   invalid = false,
 }: CreatePropertyDeedImageUploadProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [previewFile, setPreviewFile] = useState<File | null>(null);
-  const canUploadMore = multiple || value.length === 0;
-  const showExistingFile = Boolean(existingFileUrl) && value.length === 0;
+  const [preview, setPreview] = useState<PreviewTarget | null>(null);
+  const resolvedExistingUrl = resolveAssetUrl(existingFileUrl);
+  const showExistingFile = Boolean(resolvedExistingUrl) && value.length === 0;
+  const canUploadMore =
+    (multiple || value.length === 0) && !showExistingFile;
   const showInvalid = invalid && value.length === 0 && !showExistingFile;
   const resolvedLabel = fieldLabel ?? labels.label;
 
-  const previewUrl = useMemo(() => {
-    if (!previewFile) {
-      return null;
-    }
-
-    return URL.createObjectURL(previewFile);
-  }, [previewFile]);
-
   useEffect(() => {
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+      if (preview?.isObjectUrl) {
+        URL.revokeObjectURL(preview.url);
       }
     };
-  }, [previewUrl]);
+  }, [preview]);
+
+  const previewObjectUrl = preview?.url ?? null;
+  const previewIsPdf = preview?.isPdf ?? false;
+  const previewIsImage = preview?.isImage ?? false;
+  const previewName = preview?.name ?? labels.previewTitle;
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = Array.from(event.target.files ?? []).filter(
@@ -197,6 +300,10 @@ export default function CreatePropertyDeedImageUpload({
     if (selectedFiles.length === 0) {
       event.target.value = "";
       return;
+    }
+
+    if (resolvedExistingUrl) {
+      onClearExisting?.();
     }
 
     if (multiple) {
@@ -210,6 +317,14 @@ export default function CreatePropertyDeedImageUpload({
 
   function handleDelete(index: number) {
     onChange(value.filter((_, fileIndex) => fileIndex !== index));
+  }
+
+  function handleChangeExisting() {
+    inputRef.current?.click();
+  }
+
+  function handleDeleteExisting() {
+    onClearExisting?.();
   }
 
   return (
@@ -232,6 +347,16 @@ export default function CreatePropertyDeedImageUpload({
         <CreatePropertyFieldLabel label={resolvedLabel} invalid={showInvalid} />
       )}
 
+      <input
+        ref={inputRef}
+        id={inputId}
+        type="file"
+        multiple={multiple}
+        accept={ACCEPTED_FILE_TYPES}
+        className="sr-only"
+        onChange={handleFileChange}
+      />
+
       {canUploadMore ? (
         <label
           htmlFor={inputId}
@@ -245,16 +370,6 @@ export default function CreatePropertyDeedImageUpload({
               : "border-[#BFE0D4] dark:border-[#2f403b]",
           )}
         >
-          <input
-            ref={inputRef}
-            id={inputId}
-            type="file"
-            multiple={multiple}
-            accept={ACCEPTED_FILE_TYPES}
-            className="sr-only"
-            onChange={handleFileChange}
-          />
-
           {variant === "dropzone" || variant === "dashed" ? (
             <div className="space-y-1">
               <p className="text-sm font-medium text-[#666666] dark:text-[#9eb5af]">
@@ -312,19 +427,25 @@ export default function CreatePropertyDeedImageUpload({
               file={file}
               labels={labels}
               onDelete={() => handleDelete(index)}
-              onPreview={() => setPreviewFile(file)}
+              onPreview={setPreview}
             />
           ))}
         </div>
-      ) : showExistingFile && existingFileUrl ? (
-        <ExistingFileRow fileUrl={existingFileUrl} labels={labels} />
+      ) : showExistingFile && resolvedExistingUrl ? (
+        <ExistingFileRow
+          fileUrl={resolvedExistingUrl}
+          labels={labels}
+          onPreview={setPreview}
+          onChangeFile={handleChangeExisting}
+          onDelete={handleDeleteExisting}
+        />
       ) : null}
 
       <Dialog
-        open={previewFile !== null}
+        open={preview !== null}
         onOpenChange={(open) => {
           if (!open) {
-            setPreviewFile(null);
+            setPreview(null);
           }
         }}
       >
@@ -351,18 +472,18 @@ export default function CreatePropertyDeedImageUpload({
           </div>
 
           <div className="max-h-[85vh] overflow-auto bg-[#f7f7f7] p-4 no-scrollbar dark:bg-[#121a18]">
-            {previewFile && previewUrl ? (
-              isPdfFile(previewFile) ? (
+            {preview && previewObjectUrl ? (
+              previewIsPdf ? (
                 <iframe
-                  src={previewUrl}
-                  title={previewFile.name}
+                  src={previewObjectUrl}
+                  title={previewName}
                   className="h-[65vh] w-full rounded-2xl bg-white dark:bg-[#1a2421]"
                 />
-              ) : isImageFile(previewFile) ? (
+              ) : previewIsImage ? (
                 <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden rounded-2xl bg-white dark:bg-[#1a2421]">
                   <Image
-                    src={previewUrl}
-                    alt={previewFile.name}
+                    src={previewObjectUrl}
+                    alt={previewName}
                     fill
                     unoptimized
                     className="object-contain"
@@ -372,7 +493,7 @@ export default function CreatePropertyDeedImageUpload({
                 <div className="flex flex-col items-center gap-3 py-12 text-center">
                   <ImageIcon className="size-10 text-[#bdbdbd] dark:text-[#6b7d78]" />
                   <p className="text-sm text-[#666666] dark:text-[#9eb5af]">
-                    {previewFile.name}
+                    {previewName}
                   </p>
                 </div>
               )

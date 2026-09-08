@@ -28,6 +28,9 @@ export function useCreatePropertyAddressStep() {
     (state) => state.setAddressManual,
   );
   const setMapLocation = useCreatePropertyDraftStore((state) => state.setMapLocation);
+  const clearExistingFileUrl = useCreatePropertyDraftStore(
+    (state) => state.clearExistingFileUrl,
+  );
 
   const canContinue = canContinueNationalAddress(method, photoFiles, linkUrl, {
     hasExistingPhoto: Boolean(existingAddressImageUrl),
@@ -50,6 +53,8 @@ export function useCreatePropertyAddressStep() {
     mapLocation,
     setMapLocation,
     existingAddressImageUrl,
+    clearExistingAddressImageUrl: () =>
+      clearExistingFileUrl("existingAddressImageUrl"),
     canContinue,
   };
 }

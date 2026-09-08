@@ -24,6 +24,8 @@ type CreatePropertyAgentDataPhaseProps = {
   onChange: (value: PropertyAgentDataState) => void;
   showFieldErrors?: boolean;
   hasExistingPowerOfAttorney?: boolean;
+  existingPowerOfAttorneyImageUrl?: string | null;
+  onClearExistingPowerOfAttorney?: () => void;
 };
 
 function isIdNumberComplete(idNumber: string) {
@@ -38,6 +40,8 @@ export default function CreatePropertyAgentDataPhase({
   onChange,
   showFieldErrors = false,
   hasExistingPowerOfAttorney = false,
+  existingPowerOfAttorneyImageUrl = null,
+  onClearExistingPowerOfAttorney,
 }: CreatePropertyAgentDataPhaseProps) {
   function updateField<K extends keyof PropertyAgentDataState>(
     field: K,
@@ -129,6 +133,8 @@ export default function CreatePropertyAgentDataPhase({
           updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
         }
         invalid={powerOfAttorneyInvalid}
+        existingFileUrl={existingPowerOfAttorneyImageUrl}
+        onClearExisting={onClearExistingPowerOfAttorney}
         variant="dropzone"
       />
 

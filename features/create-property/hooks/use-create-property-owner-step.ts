@@ -13,8 +13,14 @@ export function useCreatePropertyOwnerStep() {
   const hasExistingPowerOfAttorney = useCreatePropertyDraftStore(
     (state) => state.hasExistingPowerOfAttorney,
   );
+  const existingPowerOfAttorneyImageUrl = useCreatePropertyDraftStore(
+    (state) => state.existingPowerOfAttorneyImageUrl,
+  );
   const setOwnerData = useCreatePropertyDraftStore((state) => state.setOwnerData);
   const setAgentData = useCreatePropertyDraftStore((state) => state.setAgentData);
+  const clearExistingFileUrl = useCreatePropertyDraftStore(
+    (state) => state.clearExistingFileUrl,
+  );
 
   const ownerComplete = isPropertyOwnerDataComplete(ownerData);
   const agentComplete =
@@ -31,5 +37,11 @@ export function useCreatePropertyOwnerStep() {
     setAgentData,
     canContinue,
     hasExistingPowerOfAttorney: isEditMode && hasExistingPowerOfAttorney,
+    existingPowerOfAttorneyImageUrl:
+      isEditMode && hasExistingPowerOfAttorney
+        ? existingPowerOfAttorneyImageUrl
+        : null,
+    clearExistingPowerOfAttorneyImageUrl: () =>
+      clearExistingFileUrl("existingPowerOfAttorneyImageUrl"),
   };
 }

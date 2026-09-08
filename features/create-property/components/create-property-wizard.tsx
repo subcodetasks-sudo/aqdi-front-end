@@ -53,16 +53,30 @@ export default function CreatePropertyWizard({
     null,
   );
   const [completedPropertyName, setCompletedPropertyName] = useState("");
+  const isEditMode = initialEditDraft !== null;
+  const [isEditSessionReady, setIsEditSessionReady] = useState(!isEditMode);
+  const isDraftHydrated = usePersistStoreHydrated(
+    useCreatePropertyDraftStore.persist,
+  );
 
   useEffect(() => {
     if (!initialEditDraft) {
+      setIsEditSessionReady(true);
+      return;
+    }
+
+    // Wait for persist rehydration first; otherwise a stale create draft can
+    // overwrite the API-backed edit session (including empty owner fields).
+    if (!isDraftHydrated) {
+      setIsEditSessionReady(false);
       return;
     }
 
     setCompletedPropertyId(null);
     setCompletedPropertyName("");
     initializeEditSession(initialEditDraft);
-  }, [initialEditDraft, initializeEditSession]);
+    setIsEditSessionReady(true);
+  }, [initialEditDraft, initializeEditSession, isDraftHydrated]);
 
   useEffect(() => {
     if (currentStep === "success" && completedPropertyId === null) {
@@ -76,13 +90,8 @@ export default function CreatePropertyWizard({
     };
   }, []);
 
-  const isEditMode = initialEditDraft !== null;
   const isSuccess = completedPropertyId !== null;
-  const isPersistedDraftFlow = !isEditMode && !isSuccess;
-  const isDraftHydrated = usePersistStoreHydrated(
-    isPersistedDraftFlow ? useCreatePropertyDraftStore.persist : undefined,
-  );
-  const canRenderSteps = !isPersistedDraftFlow || isDraftHydrated;
+  const canRenderSteps = isDraftHydrated && isEditSessionReady;
 
   function handleReviewComplete(propertyId: number) {
     const isEditMode = initialEditDraft !== null;

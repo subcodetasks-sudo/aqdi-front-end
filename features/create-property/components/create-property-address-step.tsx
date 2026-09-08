@@ -33,6 +33,7 @@ export default function CreatePropertyAddressStep({
     manualAddress,
     setManualAddress,
     existingAddressImageUrl,
+    clearExistingAddressImageUrl,
     canContinue,
   } = useCreatePropertyAddressStep();
   const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
@@ -76,6 +77,7 @@ export default function CreatePropertyAddressStep({
           photoFiles={photoFiles}
           onPhotoFilesChange={setPhotoFiles}
           existingPhotoUrl={existingAddressImageUrl}
+          onClearExistingPhoto={clearExistingAddressImageUrl}
           linkUrl={linkUrl}
           onLinkUrlChange={setLinkUrl}
           manualAddress={manualAddress}

@@ -16,6 +16,7 @@ import {
   type ManualNationalAddressData,
 } from "@/features/shared/types/manual-national-address";
 import type { PropertyWithUnitsApiData } from "@/features/property-units/types/property-units-api";
+import { resolveAssetUrl } from "@/features/shared/utils/resolve-asset-url";
 import { formatSaudiMobileForForm } from "@/lib/validation/format-saudi-mobile-for-form";
 
 export type PropertyEditDraftData = {
@@ -31,6 +32,7 @@ export type PropertyEditDraftData = {
   existingTrusteeshipImageUrl: string | null;
   existingGuardiansPoaImageUrl: string | null;
   existingAddressImageUrl: string | null;
+  existingPowerOfAttorneyImageUrl: string | null;
   isMultipleTrusteeshipDeedCopy: boolean;
   hasExistingPowerOfAttorney: boolean;
   addressMethod: PropertyNationalAddressMethodId;
@@ -41,20 +43,6 @@ export type PropertyEditDraftData = {
   agentData: typeof EMPTY_PROPERTY_AGENT_DATA;
   reviewData: typeof EMPTY_PROPERTY_REVIEW_DATA;
 };
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "";
-
-function resolveAssetUrl(path: string | null) {
-  if (!path) {
-    return null;
-  }
-
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-
-  return `${BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-}
 
 function mapInstrumentType(value: string | null): PropertyDeedTypeId | "" {
   if (!value) {
@@ -72,6 +60,10 @@ function mapInstrumentType(value: string | null): PropertyDeedTypeId | "" {
   return "";
 }
 
+function digitsOnly(value: string | number | null | undefined) {
+  return String(value ?? "").replace(/\D/g, "");
+}
+
 function parseBirthDate(
   value: string | null | undefined,
   calendarType: PropertyCalendarType,
@@ -80,18 +72,33 @@ function parseBirthDate(
     return { ...EMPTY_PROPERTY_BIRTH_DATE, calendarType };
   }
 
-  const parts = value.split("-");
+  const parts = value
+    .trim()
+    .split(/[-/]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
 
-  if (parts.length === 3) {
+  if (parts.length !== 3) {
+    return { ...EMPTY_PROPERTY_BIRTH_DATE, calendarType };
+  }
+
+  // ISO-style YYYY-MM-DD from some API responses.
+  if (parts[0].length === 4) {
     return {
       calendarType,
-      day: parts[0].padStart(2, "0"),
+      year: parts[0],
       month: parts[1].padStart(2, "0"),
-      year: parts[2],
+      day: parts[2].padStart(2, "0"),
     };
   }
 
-  return { ...EMPTY_PROPERTY_BIRTH_DATE, calendarType };
+  // DD-MM-YYYY (common for this API).
+  return {
+    calendarType,
+    day: parts[0].padStart(2, "0"),
+    month: parts[1].padStart(2, "0"),
+    year: parts[2],
+  };
 }
 
 function resolveManualAddress(
@@ -179,6 +186,9 @@ export function mapPropertyApiToEditDraft(
       property.copy_of_guardians_power_of_attorney_for_agent,
     ),
     existingAddressImageUrl: resolveAssetUrl(property.image_address),
+    existingPowerOfAttorneyImageUrl: resolveAssetUrl(
+      property.copy_of_the_authorization_or_agency,
+    ),
     isMultipleTrusteeshipDeedCopy: Boolean(
       property.is_multiple_trusteeship_deed_copy,
     ),
@@ -192,14 +202,14 @@ export function mapPropertyApiToEditDraft(
     },
     ownerData: {
       fullName: property.name_owner?.trim() ?? "",
-      idNumber: property.property_owner_id_num?.replace(/\D/g, "") ?? "",
+      idNumber: digitsOnly(property.property_owner_id_num),
       birthDate: ownerBirthDate,
       phone: formatPhoneForForm(property.property_owner_mobile),
       iban: property.property_owner_iban ?? "",
       hasAgent: hasAgent as "yes" | "no",
     },
     agentData: {
-      idNumber: property.id_num_of_property_owner_agent?.replace(/\D/g, "") ?? "",
+      idNumber: digitsOnly(property.id_num_of_property_owner_agent),
       birthDate: parseBirthDate(
         property.dob_of_property_owner_agent,
         agentCalendarType,

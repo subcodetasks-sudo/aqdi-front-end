@@ -1,10 +1,11 @@
 import {
   getAgentDataValidationIssues,
   getOwnerDataValidationIssues,
-  isAgentDataComplete,
   isOwnerDataComplete,
+  isPhoneComplete,
   type OwnerValidationIssue,
 } from "@/lib/validation/owner-step-validation";
+import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 
 export const PROPERTY_HAS_AGENT_OPTIONS = ["yes", "no"] as const;
 
@@ -75,7 +76,12 @@ export function isPropertyAgentDataComplete(
     agentData.powerOfAttorneyFiles.length === 1 ||
     Boolean(options?.allowExistingPowerOfAttorney);
 
-  return isAgentDataComplete(agentData) && hasPowerOfAttorney;
+  return (
+    agentData.idNumber.replace(/\D/g, "").length === 10 &&
+    isAdultBirthDateComplete(agentData.birthDate) &&
+    isPhoneComplete(agentData.phone) &&
+    hasPowerOfAttorney
+  );
 }
 
 export function getPropertyOwnerValidationIssues(

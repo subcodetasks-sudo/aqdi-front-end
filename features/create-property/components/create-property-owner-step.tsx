@@ -30,6 +30,8 @@ export default function CreatePropertyOwnerStep({
     setAgentData,
     canContinue,
     hasExistingPowerOfAttorney,
+    existingPowerOfAttorneyImageUrl,
+    clearExistingPowerOfAttorneyImageUrl,
   } = useCreatePropertyOwnerStep();
   const [showFieldErrors, setShowFieldErrors] = useState(false);
 
@@ -74,6 +76,10 @@ export default function CreatePropertyOwnerStep({
               onChange={setAgentData}
               showFieldErrors={showFieldErrors}
               hasExistingPowerOfAttorney={hasExistingPowerOfAttorney}
+              existingPowerOfAttorneyImageUrl={existingPowerOfAttorneyImageUrl}
+              onClearExistingPowerOfAttorney={
+                clearExistingPowerOfAttorneyImageUrl
+              }
             />
           ) : null}
         </div>

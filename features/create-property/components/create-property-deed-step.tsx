@@ -80,6 +80,7 @@ export default function CreatePropertyDeedStep({
     existingEndowmentCertImageUrl,
     existingTrusteeshipImageUrl,
     existingGuardiansPoaImageUrl,
+    clearExistingFileUrl,
     canContinue: canContinueDeed,
   } = useCreatePropertyDeedStep();
   const {
@@ -92,6 +93,7 @@ export default function CreatePropertyDeedStep({
     manualAddress,
     setManualAddress,
     existingAddressImageUrl,
+    clearExistingAddressImageUrl,
     canContinue: canContinueAddress,
   } = useCreatePropertyAddressStep();
   const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
@@ -172,6 +174,7 @@ export default function CreatePropertyDeedStep({
           value={deedFrontFiles}
           onChange={setDeedFrontFiles}
           existingFileUrl={existingDeedFrontImageUrl}
+          onClearExisting={() => clearExistingFileUrl("existingDeedFrontImageUrl")}
           variant="dropzone"
           invalid={
             instrumentInvalid &&
@@ -186,6 +189,7 @@ export default function CreatePropertyDeedStep({
           value={deedBackFiles}
           onChange={setDeedBackFiles}
           existingFileUrl={existingDeedBackImageUrl}
+          onClearExisting={() => clearExistingFileUrl("existingDeedBackImageUrl")}
           variant="dropzone"
           invalid={
             instrumentInvalid &&
@@ -215,6 +219,7 @@ export default function CreatePropertyDeedStep({
         value={deedFiles}
         onChange={setDeedFiles}
         existingFileUrl={existingDeedImageUrl}
+        onClearExisting={() => clearExistingFileUrl("existingDeedImageUrl")}
         variant="dropzone"
         invalid={
           showFieldErrors &&
@@ -260,6 +265,9 @@ export default function CreatePropertyDeedStep({
                     value={deedFiles}
                     onChange={setDeedFiles}
                     existingFileUrl={existingDeedImageUrl}
+                    onClearExisting={() =>
+                      clearExistingFileUrl("existingDeedImageUrl")
+                    }
                     variant="dropzone"
                     invalid={
                       showFieldErrors &&
@@ -279,6 +287,9 @@ export default function CreatePropertyDeedStep({
                   value={deedInheritanceFiles}
                   onChange={setDeedInheritanceFiles}
                   existingFileUrl={existingInheritanceImageUrl}
+                  onClearExisting={() =>
+                    clearExistingFileUrl("existingInheritanceImageUrl")
+                  }
                   variant="dropzone"
                   invalid={
                     showFieldErrors &&
@@ -298,6 +309,9 @@ export default function CreatePropertyDeedStep({
                     value={deedHeirsPoaFiles}
                     onChange={setDeedHeirsPoaFiles}
                     existingFileUrl={existingHeirsPoaImageUrl}
+                    onClearExisting={() =>
+                      clearExistingFileUrl("existingHeirsPoaImageUrl")
+                    }
                     variant="dropzone"
                     invalid={
                       showFieldErrors &&
@@ -334,6 +348,9 @@ export default function CreatePropertyDeedStep({
                       value={deedGuardiansPoaFiles}
                       onChange={setDeedGuardiansPoaFiles}
                       existingFileUrl={existingGuardiansPoaImageUrl}
+                      onClearExisting={() =>
+                        clearExistingFileUrl("existingGuardiansPoaImageUrl")
+                      }
                       variant="dropzone"
                       invalid={
                         showFieldErrors &&
@@ -357,6 +374,9 @@ export default function CreatePropertyDeedStep({
                   value={deedEndowmentCertFiles}
                   onChange={setDeedEndowmentCertFiles}
                   existingFileUrl={existingEndowmentCertImageUrl}
+                  onClearExisting={() =>
+                    clearExistingFileUrl("existingEndowmentCertImageUrl")
+                  }
                   variant="dropzone"
                   invalid={
                     showFieldErrors &&
@@ -371,6 +391,9 @@ export default function CreatePropertyDeedStep({
                   value={deedTrusteeshipFiles}
                   onChange={setDeedTrusteeshipFiles}
                   existingFileUrl={existingTrusteeshipImageUrl}
+                  onClearExisting={() =>
+                    clearExistingFileUrl("existingTrusteeshipImageUrl")
+                  }
                   variant="dropzone"
                   invalid={
                     showFieldErrors &&
@@ -399,6 +422,9 @@ export default function CreatePropertyDeedStep({
                       value={deedGuardiansPoaFiles}
                       onChange={setDeedGuardiansPoaFiles}
                       existingFileUrl={existingGuardiansPoaImageUrl}
+                      onClearExisting={() =>
+                        clearExistingFileUrl("existingGuardiansPoaImageUrl")
+                      }
                       variant="dropzone"
                       invalid={
                         showFieldErrors &&
@@ -431,6 +457,7 @@ export default function CreatePropertyDeedStep({
                 photoFiles={photoFiles}
                 onPhotoFilesChange={setPhotoFiles}
                 existingPhotoUrl={existingAddressImageUrl}
+                onClearExistingPhoto={clearExistingAddressImageUrl}
                 linkUrl={linkUrl}
                 onLinkUrlChange={setLinkUrl}
                 manualAddress={manualAddress}

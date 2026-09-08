@@ -48,6 +48,7 @@ type PropertyDraftStore = {
   existingTrusteeshipImageUrl: string | null;
   existingGuardiansPoaImageUrl: string | null;
   existingAddressImageUrl: string | null;
+  existingPowerOfAttorneyImageUrl: string | null;
   hasExistingPowerOfAttorney: boolean;
   currentStep: CreatePropertyStep;
   selectedDeedType: PropertyDeedTypeId | "";
@@ -108,6 +109,19 @@ type PropertyDraftStore = {
   setOwnerData: (data: PropertyOwnerDataState) => void;
   setAgentData: (data: PropertyAgentDataState) => void;
   setReviewData: (data: PropertyReviewDataState) => void;
+  clearExistingFileUrl: (
+    field:
+      | "existingDeedImageUrl"
+      | "existingDeedFrontImageUrl"
+      | "existingDeedBackImageUrl"
+      | "existingInheritanceImageUrl"
+      | "existingHeirsPoaImageUrl"
+      | "existingEndowmentCertImageUrl"
+      | "existingTrusteeshipImageUrl"
+      | "existingGuardiansPoaImageUrl"
+      | "existingAddressImageUrl"
+      | "existingPowerOfAttorneyImageUrl",
+  ) => void;
   resetDraft: () => void;
   initializeNewSession: () => void;
   hydrateFilesFromPersisted: () => void;
@@ -147,6 +161,7 @@ function createInitialPropertyDraft() {
     existingTrusteeshipImageUrl: null as string | null,
     existingGuardiansPoaImageUrl: null as string | null,
     existingAddressImageUrl: null as string | null,
+    existingPowerOfAttorneyImageUrl: null as string | null,
     hasExistingPowerOfAttorney: false,
     currentStep: "deed" as CreatePropertyStep,
     selectedDeedType: "" as PropertyDeedTypeId | "",
@@ -343,6 +358,13 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         });
       },
       setReviewData: (data) => set({ reviewData: data }),
+      clearExistingFileUrl: (field) =>
+        set({
+          [field]: null,
+          ...(field === "existingPowerOfAttorneyImageUrl"
+            ? { hasExistingPowerOfAttorney: false }
+            : {}),
+        }),
       resetDraft: () => {
         localStorage.removeItem("aqdi-create-property-draft");
         set(createInitialPropertyDraft());
@@ -388,6 +410,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
           existingTrusteeshipImageUrl: data.existingTrusteeshipImageUrl,
           existingGuardiansPoaImageUrl: data.existingGuardiansPoaImageUrl,
           existingAddressImageUrl: data.existingAddressImageUrl,
+          existingPowerOfAttorneyImageUrl: data.existingPowerOfAttorneyImageUrl,
           hasExistingPowerOfAttorney: data.hasExistingPowerOfAttorney,
           selectedDeedType: data.selectedDeedType,
           isMultipleTrusteeshipDeedCopy: data.isMultipleTrusteeshipDeedCopy,
@@ -419,6 +442,7 @@ export const useCreatePropertyDraftStore = create<PropertyDraftStore>()(
         existingTrusteeshipImageUrl: state.existingTrusteeshipImageUrl,
         existingGuardiansPoaImageUrl: state.existingGuardiansPoaImageUrl,
         existingAddressImageUrl: state.existingAddressImageUrl,
+        existingPowerOfAttorneyImageUrl: state.existingPowerOfAttorneyImageUrl,
         hasExistingPowerOfAttorney: state.hasExistingPowerOfAttorney,
         currentStep:
           state.currentStep === "success" ||
