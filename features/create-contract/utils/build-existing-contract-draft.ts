@@ -1,4 +1,3 @@
-import { BASE_URL } from "@/lib/api/constants";
 import { formatSaudiMobileForForm } from "@/lib/validation/format-saudi-mobile-for-form";
 import {
   EMPTY_AGENT_DATA,
@@ -18,27 +17,10 @@ import type {
   PropertyUnitApiItem,
   PropertyWithUnitsApiData,
 } from "@/features/property-units/types/property-units-api";
-
-function getAssetOrigin() {
-  try {
-    return new URL(BASE_URL).origin;
-  } catch {
-    return BASE_URL.replace(/\/$/, "");
-  }
-}
+import { resolveAssetUrl } from "@/features/shared/utils/resolve-asset-url";
 
 export function resolveContractAssetUrl(path: string | null | undefined) {
-  if (!path) {
-    return null;
-  }
-
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-
-  // Assets are served from the host root (e.g. /storage, /uploads), not from the
-  // API path in BASE_URL (which may be suffixed with /api), so use the origin.
-  return `${getAssetOrigin()}/${path.replace(/^\//, "")}`;
+  return resolveAssetUrl(path);
 }
 
 export function parseContractBirthDate(
