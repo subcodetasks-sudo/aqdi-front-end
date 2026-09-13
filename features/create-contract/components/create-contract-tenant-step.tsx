@@ -59,9 +59,6 @@ export default function CreateContractTenantStep({
   const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
-  const existingPropertyContext = useCreateContractDraftStore(
-    (state) => state.existingPropertyContext,
-  );
   const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
@@ -84,11 +81,6 @@ export default function CreateContractTenantStep({
 
   function handlePrevious() {
     if (currentPhaseIndex === 0) {
-      if (existingPropertyContext) {
-        router.back();
-        return;
-      }
-
       onBack();
       return;
     }
