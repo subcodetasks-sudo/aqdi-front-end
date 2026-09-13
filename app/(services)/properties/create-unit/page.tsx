@@ -253,6 +253,7 @@ export default async function CreateUnitPage({ searchParams }: CreateUnitPagePro
       propertyId={propertyId}
       contractType={contractType}
       contractTypeLocked={contractTypeLocked}
+      hideContractTypeSelector={urlHasExplicitContractType}
       isEditMode={isEditMode}
       propertyHasUnits={propertyHasUnits}
       initialUnits={initialUnits}

@@ -19,9 +19,13 @@ type PropertyUnitsPageContentProps = {
   commercialItems: PropertyUnitCardData[];
 };
 
-function buildCreateUnitHref(propertyId: number) {
+function buildCreateUnitHref(
+  propertyId: number,
+  contractType: "housing" | "commercial",
+) {
   const params = new URLSearchParams({
     propertyId: String(propertyId),
+    contract_type: contractType,
   });
 
   return `/properties/create-unit?${params.toString()}`;
@@ -37,9 +41,13 @@ export default function PropertyUnitsPageContent({
 }: PropertyUnitsPageContentProps) {
   const { activeTab, selectTab } = usePropertyUnitsTabs(initialTab);
 
-  const createUnitLabel = labels.createResidentialUnit;
+  const contractType = activeTab === "commercial" ? "commercial" : "housing";
+  const createUnitLabel =
+    activeTab === "commercial"
+      ? labels.createCommercialUnit
+      : labels.createResidentialUnit;
   const createUnitHref =
-    propertyId !== null ? buildCreateUnitHref(propertyId) : null;
+    propertyId !== null ? buildCreateUnitHref(propertyId, contractType) : null;
 
   return (
     <>

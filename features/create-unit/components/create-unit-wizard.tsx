@@ -15,6 +15,7 @@ type CreateUnitWizardProps = {
   propertyId: number | null;
   contractType: PropertyContractType;
   contractTypeLocked: boolean;
+  hideContractTypeSelector: boolean;
   isEditMode: boolean;
   propertyHasUnits: boolean;
   initialUnits: UnitDataState[] | null;
@@ -26,6 +27,7 @@ export default function CreateUnitWizard({
   propertyId,
   contractType,
   contractTypeLocked,
+  hideContractTypeSelector,
   isEditMode,
   propertyHasUnits,
   initialUnits,
@@ -78,6 +80,7 @@ export default function CreateUnitWizard({
         labels={labels}
         propertyId={propertyId}
         contractTypeLocked={contractTypeLocked}
+        hideContractTypeSelector={hideContractTypeSelector}
         isEditMode={isEditMode}
         propertyHasUnits={propertyHasUnits}
         onBack={() => router.back()}

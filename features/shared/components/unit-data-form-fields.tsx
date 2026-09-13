@@ -45,6 +45,7 @@ type UnitDataFormFieldsProps = {
   contractType?: PropertyContractType;
   onContractTypeChange?: (contractType: PropertyContractType) => void;
   contractTypeSelectorVariant?: "select" | "cards";
+  hideContractTypeSelector?: boolean;
   hideHousingOnlyFieldsForCommercial?: boolean;
   electricityMeterFee?: number;
   waterMeterFee?: number;
@@ -111,6 +112,7 @@ export default function UnitDataFormFields({
   contractType,
   onContractTypeChange,
   contractTypeSelectorVariant = "select",
+  hideContractTypeSelector = false,
   hideHousingOnlyFieldsForCommercial = false,
   electricityMeterFee = 0,
   waterMeterFee = 0,
@@ -272,7 +274,7 @@ export default function UnitDataFormFields({
 
   return (
     <div className="space-y-3">
-      {labels.contractType && contractType && useCardsSelector ? (
+      {!hideContractTypeSelector && labels.contractType && contractType && useCardsSelector ? (
         <CreateUnitContractTypeCards
           label={contractTypeLabel}
           value={contractType}
@@ -290,7 +292,7 @@ export default function UnitDataFormFields({
         />
       ) : null}
 
-      {labels.contractType && contractType && !useCardsSelector && !onContractTypeChange ? (
+      {!hideContractTypeSelector && labels.contractType && contractType && !useCardsSelector && !onContractTypeChange ? (
         <div>
           <label className="mb-1 block text-sm font-semibold text-black dark:text-white">
             {contractTypeLabel}
@@ -306,7 +308,7 @@ export default function UnitDataFormFields({
         </div>
       ) : null}
 
-      {labels.contractType &&
+      {!hideContractTypeSelector && labels.contractType &&
       contractType &&
       !useCardsSelector &&
       onContractTypeChange ? (

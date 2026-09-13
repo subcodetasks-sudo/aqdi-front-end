@@ -11,6 +11,7 @@ type CreateUnitPageContentProps = {
   propertyId: number | null;
   contractType: PropertyContractType;
   contractTypeLocked: boolean;
+  hideContractTypeSelector: boolean;
   isEditMode: boolean;
   propertyHasUnits: boolean;
   initialUnits: UnitDataState[] | null;
@@ -22,6 +23,7 @@ export default function CreateUnitPageContent({
   propertyId,
   contractType,
   contractTypeLocked,
+  hideContractTypeSelector,
   isEditMode,
   propertyHasUnits,
   initialUnits,
@@ -43,6 +45,7 @@ export default function CreateUnitPageContent({
           propertyId={propertyId}
           contractType={contractType}
           contractTypeLocked={contractTypeLocked}
+          hideContractTypeSelector={hideContractTypeSelector}
           isEditMode={isEditMode}
           propertyHasUnits={propertyHasUnits}
           initialUnits={initialUnits}

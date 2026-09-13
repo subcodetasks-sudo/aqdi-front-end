@@ -24,6 +24,7 @@ type CreateUnitStepProps = {
   labels: CreateUnitLabels;
   propertyId: number | null;
   contractTypeLocked: boolean;
+  hideContractTypeSelector: boolean;
   isEditMode: boolean;
   propertyHasUnits: boolean;
   onBack: () => void;
@@ -45,6 +46,7 @@ export default function CreateUnitStep({
   labels,
   propertyId,
   contractTypeLocked,
+  hideContractTypeSelector,
   isEditMode,
   propertyHasUnits,
   onBack,
@@ -188,6 +190,7 @@ export default function CreateUnitStep({
                   }}
                   contractType={unitContractType}
                   contractTypeSelectorVariant="cards"
+                  hideContractTypeSelector={hideContractTypeSelector}
                   hideHousingOnlyFieldsForCommercial
                   onContractTypeChange={
                     contractTypeLocked
