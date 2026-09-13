@@ -46,10 +46,17 @@ export default function LoginForm() {
   const { isSubmitting } = form.formState;
 
   async function onSubmit(values: LoginFormValues) {
-    const { getFcmToken } = await import(
-      "@/features/notifications/services/get-fcm-token"
-    );
-    const fcmToken = await getFcmToken({ requestPermission: true });
+    // Never block login on FCM (permission prompt / SW / getToken can hang).
+    // Attach a token only if permission was already granted and it resolves quickly.
+    const fcmToken = await Promise.race([
+      import("@/features/notifications/services/get-fcm-token")
+        .then(({ getFcmToken }) => getFcmToken({ requestPermission: false }))
+        .catch(() => null),
+      new Promise<null>((resolve) => {
+        window.setTimeout(() => resolve(null), 800);
+      }),
+    ]);
+
     const response = await loginUser({ ...values, fcmToken });
 
     if (!response.ok) {
