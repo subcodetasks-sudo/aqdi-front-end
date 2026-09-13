@@ -17,6 +17,7 @@ import type {
   PropertyUnitApiItem,
   PropertyWithUnitsApiData,
 } from "@/features/property-units/types/property-units-api";
+import { toFloorFormValue } from "@/features/shared/utils/format-floor-display";
 import { resolveAssetUrl } from "@/features/shared/utils/resolve-asset-url";
 
 export function resolveContractAssetUrl(path: string | null | undefined) {
@@ -119,7 +120,7 @@ export function buildRentedUnitData(
     unitTypeId: toStringValue(unit.unit_type_id),
     unitUsageId: toStringValue(unit.unit_usage_id),
     totalArea: toStringValue(unit.unit_area),
-    floorNumber: toStringValue(unit.floor_number),
+    floorNumber: toFloorFormValue(unit.floor_number),
     unitNumber: toStringValue(unit.unit_number),
     roomsCount: toOptionalCount(unit.number_of_rooms ?? unit.tootal_rooms),
     hallsCount: toOptionalCount(unit.The_number_of_halls),

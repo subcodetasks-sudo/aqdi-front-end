@@ -5,6 +5,7 @@ import type {
   PropertyUnitCardData,
   PropertyUnitCategory,
 } from "@/features/property-units/types/property-unit";
+import { formatFloorDisplay } from "@/features/shared/utils/format-floor-display";
 
 type UnitLookups = {
   housing: {
@@ -121,6 +122,7 @@ export function mapPropertyUnitToCard(
   unitContractType: PropertyContractType,
   unitTypes: UnitLookupOption[],
   unitUsages: UnitLookupOption[],
+  groundFloorLabel: string,
 ): PropertyUnitCardData {
   return {
     id: String(unit.id),
@@ -132,7 +134,8 @@ export function mapPropertyUnitToCard(
     details: {
       unitType: lookupName(unitTypes, unit.unit_type_id),
       unitUse: lookupName(unitUsages, unit.unit_usage_id),
-      floorNumber: displayValue(unit.floor_number),
+      floorNumber:
+        formatFloorDisplay(unit.floor_number, groundFloorLabel) ?? "-",
       unitArea: displayValue(unit.unit_area),
       roomsCount: resolveRoomsCount(unit),
       hallsCount: displayValue(unit.The_number_of_halls),
@@ -149,6 +152,7 @@ export function mapPropertyUnitsToCards(
   propertyId: number,
   fallbackContractType: PropertyContractType,
   lookups: UnitLookups,
+  groundFloorLabel: string,
 ) {
   const cards = units.map((unit) => {
     const unitContractType = resolveUnitContractType(
@@ -165,6 +169,7 @@ export function mapPropertyUnitsToCards(
       unitContractType,
       lookupSet.types,
       lookupSet.usages,
+      groundFloorLabel,
     );
   });
 

@@ -72,6 +72,7 @@ export default async function PropertyUnitsPage({
         housing: { types: housingTypes, usages: housingUsages },
         commercial: { types: commercialTypes, usages: commercialUsages },
       },
+      t("groundFloor"),
     );
 
     residentialItems = mapped.residentialItems;
@@ -86,6 +87,7 @@ export default async function PropertyUnitsPage({
       : t("pageSubtitle"),
     emptyResidential: t("emptyResidential"),
     emptyCommercial: t("emptyCommercial"),
+    groundFloor: t("groundFloor"),
     createResidentialUnit: t("createResidentialUnit"),
     createCommercialUnit: t("createCommercialUnit"),
     tabs: {

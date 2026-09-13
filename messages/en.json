@@ -871,6 +871,7 @@
         "close": "Close",
         "loading": "Loading data...",
         "emptyValue": "—",
+        "groundFloor": "Ground floor",
         "ownerSection": "Owner (lessor) data",
         "tenantSection": "Tenant data",
         "unitSection": "Leased unit data",
@@ -910,6 +911,7 @@
         "close": "Close",
         "loading": "Loading data...",
         "emptyValue": "—",
+        "groundFloor": "Ground floor",
         "overviewSection": "Request details",
         "ownerSection": "Owner (lessor) data",
         "tenantSection": "Tenant data",
@@ -1092,6 +1094,7 @@
     "pageSubtitleWithName": "{propertyName} – browse saved units and create your contracts on them.",
     "emptyResidential": "No residential units saved yet.",
     "emptyCommercial": "No commercial units saved yet.",
+    "groundFloor": "Ground",
     "createResidentialUnit": "Add a new unit",
     "createCommercialUnit": "Add a new unit",
     "tabs": {

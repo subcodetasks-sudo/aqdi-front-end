@@ -1,5 +1,6 @@
 import type { CompletedContractDetails } from "@/features/requests/services/get-completed-contract-details";
 import type { CompletedContractUnit } from "@/features/requests/types/completed-contract";
+import { formatFloorDisplay } from "@/features/shared/utils/format-floor-display";
 
 export type RequestContractDetailsRow = {
   label: string;
@@ -23,6 +24,7 @@ export type RequestContractDialogLabels = {
   close: string;
   loading: string;
   emptyValue: string;
+  groundFloor: string;
   linkPreview: string;
   overviewSection: string;
   ownerSection: string;
@@ -269,7 +271,7 @@ function buildUnitRows(
   pushRow(
     unitRows,
     labels.fields.floor,
-    toDisplayValue(unit.floor_number, empty),
+    formatFloorDisplay(unit.floor_number, labels.groundFloor),
   );
   pushRow(
     unitRows,

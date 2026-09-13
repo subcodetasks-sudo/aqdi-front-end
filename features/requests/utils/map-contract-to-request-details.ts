@@ -1,4 +1,5 @@
 import type { UncompletedContractData } from "@/features/create-contract/types/uncompleted-contract";
+import { formatFloorDisplay } from "@/features/shared/utils/format-floor-display";
 
 export type RequestDetailsSection = {
   title: string;
@@ -16,6 +17,7 @@ export type RequestDetailsDialogLabels = {
   close: string;
   loading: string;
   emptyValue: string;
+  groundFloor: string;
   ownerSection: string;
   tenantSection: string;
   unitSection: string;
@@ -206,7 +208,7 @@ function buildUnitRows(
   pushRow(
     unitRows,
     labels.fields.floor,
-    toDisplayValue(unit.floor_number, empty),
+    formatFloorDisplay(unit.floor_number, labels.groundFloor),
   );
   pushRow(
     unitRows,

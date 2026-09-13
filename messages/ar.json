@@ -891,6 +891,7 @@
         "close": "إغلاق",
         "loading": "جاري تحميل البيانات...",
         "emptyValue": "—",
+        "groundFloor": "أرضي",
         "ownerSection": "بيانات المالك (المؤجر)",
         "tenantSection": "بيانات المستأجر",
         "unitSection": "بيانات الوحدة المؤجرة",
@@ -930,6 +931,7 @@
         "close": "إغلاق",
         "loading": "جاري تحميل البيانات...",
         "emptyValue": "—",
+        "groundFloor": "أرضي",
         "overviewSection": "بيانات الطلب",
         "ownerSection": "بيانات المالك (المؤجر)",
         "tenantSection": "بيانات المستأجر",
@@ -1112,6 +1114,7 @@
     "pageSubtitleWithName": "{propertyName} – استعرض الوحدات المحفوظة وأنشئ عقودك عليها.",
     "emptyResidential": "لا توجد وحدات سكنية محفوظة بعد.",
     "emptyCommercial": "لا توجد وحدات تجارية محفوظة بعد.",
+    "groundFloor": "أرضي",
     "createResidentialUnit": "إضافة وحدة جديدة",
     "createCommercialUnit": "إضافة وحدة جديدة",
     "tabs": {

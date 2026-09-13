@@ -15,16 +15,18 @@ function displayCount(value: string | number | null | undefined) {
   return String(parsed).padStart(2, "0");
 }
 
-function mapFloorNumber(value: string | null | undefined) {
-  if (!value) {
+function mapFloorNumber(value: string | number | null | undefined) {
+  if (value === null || value === undefined || value === "") {
     return "";
   }
 
-  if (value === "0") {
+  const text = String(value).trim();
+  const numeric = Number(text);
+  if (Number.isFinite(numeric) && numeric < 1) {
     return "ground";
   }
 
-  return value;
+  return text;
 }
 
 function mapRoomsCount(unit: PropertyUnitApiItem) {

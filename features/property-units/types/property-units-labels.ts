@@ -4,6 +4,7 @@ export type PropertyUnitsLabels = {
   pageSubtitle: string;
   emptyResidential: string;
   emptyCommercial: string;
+  groundFloor: string;
   createResidentialUnit: string;
   createCommercialUnit: string;
   tabs: {
