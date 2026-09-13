@@ -99,6 +99,7 @@ export type CreateContractLabels = {
       hint?: string;
       attached: string;
       preview: string;
+      change: string;
       delete: string;
       previewTitle: string;
       closePreview: string;

@@ -5,6 +5,7 @@ import {
   CloudDownload,
   Eye,
   ImageIcon,
+  RefreshCw,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -63,9 +64,16 @@ type DeedFileRowProps = {
   labels: CreateContractLabels["deed"]["deedImage"];
   onDelete: () => void;
   onPreview: () => void;
+  onChangeFile: () => void;
 };
 
-function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
+function DeedFileRow({
+  file,
+  labels,
+  onDelete,
+  onPreview,
+  onChangeFile,
+}: DeedFileRowProps) {
   const { name, extension } = getFileParts(file);
   const previewUrl = useMemo(
     () => (isImageFile(file) ? URL.createObjectURL(file) : null),
@@ -106,6 +114,15 @@ function DeedFileRow({ file, labels, onDelete, onPreview }: DeedFileRowProps) {
 
         <button
           type="button"
+          onClick={onChangeFile}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
+        >
+          <RefreshCw className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.change}</span>
+        </button>
+
+        <button
+          type="button"
           onClick={onDelete}
           className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500 dark:bg-[#2a1818] dark:text-[#f87171]"
         >
@@ -121,10 +138,14 @@ function ExistingImageRow({
   url,
   labels,
   onPreview,
+  onChangeFile,
+  onDelete,
 }: {
   url: string;
   labels: CreateContractLabels["deed"]["deedImage"];
   onPreview: () => void;
+  onChangeFile: () => void;
+  onDelete: () => void;
 }) {
   const fileName = url.split("/").pop() || url;
   const extension = fileName.includes(".")
@@ -155,6 +176,24 @@ function ExistingImageRow({
           <Eye className="size-4 shrink-0" aria-hidden="true" />
           <span>{labels.preview}</span>
         </button>
+
+        <button
+          type="button"
+          onClick={onChangeFile}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
+        >
+          <RefreshCw className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.change}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onDelete}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ffe8e8] px-3 text-sm font-bold text-red-500 dark:bg-[#2a1818] dark:text-[#f87171]"
+        >
+          <X className="size-4 shrink-0" aria-hidden="true" />
+          <span>{labels.delete}</span>
+        </button>
       </div>
     </div>
   );
@@ -177,10 +216,12 @@ export default function CreateContractDeedImageUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [previewExistingUrl, setPreviewExistingUrl] = useState<string | null>(null);
-  const showExistingImage = value.length === 0 && Boolean(existingImageUrl);
+  const [existingImageCleared, setExistingImageCleared] = useState(false);
+  const showExistingImage =
+    value.length === 0 && Boolean(existingImageUrl) && !existingImageCleared;
   const showInvalid = invalid && value.length === 0 && !showExistingImage;
   const pdfOnly = accept === PDF_ONLY_ACCEPT;
-  const hideUploadArea = value.length > 0;
+  const hideUploadArea = value.length > 0 || showExistingImage;
 
   const previewUrl = useMemo(() => {
     if (!previewFile) {
@@ -214,6 +255,14 @@ export default function CreateContractDeedImageUpload({
     onChange(value.filter((_, fileIndex) => fileIndex !== index));
   }
 
+  function handleChangeFile() {
+    inputRef.current?.click();
+  }
+
+  function handleDeleteExisting() {
+    setExistingImageCleared(true);
+  }
+
   const resolvedLabel = fieldLabel ?? labels.label;
   const isDropzone = variant === "dropzone";
   const isDashed = variant === "dashed";
@@ -240,6 +289,17 @@ export default function CreateContractDeedImageUpload({
         <CreateContractFieldLabel label={resolvedLabel} invalid={showInvalid} />
       )}
 
+      <input
+        ref={inputRef}
+        id={inputId}
+        type="file"
+        multiple={!single}
+        accept={accept}
+        className="sr-only"
+        aria-invalid={showInvalid}
+        onChange={handleFileChange}
+      />
+
       {!hideUploadArea ? (
         <label
           htmlFor={inputId}
@@ -255,17 +315,6 @@ export default function CreateContractDeedImageUpload({
               : "border-[#BFE0D4] dark:border-[#2f403b]",
           )}
         >
-          <input
-            ref={inputRef}
-            id={inputId}
-            type="file"
-            multiple={!single}
-            accept={accept}
-            className="sr-only"
-            aria-invalid={showInvalid}
-            onChange={handleFileChange}
-          />
-
           {isDashed || isDashedPill || isDropzone ? (
             <div className="space-y-1">
               <p className="text-sm font-medium text-[#666666] dark:text-[#9eb5af]">
@@ -322,6 +371,8 @@ export default function CreateContractDeedImageUpload({
           url={existingImageUrl}
           labels={labels}
           onPreview={() => setPreviewExistingUrl(existingImageUrl)}
+          onChangeFile={handleChangeFile}
+          onDelete={handleDeleteExisting}
         />
       ) : null}
 
@@ -333,6 +384,7 @@ export default function CreateContractDeedImageUpload({
               file={file}
               labels={labels}
               onDelete={() => handleDelete(index)}
+              onChangeFile={handleChangeFile}
               onPreview={() => setPreviewFile(file)}
             />
           ))}
