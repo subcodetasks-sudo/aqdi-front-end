@@ -73,9 +73,7 @@ export default function Navbar({ dialogLabels }: NavbarProps) {
 
   useEffect(() => {
     let frameId = 0;
-    let lastScrolled = window.scrollY > SCROLL_THRESHOLD_PX;
-
-    setScrolled(lastScrolled);
+    let lastScrolled = false;
 
     function updateScrolled() {
       frameId = 0;
@@ -97,6 +95,8 @@ export default function Navbar({ dialogLabels }: NavbarProps) {
       frameId = window.requestAnimationFrame(updateScrolled);
     }
 
+    // Sync the initial scroll position (e.g. restored on reload) on the next frame.
+    frameId = window.requestAnimationFrame(updateScrolled);
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {

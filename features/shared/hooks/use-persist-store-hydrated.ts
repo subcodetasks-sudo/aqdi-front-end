@@ -1,32 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 type PersistStoreApi = {
   hasHydrated: () => boolean;
   onFinishHydration: (listener: () => void) => () => void;
 };
 
+function noopUnsubscribe() {}
+
+function getServerSnapshot() {
+  return false;
+}
+
 export function usePersistStoreHydrated(
   persistApi?: PersistStoreApi,
 ) {
-  const [isHydrated, setIsHydrated] = useState(false);
+  const subscribe = useCallback(
+    (onChange: () => void) =>
+      persistApi ? persistApi.onFinishHydration(onChange) : noopUnsubscribe,
+    [persistApi],
+  );
 
-  useEffect(() => {
-    if (!persistApi) {
-      setIsHydrated(true);
-      return;
-    }
+  const getSnapshot = useCallback(
+    () => (persistApi ? persistApi.hasHydrated() : true),
+    [persistApi],
+  );
 
-    if (persistApi.hasHydrated()) {
-      setIsHydrated(true);
-      return;
-    }
-
-    return persistApi.onFinishHydration(() => {
-      setIsHydrated(true);
-    });
-  }, [persistApi]);
-
-  return isHydrated;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

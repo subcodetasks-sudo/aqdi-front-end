@@ -1,23 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
+
+type PermissionState = NotificationPermission | "unsupported" | null;
+
+function subscribeToNothing() {
+  return () => {};
+}
+
+function getPermissionSnapshot(): PermissionState {
+  return "Notification" in window ? Notification.permission : "unsupported";
+}
+
+// Keep SSR and the hydration render identical — the real permission is read
+// from the browser right after hydration.
+function getServerPermissionSnapshot(): PermissionState {
+  return null;
+}
 
 export function useFcm() {
-  // Keep SSR and the first client render identical — sync real permission after mount.
   const [token, setToken] = useState<string | null>(null);
-  const [notificationPermission, setNotificationPermission] = useState<
-    NotificationPermission | "unsupported" | null
-  >(null);
+  const browserPermission = useSyncExternalStore(
+    subscribeToNothing,
+    getPermissionSnapshot,
+    getServerPermissionSnapshot,
+  );
+  const [requestedPermission, setRequestedPermission] =
+    useState<NotificationPermission | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!("Notification" in window)) {
-      setNotificationPermission("unsupported");
-      return;
-    }
-
-    setNotificationPermission(Notification.permission);
-  }, []);
 
   const requestPermission = useCallback(async () => {
     if (typeof window === "undefined" || !("Notification" in window)) {
@@ -31,7 +41,7 @@ export function useFcm() {
         "@/features/notifications/services/get-fcm-token"
       );
       const deviceToken = await getFcmToken({ requestPermission: true });
-      setNotificationPermission(Notification.permission);
+      setRequestedPermission(Notification.permission);
       setToken(deviceToken);
     } catch (error) {
       console.error("Failed to request notification permission:", error);
@@ -42,7 +52,7 @@ export function useFcm() {
 
   return {
     token,
-    notificationPermission,
+    notificationPermission: requestedPermission ?? browserPermission,
     requestPermission,
     isLoading,
   };
