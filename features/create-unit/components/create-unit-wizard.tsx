@@ -1,0 +1,91 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import CreateUnitStep from "@/features/create-unit/components/create-unit-step";
+import { useCreateUnitDraftStore } from "@/features/create-unit/stores/use-create-unit-draft-store";
+import type { CreateUnitLabels } from "@/features/create-unit/types/create-unit-labels";
+import type { UnitDataState } from "@/features/create-unit/types/unit-data";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+
+type CreateUnitWizardProps = {
+  labels: CreateUnitLabels;
+  propertyId: number | null;
+  contractType: PropertyContractType;
+  contractTypeLocked: boolean;
+  hideContractTypeSelector: boolean;
+  isEditMode: boolean;
+  propertyHasUnits: boolean;
+  initialUnits: UnitDataState[] | null;
+  preservedUnits: UnitDataState[];
+};
+
+export default function CreateUnitWizard({
+  labels,
+  propertyId,
+  contractType,
+  contractTypeLocked,
+  hideContractTypeSelector,
+  isEditMode,
+  propertyHasUnits,
+  initialUnits,
+  preservedUnits,
+}: CreateUnitWizardProps) {
+  const router = useRouter();
+  const initializeSession = useCreateUnitDraftStore(
+    (state) => state.initializeSession,
+  );
+  const resetDraft = useCreateUnitDraftStore((state) => state.resetDraft);
+
+  useEffect(() => {
+    initializeSession(propertyId, contractType, {
+      isEditMode,
+      initialUnits: initialUnits ?? undefined,
+      preservedUnits,
+    });
+  }, [
+    contractType,
+    initialUnits,
+    initializeSession,
+    isEditMode,
+    preservedUnits,
+    propertyId,
+  ]);
+
+  function handleComplete(message?: string) {
+    resetDraft();
+
+    toast.success(
+      message ||
+        (isEditMode
+          ? labels.navigation.updateSuccess
+          : labels.navigation.createSuccess),
+    );
+
+    if (propertyId) {
+      router.push(
+        `/properties/my-properties/units?propertyId=${propertyId}&contract_type=${contractType}`,
+      );
+      return;
+    }
+
+    router.back();
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-4xl space-y-4">
+      <CreateUnitStep
+        labels={labels}
+        propertyId={propertyId}
+        contractTypeLocked={contractTypeLocked}
+        hideContractTypeSelector={hideContractTypeSelector}
+        isEditMode={isEditMode}
+        propertyHasUnits={propertyHasUnits}
+        onBack={() => router.back()}
+        onComplete={handleComplete}
+      />
+    </div>
+  );
+}

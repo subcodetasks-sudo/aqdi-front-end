@@ -1,0 +1,47 @@
+"use client";
+
+import { ArrowUpLeft } from "lucide-react";
+
+import CustomIcon from "@/features/shared/components/custom-icon";
+import { cn } from "@/lib/utils";
+
+type HeroCtaButtonProps = {
+  label: string;
+  iconSrc: string;
+  featured?: boolean;
+};
+
+export default function HeroCtaButton({
+  label,
+  iconSrc,
+  featured = false,
+}: HeroCtaButtonProps) {
+  return (
+    <button
+      type="button"
+      className={cn(
+        "group flex h-12 w-full min-w-0 items-center gap-2.5 rounded-full bg-brand px-3 ps-4 pe-2.5 text-white transition-colors hover:bg-brand/90 sm:h-14 sm:gap-3 sm:px-2 sm:pe-2 sm:ps-4 2xl:ps-5",
+        featured &&
+          "shadow-[0_0_24px_rgba(13,179,139,0.35)] ring-1 ring-brand-secondary/50"
+      )}
+    >
+      <span className="inline-flex size-7 shrink-0 items-center justify-center sm:size-6 lg:size-8">
+        <CustomIcon
+          src={iconSrc}
+          className="text-white [&_svg]:size-4 sm:[&_svg]:size-3 lg:[&_svg]:size-4"
+        />
+      </span>
+
+      <span className="min-w-0 flex-1 text-center text-sm font-semibold leading-tight sm:text-xs lg:text-sm">
+        {label}
+      </span>
+
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white sm:size-6 lg:size-8">
+        <ArrowUpLeft
+          className="size-4 text-brand transition-transform duration-300 group-hover:-rotate-45 sm:size-3 lg:size-4"
+          aria-hidden="true"
+        />
+      </span>
+    </button>
+  );
+}

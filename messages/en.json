@@ -1,0 +1,2617 @@
+{
+  "site": {
+    "metaTitle": "Aqadi | Electronic Rental Contract Documentation",
+    "metaDescription": "Aqadi helps you document residential and commercial rental contracts electronically through the Ejar network — quickly, securely, and in a way that protects all parties.",
+    "homeTitle": "Home",
+    "aboutTitle": "About us",
+    "aboutDescription": "Learn about Aqadi, our vision, mission, and values for documenting electronic rental contracts."
+  },
+  "navbar": {
+    "topBar": {
+      "aboutUs": "About us",
+      "blog": "Blog",
+      "faq": "FAQ",
+      "httpsSecurity": "A secure site using HTTPS protocol",
+      "httpfor": " for encryption and security.",
+      "officialLinks": "Official Saudi website links ",
+      "endWith": "end with .sa",
+      "whatsappService": "Enjoy contract documentation service via WhatsApp"
+    },
+    "brand": {
+      "name": "Aqadi",
+      "tagline": "For a flourishing rental sector"
+    },
+    "nav": {
+      "home": "Home",
+      "myProperties": "My Properties",
+      "requests": "My requests",
+      "downloadApp": "Download the app now"
+    },
+    "cta": "Start with Aqadi",
+    "profile": "Profile",
+    "menu": "Menu",
+    "myAccount": "My Account",
+    "notifications": "Notifications"
+  },
+  "instrumentTypePopup": {
+    "title": "Contract fees for {deedType}",
+    "clarification": "Clarification:",
+    "confirmContinue": "Confirm and continue",
+    "close": "Close"
+  },
+  "userSheet": {
+    "title": "My Account",
+    "close": "Close",
+    "profile": {
+      "sectionTitle": "Personal Profile",
+      "avatarAlt": "User avatar"
+    },
+    "policies": {
+      "sectionTitle": "Policies and Regulations",
+      "terms": "Terms and Conditions",
+      "privacy": "Privacy Policy",
+      "termsHref": "/terms",
+      "privacyHref": "/privacy"
+    },
+    "helpCenter": {
+      "sectionTitle": "Help Center",
+      "whatsapp": "Contact us via WhatsApp",
+      "whatsappHref": "https://wa.me/"
+    },
+    "accountSettings": {
+      "sectionTitle": "Account Settings",
+      "language": "Language",
+      "notifications": "Turn off notifications",
+      "logout": "Log out",
+      "logoutSuccess": "Signed out successfully",
+      "logoutError": "Unable to sign out, please try again"
+    },
+    "social": {
+      "followUs": "Follow us:",
+      "youtube": "YouTube",
+      "twitter": "X",
+      "tiktok": "TikTok"
+    },
+    "downloadApp": "Download the app now",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store"
+  },
+  "hero": {
+    "badge": "Your documented contract via Ejar network in minutes",
+    "titleLine1Accent": "Rental",
+    "titleLine1Main": "contract",
+    "titleLine2Main": "electronic",
+    "titleLine2Accent": "documented ..",
+    "description": "Approved and documented rental contracts through the Ejar electronic platform, with simple and secure steps that protect all parties.",
+    "features": [
+      "Certified by the Real Estate General Authority",
+      "Compatible with unified business account requirements",
+      "Certified by the Ministry of Commerce",
+      "Compatible with social insurance requirements",
+      "Recognized by the enforcement court",
+      "Compatible with municipal requirements"
+    ],
+    "residentialCta": "Create residential lease contract",
+    "commercialCta": "Create commercial lease contract",
+    "mostRequested": "Most requested",
+    "downloadApp": "Download the app now",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store",
+    "whatsapp": "Contact via WhatsApp",
+    "visualAlt": "Aqadi app showing a successfully issued lease contract"
+  },
+  "trustedEntities": {
+    "badge": "Trusted and certified entities",
+    "titlePrefix": "Licensed by",
+    "titleAccent": "official authorities",
+    "description": "We operate under approved regulations to ensure the reliability and security of all transactions",
+    "viewLicense": "View license",
+    "entities": {
+      "business": {
+        "name": "Saudi Business Center",
+        "nameEn": "Saudi Business Center",
+        "description": "Certified and registered commercial record."
+      },
+      "rega": {
+        "name": "Real Estate General Authority",
+        "nameEn": "Real Estate General Authority",
+        "description": "Official license from the regulatory authority."
+      },
+      "ejar": {
+        "name": "EJAR Network",
+        "nameEn": "EJAR Network",
+        "description": "Officially documented and certified platform."
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "Use the Aqdi app to document your residential and commercial contracts easily and securely.",
+    "downloadLabel": "Download the app now",
+    "downloadOnThe": "Download On The",
+    "googlePlay": "Google Play",
+    "appStore": "Apple Store",
+    "nav": {
+      "home": "Home",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "items": {
+      "residential": {
+        "eyebrow": "Residential contract",
+        "titleLine1": "Documenting",
+        "titleLine2": "Residential Contract",
+        "description": "Document your residential lease electronically in minutes for buildings, villas, apartments, or rooms.",
+        "statsValue": "+8M",
+        "statsText": "Over 8 million documented contracts via Ejar"
+      },
+      "commercial": {
+        "eyebrow": "Commercial contract",
+        "titleLine1": "Documenting",
+        "titleLine2": "Commercial Contract",
+        "description": "Create a documented commercial lease for shops, offices, and showrooms with simple and officially approved steps.",
+        "statsValue": "+2M",
+        "statsText": "Over 2 million documented contracts via Ejar"
+      }
+    }
+  },
+  "advantages": {
+    "badge": "Our advantages",
+    "titlePrefix": "Why ",
+    "titleAccent": "Aqadi",
+    "titleSuffix": " !",
+    "description": "Your documented contract via the Ejar network and the Real Estate General Authority in minutes.",
+    "items": {
+      "trust": {
+        "title": "High trust",
+        "description": "A platform licensed by Ejar and REGA, guaranteeing officially documented and approved contracts."
+      },
+      "time": {
+        "title": "We save your time",
+        "description": "Complete your electronic contract in just minutes without visiting an office."
+      },
+      "support": {
+        "title": "Strong 24/7 support",
+        "description": "Instant support to help you create your contract and resolve any issue quickly."
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Pricing",
+    "titlePrefix": "Document ",
+    "titleAccent": "Your Contract",
+    "description": "Choose the contract package that fits your needs and start instantly.",
+    "benefitsTitle": "What you will get:",
+    "plans": [
+      {
+        "id": "commercial",
+        "icon": "/icons/bag.svg",
+        "title": "Commercial Contract Package",
+        "description": "Suitable for shops, hotels, and factories.",
+        "price": "349",
+        "period": "/ per year",
+        "features": [
+          "Your contract is issued in minutes",
+          "Compatible with Ministry of Commerce requirements",
+          "Compatible with Balady requirements",
+          "Compatible with Saudi Business Center requirements",
+          "Valid for lease or investment"
+        ],
+        "cta": "Order now"
+      },
+      {
+        "id": "residential",
+        "icon": "/icons/home.svg",
+        "title": "Residential Contract Package",
+        "description": "Suitable for buildings, apartments, villas, and rooms.",
+        "price": "249",
+        "period": "/ per year",
+        "features": [
+          "Your contract is issued in minutes",
+          "Suitable for Citizen Account requirements",
+          "Suitable for developed social security requirements",
+          "Enforcement deed",
+          "Valid for lease or investment"
+        ],
+        "cta": "Order now"
+      }
+    ]
+  },
+  "support": {
+    "eyebrow": "Direct Continuous Support",
+    "titleLine1": "For inquiries about",
+    "titleLine2": "contract documentation",
+    "titleLine3": "on WhatsApp!",
+    "description": "Our specialized team is ready to help with any question about documenting rental contracts. Contact us any time and we will respond within minutes.",
+    "cta": "Contact via WhatsApp",
+    "satisfaction": "⭐ 98% customer satisfaction",
+    "responseTime": "Reply within 5 minutes",
+    "imageAlt": "Aqadi WhatsApp support chat interface"
+  },
+  "appSection": {
+    "eyebrow": "Mobile App",
+    "titleLine1": "Document your contracts",
+    "titleLine2": "from your smartphone",
+    "description": "Download the Aqadi app and complete all your rental transactions from anywhere with an easy interface, instant notifications, and a seamless experience.",
+    "imageAlt": "A showcase of Aqadi mobile app screens"
+  },
+  "about": {
+    "whoWeAre": {
+      "eyebrow": "Who are we?",
+      "titleLine1": "We simplify managing",
+      "titleLine2": "rental contracts",
+      "description": "We provide integrated electronic solutions for managing residential and commercial rental contracts with simple, secure steps that protect all parties and save your time and effort."
+    },
+    "numbers": {
+      "badge": "Our story",
+      "title": "Numbers we are proud of",
+      "description": "We operate under the supervision and licensing of accredited government authorities to ensure the reliability and security of all transactions.",
+      "items": {
+        "satisfaction": {
+          "value": "+98%",
+          "label": "Customer satisfaction"
+        },
+        "experience": {
+          "value": "+4",
+          "label": "Years of experience"
+        },
+        "commercial": {
+          "value": "+2M",
+          "label": "Documented commercial contracts"
+        },
+        "residential": {
+          "value": "+8.3M",
+          "label": "Documented residential contracts"
+        }
+      }
+    },
+    "values": {
+      "title": "Everything you need to know",
+      "description": "You can use the \"Aqadi\" platform to document your residential and commercial contracts with ease.",
+      "vision": {
+        "eyebrow": "Vision",
+        "title": "Our vision..",
+        "description": "To be the first choice in the real estate facilities sector and contribute to achieving Saudi Vision 2030 goals.",
+        "imageAlt": "Image representing Aqadi vision"
+      },
+      "mission": {
+        "eyebrow": "Mission",
+        "title": "Our mission",
+        "description": "We provide trusted solutions focused on efficiency and effectiveness, while being a key factor in the success of our partners and employees.",
+        "imageAlt": "Image representing Aqadi mission"
+      }
+    },
+    "coreValues": {
+      "badge": "Our values",
+      "title": "Aqadi values",
+      "description": "Ejar aims to regulate the real estate rental sector in Saudi Arabia in a balanced way that protects the rights of all parties in the rental process.",
+      "items": [
+        {
+          "id": "transparency",
+          "icon": "/icons/folder-star.svg",
+          "eyebrow": "Transparency",
+          "title": "Towards clear and responsible management",
+          "description": "Providing clear and fully open information to the public to enhance citizen understanding."
+        },
+        {
+          "id": "trust",
+          "icon": "/icons/badge.svg",
+          "eyebrow": "Trust",
+          "title": "The foundation of our relationship with citizens",
+          "description": "Our platform relies on transparent and accurate information to serve you efficiently."
+        },
+        {
+          "id": "balance",
+          "icon": "/icons/like.svg",
+          "eyebrow": "Balance",
+          "title": "Effective service and clear vision",
+          "description": "Providing clear and fully open information to the public to enhance citizen understanding."
+        }
+      ]
+    },
+    "beneficiaries": {
+      "badge": "Beneficiary Customers",
+      "title": "Beneficiaries of (Ejar)",
+      "description": "Based on the partnership with Ejar for housing services, all parties in the process can register and use the electronic rental services network.",
+      "items": [
+        {
+          "id": "tenant",
+          "icon": "/icons/user.svg",
+          "title": "Tenant",
+          "description": "Citizens and residents benefiting from rental services."
+        },
+        {
+          "id": "lessor",
+          "icon": "/icons/user-check.svg",
+          "title": "Lessor",
+          "description": "Investors and owners of residential properties from individuals, entities, and endowments."
+        },
+        {
+          "id": "broker",
+          "icon": "/icons/user-edit.svg",
+          "title": "Real Estate Broker",
+          "description": "Real estate offices and brokerage companies."
+        }
+      ]
+    }
+  },
+  "footer": {
+    "followUs": "Follow us on",
+    "securePayments": "Secure payment methods",
+    "paymentsAlt": "Secure payment methods: Mastercard, Visa, Apple Pay, mada, and stc pay",
+    "description": "A licensed electronic platform by Ejar network and REGA to document residential and commercial rental contracts easily and securely.",
+    "newsletterPlaceholder": "Type your email here",
+    "newsletterSubmit": "Subscribe to newsletter",
+    "quickLinks": {
+      "title": "Quick links",
+      "items": [
+        { "label": "About us", "href": "/about" },
+        { "label": "Blog", "href": "https://blogs.aqdi.sa/" },
+        { "label": "FAQ", "href": "/faq" }
+      ]
+    },
+    "importantLinks": {
+      "title": "Important links",
+      "items": [
+        {
+          "label": "Residential contract documentation",
+          "href": "/create-contract?id=residential"
+        },
+        {
+          "label": "Commercial contract documentation",
+          "href": "/create-contract?id=commercial"
+        },
+        { "label": "Contracts", "href": "/requests" }
+      ]
+    },
+    "licenses": {
+      "title": "Licenses",
+      "items": [
+        { "label": "Commercial Register: 7000000001" },
+        { "label": "Tax Number: 7000000006" }
+      ]
+    },
+    "support": {
+      "title": "Need help?",
+      "phone": "+966 51 001 00 001",
+      "weekdaysHours": "Monday to Friday from 9:00 AM to 6:00 PM",
+      "saturdayHours": "Saturday from 9:00 AM to 2:00 PM",
+      "email": "info@aqdi.sa"
+    },
+    "copyright": "All rights reserved Aqadi 2024 ©",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "termsHref": "/terms",
+    "privacyHref": "/privacy"
+  },
+  "legal": {
+    "close": "Close",
+    "terms": {
+      "title": "Terms and Conditions",
+      "metaTitle": "Terms and Conditions | Aqadi",
+      "metaDescription": "Read the terms and conditions for using Aqadi electronic lease documentation platform.",
+      "empty": "Terms and conditions are not available at the moment."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "metaTitle": "Privacy Policy | Aqadi",
+      "metaDescription": "Read Aqadi privacy policy and how we protect your data.",
+      "empty": "Privacy policy is not available at the moment."
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Questions we hear often, answered",
+    "description": "Short and clear answers before you start.",
+    "loading": "Loading questions...",
+    "error": "Unable to load questions right now. Please try again later.",
+    "empty": "No questions are available at the moment."
+  },
+  "notificationsPage": {
+    "metaTitle": "Notifications | Aqadi",
+    "metaDescription": "View your Aqadi notifications and contract status alerts.",
+    "title": "Notifications",
+    "subtitle": "Contract status alerts and notifications for your account.",
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "When a new notification arrives, it will show up here.",
+    "clearAll": "Clear all",
+    "enableTitle": "Enable notifications",
+    "enableDescription": "Enable browser notifications to get instant alerts when your contracts are updated.",
+    "enableDenied": "Notification permission was denied. You can enable it from your browser site settings.",
+    "enableUnsupported": "This browser does not support web notifications.",
+    "enableAction": "Enable notifications",
+    "enableLoading": "Enabling..."
+  },
+  "blog": {
+    "latest": {
+      "badge": "Blog",
+      "title": "Latest articles and real estate tips",
+      "description": "Everything you need to manage your properties with confidence and professionalism",
+      "share": "Share",
+      "post": {
+        "featuredCategory": "Property management",
+        "featuredTitle": "The importance of managing property data in the digital age",
+        "listCategory": "A comprehensive guide to creating rental contracts",
+        "listTitle": "How to create a professional rental contract in minutes",
+        "description": "Everything you need to manage your properties with confidence and professionalism",
+        "date": "Tuesday, February 10, 2025",
+        "readTime": "5 minutes",
+        "views": "1.8K"
+      }
+    },
+    "listing": {
+      "tabs": {
+        "all": "All",
+        "propertyManagement": "Property management",
+        "contracts": "Contracts",
+        "realEstateMarket": "Real estate market"
+      },
+      "sidebar": {
+        "stats": {
+          "title": "Aqadi Blog",
+          "subtitle": "Your comprehensive real estate platform",
+          "description": "We share with you the latest articles and tips in real estate, asset management, and creating professional contracts.",
+          "statsHeading": "Ejar in numbers:",
+          "logoAlt": "Aqadi logo",
+          "activeUsers": "+5M",
+          "activeUsersLabel": "Active users",
+          "annualContracts": "+2M",
+          "annualContractsLabel": "Active contracts",
+          "leasedUnits": "+3M",
+          "leasedUnitsLabel": "Leased units"
+        },
+        "categories": {
+          "title": "Categories",
+          "items": [
+            {
+              "id": "property-management",
+              "label": "Property management",
+              "count": "12"
+            },
+            {
+              "id": "contracts",
+              "label": "Contracts",
+              "count": "34"
+            },
+            {
+              "id": "investment-tips",
+              "label": "Investment tips",
+              "count": "56"
+            },
+            {
+              "id": "real-estate-market",
+              "label": "Real estate market",
+              "count": "78"
+            },
+            {
+              "id": "legal",
+              "label": "Legal",
+              "count": "90"
+            }
+          ]
+        },
+        "tags": {
+          "title": "Popular tags",
+          "items": [
+            "#rental",
+            "#contracts",
+            "#law"
+          ]
+        },
+        "newsletter": {
+          "badge": "News",
+          "title": "Weekly newsletter",
+          "description": "The latest real estate articles and tips directly to your inbox.",
+          "placeholder": "Write your email here..",
+          "subscribe": "Subscribe now with Aqadi",
+          "submitEmailLabel": "Submit email"
+        }
+      },
+      "post": {
+        "listCategory": "A comprehensive guide to creating rental contracts",
+        "listTitle": "How to create a professional rental contract in minutes..",
+        "date": "Tuesday, February 10, 2025",
+        "readTime": "5 minutes",
+        "views": "1.8K",
+        "readMore": "Read more"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "detail": {
+      "shareArticle": "Share the article",
+      "shareOnX": "Share on X",
+      "shareOnLinkedin": "Share on LinkedIn",
+      "shareGeneric": "Share",
+      "post": {
+        "category": "A comprehensive guide to creating rental contracts",
+        "title": "How to create a professional rental contract in minutes..",
+        "date": "Tuesday, February 20, 2024",
+        "readTime": "6 minutes",
+        "views": "1.8K",
+        "imageAlt": "Two professionals reviewing a rental contract at a desk",
+        "sections": [
+          {
+            "type": "heading",
+            "content": "Latest articles and real estate tips"
+          },
+          {
+            "type": "paragraph",
+            "content": "In today's fast-moving real estate market, creating rental contracts professionally and quickly is essential for every owner and investor. Whether you manage one property or an entire portfolio, understanding contract fundamentals saves time and reduces legal risk."
+          },
+          {
+            "type": "heading",
+            "content": "Traditional challenges in property management"
+          },
+          {
+            "type": "paragraph",
+            "content": "Traditional property management relies on paperwork and manual follow-up, which leads to contract delays, difficulty tracking tenant data, and weak documentation of agreements. These challenges make it harder for owners to maintain operational efficiency."
+          },
+          {
+            "type": "heading",
+            "content": "What is digital property management?"
+          },
+          {
+            "type": "paragraph",
+            "content": "Digital property management means using electronic systems to store property, owner, and tenant data, and to create and document contracts through accredited platforms such as Ejar. This approach provides clearer visibility, faster decisions, and secure documentation for every step in the rental cycle."
+          },
+          {
+            "type": "quote",
+            "content": "Managers who adopt digital property management save up to 60% of the time spent on administrative tasks, reduce human error, and significantly improve tenant satisfaction."
+          }
+        ]
+      },
+      "comments": {
+        "title": "Comments",
+        "tags": ["#rental", "#contracts", "#law"],
+        "authorImageAlt": "Abdullah profile photo",
+        "likeAriaLabel": "Like comment",
+        "shareAriaLabel": "Share comment",
+        "form": {
+          "title": "Add your comment",
+          "placeholder": "Share your opinion or questions..",
+          "submit": "Send comment",
+          "submitAriaLabel": "Send comment"
+        },
+        "items": [
+          {
+            "id": "comment-1",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "I wish you would publish a detailed article about the best real estate management systems available in the Saudi market.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": true
+          },
+          {
+            "id": "comment-2",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "Simple and helpful explanation, especially the part about electronically documenting the contract. I was hesitant to move to digital management but this article clearly showed me the practical benefits.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": true
+          },
+          {
+            "id": "comment-3",
+            "role": "Real estate investor",
+            "timeAgo": "3 days ago",
+            "rating": 5,
+            "content": "Valuable and professionally structured content. I hope to see more practical examples of common contract clauses, but overall the article covers the fundamentals excellently.",
+            "authorName": "Abdullah ..",
+            "likes": "2.3k+",
+            "shares": "200+",
+            "isLiked": false
+          }
+        ]
+      }
+    }
+  },
+  "auth": {
+    "hero": {
+      "imageAlt": "Aqadi app showing a successfully issued lease contract"
+    },
+    "login": {
+      "back": "Back to home",
+      "greeting": "Welcome back!",
+      "subtitle": "Enter your details to sign in to your account.",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5xxxxxxxx",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here ...",
+      "forgotPassword": "Forgot your password?",
+      "rememberMe": "Remember me",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Sign in",
+      "submitSuccess": "Signed in successfully",
+      "submitError": "Unable to sign in, please check your credentials",
+      "or": "OR",
+      "noAccount": "Don't have an account!",
+      "createAccount": "Create a new account",
+      "validation": {
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters"
+      }
+    },
+    "register": {
+      "back": "Back to sign in",
+      "title": "Create a new account",
+      "fullNameLabel": "First and last name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5xxxxxxxx",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example@email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here ...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Create your account now",
+      "submitSuccess": "Account created successfully",
+      "submitError": "Unable to create your account, please try again",
+      "or": "OR",
+      "hasAccount": "Already have an account!",
+      "signIn": "Sign in",
+      "terms": {
+        "prefix": "I agree to the",
+        "termsLink": "Terms and Conditions",
+        "and": "and",
+        "privacyLink": "Privacy Policy",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      },
+      "validation": {
+        "fullNameRequired": "Name is required",
+        "fullNameMin": "Please enter your full name",
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "termsRequired": "You must accept the terms and conditions"
+      }
+    },
+    "verifyOtp": {
+      "back": "Go back",
+      "title": "Verify your mobile number!",
+      "instruction": "Enter the code sent to your mobile number,",
+      "defaultPhone": "+966563153879",
+      "otpLabel": "OTP verification code",
+      "submit": "Confirm code",
+      "submitSuccess": "Mobile number verified successfully",
+      "submitError": "Unable to verify the code, please try again",
+      "phoneMissing": "Mobile number is missing, please register again",
+      "notReceived": "Didn't receive the code?",
+      "resend": "Resend OTP verification code",
+      "resendSuccess": "A new verification code has been sent",
+      "resendError": "Unable to resend the verification code, please try again",
+      "validation": {
+        "otpRequired": "Verification code is required",
+        "otpInvalid": "Please enter a valid 4-digit code"
+      }
+    },
+    "forgotPassword": {
+      "back": "Back to sign in",
+      "title": "Forgot your password!",
+      "subtitle": "Enter the mobile number linked to your account..",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "5xxxxxxxx",
+      "submit": "Send verification code",
+      "submitSuccess": "A new password reset code has been sent to your registered mobile number",
+      "submitError": "Unable to send the verification code, please try again",
+      "or": "OR",
+      "rememberedPassword": "Remembered your password?",
+      "backToLogin": "Back to sign in",
+      "validation": {
+        "phoneRequired": "Mobile number is required",
+        "phoneInvalid": "Please enter a valid Saudi mobile number"
+      }
+    },
+    "resetPassword": {
+      "back": "Go back",
+      "title": "Reset your password!",
+      "subtitle": "Choose a strong password to keep your account secure.",
+      "passwordLabel": "New password",
+      "passwordPlaceholder": "Enter your new password here...",
+      "confirmPasswordLabel": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm your new password here...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Save new password",
+      "submitSuccess": "Your password has been reset successfully",
+      "submitError": "Unable to reset your password, please try again",
+      "sessionMissing": "Verification session expired, please start again from forgot password",
+      "validation": {
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "confirmPasswordRequired": "Password confirmation is required",
+        "passwordsMismatch": "Passwords do not match"
+      }
+    },
+    "profile": {
+      "back": "Back",
+      "title": "Edit profile",
+      "close": "Close",
+      "avatarAlt": "User avatar",
+      "fullNameLabel": "First and last name",
+      "fullNamePlaceholder": "Enter your first and last name here...",
+      "phoneLabel": "Mobile number",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password here...",
+      "togglePasswordVisibility": "Show or hide password",
+      "submit": "Save",
+      "submitSuccess": "Changes saved successfully",
+      "submitError": "Unable to save changes, please try again",
+      "passwordUpdateError": "Name was saved, but the password could not be updated",
+      "deleteAccount": "Delete account",
+      "deleteAccountUnavailable": "Account deletion is not available yet",
+      "validation": {
+        "fullNameRequired": "Name is required",
+        "fullNameMin": "Please enter your full name",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters"
+      }
+    }
+  },
+  "properties": {
+    "backLabel": "Back",
+    "pageTitle": "Add new property",
+    "badge": "Your certified contract from the Ejar network within 30 minutes",
+    "titleAccent": "Add",
+    "titleMain": "a new property ..",
+    "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
+    "cta": "Add new property",
+    "visualAlt": "Illustration of property data management and contract creation",
+    "downloadApp": "Download the app now",
+    "typeDialog": {
+      "title": "Property",
+      "close": "Close",
+      "mainTitle": "Choose property type",
+      "subtitle": "( Choose the property you want: residential or commercial )",
+      "iconAlt": "Add property",
+      "options": {
+        "residential": {
+          "title": "Create your residential property",
+          "description": "... building, apartment, villa, room",
+          "iconAlt": "Residential property"
+        },
+        "commercial": {
+          "title": "Create your commercial property",
+          "description": "... shop, market, hotel, factory",
+          "iconAlt": "Commercial property"
+        }
+      }
+    }
+  },
+  "requests": {
+    "backLabel": "Back",
+    "pageTitle": "My requests",
+    "pageSubtitle": "Track the status of your requests and rental contracts step by step until documentation on the Ejar platform.",
+    "searchPlaceholder": "Search by request number or ID",
+    "filtersLabel": "Filters",
+    "filtersDialog": {
+      "title": "Request filters",
+      "close": "Close",
+      "contractTypeLabel": "Contract type",
+      "requestTypeLabel": "Request type",
+      "all": "All",
+      "allTypes": "All types",
+      "completed": "Completed request",
+      "draftContract": "Contract draft request",
+      "incomplete": "Draft (incomplete)",
+      "cancelled": "Cancelled",
+      "showResults": "Show results"
+    },
+    "requestsCount": "{count} requests",
+    "filterAll": "All",
+    "emptyState": "You do not have any requests yet.",
+    "tabs": {
+      "residential": "Residential",
+      "commercial": "Commercial"
+    },
+    "contractTypes": {
+      "housing": "Residential lease contract",
+      "commercial": "Commercial lease contract"
+    },
+    "card": {
+      "requestNumberLabel": "Your request number is:",
+      "copyRequestNumber": "Copy request number",
+      "lastUpdatedLabel": "Last updated:",
+      "requestStatusLabel": "Your request status",
+      "paymentSuccessful": "Paid",
+      "awaitingClientPayment": "Awaiting client payment",
+      "unitType": {
+        "residential": "Residential",
+        "commercial": "Commercial"
+      },
+      "viewData": "View data",
+      "viewShort": "View",
+      "completeRequest": "Complete request",
+      "draftIncompleteBadge": "Draft (incomplete)",
+      "incompleteValidityNotice": "An incomplete request is valid for 30 days from its creation date; after that period it is closed automatically.",
+      "editError": "Failed to load contract data",
+      "incompleteProgressDialog": {
+        "title": "Request details #{number}",
+        "close": "Close",
+        "loading": "Loading data...",
+        "requestNumberLabel": "Request number",
+        "contractTypeLabel": "Contract type",
+        "financialFeeLabel": "Contract service fee",
+        "pathTitle": "Request creation path",
+        "continueCta": "Continue from where you stopped",
+        "currency": "SAR",
+        "draftBadge": "Draft (incomplete)",
+        "stepStatus": {
+          "completed": "Completed",
+          "current": "Incomplete — stopped here",
+          "pending": "Not completed yet"
+        },
+        "steps": {
+          "contractType": "Contract type",
+          "deed": "Ownership document",
+          "owner": "Owner data",
+          "tenant": "Tenant data",
+          "unit": "Unit data",
+          "finance": "Financial data",
+          "payment": "Pay service fee"
+        }
+      },
+      "detailsDialog": {
+        "title": "Review request data #{number}",
+        "subtitle": "Your request data (owner, tenant, leased unit, and financial data).",
+        "close": "Close",
+        "loading": "Loading data...",
+        "emptyValue": "—",
+        "groundFloor": "Ground floor",
+        "ownerSection": "Owner (lessor) data",
+        "tenantSection": "Tenant data",
+        "unitSection": "Leased unit data",
+        "financeSection": "Financial data",
+        "fields": {
+          "name": "Name",
+          "idNumber": "ID number",
+          "mobile": "Mobile number",
+          "unitType": "Unit type",
+          "usage": "Usage",
+          "area": "Area",
+          "floor": "Floor",
+          "electricityMeter": "Electricity meter",
+          "waterMeter": "Water meter",
+          "annualRent": "Annual rent",
+          "contractDuration": "Contract duration",
+          "paymentsCount": "Number of payments",
+          "financialFee": "Contract service fee"
+        },
+        "duration": {
+          "oneYear": "One year",
+          "years": "{count} years",
+          "months": "{count} months"
+        },
+        "payments": {
+          "monthly": "12 payments (monthly)",
+          "quarterly": "4 payments (quarterly)",
+          "semiAnnual": "2 payments (semi-annual)",
+          "annual": "1 payment (annual)"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²"
+      },
+      "contractDialog": {
+        "title": "Contract details #{number}",
+        "subtitle": "Your documented contract data (owner, tenant, unit, and financial data).",
+        "close": "Close",
+        "loading": "Loading data...",
+        "emptyValue": "—",
+        "groundFloor": "Ground floor",
+        "overviewSection": "Request details",
+        "ownerSection": "Owner (lessor) data",
+        "tenantSection": "Tenant data",
+        "unitSection": "Leased unit data",
+        "financeSection": "Financial data",
+        "servicesSection": "Services",
+        "linkPreview": "Preview",
+        "instrumentTypes": {
+          "electronic": "Electronic ownership deed",
+          "electronic_deed_from_the_ministry_of_justice": "Electronic ownership deed from the Ministry of Justice",
+          "electronic_tax_register": "Electronic ownership deed from the real estate registry",
+          "old_handwritten": "Paper ownership deed",
+          "property_ownership_owner_are_deceased_endowment": "Ownership deed — deceased owner",
+          "property_ownership_owner_is_endowment": "Ownership deed — endowment owner",
+          "sale_agreement": "Sale paper stamped by a real estate office",
+          "economic_cities_authority_suspended": "Economic Cities Authority document",
+          "strong_argument": "Adverse possession deed",
+          "sublease_agreement": "Sublease agreement",
+          "lease_renewal": "Lease renewal",
+          "property_ownership_owner_are_suspended": "Ownership deed — suspended owner",
+          "property_ownership_owner_are_deceased": "Ownership deed — deceased owner"
+        },
+        "fields": {
+          "requestNumber": "Request number",
+          "contractType": "Contract type",
+          "status": "Status",
+          "instrumentType": "Deed type",
+          "propertyName": "Property name",
+          "createdAt": "Created at",
+          "addressUrl": "Address link",
+          "name": "Name",
+          "idNumber": "ID number",
+          "mobile": "Mobile",
+          "unitNumber": "Unit number",
+          "unitType": "Unit type",
+          "usage": "Usage",
+          "area": "Area",
+          "floor": "Floor",
+          "rooms": "Rooms",
+          "halls": "Halls",
+          "kitchens": "Kitchens",
+          "toilets": "Bathrooms",
+          "electricityMeter": "Electricity meter",
+          "waterMeter": "Water meter",
+          "furnished": "Furnished",
+          "kitchenTank": "Kitchen tank",
+          "parking": "Parking spaces",
+          "gasMeter": "Gas meter",
+          "contractDuration": "Contract duration",
+          "annualRent": "Annual rent",
+          "paymentType": "Payment method",
+          "contractPeriodPrice": "Contract period price",
+          "applicationFees": "Application fees",
+          "tax": "Tax",
+          "electricityMeterFee": "Electricity meter fee",
+          "waterMeterFee": "Water meter fee",
+          "servicesTotal": "Services total",
+          "meterFeesTotal": "Meter fees total",
+          "docFee": "Contract service fee",
+          "totalPrice": "Total",
+          "yes": "Yes",
+          "no": "No",
+          "housing": "Residential",
+          "commercial": "Commercial"
+        },
+        "duration": {
+          "oneYear": "One year",
+          "years": "{count} years",
+          "months": "{count} months"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²"
+      },
+      "completePayment": "Pay now",
+      "completePaymentWithAmount": "Pay '{'amount'}' SAR",
+      "completePaymentLoading": "Redirecting to payment...",
+      "whenReceiveContract": "When will I receive the contract?",
+      "receiveContractDialog": {
+        "title": "When will I receive the contract?",
+        "subtitle": "Your request journey #{number} until receiving the documented contract:",
+        "close": "Close",
+        "loading": "Loading request journey...",
+        "retry": "Retry",
+        "draftBadge": "Draft",
+        "statusUpdatedToast": "Your request status was updated",
+        "expectedDurationTitle": "Expected duration",
+        "expectedDurationBody": "The expected time to send the contract draft via WhatsApp for review is less than 30 minutes during working hours from 9:00 AM to 1:00 AM daily.",
+        "contactPrompt": "For more help, feel free to contact us",
+        "whatsappCta": "Contact via WhatsApp",
+        "whatsappHref": "https://wa.me/"
+      },
+      "downloadInvoice": "Download invoice",
+      "invoiceDialog": {
+        "title": "Invoice",
+        "close": "Close",
+        "loading": "Loading invoice...",
+        "retry": "Retry",
+        "platformName": "Aqdi",
+        "platformSubtitle": "Rental contract documentation platform",
+        "customerLabel": "Customer",
+        "requestNumberLabel": "Request number",
+        "contractTypeLabel": "Contract type",
+        "tableIndex": "#",
+        "tableDescription": "Description",
+        "tableAmount": "Amount",
+        "totalDueLabel": "Total due",
+        "printLabel": "Print / Download invoice",
+        "paidStatusLabel": "Paid",
+        "unpaidStatusLabel": "Unpaid",
+        "loadError": "Failed to load invoice"
+      },
+      "whatsappLabel": "Contact via WhatsApp",
+      "whatsappHref": "https://wa.me/",
+      "status": {
+        "completed": "Completed",
+        "completedWithAmount": "Completed · '{'amount'}' SAR",
+        "incomplete": "Contract draft request",
+        "inProgress": "In progress",
+        "returned": "Returned"
+      },
+      "deleteRequest": "Delete request",
+      "deleteDialog": {
+        "title": "Delete contract",
+        "description": "Are you sure you want to delete this contract? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "success": "Contract deleted successfully",
+        "error": "Failed to delete contract"
+      }
+    }
+  },
+  "myProperties": {
+    "backLabel": "Home",
+    "pageTitle": "My Properties",
+    "pageSubtitle": "Your saved properties – create contracts on them easily without re-entering data.",
+    "pageBadge": "Has properties",
+    "propertiesCount": "{count} properties",
+    "addProperty": "Add new property",
+    "emptyStateTitle": "No saved properties yet",
+    "emptyStateDescription": "Add your first property to create contracts on it easily without re-entering data.",
+
+    "contractTypes": {
+      "housing": "Residential property",
+      "commercial": "Commercial property"
+    },
+    "card": {
+      "requestDateLabel": "Added on:",
+      "deleteProperty": "Delete property",
+      "deleteDialog": {
+        "title": "Delete property",
+        "description": "Are you sure you want to delete this property? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "success": "Property deleted successfully",
+        "error": "Failed to delete property"
+      },
+      "viewDeed": "View deed",
+      "ejarLogoAlt": "Ejar logo",
+      "deedDialog": {
+        "title": "Attachment preview",
+        "close": "Close",
+        "print": "Print",
+        "download": "Download",
+        "view": "View"
+      },
+      "actions": {
+        "viewEdit": "View and edit property",
+        "viewUnits": "View property units",
+        "addUnit": "Add new unit to property",
+        "createContract": "Create rental contract for this property"
+      }
+    }
+  },
+  "propertyUnits": {
+    "backLabel": "Back",
+    "pageTitle": "Property units",
+    "pageSubtitle": "Browse saved units and create your contracts on them.",
+    "pageSubtitleWithName": "{propertyName} – browse saved units and create your contracts on them.",
+    "emptyResidential": "No residential units saved yet.",
+    "emptyCommercial": "No commercial units saved yet.",
+    "groundFloor": "Ground",
+    "createResidentialUnit": "Add a new unit",
+    "createCommercialUnit": "Add a new unit",
+    "tabs": {
+      "residential": "Residential units",
+      "commercial": "Commercial units"
+    },
+    "selection": {
+      "selectedResidential": "{count} residential units selected",
+      "selectedCommercial": "{count} commercial units selected",
+      "cancelSelection": "Cancel selection",
+      "createContractOnSelected": "Create a contract on selected",
+      "starting": "Starting contract..."
+    },
+    "card": {
+      "unitNumberLabel": "Unit number",
+      "editUnit": "Edit",
+      "deleteUnit": "Delete unit",
+      "deleteDialog": {
+        "title": "Delete unit",
+        "description": "Are you sure you want to delete this unit? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "success": "Unit deleted successfully",
+        "error": "Failed to delete unit"
+      },
+      "categoryResidential": "Residential",
+      "categoryCommercial": "Commercial",
+      "createResidentialContract": "Create a residential contract for this unit",
+      "createCommercialContract": "Create a commercial contract for this unit",
+      "startContractLoading": "Starting contract...",
+      "startContractError": "Failed to start contract",
+      "selectAtLeastOneUnit": "You must select at least one unit from the property.",
+      "selectUnit": "Select unit {number}",
+      "orDivider": "or",
+      "createNewResidentialUnit": "Create a new residential unit",
+      "createNewCommercialUnit": "Create a new commercial unit",
+      "ejarLogoAlt": "Ejar logo",
+      "fields": {
+        "unitType": "Unit type:",
+        "unitUse": "Unit use:",
+        "floorNumber": "Floor number:",
+        "unitArea": "Unit area:",
+        "roomsCount": "Number of rooms:",
+        "hallsCount": "Number of halls:",
+        "kitchensCount": "Number of kitchens:",
+        "bathroomsCount": "Number of bathrooms:",
+        "windowAcCount": "Number of window ACs:",
+        "splitAcCount": "Number of split ACs:"
+      }
+    }
+  },
+  "createProperty": {
+    "incompleteContinue": "Please complete all required fields before continuing",
+    "backLabel": "Back",
+    "pageTitle": "Add new property",
+    "pageTitleResidential": "Add residential property",
+    "pageTitleCommercial": "Add commercial property",
+    "editPageTitleResidential": "Edit residential property",
+    "editPageTitleCommercial": "Edit commercial property",
+    "header": {
+      "home": "Home",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "stepper": {
+      "journey": "Your rental journey just got easier.",
+      "saveAlt": "Save",
+      "brand": "Aqdi",
+      "steps": {
+        "deed": "Deed",
+        "owner": "Owner",
+        "review": "Property name"
+      }
+    },
+    "deed": {
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue"
+      },
+      "title": "Ownership document",
+      "subtitle": "Fill in your details correctly!",
+      "deedType": {
+        "label": "Select deed type:",
+        "placeholder": "Select from here...",
+        "clearSelection": "Clear deed type",
+        "types": {
+          "electronic_deed_from_the_ministry_of_justice": "Electronic ownership deed from the Ministry of Justice",
+          "electronic_tax_register": "Electronic ownership deed from the Real Estate Registry",
+          "old_handwritten": "Paper ownership deed",
+          "property_ownership_owner_are_deceased_endowment": "Ownership deed with deceased owner",
+          "property_ownership_owner_is_endowment": "Ownership deed with waqf owner",
+          "sale_agreement": "Sales paper stamped by a real estate office",
+          "economic_cities_authority_suspended": "Economic Cities Authority document",
+          "strong_argument": "Adverse possession deed"
+        }
+      },
+      "deedImage": {
+        "label": "Electronic deed image",
+        "frontLabel": "Deed image (front)",
+        "backLabel": "Deed image (back)",
+        "inheritanceLabel": "Inheritance certificate image",
+        "heirsPoaLabel": "Heirs' power of attorney to the agent",
+        "endowmentCertLabel": "Endowment registration certificate image",
+        "trusteeshipLabel": "Trusteeship deed image",
+        "guardiansPoaLabel": "Power of attorney from all trustees to one of them",
+        "salePaperLabel": "Image of the sales paper stamped by the real estate office",
+        "adversePossessionLabel": "Image of the adverse possession deed",
+        "economicCitiesLabel": "Image of the Economic Cities Authority document",
+        "paperLabel": "Image of the paper deed",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file",
+        "acceptedFormats": "png - jpeg - pdf",
+        "attached": "Attached",
+        "preview": "View",
+        "change": "Change",
+        "delete": "Remove",
+        "previewTitle": "File preview",
+        "closePreview": "Close"
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?",
+        "trusteesPoaHint": "To represent the endowment in the contract — only one representative is accepted"
+      },
+      "deceased": {
+        "deedLabel": "Copy of the property deed",
+        "inheritanceLabel": "Copy of the inheritance certificate",
+        "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
+        "najizHint": "Power of attorney issued by Najiz is accepted",
+        "minorHeirsLabel": "Are any of the heirs minors?",
+        "guardiansPoaLabel": "Minor guardianship deed",
+        "guardiansPoaHint": "Attach the guardianship deed issued to the legal guardian of the minor",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file"
+      },
+      "manualEntry": {
+        "separator": "Or - if you prefer not to upload an image",
+        "toggleLabel": "Enter deed data manually instead of an image",
+        "instrumentNumber": {
+          "label": "Deed number",
+          "placeholder": "Numbers only",
+          "hint": "Numbers only - no length limit"
+        },
+        "instrumentDate": {
+          "label": "Deed date",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "Day",
+          "monthPlaceholder": "Month",
+          "yearPlaceholder": "Year"
+        }
+      }
+    },
+    "address": {
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "submitting": "Saving...",
+        "submitError": "Could not save property data. Please try again."
+      },
+      "title": "National address for the property",
+      "subtitle": "Choose your preferred method:",
+      "nationalAddress": {
+        "methodSelect": {
+          "label": "National address entry method",
+          "placeholder": "Choose from here.."
+        },
+        "methods": {
+          "link": {
+            "title": "Property location link",
+            "description": "Via Google Maps"
+          },
+          "manual": {
+            "title": "Enter address manually",
+            "description": "City, neighborhood, and street"
+          },
+          "photo": {
+            "title": "Attach national address",
+            "description": "Address card image"
+          }
+        },
+        "mapTitle": "National address map",
+        "mapHint": "Click on the map to select the property location.",
+        "coordinatesLabel": "Selected coordinates",
+        "link": {
+          "label": "Add Google Maps link for the property",
+          "placeholder": "Add Google Maps link for the property here...",
+          "hint": "Open Google Maps → long-press the property location → Share → Copy link, then paste it here"
+        },
+        "manual": {
+          "place": {
+            "label": "Region",
+            "placeholder": "Choose from here...",
+            "loading": "Loading..."
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Choose from here...",
+            "loading": "Loading...",
+            "selectPlaceFirst": "Select the region first"
+          },
+          "neighborhood": {
+            "label": "Neighborhood",
+            "placeholder": "Enter the neighborhood"
+          },
+          "street": {
+            "label": "Street name",
+            "placeholder": "Choose from here..."
+          },
+          "buildingNumber": {
+            "label": "Building number",
+            "placeholder": "Choose from here..."
+          },
+          "postalCode": {
+            "label": "Postal code",
+            "placeholder": "Choose from here..."
+          },
+          "extraFigure": {
+            "label": "Additional number",
+            "placeholder": "Choose from here..."
+          }
+        },
+        "photo": {
+          "label": "Property national address card photo",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
+          "attached": "Attached",
+          "preview": "View",
+          "change": "Change",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      }
+    },
+    "owner": {
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue"
+      },
+      "validation": {
+        "hintTitle": "Please complete the following fields:",
+        "issues": {
+          "fullName": "Owner's full name",
+          "idNumber": "Owner's ID number",
+          "idNumberLength": "ID number must be 10 digits",
+          "birthDate": "Owner's date of birth",
+          "phone": "Owner's mobile number",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
+          "iban": "Owner's IBAN",
+          "ibanInvalid": "Owner's IBAN must be a valid Saudi IBAN",
+          "hasAgent": "Is there an agent for the owner?",
+          "powerOfAttorney": "Power of attorney attachment"
+        },
+        "fieldErrors": {
+          "idNumberLength": "ID number must be 10 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
+          "iban": "IBAN must start with SA followed by 22 digits"
+        }
+      },
+      "phases": [
+        {
+          "title": "Property owner data",
+          "subtitle": "Fill in your details correctly:"
+        },
+        {
+          "title": "Agent data",
+          "subtitle": "Fill in your details correctly:"
+        }
+      ],
+      "birthDate": {
+        "label": "Owner's date of birth",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "ownerData": {
+        "fullName": {
+          "label": "Owner's full name",
+          "placeholder": "Type here..."
+        },
+        "idNumber": {
+          "label": "Owner's ID number",
+          "placeholder": "1x xxx xx xxx"
+        },
+        "phone": {
+          "label": "Owner's mobile number",
+          "placeholder": "05xxxxxxxxx"
+        },
+        "iban": {
+          "label": "Owner's IBAN",
+          "placeholder": "SA00 0000 0000 0000 0000 0000"
+        },
+        "hasAgent": {
+          "title": "Do you want to add an agent for the property owner?",
+          "description": "Agent details + power of attorney image — we verify it in official systems"
+        }
+      },
+      "agentData": {
+        "sectionTitle": "Agent details",
+        "sectionDescription": "We verify the agent in official systems before accepting the power of attorney",
+        "footerNote": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause",
+        "idNumber": {
+          "label": "Agent ID number",
+          "placeholder": "1xxxxxxxxx"
+        },
+        "birthDateLabel": "Agent date of birth",
+        "phone": {
+          "label": "Agent mobile number",
+          "placeholder": "05xxxxxxxxx"
+        },
+        "powerOfAttorney": {
+          "label": "Attach power of attorney image",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "attached": "Attached",
+          "preview": "View",
+          "change": "Change",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      }
+    },
+    "review": {
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "save": "Save",
+        "saveSuccess": "Draft saved successfully",
+        "submitting": "Saving...",
+        "submitError": "Could not save owner data. Please try again.",
+        "updateSuccess": "Property updated successfully."
+      },
+      "title": "Property name",
+      "subtitle": "Fill in your details correctly:",
+      "propertyName": {
+        "label": "Property name",
+        "placeholder": "...Write here",
+        "hint": "Please add a name for the property to make it easier to find or distinguish:",
+        "example": "For example — Pearl Rest House · My building in Al-Rabee' · My office in Al-Olaya… etc."
+      }
+    },
+    "success": {
+      "title": "Congratulations, «{propertyName}» was saved successfully!",
+      "description": "Now you can save property data and recreate contracts on it with ease, without needing to fill in the data again.",
+      "mainMenu": "View my properties list",
+      "mainMenuHref": "/properties/my-properties",
+      "actions": {
+        "viewProperty": "View and edit property",
+        "addUnit": "Add a new unit to the property",
+        "createContract": "Create a rental contract for the property"
+      }
+    }
+  },
+  "createUnit": {
+    "backLabel": "Back",
+    "pageTitle": "Create a new unit",
+    "editPageTitle": "Edit unit",
+    "fieldRequired": "This field is required",
+    "incompleteContinue": "Please complete all required fields before continuing",
+    "navigation": {
+      "previous": "Back",
+      "continue": "Continue",
+      "save": "Save changes",
+      "submitting": "Saving...",
+      "submitError": "Could not save the unit. Please try again.",
+      "updateSuccess": "Unit updated successfully",
+      "createSuccess": "Unit created successfully"
+    },
+    "title": "Leased unit data",
+    "editTitle": "Edit unit data",
+    "subtitle": "Fill in your details correctly:",
+    "editSubtitle": "Update the unit details below:",
+    "selectPlaceholder": "Choose from here...",
+    "contractType": {
+      "label": "What is the unit use type: residential or commercial?",
+      "linkedLabel": "Property linked contract type",
+      "options": {
+        "housing": "Residential",
+        "commercial": "Commercial"
+      },
+      "descriptions": {
+        "housing": "Apartment, villa, floor, room...",
+        "commercial": "Shop, office, warehouse, showroom..."
+      }
+    },
+    "unitType": {
+      "label": "Unit type",
+      "options": {
+        "apartment": "Apartment",
+        "villa": "Villa",
+        "floor": "Floor",
+        "studio": "Studio",
+        "office": "Office",
+        "shop": "Shop"
+      }
+    },
+    "unitUsage": {
+      "label": "Unit usage",
+      "options": {
+        "residential": "Residential",
+        "commercial": "Commercial"
+      }
+    },
+    "totalArea": {
+      "label": "Approximate unit area",
+      "placeholder": "Write here...",
+      "suffix": "m²"
+    },
+    "floorNumber": {
+      "label": "Unit floor number"
+    },
+    "floorOptions": {
+      "ground": "Ground floor"
+    },
+    "unitNumber": {
+      "label": "Unit number",
+      "placeholder": "Write here..."
+    },
+    "unitCardTitle": "Basic information",
+    "addUnit": "Add unit",
+    "removeUnit": "Delete",
+    "unitsCount": "Number of units",
+    "unitListTitle": "Unit",
+    "floorSummaryPrefix": "Floor",
+    "additionalInfo": {
+      "toggle": "Would you like to add additional information?",
+      "writeHerePlaceholder": "Write here..."
+    },
+    "roomsCount": {
+      "label": "Number of rooms",
+      "hint": "Living rooms, majlis, and bedrooms are all counted as rooms"
+    },
+    "hallsCount": {
+      "label": "Number of halls"
+    },
+    "majlisCount": {
+      "label": "Number of majlis"
+    },
+    "kitchensCount": {
+      "label": "Number of kitchens"
+    },
+    "bathroomsCount": {
+      "label": "Number of bathrooms"
+    },
+    "windowAcCount": {
+      "label": "Window AC"
+    },
+    "splitAcCount": {
+      "label": "Split AC"
+    },
+    "kitchenCabinetsInstalled": {
+      "label": "Are kitchen cabinets installed?",
+      "kitchensRequiredHint": "Specify the number of kitchens first"
+    },
+    "furnished": {
+      "label": "Is the unit furnished?"
+    },
+    "furnishingType": {
+      "label": "Furnishing type",
+      "new": "New",
+      "used": "Used"
+    },
+    "addElectricityMeter": {
+      "label": "Do you want to add an electricity meter?"
+    },
+    "electricityMeterNumber": {
+      "label": "Electricity meter number",
+      "placeholder": "Write here..."
+    },
+    "addWaterMeter": {
+      "label": "Do you want to add a water meter?"
+    },
+    "waterMeterNumber": {
+      "label": "Water meter number",
+      "placeholder": "Write here..."
+    },
+    "success": {
+      "title": "Congratulations, unit data saved successfully!",
+      "description": "You can now create rental contracts easily without filling in the property and owner data again.",
+      "mainMenu": "Return to main menu",
+      "mainMenuHref": "/",
+      "actions": {
+        "viewProperty": "View and edit property",
+        "viewPropertyHref": "/properties",
+        "addUnit": "Add a new unit to the property",
+        "addUnitHref": "/properties/create-unit",
+        "createContract": "Create a rental contract for this property",
+        "createContractHref": "/create-contract",
+        "ejarLogoAlt": "Ejar"
+      }
+    }
+  },
+  "createContract": {
+    "incompleteContinue": "Please complete all required fields before continuing",
+    "fieldRequired": "This field is required",
+    "backLabel": "Back",
+    "pageTitleResidential": "Residential lease contract",
+    "pageTitleCommercial": "Commercial lease contract",
+    "header": {
+      "home": "Home",
+      "help": "Help",
+      "dark": "Dark",
+      "light": "Light",
+      "requestPrefix": "Request",
+      "copySuccess": "Request number copied",
+      "copyError": "Could not copy request number",
+      "whatsappHref": "https://wa.me/",
+      "exitHomeDialog": {
+        "title": "Return to Home",
+        "close": "Close",
+        "incompleteTitle": "Your request #{orderNumber} is not complete yet",
+        "description": "If you leave without saving, you will lose what you entered. We recommend saving it to complete later from the orders section.",
+        "saveThenExit": "Save the request then exit",
+        "saving": "Saving...",
+        "exitWithoutSaving": "Exit without saving",
+        "exitingWithoutSaving": "Cancelling request...",
+        "continue": "Go back - Complete my request",
+        "saveError": "Could not save the request, please try again",
+        "missingContractSession": "There is no active request to save"
+      }
+    },
+    "stepper": {
+      "journey": "Your rental journey has become easier.",
+      "ejarLogoAlt": "Ejar",
+      "steps": {
+        "intro": "My contract",
+        "deed": "Deed",
+        "owner": "Owner",
+        "tenant": "Tenant",
+        "finance": "Finance"
+      }
+    },
+    "intro": {
+      "title": "Requirements before we start",
+      "subtitle": "To serve you quickly, prepare the following:",
+      "requirements": [
+        "Lessor and lessee information.",
+        "A copy of the deed and the property address.",
+        "Leased unit details.",
+        "Rent amount.",
+        "We send you a draft contract via WhatsApp for review",
+        "Contract documentation on the Ejar platform"
+      ],
+      "priceLabel": "Contract price for one year:",
+      "currency": "SAR",
+      "viewAllPrices": "View all prices",
+      "start": "Let's start",
+      "startContractLoading": "Starting contract...",
+      "startContractError": "Failed to start contract",
+      "priceDialog": {
+        "title": "Fees for creating and documenting a lease contract:",
+        "close": "Close",
+        "yearOrLess": "One year or less: {price} SAR.",
+        "additionalYear": "If the customer wishes to add another year to the contract: {price} SAR per additional year",
+        "disclaimer": "Prices include Ejar platform, brokerage, and documentation fees. There are no other fees."
+      }
+    },
+    "prices": {
+      "residential": "249",
+      "commercial": "349",
+      "additionalYear": "150"
+    },
+    "deed": {
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "submitting": "Saving..."
+      },
+      "submitError": "Failed to save deed data",
+      "submitAddressError": "Failed to save address data",
+      "missingContractSession": "Please start the contract first",
+      "phases": [
+        {
+          "title": "Ownership document",
+          "subtitle": "Please fill in your details correctly"
+        },
+        {
+          "title": "National address for the property",
+          "subtitle": "Identify the property location using one of the three methods"
+        }
+      ],
+      "deedType": {
+        "label": "Select document type",
+        "placeholder": "Select from here..",
+        "clearSelection": "Clear deed type",
+        "types": {
+          "electronic-justice-ministry": "Electronic ownership deed from the Ministry of Justice",
+          "electronic-real-estate-registry": "Electronic ownership deed from the Real Estate Registry",
+          "paper": "Paper ownership deed",
+          "deceased-owner": "Ownership deed with deceased owner",
+          "waqf-owner": "Ownership deed with endowment owner",
+          "sale-paper": "Sales paper stamped by a real estate office",
+          "economic-cities-authority": "Economic Cities Authority document",
+          "adverse-possession": "Adverse possession deed",
+          "sublease-contract": "Sublease contract",
+          "lease-renewal": "Lease renewal"
+        }
+      },
+      "deedImage": {
+        "label": "Electronic deed image",
+        "frontLabel": "Deed image (front)",
+        "backLabel": "Deed image (back)",
+        "inheritanceLabel": "Inheritance certificate image",
+        "heirsPoaLabel": "Heirs' power of attorney to the agent",
+        "endowmentCertLabel": "Endowment registration certificate image",
+        "trusteeshipLabel": "Trusteeship deed image",
+        "guardiansPoaLabel": "Power of attorney from all trustees to one of them",
+        "salePaperLabel": "Image of the sales paper stamped by the real estate office",
+        "adversePossessionLabel": "Image of the adverse possession deed",
+        "economicCitiesLabel": "Image of the Economic Cities Authority document",
+        "paperLabel": "Image of the paper deed",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file",
+        "acceptedFormats": "png - jpeg - pdf",
+        "attached": "Attached",
+        "change": "Change",
+        "preview": "View",
+        "delete": "Remove",
+        "previewTitle": "File preview",
+        "closePreview": "Close"
+      },
+      "sublease": {
+        "alertTitle": "Note:",
+        "notes": [
+          "01- You must mention the same unit as in the primary contract.",
+          "02- You must mention the same unit floor as in the primary contract.",
+          "03- You must mention the same unit area as in the primary contract."
+        ],
+        "uploadLabel": "Attach the primary sublease agreement (PDF)",
+        "pdfHint": "PDF only — verify the actual file type, not just the extension"
+      },
+      "nationalAddress": {
+        "methodSelect": {
+          "label": "National address entry method",
+          "placeholder": "Choose from here.."
+        },
+        "methods": {
+          "link": {
+            "title": "Property location link",
+            "description": "Via Google Maps"
+          },
+          "manual": {
+            "title": "Enter address manually",
+            "description": "City, neighborhood, and street"
+          },
+          "photo": {
+            "title": "Attach national address",
+            "description": "Address card image"
+          }
+        },
+        "mapTitle": "National address map",
+        "mapHint": "Click on the map to select the property location.",
+        "coordinatesLabel": "Selected coordinates",
+        "link": {
+          "label": "Add Google Maps link for the property",
+          "placeholder": "... Add Google Maps link for the property here",
+          "hint": "Open Google Maps → long-press the property location → Share → Copy link, then paste it here"
+        },
+        "manual": {
+          "place": {
+            "label": "Region",
+            "placeholder": "... Select",
+            "loading": "Loading..."
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "... Select",
+            "loading": "Loading...",
+            "selectPlaceFirst": "Select the region first"
+          },
+          "neighborhood": {
+            "label": "Neighborhood",
+            "placeholder": "... Select"
+          },
+          "street": {
+            "label": "Street name",
+            "placeholder": "Write here.."
+          },
+          "buildingNumber": {
+            "label": "Building number",
+            "placeholder": "0000"
+          },
+          "postalCode": {
+            "label": "Postal code",
+            "placeholder": "00000"
+          },
+          "extraFigure": {
+            "label": "Additional number",
+            "placeholder": "0000"
+          }
+        },
+        "photo": {
+          "label": "Property national address card photo",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "hint": "Get it from the Spl or National Address app — it includes the full city, district, and postal code",
+          "attached": "Attached",
+          "change": "Change",
+          "preview": "View",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      },
+      "leaseRenewal": {
+        "noticeResidential": "You selected lease renewal and chose a residential contract type. If the contract you want to renew was originally commercial, please go back and select commercial instead of residential.",
+        "noticeCommercial": "You selected lease renewal and chose a commercial contract type. If the contract you want to renew was originally residential, please go back and select residential instead of commercial.",
+        "uploadLabel": "Attach the rental contract you want to renew (PDF)",
+        "pdfHint": "PDF only — verify the actual file type, not just the extension",
+        "addressFieldLabel": "Property address for this renewal",
+        "sameAddress": {
+          "title": "Same address mentioned in the contract",
+          "description": "We will not ask you to enter it again"
+        },
+        "changeAddress": {
+          "title": "Change address",
+          "description": "Enter it using one of the three methods"
+        },
+        "sameAddressConfirmation": "The national address from the original contract will be used — no need to enter it again."
+      },
+      "waqf": {
+        "multipleTrusteesLabel": "Is there more than one trustee for the endowment?",
+        "trusteesPoaHint": "To represent the endowment in the contract — only one representative is accepted"
+      },
+      "deceased": {
+        "deedLabel": "Copy of the property deed",
+        "inheritanceLabel": "Copy of the inheritance certificate",
+        "heirsPoaLabel": "Copy of the legal power of attorney for the heirs",
+        "najizHint": "Power of attorney issued by Najiz is accepted",
+        "minorHeirsLabel": "Are any of the heirs minors?",
+        "guardiansPoaLabel": "Minor guardianship deed",
+        "guardiansPoaHint": "Attach the guardianship deed issued to the legal guardian of the minor",
+        "clickHere": "Click here",
+        "chooseFile": "to choose an image or file"
+      },
+      "manualEntry": {
+        "separator": "Or - if you prefer not to upload an image",
+        "toggleLabel": "Enter deed data manually instead of an image",
+        "instrumentNumber": {
+          "label": "Deed number",
+          "placeholder": "Numbers only",
+          "hint": "Numbers only - no length limit"
+        },
+        "instrumentDate": {
+          "label": "Deed date",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "Day",
+          "monthPlaceholder": "Month",
+          "yearPlaceholder": "Year"
+        }
+      }
+    },
+    "owner": {
+      "cancelRequest": "Cancel request",
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "saveLater": "Save and complete later",
+        "savingLater": "Saving...",
+        "submitting": "Saving..."
+      },
+      "submitError": "Failed to save owner data",
+      "missingContractSession": "Please start the contract first",
+      "saveLaterError": "Failed to save contract draft",
+      "validation": {
+        "hintTitle": "Please complete the following fields:",
+        "issues": {
+          "fullName": "Owner's full name",
+          "idNumber": "Owner's ID number",
+          "idNumberLength": "ID number must be 10 digits",
+          "birthDate": "Owner's date of birth",
+          "phone": "Owner's mobile number",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
+          "iban": "Owner's IBAN",
+          "ibanInvalid": "Owner's IBAN must be a valid Saudi IBAN",
+          "hasAgent": "Is there an agent for the owner?",
+          "powerOfAttorney": "Power of attorney attachment"
+        },
+        "fieldErrors": {
+          "idNumberLength": "ID number must be 10 digits",
+          "phoneLength": "Mobile number must start with 05 and be 10 digits",
+          "iban": "IBAN must start with SA followed by 22 digits"
+        }
+      },
+      "phases": [
+        {
+          "title": "Property owner data",
+          "subtitle": "Fill in your data correctly:"
+        }
+      ],
+      "birthDate": {
+        "label": "Owner date of birth",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day!",
+        "month": "Month!",
+        "year": "Year!",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "ownerData": {
+        "fullName": {
+          "label": "Owner full name",
+          "placeholder": "Write here..."
+        },
+        "idNumber": {
+          "label": "Owner ID number",
+          "placeholder": "1xxxxxxxxx"
+        },
+        "phone": {
+          "label": "Owner mobile number",
+          "placeholder": "05xxxxxxxxx"
+        },
+        "iban": {
+          "label": "Owner IBAN",
+          "placeholder": "SA00 0000 0000 0000 0000 0000"
+        },
+        "hasAgent": {
+          "title": "Do you want to add an agent for the property owner?",
+          "description": "Agent details + power of attorney image — we verify it in official systems"
+        }
+      },
+      "agentData": {
+        "sectionTitle": "Agent details",
+        "sectionDescription": "We verify the agent in official systems before accepting the power of attorney",
+        "footerNote": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause",
+        "idNumber": {
+          "label": "Agent ID number",
+          "placeholder": "1xxxxxxxxx"
+        },
+        "birthDateLabel": "Agent date of birth",
+        "phone": {
+          "label": "Agent mobile number",
+          "placeholder": "05xxxxxxxxx"
+        },
+        "powerOfAttorney": {
+          "label": "Attach power of attorney photo",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "attached": "Attached",
+          "change": "Change",
+          "preview": "View",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      }
+    },
+    "tenant": {
+      "cancelRequest": "Cancel request",
+      "submitError": "Failed to save tenant data",
+      "submitUnitError": "Failed to save rented unit data",
+      "missingContractSession": "Please start the contract first",
+      "saveLaterError": "Failed to save contract draft",
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "saveLater": "Save and complete later",
+        "savingLater": "Saving...",
+        "submitting": "Saving..."
+      },
+      "phases": [
+        {
+          "title": "Tenant data",
+          "subtitle": "Fill in your data correctly:"
+        },
+        {
+          "title": "Rented unit data",
+          "subtitle": "Fill in your data correctly:"
+        }
+      ],
+      "tenantStatus": {
+        "label": "Tenant status",
+        "placeholder": "Select from here...",
+        "options": {
+          "individual": "Individual",
+          "establishment-or-company": "Establishment or company"
+        }
+      },
+      "birthDate": {
+        "label": "Tenant date of birth",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day!",
+        "month": "Month!",
+        "year": "Year!",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000"
+      },
+      "individualData": {
+        "idNumber": {
+          "label": "Tenant ID number",
+          "placeholder": "1xxxxxxxxx"
+        },
+        "phone": {
+          "label": "Tenant mobile number",
+          "placeholder": "05xxxxxxxxx"
+        }
+      },
+      "organizationData": {
+        "delegationType": {
+          "label": "Type of authorization or power of attorney",
+          "options": {
+            "owner-representative": {
+              "title": "I am the registry owner and its representative",
+              "description": "Your details and registry details are enough — no attachments"
+            },
+            "agent-authorized": {
+              "title": "I am an agent or authorized for the registry owner",
+              "description": "Same details + power of attorney or authorization image",
+              "badge": "Requires attaching the power of attorney"
+            }
+          }
+        },
+        "region": {
+          "label": "Region of the tenant legal agent",
+          "placeholder": "Select from here...",
+          "loading": "Loading regions..."
+        },
+        "city": {
+          "label": "City of the tenant legal agent",
+          "placeholder": "Select from here...",
+          "loading": "Loading cities...",
+          "selectRegionFirst": "Select a region first"
+        },
+        "unifiedRecordNumber": {
+          "label": "Unified registry number",
+          "placeholder": "xxxxxxxxx",
+          "hint": "The unified registry is 10 digits and always starts with 7"
+        },
+        "ownerIdNumber": {
+          "label": "Registry owner ID number",
+          "placeholder": "1xxxxxxxxx"
+        },
+        "ownerBirthDateLabel": "Registry owner date of birth",
+        "ownerPhone": {
+          "label": "Registry owner mobile number",
+          "placeholder": "05xxxxxxxxx"
+        },
+        "powerOfAttorney": {
+          "label": "Attach power of attorney or authorization image",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "hint": "Electronic powers of attorney are accepted in the Ejar system if they include the \"Ejar Electronic Network\" clause, or a certified authorization from the Chamber of Commerce, or an association agreement that grants the right to sign contracts",
+          "attached": "Attached",
+          "change": "Change",
+          "preview": "View",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        }
+      },
+      "rentedUnit": {
+        "selectPlaceholder": "Select from here...",
+        "optionsError": "Failed to load unit options",
+        "unitType": {
+          "label": "Unit type",
+          "disabledGroupNotice": {
+            "housing": "The following options are for commercial contracts — your current contract is residential. To pick one, go back to the main menu and set the contract type to \"Commercial\".",
+            "commercial": "The following options are for residential contracts — your current contract is commercial. To pick one, go back to the main menu and set the contract type to \"Residential\"."
+          },
+          "options": {
+            "apartment": "Apartment",
+            "villa": "Villa",
+            "floor": "Floor",
+            "studio": "Studio",
+            "office": "Office",
+            "shop": "Shop"
+          }
+        },
+        "unitUsage": {
+          "label": "Unit usage",
+          "options": {
+            "residential": "Residential",
+            "commercial": "Commercial"
+          }
+        },
+        "totalArea": {
+          "label": "Approximate unit area",
+          "placeholder": "Write here...",
+          "suffix": "m²"
+        },
+        "floorNumber": {
+          "label": "Unit floor number"
+        },
+        "floorOptions": {
+          "ground": "Ground"
+        },
+        "unitNumber": {
+          "label": "Unit number",
+          "placeholder": "Write here..."
+        },
+        "unitCardTitle": "Basic information",
+        "addUnit": "Add unit",
+        "removeUnit": "Delete",
+        "unitsCount": "Number of units",
+        "unitListTitle": "Unit",
+        "floorSummaryPrefix": "Floor",
+        "additionalInfo": {
+          "toggle": "Would you like to add additional information?",
+          "writeHerePlaceholder": "Write here..."
+        },
+        "roomsCount": {
+          "label": "Number of rooms",
+          "hint": "Living rooms, majlis, and bedrooms are all counted as rooms"
+        },
+        "hallsCount": {
+          "label": "Number of halls"
+        },
+        "majlisCount": {
+          "label": "Number of majlis"
+        },
+        "kitchensCount": {
+          "label": "Number of kitchens"
+        },
+        "bathroomsCount": {
+          "label": "Number of bathrooms"
+        },
+        "windowAcCount": {
+          "label": "Window AC"
+        },
+        "splitAcCount": {
+          "label": "Split AC"
+        },
+        "kitchenCabinetsInstalled": {
+          "label": "Are kitchen cabinets installed?",
+          "kitchensRequiredHint": "Specify the number of kitchens first"
+        },
+        "furnished": {
+          "label": "Is the unit furnished?"
+        },
+        "furnishingType": {
+          "label": "Furnishing type",
+          "new": "New",
+          "used": "Used"
+        },
+        "addElectricityMeter": {
+          "label": "Do you want to add an electricity meter?"
+        },
+        "electricityMeterNumber": {
+          "label": "Electricity meter number",
+          "placeholder": "Write here..."
+        },
+        "addWaterMeter": {
+          "label": "Do you want to add a water meter?"
+        },
+        "waterMeterNumber": {
+          "label": "Water meter number",
+          "placeholder": "Write here..."
+        },
+        "meterRegistration": {
+          "title": "After documenting the contract, the meter will be:",
+          "currency": "SAR",
+          "tenant": {
+            "title": "Transferred to the tenant's name",
+            "subtitle": "Bills are issued in the tenant's name",
+            "feeBadge": "Transfer fee '{'fee'}' '{'currency'}'",
+            "feeFooter": "+ '{'fee'}' '{'currency'}' transfer fee"
+          },
+          "owner": {
+            "title": "Remains in the owner's name",
+            "subtitle": "Bills are issued in the owner's name",
+            "noFee": "No fees"
+          },
+          "notice": {
+            "beforeFee": "Meter ownership transfer fee is",
+            "feeAmount": "'{'fee'}' SAR",
+            "afterFee": "for transferring the meter to the tenant's name, and it is",
+            "nonRefundable": "non-refundable",
+            "afterNonRefundable": "if there is a reason preventing the transfer. It is added to the total request. If the contract period is",
+            "lessThanMonth": "less than a month",
+            "afterLessThanMonth": "transferring the meter to the tenant's name is not accepted."
+          }
+        }
+      },
+      "leaseRenewal": {
+        "heading": "Would you like to add amendments?",
+        "subtitle": "Update your details quickly",
+        "addNotesToggle": "Add notes?",
+        "edit": "Edit",
+        "confirmContinue": "Confirm and continue",
+        "unitFieldLabel": "Unit in this renewal",
+        "sameUnit": {
+          "title": "Same unit mentioned in the contract",
+          "description": "You will not be asked to enter it again"
+        },
+        "changeUnit": {
+          "title": "I want to edit the unit data",
+          "description": "Fill in the complete unit data"
+        },
+        "sameUnitConfirmation": "Unit data from the original contract will be used — no need to enter it again.",
+        "notesDialog": {
+          "title": "Required amendments...",
+          "close": "Close",
+          "heading": "Please write all required amendments.",
+          "subtitle": "You can add the following:",
+          "notesLabel": "Please write the required amendments",
+          "notesPlaceholder": "Write here...",
+          "stepIndicator": "3 of 3",
+          "save": "Save"
+        }
+      },
+      "saveLaterDialog": {
+        "title": "Save and complete later",
+        "close": "Close",
+        "successTitle": "We save your progress",
+        "successDescription": "Everything you entered is saved, and you can continue where you left off",
+        "orderNumberLabel": "Request number",
+        "foundInLabel": "Find it in",
+        "foundInValue": "Requests section",
+        "retentionLabel": "Request retention",
+        "retentionDays": "30 days",
+        "tip": "Save the request number — you'll need it if you contact support before finishing",
+        "confirm": "Save request and exit",
+        "saving": "Saving..."
+      }
+    },
+    "finance": {
+      "title": "Financial Data",
+      "subtitle": "Fill in your data correctly:",
+      "submitError": "Failed to save finance data",
+      "missingContractSession": "Please start the contract first",
+      "subleaseAlert": {
+        "title": "Sublease contract:",
+        "bodyBefore": "The",
+        "duration": "contract duration",
+        "bodyMiddle": "and",
+        "startDate": "its start date",
+        "bodyAfter": "must not exceed the limits of the attached original lease contract — it must not start before its start and must not end after its end."
+      },
+      "navigation": {
+        "previous": "Back",
+        "continue": "Continue",
+        "submitting": "Saving..."
+      },
+      "selectPlaceholder": "Choose from here...",
+      "contractStartDate": {
+        "label": "Contract start date",
+        "hijri": "Hijri",
+        "gregorian": "Gregorian",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "dayPlaceholder": "00",
+        "monthPlaceholder": "00",
+        "yearPlaceholder": "0000",
+        "correspondingHijri": "Corresponding Hijri: '{'date'}' AH",
+        "correspondingGregorian": "Corresponding Gregorian: '{'date'}' AD"
+      },
+      "contractDuration": {
+        "label": "Contract duration",
+        "loading": "Loading contract periods...",
+        "optionsError": "Failed to load contract periods",
+        "otherOption": "Other duration",
+        "feeLabel": "Total fees",
+        "currency": "SAR",
+        "custom": {
+          "yearsLabel": "Years",
+          "yearsPlaceholder": "Select years",
+          "monthsLabel": "Months",
+          "monthsPlaceholder": "Select months",
+          "yearOption": "'{'count'}' year(s)",
+          "monthOption": "+ '{'count'}' month(s)",
+          "monthOptionZero": "No months",
+          "loadingPreview": "Calculating documentation fees...",
+          "previewError": "Failed to load documentation fee preview"
+        }
+      },
+      "totalRentAmount": {
+        "label": "Total rent amount",
+        "placeholder": "Type here...",
+        "amountInWords": "Total contract value: '{'amount'}'"
+      },
+      "paymentMethod": {
+        "label": "Payment method",
+        "loading": "Loading payment methods...",
+        "optionsError": "Failed to load payment methods"
+      },
+      "tenantPermissions": {
+        "title": "Permissions for the tenant, guarantee amount, or daily fine?",
+        "subtitle": "Such as subletting, a daily fine, or holding a guarantee deposit",
+        "instruction": "Choose what you want to add — unselected items are not included in the contract",
+        "optionsError": "Failed to load tenant roles",
+        "close": "Close",
+        "confirmPrefix": "Confirm",
+        "serviceDefinitionLabel": "Service definition:",
+        "depositNote": "Note: If you add a security deposit amount, the tenant cannot approve the contract until the deposit is paid and held on the Ejar platform.",
+        "currency": "SAR",
+        "currencyPerDay": "SAR/day",
+        "inputRequired": "Please enter a valid value",
+        "inputFallbackLabel": "Enter value"
+      },
+      "otherConditions": {
+        "title": "Would you like to add other conditions...?",
+        "subtitle": "Additional conditions agreed by both parties and documented in the contract",
+        "instruction": "Add one condition per line – it appears in the contract terms",
+        "placeholder": "Write the condition here",
+        "add": "Add condition",
+        "remove": "Remove condition",
+        "clearSummary": "Clear conditions",
+        "addedSummaryOne": "1 condition added",
+        "addedSummaryTwo": "2 conditions added",
+        "addedSummaryFew": "{count} conditions added",
+        "addedSummaryMany": "{count} conditions added"
+      }
+    },
+    "payment": {
+      "title": "Pay the contract financial consideration",
+      "subtitle": "Contract financial consideration details:",
+      "encryptionNote": "Full data encryption — we do not store your card numbers",
+      "journeyMessage": "Your rental journey just got easier.",
+      "securePaymentLabel": "Secure and encrypted payment",
+      "reviewOrderLabel": "Review request – check all your details before paying",
+      "reviewDialog": {
+        "title": "Review order – review before payment",
+        "close": "Close",
+        "edit": "Edit",
+        "view": "View",
+        "linkPreview": "Preview",
+        "confirm": "Done – details are correct",
+        "hint": "Click 'Edit' on any section to go to its page and fix it, then return to complete payment",
+        "emptyValue": "—",
+        "unitIncomplete": "Not entered yet – tap Edit to complete",
+        "orderNumber": "Order number",
+        "contractUuid": "Contract UUID",
+        "share": "Share",
+        "copy": "Copy data",
+        "print": "Print",
+        "download": "Download",
+        "attachmentPreviewTitle": "Attachment preview",
+        "copySuccess": "Order details copied",
+        "copyError": "Failed to copy details",
+        "shareError": "Failed to share order",
+        "sections": {
+          "deed": "Ownership document",
+          "nationalAddress": "National address (attach address card)",
+          "ownerSelf": "Owner details (self)",
+          "ownerWithAgent": "Owner details (with agent)",
+          "tenantIndividual": "Tenant details (individual)",
+          "tenantOrganization": "Tenant details (establishment or company)",
+          "unit": "Unit details",
+          "rent": "Rent amount"
+        },
+        "fields": {
+          "contractType": "Contract type",
+          "startDate": "Start date",
+          "duration": "Contract duration",
+          "documentType": "Document type",
+          "deedAttachment": "Document image",
+          "leaseRenewalAttachment": "Attach the lease contract you want to renew (PDF)",
+          "mapsLink": "Property location link from Google Maps",
+          "addressPhoto": "National address photo",
+          "addressManual": "National address",
+          "ownerId": "Owner ID number",
+          "ownerPhone": "Owner mobile number",
+          "ownerBirthDate": "Owner date of birth",
+          "tenantDelegation": "Authorization",
+          "tenantUnifiedRecord": "Registration number",
+          "tenantId": "Tenant ID number",
+          "tenantPhone": "Tenant mobile number",
+          "tenantBirthDate": "Tenant date of birth",
+          "tenantOwnerId": "Owner ID",
+          "tenantOwnerPhone": "Owner mobile",
+          "tenantOwnerBirthDate": "Owner date of birth",
+          "unitType": "Unit type",
+          "unitUsage": "Unit usage",
+          "floor": "Floor",
+          "unitNumber": "Unit number",
+          "area": "Area",
+          "rooms": "Rooms",
+          "bathrooms": "Bathrooms",
+          "kitchens": "Kitchens",
+          "kitchenCabinets": "Kitchen cabinets",
+          "paymentMethod": "Payment method"
+        },
+        "delegation": {
+          "owner-representative": "I am the record owner and its representative",
+          "agent-authorized": "Authorized agent"
+        },
+        "kitchenCabinets": {
+          "installed": "Installed",
+          "notInstalled": "Not installed"
+        },
+        "calendar": {
+          "hijri": "Hijri",
+          "gregorian": "Gregorian"
+        },
+        "currency": "SAR",
+        "areaUnit": "m²",
+        "contractTypeResidential": "Residential",
+        "contractTypeCommercial": "Commercial",
+        "sameAddress": "Same previous national address",
+        "sameUnit": "Same unit mentioned in the contract",
+        "yearsCount": "'{'count'}' year(s)",
+        "monthsCount": "'{'count'}' month(s)",
+        "paymentMethodPrefix": "Payment method: '{'method'}'"
+      },
+      "navigation": {
+        "previous": "Back",
+        "pay": "Pay & Notarize Contract",
+        "payWithAmount": "Pay & Notarize Contract – '{'amount'}' SAR",
+        "sendDraft": "Send contract draft via WhatsApp for review",
+        "paying": "Redirecting to payment...",
+        "payError": "Failed to start payment. Please try again.",
+        "save": "Save",
+        "saveError": "Failed to save contract draft"
+      },
+      "summary": {
+        "sectionTitle": "Your order fees",
+        "ejarFees": "Contract documentation fees on Ejar",
+        "contractPeriodPrice": "Contract period price:",
+        "vat": "Value Added Tax (15%)",
+        "applicationFees": "Application fees:",
+        "electricityMeterFee": "Electricity meter fee:",
+        "waterMeterFee": "Water meter fee:",
+        "meterFeesTotal": "Total meter fees:",
+        "services": "Additional services:",
+        "servicesTotal": "Services total:",
+        "docFee": "Documentation fees:",
+        "total": "Total",
+        "priceBeforeCoupon": "Total before discount",
+        "discount": "Discount amount",
+        "priceAfterCoupon": "Total after discount",
+        "currency": "SAR",
+        "ejarLogoAlt": "Ejar",
+        "free": "Free",
+        "contractTypeResidential": "Residential contract",
+        "contractTypeCommercial": "Commercial contract",
+        "yearsCount": "'{'count'}' year(s)",
+        "monthsCount": "'{'count'}' month(s)"
+      },
+      "savePropertyData": {
+        "label": "Would you like to save the property data?",
+        "description": "So you can create contracts quickly and easily in the future",
+        "dialog": {
+          "title": "Save property data",
+          "close": "Close",
+          "heading": "Property name",
+          "subtitle": "Add a name to save this property for future contracts:",
+          "nameLabel": "Property name",
+          "namePlaceholder": "Write here...",
+          "nameHint": "Please add a name for the property to make it easier to find or distinguish:",
+          "nameExample": "For example - Al-Lulu Rest House - My building in Al-Rayyan district... etc.",
+          "save": "Save property",
+          "saving": "Saving...",
+          "submitError": "Could not save property data. Please try again.",
+          "submitSuccess": "Property data saved successfully",
+          "missingContractSession": "Contract session is missing. Please restart the contract flow."
+        }
+      },
+      "discountCode": {
+        "question": "Do you have a discount code?",
+        "add": "Click to add",
+        "placeholder": "Enter code here",
+        "apply": "Apply",
+        "applying": "Applying...",
+        "clear": "Clear",
+        "applyError": "Could not apply the discount code. Check the code and try again.",
+        "alreadyApplied": "A discount code has already been applied to this contract.",
+        "missingContractSession": "Contract session is missing. Please restart the contract flow."
+      },
+      "disclaimer": {
+        "prefix": "By clicking 'Continue', you agree to the",
+        "termsLink": "Terms and Conditions",
+        "and": "and",
+        "privacyLink": "Privacy Policy",
+        "termsHref": "/terms",
+        "privacyHref": "/privacy"
+      },
+      "methodDialog": {
+        "title": "Choose how to receive the contract",
+        "subtitle": "The difference is in the order of steps only – the draft reaches you via WhatsApp in both cases",
+        "submitting": "Processing...",
+        "draft": {
+          "title": "Receive the contract draft first, then I'll pay",
+          "description": "We send you the contract draft via WhatsApp first",
+          "steps": ["Contract draft", "Your review", "Payment", "Ejar notarization"],
+          "note": "Ideal for those who want to review their contract before completing payment."
+        },
+        "payNow": {
+          "title": "Pay first, then receive the contract draft",
+          "description": "Pay then we send you the contract draft via WhatsApp",
+          "badge": "2x Faster",
+          "discountBadge": "5% off",
+          "steps": ["Payment", "Contract draft", "Your review", "Ejar notarization"],
+          "note": "Ideal for those who want to save time. The contract draft is sent via WhatsApp for review before notarization in all cases."
+        },
+        "selected": {
+          "draft": {
+            "title": "Draft first, then payment",
+            "description": "You will receive the contract draft via WhatsApp for review before payment"
+          },
+          "payNow": {
+            "title": "Pay first, then draft",
+            "description": "You will receive the contract draft via WhatsApp after payment",
+            "savings": "You saved '{'percent'}'% ('{'amount'}' SAR) and your documentation is 2x faster"
+          }
+        },
+        "afterDiscount": "After discount",
+        "total": "Total",
+        "currency": "SAR",
+        "close": "Close",
+        "footerNoteTitle": "In short:",
+        "footerNote": "In both options, you will receive the contract draft via WhatsApp for review before notarization on Ejar – paying now gets you a discount and faster draft delivery.",
+        "missingContractSession": "Contract session is missing. Please restart the contract flow.",
+        "draftError": "Could not save the contract draft. Please try again.",
+        "changeMethod": "Change",
+        "confirmPayNow": "Confirm pay first"
+      },
+      "draftSuccessDialog": {
+        "title": "Congratulations, your request was received successfully!",
+        "paymentStatusLabel": "Payment status: Incomplete",
+        "paymentStatusDescription": "The client wishes to receive the contract draft first, then complete payment",
+        "orderNumberLabel": "Your order number",
+        "copy": "Copy",
+        "copySuccess": "Order number copied",
+        "copyError": "Could not copy the order number",
+        "preparationDescription": "Our team will prepare the contract draft and send it to you via WhatsApp for review",
+        "whatsappCta": "Aqdi team is happy to hear from you",
+        "whatsappHref": "https://wa.me/"
+      }
+    }
+  },
+  "paymentStatus": {
+    "backLabel": "Back",
+    "checkingTitle": "Checking payment status",
+    "checkingDescription": "Waiting for the backend to confirm the payment and update the contract status.",
+    "success": {
+      "pageTitle": "Payment result",
+      "title": "Payment successful",
+      "description": "Your payment was received successfully"
+    },
+    "error": {
+      "pageTitle": "Payment failed",
+      "title": "Payment failed",
+      "description": "Your payment could not be completed"
+    },
+    "contractNumberLabel": "Contract number",
+    "contractTypeLabel": "Contract type",
+    "paidAmountLabel": "Paid amount",
+    "housingContractTypeLabel": "Residential",
+    "commercialContractTypeLabel": "Commercial",
+    "backToRequests": "Back to requests",
+    "backToHome": "Back to home",
+    "retryPayment": "Retry payment",
+    "retryPaymentLoading": "Redirecting to payment...",
+    "retryPaymentError": "Failed to start payment. Please try again.",
+    "completedMessage": "Payment succeeded and the contract status was updated to completed",
+    "failedMessage": "Payment was not completed"
+  },
+  "startWithAqdi": {
+    "dialog": {
+      "title": "Start with Aqadi",
+      "close": "Close",
+      "mainTitle": "Electronic rental contract from the Ejar platform",
+      "subtitle": "Now conclude your certified contract yourself through Ejar and the Real Estate General Authority.",
+      "ejarLogoAlt": "Ejar logo",
+      "aqdiLogoAlt": "Aqadi logo",
+      "divider": "Choose the contract type to continue",
+      "continue": "Continue",
+      "newContract": {
+        "title": "Create a rental contract",
+        "description": "Create a rental contract for a property not previously saved on the Aqadi platform.",
+        "imageAlt": "Create a new rental contract"
+      },
+      "estateContract": {
+        "title": "Choose a property and create a contract",
+        "description": "Choose one of your previously saved properties to simplify your rental process.",
+        "imageAlt": "Choose a saved property and create a contract"
+      },
+      "contractTypeDialog": {
+        "title": "Contract",
+        "mainTitle": "Choose the rental contract type",
+        "subtitle": "Choose the contract you want (residential - commercial)",
+        "iconAlt": "Contract type",
+        "options": {
+          "residential": {
+            "title": "Create your residential contract",
+            "description": "Building, apartment, villa, room...",
+            "iconAlt": "Residential contract"
+          },
+          "commercial": {
+            "title": "Create your commercial contract",
+            "description": "Shop, market, hotel, factory...",
+            "iconAlt": "Commercial contract"
+          }
+        }
+      }
+    }
+  },
+  "websiteClosed": {
+    "kicker": "Scheduled maintenance",
+    "headline": "The service is briefly down for maintenance",
+    "body": "Your contracts and data are saved. There is nothing you need to do right now — the service returns as soon as the work is done.",
+    "issuedOn": "Issued",
+    "autoNote": "We check every minute, and this page opens on its own once the service is back."
+  }
+}

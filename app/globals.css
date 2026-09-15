@@ -1,0 +1,934 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-contract-step-skip: contract-step-skip 0.7s ease-out both;
+  --animate-strike-in: strike-in 0.45s ease-out both;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes contract-step-skip {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      filter: grayscale(0);
+    }
+    45% {
+      opacity: 0.55;
+      transform: scale(0.94);
+      filter: grayscale(0.4);
+    }
+    100% {
+      opacity: 0.28;
+      transform: scale(1);
+      filter: grayscale(0.85);
+    }
+  }
+  @keyframes strike-in {
+    from {
+      transform: translateY(-50%) scaleX(0);
+    }
+    to {
+      transform: translateY(-50%) scaleX(1);
+    }
+  }
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: #0d1413;
+  --foreground: #ffffff;
+  --card: #151c1b;
+  --card-foreground: #ffffff;
+  --popover: #1a2421;
+  --popover-foreground: #ffffff;
+  --primary: #00a67e;
+  --primary-foreground: #ffffff;
+  --secondary: #1a2221;
+  --secondary-foreground: #ffffff;
+  --muted: #1a2221;
+  --muted-foreground: #a3adac;
+  --accent: #16352f;
+  --accent-foreground: #ffffff;
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: #262d2c;
+  --input: #0d1614;
+  --ring: #00a67e;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: #151c1b;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #00a67e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1a2221;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #262d2c;
+  --sidebar-ring: #00a67e;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@theme {
+  --color-brand: #0d5a50;
+  --color-brand-secondary: #0db38b;
+  --color-brand-background: #f5f5f5;
+  --color-brand-background-green: #eafffc;
+
+  /* ====== Screens' sizes like bootstrap ====== */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+}
+
+@utility container {
+  margin-inline: auto;
+  width: 95%;
+  @variant sm {
+    width: 94%;
+  }
+  @variant md {
+    width: 94%;
+  }
+  @variant lg {
+    width: 96%;
+  }
+  @variant xl {
+    width: 85%;
+  }
+  @variant 2xl {
+    width: 85%;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Printing a specific element: remove everything else in the document
+     from layout (not just hide it), reveal only the node marked
+     #print-area, and let it lay out from the top of the page regardless of
+     where it sits on screen. #print-area is portalled as a direct child of
+     <body>, so its siblings are the entire rest of the app. Using
+     visibility: hidden here (instead of display: none) used to leave the
+     rest of the app's layout height intact, which made the print engine
+     paginate the whole (possibly long) underlying page and emit blank
+     trailing pages after the invoice. */
+  @media print {
+    @page {
+      margin: 10mm 12mm;
+    }
+
+    body > *:not(#print-area) {
+      display: none !important;
+    }
+    #print-area {
+      display: block;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    #print-area * {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+
+  .auth-phone-input--readonly .react-international-phone-input-container {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+  }
+
+  .auth-phone-input--readonly .react-international-phone-input {
+    color: #6b7280;
+    cursor: not-allowed;
+  }
+
+  .auth-phone-input {
+    --react-international-phone-height: 3.5rem;
+    --react-international-phone-border-radius: 9999px;
+    --react-international-phone-border-color: #d6d6d6;
+    --react-international-phone-background-color: #f7f7f7;
+    --react-international-phone-text-color: var(--foreground);
+    --react-international-phone-font-size: 1rem;
+    /* --react-international-phone-country-selector-arrow-color: #6b7280; */
+  }
+
+  @media (min-width: 768px) {
+    .auth-phone-input {
+      --react-international-phone-font-size: 0.875rem;
+    }
+  }
+
+  .auth-phone-input .react-international-phone-input-container {
+    overflow: hidden;
+    border: 1px solid #d6d6d6;
+    border-radius: 9999px;
+    background-color: #f7f7f7;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .auth-phone-input .react-international-phone-country-selector-button {
+    width: 100px;
+    height: 3.5rem;
+    border: 0;
+    margin: 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__button-content {
+    gap: 8px;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__flag-emoji {
+    margin: 0;
+  }
+/* 
+  .auth-phone-input .react-international-phone-country-selector-button::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 28px;
+    background-color: #d0d0d0;
+    margin-inline-start: 10px;
+  } */
+
+  .auth-phone-input .react-international-phone-input {
+    height: 3.5rem;
+    border: 0;
+    margin: 0;
+    padding-inline: 18px;
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--foreground);
+    font-family: inherit;
+    font-weight: 400;
+    letter-spacing: normal;
+  }
+
+  .auth-phone-input .react-international-phone-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .auth-phone-input
+    .react-international-phone-country-selector-button__dropdown-arrow {
+    margin-right: 0;
+  }
+
+  .auth-phone-input
+    .react-international-phone-input-container:has(.react-international-phone-input:focus) {
+    border-color: #bdbdbd;
+    box-shadow: 0 0 0 3px rgb(13 90 80 / 12%);
+  }
+
+  .auth-phone-input--invalid .react-international-phone-input-container {
+    border-color: oklch(0.577 0.245 27.325);
+    box-shadow: 0 0 0 3px oklch(0.577 0.245 27.325 / 0.12);
+  }
+
+  .auth-password-input::placeholder {
+    letter-spacing: 0.01em;
+  }
+}
+
+.osm-location-picker-map.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
+}
+
+.osm-location-marker {
+  background: transparent;
+  border: none;
+}
+
+.osm-location-marker-dot {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-radius: 9999px;
+  background: #0db38b;
+  box-shadow: 0 0 0 4px rgb(13 179 139 / 25%);
+}
+
+.create-property-dark-shell.dark,
+.create-contract-dark-shell.dark,
+.create-flow-dark-shell.dark,
+.services-dark-shell.dark {
+  --color-brand-background: #101614;
+  --color-brand-background-green: #16352f;
+  background-color: #101614;
+  color-scheme: dark;
+}
+
+.create-property-flow.dark,
+.create-contract-flow.dark,
+.create-flow-dark.dark {
+  --color-brand-background: #101614;
+  --color-brand-background-green: #16352f;
+  color-scheme: dark;
+}
+
+.create-property-dark-shell.dark .bg-white,
+.create-contract-dark-shell.dark .bg-white,
+.create-flow-dark-shell.dark .bg-white,
+.services-dark-shell.dark .bg-white,
+.create-property-flow.dark .bg-white,
+.create-contract-flow.dark .bg-white,
+.create-flow-dark.dark .bg-white {
+  background-color: #1a2421 !important;
+}
+
+.create-property-dark-shell.dark .bg-brand-background,
+.create-contract-dark-shell.dark .bg-brand-background,
+.create-flow-dark-shell.dark .bg-brand-background,
+.services-dark-shell.dark .bg-brand-background,
+.create-property-flow.dark .bg-brand-background,
+.create-contract-flow.dark .bg-brand-background,
+.create-flow-dark.dark .bg-brand-background {
+  background-color: #101614 !important;
+}
+
+.create-property-dark-shell.dark .bg-brand-background-green,
+.create-contract-dark-shell.dark .bg-brand-background-green,
+.create-flow-dark-shell.dark .bg-brand-background-green,
+.services-dark-shell.dark .bg-brand-background-green,
+.create-property-flow.dark .bg-brand-background-green,
+.create-contract-flow.dark .bg-brand-background-green,
+.create-flow-dark.dark .bg-brand-background-green {
+  background-color: #16352f !important;
+}
+
+.create-property-dark-shell.dark .text-brand,
+.create-contract-dark-shell.dark .text-brand,
+.create-flow-dark-shell.dark .text-brand,
+.services-dark-shell.dark .text-brand,
+.create-property-flow.dark .text-brand,
+.create-contract-flow.dark .text-brand,
+.create-flow-dark.dark .text-brand {
+  color: #7dccc0 !important;
+}
+
+.create-property-dark-shell.dark .text-\[\#7f7f7f\],
+.create-property-dark-shell.dark .text-\[\#9a9a9a\],
+.create-property-dark-shell.dark .text-\[\#666666\],
+.create-property-dark-shell.dark .text-\[\#bdbdbd\],
+.create-contract-dark-shell.dark .text-\[\#7f7f7f\],
+.create-contract-dark-shell.dark .text-\[\#9a9a9a\],
+.create-contract-dark-shell.dark .text-\[\#666666\],
+.create-contract-dark-shell.dark .text-\[\#bdbdbd\],
+.create-flow-dark-shell.dark .text-\[\#7f7f7f\],
+.create-flow-dark-shell.dark .text-\[\#9a9a9a\],
+.create-flow-dark-shell.dark .text-\[\#666666\],
+.create-flow-dark-shell.dark .text-\[\#bdbdbd\],
+.services-dark-shell.dark .text-\[\#7f7f7f\],
+.services-dark-shell.dark .text-\[\#7a7a7a\],
+.services-dark-shell.dark .text-\[\#8a8a8a\],
+.services-dark-shell.dark .text-\[\#9a9a9a\],
+.services-dark-shell.dark .text-\[\#666666\],
+.services-dark-shell.dark .text-\[\#bdbdbd\],
+.create-property-flow.dark .text-\[\#7f7f7f\],
+.create-property-flow.dark .text-\[\#9a9a9a\],
+.create-property-flow.dark .text-\[\#666666\],
+.create-property-flow.dark .text-\[\#bdbdbd\],
+.create-contract-flow.dark .text-\[\#7f7f7f\],
+.create-contract-flow.dark .text-\[\#9a9a9a\],
+.create-contract-flow.dark .text-\[\#666666\],
+.create-contract-flow.dark .text-\[\#bdbdbd\],
+.create-flow-dark.dark .text-\[\#7f7f7f\],
+.create-flow-dark.dark .text-\[\#9a9a9a\],
+.create-flow-dark.dark .text-\[\#666666\],
+.create-flow-dark.dark .text-\[\#bdbdbd\] {
+  color: #9eb5af !important;
+}
+
+.create-property-dark-shell.dark .text-\[\#333333\],
+.create-contract-dark-shell.dark .text-\[\#333333\],
+.create-flow-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#222222\],
+.create-property-flow.dark .text-\[\#333333\],
+.create-contract-flow.dark .text-\[\#333333\],
+.create-flow-dark.dark .text-\[\#333333\] {
+  color: #ffffff !important;
+}
+
+.create-property-dark-shell.dark .text-black,
+.create-contract-dark-shell.dark .text-black,
+.create-flow-dark-shell.dark .text-black,
+.services-dark-shell.dark .text-black,
+.create-property-flow.dark .text-black,
+.create-contract-flow.dark .text-black,
+.create-flow-dark.dark .text-black,
+.create-property-dark-shell.dark .text-\[\#1a1a1a\],
+.create-contract-dark-shell.dark .text-\[\#1a1a1a\],
+.create-flow-dark-shell.dark .text-\[\#1a1a1a\],
+.services-dark-shell.dark .text-\[\#1a1a1a\],
+.create-property-flow.dark .text-\[\#1a1a1a\],
+.create-contract-flow.dark .text-\[\#1a1a1a\],
+.create-flow-dark.dark .text-\[\#1a1a1a\],
+.create-property-dark-shell.dark .text-\[\#1f1f1f\],
+.create-contract-dark-shell.dark .text-\[\#1f1f1f\],
+.create-flow-dark-shell.dark .text-\[\#1f1f1f\],
+.services-dark-shell.dark .text-\[\#1f1f1f\],
+.create-property-flow.dark .text-\[\#1f1f1f\],
+.create-contract-flow.dark .text-\[\#1f1f1f\],
+.create-flow-dark.dark .text-\[\#1f1f1f\] {
+  color: #ffffff !important;
+}
+
+.create-property-dark-shell.dark .bg-\[\#FBFBFA\],
+.create-contract-dark-shell.dark .bg-\[\#FBFBFA\],
+.create-flow-dark-shell.dark .bg-\[\#FBFBFA\],
+.services-dark-shell.dark .bg-\[\#FBFBFA\],
+.create-property-flow.dark .bg-\[\#FBFBFA\],
+.create-contract-flow.dark .bg-\[\#FBFBFA\],
+.create-flow-dark.dark .bg-\[\#FBFBFA\],
+.create-property-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-contract-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-flow-dark-shell.dark .bg-\[\#FAFBFB\],
+.services-dark-shell.dark .bg-\[\#FAFBFB\],
+.create-property-flow.dark .bg-\[\#FAFBFB\],
+.create-contract-flow.dark .bg-\[\#FAFBFB\],
+.create-flow-dark.dark .bg-\[\#FAFBFB\],
+.create-property-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-contract-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-flow-dark-shell.dark .bg-\[\#FBFDFC\],
+.services-dark-shell.dark .bg-\[\#FBFDFC\],
+.create-property-flow.dark .bg-\[\#FBFDFC\],
+.create-contract-flow.dark .bg-\[\#FBFDFC\],
+.create-flow-dark.dark .bg-\[\#FBFDFC\],
+.create-property-dark-shell.dark .bg-\[\#f1f7f5\],
+.create-contract-dark-shell.dark .bg-\[\#f1f7f5\],
+.create-flow-dark-shell.dark .bg-\[\#f1f7f5\],
+.services-dark-shell.dark .bg-\[\#f1f7f5\],
+.create-property-flow.dark .bg-\[\#f1f7f5\],
+.create-contract-flow.dark .bg-\[\#f1f7f5\],
+.create-flow-dark.dark .bg-\[\#f1f7f5\] {
+  background-color: #0d1614 !important;
+}
+
+.create-property-dark-shell.dark .bg-\[\#f3faf7\],
+.create-contract-dark-shell.dark .bg-\[\#f3faf7\],
+.create-flow-dark-shell.dark .bg-\[\#f3faf7\],
+.services-dark-shell.dark .bg-\[\#f3faf7\],
+.create-property-flow.dark .bg-\[\#f3faf7\],
+.create-contract-flow.dark .bg-\[\#f3faf7\],
+.create-flow-dark.dark .bg-\[\#f3faf7\] {
+  background-color: #16352f !important;
+}
+
+.create-property-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-contract-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-flow-dark-shell.dark .bg-\[\#e7f4ef\],
+.services-dark-shell.dark .bg-\[\#e7f4ef\],
+.create-property-flow.dark .bg-\[\#e7f4ef\],
+.create-contract-flow.dark .bg-\[\#e7f4ef\],
+.create-flow-dark.dark .bg-\[\#e7f4ef\] {
+  background-color: #0f2a24 !important;
+}
+
+.create-property-dark-shell.dark .border-\[\#e8e8e8\],
+.create-property-dark-shell.dark .border-\[\#ececec\],
+.create-property-dark-shell.dark .border-\[\#e4e4e4\],
+.create-property-dark-shell.dark .border-\[\#d9d9d9\],
+.create-property-dark-shell.dark .border-\[\#BFE0D4\],
+.create-property-dark-shell.dark .border-\[\#cfe8e0\],
+.create-contract-dark-shell.dark .border-\[\#e8e8e8\],
+.create-contract-dark-shell.dark .border-\[\#ececec\],
+.create-contract-dark-shell.dark .border-\[\#e4e4e4\],
+.create-contract-dark-shell.dark .border-\[\#d9d9d9\],
+.create-contract-dark-shell.dark .border-\[\#BFE0D4\],
+.create-contract-dark-shell.dark .border-\[\#cfe8e0\],
+.create-flow-dark-shell.dark .border-\[\#e8e8e8\],
+.create-flow-dark-shell.dark .border-\[\#ececec\],
+.create-flow-dark-shell.dark .border-\[\#e4e4e4\],
+.create-flow-dark-shell.dark .border-\[\#d9d9d9\],
+.create-flow-dark-shell.dark .border-\[\#BFE0D4\],
+.create-flow-dark-shell.dark .border-\[\#cfe8e0\],
+.services-dark-shell.dark .border-\[\#e8e8e8\],
+.services-dark-shell.dark .border-\[\#ececec\],
+.services-dark-shell.dark .border-\[\#e4e4e4\],
+.services-dark-shell.dark .border-\[\#d9d9d9\],
+.services-dark-shell.dark .border-\[\#BFE0D4\],
+.services-dark-shell.dark .border-\[\#cfe8e0\],
+.create-property-flow.dark .border-\[\#e8e8e8\],
+.create-property-flow.dark .border-\[\#ececec\],
+.create-property-flow.dark .border-\[\#e4e4e4\],
+.create-property-flow.dark .border-\[\#d9d9d9\],
+.create-property-flow.dark .border-\[\#BFE0D4\],
+.create-property-flow.dark .border-\[\#cfe8e0\],
+.create-contract-flow.dark .border-\[\#e8e8e8\],
+.create-contract-flow.dark .border-\[\#ececec\],
+.create-contract-flow.dark .border-\[\#e4e4e4\],
+.create-contract-flow.dark .border-\[\#d9d9d9\],
+.create-contract-flow.dark .border-\[\#BFE0D4\],
+.create-contract-flow.dark .border-\[\#cfe8e0\],
+.create-flow-dark.dark .border-\[\#e8e8e8\],
+.create-flow-dark.dark .border-\[\#ececec\],
+.create-flow-dark.dark .border-\[\#e4e4e4\],
+.create-flow-dark.dark .border-\[\#d9d9d9\],
+.create-flow-dark.dark .border-\[\#BFE0D4\],
+.create-flow-dark.dark .border-\[\#cfe8e0\] {
+  border-color: #2f403b !important;
+}
+
+.create-property-dark-shell.dark .hover\:bg-\[\#fafafa\]:hover,
+.create-contract-dark-shell.dark .hover\:bg-\[\#fafafa\]:hover,
+.create-flow-dark-shell.dark .hover\:bg-\[\#fafafa\]:hover,
+.create-property-flow.dark .hover\:bg-\[\#fafafa\]:hover,
+.create-contract-flow.dark .hover\:bg-\[\#fafafa\]:hover,
+.create-flow-dark.dark .hover\:bg-\[\#fafafa\]:hover {
+  background-color: #24302c !important;
+}
+
+.create-property-dark-shell.dark .bg-\[\#f0f0f0\],
+.create-contract-dark-shell.dark .bg-\[\#f0f0f0\],
+.create-flow-dark-shell.dark .bg-\[\#f0f0f0\],
+.services-dark-shell.dark .bg-\[\#f0f0f0\],
+.create-property-flow.dark .bg-\[\#f0f0f0\],
+.create-contract-flow.dark .bg-\[\#f0f0f0\],
+.create-flow-dark.dark .bg-\[\#f0f0f0\] {
+  background-color: #24302c !important;
+}
+
+.create-property-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-contract-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-flow-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-property-flow.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-contract-flow.dark .hover\:bg-\[\#e8e8e8\]:hover,
+.create-flow-dark.dark .hover\:bg-\[\#e8e8e8\]:hover {
+  background-color: #2f403b !important;
+}
+
+.create-property-dark-shell.dark .ring-offset-2,
+.create-contract-dark-shell.dark .ring-offset-2,
+.create-flow-dark-shell.dark .ring-offset-2,
+.create-property-flow.dark .ring-offset-2,
+.create-contract-flow.dark .ring-offset-2,
+.create-flow-dark.dark .ring-offset-2 {
+  --tw-ring-offset-color: #101614;
+}
+
+/* Requests / services dark palette — match product dark mock */
+.services-dark-shell.dark {
+  --color-brand: #00a67e;
+  --color-brand-secondary: #00a67e;
+  --color-brand-background: #0d1413;
+  --color-brand-background-green: #0e312a;
+  background-color: #0d1413;
+}
+
+.services-dark-shell.dark .bg-white {
+  background-color: #151c1b !important;
+}
+
+.services-dark-shell.dark .bg-brand-background {
+  background-color: #0d1413 !important;
+}
+
+.services-dark-shell.dark .bg-brand-background-green {
+  background-color: #0e312a !important;
+}
+
+.services-dark-shell.dark .bg-brand {
+  background-color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-brand {
+  color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-\[\#7f7f7f\],
+.services-dark-shell.dark .text-\[\#7a7a7a\],
+.services-dark-shell.dark .text-\[\#8a8a8a\],
+.services-dark-shell.dark .text-\[\#9a9a9a\],
+.services-dark-shell.dark .text-\[\#666666\],
+.services-dark-shell.dark .text-\[\#555555\],
+.services-dark-shell.dark .text-\[\#bdbdbd\],
+.services-dark-shell.dark .text-\[\#b0b0b0\] {
+  color: #a3adac !important;
+}
+
+.services-dark-shell.dark .text-\[\#333333\],
+.services-dark-shell.dark .text-\[\#222222\] {
+  color: #ffffff !important;
+}
+
+.services-dark-shell.dark .text-black,
+.services-dark-shell.dark .text-\[\#1a1a1a\],
+.services-dark-shell.dark .text-\[\#1f1f1f\] {
+  color: #ffffff !important;
+}
+
+.services-dark-shell.dark .bg-\[\#FBFBFA\],
+.services-dark-shell.dark .bg-\[\#f1f7f5\] {
+  background-color: #0d1614 !important;
+}
+
+.services-dark-shell.dark .border-\[\#e8e8e8\],
+.services-dark-shell.dark .border-\[\#ececec\],
+.services-dark-shell.dark .border-\[\#e4e4e4\],
+.services-dark-shell.dark .border-\[\#d9d9d9\],
+.services-dark-shell.dark .border-\[\#f0f0f0\] {
+  border-color: #262d2c !important;
+}
+
+.services-dark-shell.dark .bg-\[\#f7f7f7\],
+.services-dark-shell.dark .bg-\[\#fafafa\],
+.services-dark-shell.dark .bg-\[\#f3f3f3\] {
+  background-color: #1a2221 !important;
+}
+
+.services-dark-shell.dark .hover\:bg-\[\#fafafa\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#f0f0f0\]:hover,
+.services-dark-shell.dark .hover\:bg-\[\#ebebeb\]:hover {
+  background-color: #1a2221 !important;
+}
+
+.services-dark-shell.dark .bg-\[\#fff1e6\] {
+  background-color: #3d2e1d !important;
+}
+
+.services-dark-shell.dark .text-\[\#e67e22\],
+.services-dark-shell.dark .text-\[\#b45309\] {
+  color: #dfa88d !important;
+}
+
+.services-dark-shell.dark .bg-\[\#e8f1ff\] {
+  background-color: #1d2d3d !important;
+}
+
+.services-dark-shell.dark .text-\[\#3b82f6\] {
+  color: #8daddf !important;
+}
+
+.services-dark-shell.dark .bg-\[\#e8f8ee\] {
+  background-color: #00a67e !important;
+}
+
+.services-dark-shell.dark .text-\[\#25D366\] {
+  color: #ffffff !important;
+}
+
+.services-dark-shell.dark .shadow-\[0_2px_24px_rgba\(0\,0\,0\,0\.04\)\],
+.services-dark-shell.dark .shadow-sm {
+  box-shadow: none !important;
+}
+
+.services-dark-shell.dark .text-muted-foreground {
+  color: #a3adac !important;
+}
+
+/* Portaled dialogs / selects while a services dark shell is active */
+html.dark [data-slot="dialog-content"],
+html.dark [data-slot="alert-dialog-content"],
+html.dark [data-slot="select-content"],
+html.dark [data-slot="dropdown-menu-content"],
+html.dark [data-slot="popover-content"] {
+  background-color: #1a2421 !important;
+  color: #ffffff !important;
+  border-color: #2f403b !important;
+  --tw-ring-color: rgb(47 64 59 / 0.55);
+}
+
+html.dark [data-slot="dialog-overlay"],
+html.dark [data-slot="alert-dialog-overlay"] {
+  background-color: rgb(0 0 0 / 0.7) !important;
+}
+
+html.dark [data-slot="dialog-footer"],
+html.dark [data-slot="alert-dialog-footer"] {
+  background-color: #121a18 !important;
+  border-color: #2f403b !important;
+  color: #ffffff !important;
+}
+
+html.dark [data-slot="dialog-title"],
+html.dark [data-slot="alert-dialog-title"] {
+  color: #ffffff !important;
+}
+
+html.dark [data-slot="dialog-description"],
+html.dark [data-slot="alert-dialog-description"] {
+  color: #9eb5af !important;
+}
+
+html.dark [data-slot="dialog-content"] .bg-white,
+html.dark [data-slot="alert-dialog-content"] .bg-white,
+html.dark [data-slot="dialog-content"] .bg-\[\#f8f8f8\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f8f8f8\],
+html.dark [data-slot="dialog-content"] .bg-\[\#FBFBFA\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#FBFBFA\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f7f7f7\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f7f7f7\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f2f2f2\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f2f2f2\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f0f0f0\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f0f0f0\],
+html.dark [data-slot="dialog-content"] .bg-\[\#fafafa\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#fafafa\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f3f3f3\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f3f3f3\] {
+  background-color: #121a18 !important;
+}
+
+html.dark [data-slot="dialog-content"] .bg-brand-background,
+html.dark [data-slot="alert-dialog-content"] .bg-brand-background,
+html.dark [data-slot="dialog-content"] .bg-brand-background-green,
+html.dark [data-slot="alert-dialog-content"] .bg-brand-background-green,
+html.dark [data-slot="dialog-content"] .bg-brand-background-green\/40,
+html.dark [data-slot="alert-dialog-content"] .bg-brand-background-green\/40,
+html.dark [data-slot="dialog-content"] .bg-brand-background-green\/60,
+html.dark [data-slot="alert-dialog-content"] .bg-brand-background-green\/60,
+html.dark [data-slot="dialog-content"] .bg-\[\#eef6f3\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#eef6f3\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f5fbf8\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f5fbf8\],
+html.dark [data-slot="dialog-content"] .bg-\[\#e3f0eb\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#e3f0eb\],
+html.dark [data-slot="dialog-content"] .bg-\[\#f7fcf9\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#f7fcf9\],
+html.dark [data-slot="dialog-content"] .bg-\[\#e8f5ee\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#e8f5ee\],
+html.dark [data-slot="dialog-content"] .bg-\[\#eef8f3\],
+html.dark [data-slot="alert-dialog-content"] .bg-\[\#eef8f3\] {
+  background-color: #16352f !important;
+}
+
+html.dark [data-slot="dialog-content"] .bg-gray-200\/10,
+html.dark [data-slot="alert-dialog-content"] .bg-gray-200\/10 {
+  background-color: #121a18 !important;
+}
+
+html.dark [data-slot="dialog-content"] .text-black,
+html.dark [data-slot="alert-dialog-content"] .text-black,
+html.dark [data-slot="dialog-content"] .text-\[\#222\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#222\],
+html.dark [data-slot="dialog-content"] .text-\[\#222222\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#222222\],
+html.dark [data-slot="dialog-content"] .text-\[\#2b2b2b\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#2b2b2b\],
+html.dark [data-slot="dialog-content"] .text-\[\#333333\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#333333\],
+html.dark [data-slot="dialog-content"] .text-\[\#1a1a1a\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#1a1a1a\],
+html.dark [data-slot="dialog-content"] .text-\[\#1f1f1f\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#1f1f1f\],
+html.dark [data-slot="dialog-content"] .text-\[\#444444\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#444444\],
+html.dark [data-slot="dialog-content"] .text-\[\#555\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#555\],
+html.dark [data-slot="dialog-content"] .text-\[\#555555\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#555555\] {
+  color: #ffffff !important;
+}
+
+html.dark [data-slot="dialog-content"] .text-\[\#2a6644\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#2a6644\],
+html.dark [data-slot="dialog-content"] .text-\[\#35584a\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#35584a\],
+html.dark [data-slot="dialog-content"] .text-\[\#666\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#666\],
+html.dark [data-slot="dialog-content"] .text-\[\#666666\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#666666\],
+html.dark [data-slot="dialog-content"] .text-\[\#6b7c76\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#6b7c76\],
+html.dark [data-slot="dialog-content"] .text-\[\#7f7f7f\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#7f7f7f\],
+html.dark [data-slot="dialog-content"] .text-\[\#8a8a8a\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#8a8a8a\],
+html.dark [data-slot="dialog-content"] .text-\[\#9a9a9a\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#9a9a9a\],
+html.dark [data-slot="dialog-content"] .text-\[\#bdbdbd\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#bdbdbd\],
+html.dark [data-slot="dialog-content"] .text-\[\#5c6b68\],
+html.dark [data-slot="alert-dialog-content"] .text-\[\#5c6b68\],
+html.dark [data-slot="dialog-content"] .text-muted-foreground,
+html.dark [data-slot="alert-dialog-content"] .text-muted-foreground {
+  color: #9eb5af !important;
+}
+
+html.dark [data-slot="dialog-content"] .text-brand,
+html.dark [data-slot="alert-dialog-content"] .text-brand {
+  color: #7dccc0 !important;
+}
+
+html.dark [data-slot="dialog-content"] .border-\[\#e8e8e8\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#e8e8e8\],
+html.dark [data-slot="dialog-content"] .border-\[\#ececec\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#ececec\],
+html.dark [data-slot="dialog-content"] .border-\[\#e5e5e5\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#e5e5e5\],
+html.dark [data-slot="dialog-content"] .border-\[\#e6e6e6\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#e6e6e6\],
+html.dark [data-slot="dialog-content"] .border-\[\#e0e0e0\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#e0e0e0\],
+html.dark [data-slot="dialog-content"] .border-\[\#dfe7e3\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#dfe7e3\],
+html.dark [data-slot="dialog-content"] .border-\[\#dce8e3\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#dce8e3\],
+html.dark [data-slot="dialog-content"] .border-\[\#cfe8dd\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#cfe8dd\],
+html.dark [data-slot="dialog-content"] .border-\[\#f0f0f0\],
+html.dark [data-slot="alert-dialog-content"] .border-\[\#f0f0f0\],
+html.dark [data-slot="dialog-content"] .divide-\[\#e5e5e5\] > :not([hidden]) ~ :not([hidden]),
+html.dark [data-slot="alert-dialog-content"] .divide-\[\#e5e5e5\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #2f403b !important;
+}
+
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#fafafa\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#fafafa\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#f7f7f7\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#f7f7f7\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#f5fbf8\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#f5fbf8\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#f0f0f0\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#f0f0f0\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#efefef\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#efefef\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#ebebeb\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#ebebeb\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#e8e8e8\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#e8e8e8\]:hover,
+html.dark [data-slot="dialog-content"] .hover\:bg-\[\#e3f0eb\]:hover,
+html.dark [data-slot="alert-dialog-content"] .hover\:bg-\[\#e3f0eb\]:hover {
+  background-color: #24302c !important;
+}
+
+html.dark [data-slot="select-item"],
+html.dark [data-slot="dropdown-menu-item"] {
+  color: #ffffff;
+}
+
+html.dark [data-slot="select-item"]:focus,
+html.dark [data-slot="dropdown-menu-item"]:focus {
+  background-color: #16352f;
+  color: #ffffff;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark [data-slot="input"] {
+  color: #ffffff;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #6b7d78;
+}

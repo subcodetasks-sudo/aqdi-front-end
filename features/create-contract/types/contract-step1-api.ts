@@ -1,0 +1,26 @@
+export type ContractStep1ApiData = {
+  id: number;
+  contract_id: number;
+  uuid: string;
+  contract_type: string;
+  contract_type_trans: string;
+  real_id: number | null;
+  real_units_id: number | null;
+  instrument_type: string;
+  instrument_type_trans: string;
+  image_instrument: string | null;
+  image_instrument_from_the_front: string | null;
+  image_instrument_from_the_back: string | null;
+  Image_inheritance_certificate: string | null;
+  copy_power_of_attorney_from_heirs_to_agent: string | null;
+  copy_of_the_endowment_registration_certificate: string | null;
+  copy_of_the_trusteeship_deed: string | null;
+  is_multiple_trusteeship_deed_copy: boolean | number | null;
+  copy_of_guardians_power_of_attorney_for_agent: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  lat: string | null;
+  lng: string | null;
+  address_url: string | null;
+  step: number;
+};

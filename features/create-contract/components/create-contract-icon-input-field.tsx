@@ -1,0 +1,93 @@
+"use client";
+
+import type { LucideIcon } from "lucide-react";
+import { useId } from "react";
+
+import { Input } from "@/components/ui/input";
+import CreateContractFieldLabel from "@/features/create-contract/components/create-contract-field-label";
+import {
+  fieldChromeIconClass,
+  fieldChromeNestedInputClass,
+  fieldChromeSurfaceClass,
+  resolveFieldChromeState,
+} from "@/lib/ui/field-chrome";
+import { cn } from "@/lib/utils";
+
+type CreateContractIconInputFieldProps = {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  icon: LucideIcon;
+  type?: "text" | "tel";
+  dir?: "ltr" | "rtl";
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  maxLength?: number;
+  errorMessage?: string;
+  invalid?: boolean;
+  valid?: boolean;
+};
+
+export default function CreateContractIconInputField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  icon: Icon,
+  type = "text",
+  dir,
+  inputMode,
+  maxLength,
+  errorMessage,
+  invalid = false,
+  valid = false,
+}: CreateContractIconInputFieldProps) {
+  const inputId = useId();
+  const showInvalid = invalid || Boolean(errorMessage);
+  const chrome = resolveFieldChromeState({
+    invalid: showInvalid,
+    valid,
+  });
+
+  return (
+    <div>
+      <CreateContractFieldLabel label={label} invalid={showInvalid} />
+
+      <div
+        dir={dir}
+        className={cn(
+          "flex h-10 w-full items-center gap-2 rounded-2xl border px-2",
+          fieldChromeSurfaceClass(chrome),
+        )}
+      >
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center",
+            fieldChromeIconClass(chrome),
+          )}
+        >
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+
+        <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />
+
+        <Input
+          id={inputId}
+          type={type}
+          dir={dir}
+          inputMode={inputMode}
+          maxLength={maxLength}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          aria-invalid={showInvalid}
+          className={cn("h-auto px-2 text-sm", fieldChromeNestedInputClass)}
+        />
+      </div>
+
+      {errorMessage ? (
+        <p className="mt-1.5 text-xs font-medium text-[#c62828]">{errorMessage}</p>
+      ) : null}
+    </div>
+  );
+}

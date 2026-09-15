@@ -1,0 +1,36 @@
+import { getTranslations } from "next-intl/server";
+
+import MyPropertiesPageContent from "@/features/my-properties/components/my-properties-page-content";
+import { getMyProperties } from "@/features/my-properties/services/get-my-properties";
+import type { MyPropertyCardData } from "@/features/my-properties/types/property-card";
+import type { MyPropertiesLabels } from "@/features/my-properties/types/my-properties-labels";
+import { mapRealEstateToCard } from "@/features/my-properties/utils/map-real-estate-to-card";
+
+export default async function MyPropertiesPage() {
+  const [t, properties] = await Promise.all([
+    getTranslations("myProperties"),
+    getMyProperties().catch(() => [] as Awaited<ReturnType<typeof getMyProperties>>),
+  ]);
+  const labels: MyPropertiesLabels = {
+    backLabel: t("backLabel"),
+    pageTitle: t("pageTitle"),
+    pageSubtitle: t("pageSubtitle"),
+    pageBadge: t("pageBadge"),
+    propertiesCountLabel: "",
+    emptyStateTitle: t("emptyStateTitle"),
+    emptyStateDescription: t("emptyStateDescription"),
+    addProperty: t("addProperty"),
+    contractTypes: {
+      housing: t("contractTypes.housing"),
+      commercial: t("contractTypes.commercial"),
+    },
+  };
+
+  const items: MyPropertyCardData[] = properties.map((property) =>
+    mapRealEstateToCard(property, labels.contractTypes),
+  );
+
+  labels.propertiesCountLabel = t("propertiesCount", { count: items.length });
+
+  return <MyPropertiesPageContent labels={labels} items={items} />;
+}
