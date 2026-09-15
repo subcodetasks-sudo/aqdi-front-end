@@ -1,4 +1,6 @@
-"use server";
+// Server-only (not a server action): as a "use server" export, apiRequest would
+// be an open proxy that attaches the user's bearer token to any endpoint.
+import "server-only";
 
 import { redirect } from "next/navigation";
 

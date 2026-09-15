@@ -1,4 +1,7 @@
-"use server";
+// Server-only helpers (not server actions): exporting these from a "use server"
+// module would make them callable from the browser, and `getToken` would hand
+// the httpOnly auth cookie to client JavaScript.
+import "server-only";
 
 import { cookies } from "next/headers";
 
