@@ -16,13 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function MaintenancePage() {
-  const status = await getWebsiteStatus();
+  const [status, locale] = await Promise.all([getWebsiteStatus(), getLocale()]);
 
   if (status.isOpen) {
     redirect("/");
   }
 
-  const locale = await getLocale();
   const view = await getWebsiteClosedView(status, locale);
 
   return <WebsiteClosedScreen view={view} />;

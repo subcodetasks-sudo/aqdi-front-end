@@ -1,5 +1,6 @@
 // Custom Next.js server for cPanel / Passenger (Node.js Selector).
 // Set this file as the "Application startup file" in the cPanel Node.js app.
+/* eslint-disable @typescript-eslint/no-require-imports -- CommonJS entry loaded directly by Passenger */
 
 const { createServer } = require("http");
 const { parse } = require("url");
