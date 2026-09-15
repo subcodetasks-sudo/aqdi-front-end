@@ -3,7 +3,21 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const MAX_UPLOAD_BODY_SIZE = 50 * 1024 * 1024; // 50 MB
 
+const SECURITY_HEADERS = [
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(self), payment=(self)",
+  },
+];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+  },
   experimental: {
     serverActions: {
       // Avoid string parse issues at config load time
