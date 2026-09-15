@@ -54,28 +54,26 @@ export default function CreatePropertyWizard({
   );
   const [completedPropertyName, setCompletedPropertyName] = useState("");
   const isEditMode = initialEditDraft !== null;
-  const [isEditSessionReady, setIsEditSessionReady] = useState(!isEditMode);
+  const [initializedEditDraft, setInitializedEditDraft] =
+    useState<PropertyEditDraftData | null>(null);
   const isDraftHydrated = usePersistStoreHydrated(
     useCreatePropertyDraftStore.persist,
   );
+  const isEditSessionReady =
+    !initialEditDraft || initializedEditDraft === initialEditDraft;
 
   useEffect(() => {
-    if (!initialEditDraft) {
-      setIsEditSessionReady(true);
-      return;
-    }
-
     // Wait for persist rehydration first; otherwise a stale create draft can
     // overwrite the API-backed edit session (including empty owner fields).
-    if (!isDraftHydrated) {
-      setIsEditSessionReady(false);
+    if (!initialEditDraft || !isDraftHydrated) {
       return;
     }
 
-    setCompletedPropertyId(null);
-    setCompletedPropertyName("");
     initializeEditSession(initialEditDraft);
-    setIsEditSessionReady(true);
+    // Readiness has to trail the external store reset above, so it can't be
+    // derived during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setInitializedEditDraft(initialEditDraft);
   }, [initialEditDraft, initializeEditSession, isDraftHydrated]);
 
   useEffect(() => {

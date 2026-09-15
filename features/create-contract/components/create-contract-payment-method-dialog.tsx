@@ -7,7 +7,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import {
   Dialog,
@@ -139,20 +139,24 @@ export default function CreateContractPaymentMethodDialog({
   const [pendingMethod, setPendingMethod] = useState<PaymentMethod | null>(
     selectedMethod,
   );
+  const [syncedProps, setSyncedProps] = useState({ open, selectedMethod });
+
+  if (
+    syncedProps.open !== open ||
+    syncedProps.selectedMethod !== selectedMethod
+  ) {
+    setSyncedProps({ open, selectedMethod });
+    if (open) {
+      setPendingMethod(selectedMethod);
+    }
+  }
+
   const showPayNowCoupon = Boolean(payNowExtra);
   const isPayNowPending = pendingMethod === "pay-now";
   const payNowAmount =
     hasDiscount && typeof discountedPrice === "number"
       ? discountedPrice
       : totalPrice;
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    setPendingMethod(selectedMethod);
-  }, [open, selectedMethod]);
 
   async function handleSelect(method: PaymentMethod) {
     if (isSubmitting) {

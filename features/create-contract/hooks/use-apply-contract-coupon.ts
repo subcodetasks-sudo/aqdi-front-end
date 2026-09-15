@@ -24,12 +24,14 @@ export function useApplyContractCoupon(contractUuid: string | null) {
       return;
     }
 
+    // The coupon belongs to another contract session: drop it from the draft
+    // store. `appliedCoupon` below is already derived as null for the mismatch,
+    // so no local state reset is needed here.
     if (couponContractUuid && couponContractUuid !== contractUuid) {
       setPaymentData({
         ...useCreateContractDraftStore.getState().paymentData,
         appliedCoupon: null,
       });
-      setCouponContractUuid(null);
     }
   }, [contractUuid, couponContractUuid, setPaymentData]);
 

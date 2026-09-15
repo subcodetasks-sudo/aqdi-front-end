@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
@@ -54,9 +54,14 @@ export default function PropertyUnitsTabs({
       ? labels.createResidentialUnit
       : labels.createCommercialUnit;
 
-  useEffect(() => {
+  const selectionScope = `${activeTab}:${propertyId}`;
+  const [activeSelectionScope, setActiveSelectionScope] =
+    useState(selectionScope);
+
+  if (activeSelectionScope !== selectionScope) {
+    setActiveSelectionScope(selectionScope);
     setSelectedUnitIds([]);
-  }, [activeTab, propertyId]);
+  }
 
   function handleTabChange(tab: PropertyUnitTab) {
     setSelectedUnitIds([]);

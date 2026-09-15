@@ -1,7 +1,7 @@
 "use client";
 
 import { ClipboardList, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,13 +31,15 @@ export default function CreateContractLeaseRenewalNotesDialog({
   onSave,
 }: CreateContractLeaseRenewalNotesDialogProps) {
   const [draft, setDraft] = useState(value);
+  const [syncedProps, setSyncedProps] = useState({ open, value });
   const canSave = draft.trim().length > 0;
 
-  useEffect(() => {
+  if (syncedProps.open !== open || syncedProps.value !== value) {
+    setSyncedProps({ open, value });
     if (open) {
       setDraft(value);
     }
-  }, [open, value]);
+  }
 
   function handleSave() {
     if (!canSave) {

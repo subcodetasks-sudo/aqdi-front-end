@@ -1,7 +1,7 @@
 "use client";
 
 import { Building2, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,13 +34,15 @@ export default function CreateContractSavePropertyDialog({
   onSave,
 }: CreateContractSavePropertyDialogProps) {
   const [propertyName, setPropertyName] = useState(initialValue);
+  const [syncedProps, setSyncedProps] = useState({ open, initialValue });
   const canSave = propertyName.trim().length > 0 && !isSaving;
 
-  useEffect(() => {
+  if (syncedProps.open !== open || syncedProps.initialValue !== initialValue) {
+    setSyncedProps({ open, initialValue });
     if (open) {
       setPropertyName(initialValue);
     }
-  }, [initialValue, open]);
+  }
 
   async function handleSave() {
     if (!canSave) {

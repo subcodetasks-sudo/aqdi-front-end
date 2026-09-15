@@ -28,13 +28,16 @@ export default function CreateContractDiscountCodeField({
   const isLocked = Boolean(appliedCoupon);
   const [isExpanded, setIsExpanded] = useState(isLocked);
   const [draft, setDraft] = useState(appliedCoupon?.code ?? "");
+  const [syncedCoupon, setSyncedCoupon] = useState(appliedCoupon);
 
-  useEffect(() => {
+  // Adjust state during render (not in an effect) when a coupon gets applied.
+  if (appliedCoupon !== syncedCoupon) {
+    setSyncedCoupon(appliedCoupon);
     if (appliedCoupon) {
       setDraft(appliedCoupon.code);
       setIsExpanded(true);
     }
-  }, [appliedCoupon]);
+  }
 
   useEffect(() => {
     if (!isExpanded || isLocked) {

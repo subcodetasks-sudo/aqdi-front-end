@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useId, useState } from "react";
+import { createElement, useId, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -55,13 +55,15 @@ export default function CreateContractTenantRoleDialog({
   const inputId = useId();
   const [draft, setDraft] = useState(value);
   const [showError, setShowError] = useState(false);
+  const [syncedProps, setSyncedProps] = useState({ open, value });
 
-  useEffect(() => {
+  if (syncedProps.open !== open || syncedProps.value !== value) {
+    setSyncedProps({ open, value });
     if (open) {
       setDraft(value);
       setShowError(false);
     }
-  }, [open, value]);
+  }
 
   if (!role) {
     return null;
@@ -70,7 +72,7 @@ export default function CreateContractTenantRoleDialog({
   const title = getTenantRoleTitle(role);
   const requiresInput = role.has_user_input;
   const isNumber = role.input_field_type === "number";
-  const InputIcon = resolveTenantRoleIcon(role.input_icon ?? role.icon);
+  const inputIcon = resolveTenantRoleIcon(role.input_icon ?? role.icon);
   const currencySuffix = isNumber
     ? isDailyFineRole(role)
       ? labels.currencyPerDay
@@ -164,7 +166,10 @@ export default function CreateContractTenantRoleDialog({
                   fieldChromeIconClass(chrome),
                 )}
               >
-                <InputIcon className="size-5" aria-hidden="true" />
+                {createElement(inputIcon, {
+                  className: "size-5",
+                  "aria-hidden": true,
+                })}
               </span>
 
               <span className="h-6 w-px shrink-0 bg-[#dcdcdc]" aria-hidden="true" />

@@ -3,7 +3,7 @@
 import { Printer, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import {
@@ -306,36 +306,55 @@ export default function RequestInvoiceDialog({
   labels,
 }: RequestInvoiceDialogProps) {
   const locale = useLocale();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(open);
   const [error, setError] = useState<string | null>(null);
   const [invoice, setInvoice] = useState<ContractInvoice | null>(null);
+  const [wasOpen, setWasOpen] = useState(open);
 
-  const chrome = {
-    title: labels.title,
-    platformName: labels.platformName,
-    platformSubtitle: labels.platformSubtitle,
-    printLabel: labels.printLabel,
-    totalDueLabel: labels.totalDueLabel,
-    unpaidStatusLabel: labels.unpaidStatusLabel,
-    paidStatusLabel: labels.paidStatusLabel,
-  };
+  // Reset to a loading state during render when the dialog opens, so the
+  // fetch effect below only sets state after the request resolves.
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) {
+      resetToLoading();
+    }
+  }
 
-  const loadInvoice = useCallback(
-    async (signal?: { cancelled: boolean }) => {
-      setIsLoading(true);
-      setError(null);
-      setInvoice(null);
+  function resetToLoading() {
+    setIsLoading(true);
+    setError(null);
+    setInvoice(null);
+  }
 
-      try {
-        const result = await getContractInvoice({
-          contractId,
-          uuid,
-          contractTypeLabel,
-          locale,
-          chrome,
-        });
+  // Bumped by the retry button to re-run the fetch effect.
+  const [attempt, setAttempt] = useState(0);
 
-        if (signal?.cancelled) {
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    let cancelled = false;
+
+    // Depend on the individual label strings (not the labels object) so a new
+    // labels identity doesn't trigger a re-fetch.
+    getContractInvoice({
+      contractId,
+      uuid,
+      contractTypeLabel,
+      locale,
+      chrome: {
+        title: labels.title,
+        platformName: labels.platformName,
+        platformSubtitle: labels.platformSubtitle,
+        printLabel: labels.printLabel,
+        totalDueLabel: labels.totalDueLabel,
+        unpaidStatusLabel: labels.unpaidStatusLabel,
+        paidStatusLabel: labels.paidStatusLabel,
+      },
+    })
+      .then((result) => {
+        if (cancelled) {
           return;
         }
 
@@ -347,47 +366,38 @@ export default function RequestInvoiceDialog({
 
         setInvoice(result.data);
         setError(null);
-      } catch {
-        if (!signal?.cancelled) {
+      })
+      .catch(() => {
+        if (!cancelled) {
           setError(labels.loadError);
           setInvoice(null);
         }
-      } finally {
-        if (!signal?.cancelled) {
+      })
+      .finally(() => {
+        if (!cancelled) {
           setIsLoading(false);
         }
-      }
-    },
-    // chrome fields are stable strings from server-rendered labels
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- avoid re-fetch on new labels object identity
-    [
-      contractId,
-      uuid,
-      contractTypeLabel,
-      locale,
-      labels.loadError,
-      labels.title,
-      labels.platformName,
-      labels.platformSubtitle,
-      labels.printLabel,
-      labels.totalDueLabel,
-      labels.unpaidStatusLabel,
-      labels.paidStatusLabel,
-    ],
-  );
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const signal = { cancelled: false };
-    void loadInvoice(signal);
+      });
 
     return () => {
-      signal.cancelled = true;
+      cancelled = true;
     };
-  }, [open, loadInvoice]);
+  }, [
+    open,
+    attempt,
+    contractId,
+    uuid,
+    contractTypeLabel,
+    locale,
+    labels.loadError,
+    labels.title,
+    labels.platformName,
+    labels.platformSubtitle,
+    labels.printLabel,
+    labels.totalDueLabel,
+    labels.unpaidStatusLabel,
+    labels.paidStatusLabel,
+  ]);
 
   function handlePrint() {
     if (!invoice) {
@@ -433,7 +443,10 @@ export default function RequestInvoiceDialog({
             <p className="text-sm text-[#c0392b]">{error}</p>
             <button
               type="button"
-              onClick={() => void loadInvoice()}
+              onClick={() => {
+                resetToLoading();
+                setAttempt((current) => current + 1);
+              }}
               className="inline-flex h-10 items-center justify-center rounded-2xl bg-brand px-4 text-sm font-bold text-white"
             >
               {labels.retry}

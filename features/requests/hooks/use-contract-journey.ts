@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { getContractById } from "@/features/requests/services/get-contract-by-id";
+import {
+  getContractById,
+  type GetContractByIdResult,
+} from "@/features/requests/services/get-contract-by-id";
 import { useContractsLiveStore } from "@/features/requests/stores/use-contracts-live-store";
 import type { ContractDetail } from "@/features/requests/types/contract-journey";
 
@@ -22,22 +25,30 @@ export function useContractJourney({
   const applySnapshot = useContractsLiveStore((state) => state.applySnapshot);
   const lastHandledRevision = useRef<number | null>(null);
   const ignoreNextStoreEvent = useRef(false);
+  const requestKey = enabled ? contractId : null;
+  const [activeRequestKey, setActiveRequestKey] = useState<number | null>(
+    null,
+  );
 
-  const load = useCallback(
-    async ({ silent = false }: { silent?: boolean } = {}) => {
-      if (!silent) {
-        setLoading(true);
-        setError(null);
-      }
+  // Reset during render when a new contract starts loading, so the fetch
+  // effect only sets state once the request resolves.
+  if (requestKey !== activeRequestKey) {
+    setActiveRequestKey(requestKey);
+    if (requestKey !== null) {
+      setDetail(null);
+      setLoading(true);
+      setError(null);
+    }
+  }
 
-      const result = await getContractById(contractId);
-
+  const applyResult = useCallback(
+    (result: GetContractByIdResult, silent: boolean) => {
       if (!result.ok) {
         if (!silent) {
           setError(result.error);
           setLoading(false);
         }
-        return result;
+        return;
       }
 
       setDetail(result.data);
@@ -45,9 +56,8 @@ export function useContractJourney({
       applySnapshot(result.data);
       setError(null);
       setLoading(false);
-      return result;
     },
-    [applySnapshot, contractId],
+    [applySnapshot],
   );
 
   useEffect(() => {
@@ -55,11 +65,20 @@ export function useContractJourney({
       return;
     }
 
+    let cancelled = false;
     lastHandledRevision.current = null;
     ignoreNextStoreEvent.current = false;
-    setDetail(null);
-    void load();
-  }, [enabled, load]);
+
+    void getContractById(contractId).then((result) => {
+      if (!cancelled) {
+        applyResult(result, false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [applyResult, contractId, enabled]);
 
   useEffect(() => {
     if (!enabled || !livePatch?.revision) {
@@ -118,13 +137,21 @@ export function useContractJourney({
       };
     });
 
-    void load({ silent: true });
-  }, [contractId, enabled, livePatch, load]);
+    void getContractById(contractId).then((result) =>
+      applyResult(result, true),
+    );
+  }, [applyResult, contractId, enabled, livePatch]);
 
   return {
     detail,
     loading,
     error,
-    reload: () => void load(),
+    reload: () => {
+      setLoading(true);
+      setError(null);
+      void getContractById(contractId).then((result) =>
+        applyResult(result, false),
+      );
+    },
   };
 }

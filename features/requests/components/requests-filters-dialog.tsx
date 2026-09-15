@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 
 import {
@@ -79,12 +79,14 @@ export default function RequestsFiltersDialog({
   onApply,
 }: RequestsFiltersDialogProps) {
   const [draft, setDraft] = useState(value);
+  const [syncedProps, setSyncedProps] = useState({ open, value });
 
-  useEffect(() => {
+  if (syncedProps.open !== open || syncedProps.value !== value) {
+    setSyncedProps({ open, value });
     if (open) {
       setDraft(value);
     }
-  }, [open, value]);
+  }
 
   function handleApply() {
     onApply(draft);
