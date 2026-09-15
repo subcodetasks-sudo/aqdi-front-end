@@ -7,6 +7,7 @@ import type {
   AppSettingsApiResponse,
 } from "@/features/settings/types/app-settings";
 import { apiRequest } from "@/lib/api/api-request";
+import { sanitizeRichText } from "@/lib/security/sanitize-rich-text";
 
 const fetchAppSettings = cache(async function fetchAppSettings(): Promise<AppSettings | null> {
   const response = await apiRequest<AppSettingsApiResponse>("/settings", {
@@ -18,7 +19,20 @@ const fetchAppSettings = cache(async function fetchAppSettings(): Promise<AppSet
     return null;
   }
 
-  return response.data.data;
+  const settings = response.data.data;
+
+  // Terms/privacy are CMS HTML rendered with dangerouslySetInnerHTML.
+  return {
+    ...settings,
+    terms: {
+      ...settings.terms,
+      description: sanitizeRichText(settings.terms?.description ?? ""),
+    },
+    privacy: {
+      ...settings.privacy,
+      description: sanitizeRichText(settings.privacy?.description ?? ""),
+    },
+  };
 });
 
 export async function getAppSettings(): Promise<AppSettings | null> {

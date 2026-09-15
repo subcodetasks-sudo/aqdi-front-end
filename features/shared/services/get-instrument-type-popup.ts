@@ -6,6 +6,7 @@ import type {
   InstrumentTypePopupItem,
 } from "@/features/shared/types/instrument-type-popup";
 import { apiRequest } from "@/lib/api/api-request";
+import { sanitizeRichText } from "@/lib/security/sanitize-rich-text";
 
 export async function getInstrumentTypePopup(
   instrumentType: string,
@@ -27,5 +28,8 @@ export async function getInstrumentTypePopup(
     );
   }
 
-  return response.data.data;
+  return (response.data.data ?? []).map((item) => ({
+    ...item,
+    content_popup: sanitizeRichText(item.content_popup ?? ""),
+  }));
 }
