@@ -4,7 +4,7 @@ export type CompressedImage = {
   contentType: string;
 };
 
-function shouldCompressImage(file: File): boolean {
+function shouldCompressImage(file: Blob): boolean {
   return (
     file.type.startsWith("image/") &&
     !file.type.includes("gif") &&
@@ -12,24 +12,33 @@ function shouldCompressImage(file: File): boolean {
   );
 }
 
-export async function compressImage(file: File): Promise<CompressedImage> {
+export async function compressImage(
+  file: Blob & { name?: string },
+): Promise<CompressedImage> {
   const buffer = await file.arrayBuffer();
 
   return {
     buffer,
-    fileName: file.name,
-    contentType: file.type,
+    fileName: typeof file.name === "string" && file.name.length > 0 ? file.name : "image",
+    contentType: file.type || "application/octet-stream",
   };
 }
 
 export async function compressFormDataImages(formData: FormData): Promise<FormData> {
   for (const [key, value] of Array.from(formData.entries())) {
-    if (!(value instanceof File) || !shouldCompressImage(value)) {
+    // Route-handler / undici uploads may arrive as Blob rather than File.
+    if (typeof Blob === "undefined" || !(value instanceof Blob)) {
+      continue;
+    }
+
+    if (!shouldCompressImage(value)) {
       continue;
     }
 
     try {
-      const { buffer, fileName, contentType } = await compressImage(value);
+      const { buffer, fileName, contentType } = await compressImage(
+        value as Blob & { name?: string },
+      );
       const compressedFile = new File([new Uint8Array(buffer)], fileName, {
         type: contentType,
       });
