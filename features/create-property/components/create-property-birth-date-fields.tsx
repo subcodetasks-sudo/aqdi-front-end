@@ -1,13 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
+
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
-import type { PropertyBirthDateValue } from "@/features/create-property/types/owner-step";
+import type {
+  PropertyBirthDateValue,
+  PropertyCalendarType,
+} from "@/features/create-property/types/owner-step";
 import {
+  convertAdultBirthDateCalendar,
   getAdultBirthDayOptions,
   getAdultBirthMonthOptions,
   getAdultBirthYearOptions,
   isAdultBirthDateComplete,
   isAtLeastAdultAge,
+  sanitizeAdultBirthDateValue,
 } from "@/lib/validation/birth-date-year-options";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +43,19 @@ export default function CreatePropertyBirthDateFields({
   onChange,
   invalid = false,
 }: CreatePropertyBirthDateFieldsProps) {
+  useEffect(() => {
+    const sanitized = sanitizeAdultBirthDateValue(value);
+    if (
+      sanitized.day !== value.day ||
+      sanitized.month !== value.month ||
+      sanitized.year !== value.year
+    ) {
+      onChange(sanitized);
+    }
+  }, [value, onChange]);
+
+  // Options are derived from today's date so under-18 years stay excluded,
+  // and a new max year appears automatically once that cohort turns 18.
   const yearOptions = getAdultBirthYearOptions(value.calendarType);
   const monthOptions = getAdultBirthMonthOptions(
     value.calendarType,
@@ -70,12 +90,19 @@ export default function CreatePropertyBirthDateFields({
     field: K,
     fieldValue: PropertyBirthDateValue[K],
   ) {
+    if (field === "calendarType") {
+      onChange(
+        convertAdultBirthDateCalendar(
+          value,
+          fieldValue as PropertyCalendarType,
+        ),
+      );
+      return;
+    }
+
     const nextValue: PropertyBirthDateValue = {
       ...value,
       [field]: fieldValue,
-      ...(field === "calendarType"
-        ? { day: "", month: "", year: "" }
-        : {}),
     };
 
     if (field === "year") {

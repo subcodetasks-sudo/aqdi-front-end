@@ -15,6 +15,7 @@ import {
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 type CreatePropertyAgentDataPhaseProps = {
   labels: CreatePropertyLabels["owner"]["agentData"];
@@ -23,14 +24,12 @@ type CreatePropertyAgentDataPhaseProps = {
   value: PropertyAgentDataState;
   onChange: (value: PropertyAgentDataState) => void;
   showFieldErrors?: boolean;
+  /** When the step itself is titled for the agent (deceased-owner flow). */
+  hideSectionHeader?: boolean;
   hasExistingPowerOfAttorney?: boolean;
   existingPowerOfAttorneyImageUrl?: string | null;
   onClearExistingPowerOfAttorney?: () => void;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 export default function CreatePropertyAgentDataPhase({
   labels,
@@ -39,6 +38,7 @@ export default function CreatePropertyAgentDataPhase({
   value,
   onChange,
   showFieldErrors = false,
+  hideSectionHeader = false,
   hasExistingPowerOfAttorney = false,
   existingPowerOfAttorneyImageUrl = null,
   onClearExistingPowerOfAttorney,
@@ -63,7 +63,7 @@ export default function CreatePropertyAgentDataPhase({
   });
   const idInvalid =
     Boolean(idNumberError) ||
-    (showFieldErrors && !isIdNumberComplete(value.idNumber));
+    (showFieldErrors && !isSaudiNationalIdComplete(value.idNumber));
   const phoneInvalid =
     Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
   const birthDateInvalid =
@@ -72,19 +72,21 @@ export default function CreatePropertyAgentDataPhase({
     showFieldErrors &&
     value.powerOfAttorneyFiles.length !== 1 &&
     !hasExistingPowerOfAttorney;
-  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const idValid = !idInvalid && isSaudiNationalIdComplete(value.idNumber);
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
     <div className="space-y-3">
-      <div className="space-y-1 text-center">
-        <h3 className="text-lg font-extrabold text-brand md:text-xl">
-          {labels.sectionTitle}
-        </h3>
-        {labels.sectionDescription ? (
-          <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
-        ) : null}
-      </div>
+      {!hideSectionHeader ? (
+        <div className="space-y-1 text-center">
+          <h3 className="text-lg font-extrabold text-brand md:text-xl">
+            {labels.sectionTitle}
+          </h3>
+          {labels.sectionDescription ? (
+            <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <CreatePropertyIconInputField

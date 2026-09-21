@@ -1,16 +1,19 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import Image from "next/image";
 import { Save } from "lucide-react";
 
 import { useCreatePropertySteps } from "@/features/create-property/hooks/use-create-property-steps";
+import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import {
   CREATE_PROPERTY_STEPS,
   CREATE_PROPERTY_STEPPER_STEPS,
   type CreatePropertyStepperStep,
 } from "@/features/create-property/types/create-property-step";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import { propertyDeedTypeIsDeceasedOwner } from "@/features/create-property/types/deed-type";
+import { isOwnerStepSkipped } from "@/features/create-property/utils/is-owner-step-skipped";
 import { cn } from "@/lib/utils";
 
 type CreatePropertyStepperProps = {
@@ -19,24 +22,45 @@ type CreatePropertyStepperProps = {
 };
 
 const stepPillClassName =
-  "inline-flex h-8 min-w-0 flex-1 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold transition-all sm:h-12 sm:grow sm:px-3 sm:text-sm";
+  "relative inline-flex h-8 min-w-0 flex-1 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold transition-all sm:h-12 sm:grow sm:px-3 sm:text-sm";
+
+const skippedStrikeClassName =
+  "after:pointer-events-none after:absolute after:inset-x-1.5 after:top-1/2 after:h-[1.5px] after:[transform-origin:right_center] after:rounded-full after:bg-brand after:content-['']";
 
 function getStepPillClassName(
   isActive: boolean,
+  isStepCompleted: boolean,
   isUnlocked: boolean,
-  completed: boolean,
+  flowCompleted: boolean,
+  isSkipped: boolean,
+  showStrike: boolean,
+  isSkipAnimating: boolean,
 ) {
+  if (isSkipped) {
+    return cn(
+      stepPillClassName,
+      "cursor-not-allowed bg-[#f0f0f0] text-[#c4c4c4] dark:bg-[#24302c] dark:text-[#6a7a74]",
+      showStrike && skippedStrikeClassName,
+      showStrike &&
+        (isSkipAnimating
+          ? "after:animate-strike-in"
+          : "after:[transform:translateY(-50%)_scaleX(1)]"),
+    );
+  }
+
   return cn(
     stepPillClassName,
-    completed
+    flowCompleted
       ? "cursor-default bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"
       : isUnlocked
         ? "cursor-pointer hover:opacity-90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-secondary/30"
         : "cursor-not-allowed opacity-50",
-    !completed &&
+    !flowCompleted &&
       (isActive
         ? "bg-brand text-white shadow-[0_0_0_2px_#ffffff,0_0_0_4px_#0db38b] dark:shadow-[0_0_0_2px_#1a2421,0_0_0_4px_#0db38b] sm:shadow-none sm:ring-2 sm:ring-brand-secondary sm:ring-offset-2"
-        : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"),
+        : isStepCompleted
+          ? "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"
+          : "bg-brand-background-green text-brand dark:bg-[#16352f] dark:text-[#7dccc0]"),
   );
 }
 
@@ -54,9 +78,38 @@ export default function CreatePropertyStepper({
   completed = false,
 }: CreatePropertyStepperProps) {
   const { currentStepIndex, goToStep } = useCreatePropertySteps();
+  const selectedDeedType = useCreatePropertyDraftStore(
+    (state) => state.selectedDeedType,
+  );
+  const skippingOwnerStep = useCreatePropertyDraftStore(
+    (state) => state.skippingOwnerStep,
+  );
+  const clearSkippingOwnerStep = useCreatePropertyDraftStore(
+    (state) => state.clearSkippingOwnerStep,
+  );
+  const ownerSkipped = isOwnerStepSkipped({ selectedDeedType });
+  const deceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
+
+  useEffect(() => {
+    if (!skippingOwnerStep) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      clearSkippingOwnerStep();
+    }, 750);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [skippingOwnerStep, clearSkippingOwnerStep]);
 
   function isStepUnlocked(step: CreatePropertyStepperStep) {
     if (completed) {
+      return false;
+    }
+
+    if (step === "owner" && ownerSkipped) {
       return false;
     }
 
@@ -89,29 +142,48 @@ export default function CreatePropertyStepper({
 
         {CREATE_PROPERTY_STEPPER_STEPS.map((step, index) => {
           const stepIndex = CREATE_PROPERTY_STEPS.indexOf(step);
+          const isSkipped = step === "owner" && ownerSkipped;
+          const isPassed = stepIndex < currentStepIndex;
+          const isStepCompleted = completed || (isPassed && !isSkipped);
           const isActive = !completed && stepIndex === currentStepIndex;
-          const isStepCompleted = completed || stepIndex < currentStepIndex;
           const isUnlocked = isStepUnlocked(step);
+          const showOwnerStrike =
+            isSkipped && (isPassed || skippingOwnerStep);
+          const stepLabel =
+            step === "owner" && deceasedOwner
+              ? labels.steps.agent || "الوكيل"
+              : labels.steps[step];
 
           return (
             <Fragment key={step}>
               {index > 0 && (
                 <span
                   aria-hidden="true"
-                  className={getConnectorClassName(isActive || isStepCompleted)}
+                  className={getConnectorClassName(
+                    isActive || isStepCompleted || (isSkipped && isPassed),
+                  )}
                 />
               )}
 
               <button
                 type="button"
-                title={labels.steps[step]}
-                aria-label={labels.steps[step]}
+                title={stepLabel}
+                aria-label={stepLabel}
                 aria-current={isActive ? "step" : undefined}
-                disabled={!isUnlocked}
+                aria-disabled={isSkipped || !isUnlocked}
+                disabled={isSkipped || !isUnlocked}
                 onClick={() => goToStep(step)}
-                className={getStepPillClassName(isActive, isUnlocked, completed)}
+                className={getStepPillClassName(
+                  isActive,
+                  isStepCompleted,
+                  isUnlocked,
+                  completed,
+                  isSkipped,
+                  showOwnerStrike,
+                  isSkipped && skippingOwnerStep,
+                )}
               >
-                <span className="truncate">{labels.steps[step]}</span>
+                <span className="truncate">{stepLabel}</span>
               </button>
             </Fragment>
           );

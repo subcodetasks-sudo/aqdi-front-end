@@ -13,8 +13,14 @@ import CreatePropertySuccessStep from "@/features/create-property/components/cre
 import { useCreatePropertySteps } from "@/features/create-property/hooks/use-create-property-steps";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import { propertyDeedTypeIsDeceasedOwner } from "@/features/create-property/types/deed-type";
+import {
+  isPropertyAgentDataComplete,
+} from "@/features/create-property/types/owner-step";
 import type { PropertyTypeId } from "@/features/properties/types/property-type";
 import type { PropertyEditDraftData } from "@/features/create-property/utils/map-property-api-to-draft";
+import { toPropertyContractType } from "@/features/create-property/utils/contract-type";
+import { isOwnerStepSkipped } from "@/features/create-property/utils/is-owner-step-skipped";
 import {
   resetCreatePropertyDraft,
   resetCreatePropertyDraftIfScheduledOnUnmount,
@@ -49,6 +55,19 @@ export default function CreatePropertyWizard({
   const hydrateFilesFromPersisted = useCreatePropertyDraftStore(
     (state) => state.hydrateFilesFromPersisted,
   );
+  const selectedDeedType = useCreatePropertyDraftStore(
+    (state) => state.selectedDeedType,
+  );
+  const skipOwnerToReview = useCreatePropertyDraftStore(
+    (state) => state.skipOwnerToReview,
+  );
+  const agentData = useCreatePropertyDraftStore((state) => state.agentData);
+  const hasExistingPowerOfAttorney = useCreatePropertyDraftStore(
+    (state) => state.hasExistingPowerOfAttorney,
+  );
+  const storeIsEditMode = useCreatePropertyDraftStore((state) => state.isEditMode);
+  const ownerSkipped = isOwnerStepSkipped({ selectedDeedType });
+  const deceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
   const [completedPropertyId, setCompletedPropertyId] = useState<number | null>(
     null,
   );
@@ -81,6 +100,36 @@ export default function CreatePropertyWizard({
       setCurrentStep("deed");
     }
   }, [completedPropertyId, currentStep, setCurrentStep]);
+
+  useEffect(() => {
+    if (currentStep === "owner" && ownerSkipped) {
+      skipOwnerToReview();
+    }
+  }, [currentStep, ownerSkipped, skipOwnerToReview]);
+
+  // Old drafts skipped the owner step for deceased deeds and landed on review.
+  // Send those flows back to the agent step until agent data is complete.
+  useEffect(() => {
+    if (!deceasedOwner || currentStep !== "review") {
+      return;
+    }
+
+    const agentComplete = isPropertyAgentDataComplete(agentData, {
+      allowExistingPowerOfAttorney:
+        storeIsEditMode && hasExistingPowerOfAttorney,
+    });
+
+    if (!agentComplete) {
+      setCurrentStep("owner");
+    }
+  }, [
+    agentData,
+    currentStep,
+    deceasedOwner,
+    hasExistingPowerOfAttorney,
+    setCurrentStep,
+    storeIsEditMode,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -148,12 +197,13 @@ export default function CreatePropertyWizard({
               <CreatePropertyDeedStep
                 labels={labels.deed}
                 addressLabels={labels.address}
+                contractType={toPropertyContractType(propertyType)}
                 onBack={() => router.back()}
                 onComplete={goNext}
               />
             ) : null}
 
-            {!isSuccess && currentStep === "owner" ? (
+            {!isSuccess && currentStep === "owner" && !ownerSkipped ? (
               <CreatePropertyOwnerStep
                 labels={labels.owner}
                 onBack={goBack}

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import CreatePropertyDeedImageUpload from "@/features/create-property/components/create-property-deed-image-upload";
 import CreatePropertyDeedTypeSelect from "@/features/create-property/components/create-property-deed-type-select";
+import CreatePropertyDetailsFields from "@/features/create-property/components/create-property-details-fields";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import CreatePropertyFormSelect from "@/features/create-property/components/create-property-form-select";
 import CreatePropertyNationalAddress from "@/features/create-property/components/create-property-national-address";
@@ -23,6 +24,7 @@ import {
   propertyDeedTypeIsSalePaper,
 } from "@/features/create-property/types/deed-type";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import DeedInstrumentEntrySection from "@/features/shared/components/deed-instrument-entry-section";
 import InstrumentTypePopupDialog from "@/features/shared/components/instrument-type-popup-dialog";
 import { useInstrumentTypeDeedPopup } from "@/features/shared/hooks/use-instrument-type-deed-popup";
@@ -31,6 +33,7 @@ import { propertyDeedTypeSupportsManualEntry } from "@/features/shared/utils/sup
 type CreatePropertyDeedStepProps = {
   labels: CreatePropertyLabels["deed"];
   addressLabels: CreatePropertyLabels["address"];
+  contractType: PropertyContractType;
   onBack: () => void;
   onComplete: () => void;
 };
@@ -38,6 +41,7 @@ type CreatePropertyDeedStepProps = {
 export default function CreatePropertyDeedStep({
   labels,
   addressLabels,
+  contractType,
   onBack,
   onComplete,
 }: CreatePropertyDeedStepProps) {
@@ -45,6 +49,8 @@ export default function CreatePropertyDeedStep({
   const {
     selectedDeedType,
     setSelectedDeedType,
+    propertyDetails,
+    setPropertyDetails,
     deedFiles,
     setDeedFiles,
     deedFrontFiles,
@@ -96,7 +102,7 @@ export default function CreatePropertyDeedStep({
     clearExistingAddressImageUrl,
     canContinue: canContinueAddress,
   } = useCreatePropertyAddressStep();
-  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1();
+  const { isSubmitting, submitStep1 } = useSubmitPropertyStep1(contractType);
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const deedTypePopup = useInstrumentTypeDeedPopup("realestate");
   const supportsManualEntry = propertyDeedTypeSupportsManualEntry(selectedDeedType);
@@ -108,6 +114,7 @@ export default function CreatePropertyDeedStep({
 
   function handleDeedTypeChange(value: PropertyDeedTypeId | "") {
     setSelectedDeedType(value);
+    setShowFieldErrors(false);
 
     if (!value) {
       return;
@@ -442,6 +449,17 @@ export default function CreatePropertyDeedStep({
               renderInstrumentEntry(renderSingleUpload())
             ) : null}
           </div>
+
+          {selectedDeedType ? (
+            <CreatePropertyDetailsFields
+              labels={labels.propertyDetails}
+              contractType={contractType}
+              selectedDeedType={selectedDeedType}
+              value={propertyDetails}
+              onChange={setPropertyDetails}
+              showFieldErrors={showFieldErrors}
+            />
+          ) : null}
 
           {selectedDeedType ? (
             <div className="space-y-3 border-t border-dashed border-[#d9d9d9] pt-4">

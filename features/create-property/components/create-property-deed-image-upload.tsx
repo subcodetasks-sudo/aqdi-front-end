@@ -20,7 +20,10 @@ import {
 } from "@/components/ui/dialog";
 import CreatePropertyFieldLabel from "@/features/create-property/components/create-property-field-label";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
-import { resolveAssetUrl } from "@/features/shared/utils/resolve-asset-url";
+import {
+  resolveAssetUrl,
+  toProxiedAssetUrl,
+} from "@/features/shared/utils/resolve-asset-url";
 import { cn } from "@/lib/utils";
 
 type CreatePropertyDeedImageUploadProps = {
@@ -96,11 +99,12 @@ function ExistingFileRow({
   onDelete,
 }: ExistingFileRowProps) {
   const fileName = fileUrl.split("/").pop()?.split("?")[0] ?? labels.preview;
+  const previewUrl = toProxiedAssetUrl(fileUrl) ?? fileUrl;
   const showThumbnail = isImageUrl(fileUrl);
 
   function handlePreview() {
     onPreview({
-      url: fileUrl,
+      url: previewUrl,
       isObjectUrl: false,
       name: fileName,
       isPdf: isPdfUrl(fileUrl),
@@ -119,7 +123,7 @@ function ExistingFileRow({
             aria-label={labels.preview}
           >
             <Image
-              src={fileUrl}
+              src={previewUrl}
               alt={labels.preview}
               fill
               unoptimized

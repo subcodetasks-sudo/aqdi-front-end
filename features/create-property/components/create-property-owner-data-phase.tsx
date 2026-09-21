@@ -15,6 +15,7 @@ import {
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 import { cn } from "@/lib/utils";
 
 type CreatePropertyOwnerDataPhaseProps = {
@@ -25,10 +26,6 @@ type CreatePropertyOwnerDataPhaseProps = {
   onChange: (value: PropertyOwnerDataState) => void;
   showFieldErrors?: boolean;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 export default function CreatePropertyOwnerDataPhase({
   labels,
@@ -58,14 +55,14 @@ export default function CreatePropertyOwnerDataPhase({
   });
   const idInvalid =
     Boolean(idNumberError) ||
-    (showFieldErrors && !isIdNumberComplete(value.idNumber));
+    (showFieldErrors && !isSaudiNationalIdComplete(value.idNumber));
   const phoneInvalid =
     Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
   const birthDateInvalid =
     showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
   const hasAgentInvalid = showFieldErrors && value.hasAgent === "";
   const hasAgentChecked = value.hasAgent === "yes";
-  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const idValid = !idInvalid && isSaudiNationalIdComplete(value.idNumber);
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
