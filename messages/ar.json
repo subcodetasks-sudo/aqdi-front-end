@@ -642,25 +642,19 @@
     "login": {
       "back": "العودة للرئيسية",
       "greeting": "مرحباً بعودتك !.",
-      "subtitle": "قم بإدخال البيانات لتسجيل حسابك الآن.",
+      "subtitle": "أدخل رقم جوالك لاستلام رمز تسجيل الدخول.",
       "phoneLabel": "رقم الجوال",
       "phonePlaceholder": "5xxxxxxxx",
-      "passwordLabel": "كلمة المرور",
-      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
-      "forgotPassword": "هل نسيت كلمة المرور ؟",
       "rememberMe": "تذكرني",
-      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
-      "submit": "تسجيل الدخول",
-      "submitSuccess": "تم تسجيل الدخول بنجاح",
-      "submitError": "تعذر تسجيل الدخول، يرجى التحقق من البيانات",
+      "submit": "إرسال الرمز",
+      "submitSuccess": "تم إرسال رمز تسجيل الدخول إلى رقم جوالك",
+      "submitError": "تعذر إرسال رمز تسجيل الدخول، يرجى المحاولة مرة أخرى",
       "or": "أو",
       "noAccount": "ليس لديك حساب !",
       "createAccount": "إنشاء حساب جديد",
       "validation": {
         "phoneRequired": "رقم الجوال مطلوب",
-        "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح",
-        "passwordRequired": "كلمة المرور مطلوبة",
-        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+        "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح"
       }
     },
     "register": {
@@ -709,8 +703,9 @@
       "otpLabel": "رمز التحقق OTP",
       "submit": "تأكيد الرمز",
       "submitSuccess": "تم التحقق من رقم الجوال بنجاح",
+      "loginSuccess": "تم تسجيل الدخول بنجاح",
       "submitError": "تعذر التحقق من الرمز، يرجى المحاولة مرة أخرى",
-      "phoneMissing": "رقم الجوال غير موجود، يرجى التسجيل مرة أخرى",
+      "phoneMissing": "رقم الجوال غير موجود، يرجى العودة والمحاولة مرة أخرى",
       "notReceived": "لم تستلم الرمز؟",
       "resend": "إعادة إرسال كود التحقق OTP",
       "resendSuccess": "تم إرسال رمز تحقق جديد",
@@ -773,7 +768,15 @@
       "submitError": "تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى",
       "passwordUpdateError": "تم حفظ الاسم، لكن تعذر تحديث كلمة المرور",
       "deleteAccount": "حذف الحساب",
-      "deleteAccountUnavailable": "حذف الحساب غير متاح حالياً",
+      "deleteDialog": {
+        "title": "حذف الحساب",
+        "description": "سيؤدي هذا إلى حذف حسابك وجميع البيانات المرتبطة به بشكل نهائي. لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "confirm": "حذف الحساب",
+        "deleting": "جارٍ الحذف...",
+        "success": "تم حذف حسابك بنجاح",
+        "error": "تعذر حذف حسابك، يرجى المحاولة مرة أخرى"
+      },
       "validation": {
         "fullNameRequired": "الاسم مطلوب",
         "fullNameMin": "يرجى إدخال الاسم الكامل",
@@ -980,14 +983,15 @@
           "kitchenTank": "خزان المطبخ",
           "parking": "مواقف السيارات",
           "gasMeter": "عداد الغاز",
-          "contractDuration": "مدة العقد",
+          "contractDuration": "فترة العقد",
           "annualRent": "قيمة الإيجار السنوي",
           "paymentType": "طريقة الدفع",
-          "contractPeriodPrice": "سعر مدة العقد",
+          "contractPeriodPrice": "مدة العقد",
           "applicationFees": "رسوم التطبيق",
           "tax": "الضريبة",
-          "electricityMeterFee": "رسوم عداد الكهرباء",
-          "waterMeterFee": "رسوم عداد الماء",
+          "electricityMeterFee": "رسوم نقل الكهرباء",
+          "waterMeterFee": "رسوم نقل الماء",
+          "paperDeedFee": "رسوم إضافية على وثيقة التملك",
           "servicesTotal": "إجمالي الخدمات",
           "meterFeesTotal": "إجمالي رسوم العدادات",
           "docFee": "المقابل المالي لعقدي",
@@ -1077,6 +1081,10 @@
     "contractTypes": {
       "housing": "عقار سكني",
       "commercial": "عقار تجاري"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي"
     },
     "card": {
       "requestDateLabel": "تاريخ الإضافة :",
@@ -1187,6 +1195,7 @@
       "steps": {
         "deed": "الصك",
         "owner": "المالك",
+        "agent": "الوكيل",
         "review": "اسم العقار"
       }
     },
@@ -1205,11 +1214,68 @@
           "electronic_deed_from_the_ministry_of_justice": "صك ملكية الكتروني من وزارة العدل",
           "electronic_tax_register": "صك ملكية الكتروني من السجل العقاري",
           "old_handwritten": "صك ملكية ورقي",
-          "property_ownership_owner_are_deceased_endowment": "صك ملكية والمالك متوفي",
+          "property_ownership_owner_are_deceased": "صك ملكية والمالك متوفي",
+          "property_ownership_owner_are_deceased_endowment": "صك ملكية وقف لمالك متوفى",
           "property_ownership_owner_is_endowment": "صك ملكية والمالك وقف",
+          "property_ownership_owner_are_suspended": "صك ملكية (مالك موقوف)",
           "sale_agreement": "ورقة مبايعة مختومة من مكتب عقاري",
           "economic_cities_authority_suspended": "وثيقة هيئة المدن الاقتصادية",
           "strong_argument": "حجة استحكام"
+        }
+      },
+      "propertyDetails": {
+        "title": "بيانات العقار",
+        "subtitle": "أكمل بيانات العقار قبل حفظ العنوان",
+        "propertyType": {
+          "label": "نوع العقار",
+          "placeholder": "إختر من هنا ...",
+          "loading": "جاري التحميل..."
+        },
+        "propertyUsage": {
+          "label": "استخدام العقار",
+          "placeholder": "إختر من هنا ...",
+          "loading": "جاري التحميل..."
+        },
+        "numberOfFloors": {
+          "label": "عدد الأدوار",
+          "placeholder": "مثال: 2"
+        },
+        "numberOfUnits": {
+          "label": "عدد الوحدات في العقار",
+          "placeholder": "مثال: 4"
+        },
+        "unitsPerFloor": {
+          "label": "عدد الوحدات في الدور",
+          "placeholder": "مثال: 2"
+        },
+        "propertyAge": {
+          "label": "عمر العقار (بالسنوات)",
+          "placeholder": "مثال: 5"
+        },
+        "electricityOwnership": {
+          "label": "ملكية عداد الكهرباء",
+          "placeholder": "إختر من هنا ..."
+        },
+        "waterOwnership": {
+          "label": "ملكية عداد المياه",
+          "placeholder": "إختر من هنا ..."
+        },
+        "ownership": {
+          "owner": "المالك",
+          "tenant": "المستأجر"
+        },
+        "registryNumber": {
+          "label": "رقم السجل العقاري",
+          "placeholder": "أدخل رقم السجل"
+        },
+        "registryDate": {
+          "label": "تاريخ أول تسجيل",
+          "day": "اليوم",
+          "month": "الشهر",
+          "year": "السنة",
+          "dayPlaceholder": "اليوم",
+          "monthPlaceholder": "الشهر",
+          "yearPlaceholder": "السنة"
         }
       },
       "deedImage": {
@@ -1363,9 +1429,8 @@
       "validation": {
         "hintTitle": "يرجى إكمال الحقول التالية:",
         "issues": {
-          "fullName": "اسم مالك العقار الثلاثي",
           "idNumber": "رقم هوية المالك",
-          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
           "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
@@ -1375,7 +1440,7 @@
           "powerOfAttorney": "إرفاق صورة الوكالة"
         },
         "fieldErrors": {
-          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
           "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
@@ -1402,10 +1467,6 @@
         "yearPlaceholder": "0000"
       },
       "ownerData": {
-        "fullName": {
-          "label": "اسم مالك العقار الثلاثي",
-          "placeholder": "أكتب هنا ..."
-        },
         "idNumber": {
           "label": "رقم هوية المالك",
           "placeholder": "1xxxxxxxxxx"
@@ -1448,6 +1509,33 @@
           "previewTitle": "معاينة الملف",
           "closePreview": "إغلاق"
         }
+      },
+      "nazirData": {
+        "sectionTitle": "بيانات ناظر الوقف",
+        "sectionDescription": "قم بتعبئة بياناتك بشكل صحيح",
+        "footerNote": "",
+        "idNumber": {
+          "label": "رقم هوية الناظر",
+          "placeholder": "1111111111"
+        },
+        "birthDateLabel": "تاريخ ميلاد الناظر",
+        "phone": {
+          "label": "رقم جوال الناظر",
+          "placeholder": "05xxxxxxxx"
+        },
+        "powerOfAttorney": {
+          "label": "مستند صفة ناظر الوقف",
+          "clickHere": "اضغط هنا",
+          "chooseFile": "لاختيار صورة أو ملف",
+          "acceptedFormats": "png - jpeg - pdf",
+          "attached": "تم الإرفاق",
+          "preview": "عرض",
+          "change": "تغيير",
+          "delete": "إزالة",
+          "previewTitle": "معاينة الملف",
+          "closePreview": "إغلاق"
+        },
+        "documentHint": "يثبت صفة الناظر في تمثيل الوقف (صك النظارة أو وكالة النظار)."
       }
     },
     "review": {
@@ -1655,7 +1743,9 @@
       "steps": {
         "intro": "عقدي",
         "deed": "الصك",
+        "waqfNazir": "ناظر الوقف",
         "owner": "المالك",
+        "agent": "الوكيل",
         "tenant": "المستأجر",
         "finance": "المالية"
       }
@@ -1709,6 +1799,102 @@
           "subtitle": "حدد موقع العقار بإحدى الطرق الثلاث"
         }
       ],
+      "legalAgent": {
+        "title": "بيانات الوكيل الشرعي",
+        "subtitle": "قم بتعبئة بياناتك بشكل صحيح",
+        "documentHint": "يثبت صفة الوكيل الشرعي في تمثيل ورثة المالك المتوفى",
+        "agentData": {
+          "sectionTitle": "بيانات الوكيل الشرعي",
+          "sectionDescription": "قم بتعبئة بياناتك بشكل صحيح",
+          "footerNote": "",
+          "idNumber": {
+            "label": "رقم هوية الوكيل",
+            "placeholder": "1xxxxxxxxx"
+          },
+          "birthDateLabel": "تاريخ ميلاد الوكيل",
+          "phone": {
+            "label": "رقم جوال الوكيل",
+            "placeholder": "05xxxxxxxx"
+          },
+          "powerOfAttorney": {
+            "label": "مستند صفة الوكيل الشرعي",
+            "clickHere": "اضغط هنا",
+            "chooseFile": "لاختيار صورة أو ملف",
+            "acceptedFormats": "png - jpeg - pdf",
+            "attached": "تم الإرفاق",
+            "change": "تغيير",
+            "preview": "عرض",
+            "delete": "إزالة",
+            "previewTitle": "معاينة الملف",
+            "closePreview": "إغلاق"
+          }
+        },
+        "birthDate": {
+          "label": "تاريخ ميلاد الوكيل",
+          "hijri": "هجري",
+          "gregorian": "ميلادي",
+          "day": "اليوم",
+          "month": "الشهر",
+          "year": "السنة",
+          "dayPlaceholder": "00",
+          "monthPlaceholder": "00",
+          "yearPlaceholder": "0000"
+        },
+        "validation": {
+          "fieldErrors": {
+            "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
+            "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام"
+          }
+        }
+      },
+      "waqfNazir": {
+        "title": "بيانات ناظر الوقف",
+        "subtitle": "قم بتعبئة بياناتك بشكل صحيح",
+        "documentHint": "يثبت صفة الناظر في تمثيل الوقف (صك النظارة أو وكالة النظار)",
+        "agentData": {
+          "sectionTitle": "بيانات ناظر الوقف",
+          "sectionDescription": "قم بتعبئة بياناتك بشكل صحيح",
+          "footerNote": "",
+          "idNumber": {
+            "label": "رقم هوية الناظر",
+            "placeholder": "1111111111"
+          },
+          "birthDateLabel": "تاريخ ميلاد الناظر",
+          "phone": {
+            "label": "رقم جوال الناظر",
+            "placeholder": "05xxxxxxxx"
+          },
+          "powerOfAttorney": {
+            "label": "مستند صفة ناظر الوقف",
+            "clickHere": "اضغط هنا",
+            "chooseFile": "لاختيار صورة أو ملف",
+            "acceptedFormats": "png - jpeg - pdf",
+            "attached": "تم الإرفاق بنجاح",
+            "change": "تغيير",
+            "preview": "عرض",
+            "delete": "إزالة",
+            "previewTitle": "معاينة الملف",
+            "closePreview": "إغلاق"
+          }
+        },
+        "birthDate": {
+          "label": "تاريخ ميلاد الناظر",
+          "hijri": "هجري",
+          "gregorian": "ميلادي",
+          "day": "اليوم",
+          "month": "الشهر",
+          "year": "السنة",
+          "dayPlaceholder": "00",
+          "monthPlaceholder": "00",
+          "yearPlaceholder": "0000"
+        },
+        "validation": {
+          "fieldErrors": {
+            "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
+            "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام"
+          }
+        }
+      },
       "deedType": {
         "label": "حدد نوع المستند",
         "placeholder": "إختر من هنا ..",
@@ -1900,9 +2086,8 @@
       "validation": {
         "hintTitle": "يرجى إكمال الحقول التالية:",
         "issues": {
-          "fullName": "اسم مالك العقار الثلاثي",
           "idNumber": "رقم هوية المالك",
-          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
           "birthDate": "تاريخ ميلاد المالك",
           "phone": "رقم جوال المالك",
           "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
@@ -1912,7 +2097,7 @@
           "powerOfAttorney": "إرفاق صورة الوكالة"
         },
         "fieldErrors": {
-          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام",
+          "idNumberLength": "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2",
           "phoneLength": "رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام",
           "iban": "يجب أن يبدأ الآيبان بـ SA متبوعًا بـ 22 رقمًا"
         }
@@ -1935,10 +2120,6 @@
         "yearPlaceholder": "0000"
       },
       "ownerData": {
-        "fullName": {
-          "label": "اسم مالك العقار الثلاثي",
-          "placeholder": "أكتب هنا ..."
-        },
         "idNumber": {
           "label": "رقم هوية المالك",
           "placeholder": "1xxxxxxxxx"
@@ -2375,6 +2556,8 @@
           "nationalAddress": "العنوان الوطني (إرفاق بطاقة العنوان)",
           "ownerSelf": "بيانات المالك (بنفسه)",
           "ownerWithAgent": "بيانات المالك (بوكيل)",
+          "agent": "بيانات الوكيل",
+          "nazir": "بيانات ناظر الوقف",
           "tenantIndividual": "بيانات المستأجر (فرد)",
           "tenantOrganization": "بيانات المستأجر (مؤسسة أو شركة)",
           "unit": "بيانات الوحدة",
@@ -2393,6 +2576,9 @@
           "ownerId": "رقم هوية المالك",
           "ownerPhone": "رقم جوال المالك",
           "ownerBirthDate": "تاريخ ميلاد المالك",
+          "agentId": "رقم هوية الوكيل",
+          "agentPhone": "رقم جوال الوكيل",
+          "agentBirthDate": "تاريخ ميلاد الوكيل",
           "tenantDelegation": "التفويض",
           "tenantUnifiedRecord": "رقم السجل",
           "tenantId": "رقم هوية المستأجر",
@@ -2449,6 +2635,7 @@
         "ejarFees": "رسوم توثيق العقد في منصة إيجار",
         "contractPeriodPrice": "سعر فترة العقد :",
         "vat": "ضريبة القيمة المضافة (15%)",
+        "taxWithPercent": "الضريبة ('{'percent'}'%)",
         "applicationFees": "رسوم التطبيق :",
         "electricityMeterFee": "رسوم عداد الكهرباء :",
         "waterMeterFee": "رسوم عداد المياه :",
@@ -2457,6 +2644,8 @@
         "servicesTotal": "إجمالي الخدمات :",
         "docFee": "رسوم التوثيق :",
         "total": "الإجمالي",
+        "couponDiscount": "خصم الكوبون",
+        "payable": "المدفوع",
         "priceBeforeCoupon": "الإجمالي قبل الخصم",
         "discount": "قيمة الخصم",
         "priceAfterCoupon": "الإجمالي بعد الخصم",

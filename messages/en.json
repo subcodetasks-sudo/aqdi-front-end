@@ -622,25 +622,19 @@
     "login": {
       "back": "Back to home",
       "greeting": "Welcome back!",
-      "subtitle": "Enter your details to sign in to your account.",
+      "subtitle": "Enter your mobile number to receive a sign-in code.",
       "phoneLabel": "Mobile number",
       "phonePlaceholder": "5xxxxxxxx",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter your password here ...",
-      "forgotPassword": "Forgot your password?",
       "rememberMe": "Remember me",
-      "togglePasswordVisibility": "Show or hide password",
-      "submit": "Sign in",
-      "submitSuccess": "Signed in successfully",
-      "submitError": "Unable to sign in, please check your credentials",
+      "submit": "Send code",
+      "submitSuccess": "A sign-in code has been sent to your mobile number",
+      "submitError": "Unable to send the sign-in code, please try again",
       "or": "OR",
       "noAccount": "Don't have an account!",
       "createAccount": "Create a new account",
       "validation": {
         "phoneRequired": "Mobile number is required",
-        "phoneInvalid": "Please enter a valid Saudi mobile number",
-        "passwordRequired": "Password is required",
-        "passwordMin": "Password must be at least 8 characters"
+        "phoneInvalid": "Please enter a valid Saudi mobile number"
       }
     },
     "register": {
@@ -689,8 +683,9 @@
       "otpLabel": "OTP verification code",
       "submit": "Confirm code",
       "submitSuccess": "Mobile number verified successfully",
+      "loginSuccess": "Signed in successfully",
       "submitError": "Unable to verify the code, please try again",
-      "phoneMissing": "Mobile number is missing, please register again",
+      "phoneMissing": "Mobile number is missing, please go back and try again",
       "notReceived": "Didn't receive the code?",
       "resend": "Resend OTP verification code",
       "resendSuccess": "A new verification code has been sent",
@@ -753,7 +748,15 @@
       "submitError": "Unable to save changes, please try again",
       "passwordUpdateError": "Name was saved, but the password could not be updated",
       "deleteAccount": "Delete account",
-      "deleteAccountUnavailable": "Account deletion is not available yet",
+      "deleteDialog": {
+        "title": "Delete account",
+        "description": "This will permanently delete your account and all associated data. This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete account",
+        "deleting": "Deleting...",
+        "success": "Your account has been deleted successfully",
+        "error": "Unable to delete your account, please try again"
+      },
       "validation": {
         "fullNameRequired": "Name is required",
         "fullNameMin": "Please enter your full name",
@@ -960,14 +963,15 @@
           "kitchenTank": "Kitchen tank",
           "parking": "Parking spaces",
           "gasMeter": "Gas meter",
-          "contractDuration": "Contract duration",
+          "contractDuration": "Contract term",
           "annualRent": "Annual rent",
           "paymentType": "Payment method",
-          "contractPeriodPrice": "Contract period price",
+          "contractPeriodPrice": "Contract period",
           "applicationFees": "Application fees",
           "tax": "Tax",
-          "electricityMeterFee": "Electricity meter fee",
-          "waterMeterFee": "Water meter fee",
+          "electricityMeterFee": "Electricity transfer fee",
+          "waterMeterFee": "Water transfer fee",
+          "paperDeedFee": "Additional paper deed fee",
           "servicesTotal": "Services total",
           "meterFeesTotal": "Meter fees total",
           "docFee": "Contract service fee",
@@ -1057,6 +1061,10 @@
     "contractTypes": {
       "housing": "Residential property",
       "commercial": "Commercial property"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
     },
     "card": {
       "requestDateLabel": "Added on:",
@@ -1167,6 +1175,7 @@
       "steps": {
         "deed": "Deed",
         "owner": "Owner",
+        "agent": "Agent",
         "review": "Property name"
       }
     },
@@ -1185,11 +1194,68 @@
           "electronic_deed_from_the_ministry_of_justice": "Electronic ownership deed from the Ministry of Justice",
           "electronic_tax_register": "Electronic ownership deed from the Real Estate Registry",
           "old_handwritten": "Paper ownership deed",
-          "property_ownership_owner_are_deceased_endowment": "Ownership deed with deceased owner",
+          "property_ownership_owner_are_deceased": "Ownership deed with deceased owner",
+          "property_ownership_owner_are_deceased_endowment": "Ownership deed — endowment with deceased owner",
           "property_ownership_owner_is_endowment": "Ownership deed with waqf owner",
+          "property_ownership_owner_are_suspended": "Ownership deed — suspended owner",
           "sale_agreement": "Sales paper stamped by a real estate office",
           "economic_cities_authority_suspended": "Economic Cities Authority document",
           "strong_argument": "Adverse possession deed"
+        }
+      },
+      "propertyDetails": {
+        "title": "Property details",
+        "subtitle": "Complete property details before saving the address",
+        "propertyType": {
+          "label": "Property type",
+          "placeholder": "Select...",
+          "loading": "Loading..."
+        },
+        "propertyUsage": {
+          "label": "Property usage",
+          "placeholder": "Select...",
+          "loading": "Loading..."
+        },
+        "numberOfFloors": {
+          "label": "Number of floors",
+          "placeholder": "e.g. 2"
+        },
+        "numberOfUnits": {
+          "label": "Units in the property",
+          "placeholder": "e.g. 4"
+        },
+        "unitsPerFloor": {
+          "label": "Units per floor",
+          "placeholder": "e.g. 2"
+        },
+        "propertyAge": {
+          "label": "Property age (years)",
+          "placeholder": "e.g. 5"
+        },
+        "electricityOwnership": {
+          "label": "Electricity meter ownership",
+          "placeholder": "Select..."
+        },
+        "waterOwnership": {
+          "label": "Water meter ownership",
+          "placeholder": "Select..."
+        },
+        "ownership": {
+          "owner": "Owner",
+          "tenant": "Tenant"
+        },
+        "registryNumber": {
+          "label": "Real estate registry number",
+          "placeholder": "Enter registry number"
+        },
+        "registryDate": {
+          "label": "First registration date",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "Day",
+          "monthPlaceholder": "Month",
+          "yearPlaceholder": "Year"
         }
       },
       "deedImage": {
@@ -1343,9 +1409,8 @@
       "validation": {
         "hintTitle": "Please complete the following fields:",
         "issues": {
-          "fullName": "Owner's full name",
           "idNumber": "Owner's ID number",
-          "idNumberLength": "ID number must be 10 digits",
+          "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
           "birthDate": "Owner's date of birth",
           "phone": "Owner's mobile number",
           "phoneLength": "Mobile number must start with 05 and be 10 digits",
@@ -1355,7 +1420,7 @@
           "powerOfAttorney": "Power of attorney attachment"
         },
         "fieldErrors": {
-          "idNumberLength": "ID number must be 10 digits",
+          "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
           "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "IBAN must start with SA followed by 22 digits"
         }
@@ -1382,10 +1447,6 @@
         "yearPlaceholder": "0000"
       },
       "ownerData": {
-        "fullName": {
-          "label": "Owner's full name",
-          "placeholder": "Type here..."
-        },
         "idNumber": {
           "label": "Owner's ID number",
           "placeholder": "1x xxx xx xxx"
@@ -1428,6 +1489,33 @@
           "previewTitle": "File preview",
           "closePreview": "Close"
         }
+      },
+      "nazirData": {
+        "sectionTitle": "Waqf nazir details",
+        "sectionDescription": "Fill in your details correctly",
+        "footerNote": "",
+        "idNumber": {
+          "label": "Nazir ID number",
+          "placeholder": "1111111111"
+        },
+        "birthDateLabel": "Nazir date of birth",
+        "phone": {
+          "label": "Nazir mobile number",
+          "placeholder": "05xxxxxxxx"
+        },
+        "powerOfAttorney": {
+          "label": "Waqf nazir capacity document",
+          "clickHere": "Click here",
+          "chooseFile": "to choose an image or file",
+          "acceptedFormats": "png - jpeg - pdf",
+          "attached": "Attached",
+          "preview": "View",
+          "change": "Change",
+          "delete": "Remove",
+          "previewTitle": "File preview",
+          "closePreview": "Close"
+        },
+        "documentHint": "Proves the nazir’s capacity to represent the endowment (trusteeship deed or trustees’ power of attorney)."
       }
     },
     "review": {
@@ -1635,7 +1723,9 @@
       "steps": {
         "intro": "My contract",
         "deed": "Deed",
+        "waqfNazir": "Waqf nazir",
         "owner": "Owner",
+        "agent": "Agent",
         "tenant": "Tenant",
         "finance": "Finance"
       }
@@ -1689,6 +1779,102 @@
           "subtitle": "Identify the property location using one of the three methods"
         }
       ],
+      "legalAgent": {
+        "title": "Legal agent details",
+        "subtitle": "Please fill in your details correctly",
+        "documentHint": "Proves the legal agent's authority to represent the deceased owner's heirs",
+        "agentData": {
+          "sectionTitle": "Legal agent details",
+          "sectionDescription": "Please fill in your details correctly",
+          "footerNote": "",
+          "idNumber": {
+            "label": "Agent ID number",
+            "placeholder": "1xxxxxxxxx"
+          },
+          "birthDateLabel": "Agent date of birth",
+          "phone": {
+            "label": "Agent mobile number",
+            "placeholder": "05xxxxxxxx"
+          },
+          "powerOfAttorney": {
+            "label": "Legal agent capacity document",
+            "clickHere": "Click here",
+            "chooseFile": "to choose an image or file",
+            "acceptedFormats": "png - jpeg - pdf",
+            "attached": "Attached",
+            "change": "Change",
+            "preview": "Preview",
+            "delete": "Remove",
+            "previewTitle": "File preview",
+            "closePreview": "Close"
+          }
+        },
+        "birthDate": {
+          "label": "Agent date of birth",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "00",
+          "monthPlaceholder": "00",
+          "yearPlaceholder": "0000"
+        },
+        "validation": {
+          "fieldErrors": {
+            "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
+            "phoneLength": "Mobile number must start with 05 and be 10 digits"
+          }
+        }
+      },
+      "waqfNazir": {
+        "title": "Waqf nazir details",
+        "subtitle": "Please fill in your details correctly",
+        "documentHint": "Proves the nazir's authority to represent the endowment (trusteeship deed or nazirs' power of attorney)",
+        "agentData": {
+          "sectionTitle": "Waqf nazir details",
+          "sectionDescription": "Please fill in your details correctly",
+          "footerNote": "",
+          "idNumber": {
+            "label": "Nazir ID number",
+            "placeholder": "1111111111"
+          },
+          "birthDateLabel": "Nazir date of birth",
+          "phone": {
+            "label": "Nazir mobile number",
+            "placeholder": "05xxxxxxxx"
+          },
+          "powerOfAttorney": {
+            "label": "Waqf nazir capacity document",
+            "clickHere": "Click here",
+            "chooseFile": "to choose an image or file",
+            "acceptedFormats": "png - jpeg - pdf",
+            "attached": "Attached successfully",
+            "change": "Change",
+            "preview": "Preview",
+            "delete": "Remove",
+            "previewTitle": "File preview",
+            "closePreview": "Close"
+          }
+        },
+        "birthDate": {
+          "label": "Nazir date of birth",
+          "hijri": "Hijri",
+          "gregorian": "Gregorian",
+          "day": "Day",
+          "month": "Month",
+          "year": "Year",
+          "dayPlaceholder": "00",
+          "monthPlaceholder": "00",
+          "yearPlaceholder": "0000"
+        },
+        "validation": {
+          "fieldErrors": {
+            "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
+            "phoneLength": "Mobile number must start with 05 and be 10 digits"
+          }
+        }
+      },
       "deedType": {
         "label": "Select document type",
         "placeholder": "Select from here..",
@@ -1880,9 +2066,8 @@
       "validation": {
         "hintTitle": "Please complete the following fields:",
         "issues": {
-          "fullName": "Owner's full name",
           "idNumber": "Owner's ID number",
-          "idNumberLength": "ID number must be 10 digits",
+          "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
           "birthDate": "Owner's date of birth",
           "phone": "Owner's mobile number",
           "phoneLength": "Mobile number must start with 05 and be 10 digits",
@@ -1892,7 +2077,7 @@
           "powerOfAttorney": "Power of attorney attachment"
         },
         "fieldErrors": {
-          "idNumberLength": "ID number must be 10 digits",
+          "idNumberLength": "ID number must be 10 digits and start with 1 or 2",
           "phoneLength": "Mobile number must start with 05 and be 10 digits",
           "iban": "IBAN must start with SA followed by 22 digits"
         }
@@ -1915,10 +2100,6 @@
         "yearPlaceholder": "0000"
       },
       "ownerData": {
-        "fullName": {
-          "label": "Owner full name",
-          "placeholder": "Write here..."
-        },
         "idNumber": {
           "label": "Owner ID number",
           "placeholder": "1xxxxxxxxx"
@@ -2355,6 +2536,8 @@
           "nationalAddress": "National address (attach address card)",
           "ownerSelf": "Owner details (self)",
           "ownerWithAgent": "Owner details (with agent)",
+          "agent": "Agent details",
+          "nazir": "Waqf nazir details",
           "tenantIndividual": "Tenant details (individual)",
           "tenantOrganization": "Tenant details (establishment or company)",
           "unit": "Unit details",
@@ -2373,6 +2556,9 @@
           "ownerId": "Owner ID number",
           "ownerPhone": "Owner mobile number",
           "ownerBirthDate": "Owner date of birth",
+          "agentId": "Agent ID number",
+          "agentPhone": "Agent mobile number",
+          "agentBirthDate": "Agent date of birth",
           "tenantDelegation": "Authorization",
           "tenantUnifiedRecord": "Registration number",
           "tenantId": "Tenant ID number",
@@ -2429,6 +2615,7 @@
         "ejarFees": "Contract documentation fees on Ejar",
         "contractPeriodPrice": "Contract period price:",
         "vat": "Value Added Tax (15%)",
+        "taxWithPercent": "Tax ('{'percent'}'%)",
         "applicationFees": "Application fees:",
         "electricityMeterFee": "Electricity meter fee:",
         "waterMeterFee": "Water meter fee:",
@@ -2437,6 +2624,8 @@
         "servicesTotal": "Services total:",
         "docFee": "Documentation fees:",
         "total": "Total",
+        "couponDiscount": "Coupon discount",
+        "payable": "Payable",
         "priceBeforeCoupon": "Total before discount",
         "discount": "Discount amount",
         "priceAfterCoupon": "Total after discount",
