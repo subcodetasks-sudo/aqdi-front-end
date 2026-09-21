@@ -1,6 +1,5 @@
 import MyPropertiesAddButton from "@/features/my-properties/components/my-properties-add-button";
-import MyPropertiesEmptyState from "@/features/my-properties/components/my-properties-empty-state";
-import MyPropertiesGrid from "@/features/my-properties/components/my-properties-grid";
+import MyPropertiesListContent from "@/features/my-properties/components/my-properties-list-content";
 import ServicesPageBackConfig from "@/features/services/components/services-page-back-config";
 import type { MyPropertyCardData } from "@/features/my-properties/types/property-card";
 import type { MyPropertiesLabels } from "@/features/my-properties/types/my-properties-labels";
@@ -39,15 +38,7 @@ export default function MyPropertiesPageContent({
         </div>
       </div>
 
-      {items.length > 0 ? (
-        <MyPropertiesGrid items={items} />
-      ) : (
-        <MyPropertiesEmptyState
-          title={labels.emptyStateTitle}
-          description={labels.emptyStateDescription}
-          addPropertyLabel={labels.addProperty}
-        />
-      )}
+      <MyPropertiesListContent labels={labels} items={items} />
     </>
   );
 }

@@ -11,4 +11,8 @@ export type MyPropertiesLabels = {
     housing: string;
     commercial: string;
   };
+  pagination: {
+    previous: string;
+    next: string;
+  };
 };
