@@ -13,6 +13,9 @@ import {
 } from "@/features/create-contract/types/national-address";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
+import { isLegalAgentDataComplete } from "@/features/create-contract/utils/is-legal-agent-data-complete";
+import { requiresDeceasedOwnerLegalAgent } from "@/features/create-contract/utils/requires-deceased-owner-legal-agent";
+import { requiresWaqfOwnerNazir } from "@/features/create-contract/utils/requires-waqf-owner-nazir";
 import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
 import { deedTypeSupportsManualEntry } from "@/features/shared/utils/supports-manual-deed-entry";
 
@@ -29,6 +32,11 @@ export function useCreateContractDeedStep() {
   );
   const isAddressAlreadySubmitted = useCreateContractDraftStore(
     (state) => (state.contractStep2Data?.step ?? 0) >= 3,
+  );
+  const agentData = useCreateContractDraftStore((state) => state.owner.agentData);
+  const setAgentData = useCreateContractDraftStore((state) => state.setAgentData);
+  const contractStep2Data = useCreateContractDraftStore(
+    (state) => state.contractStep2Data,
   );
   const setSelectedDeedType = useCreateContractDraftStore(
     (state) => state.setSelectedDeedType,
@@ -97,8 +105,11 @@ export function useCreateContractDeedStep() {
     contractStep1Data?.Image_inheritance_certificate,
   );
   const existingHeirsPoaImageUrl = resolveContractAssetUrl(
-    contractStep1Data?.copy_power_of_attorney_from_heirs_to_agent,
+    contractStep2Data?.copy_power_of_attorney_from_heirs_to_agent ??
+      contractStep2Data?.copy_of_the_authorization_or_agency ??
+      contractStep1Data?.copy_power_of_attorney_from_heirs_to_agent,
   );
+  const existingLegalAgentPoaUrl = existingHeirsPoaImageUrl;
   const existingEndowmentCertImageUrl = resolveContractAssetUrl(
     contractStep1Data?.copy_of_the_endowment_registration_certificate,
   );
@@ -108,6 +119,9 @@ export function useCreateContractDeedStep() {
   const existingGuardiansPoaImageUrl = resolveContractAssetUrl(
     contractStep1Data?.copy_of_guardians_power_of_attorney_for_agent,
   );
+  /** Prefill nazir capacity doc from step1 trusteeship or guardians POA. */
+  const existingWaqfNazirDocumentUrl =
+    existingTrusteeshipImageUrl ?? existingGuardiansPoaImageUrl;
   const existingAddressImageUrl = resolveContractAssetUrl(
     existingPropertyContext?.property.image_address,
   );
@@ -117,6 +131,20 @@ export function useCreateContractDeedStep() {
   const needsFrontBack = deedTypeNeedsFrontBack(deed.selectedDeedType);
   const isDeceasedOwner = deedTypeIsDeceasedOwner(deed.selectedDeedType);
   const isWaqfOwner = deedTypeIsWaqfOwner(deed.selectedDeedType);
+  const needsLegalAgent = requiresDeceasedOwnerLegalAgent({
+    selectedDeedType: deed.selectedDeedType,
+    instrumentType: contractStep1Data?.instrument_type,
+    requiresDeceasedOwnerLegalAgent:
+      contractStep2Data?.requires_deceased_owner_legal_agent ??
+      contractStep1Data?.requires_deceased_owner_legal_agent,
+    propertyOwnerIsDeceased:
+      contractStep2Data?.property_owner_is_deceased ??
+      contractStep1Data?.property_owner_is_deceased,
+  });
+  const needsWaqfNazir = requiresWaqfOwnerNazir({
+    selectedDeedType: deed.selectedDeedType,
+    instrumentType: contractStep1Data?.instrument_type,
+  });
   const isMultipleTrusteeshipDeedCopy = deed.isMultipleTrusteeshipDeedCopy;
   const hasMinorHeirs = deed.hasMinorHeirs;
 
@@ -142,35 +170,30 @@ export function useCreateContractDeedStep() {
     deedTypeSupportsManualEntry(deed.selectedDeedType) &&
     isManualDeedEntryComplete(deed.manualDeedEntry);
 
+  const isGuardiansPoaSatisfied =
+    (!isDeceasedOwner || !hasMinorHeirs || hasGuardiansPoaImage) &&
+    (!isWaqfOwner || !isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage);
+
   const isDeedComplete =
-    isInstrumentTypeLocked ||
-    isDeedAlreadySubmitted ||
-    (deed.selectedDeedType !== "" &&
-      (isLeaseRenewal
-        ? hasSingleImage
-        : hasManualInstrumentEntry
-          ? isDeceasedOwner
-            ? hasInheritanceImage &&
-              hasHeirsPoaImage &&
-              (!hasMinorHeirs || hasGuardiansPoaImage)
-            : isWaqfOwner
-              ? hasEndowmentCertImage &&
-                hasTrusteeshipImage &&
-                (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-              : true
-          : needsFrontBack
-            ? hasFrontImage && hasBackImage
-            : isDeceasedOwner
-              ? hasSingleImage &&
-                hasInheritanceImage &&
-                hasHeirsPoaImage &&
-                (!hasMinorHeirs || hasGuardiansPoaImage)
+    (isInstrumentTypeLocked ||
+      isDeedAlreadySubmitted ||
+      (deed.selectedDeedType !== "" &&
+        (isLeaseRenewal
+          ? hasSingleImage
+          : hasManualInstrumentEntry
+            ? isDeceasedOwner
+              ? hasInheritanceImage && hasHeirsPoaImage
               : isWaqfOwner
-                ? hasSingleImage &&
-                  hasEndowmentCertImage &&
-                  hasTrusteeshipImage &&
-                  (!isMultipleTrusteeshipDeedCopy || hasGuardiansPoaImage)
-                : hasSingleImage));
+                ? hasEndowmentCertImage && hasTrusteeshipImage
+                : true
+            : needsFrontBack
+              ? hasFrontImage && hasBackImage
+              : isDeceasedOwner
+                ? hasSingleImage && hasInheritanceImage && hasHeirsPoaImage
+                : isWaqfOwner
+                  ? hasSingleImage && hasEndowmentCertImage && hasTrusteeshipImage
+                  : hasSingleImage))) &&
+    isGuardiansPoaSatisfied;
 
   const showNationalAddress =
     deed.selectedDeedType !== "" && !isSublease;
@@ -194,7 +217,15 @@ export function useCreateContractDeedStep() {
         (deed.leaseRenewalAddressMode === "change" && isStandardAddressComplete)
       : isStandardAddressComplete);
 
-  const canContinue = isDeedComplete && isAddressComplete;
+  const isLegalAgentComplete =
+    !needsLegalAgent ||
+    isAddressAlreadySubmitted ||
+    isLegalAgentDataComplete(agentData, {
+      hasExistingPoa: existingLegalAgentPoaUrl !== null,
+    });
+
+  // Waqf nazir identity is collected on its own wizard step after deed.
+  const canContinue = isDeedComplete && isAddressComplete && isLegalAgentComplete;
 
   return {
     selectedDeedType: deed.selectedDeedType,
@@ -228,6 +259,12 @@ export function useCreateContractDeedStep() {
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,
+    needsLegalAgent,
+    needsWaqfNazir,
+    agentData,
+    setAgentData,
+    existingLegalAgentPoaUrl,
+    existingWaqfNazirDocumentUrl,
     nationalAddressMethod: deed.nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles: deed.nationalAddressPhotoFiles,

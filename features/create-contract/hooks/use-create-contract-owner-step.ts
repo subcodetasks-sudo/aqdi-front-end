@@ -11,10 +11,9 @@ export function useCreateContractOwnerStep() {
   const setOwnerData = useCreateContractDraftStore((state) => state.setOwnerData);
   const setAgentData = useCreateContractDraftStore((state) => state.setAgentData);
 
-  const ownerComplete = isOwnerDataComplete(owner.ownerData);
-  const agentComplete =
-    owner.ownerData.hasAgent !== "yes" || isAgentDataComplete(owner.agentData);
-  const canContinue = ownerComplete && agentComplete;
+  const needsAgent = owner.ownerData.hasAgent === "yes";
+  const agentComplete = !needsAgent || isAgentDataComplete(owner.agentData);
+  const canContinue = isOwnerDataComplete(owner.ownerData) && agentComplete;
 
   return {
     ownerData: owner.ownerData,

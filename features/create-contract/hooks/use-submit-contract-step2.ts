@@ -10,6 +10,7 @@ import {
   DEFAULT_NATIONAL_ADDRESS_LOCATION,
   type NationalAddressMethodId,
 } from "@/features/create-contract/types/national-address";
+import type { AgentDataState } from "@/features/create-contract/types/owner-step";
 import type { ManualNationalAddressData } from "@/features/shared/types/manual-national-address";
 
 type SubmitContractStep2Input = {
@@ -17,6 +18,10 @@ type SubmitContractStep2Input = {
   photoFiles: File[];
   linkUrl: string;
   manualAddress: ManualNationalAddressData;
+  legalAgent?: AgentDataState;
+  hasExistingLegalAgentPoa?: boolean;
+  waqfNazir?: AgentDataState;
+  hasExistingWaqfNazirDocument?: boolean;
 };
 
 export function useSubmitContractStep2() {
@@ -40,6 +45,9 @@ export function useSubmitContractStep2() {
     photoFiles,
     linkUrl,
     manualAddress,
+    legalAgent,
+    hasExistingLegalAgentPoa = false,
+    waqfNazir,
   }: SubmitContractStep2Input): Promise<boolean> {
     if (isSubmitting) {
       return false;
@@ -62,7 +70,9 @@ export function useSubmitContractStep2() {
     if (
       isExistingPropertyContract &&
       addressMethod === "photo" &&
-      photoFiles.length === 0
+      photoFiles.length === 0 &&
+      !legalAgent &&
+      !waqfNazir
     ) {
       return true;
     }
@@ -79,6 +89,23 @@ export function useSubmitContractStep2() {
         addressUrl:
           addressMethod === "link" ? linkUrl.trim() || undefined : undefined,
         manualAddress: addressMethod === "manual" ? manualAddress : undefined,
+        legalAgent: legalAgent
+          ? {
+              idNumber: legalAgent.idNumber,
+              birthDate: legalAgent.birthDate,
+              phone: legalAgent.phone,
+            }
+          : undefined,
+        legalAgentPoaFile: legalAgent?.powerOfAttorneyFiles[0],
+        hasExistingLegalAgentPoa,
+        waqfNazir: waqfNazir
+          ? {
+              idNumber: waqfNazir.idNumber,
+              birthDate: waqfNazir.birthDate,
+              phone: waqfNazir.phone,
+            }
+          : undefined,
+        waqfNazirDocumentFile: waqfNazir?.powerOfAttorneyFiles[0],
       });
 
       if (!result.ok) {

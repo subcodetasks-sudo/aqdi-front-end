@@ -22,6 +22,8 @@ import type {
 } from "@/features/create-contract/types/create-contract-review-order";
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
+import { isDeceasedOwnerContract } from "@/features/create-contract/utils/is-deceased-owner-contract";
+import { requiresWaqfOwnerNazir } from "@/features/create-contract/utils/requires-waqf-owner-nazir";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 import { parseContractPeriodLabel } from "@/features/create-contract/utils/parse-contract-period-label";
@@ -282,6 +284,7 @@ export function useContractReviewOrderSummary(
     (state) => state.contractStep2Data?.image_address,
   );
   const ownerData = useCreateContractDraftStore((state) => state.owner.ownerData);
+  const agentData = useCreateContractDraftStore((state) => state.owner.agentData);
   const tenantData = useCreateContractDraftStore((state) => state.tenant.tenantData);
   const rentedUnits = useCreateContractDraftStore((state) => state.tenant.rentedUnits);
   const financeData = useCreateContractDraftStore((state) => state.financeData);
@@ -290,6 +293,14 @@ export function useContractReviewOrderSummary(
     const empty = labels.emptyValue;
     const isSublease = isSubleaseContract({ selectedDeedType, instrumentType });
     const ownerSkipped = isOwnerStepSkipped({ selectedDeedType, instrumentType });
+    const deceasedOwner = isDeceasedOwnerContract({
+      selectedDeedType,
+      instrumentType,
+    });
+    const waqfNazir = requiresWaqfOwnerNazir({
+      selectedDeedType,
+      instrumentType,
+    });
     const isLeaseRenewal = deedTypeIsLeaseRenewal(selectedDeedType);
 
     const contractTypeLabel =
@@ -478,7 +489,7 @@ export function useContractReviewOrderSummary(
       sections.push({
         id: "owner",
         title:
-          ownerData.hasAgent === "yes"
+          !deceasedOwner && !waqfNazir && ownerData.hasAgent === "yes"
             ? labels.sections.ownerWithAgent
             : labels.sections.ownerSelf,
         editTarget: "owner",
@@ -495,6 +506,56 @@ export function useContractReviewOrderSummary(
             label: labels.fields.ownerBirthDate,
             value: formatBirthDate(
               ownerData.birthDate,
+              labels.calendar,
+              empty,
+            ),
+          },
+        ],
+      });
+
+      if (deceasedOwner || ownerData.hasAgent === "yes") {
+        sections.push({
+          id: "agent",
+          title: labels.sections.agent,
+          editTarget: deceasedOwner ? "nationalAddress" : "owner",
+          fields: [
+            {
+              label: labels.fields.agentId,
+              value: displayValue(agentData.idNumber, empty),
+            },
+            {
+              label: labels.fields.agentPhone,
+              value: displayValue(agentData.phone, empty),
+            },
+            {
+              label: labels.fields.agentBirthDate,
+              value: formatBirthDate(
+                agentData.birthDate,
+                labels.calendar,
+                empty,
+              ),
+            },
+          ],
+        });
+      }
+    } else if (waqfNazir) {
+      sections.push({
+        id: "agent",
+        title: labels.sections.nazir,
+        editTarget: "waqfNazir",
+        fields: [
+          {
+            label: labels.fields.agentId,
+            value: displayValue(agentData.idNumber, empty),
+          },
+          {
+            label: labels.fields.agentPhone,
+            value: displayValue(agentData.phone, empty),
+          },
+          {
+            label: labels.fields.agentBirthDate,
+            value: formatBirthDate(
+              agentData.birthDate,
               labels.calendar,
               empty,
             ),
@@ -756,6 +817,7 @@ export function useContractReviewOrderSummary(
     nationalAddressMethod,
     nationalAddressPhotoFiles,
     ownerData,
+    agentData,
     paymentTypesQuery.data,
     rentedUnits,
     selectedDeedType,

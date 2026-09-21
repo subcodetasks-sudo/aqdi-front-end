@@ -49,7 +49,7 @@ export function useCreateContractSteps() {
   function goToStep(step: CreateContractStep) {
     if (
       existingPropertyContext &&
-      (step === "deed" || step === "owner")
+      (step === "deed" || step === "owner" || step === "waqfNazir")
     ) {
       return;
     }
@@ -64,7 +64,7 @@ export function useCreateContractSteps() {
   function isStepUnlocked(step: CreateContractStep) {
     if (
       existingPropertyContext &&
-      (step === "deed" || step === "owner")
+      (step === "deed" || step === "owner" || step === "waqfNazir")
     ) {
       return false;
     }
@@ -79,6 +79,7 @@ export function useCreateContractSteps() {
     goNext: goNextStep,
     goBack: goBackStep,
     goToStep,
+    setCurrentStep,
     isStepUnlocked,
   };
 }
