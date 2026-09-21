@@ -7,7 +7,7 @@ import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phon
 
 type LoginUserPayload = {
   phone: string;
-  password: string;
+  otpCode: string;
   rememberMe: boolean;
   fcmToken?: string | null;
 };
@@ -17,7 +17,7 @@ export async function loginUser(payload: LoginUserPayload) {
     method: "POST",
     body: JSON.stringify({
       mobile: getSaudiMobileForApi(payload.phone),
-      password: payload.password,
+      otp_code: payload.otpCode,
       ...(payload.fcmToken ? { fcm_token: payload.fcmToken } : {}),
     }),
     cache: "no-store",
@@ -30,13 +30,16 @@ export async function loginUser(payload: LoginUserPayload) {
     } as const;
   }
 
-  const { user, token } = response.data.data;
+  const { user, login_notification: loginNotification, ...tokens } =
+    response.data.data;
 
-  await setAuthToken(token, payload.rememberMe);
+  await setAuthToken(tokens.token, payload.rememberMe);
 
   return {
     ok: true,
     message: response.data.message,
     user,
+    tokens,
+    loginNotification: loginNotification ?? null,
   } as const;
 }

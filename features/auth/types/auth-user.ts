@@ -18,12 +18,27 @@ export type AuthUser = {
   total_paid_amount: number;
 };
 
+/** Shared shape of the token fields returned by both login and refresh-token. */
+export type AuthTokenPayload = {
+  token: string;
+  refresh_token: string;
+  token_expires_in: number;
+  token_expires_at: string;
+  refresh_token_expires_at: string;
+};
+
+export type LoginNotification = {
+  title?: string;
+  message?: string;
+  [key: string]: unknown;
+};
+
 export type LoginApiResponse = {
   message: string;
   code: number;
   success: boolean;
   data?: {
     user: AuthUser;
-    token: string;
-  };
+    login_notification?: LoginNotification | null;
+  } & AuthTokenPayload;
 };

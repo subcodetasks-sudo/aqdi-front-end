@@ -9,9 +9,25 @@ type LogoutApiResponse = {
   success: boolean;
 };
 
-export async function logoutUser() {
+type LogoutUserPayload = {
+  fcmToken?: string | null;
+  refreshToken?: string | null;
+};
+
+export async function logoutUser(payload: LogoutUserPayload = {}) {
+  const body: Record<string, string> = {};
+
+  if (payload.refreshToken) {
+    body.refresh_token = payload.refreshToken;
+  }
+
+  if (payload.fcmToken) {
+    body.fcm_token = payload.fcmToken;
+  }
+
   const response = await apiRequest<LogoutApiResponse>("/auth/logout", {
     method: "POST",
+    body: JSON.stringify(body),
     cache: "no-store",
   });
 
