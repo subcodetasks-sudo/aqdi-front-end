@@ -100,7 +100,9 @@ export default async function CreateContractPage({
       steps: {
         intro: t("stepper.steps.intro"),
         deed: t("stepper.steps.deed"),
+        waqfNazir: t("stepper.steps.waqfNazir"),
         owner: t("stepper.steps.owner"),
+        agent: t("stepper.steps.agent"),
         tenant: t("stepper.steps.tenant"),
         finance: t("stepper.steps.finance"),
       },
@@ -299,6 +301,122 @@ export default async function CreateContractPage({
           yearPlaceholder: t("deed.manualEntry.instrumentDate.yearPlaceholder"),
         },
       },
+      legalAgent: {
+        title: t("deed.legalAgent.title"),
+        subtitle: t("deed.legalAgent.subtitle"),
+        documentHint: t("deed.legalAgent.documentHint"),
+        agentData: {
+          sectionTitle: t("deed.legalAgent.agentData.sectionTitle"),
+          sectionDescription: t("deed.legalAgent.agentData.sectionDescription"),
+          footerNote: t("deed.legalAgent.agentData.footerNote"),
+          idNumber: {
+            label: t("deed.legalAgent.agentData.idNumber.label"),
+            placeholder: t("deed.legalAgent.agentData.idNumber.placeholder"),
+          },
+          birthDateLabel: t("deed.legalAgent.agentData.birthDateLabel"),
+          phone: {
+            label: t("deed.legalAgent.agentData.phone.label"),
+            placeholder: t("deed.legalAgent.agentData.phone.placeholder"),
+          },
+          powerOfAttorney: {
+            label: t("deed.legalAgent.agentData.powerOfAttorney.label"),
+            clickHere: t("deed.legalAgent.agentData.powerOfAttorney.clickHere"),
+            chooseFile: t("deed.legalAgent.agentData.powerOfAttorney.chooseFile"),
+            acceptedFormats: t(
+              "deed.legalAgent.agentData.powerOfAttorney.acceptedFormats",
+            ),
+            attached: t("deed.legalAgent.agentData.powerOfAttorney.attached"),
+            change: t("deed.legalAgent.agentData.powerOfAttorney.change"),
+            preview: t("deed.legalAgent.agentData.powerOfAttorney.preview"),
+            delete: t("deed.legalAgent.agentData.powerOfAttorney.delete"),
+            previewTitle: t(
+              "deed.legalAgent.agentData.powerOfAttorney.previewTitle",
+            ),
+            closePreview: t(
+              "deed.legalAgent.agentData.powerOfAttorney.closePreview",
+            ),
+          },
+        },
+        birthDate: {
+          label: t("deed.legalAgent.birthDate.label"),
+          hijri: t("deed.legalAgent.birthDate.hijri"),
+          gregorian: t("deed.legalAgent.birthDate.gregorian"),
+          day: t("deed.legalAgent.birthDate.day"),
+          month: t("deed.legalAgent.birthDate.month"),
+          year: t("deed.legalAgent.birthDate.year"),
+          dayPlaceholder: t("deed.legalAgent.birthDate.dayPlaceholder"),
+          monthPlaceholder: t("deed.legalAgent.birthDate.monthPlaceholder"),
+          yearPlaceholder: t("deed.legalAgent.birthDate.yearPlaceholder"),
+        },
+        validation: {
+          fieldErrors: {
+            idNumberLength: t(
+              "deed.legalAgent.validation.fieldErrors.idNumberLength",
+            ),
+            phoneLength: t(
+              "deed.legalAgent.validation.fieldErrors.phoneLength",
+            ),
+          },
+        },
+      },
+      waqfNazir: {
+        title: t("deed.waqfNazir.title"),
+        subtitle: t("deed.waqfNazir.subtitle"),
+        documentHint: t("deed.waqfNazir.documentHint"),
+        agentData: {
+          sectionTitle: t("deed.waqfNazir.agentData.sectionTitle"),
+          sectionDescription: t("deed.waqfNazir.agentData.sectionDescription"),
+          footerNote: t("deed.waqfNazir.agentData.footerNote"),
+          idNumber: {
+            label: t("deed.waqfNazir.agentData.idNumber.label"),
+            placeholder: t("deed.waqfNazir.agentData.idNumber.placeholder"),
+          },
+          birthDateLabel: t("deed.waqfNazir.agentData.birthDateLabel"),
+          phone: {
+            label: t("deed.waqfNazir.agentData.phone.label"),
+            placeholder: t("deed.waqfNazir.agentData.phone.placeholder"),
+          },
+          powerOfAttorney: {
+            label: t("deed.waqfNazir.agentData.powerOfAttorney.label"),
+            clickHere: t("deed.waqfNazir.agentData.powerOfAttorney.clickHere"),
+            chooseFile: t("deed.waqfNazir.agentData.powerOfAttorney.chooseFile"),
+            acceptedFormats: t(
+              "deed.waqfNazir.agentData.powerOfAttorney.acceptedFormats",
+            ),
+            attached: t("deed.waqfNazir.agentData.powerOfAttorney.attached"),
+            change: t("deed.waqfNazir.agentData.powerOfAttorney.change"),
+            preview: t("deed.waqfNazir.agentData.powerOfAttorney.preview"),
+            delete: t("deed.waqfNazir.agentData.powerOfAttorney.delete"),
+            previewTitle: t(
+              "deed.waqfNazir.agentData.powerOfAttorney.previewTitle",
+            ),
+            closePreview: t(
+              "deed.waqfNazir.agentData.powerOfAttorney.closePreview",
+            ),
+          },
+        },
+        birthDate: {
+          label: t("deed.waqfNazir.birthDate.label"),
+          hijri: t("deed.waqfNazir.birthDate.hijri"),
+          gregorian: t("deed.waqfNazir.birthDate.gregorian"),
+          day: t("deed.waqfNazir.birthDate.day"),
+          month: t("deed.waqfNazir.birthDate.month"),
+          year: t("deed.waqfNazir.birthDate.year"),
+          dayPlaceholder: t("deed.waqfNazir.birthDate.dayPlaceholder"),
+          monthPlaceholder: t("deed.waqfNazir.birthDate.monthPlaceholder"),
+          yearPlaceholder: t("deed.waqfNazir.birthDate.yearPlaceholder"),
+        },
+        validation: {
+          fieldErrors: {
+            idNumberLength: t(
+              "deed.waqfNazir.validation.fieldErrors.idNumberLength",
+            ),
+            phoneLength: t(
+              "deed.waqfNazir.validation.fieldErrors.phoneLength",
+            ),
+          },
+        },
+      },
     },
     owner: {
       cancelRequest: t("owner.cancelRequest"),
@@ -334,10 +452,6 @@ export default async function CreateContractPage({
         yearPlaceholder: t("owner.birthDate.yearPlaceholder"),
       },
       ownerData: {
-        fullName: {
-          label: t("owner.ownerData.fullName.label"),
-          placeholder: t("owner.ownerData.fullName.placeholder"),
-        },
         idNumber: {
           label: t("owner.ownerData.idNumber.label"),
           placeholder: t("owner.ownerData.idNumber.placeholder"),
@@ -784,6 +898,8 @@ export default async function CreateContractPage({
           nationalAddress: t("payment.reviewDialog.sections.nationalAddress"),
           ownerSelf: t("payment.reviewDialog.sections.ownerSelf"),
           ownerWithAgent: t("payment.reviewDialog.sections.ownerWithAgent"),
+          agent: t("payment.reviewDialog.sections.agent"),
+          nazir: t("payment.reviewDialog.sections.nazir"),
           tenantIndividual: t("payment.reviewDialog.sections.tenantIndividual"),
           tenantOrganization: t(
             "payment.reviewDialog.sections.tenantOrganization",
@@ -806,6 +922,9 @@ export default async function CreateContractPage({
           ownerId: t("payment.reviewDialog.fields.ownerId"),
           ownerPhone: t("payment.reviewDialog.fields.ownerPhone"),
           ownerBirthDate: t("payment.reviewDialog.fields.ownerBirthDate"),
+          agentId: t("payment.reviewDialog.fields.agentId"),
+          agentPhone: t("payment.reviewDialog.fields.agentPhone"),
+          agentBirthDate: t("payment.reviewDialog.fields.agentBirthDate"),
           tenantDelegation: t("payment.reviewDialog.fields.tenantDelegation"),
           tenantUnifiedRecord: t(
             "payment.reviewDialog.fields.tenantUnifiedRecord",
@@ -874,6 +993,7 @@ export default async function CreateContractPage({
         ejarFees: t("payment.summary.ejarFees"),
         contractPeriodPrice: t("payment.summary.contractPeriodPrice"),
         vat: t("payment.summary.vat"),
+        taxWithPercent: t("payment.summary.taxWithPercent"),
         applicationFees: t("payment.summary.applicationFees"),
         electricityMeterFee: t("payment.summary.electricityMeterFee"),
         waterMeterFee: t("payment.summary.waterMeterFee"),
@@ -882,6 +1002,8 @@ export default async function CreateContractPage({
         servicesTotal: t("payment.summary.servicesTotal"),
         docFee: t("payment.summary.docFee"),
         total: t("payment.summary.total"),
+        couponDiscount: t("payment.summary.couponDiscount"),
+        payable: t("payment.summary.payable"),
         priceBeforeCoupon: t("payment.summary.priceBeforeCoupon"),
         discount: t("payment.summary.discount"),
         priceAfterCoupon: t("payment.summary.priceAfterCoupon"),
