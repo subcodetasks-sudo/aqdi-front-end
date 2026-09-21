@@ -6,6 +6,7 @@ import { getFirebaseMessagingAsync } from "@/features/notifications/services/fir
 
 const SERVICE_WORKER_URL = "/firebase-messaging-sw.js";
 const SERVICE_WORKER_SCOPE = "/";
+const FCM_TOKEN_STORAGE_KEY = "aqdi_fcm_token";
 
 async function ensureServiceWorkerRegistration() {
   if (!("serviceWorker" in navigator)) {
@@ -32,6 +33,61 @@ async function ensureServiceWorkerRegistration() {
 
 export async function registerFirebaseServiceWorker() {
   return ensureServiceWorkerRegistration();
+}
+
+export function getStoredFcmToken() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return localStorage.getItem(FCM_TOKEN_STORAGE_KEY);
+}
+
+export function storeFcmToken(token: string) {
+  if (typeof window === "undefined" || !token) {
+    return;
+  }
+
+  localStorage.setItem(FCM_TOKEN_STORAGE_KEY, token);
+}
+
+export function clearStoredFcmToken() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  localStorage.removeItem(FCM_TOKEN_STORAGE_KEY);
+}
+
+/**
+ * Stops push delivery for this browser: deletes the FCM registration with
+ * Firebase, then clears the locally cached token. Best-effort — never throws.
+ */
+export async function disconnectFcmToken() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    if (!isFirebaseConfigured()) {
+      return;
+    }
+
+    const [{ deleteToken, isSupported }, messagingInstance] = await Promise.all([
+      import("firebase/messaging"),
+      getFirebaseMessagingAsync(),
+    ]);
+
+    if (!(await isSupported()) || !messagingInstance) {
+      return;
+    }
+
+    await deleteToken(messagingInstance);
+  } catch (error) {
+    console.warn("FCM: Failed to delete token:", error);
+  } finally {
+    clearStoredFcmToken();
+  }
 }
 
 export async function getFcmToken(options?: { requestPermission?: boolean }) {
@@ -90,6 +146,10 @@ export async function getFcmToken(options?: { requestPermission?: boolean }) {
       vapidKey,
       serviceWorkerRegistration: registration,
     });
+
+    if (token) {
+      storeFcmToken(token);
+    }
 
     return token || null;
   } catch (error) {

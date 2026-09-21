@@ -3,6 +3,7 @@
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import PaymentStatusContent from "@/features/payment/components/payment-status-content";
 import {
@@ -57,6 +58,11 @@ export default function PaymentStatusVerifier({
   const [verification, setVerification] = useState<VerificationState>({
     state: "loading",
   });
+
+  // Soft navigations can leave validation toasts from create-contract visible.
+  useEffect(() => {
+    toast.dismiss();
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
