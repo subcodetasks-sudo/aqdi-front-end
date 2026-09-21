@@ -9,7 +9,11 @@ import {
   type PersistedFile,
 } from "@/lib/storage/persisted-files";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
+import {
+  deedTypeIsDeceasedOwner,
+  deedTypeIsLeaseRenewal,
+  deedTypeIsWaqfOwner,
+} from "@/features/create-contract/types/deed-type";
 import type { LeaseRenewalAddressMode } from "@/features/create-contract/types/lease-renewal-address-mode";
 import type { LeaseRenewalUnitMode } from "@/features/create-contract/types/lease-renewal-unit-mode";
 import type { NationalAddressMethodId } from "@/features/create-contract/types/national-address";
@@ -78,11 +82,13 @@ import {
   buildFinanceDataFromStep6,
 } from "@/features/create-contract/utils/build-finance-data-from-step6";
 import {
+  buildAgentDataFromLegalAgentSource,
   buildAgentDataFromStep3,
   buildOwnerDataFromStep3,
   mapBackendStepToWizardStep,
 } from "@/features/create-contract/utils/build-uncompleted-contract-draft";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
+import { requiresWaqfOwnerNazir } from "@/features/create-contract/utils/requires-waqf-owner-nazir";
 import type { UncompletedContractData } from "@/features/create-contract/types/uncompleted-contract";
 
 type DeedDraftState = {
@@ -152,6 +158,8 @@ type CreateContractDraftStore = {
   financeData: FinanceDataState;
   paymentData: PaymentDataState;
   skippingOwnerStep: boolean;
+  activeStepSaveHandler: (() => Promise<boolean>) | null;
+  setActiveStepSaveHandler: (handler: (() => Promise<boolean>) | null) => void;
   setCurrentStep: (step: CreateContractStep) => void;
   goNextStep: () => void;
   goBackStep: () => void;
@@ -350,6 +358,9 @@ function buildStep1DataFromUncompleted(
     lng: step1.lng === null ? null : String(step1.lng),
     address_url: step1.address_url,
     step: step1.step,
+    requires_deceased_owner_legal_agent:
+      step1.requires_deceased_owner_legal_agent ?? null,
+    property_owner_is_deceased: step1.property_owner_is_deceased ?? null,
   };
 }
 
@@ -373,6 +384,29 @@ function buildStep2DataFromUncompleted(
     address_url: step2.address_url,
     image_address: step2.image_address,
     step: step2.step,
+    requires_deceased_owner_legal_agent:
+      step2.requires_deceased_owner_legal_agent ??
+      data.step1?.requires_deceased_owner_legal_agent ??
+      null,
+    property_owner_is_deceased:
+      step2.property_owner_is_deceased ??
+      data.step1?.property_owner_is_deceased ??
+      null,
+    add_legal_agent_of_owner: step2.add_legal_agent_of_owner ?? null,
+    id_num_of_property_owner_agent: step2.id_num_of_property_owner_agent ?? null,
+    mobile_of_property_owner_agent: step2.mobile_of_property_owner_agent ?? null,
+    type_dob_property_owner_agent: step2.type_dob_property_owner_agent ?? null,
+    dob_of_property_owner_agent: step2.dob_of_property_owner_agent ?? null,
+    dob_of_property_owner_agent_day:
+      step2.dob_of_property_owner_agent_day ?? null,
+    dob_of_property_owner_agent_month:
+      step2.dob_of_property_owner_agent_month ?? null,
+    dob_of_property_owner_agent_year:
+      step2.dob_of_property_owner_agent_year ?? null,
+    copy_power_of_attorney_from_heirs_to_agent:
+      step2.copy_power_of_attorney_from_heirs_to_agent ?? null,
+    copy_of_the_authorization_or_agency:
+      step2.copy_of_the_authorization_or_agency ?? null,
   };
 }
 
@@ -465,9 +499,42 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
   persist(
     (set, get) => ({
       ...createInitialState(),
+      activeStepSaveHandler: null,
+      setActiveStepSaveHandler: (handler) => set({ activeStepSaveHandler: handler }),
       setCurrentStep: (step) => set({ currentStep: step, skippingOwnerStep: false }),
       goNextStep: () => {
-        const index = CREATE_CONTRACT_STEPS.indexOf(get().currentStep);
+        const state = get();
+        const skipState = {
+          selectedDeedType: state.deed.selectedDeedType,
+          instrumentType: state.contractStep1Data?.instrument_type,
+        };
+        const waqfNazirVisible = requiresWaqfOwnerNazir(skipState);
+        const ownerSkipped = isOwnerStepSkipped(skipState);
+
+        if (state.currentStep === "deed") {
+          if (waqfNazirVisible) {
+            set({ currentStep: "waqfNazir", skippingOwnerStep: false });
+            return;
+          }
+          if (ownerSkipped) {
+            set({ currentStep: "tenant", skippingOwnerStep: true });
+            return;
+          }
+          set({ currentStep: "owner", skippingOwnerStep: false });
+          return;
+        }
+
+        if (state.currentStep === "waqfNazir") {
+          set({ currentStep: "tenant", skippingOwnerStep: true });
+          return;
+        }
+
+        if (state.currentStep === "owner") {
+          set({ currentStep: "tenant", skippingOwnerStep: false });
+          return;
+        }
+
+        const index = CREATE_CONTRACT_STEPS.indexOf(state.currentStep);
         if (index < CREATE_CONTRACT_STEPS.length - 1) {
           set({
             currentStep: CREATE_CONTRACT_STEPS[index + 1],
@@ -477,16 +544,37 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       },
       goBackStep: () => {
         const state = get();
+        const skipState = {
+          selectedDeedType: state.deed.selectedDeedType,
+          instrumentType: state.contractStep1Data?.instrument_type,
+        };
+        const ownerSkipped = isOwnerStepSkipped(skipState);
+        const waqfNazirVisible = requiresWaqfOwnerNazir(skipState);
 
-        if (
-          state.currentStep === "tenant" &&
-          (state.existingPropertyContext !== null ||
-            isOwnerStepSkipped({
-              selectedDeedType: state.deed.selectedDeedType,
-              instrumentType: state.contractStep1Data?.instrument_type,
-            }))
-        ) {
+        if (state.currentStep === "tenant") {
+          if (state.existingPropertyContext !== null) {
+            set({ currentStep: "deed", skippingOwnerStep: false });
+            return;
+          }
+
+          if (waqfNazirVisible) {
+            set({ currentStep: "waqfNazir", skippingOwnerStep: false });
+            return;
+          }
+
+          if (ownerSkipped) {
+            set({ currentStep: "deed", skippingOwnerStep: false });
+            return;
+          }
+        }
+
+        if (state.currentStep === "waqfNazir") {
           set({ currentStep: "deed", skippingOwnerStep: false });
+          return;
+        }
+
+        if (state.currentStep === "owner" && waqfNazirVisible) {
+          set({ currentStep: "waqfNazir", skippingOwnerStep: false });
           return;
         }
 
@@ -508,6 +596,16 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         set((state) => ({ deed: { ...state.deed, currentPhaseIndex: index } })),
       setSelectedDeedType: (value) =>
         set((state) => {
+          const prev = state.deed.selectedDeedType;
+          const typeChanged = prev !== value;
+          const clearDeedImage = value === "" || typeChanged;
+          const clearDeceased =
+            value === "" ||
+            (deedTypeIsDeceasedOwner(prev) && !deedTypeIsDeceasedOwner(value));
+          const clearWaqf =
+            value === "" ||
+            (deedTypeIsWaqfOwner(prev) && !deedTypeIsWaqfOwner(value));
+          const clearGuardians = clearDeceased || clearWaqf;
           const nextInstrumentType =
             value === "" ? null : mapDeedTypeToInstrumentType(value);
           const shouldClearStep1 =
@@ -518,46 +616,95 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             deed: {
               ...state.deed,
               selectedDeedType: value,
-              deedFiles: value === "" ? [] : state.deed.deedFiles,
-              deedPersistedFiles: value === "" ? [] : state.deed.deedPersistedFiles,
-              deedFrontFiles: value === "" ? [] : state.deed.deedFrontFiles,
-              deedFrontPersistedFiles:
-                value === "" ? [] : state.deed.deedFrontPersistedFiles,
-              deedBackFiles: value === "" ? [] : state.deed.deedBackFiles,
-              deedBackPersistedFiles:
-                value === "" ? [] : state.deed.deedBackPersistedFiles,
-              deedInheritanceFiles:
-                value === "" ? [] : state.deed.deedInheritanceFiles,
-              deedInheritancePersistedFiles:
-                value === "" ? [] : state.deed.deedInheritancePersistedFiles,
-              deedHeirsPoaFiles: value === "" ? [] : state.deed.deedHeirsPoaFiles,
-              deedHeirsPoaPersistedFiles:
-                value === "" ? [] : state.deed.deedHeirsPoaPersistedFiles,
-              deedEndowmentCertFiles:
-                value === "" ? [] : state.deed.deedEndowmentCertFiles,
-              deedEndowmentCertPersistedFiles:
-                value === "" ? [] : state.deed.deedEndowmentCertPersistedFiles,
-              deedTrusteeshipFiles:
-                value === "" ? [] : state.deed.deedTrusteeshipFiles,
-              deedTrusteeshipPersistedFiles:
-                value === "" ? [] : state.deed.deedTrusteeshipPersistedFiles,
-              isMultipleTrusteeshipDeedCopy:
-                value === "" ? false : state.deed.isMultipleTrusteeshipDeedCopy,
-              hasMinorHeirs: value === "" ? false : state.deed.hasMinorHeirs,
-              deedGuardiansPoaFiles:
-                value === "" ? [] : state.deed.deedGuardiansPoaFiles,
-              deedGuardiansPoaPersistedFiles:
-                value === "" ? [] : state.deed.deedGuardiansPoaPersistedFiles,
-              useManualDeedEntry: value === "" ? false : state.deed.useManualDeedEntry,
-              manualDeedEntry:
-                value === ""
-                  ? { ...EMPTY_MANUAL_DEED_ENTRY }
-                  : state.deed.manualDeedEntry,
+              deedFiles: clearDeedImage ? [] : state.deed.deedFiles,
+              deedPersistedFiles: clearDeedImage
+                ? []
+                : state.deed.deedPersistedFiles,
+              deedFrontFiles: clearDeedImage ? [] : state.deed.deedFrontFiles,
+              deedFrontPersistedFiles: clearDeedImage
+                ? []
+                : state.deed.deedFrontPersistedFiles,
+              deedBackFiles: clearDeedImage ? [] : state.deed.deedBackFiles,
+              deedBackPersistedFiles: clearDeedImage
+                ? []
+                : state.deed.deedBackPersistedFiles,
+              deedInheritanceFiles: clearDeceased
+                ? []
+                : state.deed.deedInheritanceFiles,
+              deedInheritancePersistedFiles: clearDeceased
+                ? []
+                : state.deed.deedInheritancePersistedFiles,
+              deedHeirsPoaFiles: clearDeceased
+                ? []
+                : state.deed.deedHeirsPoaFiles,
+              deedHeirsPoaPersistedFiles: clearDeceased
+                ? []
+                : state.deed.deedHeirsPoaPersistedFiles,
+              deedEndowmentCertFiles: clearWaqf
+                ? []
+                : state.deed.deedEndowmentCertFiles,
+              deedEndowmentCertPersistedFiles: clearWaqf
+                ? []
+                : state.deed.deedEndowmentCertPersistedFiles,
+              deedTrusteeshipFiles: clearWaqf
+                ? []
+                : state.deed.deedTrusteeshipFiles,
+              deedTrusteeshipPersistedFiles: clearWaqf
+                ? []
+                : state.deed.deedTrusteeshipPersistedFiles,
+              isMultipleTrusteeshipDeedCopy: clearWaqf
+                ? false
+                : state.deed.isMultipleTrusteeshipDeedCopy,
+              hasMinorHeirs: clearDeceased ? false : state.deed.hasMinorHeirs,
+              deedGuardiansPoaFiles: clearGuardians
+                ? []
+                : state.deed.deedGuardiansPoaFiles,
+              deedGuardiansPoaPersistedFiles: clearGuardians
+                ? []
+                : state.deed.deedGuardiansPoaPersistedFiles,
+              useManualDeedEntry: clearDeedImage
+                ? false
+                : state.deed.useManualDeedEntry,
+              manualDeedEntry: clearDeedImage
+                ? { ...EMPTY_MANUAL_DEED_ENTRY }
+                : state.deed.manualDeedEntry,
               leaseRenewalAddressMode: deedTypeIsLeaseRenewal(value)
                 ? state.deed.leaseRenewalAddressMode || "same"
                 : "same",
             },
-            contractStep1Data: shouldClearStep1 ? null : state.contractStep1Data,
+            contractStep1Data: shouldClearStep1
+              ? null
+              : state.contractStep1Data &&
+                  (clearDeedImage || clearDeceased || clearWaqf || clearGuardians)
+                ? {
+                    ...state.contractStep1Data,
+                    ...(clearDeedImage
+                      ? {
+                          image_instrument: null,
+                          image_instrument_from_the_front: null,
+                          image_instrument_from_the_back: null,
+                        }
+                      : {}),
+                    ...(clearDeceased
+                      ? {
+                          Image_inheritance_certificate: null,
+                          copy_power_of_attorney_from_heirs_to_agent: null,
+                        }
+                      : {}),
+                    ...(clearWaqf
+                      ? {
+                          copy_of_the_endowment_registration_certificate: null,
+                          copy_of_the_trusteeship_deed: null,
+                          is_multiple_trusteeship_deed_copy: false,
+                        }
+                      : {}),
+                    ...(clearGuardians
+                      ? {
+                          copy_of_guardians_power_of_attorney_for_agent: null,
+                        }
+                      : {}),
+                  }
+                : state.contractStep1Data,
             contractStep2Data: shouldClearStep1 ? null : state.contractStep2Data,
           };
         }),
@@ -659,6 +806,13 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
               ? state.deed.deedGuardiansPoaPersistedFiles
               : [],
           },
+          contractStep1Data:
+            !value && state.contractStep1Data
+              ? {
+                  ...state.contractStep1Data,
+                  copy_of_guardians_power_of_attorney_for_agent: null,
+                }
+              : state.contractStep1Data,
         })),
       setHasMinorHeirs: (value) =>
         set((state) => ({
@@ -670,6 +824,13 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
               ? state.deed.deedGuardiansPoaPersistedFiles
               : [],
           },
+          contractStep1Data:
+            !value && state.contractStep1Data
+              ? {
+                  ...state.contractStep1Data,
+                  copy_of_guardians_power_of_attorney_for_agent: null,
+                }
+              : state.contractStep1Data,
         })),
       setDeedGuardiansPoaFiles: async (files) => {
         const deedGuardiansPoaPersistedFiles = await filesToPersisted(files);
@@ -926,7 +1087,12 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
 
         set({
           ...base,
-          currentStep: mapBackendStepToWizardStep(data.step),
+          currentStep: mapBackendStepToWizardStep(data.step, {
+            instrumentType: data.step1?.instrument_type,
+            selectedDeedType: data.step1?.instrument_type
+              ? mapInstrumentTypeToDeedType(data.step1.instrument_type)
+              : "",
+          }),
           contractSession: {
             contractId: data.contract_id,
             uuid: data.uuid,
@@ -966,7 +1132,11 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           owner: {
             ...base.owner,
             ownerData: step3 ? buildOwnerDataFromStep3(step3) : base.owner.ownerData,
-            agentData: step3 ? buildAgentDataFromStep3(step3) : base.owner.agentData,
+            agentData: data.step2?.id_num_of_property_owner_agent
+              ? buildAgentDataFromLegalAgentSource(data.step2)
+              : step3
+                ? buildAgentDataFromStep3(step3)
+                : base.owner.agentData,
           },
           financeData: buildFinanceDataFromStep6(step6, base.financeData),
         });
