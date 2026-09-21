@@ -43,6 +43,7 @@ export function propertyDeedTypeSupportsManualEntry(
     !propertyDeedTypeIsPaper(deedType) &&
     !propertyDeedTypeIsDeceasedOwner(deedType) &&
     !propertyDeedTypeIsSalePaper(deedType) &&
-    !propertyDeedTypeIsAdversePossession(deedType)
+    !propertyDeedTypeIsAdversePossession(deedType) &&
+    deedType !== "property_ownership_owner_are_suspended"
   );
 }

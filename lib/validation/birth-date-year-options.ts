@@ -1,21 +1,18 @@
+import {
+  convertCalendarDateParts,
+  padCalendarDatePart,
+  type CalendarDateParts,
+  type CalendarDateValue,
+  type CalendarType,
+} from "@/lib/validation/convert-calendar-date";
+
 const MIN_ADULT_AGE = 18;
 const GREGORIAN_YEAR_START = 1940;
 const HIJRI_YEAR_START = 1350;
 
-export type CalendarType = "hijri" | "gregorian";
-
-export type BirthDateParts = {
-  year: number;
-  month: number;
-  day: number;
-};
-
-export type AdultBirthDateValue = {
-  calendarType: CalendarType;
-  day: string;
-  month: string;
-  year: string;
-};
+export type { CalendarType };
+export type BirthDateParts = CalendarDateParts;
+export type AdultBirthDateValue = CalendarDateValue;
 
 function parsePart(value: string) {
   const parsed = Number(value.replace(/\D/g, ""));
@@ -91,9 +88,108 @@ function getCalendarParts(date: Date, calendarType: CalendarType): BirthDatePart
   );
 }
 
+function clampConvertedBirthDate(
+  calendarType: CalendarType,
+  parts: BirthDateParts,
+  preserveMonth: boolean,
+  preserveDay: boolean,
+): AdultBirthDateValue {
+  const yearOptions = getAdultBirthYearOptions(calendarType);
+  const yearValues = yearOptions.map((option) => Number(option.value));
+  const minYear = yearValues[yearValues.length - 1];
+  const maxYear = yearValues[0];
+
+  let year = parts.year;
+  if (minYear !== undefined && maxYear !== undefined) {
+    year = Math.min(maxYear, Math.max(minYear, year));
+  }
+
+  const yearValue = String(year);
+  const monthOptions = getAdultBirthMonthOptions(calendarType, yearValue);
+  let month = preserveMonth ? parts.month : 0;
+  if (preserveMonth) {
+    const maxMonth = monthOptions.length;
+    month = Math.min(maxMonth, Math.max(1, month));
+  }
+
+  const monthValue = preserveMonth ? padCalendarDatePart(month) : "";
+  const dayOptions = getAdultBirthDayOptions(
+    calendarType,
+    yearValue,
+    monthValue,
+  );
+  let day = preserveDay && preserveMonth ? parts.day : 0;
+  if (preserveDay && preserveMonth) {
+    const maxDay = dayOptions.length;
+    day = Math.min(maxDay, Math.max(1, day));
+  }
+
+  return {
+    calendarType,
+    year: yearValue,
+    month: monthValue,
+    day: preserveDay && preserveMonth ? padCalendarDatePart(day) : "",
+  };
+}
+
 /**
- * Latest birth date that is still at least 18 years old today.
- * Age is computed from today's real date (day + month + year), not year alone.
+ * Convert a (possibly partial) adult birth date between Hijri and Gregorian
+ * without clearing filled selects. Missing month/day stay empty after switch.
+ */
+export function convertAdultBirthDateCalendar(
+  value: AdultBirthDateValue,
+  nextCalendarType: CalendarType,
+): AdultBirthDateValue {
+  if (value.calendarType === nextCalendarType) {
+    return value;
+  }
+
+  const year = parsePart(value.year);
+  const month = parsePart(value.month);
+  const day = parsePart(value.day);
+
+  if (year === null) {
+    return {
+      calendarType: nextCalendarType,
+      day: "",
+      month: "",
+      year: "",
+    };
+  }
+
+  const preserveMonth = month !== null;
+  const preserveDay = day !== null;
+  const sourceParts: BirthDateParts = {
+    year,
+    month: month ?? 1,
+    day: day ?? 1,
+  };
+
+  const converted =
+    convertCalendarDateParts(
+      sourceParts,
+      value.calendarType,
+      nextCalendarType,
+    ) ?? {
+      year: value.calendarType === "hijri" ? year + 579 : year - 579,
+      month: sourceParts.month,
+      day: sourceParts.day,
+    };
+
+  return clampConvertedBirthDate(
+    nextCalendarType,
+    converted,
+    preserveMonth,
+    preserveDay,
+  );
+}
+
+/**
+ * Latest birth date that is still at least 18 years old on `now`.
+ * Uses the real calendar day (not year alone), so:
+ * - youth birth years never appear in select options
+ * - for the newest allowed year, month/day are capped at today's cutoff
+ * - when the next cohort turns 18, that year appears automatically
  */
 export function getMaxAdultBirthDateParts(
   calendarType: CalendarType,
@@ -130,8 +226,11 @@ function padOptions(count: number) {
   });
 }
 
-export function getAdultBirthYearOptions(calendarType: CalendarType) {
-  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType);
+export function getAdultBirthYearOptions(
+  calendarType: CalendarType,
+  now = new Date(),
+) {
+  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType, now);
   const start = calendarType === "hijri" ? HIJRI_YEAR_START : GREGORIAN_YEAR_START;
   return buildYearOptions(start, maxAdultBirth.year);
 }
@@ -139,9 +238,10 @@ export function getAdultBirthYearOptions(calendarType: CalendarType) {
 export function getAdultBirthMonthOptions(
   calendarType: CalendarType,
   year: string,
+  now = new Date(),
 ) {
   const selectedYear = parsePart(year);
-  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType);
+  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType, now);
 
   if (selectedYear === maxAdultBirth.year) {
     return padOptions(maxAdultBirth.month);
@@ -154,10 +254,11 @@ export function getAdultBirthDayOptions(
   calendarType: CalendarType,
   year: string,
   month: string,
+  now = new Date(),
 ) {
   const selectedYear = parsePart(year);
   const selectedMonth = parsePart(month);
-  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType);
+  const maxAdultBirth = getMaxAdultBirthDateParts(calendarType, now);
   const fullDayCount = calendarType === "hijri" ? 30 : 31;
 
   if (
@@ -196,4 +297,60 @@ export function isAdultBirthDateComplete(birthDate: AdultBirthDateValue) {
     birthDate.year !== "" &&
     isAtLeastAdultAge(birthDate)
   );
+}
+
+/**
+ * Drop day/month/year parts that fall outside the live 18+ option lists
+ * (e.g. draft/API values for youth, or dates past today's adult cutoff).
+ */
+export function sanitizeAdultBirthDateValue(
+  value: AdultBirthDateValue,
+  now = new Date(),
+): AdultBirthDateValue {
+  const yearOptions = getAdultBirthYearOptions(value.calendarType, now);
+  if (
+    value.year !== "" &&
+    !yearOptions.some((option) => option.value === value.year)
+  ) {
+    return {
+      ...value,
+      day: "",
+      month: "",
+      year: "",
+    };
+  }
+
+  const monthOptions = getAdultBirthMonthOptions(
+    value.calendarType,
+    value.year,
+    now,
+  );
+  if (
+    value.month !== "" &&
+    !monthOptions.some((option) => option.value === value.month)
+  ) {
+    return {
+      ...value,
+      day: "",
+      month: "",
+    };
+  }
+
+  const dayOptions = getAdultBirthDayOptions(
+    value.calendarType,
+    value.year,
+    value.month,
+    now,
+  );
+  if (
+    value.day !== "" &&
+    !dayOptions.some((option) => option.value === value.day)
+  ) {
+    return {
+      ...value,
+      day: "",
+    };
+  }
+
+  return value;
 }

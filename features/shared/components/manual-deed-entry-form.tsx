@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import type { ManualDeedEntryLabels } from "@/features/shared/types/manual-deed-entry-labels";
 import {
   normalizeInstrumentNumber,
+  type InstrumentHistoryCalendarType,
   type ManualDeedEntryData,
 } from "@/features/shared/types/manual-deed-entry";
+import { convertCalendarDateValue } from "@/lib/validation/convert-calendar-date";
 import { getInstrumentHistoryYearOptions } from "@/lib/validation/instrument-history-year-options";
 import {
   fieldChromeControlClass,
@@ -47,6 +49,18 @@ function padOptions(count: number) {
     const value = String(index + 1).padStart(2, "0");
     return { value, label: value };
   });
+}
+
+function getInstrumentHistoryYearBounds(
+  calendarType: InstrumentHistoryCalendarType,
+) {
+  const options = getInstrumentHistoryYearOptions(calendarType);
+  const years = options.map((option) => Number(option.value));
+  return {
+    minYear: years[years.length - 1] ?? 0,
+    maxYear: years[0] ?? 0,
+    maxDay: () => (calendarType === "hijri" ? 30 : 31),
+  };
 }
 
 function RequiredFieldLabel({
@@ -101,16 +115,32 @@ export default function ManualDeedEntryForm({
     field: K,
     fieldValue: ManualDeedEntryData[K],
   ) {
+    if (field === "typeInstrumentHistory") {
+      const nextCalendarType = fieldValue as InstrumentHistoryCalendarType;
+      const converted = convertCalendarDateValue(
+        {
+          calendarType: value.typeInstrumentHistory,
+          day: value.instrumentHistoryDay,
+          month: value.instrumentHistoryMonth,
+          year: value.instrumentHistoryYear,
+        },
+        nextCalendarType,
+        getInstrumentHistoryYearBounds(nextCalendarType),
+      );
+
+      onChange({
+        ...value,
+        typeInstrumentHistory: nextCalendarType,
+        instrumentHistoryDay: converted.day,
+        instrumentHistoryMonth: converted.month,
+        instrumentHistoryYear: converted.year,
+      });
+      return;
+    }
+
     onChange({
       ...value,
       [field]: fieldValue,
-      ...(field === "typeInstrumentHistory"
-        ? {
-            instrumentHistoryDay: "",
-            instrumentHistoryMonth: "",
-            instrumentHistoryYear: "",
-          }
-        : {}),
     });
   }
 

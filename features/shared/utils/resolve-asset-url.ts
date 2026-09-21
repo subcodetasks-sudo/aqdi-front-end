@@ -1,11 +1,7 @@
 import { BASE_URL } from "@/lib/api/constants";
 
 function getAssetOrigin() {
-  try {
-    return new URL(BASE_URL).origin;
-  } catch {
-    return BASE_URL.replace(/\/$/, "");
-  }
+  return new URL(BASE_URL).origin;
 }
 
 /**
@@ -43,4 +39,37 @@ export function resolveAssetUrl(path: string | null | undefined) {
   }
 
   return `${getAssetOrigin()}/${normalizeAssetPath(path)}`;
+}
+
+/**
+ * Browser `<img>` / Next Image cannot send the httpOnly bearer cookie to the
+ * API host, and Laravel storage assets are auth-gated. Route same-origin
+ * previews through `/api/assets/proxy` so the server attaches the token.
+ */
+export function toProxiedAssetUrl(path: string | null | undefined) {
+  const resolved = resolveAssetUrl(path);
+
+  if (!resolved) {
+    return null;
+  }
+
+  if (
+    resolved.startsWith("blob:") ||
+    resolved.startsWith("data:") ||
+    resolved.startsWith("/api/assets/proxy")
+  ) {
+    return resolved;
+  }
+
+  try {
+    const url = new URL(resolved);
+
+    if (url.origin !== getAssetOrigin()) {
+      return resolved;
+    }
+  } catch {
+    return resolved;
+  }
+
+  return `/api/assets/proxy?url=${encodeURIComponent(resolved)}`;
 }

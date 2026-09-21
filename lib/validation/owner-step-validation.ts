@@ -1,5 +1,9 @@
 import { isSaudiMobilePrefixOnly } from "@/lib/validation/format-saudi-mobile-for-form";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
+import {
+  digitsOnlyNationalId,
+  isSaudiNationalIdComplete,
+} from "@/lib/validation/saudi-national-id";
 
 export type OwnerBirthDateLike = {
   calendarType?: "hijri" | "gregorian";
@@ -9,7 +13,6 @@ export type OwnerBirthDateLike = {
 };
 
 export type OwnerDataLike = {
-  fullName: string;
   idNumber: string;
   birthDate: OwnerBirthDateLike;
   phone: string;
@@ -25,7 +28,6 @@ export type AgentDataLike = {
 };
 
 export type OwnerValidationIssue =
-  | "fullName"
   | "idNumber"
   | "idNumberLength"
   | "birthDate"
@@ -55,14 +57,9 @@ export function isPhoneComplete(phone: string) {
   return /^05\d{8}$/.test(digits);
 }
 
-function isIdNumberComplete(idNumber: string) {
-  const digits = idNumber.replace(/\D/g, "");
-  return digits.length === 10;
-}
-
 export function isOwnerDataComplete(ownerData: OwnerDataLike) {
   return (
-    isIdNumberComplete(ownerData.idNumber) &&
+    isSaudiNationalIdComplete(ownerData.idNumber) &&
     isBirthDateComplete(ownerData.birthDate) &&
     isPhoneComplete(ownerData.phone) &&
     ownerData.hasAgent !== ""
@@ -71,7 +68,7 @@ export function isOwnerDataComplete(ownerData: OwnerDataLike) {
 
 export function isAgentDataComplete(agentData: AgentDataLike) {
   return (
-    isIdNumberComplete(agentData.idNumber) &&
+    isSaudiNationalIdComplete(agentData.idNumber) &&
     isBirthDateComplete(agentData.birthDate) &&
     isPhoneComplete(agentData.phone) &&
     agentData.powerOfAttorneyFiles.length > 0
@@ -83,10 +80,10 @@ export function getOwnerDataValidationIssues(
 ): OwnerValidationIssue[] {
   const issues: OwnerValidationIssue[] = [];
 
-  const idDigits = ownerData.idNumber.replace(/\D/g, "");
+  const idDigits = digitsOnlyNationalId(ownerData.idNumber);
   if (idDigits.length === 0) {
     issues.push("idNumber");
-  } else if (idDigits.length !== 10) {
+  } else if (!isSaudiNationalIdComplete(ownerData.idNumber)) {
     issues.push("idNumberLength");
   }
 
@@ -112,10 +109,10 @@ export function getAgentDataValidationIssues(
 ): OwnerValidationIssue[] {
   const issues: OwnerValidationIssue[] = [];
 
-  const idDigits = agentData.idNumber.replace(/\D/g, "");
+  const idDigits = digitsOnlyNationalId(agentData.idNumber);
   if (idDigits.length === 0) {
     issues.push("idNumber");
-  } else if (idDigits.length !== 10) {
+  } else if (!isSaudiNationalIdComplete(agentData.idNumber)) {
     issues.push("idNumberLength");
   }
 
@@ -141,11 +138,11 @@ export function getIdNumberFieldError(
   messages: { required: string; length: string },
   options?: { showEmpty?: boolean },
 ) {
-  const digits = idNumber.replace(/\D/g, "");
+  const digits = digitsOnlyNationalId(idNumber);
   if (digits.length === 0) {
     return options?.showEmpty ? messages.required : undefined;
   }
-  if (digits.length !== 10) {
+  if (!isSaudiNationalIdComplete(idNumber)) {
     return messages.length;
   }
   return undefined;
