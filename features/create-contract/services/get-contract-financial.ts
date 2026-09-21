@@ -4,6 +4,7 @@ import type {
   ContractFinancialApiResponse,
   ContractFinancialData,
 } from "@/features/create-contract/types/contract-financial";
+import { parseContractFinancialData } from "@/features/create-contract/utils/parse-contract-financial";
 import { apiRequest } from "@/lib/api/api-request";
 
 export async function getContractFinancial(
@@ -25,5 +26,10 @@ export async function getContractFinancial(
     );
   }
 
-  return response.data.data;
+  const parsed = parseContractFinancialData(response.data.data);
+  if (!parsed) {
+    throw new Error("Invalid contract financial payload");
+  }
+
+  return parsed;
 }
