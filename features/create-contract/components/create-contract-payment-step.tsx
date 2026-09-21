@@ -27,10 +27,8 @@ import type { CreateContractLabels } from "@/features/create-contract/types/crea
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
-import {
-  formatPaymentAmount,
-  PAYMENT_BREAKDOWN,
-} from "@/features/create-contract/types/payment-step";
+import { getContractFinancialPayable } from "@/features/create-contract/types/contract-financial";
+import { formatContractMoneyAmount } from "@/features/create-contract/utils/format-contract-money";
 import { resetCreateContractDraft } from "@/features/create-contract/utils/reset-create-contract-draft";
 import LegalDocumentDialog, {
   type LegalDocumentKind,
@@ -110,10 +108,12 @@ export default function CreateContractPaymentStep({
     },
   );
 
-  const fallbackTotal = PAYMENT_BREAKDOWN[contractType].total;
+  const financeData = financeSummaryQuery.data;
   const payableTotal = appliedCoupon
     ? appliedCoupon.totalPriceAfterCoupon
-    : (financeSummaryQuery.data?.total_price ?? fallbackTotal);
+    : financeData
+      ? getContractFinancialPayable(financeData)
+      : null;
   const hasDiscount =
     Boolean(appliedCoupon) &&
     typeof appliedCoupon?.discount === "number" &&
@@ -131,9 +131,11 @@ export default function CreateContractPaymentStep({
     selectedMethod === "draft"
       ? labels.navigation.sendDraft
       : selectedMethod === "pay-now"
-        ? withTemplate(labels.navigation.payWithAmount, {
-            amount: formatPaymentAmount(payableTotal),
-          })
+        ? payableTotal !== null
+          ? withTemplate(labels.navigation.payWithAmount, {
+              amount: formatContractMoneyAmount(payableTotal),
+            })
+          : labels.navigation.pay
         : labels.navigation.pay;
 
   function handleSwitchChange(checked: boolean) {
@@ -206,7 +208,6 @@ export default function CreateContractPaymentStep({
 
           <CreateContractPaymentSummary
             labels={labels.summary}
-            contractType={contractType}
             appliedCoupon={appliedCoupon}
           />
 
@@ -224,7 +225,7 @@ export default function CreateContractPaymentStep({
                     : hasDiscount
                       ? withTemplate(labels.methodDialog.selected.payNow.savings, {
                           percent: discountPercent,
-                          amount: formatPaymentAmount(discountAmount),
+                          amount: formatContractMoneyAmount(discountAmount),
                         })
                       : labels.methodDialog.selected.payNow.description}
                 </p>
@@ -347,7 +348,7 @@ export default function CreateContractPaymentStep({
         totalPrice={
           appliedCoupon?.totalPriceBeforeCoupon ??
           financeSummaryQuery.data?.total_price ??
-          fallbackTotal
+          0
         }
         discountedPrice={
           hasDiscount ? appliedCoupon?.totalPriceAfterCoupon ?? null : null

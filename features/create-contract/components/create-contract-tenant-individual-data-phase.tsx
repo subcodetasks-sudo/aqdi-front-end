@@ -11,6 +11,7 @@ import type { IndividualTenantData } from "@/features/create-contract/types/tena
 import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 type CreateContractTenantIndividualDataPhaseProps = {
   labels: CreateContractLabels["tenant"]["individualData"];
@@ -19,10 +20,6 @@ type CreateContractTenantIndividualDataPhaseProps = {
   onChange: (value: IndividualTenantData) => void;
   showFieldErrors?: boolean;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 export default function CreateContractTenantIndividualDataPhase({
   labels,
@@ -58,11 +55,11 @@ export default function CreateContractTenantIndividualDataPhase({
           inputMode="numeric"
           maxLength={10}
           errorMessage={
-            showFieldErrors && !isIdNumberComplete(value.idNumber)
+            showFieldErrors && !isSaudiNationalIdComplete(value.idNumber)
               ? t("fieldRequired")
               : undefined
           }
-          valid={isIdNumberComplete(value.idNumber)}
+          valid={isSaudiNationalIdComplete(value.idNumber)}
         />
 
         <CreateContractSaudiMobileField

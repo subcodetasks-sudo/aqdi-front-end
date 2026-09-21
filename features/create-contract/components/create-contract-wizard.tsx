@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 import CreateContractDeedStep from "@/features/create-contract/components/create-contract-deed-step";
 import CreateContractFinanceStep from "@/features/create-contract/components/create-contract-finance-step";
@@ -9,6 +10,7 @@ import CreateContractIntroStep from "@/features/create-contract/components/creat
 import CreateContractOwnerStep from "@/features/create-contract/components/create-contract-owner-step";
 import CreateContractPaymentStep from "@/features/create-contract/components/create-contract-payment-step";
 import CreateContractTenantStep from "@/features/create-contract/components/create-contract-tenant-step";
+import CreateContractWaqfNazirStep from "@/features/create-contract/components/create-contract-waqf-nazir-step";
 import CreateContractStepper from "@/features/create-contract/components/create-contract-stepper";
 import { useCreateContractSteps } from "@/features/create-contract/hooks/use-create-contract-steps";
 import { useStartFreshContract } from "@/features/create-contract/hooks/use-start-fresh-contract";
@@ -16,6 +18,7 @@ import { useCreateContractDraftStore } from "@/features/create-contract/stores/u
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
+import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
 import {
   resetCreateContractDraft,
   resetCreateContractDraftIfScheduledOnUnmount,
@@ -36,7 +39,8 @@ export default function CreateContractWizard({
   isDarkMode = false,
   onToggleDarkMode,
 }: CreateContractWizardProps) {
-  const { currentStep, goNext, goBack, goToStep } = useCreateContractSteps();
+  const { currentStep, goNext, goBack, goToStep, setCurrentStep } =
+    useCreateContractSteps();
   const { handleStart, isStarting } = useStartFreshContract(contractType);
   const isDraftHydrated = usePersistStoreHydrated(
     useCreateContractDraftStore.persist,
@@ -53,14 +57,17 @@ export default function CreateContractWizard({
   const skipOwnerToTenant = useCreateContractDraftStore(
     (state) => state.skipOwnerToTenant,
   );
-  const ownerSkipped = isOwnerStepSkipped({
-    selectedDeedType,
-    instrumentType,
-  });
+  const skipState = { selectedDeedType, instrumentType };
+  const ownerSkipped = isOwnerStepSkipped(skipState);
+  const waqfNazirVisible = isWaqfNazirStepVisible(skipState);
   const pageTitle =
     contractType === "residential"
       ? labels.pageTitleResidential
       : labels.pageTitleCommercial;
+
+  const setActiveStepSaveHandler = useCreateContractDraftStore(
+    (state) => state.setActiveStepSaveHandler,
+  );
 
   useEffect(() => {
     return () => {
@@ -74,11 +81,37 @@ export default function CreateContractWizard({
     };
   }, []);
 
+  // Payment has no step-save validation — clear any leftover handler from a
+  // previous step and dismiss validation toasts that linger after continue.
   useEffect(() => {
+    if (currentStep !== "payment") {
+      return;
+    }
+
+    setActiveStepSaveHandler(null);
+    toast.dismiss();
+  }, [currentStep, setActiveStepSaveHandler]);
+
+  useEffect(() => {
+    if (currentStep === "waqfNazir" && !waqfNazirVisible) {
+      if (ownerSkipped) {
+        skipOwnerToTenant();
+      } else {
+        setCurrentStep("owner");
+      }
+      return;
+    }
+
     if (currentStep === "owner" && ownerSkipped) {
       skipOwnerToTenant();
     }
-  }, [currentStep, ownerSkipped, skipOwnerToTenant]);
+  }, [
+    currentStep,
+    ownerSkipped,
+    waqfNazirVisible,
+    skipOwnerToTenant,
+    setCurrentStep,
+  ]);
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-2">
@@ -113,6 +146,14 @@ export default function CreateContractWizard({
                   labels={labels.deed}
                   onBack={goBack}
                   onComplete={goNext}
+                />
+              ) : null}
+
+              {currentStep === "waqfNazir" && waqfNazirVisible ? (
+                <CreateContractWaqfNazirStep
+                  labels={labels.deed.waqfNazir}
+                  navigationLabels={labels.deed.navigation}
+                  onBack={goBack}
                 />
               ) : null}
 

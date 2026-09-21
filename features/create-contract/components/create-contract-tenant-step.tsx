@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -59,6 +59,9 @@ export default function CreateContractTenantStep({
   const { submitStep5, isSubmitting: isSubmittingStep5 } = useSubmitContractStep5();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
+  const setActiveStepSaveHandler = useCreateContractDraftStore(
+    (state) => state.setActiveStepSaveHandler,
+  );
   const isSubmitting = isSubmittingStep4 || isSubmittingStep5;
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
@@ -157,6 +160,62 @@ export default function CreateContractTenantStep({
 
     goToNextPhase();
   }
+
+  async function submitActiveTenantData(): Promise<boolean> {
+    if (isSubmitting) {
+      return false;
+    }
+
+    if (!canContinue) {
+      setShowFieldErrors(true);
+      toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
+      return false;
+    }
+
+    if (isLeaseRenewal && isTenantDataPhase) {
+      return true;
+    }
+
+    if (isLeaseRenewalUnitPhase) {
+      const submittedTenant = await submitStep4({
+        tenantData,
+        isLeaseRenewal: true,
+      });
+
+      if (!submittedTenant) {
+        return false;
+      }
+
+      if (leaseRenewalUnitMode === "change") {
+        return submitStep5({ rentedUnits });
+      }
+
+      return true;
+    }
+
+    if (isTenantDataPhase) {
+      const submitted = await submitStep4({
+        tenantData,
+        isLeaseRenewal: false,
+      });
+
+      if (!submitted) {
+        return false;
+      }
+    }
+
+    if (isRentedUnitPhase) {
+      return submitStep5({ rentedUnits });
+    }
+
+    return true;
+  }
+
+  useEffect(() => {
+    setActiveStepSaveHandler(submitActiveTenantData);
+    return () => setActiveStepSaveHandler(null);
+  });
 
   const showSaveLaterActions = Boolean(contractSession);
 

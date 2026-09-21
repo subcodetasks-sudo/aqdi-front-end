@@ -46,6 +46,7 @@ export default function CreateContractHeader({
   const contractUuid = useCreateContractDraftStore(
     (state) => state.contractSession?.uuid ?? null,
   );
+  const [isPreparingSaveThenExit, setIsPreparingSaveThenExit] = useState(false);
 
   async function handleCopyRequest() {
     if (!contractUuid) {
@@ -63,29 +64,54 @@ export default function CreateContractHeader({
   }
 
   function handleHomeClick() {
-    if (!contractId) {
-      router.push("/");
-      return;
-    }
-
     setExitDialogOpen(true);
   }
 
   async function handleSaveThenExit() {
-    const result = await saveDraft();
+    setIsPreparingSaveThenExit(true);
 
-    if (!result.ok) {
-      toast.error(
-        result.error === "missingContractSession"
-          ? labels.exitHomeDialog.missingContractSession
-          : result.error || labels.exitHomeDialog.saveError,
-      );
-      return;
+    try {
+      const activeStepSaveHandler =
+        useCreateContractDraftStore.getState().activeStepSaveHandler;
+
+      if (activeStepSaveHandler) {
+        const saved = await activeStepSaveHandler();
+
+        // Validation toasts (e.g. incompleteContinue) already ran in the handler.
+        if (!saved) {
+          return;
+        }
+      }
+
+      const latestContractId =
+        useCreateContractDraftStore.getState().contractSession?.contractId ??
+        useCreateContractDraftStore.getState().contractStep1Data?.contract_id ??
+        null;
+
+      if (!latestContractId) {
+        setExitDialogOpen(false);
+        scheduleCreateContractDraftResetOnUnmount();
+        router.push("/");
+        return;
+      }
+
+      const result = await saveDraft();
+
+      if (!result.ok) {
+        toast.error(
+          result.error === "missingContractSession"
+            ? labels.exitHomeDialog.missingContractSession
+            : result.error || labels.exitHomeDialog.saveError,
+        );
+        return;
+      }
+
+      setExitDialogOpen(false);
+      scheduleCreateContractDraftResetOnUnmount();
+      router.push("/");
+    } finally {
+      setIsPreparingSaveThenExit(false);
     }
-
-    setExitDialogOpen(false);
-    scheduleCreateContractDraftResetOnUnmount();
-    router.push("/");
   }
 
   async function handleExitWithoutSaving() {
@@ -198,7 +224,7 @@ export default function CreateContractHeader({
         open={exitDialogOpen}
         onOpenChange={setExitDialogOpen}
         orderNumber={contractId}
-        isSaving={isSaving}
+        isSaving={isSaving || isPreparingSaveThenExit}
         isExiting={isDeleting}
         onSaveThenExit={() => void handleSaveThenExit()}
         onExitWithoutSaving={() => void handleExitWithoutSaving()}

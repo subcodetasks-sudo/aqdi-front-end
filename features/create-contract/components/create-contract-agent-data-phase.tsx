@@ -15,19 +15,42 @@ import {
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 type CreateContractAgentDataPhaseProps = {
-  labels: CreateContractLabels["owner"]["agentData"];
+  labels: {
+    sectionTitle: string;
+    sectionDescription: string;
+    footerNote: string;
+    idNumber: {
+      label: string;
+      placeholder: string;
+    };
+    birthDateLabel: string;
+    phone: {
+      label: string;
+      placeholder: string;
+    };
+    powerOfAttorney: CreateContractLabels["owner"]["agentData"]["powerOfAttorney"];
+  };
   birthDateLabels: CreateContractLabels["owner"]["birthDate"];
-  validationLabels: CreateContractLabels["owner"]["validation"]["fieldErrors"];
+  validationLabels: {
+    idNumberLength: string;
+    phoneLength: string;
+    iban?: string;
+  };
   value: AgentDataState;
   onChange: (value: AgentDataState) => void;
   showFieldErrors?: boolean;
+  /** When the step itself is titled for the agent (deceased-owner flow). */
+  hideSectionHeader?: boolean;
+  /** Step1/step2 already stored the POA — re-upload is optional. */
+  existingPoaUrl?: string | null;
+  /** When true, treat the document as already attached even without a URL/file. */
+  documentAlreadyAttached?: boolean;
+  /** Overrides the default footer note under the uploader. */
+  documentHint?: string;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 export default function CreateContractAgentDataPhase({
   labels,
@@ -36,6 +59,10 @@ export default function CreateContractAgentDataPhase({
   value,
   onChange,
   showFieldErrors = false,
+  hideSectionHeader = false,
+  existingPoaUrl = null,
+  documentAlreadyAttached = false,
+  documentHint,
 }: CreateContractAgentDataPhaseProps) {
   function updateField<K extends keyof AgentDataState>(
     field: K,
@@ -56,23 +83,28 @@ export default function CreateContractAgentDataPhase({
     length: validationLabels.phoneLength,
   });
   const idInvalid =
-    Boolean(idNumberError) || (showFieldErrors && !isIdNumberComplete(value.idNumber));
+    Boolean(idNumberError) || (showFieldErrors && !isSaudiNationalIdComplete(value.idNumber));
   const phoneInvalid =
     Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
   const birthDateInvalid = showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
-  const powerOfAttorneyInvalid =
-    showFieldErrors && value.powerOfAttorneyFiles.length === 0;
-  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const hasPoa =
+    value.powerOfAttorneyFiles.length > 0 ||
+    Boolean(existingPoaUrl) ||
+    documentAlreadyAttached;
+  const powerOfAttorneyInvalid = showFieldErrors && !hasPoa;
+  const idValid = !idInvalid && isSaudiNationalIdComplete(value.idNumber);
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
     <div className="space-y-3">
-      <div className="space-y-1 text-center">
-        <h3 className="text-lg font-extrabold text-brand md:text-xl">
-          {labels.sectionTitle}
-        </h3>
-        <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
-      </div>
+      {!hideSectionHeader ? (
+        <div className="space-y-1 text-center">
+          <h3 className="text-lg font-extrabold text-brand md:text-xl">
+            {labels.sectionTitle}
+          </h3>
+          <p className="text-sm text-[#9a9a9a]">{labels.sectionDescription}</p>
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <CreateContractIconInputField
@@ -121,11 +153,16 @@ export default function CreateContractAgentDataPhase({
           updateField("powerOfAttorneyFiles", powerOfAttorneyFiles)
         }
         invalid={powerOfAttorneyInvalid}
+        existingImageUrl={existingPoaUrl}
+        alreadyAttached={documentAlreadyAttached}
         single
         variant="dashed"
+        hint={documentHint}
       />
 
-      <p className="text-xs leading-6 text-[#9a9a9a]">{labels.footerNote}</p>
+      {!documentHint ? (
+        <p className="text-xs leading-6 text-[#9a9a9a]">{labels.footerNote}</p>
+      ) : null}
     </div>
   );
 }

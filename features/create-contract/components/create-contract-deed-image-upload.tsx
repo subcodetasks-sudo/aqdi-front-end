@@ -28,6 +28,8 @@ type CreateContractDeedImageUploadProps = {
   value: File[];
   onChange: (files: File[]) => void;
   existingImageUrl?: string | null;
+  /** Show the success/attached row even when there is no remote URL yet. */
+  alreadyAttached?: boolean;
   fieldLabel?: string;
   single?: boolean;
   variant?: "default" | "dropzone" | "dashed" | "dashed-pill";
@@ -141,13 +143,13 @@ function ExistingImageRow({
   onChangeFile,
   onDelete,
 }: {
-  url: string;
+  url: string | null;
   labels: CreateContractLabels["deed"]["deedImage"];
   onPreview: () => void;
   onChangeFile: () => void;
   onDelete: () => void;
 }) {
-  const fileName = url.split("/").pop() || url;
+  const fileName = url ? url.split("/").pop() || url : "";
   const extension = fileName.includes(".")
     ? (fileName.split(".").pop()?.toLowerCase() ?? "")
     : "";
@@ -161,21 +163,25 @@ function ExistingImageRow({
           <span>{labels.attached}</span>
         </span>
 
-        <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
-          {name}
-          {extension ? `.${extension}` : ""}
-        </p>
+        {name ? (
+          <p className="min-w-0 truncate text-sm font-semibold text-[#333333] dark:text-white">
+            {name}
+            {extension ? `.${extension}` : ""}
+          </p>
+        ) : null}
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <button
-          type="button"
-          onClick={onPreview}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
-        >
-          <Eye className="size-4 shrink-0" aria-hidden="true" />
-          <span>{labels.preview}</span>
-        </button>
+        {url ? (
+          <button
+            type="button"
+            onClick={onPreview}
+            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#e7f4ef] px-3 text-sm font-bold text-brand dark:bg-[#0f2a24] dark:text-[#7dccc0]"
+          >
+            <Eye className="size-4 shrink-0" aria-hidden="true" />
+            <span>{labels.preview}</span>
+          </button>
+        ) : null}
 
         <button
           type="button"
@@ -204,6 +210,7 @@ export default function CreateContractDeedImageUpload({
   value,
   onChange,
   existingImageUrl = null,
+  alreadyAttached = false,
   fieldLabel,
   single = false,
   variant = "default",
@@ -218,7 +225,9 @@ export default function CreateContractDeedImageUpload({
   const [previewExistingUrl, setPreviewExistingUrl] = useState<string | null>(null);
   const [existingImageCleared, setExistingImageCleared] = useState(false);
   const showExistingImage =
-    value.length === 0 && Boolean(existingImageUrl) && !existingImageCleared;
+    value.length === 0 &&
+    (Boolean(existingImageUrl) || alreadyAttached) &&
+    !existingImageCleared;
   const showInvalid = invalid && value.length === 0 && !showExistingImage;
   const pdfOnly = accept === PDF_ONLY_ACCEPT;
   const hideUploadArea = value.length > 0 || showExistingImage;
@@ -366,11 +375,15 @@ export default function CreateContractDeedImageUpload({
 
       {showInvalid ? <CreateContractFieldError message={t("fieldRequired")} /> : null}
 
-      {showExistingImage && existingImageUrl ? (
+      {showExistingImage ? (
         <ExistingImageRow
           url={existingImageUrl}
           labels={labels}
-          onPreview={() => setPreviewExistingUrl(existingImageUrl)}
+          onPreview={() => {
+            if (existingImageUrl) {
+              setPreviewExistingUrl(existingImageUrl);
+            }
+          }}
           onChangeFile={handleChangeFile}
           onDelete={handleDeleteExisting}
         />

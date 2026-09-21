@@ -15,6 +15,7 @@ import {
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 import { cn } from "@/lib/utils";
 
 type CreateContractOwnerDataPhaseProps = {
@@ -24,11 +25,9 @@ type CreateContractOwnerDataPhaseProps = {
   value: OwnerDataState;
   onChange: (value: OwnerDataState) => void;
   showFieldErrors?: boolean;
+  /** Hide when the legal agent was already collected in step 2. */
+  hideHasAgent?: boolean;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 export default function CreateContractOwnerDataPhase({
   labels,
@@ -37,6 +36,7 @@ export default function CreateContractOwnerDataPhase({
   value,
   onChange,
   showFieldErrors = false,
+  hideHasAgent = false,
 }: CreateContractOwnerDataPhaseProps) {
   function updateField<K extends keyof OwnerDataState>(
     field: K,
@@ -57,14 +57,14 @@ export default function CreateContractOwnerDataPhase({
     length: validationLabels.phoneLength,
   });
   const idInvalid =
-    Boolean(idNumberError) || (showFieldErrors && !isIdNumberComplete(value.idNumber));
+    Boolean(idNumberError) || (showFieldErrors && !isSaudiNationalIdComplete(value.idNumber));
   const phoneInvalid =
     Boolean(phoneError) || (showFieldErrors && !isPhoneComplete(value.phone));
   const birthDateInvalid =
     showFieldErrors && !isAdultBirthDateComplete(value.birthDate);
   const hasAgentInvalid = showFieldErrors && value.hasAgent === "";
   const hasAgentChecked = value.hasAgent === "yes";
-  const idValid = !idInvalid && isIdNumberComplete(value.idNumber);
+  const idValid = !idInvalid && isSaudiNationalIdComplete(value.idNumber);
   const phoneValid = !phoneInvalid && isPhoneComplete(value.phone);
 
   return (
@@ -106,39 +106,41 @@ export default function CreateContractOwnerDataPhase({
         invalid={birthDateInvalid}
       />
 
-      <label
-        className={cn(
-          "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
-          hasAgentInvalid
-            ? "border-[#e57373] bg-white"
-            : hasAgentChecked
-              ? "border-brand bg-brand-background-green"
-              : "border-[#e8e8e8] bg-white",
-        )}
-      >
-        <span className="min-w-0 space-y-1 text-start">
-          <span
-            className={cn(
-              "block text-sm font-bold",
-              hasAgentInvalid ? "text-[#c62828]" : "text-black",
-            )}
-          >
-            {labels.hasAgent.title}
+      {!hideHasAgent ? (
+        <label
+          className={cn(
+            "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
+            hasAgentInvalid
+              ? "border-[#e57373] bg-white"
+              : hasAgentChecked
+                ? "border-brand bg-brand-background-green"
+                : "border-[#e8e8e8] bg-white",
+          )}
+        >
+          <span className="min-w-0 space-y-1 text-start">
+            <span
+              className={cn(
+                "block text-sm font-bold",
+                hasAgentInvalid ? "text-[#c62828]" : "text-black",
+              )}
+            >
+              {labels.hasAgent.title}
+            </span>
+            <span className="block text-xs leading-5 text-[#9a9a9a]">
+              {labels.hasAgent.description}
+            </span>
           </span>
-          <span className="block text-xs leading-5 text-[#9a9a9a]">
-            {labels.hasAgent.description}
-          </span>
-        </span>
-        <Switch
-          dir="ltr"
-          checked={hasAgentChecked}
-          onCheckedChange={(checked) =>
-            updateField("hasAgent", checked ? "yes" : "no")
-          }
-          aria-invalid={hasAgentInvalid}
-          className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
-        />
-      </label>
+          <Switch
+            dir="ltr"
+            checked={hasAgentChecked}
+            onCheckedChange={(checked) =>
+              updateField("hasAgent", checked ? "yes" : "no")
+            }
+            aria-invalid={hasAgentInvalid}
+            className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
+          />
+        </label>
+      ) : null}
     </div>
   );
 }

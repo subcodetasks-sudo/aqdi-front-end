@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -43,6 +43,9 @@ export default function CreateContractFinanceStep({
     (state) => state.contractStep1Data?.instrument_type,
   );
   const isSublease = isSubleaseContract({ selectedDeedType, instrumentType });
+  const setActiveStepSaveHandler = useCreateContractDraftStore(
+    (state) => state.setActiveStepSaveHandler,
+  );
 
   async function handleContinue() {
     if (isSubmitting) {
@@ -76,6 +79,38 @@ export default function CreateContractFinanceStep({
 
     onComplete();
   }
+
+  async function submitActiveFinanceData(): Promise<boolean> {
+    if (isSubmitting) {
+      return false;
+    }
+
+    const nextFinanceData = sanitizeFinanceDataForContinue(financeData);
+
+    if (
+      nextFinanceData.addOtherConditions !== financeData.addOtherConditions ||
+      nextFinanceData.selectedTenantRoleIds.length !==
+        financeData.selectedTenantRoleIds.length ||
+      nextFinanceData.otherConditionsList.length !==
+        financeData.otherConditionsList.length
+    ) {
+      setFinanceData(nextFinanceData);
+    }
+
+    if (!canContinue) {
+      setShowFieldErrors(true);
+      toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
+      return false;
+    }
+
+    return submitStep6({ financeData: nextFinanceData });
+  }
+
+  useEffect(() => {
+    setActiveStepSaveHandler(submitActiveFinanceData);
+    return () => setActiveStepSaveHandler(null);
+  });
 
   return (
     <div className="space-y-4">

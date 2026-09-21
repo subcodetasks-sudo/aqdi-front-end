@@ -5,7 +5,10 @@ import type {
   BirthDateValue,
   CalendarType,
 } from "@/features/create-contract/types/owner-step";
-import { getTodayContractStartDate } from "@/features/create-contract/utils/get-today-contract-start-date";
+import {
+  convertCalendarDateValue,
+  type CalendarDateValue,
+} from "@/lib/validation/convert-calendar-date";
 import { cn } from "@/lib/utils";
 
 type ContractStartDateLabels = {
@@ -55,6 +58,16 @@ function getYearOptions(calendarType: CalendarType) {
   });
 }
 
+function getContractStartYearBounds(calendarType: CalendarType) {
+  const options = getYearOptions(calendarType);
+  const years = options.map((option) => Number(option.value));
+  return {
+    minYear: years[years.length - 1] ?? 0,
+    maxYear: years[0] ?? 0,
+    maxDay: () => (calendarType === "hijri" ? 30 : 31),
+  };
+}
+
 export default function CreateContractContractStartDateFields({
   labels,
   value,
@@ -74,12 +87,21 @@ export default function CreateContractContractStartDateFields({
     field: K,
     fieldValue: BirthDateValue[K],
   ) {
+    if (field === "calendarType") {
+      const nextCalendarType = fieldValue as CalendarType;
+      onChange(
+        convertCalendarDateValue(
+          value as CalendarDateValue,
+          nextCalendarType,
+          getContractStartYearBounds(nextCalendarType),
+        ),
+      );
+      return;
+    }
+
     onChange({
       ...value,
       [field]: fieldValue,
-      ...(field === "calendarType"
-        ? getTodayContractStartDate(fieldValue as CalendarType)
-        : {}),
     });
   }
 

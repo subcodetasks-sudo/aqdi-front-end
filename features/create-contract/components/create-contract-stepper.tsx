@@ -11,6 +11,7 @@ import {
 } from "@/features/create-contract/types/create-contract-step";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
+import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
 import { cn } from "@/lib/utils";
 
 type CreateContractStepperProps = {
@@ -90,9 +91,21 @@ export default function CreateContractStepper({
     selectedDeedType,
     instrumentType,
   });
+  const waqfNazirVisible = isWaqfNazirStepVisible({
+    selectedDeedType,
+    instrumentType,
+  });
   const hideDeedAndOwner = existingPropertyContext !== null;
   const visibleSteps = CREATE_CONTRACT_STEPPER_STEPS.filter((step) => {
-    if (hideDeedAndOwner && (step === "deed" || step === "owner")) {
+    if (hideDeedAndOwner && (step === "deed" || step === "owner" || step === "waqfNazir")) {
+      return false;
+    }
+
+    if (step === "waqfNazir" && !waqfNazirVisible) {
+      return false;
+    }
+
+    if (step === "owner" && ownerSkipped) {
       return false;
     }
 
@@ -128,6 +141,7 @@ export default function CreateContractStepper({
             isSkipped && (isPassed || skippingOwnerStep);
           const connectorCompleted =
             isActive || isCompleted || (isSkipped && isPassed);
+          const stepLabel = labels.steps[step];
 
           return (
             <Fragment key={step}>
@@ -140,8 +154,8 @@ export default function CreateContractStepper({
 
               <button
                 type="button"
-                title={labels.steps[step]}
-                aria-label={labels.steps[step]}
+                title={stepLabel}
+                aria-label={stepLabel}
                 aria-current={isActive ? "step" : undefined}
                 aria-disabled={isSkipped || !isUnlocked}
                 disabled={isSkipped || !isUnlocked}
@@ -175,7 +189,7 @@ export default function CreateContractStepper({
                     className="h-3.5 w-auto shrink-0 object-contain sm:h-5"
                   />
                 )}
-                <span>{labels.steps[step]}</span>
+                <span>{stepLabel}</span>
               </button>
             </Fragment>
           );

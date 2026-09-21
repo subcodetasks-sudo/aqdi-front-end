@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import CreateContractAgentDataPhase from "@/features/create-contract/components/create-contract-agent-data-phase";
 import CreateContractDeceasedOwnerSection from "@/features/create-contract/components/create-contract-deceased-owner-section";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
@@ -77,6 +78,11 @@ export default function CreateContractDeedStep({
     needsFrontBack,
     isDeceasedOwner,
     isWaqfOwner,
+    needsLegalAgent,
+    needsWaqfNazir,
+    agentData,
+    setAgentData,
+    existingLegalAgentPoaUrl,
     nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles,
@@ -116,12 +122,16 @@ export default function CreateContractDeedStep({
   const { submitStep1, isSubmitting: isSubmittingStep1 } = useSubmitContractStep1();
   const { submitStep2, isSubmitting: isSubmittingStep2 } = useSubmitContractStep2();
   const isSubmitting = isSubmittingStep1 || isSubmittingStep2;
+  const setActiveStepSaveHandler = useCreateContractDraftStore(
+    (state) => state.setActiveStepSaveHandler,
+  );
   const [showFieldErrors, setShowFieldErrors] = useState(false);
   const deedTypePopup = useInstrumentTypeDeedPopup("contract");
   const supportsManualEntry = deedTypeSupportsManualEntry(selectedDeedType);
 
   const deedPhase = labels.phases[0];
   const addressPhase = labels.phases[1];
+  const legalAgentLabels = labels.legalAgent;
   const leaseRenewalNotice =
     contractType === "commercial"
       ? labels.leaseRenewal?.noticeCommercial
@@ -132,6 +142,7 @@ export default function CreateContractDeedStep({
 
   function handleDeedTypeChange(value: DeedTypeId | "") {
     setSelectedDeedType(value);
+    setShowFieldErrors(false);
 
     if (!value || isInstrumentTypeLocked) {
       return;
@@ -141,6 +152,88 @@ export default function CreateContractDeedStep({
       mapDeedTypeToInstrumentType(value),
       labels.deedType.types[value],
     );
+  }
+
+  async function submitAddressWithOptionalLegalAgent() {
+    if (!nationalAddressMethod) {
+      setShowFieldErrors(true);
+      toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
+      return false;
+    }
+
+    return submitStep2({
+      addressMethod: nationalAddressMethod,
+      photoFiles: nationalAddressPhotoFiles,
+      linkUrl: nationalAddressLinkUrl,
+      manualAddress: nationalAddressManual,
+      legalAgent: needsLegalAgent ? agentData : undefined,
+      hasExistingLegalAgentPoa: Boolean(existingLegalAgentPoaUrl),
+    });
+  }
+
+  function buildDeedStep1Payload() {
+    const hasManualEntry =
+      useManualDeedEntry &&
+      supportsManualEntry &&
+      isManualDeedEntryComplete(manualDeedEntry);
+
+    const hasNewFile = needsFrontBack
+      ? deedFrontFiles.length > 0 || deedBackFiles.length > 0
+      : isDeceasedOwner
+        ? deedFiles.length > 0 ||
+          deedInheritanceFiles.length > 0 ||
+          deedHeirsPoaFiles.length > 0 ||
+          deedGuardiansPoaFiles.length > 0
+        : isWaqfOwner
+          ? deedFiles.length > 0 ||
+            deedEndowmentCertFiles.length > 0 ||
+            deedTrusteeshipFiles.length > 0 ||
+            deedGuardiansPoaFiles.length > 0
+          : deedFiles.length > 0;
+
+    const shouldSubmitDeed = hasManualEntry || hasNewFile;
+
+    const payload = hasManualEntry
+      ? isDeceasedOwner
+        ? {
+            manualDeedEntry,
+            inheritance: deedInheritanceFiles[0],
+            heirsPoa: deedHeirsPoaFiles[0],
+          }
+        : isWaqfOwner
+          ? {
+              manualDeedEntry,
+              endowmentCert: deedEndowmentCertFiles[0],
+              trusteeship: deedTrusteeshipFiles[0],
+              isMultipleTrusteeshipDeedCopy,
+              guardiansPoa: isMultipleTrusteeshipDeedCopy
+                ? deedGuardiansPoaFiles[0]
+                : undefined,
+            }
+          : { manualDeedEntry }
+      : needsFrontBack
+        ? { front: deedFrontFiles[0], back: deedBackFiles[0] }
+        : isDeceasedOwner
+          ? {
+              instrument: deedFiles[0],
+              inheritance: deedInheritanceFiles[0],
+              heirsPoa: deedHeirsPoaFiles[0],
+              guardiansPoa: hasMinorHeirs ? deedGuardiansPoaFiles[0] : undefined,
+            }
+          : isWaqfOwner
+            ? {
+                instrument: deedFiles[0],
+                endowmentCert: deedEndowmentCertFiles[0],
+                trusteeship: deedTrusteeshipFiles[0],
+                isMultipleTrusteeshipDeedCopy,
+                guardiansPoa: isMultipleTrusteeshipDeedCopy
+                  ? deedGuardiansPoaFiles[0]
+                  : undefined,
+              }
+            : { instrument: deedFiles[0] };
+
+    return { shouldSubmitDeed, payload };
   }
 
   async function handleContinue() {
@@ -188,71 +281,10 @@ export default function CreateContractDeedStep({
       return;
     }
 
-    const hasManualEntry =
-      useManualDeedEntry &&
-      supportsManualEntry &&
-      isManualDeedEntryComplete(manualDeedEntry);
-
-    const hasNewFile = needsFrontBack
-      ? deedFrontFiles.length > 0 || deedBackFiles.length > 0
-      : isDeceasedOwner
-        ? deedFiles.length > 0 ||
-          deedInheritanceFiles.length > 0 ||
-          deedHeirsPoaFiles.length > 0 ||
-          deedGuardiansPoaFiles.length > 0
-        : isWaqfOwner
-          ? deedFiles.length > 0 ||
-            deedEndowmentCertFiles.length > 0 ||
-            deedTrusteeshipFiles.length > 0 ||
-            deedGuardiansPoaFiles.length > 0
-          : deedFiles.length > 0;
-
-    const shouldSubmitDeed = hasManualEntry || hasNewFile;
+    const { shouldSubmitDeed, payload } = buildDeedStep1Payload();
 
     if (selectedDeedType && shouldSubmitDeed) {
-      const submitted = await submitStep1(
-        selectedDeedType,
-        hasManualEntry
-          ? isDeceasedOwner
-            ? {
-                manualDeedEntry,
-                inheritance: deedInheritanceFiles[0],
-                heirsPoa: deedHeirsPoaFiles[0],
-              }
-            : isWaqfOwner
-              ? {
-                  manualDeedEntry,
-                  endowmentCert: deedEndowmentCertFiles[0],
-                  trusteeship: deedTrusteeshipFiles[0],
-                  isMultipleTrusteeshipDeedCopy,
-                  guardiansPoa: isMultipleTrusteeshipDeedCopy
-                    ? deedGuardiansPoaFiles[0]
-                    : undefined,
-                }
-              : { manualDeedEntry }
-          : needsFrontBack
-            ? { front: deedFrontFiles[0], back: deedBackFiles[0] }
-            : isDeceasedOwner
-              ? {
-                  instrument: deedFiles[0],
-                  inheritance: deedInheritanceFiles[0],
-                  heirsPoa: deedHeirsPoaFiles[0],
-                  guardiansPoa: hasMinorHeirs
-                    ? deedGuardiansPoaFiles[0]
-                    : undefined,
-                }
-              : isWaqfOwner
-                ? {
-                    instrument: deedFiles[0],
-                    endowmentCert: deedEndowmentCertFiles[0],
-                    trusteeship: deedTrusteeshipFiles[0],
-                    isMultipleTrusteeshipDeedCopy,
-                    guardiansPoa: isMultipleTrusteeshipDeedCopy
-                      ? deedGuardiansPoaFiles[0]
-                      : undefined,
-                  }
-                : { instrument: deedFiles[0] },
-      );
+      const submitted = await submitStep1(selectedDeedType, payload);
 
       if (!submitted) {
         return;
@@ -266,19 +298,13 @@ export default function CreateContractDeedStep({
       return;
     }
 
-    if (!nationalAddressMethod) {
-      setShowFieldErrors(true);
-      toast.error(tIncomplete("incompleteContinue"));
-      setTimeout(scrollToFirstInvalidField, 0);
+    // Endowment: defer step2 (address + nazir identity) to the waqf-nazir step.
+    if (needsWaqfNazir) {
+      onComplete();
       return;
     }
 
-    const submittedAddress = await submitStep2({
-      addressMethod: nationalAddressMethod,
-      photoFiles: nationalAddressPhotoFiles,
-      linkUrl: nationalAddressLinkUrl,
-      manualAddress: nationalAddressManual,
-    });
+    const submittedAddress = await submitAddressWithOptionalLegalAgent();
 
     if (!submittedAddress) {
       return;
@@ -286,6 +312,75 @@ export default function CreateContractDeedStep({
 
     onComplete();
   }
+
+  async function submitActiveDeedData(): Promise<boolean> {
+    if (isSubmitting) {
+      return false;
+    }
+
+    if (!canContinue) {
+      setShowFieldErrors(true);
+      toast.error(tIncomplete("incompleteContinue"));
+      setTimeout(scrollToFirstInvalidField, 0);
+      return false;
+    }
+
+    if (selectedDeedType && deedTypeIsLeaseRenewal(selectedDeedType)) {
+      const submitted = await submitStep1(selectedDeedType, {
+        instrument: deedFiles[0],
+      });
+
+      if (!submitted) {
+        return false;
+      }
+
+      if (leaseRenewalAddressMode !== "change") {
+        return true;
+      }
+
+      if (!nationalAddressMethod) {
+        setShowFieldErrors(true);
+        toast.error(tIncomplete("incompleteContinue"));
+        setTimeout(scrollToFirstInvalidField, 0);
+        return false;
+      }
+
+      return submitStep2({
+        addressMethod: nationalAddressMethod,
+        photoFiles: nationalAddressPhotoFiles,
+        linkUrl: nationalAddressLinkUrl,
+        manualAddress: nationalAddressManual,
+      });
+    }
+
+    const { shouldSubmitDeed, payload } = buildDeedStep1Payload();
+
+    if (selectedDeedType && shouldSubmitDeed) {
+      const submitted = await submitStep1(selectedDeedType, payload);
+
+      if (!submitted) {
+        return false;
+      }
+    } else if (!isInstrumentTypeLocked && !isDeedAlreadySubmitted) {
+      return false;
+    }
+
+    if (isSublease) {
+      return true;
+    }
+
+    // Endowment: address + nazir identity are submitted on the waqf-nazir step.
+    if (needsWaqfNazir) {
+      return true;
+    }
+
+    return submitAddressWithOptionalLegalAgent();
+  }
+
+  useEffect(() => {
+    setActiveStepSaveHandler(submitActiveDeedData);
+    return () => setActiveStepSaveHandler(null);
+  });
 
   const showDeedFields =
     Boolean(selectedDeedType || existingInstrumentImageUrl) && !isLeaseRenewal;
@@ -553,6 +648,29 @@ export default function CreateContractDeedStep({
                   showFieldErrors={showFieldErrors}
                 />
               ) : null}
+            </div>
+          ) : null}
+
+          {needsLegalAgent ? (
+            <div className="space-y-3 border-t border-dashed border-[#d9d9d9] pt-4">
+              <CreateContractStepPhaseHeader
+                title={legalAgentLabels.title}
+                subtitle={legalAgentLabels.subtitle}
+              />
+
+              <div className="space-y-3 rounded-[24px] bg-white p-3 md:p-4 dark:bg-transparent">
+                <CreateContractAgentDataPhase
+                  labels={legalAgentLabels.agentData}
+                  birthDateLabels={legalAgentLabels.birthDate}
+                  validationLabels={legalAgentLabels.validation.fieldErrors}
+                  value={agentData}
+                  onChange={setAgentData}
+                  showFieldErrors={showFieldErrors}
+                  hideSectionHeader
+                  existingPoaUrl={existingLegalAgentPoaUrl}
+                  documentHint={legalAgentLabels.documentHint}
+                />
+              </div>
             </div>
           ) : null}
         </div>

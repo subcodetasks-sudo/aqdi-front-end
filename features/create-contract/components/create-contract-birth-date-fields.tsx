@@ -1,13 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
+
 import CreateContractFormSelect from "@/features/create-contract/components/create-contract-form-select";
-import type { BirthDateValue } from "@/features/create-contract/types/owner-step";
+import type {
+  BirthDateValue,
+  CalendarType,
+} from "@/features/create-contract/types/owner-step";
 import {
+  convertAdultBirthDateCalendar,
   getAdultBirthDayOptions,
   getAdultBirthMonthOptions,
   getAdultBirthYearOptions,
   isAdultBirthDateComplete,
   isAtLeastAdultAge,
+  sanitizeAdultBirthDateValue,
 } from "@/lib/validation/birth-date-year-options";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +43,19 @@ export default function CreateContractBirthDateFields({
   onChange,
   invalid = false,
 }: CreateContractBirthDateFieldsProps) {
+  useEffect(() => {
+    const sanitized = sanitizeAdultBirthDateValue(value);
+    if (
+      sanitized.day !== value.day ||
+      sanitized.month !== value.month ||
+      sanitized.year !== value.year
+    ) {
+      onChange(sanitized);
+    }
+  }, [value, onChange]);
+
+  // Options are derived from today's date so under-18 years stay excluded,
+  // and a new max year appears automatically once that cohort turns 18.
   const yearOptions = getAdultBirthYearOptions(value.calendarType);
   const monthOptions = getAdultBirthMonthOptions(
     value.calendarType,
@@ -70,12 +90,16 @@ export default function CreateContractBirthDateFields({
     field: K,
     fieldValue: BirthDateValue[K],
   ) {
+    if (field === "calendarType") {
+      onChange(
+        convertAdultBirthDateCalendar(value, fieldValue as CalendarType),
+      );
+      return;
+    }
+
     const nextValue: BirthDateValue = {
       ...value,
       [field]: fieldValue,
-      ...(field === "calendarType"
-        ? { day: "", month: "", year: "" }
-        : {}),
     };
 
     if (field === "year") {

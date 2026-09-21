@@ -18,6 +18,7 @@ import {
   UNIFIED_RECORD_NUMBER_LENGTH,
 } from "@/lib/validation/format-unified-record-number-for-form";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 type CreateContractTenantOrganizationDataPhaseProps = {
   labels: CreateContractLabels["tenant"]["organizationData"];
@@ -26,10 +27,6 @@ type CreateContractTenantOrganizationDataPhaseProps = {
   onChange: (value: OrganizationTenantData) => void;
   showFieldErrors?: boolean;
 };
-
-function isIdNumberComplete(idNumber: string) {
-  return idNumber.replace(/\D/g, "").length === 10;
-}
 
 function isUnifiedRecordNumberComplete(unifiedRecordNumber: string) {
   if (isUnifiedRecordNumberPrefixOnly(unifiedRecordNumber)) {
@@ -117,11 +114,11 @@ export default function CreateContractTenantOrganizationDataPhase({
           inputMode="numeric"
           maxLength={10}
           errorMessage={
-            showFieldErrors && !isIdNumberComplete(value.ownerIdNumber)
+            showFieldErrors && !isSaudiNationalIdComplete(value.ownerIdNumber)
               ? t("fieldRequired")
               : undefined
           }
-          valid={isIdNumberComplete(value.ownerIdNumber)}
+          valid={isSaudiNationalIdComplete(value.ownerIdNumber)}
         />
 
         <CreateContractSaudiMobileField
