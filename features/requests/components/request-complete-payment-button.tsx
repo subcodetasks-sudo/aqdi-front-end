@@ -8,9 +8,10 @@ import CreateContractDiscountCodeField from "@/features/create-contract/componen
 import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
+import { getContractFinancialPayable } from "@/features/create-contract/types/contract-financial";
 import { contractFinanceSummaryKeys } from "@/features/create-contract/query-keys";
 import { getContractFinanceSummary } from "@/features/create-contract/services/get-contract-finance-summary";
-import { formatPaymentAmount } from "@/features/create-contract/types/payment-step";
+import { formatContractMoneyAmount } from "@/features/create-contract/utils/format-contract-money";
 import { cn } from "@/lib/utils";
 
 type RequestCompletePaymentButtonProps = {
@@ -48,8 +49,11 @@ export default function RequestCompletePaymentButton({
 
   const totalPrice =
     appliedCoupon?.totalPriceBeforeCoupon ?? financeQuery.data?.total_price;
-  const payableTotal =
-    appliedCoupon?.totalPriceAfterCoupon ?? financeQuery.data?.total_price;
+  const payableTotal = appliedCoupon
+    ? appliedCoupon.totalPriceAfterCoupon
+    : financeQuery.data
+      ? getContractFinancialPayable(financeQuery.data)
+      : null;
   const hasDiscount =
     Boolean(appliedCoupon) &&
     typeof appliedCoupon?.discount === "number" &&
@@ -57,7 +61,10 @@ export default function RequestCompletePaymentButton({
   const hasAmount =
     typeof payableTotal === "number" && Number.isFinite(payableTotal);
   const idleLabel = hasAmount
-    ? labelWithAmount.replaceAll("{amount}", formatPaymentAmount(payableTotal))
+    ? labelWithAmount.replaceAll(
+        "{amount}",
+        formatContractMoneyAmount(payableTotal),
+      )
     : label;
 
   return (

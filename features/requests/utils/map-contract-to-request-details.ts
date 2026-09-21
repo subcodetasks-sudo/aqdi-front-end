@@ -236,11 +236,6 @@ export function mapContractToRequestDetails(
   const ownerRows: { label: string; value: string }[] = [];
   pushRow(
     ownerRows,
-    labels.fields.name,
-    toDisplayValue(owner?.name_owner, empty),
-  );
-  pushRow(
-    ownerRows,
     labels.fields.idNumber,
     toDisplayValue(owner?.property_owner_id_num, empty),
   );

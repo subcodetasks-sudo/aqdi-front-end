@@ -1,6 +1,7 @@
 "use server";
 
 import type { ContractFinancialApiResponse } from "@/features/create-contract/types/contract-financial";
+import { parseContractFinancialData } from "@/features/create-contract/utils/parse-contract-financial";
 import type {
   ContractInvoice,
   ContractInvoiceApiResponse,
@@ -123,12 +124,20 @@ async function fetchComposedInvoice({
     };
   }
 
+  const financial = parseContractFinancialData(financialResponse.data.data);
+  if (!financial) {
+    return {
+      ok: false,
+      error: "Invalid contract financial payload",
+    };
+  }
+
   return {
     ok: true,
     data: buildInvoiceFromContractAndFinancial({
       contractId,
       contract: contractResponse.data.data,
-      financial: financialResponse.data.data,
+      financial,
       contractTypeLabel,
       chrome,
       locale,

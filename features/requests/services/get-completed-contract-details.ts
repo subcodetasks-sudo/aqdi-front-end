@@ -4,6 +4,7 @@ import type {
   ContractFinancialApiResponse,
   ContractFinancialData,
 } from "@/features/create-contract/types/contract-financial";
+import { parseContractFinancialData } from "@/features/create-contract/utils/parse-contract-financial";
 import type {
   CompletedContractApiResponse,
   CompletedContractData,
@@ -50,7 +51,7 @@ export async function getCompletedContractDetails(
 
   const financial =
     financialResponse.ok && financialResponse.data?.status === "success"
-      ? (financialResponse.data.data ?? null)
+      ? parseContractFinancialData(financialResponse.data.data)
       : null;
 
   return {

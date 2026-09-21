@@ -1,8 +1,9 @@
 import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
+import { formatContractMoney } from "@/features/create-contract/utils/format-contract-money";
 import {
-  getContractFinancialServiceLabel,
-  getContractFinancialServicePrice,
-} from "@/features/create-contract/utils/contract-financial-display";
+  formatFinancialLineLabel,
+  getContractFinancialDisplayLines,
+} from "@/features/create-contract/utils/parse-contract-financial";
 import type { ContractInvoice } from "@/features/requests/types/contract-invoice";
 
 export type InvoiceChromeLabels = {
@@ -14,11 +15,6 @@ export type InvoiceChromeLabels = {
   unpaidStatusLabel: string;
   paidStatusLabel: string;
 };
-
-function formatAmountLabel(amount: number, locale: string) {
-  const currency = locale === "ar" ? "ريال" : "SAR";
-  return `${amount.toLocaleString("en-US")} ${currency}`;
-}
 
 export function buildInvoiceFromContractAndFinancial({
   contractId,
@@ -35,6 +31,7 @@ export function buildInvoiceFromContractAndFinancial({
   chrome: InvoiceChromeLabels;
   locale?: string;
 }): ContractInvoice {
+  const currency = locale.startsWith("ar") ? "ر.س" : "SAR";
   const isCompleted = Boolean(contract.is_completed);
   const statusLabel =
     (typeof contract.status_label === "string" && contract.status_label.trim()) ||
@@ -48,29 +45,23 @@ export function buildInvoiceFromContractAndFinancial({
       contract.contract_status_color.trim()) ||
     (isCompleted ? "#2f9e6f" : "#e67e22");
 
-  const items = (financial.services ?? [])
-    .map((service, index) => {
-      const amount = getContractFinancialServicePrice(service);
-      if (amount <= 0) {
-        return null;
-      }
-
-      return {
-        index: index + 1,
-        description: getContractFinancialServiceLabel(service, locale),
-        amount_label: formatAmountLabel(amount, locale),
-      };
-    })
-    .filter((item): item is NonNullable<typeof item> => Boolean(item))
-    .map((item, index) => ({ ...item, index: index + 1 }));
+  const detailLines = getContractFinancialDisplayLines(financial);
+  const items = detailLines.map((line, index) => ({
+    index: index + 1,
+    description: formatFinancialLineLabel(line),
+    amount_label: formatContractMoney(line.amount, currency),
+  }));
 
   const total =
-    typeof financial.total_price === "number" && Number.isFinite(financial.total_price)
-      ? financial.total_price
-      : items.reduce((sum, item) => {
-          const numeric = Number(String(item.amount_label).replace(/,/g, ""));
-          return sum + (Number.isFinite(numeric) ? numeric : 0);
-        }, 0);
+    typeof financial.total_price_after_coupon === "number" &&
+    Number.isFinite(financial.total_price_after_coupon) &&
+    typeof financial.coupon === "number" &&
+    financial.coupon > 0
+      ? financial.total_price_after_coupon
+      : typeof financial.total_price === "number" &&
+          Number.isFinite(financial.total_price)
+        ? financial.total_price
+        : detailLines.reduce((sum, line) => sum + line.amount, 0);
 
   const createdAt =
     typeof contract.created_at === "string" ? contract.created_at : null;
@@ -93,7 +84,7 @@ export function buildInvoiceFromContractAndFinancial({
     contract_type_label: contractTypeLabel,
     items,
     total_due_label: chrome.totalDueLabel,
-    total_amount_label: formatAmountLabel(total, locale),
+    total_amount_label: formatContractMoney(total, currency),
     status: isCompleted ? "paid" : "unpaid",
     status_label: statusLabel,
     status_color: statusColor,

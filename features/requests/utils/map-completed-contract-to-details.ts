@@ -67,6 +67,7 @@ export type RequestContractDialogLabels = {
     tax: string;
     electricityMeterFee: string;
     waterMeterFee: string;
+    paperDeedFee: string;
     servicesTotal: string;
     meterFeesTotal: string;
     docFee: string;
@@ -129,7 +130,65 @@ function formatAmount(value: number | null | undefined, currency: string) {
     return null;
   }
 
-  return `${value.toLocaleString("en-US")} ${currency}`;
+  return `${value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })} ${currency}`;
+}
+
+/** `part / whole * 100`, rounded to at most 2 decimals (drops trailing zeros). */
+function calculatePercentOf(
+  part: number | null | undefined,
+  whole: number | null | undefined,
+): number | null {
+  if (
+    typeof part !== "number" ||
+    typeof whole !== "number" ||
+    !Number.isFinite(part) ||
+    !Number.isFinite(whole) ||
+    part <= 0 ||
+    whole <= 0
+  ) {
+    return null;
+  }
+
+  const raw = (part / whole) * 100;
+  const rounded = Math.round(raw * 100) / 100;
+  return rounded > 0 ? rounded : null;
+}
+
+function formatAmountWithPercent(
+  value: number | null | undefined,
+  currency: string,
+  percent: number | null | undefined,
+) {
+  const formatted = formatAmount(value, currency);
+  if (!formatted) {
+    return null;
+  }
+
+  if (
+    typeof percent === "number" &&
+    Number.isFinite(percent) &&
+    percent > 0
+  ) {
+    return `${formatted} (${percent}%)`;
+  }
+
+  return formatted;
+}
+
+/** Meter / paper-deed fees — only when the user selected them (amount > 0). */
+function formatOptionalFee(value: number | null | undefined, currency: string) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+
+  return formatAmount(value, currency);
+}
+
+function hasDisplayCoupon(amount: number | null | undefined): amount is number {
+  return typeof amount === "number" && Number.isFinite(amount) && amount > 0;
 }
 
 function formatBool(
@@ -387,11 +446,6 @@ export function mapCompletedContractToDetails(
   const ownerRows: RequestContractDetailsRow[] = [];
   pushRow(
     ownerRows,
-    labels.fields.name,
-    toDisplayValue(contract.name_owner, empty),
-  );
-  pushRow(
-    ownerRows,
     labels.fields.idNumber,
     toDisplayValue(contract.property_owner_id_num, empty),
   );
@@ -443,60 +497,116 @@ export function mapCompletedContractToDetails(
     labels.fields.paymentType,
     toDisplayValue(contract.payment_type_name, empty),
   );
+
+  // Fee breakdown (server totals only — do not re-sum or show doc_fee):
+  // مدة العقد → الضريبة → رسوم التطبيق → عداد كهرباء/ماء → وثيقة ورقية → الإجمالي
+  const priceDetails = financial?.price_details;
+  const detailByKey = new Map(
+    (financial?.details ?? [])
+      .filter(
+        (line) =>
+          typeof line.amount === "number" &&
+          Number.isFinite(line.amount) &&
+          line.amount > 0,
+      )
+      .map((line) => [line.key, line] as const),
+  );
+
+  const amountFor = (
+    key:
+      | "contract_period_price"
+      | "tax"
+      | "application_fees"
+      | "electricity_meter_fee"
+      | "water_meter_fee"
+      | "paper_deed_fee",
+    fallback: number | null | undefined,
+  ) => detailByKey.get(key)?.amount ?? fallback;
+
+  const contractPeriodPrice = amountFor(
+    "contract_period_price",
+    priceDetails?.contract_period_price,
+  );
+  const taxAmount = amountFor("tax", priceDetails?.tax);
+  const taxBase =
+    (typeof financial?.subtotal === "number" && financial.subtotal > 0
+      ? financial.subtotal
+      : null) ??
+    (typeof contractPeriodPrice === "number" && contractPeriodPrice > 0
+      ? contractPeriodPrice
+      : null) ??
+    (typeof financial?.total_price === "number" &&
+    typeof taxAmount === "number" &&
+    financial.total_price > taxAmount
+      ? financial.total_price - taxAmount
+      : null);
+  const taxPercent = calculatePercentOf(taxAmount, taxBase);
+
   pushRow(
     financeRows,
     labels.fields.contractPeriodPrice,
-    formatAmount(financial?.price_details?.contract_period_price, labels.currency),
-  );
-  pushRow(
-    financeRows,
-    labels.fields.applicationFees,
-    formatAmount(financial?.price_details?.application_fees, labels.currency),
+    formatAmount(contractPeriodPrice, labels.currency),
   );
   pushRow(
     financeRows,
     labels.fields.tax,
-    formatAmount(financial?.price_details?.tax, labels.currency),
+    formatAmountWithPercent(taxAmount, labels.currency, taxPercent),
+  );
+  pushRow(
+    financeRows,
+    labels.fields.applicationFees,
+    formatAmount(
+      amountFor("application_fees", priceDetails?.application_fees),
+      labels.currency,
+    ),
   );
   pushRow(
     financeRows,
     labels.fields.electricityMeterFee,
-    formatAmount(financial?.price_details?.electricity_meter_fee, labels.currency),
+    formatOptionalFee(
+      amountFor("electricity_meter_fee", priceDetails?.electricity_meter_fee),
+      labels.currency,
+    ),
   );
   pushRow(
     financeRows,
     labels.fields.waterMeterFee,
-    formatAmount(financial?.price_details?.water_meter_fee, labels.currency),
+    formatOptionalFee(
+      amountFor("water_meter_fee", priceDetails?.water_meter_fee),
+      labels.currency,
+    ),
   );
   pushRow(
     financeRows,
-    labels.fields.servicesTotal,
-    formatAmount(financial?.services_total, labels.currency),
+    labels.fields.paperDeedFee,
+    formatOptionalFee(
+      amountFor("paper_deed_fee", priceDetails?.paper_deed_fee),
+      labels.currency,
+    ),
   );
-  pushRow(
-    financeRows,
-    labels.fields.meterFeesTotal,
-    formatAmount(financial?.meter_fees_total, labels.currency),
-  );
-  pushRow(
-    financeRows,
-    labels.fields.docFee,
-    formatAmount(financial?.doc_fee, labels.currency),
-  );
+
+  if (hasDisplayCoupon(financial?.coupon)) {
+    pushRow(
+      financeRows,
+      "خصم الكوبون",
+      formatAmount(financial.coupon, labels.currency),
+    );
+  }
+
   pushRow(
     financeRows,
     labels.fields.totalPrice,
-    formatAmount(financial?.total_price, labels.currency),
+    formatAmount(
+      typeof financial?.total_price_after_coupon === "number" &&
+        hasDisplayCoupon(financial.coupon)
+        ? financial.total_price_after_coupon
+        : financial?.total_price,
+      labels.currency,
+    ),
   );
 
+  // Do not surface services / additional_services in the completed-contract dialog.
   const serviceRows: RequestContractDetailsRow[] = [];
-  for (const service of financial?.services ?? []) {
-    pushRow(
-      serviceRows,
-      service.name || service.service_name || service.name_ar,
-      formatAmount(service.price ?? service.service_price, labels.currency),
-    );
-  }
 
   const sections = [
     buildSection(labels.overviewSection, overviewRows),
