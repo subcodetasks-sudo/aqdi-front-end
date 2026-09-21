@@ -3,7 +3,6 @@
 import { apiFormDataRequest } from "@/lib/api/api-request";
 import type {
   PropertyAgentDataState,
-  PropertyHasAgentOption,
   PropertyOwnerDataState,
 } from "@/features/create-property/types/owner-step";
 import { appendPropertyStep2Fields } from "@/features/create-property/utils/build-property-step2-form-data";
@@ -13,6 +12,8 @@ export type SubmitPropertyStep2Payload = {
   propertyName: string;
   ownerData: PropertyOwnerDataState;
   agentData: PropertyAgentDataState;
+  skipOwnerFields?: boolean;
+  agentOnly?: boolean;
 };
 
 type PropertyStep2ApiData = {

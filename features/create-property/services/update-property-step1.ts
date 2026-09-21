@@ -22,7 +22,6 @@ type PropertyStep1ApiResponse = {
 
 export async function updatePropertyStep1(payload: UpdatePropertyStep1Payload) {
   const formData = new FormData();
-
   appendPropertyStep1Fields(formData, payload);
 
   const response = await apiFormDataRequest<PropertyStep1ApiResponse>(
@@ -40,6 +39,30 @@ export async function updatePropertyStep1(payload: UpdatePropertyStep1Payload) {
   return {
     ok: true as const,
     propertyId: response.data.data?.id ?? payload.propertyId,
+    message: response.data.message,
+  };
+}
+
+export async function updatePropertyStep1FormData(formData: FormData) {
+  const response = await apiFormDataRequest<PropertyStep1ApiResponse>(
+    "/realstate/update/step1",
+    formData,
+  );
+
+  if (!response.ok || !response.data?.success) {
+    return {
+      ok: false as const,
+      error: response.error || response.data?.message || "Something went wrong",
+    };
+  }
+
+  const propertyIdValue = formData.get("id");
+  const fallbackPropertyId =
+    typeof propertyIdValue === "string" ? Number(propertyIdValue) : 0;
+
+  return {
+    ok: true as const,
+    propertyId: response.data.data?.id ?? fallbackPropertyId,
     message: response.data.message,
   };
 }
