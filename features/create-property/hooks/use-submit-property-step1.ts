@@ -3,87 +3,112 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { submitPropertyStep1 } from "@/features/create-property/services/submit-property-step1";
-import { updatePropertyStep1 } from "@/features/create-property/services/update-property-step1";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import {
+  propertyDeedTypeIsAdversePossession,
   propertyDeedTypeIsDeceasedOwner,
   propertyDeedTypeIsWaqfOwner,
   propertyDeedTypeNeedsFrontBack,
 } from "@/features/create-property/types/deed-type";
+import {
+  isPropertyDetailsComplete,
+  isStrongArgumentDetailsComplete,
+} from "@/features/create-property/types/property-details";
+import { appendPropertyStep1Fields } from "@/features/create-property/utils/build-property-step1-form-data";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
+import { mapPropertyDeedTypeToApiInstrumentType } from "@/features/create-property/utils/map-property-deed-type-to-api";
 import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
+import { resolveDraftFile } from "@/features/create-property/utils/resolve-draft-file";
+import { resolveUploadFile } from "@/features/create-property/utils/resolve-upload-file";
 import { isPropertyDeedDataComplete } from "@/features/create-property/utils/validate-property-deed-data";
 
-export function useSubmitPropertyStep1() {
+type Step1SubmitResult =
+  | { ok: true; propertyId: number; message?: string }
+  | { ok: false; error: string };
+
+async function postPropertyStep1FormData(
+  endpoint: "/api/realstate/step1" | "/api/realstate/step1/update",
+  formData: FormData,
+): Promise<Step1SubmitResult> {
+  const response = await fetch(endpoint, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = (await response.json().catch(() => null)) as Step1SubmitResult | null;
+
+  if (!data || typeof data !== "object") {
+    return {
+      ok: false,
+      error: "Something went wrong",
+    };
+  }
+
+  if (!data.ok) {
+    return {
+      ok: false,
+      error: data.error || "Something went wrong",
+    };
+  }
+
+  return data;
+}
+
+export function useSubmitPropertyStep1(
+  contractType: PropertyContractType = "housing",
+) {
   const searchParams = useSearchParams();
   const urlPropertyId = parsePropertyId(searchParams.get("propertyId") ?? undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const selectedDeedType = useCreatePropertyDraftStore(
-    (state) => state.selectedDeedType,
-  );
-  const deedFiles = useCreatePropertyDraftStore((state) => state.deedFiles);
-  const deedFrontFiles = useCreatePropertyDraftStore((state) => state.deedFrontFiles);
-  const deedBackFiles = useCreatePropertyDraftStore((state) => state.deedBackFiles);
-  const deedInheritanceFiles = useCreatePropertyDraftStore(
-    (state) => state.deedInheritanceFiles,
-  );
-  const deedHeirsPoaFiles = useCreatePropertyDraftStore(
-    (state) => state.deedHeirsPoaFiles,
-  );
-  const deedEndowmentCertFiles = useCreatePropertyDraftStore(
-    (state) => state.deedEndowmentCertFiles,
-  );
-  const deedTrusteeshipFiles = useCreatePropertyDraftStore(
-    (state) => state.deedTrusteeshipFiles,
-  );
-  const isMultipleTrusteeshipDeedCopy = useCreatePropertyDraftStore(
-    (state) => state.isMultipleTrusteeshipDeedCopy,
-  );
-  const hasMinorHeirs = useCreatePropertyDraftStore((state) => state.hasMinorHeirs);
-  const deedGuardiansPoaFiles = useCreatePropertyDraftStore(
-    (state) => state.deedGuardiansPoaFiles,
-  );
-  const addressMethod = useCreatePropertyDraftStore((state) => state.addressMethod);
-  const addressPhotoFiles = useCreatePropertyDraftStore(
-    (state) => state.addressPhotoFiles,
-  );
-  const addressLinkUrl = useCreatePropertyDraftStore((state) => state.addressLinkUrl);
-  const addressManual = useCreatePropertyDraftStore((state) => state.addressManual);
-  const mapLocation = useCreatePropertyDraftStore((state) => state.mapLocation);
-  const propertyId = useCreatePropertyDraftStore((state) => state.propertyId);
-  const existingDeedImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingDeedImageUrl,
-  );
-  const existingDeedFrontImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingDeedFrontImageUrl,
-  );
-  const existingDeedBackImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingDeedBackImageUrl,
-  );
-  const existingInheritanceImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingInheritanceImageUrl,
-  );
-  const existingHeirsPoaImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingHeirsPoaImageUrl,
-  );
-  const existingEndowmentCertImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingEndowmentCertImageUrl,
-  );
-  const existingTrusteeshipImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingTrusteeshipImageUrl,
-  );
-  const existingGuardiansPoaImageUrl = useCreatePropertyDraftStore(
-    (state) => state.existingGuardiansPoaImageUrl,
-  );
-  const useManualDeedEntry = useCreatePropertyDraftStore(
-    (state) => state.useManualDeedEntry,
-  );
-  const manualDeedEntry = useCreatePropertyDraftStore((state) => state.manualDeedEntry);
   const setPropertyId = useCreatePropertyDraftStore((state) => state.setPropertyId);
-  const isEditMode = urlPropertyId !== null;
-  const editPropertyId = urlPropertyId ?? propertyId;
+  const storePropertyId = useCreatePropertyDraftStore((state) => state.propertyId);
+  const propertyId = urlPropertyId ?? storePropertyId;
+  // Any known property id must hit update (edit URL, or resubmit after create).
+  const shouldUpdate = propertyId !== null;
 
   async function submitStep1() {
+    // Read at submit time so we never race async file-persist setters.
+    const state = useCreatePropertyDraftStore.getState();
+    const {
+      selectedDeedType,
+      propertyDetails,
+      deedFiles,
+      deedPersistedFiles,
+      deedFrontFiles,
+      deedFrontPersistedFiles,
+      deedBackFiles,
+      deedBackPersistedFiles,
+      deedInheritanceFiles,
+      deedInheritancePersistedFiles,
+      deedHeirsPoaFiles,
+      deedHeirsPoaPersistedFiles,
+      deedEndowmentCertFiles,
+      deedEndowmentCertPersistedFiles,
+      deedTrusteeshipFiles,
+      deedTrusteeshipPersistedFiles,
+      deedGuardiansPoaFiles,
+      deedGuardiansPoaPersistedFiles,
+      isMultipleTrusteeshipDeedCopy,
+      hasMinorHeirs,
+      useManualDeedEntry,
+      manualDeedEntry,
+      addressMethod,
+      addressPhotoFiles,
+      addressPhotoPersistedFiles,
+      addressLinkUrl,
+      addressManual,
+      mapLocation,
+      existingDeedImageUrl,
+      existingDeedFrontImageUrl,
+      existingDeedBackImageUrl,
+      existingInheritanceImageUrl,
+      existingHeirsPoaImageUrl,
+      existingEndowmentCertImageUrl,
+      existingTrusteeshipImageUrl,
+      existingGuardiansPoaImageUrl,
+      existingAddressImageUrl,
+    } = state;
+
     const deedComplete = isPropertyDeedDataComplete({
       selectedDeedType,
       deedFiles,
@@ -117,6 +142,17 @@ export function useSubmitPropertyStep1() {
       };
     }
 
+    if (
+      !isPropertyDetailsComplete(propertyDetails) ||
+      (propertyDeedTypeIsAdversePossession(selectedDeedType) &&
+        !isStrongArgumentDetailsComplete(propertyDetails))
+    ) {
+      return {
+        ok: false as const,
+        error: "Property details are incomplete",
+      };
+    }
+
     if (!addressMethod) {
       return {
         ok: false as const,
@@ -124,7 +160,7 @@ export function useSubmitPropertyStep1() {
       };
     }
 
-    if (isEditMode && !editPropertyId) {
+    if (shouldUpdate && !propertyId) {
       return {
         ok: false as const,
         error: "Property ID is missing",
@@ -138,56 +174,176 @@ export function useSubmitPropertyStep1() {
       const isDeceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
       const isWaqfOwner = propertyDeedTypeIsWaqfOwner(selectedDeedType);
 
-      const payload = {
-        instrumentType: selectedDeedType,
+      const localInstrument = resolveDraftFile(deedFiles, deedPersistedFiles);
+      const localFront = resolveDraftFile(deedFrontFiles, deedFrontPersistedFiles);
+      const localBack = resolveDraftFile(deedBackFiles, deedBackPersistedFiles);
+      const localInheritance = resolveDraftFile(
+        deedInheritanceFiles,
+        deedInheritancePersistedFiles,
+      );
+      const localHeirsPoa = resolveDraftFile(
+        deedHeirsPoaFiles,
+        deedHeirsPoaPersistedFiles,
+      );
+      const localEndowmentCert = resolveDraftFile(
+        deedEndowmentCertFiles,
+        deedEndowmentCertPersistedFiles,
+      );
+      const localTrusteeship = resolveDraftFile(
+        deedTrusteeshipFiles,
+        deedTrusteeshipPersistedFiles,
+      );
+      const localGuardiansPoa = resolveDraftFile(
+        deedGuardiansPoaFiles,
+        deedGuardiansPoaPersistedFiles,
+      );
+      const localAddressPhoto = resolveDraftFile(
+        addressPhotoFiles,
+        addressPhotoPersistedFiles,
+      );
+
+      // On update, re-attach existing remote docs when the user did not pick a
+      // replacement — Laravel update/step1 otherwise keeps only text fields.
+      const [
+        instrumentFile,
+        frontFile,
+        backFile,
+        inheritanceFile,
+        heirsPoaFile,
+        endowmentCertFile,
+        trusteeshipFile,
+        guardiansPoaFile,
+        addressPhotoFile,
+      ] = await Promise.all([
+        resolveUploadFile({
+          localFile: localInstrument,
+          existingUrl: shouldUpdate ? existingDeedImageUrl : null,
+          fallbackFileName: "image_instrument",
+        }),
+        resolveUploadFile({
+          localFile: localFront,
+          existingUrl: shouldUpdate ? existingDeedFrontImageUrl : null,
+          fallbackFileName: "image_instrument_front",
+        }),
+        resolveUploadFile({
+          localFile: localBack,
+          existingUrl: shouldUpdate ? existingDeedBackImageUrl : null,
+          fallbackFileName: "image_instrument_back",
+        }),
+        resolveUploadFile({
+          localFile: localInheritance,
+          existingUrl: shouldUpdate ? existingInheritanceImageUrl : null,
+          fallbackFileName: "Image_inheritance_certificate",
+        }),
+        resolveUploadFile({
+          localFile: localHeirsPoa,
+          existingUrl: shouldUpdate ? existingHeirsPoaImageUrl : null,
+          fallbackFileName: "copy_power_of_attorney_from_heirs_to_agent",
+        }),
+        resolveUploadFile({
+          localFile: localEndowmentCert,
+          existingUrl: shouldUpdate ? existingEndowmentCertImageUrl : null,
+          fallbackFileName: "copy_of_the_endowment_registration_certificate",
+        }),
+        resolveUploadFile({
+          localFile: localTrusteeship,
+          existingUrl: shouldUpdate ? existingTrusteeshipImageUrl : null,
+          fallbackFileName: "copy_of_the_trusteeship_deed",
+        }),
+        resolveUploadFile({
+          localFile: localGuardiansPoa,
+          existingUrl: shouldUpdate ? existingGuardiansPoaImageUrl : null,
+          fallbackFileName: "copy_of_guardians_power_of_attorney_for_agent",
+        }),
+        resolveUploadFile({
+          localFile: localAddressPhoto,
+          existingUrl:
+            shouldUpdate && addressMethod === "photo"
+              ? existingAddressImageUrl
+              : null,
+          fallbackFileName: "image_address",
+        }),
+      ]);
+
+      if (isDeceasedOwner && !inheritanceFile) {
+        return {
+          ok: false as const,
+          error: "Inheritance certificate is required",
+        };
+      }
+
+      if (isDeceasedOwner && !heirsPoaFile) {
+        return {
+          ok: false as const,
+          error: "Heirs power of attorney is required",
+        };
+      }
+
+      if (
+        isDeceasedOwner &&
+        !needsFrontBack &&
+        !useManualDeedEntry &&
+        !instrumentFile
+      ) {
+        return {
+          ok: false as const,
+          error: "Deed image is required",
+        };
+      }
+
+      const formData = new FormData();
+      appendPropertyStep1Fields(formData, {
+        propertyId: shouldUpdate ? propertyId ?? undefined : undefined,
+        contractType,
+        instrumentType: mapPropertyDeedTypeToApiInstrumentType(selectedDeedType),
+        propertyDetails,
+        includeStrongArgumentFields:
+          propertyDeedTypeIsAdversePossession(selectedDeedType),
         imageInstrument:
-          needsFrontBack || useManualDeedEntry ? undefined : deedFiles[0],
+          needsFrontBack || useManualDeedEntry ? undefined : instrumentFile,
         imageInstrumentFront:
-          needsFrontBack && !useManualDeedEntry ? deedFrontFiles[0] : undefined,
+          needsFrontBack && !useManualDeedEntry ? frontFile : undefined,
         imageInstrumentBack:
-          needsFrontBack && !useManualDeedEntry ? deedBackFiles[0] : undefined,
+          needsFrontBack && !useManualDeedEntry ? backFile : undefined,
         manualDeedEntry: useManualDeedEntry ? manualDeedEntry : undefined,
         imageInheritanceCertificate: isDeceasedOwner
-          ? deedInheritanceFiles[0]
+          ? inheritanceFile
           : undefined,
         copyPowerOfAttorneyFromHeirsToAgent: isDeceasedOwner
-          ? deedHeirsPoaFiles[0]
+          ? heirsPoaFile
           : undefined,
         copyOfTheEndowmentRegistrationCertificate: isWaqfOwner
-          ? deedEndowmentCertFiles[0]
+          ? endowmentCertFile
           : undefined,
-        copyOfTheTrusteeshipDeed: isWaqfOwner ? deedTrusteeshipFiles[0] : undefined,
+        copyOfTheTrusteeshipDeed: isWaqfOwner ? trusteeshipFile : undefined,
         isMultipleTrusteeshipDeedCopy: isWaqfOwner
           ? isMultipleTrusteeshipDeedCopy
           : undefined,
         copyOfGuardiansPowerOfAttorneyForAgent:
           (isWaqfOwner && isMultipleTrusteeshipDeedCopy) ||
           (isDeceasedOwner && hasMinorHeirs)
-            ? deedGuardiansPoaFiles[0]
+            ? guardiansPoaFile
             : undefined,
         addressMethod,
-        imageAddress:
-          addressMethod === "photo" ? addressPhotoFiles[0] : undefined,
+        imageAddress: addressMethod === "photo" ? addressPhotoFile : undefined,
         addressUrl:
-          addressMethod === "link" ? addressLinkUrl.trim() || undefined : undefined,
+          addressMethod === "link"
+            ? addressLinkUrl.trim() || undefined
+            : undefined,
         manualAddress: addressMethod === "manual" ? addressManual : undefined,
         latitude: mapLocation.lat,
         longitude: mapLocation.lng,
-      };
+      });
 
-      const result =
-        isEditMode && editPropertyId
-          ? await updatePropertyStep1({
-              ...payload,
-              propertyId: editPropertyId,
-            })
-          : await submitPropertyStep1(payload);
+      const result = shouldUpdate
+        ? await postPropertyStep1FormData("/api/realstate/step1/update", formData)
+        : await postPropertyStep1FormData("/api/realstate/step1", formData);
 
       if (!result.ok) {
         return result;
       }
 
-      setPropertyId(isEditMode ? editPropertyId : result.propertyId);
+      setPropertyId(shouldUpdate ? propertyId : result.propertyId);
       return result;
     } finally {
       setIsSubmitting(false);
@@ -195,7 +351,7 @@ export function useSubmitPropertyStep1() {
   }
 
   return {
-    propertyId: editPropertyId,
+    propertyId,
     isSubmitting,
     submitStep1,
   };

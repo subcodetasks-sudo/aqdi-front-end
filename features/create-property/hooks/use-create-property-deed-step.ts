@@ -2,10 +2,15 @@
 
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
 import {
+  propertyDeedTypeIsAdversePossession,
   propertyDeedTypeIsDeceasedOwner,
   propertyDeedTypeIsWaqfOwner,
   propertyDeedTypeNeedsFrontBack,
 } from "@/features/create-property/types/deed-type";
+import {
+  isPropertyDetailsComplete,
+  isStrongArgumentDetailsComplete,
+} from "@/features/create-property/types/property-details";
 import { isPropertyDeedDataComplete } from "@/features/create-property/utils/validate-property-deed-data";
 
 export function useCreatePropertyDeedStep() {
@@ -63,6 +68,12 @@ export function useCreatePropertyDeedStep() {
   const setSelectedDeedType = useCreatePropertyDraftStore(
     (state) => state.setSelectedDeedType,
   );
+  const propertyDetails = useCreatePropertyDraftStore(
+    (state) => state.propertyDetails,
+  );
+  const setPropertyDetails = useCreatePropertyDraftStore(
+    (state) => state.setPropertyDetails,
+  );
   const setDeedFiles = useCreatePropertyDraftStore((state) => state.setDeedFiles);
   const setDeedFrontFiles = useCreatePropertyDraftStore(
     (state) => state.setDeedFrontFiles,
@@ -107,7 +118,7 @@ export function useCreatePropertyDeedStep() {
   const isDeceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
   const isWaqfOwner = propertyDeedTypeIsWaqfOwner(selectedDeedType);
 
-  const canContinue = isPropertyDeedDataComplete({
+  const deedComplete = isPropertyDeedDataComplete({
     selectedDeedType,
     deedFiles,
     deedFrontFiles,
@@ -133,9 +144,18 @@ export function useCreatePropertyDeedStep() {
     },
   });
 
+  const detailsComplete =
+    isPropertyDetailsComplete(propertyDetails) &&
+    (!propertyDeedTypeIsAdversePossession(selectedDeedType) ||
+      isStrongArgumentDetailsComplete(propertyDetails));
+
+  const canContinue = deedComplete && detailsComplete;
+
   return {
     selectedDeedType,
     setSelectedDeedType,
+    propertyDetails,
+    setPropertyDetails,
     deedFiles,
     setDeedFiles,
     deedFrontFiles,

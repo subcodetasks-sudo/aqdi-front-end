@@ -5,7 +5,15 @@ import { useSearchParams } from "next/navigation";
 
 import { submitPropertyStep2 } from "@/features/create-property/services/submit-property-step2";
 import { updatePropertyStep2 } from "@/features/create-property/services/update-property-step2";
+import {
+  finishPropertyStep3,
+  finishPropertyStep3Update,
+} from "@/features/create-property/services/finish-property-step3";
 import { useCreatePropertyDraftStore } from "@/features/create-property/stores/use-create-property-draft-store";
+import {
+  propertyDeedTypeIsDeceasedOwner,
+  propertyDeedTypeIsWaqfOwner,
+} from "@/features/create-property/types/deed-type";
 import {
   isPropertyAgentDataComplete,
   isPropertyOwnerDataComplete,
@@ -18,14 +26,20 @@ export function useSubmitPropertyStep2() {
   const urlPropertyId = parsePropertyId(searchParams.get("propertyId") ?? undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const storePropertyId = useCreatePropertyDraftStore((state) => state.propertyId);
+  const selectedDeedType = useCreatePropertyDraftStore(
+    (state) => state.selectedDeedType,
+  );
   const hasExistingPowerOfAttorney = useCreatePropertyDraftStore(
     (state) => state.hasExistingPowerOfAttorney,
   );
   const ownerData = useCreatePropertyDraftStore((state) => state.ownerData);
   const agentData = useCreatePropertyDraftStore((state) => state.agentData);
   const reviewData = useCreatePropertyDraftStore((state) => state.reviewData);
-  const isEditMode = urlPropertyId !== null;
   const propertyId = urlPropertyId ?? storePropertyId;
+  const shouldUpdate = propertyId !== null && (urlPropertyId !== null || storePropertyId !== null);
+  const agentOnly =
+    propertyDeedTypeIsDeceasedOwner(selectedDeedType) ||
+    propertyDeedTypeIsWaqfOwner(selectedDeedType);
 
   async function submitStep2() {
     if (!propertyId) {
@@ -35,7 +49,7 @@ export function useSubmitPropertyStep2() {
       };
     }
 
-    if (!isPropertyOwnerDataComplete(ownerData)) {
+    if (!agentOnly && !isPropertyOwnerDataComplete(ownerData)) {
       return {
         ok: false as const,
         error: "Owner data is incomplete",
@@ -43,9 +57,10 @@ export function useSubmitPropertyStep2() {
     }
 
     if (
-      ownerData.hasAgent === "yes" &&
+      (agentOnly || ownerData.hasAgent === "yes") &&
       !isPropertyAgentDataComplete(agentData, {
-        allowExistingPowerOfAttorney: isEditMode && hasExistingPowerOfAttorney,
+        allowExistingPowerOfAttorney:
+          shouldUpdate && hasExistingPowerOfAttorney,
       })
     ) {
       return {
@@ -67,13 +82,35 @@ export function useSubmitPropertyStep2() {
       const payload = {
         propertyId,
         propertyName: reviewData.propertyName,
-        ownerData,
+        ownerData: agentOnly
+          ? { ...ownerData, hasAgent: "yes" as const }
+          : ownerData,
         agentData,
+        agentOnly,
       };
 
-      return isEditMode
+      const step2Result = shouldUpdate
         ? await updatePropertyStep2(payload)
         : await submitPropertyStep2(payload);
+
+      if (!step2Result.ok) {
+        return step2Result;
+      }
+
+      // Units are optional — finish step 3 with id only (add units later).
+      const step3Result = shouldUpdate
+        ? await finishPropertyStep3Update(propertyId)
+        : await finishPropertyStep3(propertyId);
+
+      if (!step3Result.ok) {
+        return step3Result;
+      }
+
+      return {
+        ok: true as const,
+        propertyId,
+        message: step3Result.message || step2Result.message,
+      };
     } finally {
       setIsSubmitting(false);
     }
