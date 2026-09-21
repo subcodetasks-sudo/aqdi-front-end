@@ -1,5 +1,11 @@
 import {
+  EMPTY_PROPERTY_DETAILS,
+  type PropertyDetailsState,
+} from "@/features/create-property/types/property-details";
+import {
   PROPERTY_DEED_TYPES,
+  propertyDeedTypeIsDeceasedOwner,
+  propertyDeedTypeIsWaqfOwner,
   type PropertyDeedTypeId,
 } from "@/features/create-property/types/deed-type";
 import {
@@ -23,6 +29,7 @@ export type PropertyEditDraftData = {
   propertyId: number;
   isEditMode: true;
   selectedDeedType: PropertyDeedTypeId | "";
+  propertyDetails: PropertyDetailsState;
   existingDeedImageUrl: string | null;
   existingDeedFrontImageUrl: string | null;
   existingDeedBackImageUrl: string | null;
@@ -152,6 +159,76 @@ function formatPhoneForForm(phone: string | null) {
   return formatSaudiMobileForForm(phone);
 }
 
+function resolveFirstAssetUrl(
+  ...values: Array<string | null | undefined>
+): string | null {
+  for (const value of values) {
+    const resolved = resolveAssetUrl(value);
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  return null;
+}
+
+function resolvePropertyDetails(
+  property: PropertyWithUnitsApiData,
+): PropertyDetailsState {
+  const extended = property as PropertyWithUnitsApiData & {
+    property_type_id?: number | string | null;
+    property_usages_id?: number | string | null;
+    number_of_floors?: number | string | null;
+    number_of_units_in_realestate?: number | string | null;
+    number_of_units_per_floor?: number | string | null;
+    age_of_the_property?: number | string | null;
+    electricity_meter_ownership?: "owner" | "tenant" | null;
+    water_meter_ownership?: "owner" | "tenant" | null;
+    contract_ownership?: "owner" | "tenant" | null;
+    real_estate_registry_number?: string | null;
+  };
+
+  const propertyTypeId = Number(extended.property_type_id);
+  const propertyUsagesId = Number(extended.property_usages_id);
+
+  return {
+    ...EMPTY_PROPERTY_DETAILS,
+    propertyTypeId:
+      Number.isFinite(propertyTypeId) && propertyTypeId > 0
+        ? propertyTypeId
+        : "",
+    propertyUsagesId:
+      Number.isFinite(propertyUsagesId) && propertyUsagesId > 0
+        ? propertyUsagesId
+        : "",
+    numberOfFloors: String(extended.number_of_floors ?? "").replace(/\D/g, ""),
+    numberOfUnitsInRealEstate: String(
+      extended.number_of_units_in_realestate ?? "",
+    ).trim(),
+    numberOfUnitsPerFloor: String(
+      extended.number_of_units_per_floor ?? "",
+    ).replace(/\D/g, ""),
+    ageOfTheProperty: String(extended.age_of_the_property ?? "").replace(
+      /\D/g,
+      "",
+    ),
+    electricityMeterOwnership:
+      extended.electricity_meter_ownership === "owner" ||
+      extended.electricity_meter_ownership === "tenant"
+        ? extended.electricity_meter_ownership
+        : "",
+    waterMeterOwnership:
+      extended.water_meter_ownership === "owner" ||
+      extended.water_meter_ownership === "tenant"
+        ? extended.water_meter_ownership
+        : "",
+    contractOwnership:
+      extended.contract_ownership === "tenant" ? "tenant" : "owner",
+    realEstateRegistryNumber:
+      extended.real_estate_registry_number?.trim() ?? "",
+  };
+}
+
 export function mapPropertyApiToEditDraft(
   property: PropertyWithUnitsApiData,
 ): PropertyEditDraftData {
@@ -162,36 +239,61 @@ export function mapPropertyApiToEditDraft(
   );
   const agentCalendarType = property.type_dob_property_owner_agent ?? "gregorian";
   const hasAgent = property.add_legal_agent_of_owner === 1 ? "yes" : "no";
+  // Some responses use the legacy lowercase key for the inheritance certificate.
+  const inheritanceCertificate =
+    property.Image_inheritance_certificate ??
+    (
+      property as PropertyWithUnitsApiData & {
+        image_inheritance_certificate?: string | null;
+      }
+    ).image_inheritance_certificate;
+
+  const selectedDeedType = mapInstrumentType(property.instrument_type);
+  const isDeceasedOwner = propertyDeedTypeIsDeceasedOwner(selectedDeedType);
+  const isWaqfOwner = propertyDeedTypeIsWaqfOwner(selectedDeedType);
+  const guardiansPoaUrl =
+    isDeceasedOwner || isWaqfOwner
+      ? resolveFirstAssetUrl(
+          property.copy_of_guardians_power_of_attorney_for_agent,
+        )
+      : null;
 
   return {
     propertyId: property.id,
     isEditMode: true,
-    selectedDeedType: mapInstrumentType(property.instrument_type),
-    existingDeedImageUrl: resolveAssetUrl(property.image_instrument),
-    existingDeedFrontImageUrl: resolveAssetUrl(
+    selectedDeedType,
+    propertyDetails: resolvePropertyDetails(property),
+    existingDeedImageUrl: resolveFirstAssetUrl(property.image_instrument),
+    existingDeedFrontImageUrl: resolveFirstAssetUrl(
       property.image_instrument_from_the_front,
     ),
-    existingDeedBackImageUrl: resolveAssetUrl(property.image_instrument_from_the_back),
-    existingInheritanceImageUrl: resolveAssetUrl(
-      property.Image_inheritance_certificate,
+    existingDeedBackImageUrl: resolveFirstAssetUrl(
+      property.image_instrument_from_the_back,
     ),
-    existingHeirsPoaImageUrl: resolveAssetUrl(
-      property.copy_power_of_attorney_from_heirs_to_agent,
-    ),
-    existingEndowmentCertImageUrl: resolveAssetUrl(
-      property.copy_of_the_endowment_registration_certificate,
-    ),
-    existingTrusteeshipImageUrl: resolveAssetUrl(property.copy_of_the_trusteeship_deed),
-    existingGuardiansPoaImageUrl: resolveAssetUrl(
-      property.copy_of_guardians_power_of_attorney_for_agent,
-    ),
-    existingAddressImageUrl: resolveAssetUrl(property.image_address),
-    existingPowerOfAttorneyImageUrl: resolveAssetUrl(
+    existingInheritanceImageUrl: isDeceasedOwner
+      ? resolveFirstAssetUrl(inheritanceCertificate)
+      : null,
+    existingHeirsPoaImageUrl: isDeceasedOwner
+      ? resolveFirstAssetUrl(
+          property.copy_power_of_attorney_from_heirs_to_agent,
+        )
+      : null,
+    existingEndowmentCertImageUrl: isWaqfOwner
+      ? resolveFirstAssetUrl(
+          property.copy_of_the_endowment_registration_certificate,
+        )
+      : null,
+    existingTrusteeshipImageUrl: isWaqfOwner
+      ? resolveFirstAssetUrl(property.copy_of_the_trusteeship_deed)
+      : null,
+    existingGuardiansPoaImageUrl: guardiansPoaUrl,
+    existingAddressImageUrl: resolveFirstAssetUrl(property.image_address),
+    existingPowerOfAttorneyImageUrl: resolveFirstAssetUrl(
       property.copy_of_the_authorization_or_agency,
     ),
-    isMultipleTrusteeshipDeedCopy: Boolean(
-      property.is_multiple_trusteeship_deed_copy,
-    ),
+    isMultipleTrusteeshipDeedCopy: isWaqfOwner
+      ? Boolean(property.is_multiple_trusteeship_deed_copy)
+      : false,
     hasExistingPowerOfAttorney: Boolean(property.copy_of_the_authorization_or_agency),
     addressMethod: resolveAddressMethod(property),
     addressLinkUrl: property.address_url?.trim() ?? "",
@@ -201,7 +303,6 @@ export function mapPropertyApiToEditDraft(
       lng: Number(property.longitude) || 46.6753,
     },
     ownerData: {
-      fullName: property.name_owner?.trim() ?? "",
       idNumber: digitsOnly(property.property_owner_id_num),
       birthDate: ownerBirthDate,
       phone: formatPhoneForForm(property.property_owner_mobile),

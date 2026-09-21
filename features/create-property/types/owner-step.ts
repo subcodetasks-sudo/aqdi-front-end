@@ -6,6 +6,7 @@ import {
   type OwnerValidationIssue,
 } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 export const PROPERTY_HAS_AGENT_OPTIONS = ["yes", "no"] as const;
 
@@ -29,7 +30,6 @@ export const EMPTY_PROPERTY_BIRTH_DATE: PropertyBirthDateValue = {
 };
 
 export type PropertyOwnerDataState = {
-  fullName: string;
   idNumber: string;
   birthDate: PropertyBirthDateValue;
   phone: string;
@@ -45,7 +45,6 @@ export type PropertyAgentDataState = {
 };
 
 export const EMPTY_PROPERTY_OWNER_DATA: PropertyOwnerDataState = {
-  fullName: "",
   idNumber: "",
   birthDate: EMPTY_PROPERTY_BIRTH_DATE,
   phone: "",
@@ -77,7 +76,7 @@ export function isPropertyAgentDataComplete(
     Boolean(options?.allowExistingPowerOfAttorney);
 
   return (
-    agentData.idNumber.replace(/\D/g, "").length === 10 &&
+    isSaudiNationalIdComplete(agentData.idNumber) &&
     isAdultBirthDateComplete(agentData.birthDate) &&
     isPhoneComplete(agentData.phone) &&
     hasPowerOfAttorney

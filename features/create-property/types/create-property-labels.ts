@@ -17,7 +17,9 @@ export type CreatePropertyLabels = {
     journey: string;
     saveAlt: string;
     brand: string;
-    steps: Record<CreatePropertyStepperStep, string>;
+    steps: Record<CreatePropertyStepperStep, string> & {
+      agent: string;
+    };
   };
   deed: {
     navigation: {
@@ -70,6 +72,37 @@ export type CreatePropertyLabels = {
       guardiansPoaHint: string;
       clickHere: string;
       chooseFile: string;
+    };
+    propertyDetails: {
+      title: string;
+      subtitle: string;
+      propertyType: {
+        label: string;
+        placeholder: string;
+        loading: string;
+      };
+      propertyUsage: {
+        label: string;
+        placeholder: string;
+        loading: string;
+      };
+      numberOfFloors: { label: string; placeholder: string };
+      numberOfUnits: { label: string; placeholder: string };
+      unitsPerFloor: { label: string; placeholder: string };
+      propertyAge: { label: string; placeholder: string };
+      electricityOwnership: { label: string; placeholder: string };
+      waterOwnership: { label: string; placeholder: string };
+      ownership: { owner: string; tenant: string };
+      registryNumber: { label: string; placeholder: string };
+      registryDate: {
+        label: string;
+        day: string;
+        month: string;
+        year: string;
+        dayPlaceholder: string;
+        monthPlaceholder: string;
+        yearPlaceholder: string;
+      };
     };
     manualEntry: ManualDeedEntryLabels;
   };
@@ -146,7 +179,6 @@ export type CreatePropertyLabels = {
     validation: {
       hintTitle: string;
       issues: Record<
-        | "fullName"
         | "idNumber"
         | "idNumberLength"
         | "birthDate"
@@ -180,10 +212,6 @@ export type CreatePropertyLabels = {
       yearPlaceholder: string;
     };
     ownerData: {
-      fullName: {
-        label: string;
-        placeholder: string;
-      };
       idNumber: {
         label: string;
         placeholder: string;
@@ -215,6 +243,22 @@ export type CreatePropertyLabels = {
         placeholder: string;
       };
       powerOfAttorney: CreatePropertyLabels["deed"]["deedImage"];
+    };
+    nazirData: {
+      sectionTitle: string;
+      sectionDescription?: string;
+      footerNote?: string;
+      idNumber: {
+        label: string;
+        placeholder: string;
+      };
+      birthDateLabel: string;
+      phone: {
+        label: string;
+        placeholder: string;
+      };
+      powerOfAttorney: CreatePropertyLabels["deed"]["deedImage"];
+      documentHint: string;
     };
   };
   review: {

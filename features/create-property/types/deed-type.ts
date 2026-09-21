@@ -2,8 +2,10 @@ export const PROPERTY_DEED_TYPES = [
   "electronic_deed_from_the_ministry_of_justice",
   "electronic_tax_register",
   "old_handwritten",
+  "property_ownership_owner_are_deceased",
   "property_ownership_owner_are_deceased_endowment",
   "property_ownership_owner_is_endowment",
+  "property_ownership_owner_are_suspended",
   "sale_agreement",
   "economic_cities_authority_suspended",
   "strong_argument",
@@ -32,9 +34,12 @@ export function propertyDeedTypeIsAdversePossession(
 }
 
 export function propertyDeedTypeIsDeceasedOwner(
-  deedType: PropertyDeedTypeId | "",
+  deedType: PropertyDeedTypeId | "" | string,
 ): boolean {
-  return deedType === "property_ownership_owner_are_deceased_endowment";
+  return (
+    deedType === "property_ownership_owner_are_deceased_endowment" ||
+    deedType === "property_ownership_owner_are_deceased"
+  );
 }
 
 export function propertyDeedTypeIsWaqfOwner(deedType: PropertyDeedTypeId | ""): boolean {

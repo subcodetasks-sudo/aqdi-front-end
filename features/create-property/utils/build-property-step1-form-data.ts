@@ -1,5 +1,7 @@
 import type { PropertyDeedTypeId } from "@/features/create-property/types/deed-type";
+import type { PropertyDetailsState } from "@/features/create-property/types/property-details";
 import type { PropertyNationalAddressMethodId } from "@/features/create-property/types/national-address";
+import type { PropertyContractType } from "@/features/create-property/utils/contract-type";
 import {
   appendManualNationalAddressFields,
   type ManualNationalAddressData,
@@ -11,7 +13,11 @@ import {
 
 export type PropertyStep1FormPayload = {
   propertyId?: number;
-  instrumentType: PropertyDeedTypeId;
+  contractType: PropertyContractType;
+  /** API `instrument_type` value (may differ from the UI deed option id). */
+  instrumentType: PropertyDeedTypeId | string;
+  propertyDetails: PropertyDetailsState;
+  includeStrongArgumentFields?: boolean;
   imageInstrument?: File;
   imageInstrumentFront?: File;
   imageInstrumentBack?: File;
@@ -38,18 +44,112 @@ export function appendPropertyStep1Fields(
     formData.append("id", String(payload.propertyId));
   }
 
+  formData.append("contract_type", payload.contractType);
+  formData.append(
+    "contract_ownership",
+    payload.propertyDetails.contractOwnership || "owner",
+  );
   formData.append("instrument_type", payload.instrumentType);
+
+  if (payload.propertyDetails.propertyTypeId !== "") {
+    formData.append(
+      "property_type_id",
+      String(payload.propertyDetails.propertyTypeId),
+    );
+  }
+
+  if (payload.propertyDetails.propertyUsagesId !== "") {
+    formData.append(
+      "property_usages_id",
+      String(payload.propertyDetails.propertyUsagesId),
+    );
+  }
+
+  if (payload.propertyDetails.numberOfFloors.trim()) {
+    formData.append(
+      "number_of_floors",
+      payload.propertyDetails.numberOfFloors.replace(/\D/g, ""),
+    );
+  }
+
+  if (payload.propertyDetails.numberOfUnitsInRealEstate.trim()) {
+    formData.append(
+      "number_of_units_in_realestate",
+      payload.propertyDetails.numberOfUnitsInRealEstate.trim(),
+    );
+  }
+
+  if (payload.propertyDetails.numberOfUnitsPerFloor.trim()) {
+    formData.append(
+      "number_of_units_per_floor",
+      payload.propertyDetails.numberOfUnitsPerFloor.replace(/\D/g, ""),
+    );
+  }
+
+  if (payload.propertyDetails.ageOfTheProperty.trim()) {
+    formData.append(
+      "age_of_the_property",
+      payload.propertyDetails.ageOfTheProperty.replace(/\D/g, ""),
+    );
+  }
+
+  if (payload.propertyDetails.electricityMeterOwnership) {
+    formData.append(
+      "electricity_meter_ownership",
+      payload.propertyDetails.electricityMeterOwnership,
+    );
+  }
+
+  if (payload.propertyDetails.waterMeterOwnership) {
+    formData.append(
+      "water_meter_ownership",
+      payload.propertyDetails.waterMeterOwnership,
+    );
+  }
+
+  if (payload.includeStrongArgumentFields) {
+    formData.append(
+      "real_estate_registry_number",
+      payload.propertyDetails.realEstateRegistryNumber.trim(),
+    );
+    formData.append(
+      "type_date_first_registration",
+      payload.propertyDetails.typeDateFirstRegistration,
+    );
+    formData.append(
+      "date_first_registration_day",
+      payload.propertyDetails.dateFirstRegistrationDay
+        .replace(/\D/g, "")
+        .padStart(2, "0"),
+    );
+    formData.append(
+      "date_first_registration_month",
+      payload.propertyDetails.dateFirstRegistrationMonth
+        .replace(/\D/g, "")
+        .padStart(2, "0"),
+    );
+    formData.append(
+      "date_first_registration_year",
+      payload.propertyDetails.dateFirstRegistrationYear.replace(/\D/g, ""),
+    );
+  }
 
   if (payload.imageInstrument) {
     formData.append("image_instrument", payload.imageInstrument);
   }
 
   if (payload.imageInstrumentFront) {
-    formData.append("image_instrument_from_the_front", payload.imageInstrumentFront);
+    formData.append(
+      "image_instrument_from_the_front",
+      payload.imageInstrumentFront,
+    );
   }
 
   if (payload.imageInstrumentBack) {
-    formData.append("image_instrument_from_the_back", payload.imageInstrumentBack);
+    formData.append(
+      "image_instrument_from_the_back",
+      payload.imageInstrumentBack,
+    );
   }
 
   if (payload.imageInheritanceCertificate) {
@@ -74,7 +174,10 @@ export function appendPropertyStep1Fields(
   }
 
   if (payload.copyOfTheTrusteeshipDeed) {
-    formData.append("copy_of_the_trusteeship_deed", payload.copyOfTheTrusteeshipDeed);
+    formData.append(
+      "copy_of_the_trusteeship_deed",
+      payload.copyOfTheTrusteeshipDeed,
+    );
   }
 
   if (payload.isMultipleTrusteeshipDeedCopy !== undefined) {
@@ -97,6 +200,8 @@ export function appendPropertyStep1Fields(
 
   formData.append("latitude", String(payload.latitude));
   formData.append("longitude", String(payload.longitude));
+  formData.append("lat", String(payload.latitude));
+  formData.append("lng", String(payload.longitude));
 
   if (payload.addressMethod === "photo" && payload.imageAddress) {
     formData.append("image_address", payload.imageAddress);
