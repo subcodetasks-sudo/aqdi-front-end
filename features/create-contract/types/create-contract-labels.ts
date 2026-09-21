@@ -38,7 +38,9 @@ export type CreateContractLabels = {
     steps: {
       intro: string;
       deed: string;
+      waqfNazir: string;
       owner: string;
+      agent: string;
       tenant: string;
       finance: string;
     };
@@ -197,6 +199,104 @@ export type CreateContractLabels = {
       trusteesPoaHint: string;
     };
     manualEntry: ManualDeedEntryLabels;
+    /** Deceased-owner legal agent collected with address in step 2. */
+    legalAgent: {
+      title: string;
+      subtitle: string;
+      documentHint: string;
+      agentData: {
+        sectionTitle: string;
+        sectionDescription: string;
+        footerNote: string;
+        idNumber: {
+          label: string;
+          placeholder: string;
+        };
+        birthDateLabel: string;
+        phone: {
+          label: string;
+          placeholder: string;
+        };
+        powerOfAttorney: {
+          label: string;
+          clickHere: string;
+          chooseFile: string;
+          acceptedFormats: string;
+          attached: string;
+          change: string;
+          preview: string;
+          delete: string;
+          previewTitle: string;
+          closePreview: string;
+        };
+      };
+      birthDate: {
+        label: string;
+        hijri: string;
+        gregorian: string;
+        day: string;
+        month: string;
+        year: string;
+        dayPlaceholder: string;
+        monthPlaceholder: string;
+        yearPlaceholder: string;
+      };
+      validation: {
+        fieldErrors: {
+          idNumberLength: string;
+          phoneLength: string;
+        };
+      };
+    };
+    /** Endowment (waqf) nazir collected with address in step 2. */
+    waqfNazir: {
+      title: string;
+      subtitle: string;
+      documentHint: string;
+      agentData: {
+        sectionTitle: string;
+        sectionDescription: string;
+        footerNote: string;
+        idNumber: {
+          label: string;
+          placeholder: string;
+        };
+        birthDateLabel: string;
+        phone: {
+          label: string;
+          placeholder: string;
+        };
+        powerOfAttorney: {
+          label: string;
+          clickHere: string;
+          chooseFile: string;
+          acceptedFormats: string;
+          attached: string;
+          change: string;
+          preview: string;
+          delete: string;
+          previewTitle: string;
+          closePreview: string;
+        };
+      };
+      birthDate: {
+        label: string;
+        hijri: string;
+        gregorian: string;
+        day: string;
+        month: string;
+        year: string;
+        dayPlaceholder: string;
+        monthPlaceholder: string;
+        yearPlaceholder: string;
+      };
+      validation: {
+        fieldErrors: {
+          idNumberLength: string;
+          phoneLength: string;
+        };
+      };
+    };
   };
   owner: {
     cancelRequest: string;
@@ -213,7 +313,6 @@ export type CreateContractLabels = {
     validation: {
       hintTitle: string;
       issues: Record<
-        | "fullName"
         | "idNumber"
         | "idNumberLength"
         | "birthDate"
@@ -247,10 +346,6 @@ export type CreateContractLabels = {
       yearPlaceholder: string;
     };
     ownerData: {
-      fullName: {
-        label: string;
-        placeholder: string;
-      };
       idNumber: {
         label: string;
         placeholder: string;
@@ -622,6 +717,8 @@ export type CreateContractLabels = {
         nationalAddress: string;
         ownerSelf: string;
         ownerWithAgent: string;
+        agent: string;
+        nazir: string;
         tenantIndividual: string;
         tenantOrganization: string;
         unit: string;
@@ -640,6 +737,9 @@ export type CreateContractLabels = {
         ownerId: string;
         ownerPhone: string;
         ownerBirthDate: string;
+        agentId: string;
+        agentPhone: string;
+        agentBirthDate: string;
         tenantDelegation: string;
         tenantUnifiedRecord: string;
         tenantId: string;
@@ -696,6 +796,7 @@ export type CreateContractLabels = {
       ejarFees: string;
       contractPeriodPrice: string;
       vat: string;
+      taxWithPercent: string;
       applicationFees: string;
       electricityMeterFee: string;
       waterMeterFee: string;
@@ -704,6 +805,8 @@ export type CreateContractLabels = {
       servicesTotal: string;
       docFee: string;
       total: string;
+      couponDiscount: string;
+      payable: string;
       priceBeforeCoupon: string;
       discount: string;
       priceAfterCoupon: string;

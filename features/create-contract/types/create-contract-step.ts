@@ -1,6 +1,7 @@
 export const CREATE_CONTRACT_STEPS = [
   "intro",
   "deed",
+  "waqfNazir",
   "owner",
   "tenant",
   "finance",

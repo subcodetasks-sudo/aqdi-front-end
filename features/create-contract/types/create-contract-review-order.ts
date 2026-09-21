@@ -5,6 +5,7 @@ export type CreateContractReviewEditTarget =
   | "deed"
   | "nationalAddress"
   | "owner"
+  | "waqfNazir"
   | "tenant"
   | "unit"
   | "rent";
@@ -49,6 +50,8 @@ export function reviewEditTargetToStep(
       return "deed";
     case "owner":
       return "owner";
+    case "waqfNazir":
+      return "waqfNazir";
     case "tenant":
     case "unit":
       return "tenant";

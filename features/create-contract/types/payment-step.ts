@@ -1,31 +1,7 @@
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
 
 import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
-
-export type PaymentBreakdown = {
-  ejarFees: number;
-  contractPeriodPrice: number;
-  vat: number;
-  applicationFees: number;
-  total: number;
-};
-
-export const PAYMENT_BREAKDOWN: Record<ContractTypeId, PaymentBreakdown> = {
-  residential: {
-    ejarFees: 125,
-    contractPeriodPrice: 124,
-    vat: 0,
-    applicationFees: 0,
-    total: 249,
-  },
-  commercial: {
-    ejarFees: 175,
-    contractPeriodPrice: 174,
-    vat: 0,
-    applicationFees: 0,
-    total: 349,
-  },
-};
+import { formatContractMoneyAmount } from "@/features/create-contract/utils/format-contract-money";
 
 export type PaymentDataState = {
   savePropertyData: boolean;
@@ -39,6 +15,34 @@ export const EMPTY_PAYMENT_DATA: PaymentDataState = {
   appliedCoupon: null,
 };
 
+/** @deprecated Use formatContractMoneyAmount — kept for callers expecting a number string. */
 export function formatPaymentAmount(amount: number) {
-  return amount === 0 ? "00" : amount.toLocaleString("en-US");
+  return formatContractMoneyAmount(amount);
 }
+
+/** @deprecated Hardcoded fallbacks removed; financial amounts come from the API. */
+export type PaymentBreakdown = {
+  ejarFees: number;
+  contractPeriodPrice: number;
+  vat: number;
+  applicationFees: number;
+  total: number;
+};
+
+/** @deprecated Do not use — fee amounts must come from API `details`. */
+export const PAYMENT_BREAKDOWN: Record<ContractTypeId, PaymentBreakdown> = {
+  residential: {
+    ejarFees: 0,
+    contractPeriodPrice: 0,
+    vat: 0,
+    applicationFees: 0,
+    total: 0,
+  },
+  commercial: {
+    ejarFees: 0,
+    contractPeriodPrice: 0,
+    vat: 0,
+    applicationFees: 0,
+    total: 0,
+  },
+};

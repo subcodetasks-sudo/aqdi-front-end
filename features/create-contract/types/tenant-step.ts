@@ -8,6 +8,7 @@ import {
   isUnifiedRecordNumberPrefixOnly,
   UNIFIED_RECORD_NUMBER_LENGTH,
 } from "@/lib/validation/format-unified-record-number-for-form";
+import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 export const TENANT_STATUS_OPTIONS = [
   "individual",
@@ -73,11 +74,6 @@ function isBirthDateComplete(birthDate: BirthDateValue) {
   return isAdultBirthDateComplete(birthDate);
 }
 
-function isIdNumberComplete(idNumber: string) {
-  const digits = idNumber.replace(/\D/g, "");
-  return digits.length === 10;
-}
-
 function isUnifiedRecordNumberComplete(unifiedRecordNumber: string) {
   if (isUnifiedRecordNumberPrefixOnly(unifiedRecordNumber)) {
     return false;
@@ -92,7 +88,7 @@ function isUnifiedRecordNumberComplete(unifiedRecordNumber: string) {
 
 function isIndividualTenantComplete(individual: IndividualTenantData) {
   return (
-    isIdNumberComplete(individual.idNumber) &&
+    isSaudiNationalIdComplete(individual.idNumber) &&
     isBirthDateComplete(individual.birthDate) &&
     isPhoneComplete(individual.phone)
   );
@@ -102,7 +98,7 @@ function isOrganizationTenantComplete(organization: OrganizationTenantData) {
   const baseComplete =
     organization.delegationType !== "" &&
     isUnifiedRecordNumberComplete(organization.unifiedRecordNumber) &&
-    isIdNumberComplete(organization.ownerIdNumber) &&
+    isSaudiNationalIdComplete(organization.ownerIdNumber) &&
     isBirthDateComplete(organization.ownerBirthDate) &&
     isPhoneComplete(organization.ownerPhone);
 

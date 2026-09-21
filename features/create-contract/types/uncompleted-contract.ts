@@ -27,6 +27,8 @@ export type UncompletedContractStep1 = {
   lng: number | string | null;
   address_url: string | null;
   step: number;
+  requires_deceased_owner_legal_agent?: boolean | null;
+  property_owner_is_deceased?: boolean | null;
 };
 
 export type UncompletedContractStep2 = {
@@ -40,6 +42,18 @@ export type UncompletedContractStep2 = {
   latitude: string | null;
   longitude: string | null;
   step: number;
+  requires_deceased_owner_legal_agent?: boolean | null;
+  property_owner_is_deceased?: boolean | null;
+  add_legal_agent_of_owner?: number | boolean | null;
+  id_num_of_property_owner_agent?: string | null;
+  dob_of_property_owner_agent?: string | null;
+  type_dob_property_owner_agent?: CalendarType | null;
+  dob_of_property_owner_agent_day?: string | null;
+  dob_of_property_owner_agent_month?: string | null;
+  dob_of_property_owner_agent_year?: string | null;
+  mobile_of_property_owner_agent?: string | null;
+  copy_power_of_attorney_from_heirs_to_agent?: string | null;
+  copy_of_the_authorization_or_agency?: string | null;
 };
 
 export type UncompletedContractStep3 = {

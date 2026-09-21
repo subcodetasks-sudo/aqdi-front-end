@@ -27,7 +27,6 @@ export const EMPTY_BIRTH_DATE: BirthDateValue = {
 };
 
 export type OwnerDataState = {
-  fullName: string;
   idNumber: string;
   birthDate: BirthDateValue;
   phone: string;
@@ -43,7 +42,6 @@ export type AgentDataState = {
 };
 
 export const EMPTY_OWNER_DATA: OwnerDataState = {
-  fullName: "",
   idNumber: "",
   birthDate: EMPTY_BIRTH_DATE,
   phone: "",
@@ -53,7 +51,7 @@ export const EMPTY_OWNER_DATA: OwnerDataState = {
 
 export const EMPTY_AGENT_DATA: AgentDataState = {
   idNumber: "",
-  birthDate: { ...EMPTY_BIRTH_DATE, calendarType: "gregorian" },
+  birthDate: { ...EMPTY_BIRTH_DATE, calendarType: "hijri" },
   phone: "",
   powerOfAttorneyFiles: [],
 };

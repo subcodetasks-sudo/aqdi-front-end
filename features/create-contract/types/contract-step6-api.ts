@@ -1,4 +1,5 @@
 import type { TenantRoleDetail } from "@/features/create-contract/types/tenant-role";
+import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
 
 export type ContractStep6ApiData = {
   id: number;
@@ -22,4 +23,13 @@ export type ContractStep6ApiData = {
   tenant_role_values?: Record<string, string> | null;
   tenant_roles_details?: TenantRoleDetail[] | null;
   step: number;
+  /** Financial summary returned after step6 submit (AQDI API V2). */
+  details?: ContractFinancialData["details"];
+  price_details?: ContractFinancialData["price_details"];
+  subtotal?: number | null;
+  tax_percent?: number | null;
+  tax_amount?: number | null;
+  total_price?: number | null;
+  coupon?: number | null;
+  total_price_after_coupon?: number | null;
 };

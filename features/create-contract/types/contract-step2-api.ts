@@ -9,4 +9,16 @@ export type ContractStep2ApiData = {
   address_url: string | null;
   image_address: string | null;
   step: number;
+  requires_deceased_owner_legal_agent?: boolean | null;
+  property_owner_is_deceased?: boolean | null;
+  add_legal_agent_of_owner?: boolean | number | null;
+  id_num_of_property_owner_agent?: string | null;
+  mobile_of_property_owner_agent?: string | null;
+  type_dob_property_owner_agent?: "hijri" | "gregorian" | null;
+  dob_of_property_owner_agent?: string | null;
+  dob_of_property_owner_agent_day?: string | null;
+  dob_of_property_owner_agent_month?: string | null;
+  dob_of_property_owner_agent_year?: string | null;
+  copy_power_of_attorney_from_heirs_to_agent?: string | null;
+  copy_of_the_authorization_or_agency?: string | null;
 };

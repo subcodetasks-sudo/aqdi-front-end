@@ -23,4 +23,6 @@ export type ContractStep1ApiData = {
   lng: string | null;
   address_url: string | null;
   step: number;
+  requires_deceased_owner_legal_agent?: boolean | null;
+  property_owner_is_deceased?: boolean | null;
 };
