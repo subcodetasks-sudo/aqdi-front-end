@@ -53,6 +53,9 @@ export function buildContractStep6Body({
     ),
     contract_starting_date_year: formatPropertyOwnerYear(contractStartDate.year),
     payment_type_id: financeData.paymentTypeId,
+    annual_rent_amount_for_the_unit: Number(
+      financeData.totalRentAmount.replace(/\D/g, ""),
+    ),
     conditions: hasOtherConditions,
     tenant_roles: tenantPayload.tenant_roles,
     additional_terms: hasOtherConditions,

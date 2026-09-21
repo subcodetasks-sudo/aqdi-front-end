@@ -11,6 +11,7 @@ import type { ContractStep6ApiData } from "@/features/create-contract/types/cont
 import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-lease-renewal-contract";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
+import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
 
 type ContractStepProgressState = {
   currentStep: CreateContractStep;
@@ -39,6 +40,7 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
   const skipState = getSkipOwnerProgressState(state);
   const leaseRenewal = isLeaseRenewalContract(skipState);
   const sublease = isSubleaseContract(skipState);
+  const waqfNazir = isWaqfNazirStepVisible(skipState);
 
   let maxIndex = CREATE_CONTRACT_STEPS.indexOf("deed");
 
@@ -62,6 +64,20 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
 
     if ((state.contractStep4Data?.step ?? 0) >= 5) {
       maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
+
+    if ((state.contractStep5Data?.step ?? 0) >= 6) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
+  } else if (waqfNazir) {
+    // After step1, unlock the independent nazir step (step2 is submitted there).
+    if ((state.contractStep1Data?.step ?? 0) >= 2) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("waqfNazir");
+    }
+
+    // After nazir/step2, owner is skipped — unlock tenant.
+    if ((state.contractStep2Data?.step ?? 0) >= 3) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("tenant");
     }
 
     if ((state.contractStep5Data?.step ?? 0) >= 6) {
@@ -94,7 +110,13 @@ export function canNavigateToContractStep(
   step: CreateContractStep,
   state: ContractStepProgressState,
 ) {
-  if (step === "owner" && isOwnerStepSkipped(getSkipOwnerProgressState(state))) {
+  const skipState = getSkipOwnerProgressState(state);
+
+  if (step === "owner" && isOwnerStepSkipped(skipState)) {
+    return false;
+  }
+
+  if (step === "waqfNazir" && !isWaqfNazirStepVisible(skipState)) {
     return false;
   }
 

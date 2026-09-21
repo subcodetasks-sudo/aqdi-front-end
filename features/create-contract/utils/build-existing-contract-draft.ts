@@ -80,7 +80,6 @@ export function buildContractOwnerData(
 
   return {
     ...EMPTY_OWNER_DATA,
-    fullName: property.name_owner?.trim() ?? "",
     idNumber: property.property_owner_id_num?.replace(/\D/g, "") ?? "",
     birthDate: parseContractBirthDate(
       property.property_owner_dob_hijri ?? property.dob_hijri,

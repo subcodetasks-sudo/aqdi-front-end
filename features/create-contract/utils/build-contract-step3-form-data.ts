@@ -12,21 +12,46 @@ export type ContractStep3FormPayload = {
   contractId: number;
   ownerData: OwnerDataState;
   agentData: AgentDataState;
+  /**
+   * When the deceased-owner legal agent or waqf nazir was already saved in
+   * step 2, do not send `add_legal_agent_of_owner=false` (it would wipe them).
+   */
+  legalAgentAlreadySaved?: boolean;
 };
+
+function appendAgentFields(formData: FormData, agentData: AgentDataState) {
+  formData.append(
+    "id_num_of_property_owner_agent",
+    agentData.idNumber.replace(/\D/g, ""),
+  );
+  appendPropertyOwnerBirthDate(formData, agentData.birthDate, {
+    calendarField: "type_dob_property_owner_agent",
+    dayField: "dob_of_property_owner_agent_day",
+    monthField: "dob_of_property_owner_agent_month",
+    yearField: "dob_of_property_owner_agent_year",
+  });
+  formData.append(
+    "mobile_of_property_owner_agent",
+    formatPropertyOwnerMobileForApi(agentData.phone),
+  );
+
+  const powerOfAttorneyFile = agentData.powerOfAttorneyFiles[0];
+  if (powerOfAttorneyFile) {
+    formData.append(
+      "copy_of_the_authorization_or_agency",
+      powerOfAttorneyFile,
+    );
+  }
+}
 
 export function appendContractStep3Fields(
   formData: FormData,
   payload: ContractStep3FormPayload,
 ) {
-  const { ownerData, agentData } = payload;
+  const { ownerData, agentData, legalAgentAlreadySaved = false } = payload;
 
   formData.append("id", String(payload.contractId));
   formData.append("type_dob_property_owner", ownerData.birthDate.calendarType);
-
-  const ownerName = ownerData.fullName.trim();
-  if (ownerName) {
-    formData.append("name_owner", ownerName);
-  }
 
   formData.append(
     "property_owner_id_num",
@@ -54,33 +79,24 @@ export function appendContractStep3Fields(
     formData.append("property_owner_iban", ownerIban);
   }
 
+  // Step 2 may already have saved the deceased-owner legal agent. Sending
+  // add_legal_agent_of_owner=false would wipe it — omit the flag, or send
+  // true only when re-sending agent fields.
+  if (legalAgentAlreadySaved) {
+    if (ownerData.hasAgent === "yes") {
+      formData.append("add_legal_agent_of_owner", "1");
+      appendAgentFields(formData, agentData);
+    }
+    // hasAgent !== "yes": omit the flag entirely so step-2 agent is kept.
+    return;
+  }
+
   formData.append(
     "add_legal_agent_of_owner",
     ownerData.hasAgent === "yes" ? "1" : "0",
   );
 
   if (ownerData.hasAgent === "yes") {
-    formData.append(
-      "id_num_of_property_owner_agent",
-      agentData.idNumber.replace(/\D/g, ""),
-    );
-    appendPropertyOwnerBirthDate(formData, agentData.birthDate, {
-      calendarField: "type_dob_property_owner_agent",
-      dayField: "dob_of_property_owner_agent_day",
-      monthField: "dob_of_property_owner_agent_month",
-      yearField: "dob_of_property_owner_agent_year",
-    });
-    formData.append(
-      "mobile_of_property_owner_agent",
-      formatPropertyOwnerMobileForApi(agentData.phone),
-    );
-
-    const powerOfAttorneyFile = agentData.powerOfAttorneyFiles[0];
-    if (powerOfAttorneyFile) {
-      formData.append(
-        "copy_of_the_authorization_or_agency",
-        powerOfAttorneyFile,
-      );
-    }
+    appendAgentFields(formData, agentData);
   }
 }
