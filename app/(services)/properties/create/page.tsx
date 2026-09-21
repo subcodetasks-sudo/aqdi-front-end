@@ -4,10 +4,14 @@ import { getTranslations } from "next-intl/server";
 import CreatePropertyPageContent from "@/features/create-property/components/create-property-page-content";
 import type { CreatePropertyLabels } from "@/features/create-property/types/create-property-labels";
 import { PROPERTY_DEED_TYPES } from "@/features/create-property/types/deed-type";
+import { propertyLookupKeys } from "@/features/create-property/query-keys";
+import { getRealEstateTypes } from "@/features/create-property/services/get-real-estate-types";
+import { getRealEstateUsages } from "@/features/create-property/services/get-real-estate-usages";
+import { toPropertyContractType } from "@/features/create-property/utils/contract-type";
 import { mapPropertyApiToEditDraft } from "@/features/create-property/utils/map-property-api-to-draft";
 import { parsePropertyId } from "@/features/create-property/utils/parse-property-id";
 import { parsePropertyType } from "@/features/properties/types/property-type";
-import { getPropertyUnits } from "@/features/property-units/services/get-property-units";
+import { getRealEstateShow } from "@/features/property-units/services/get-real-estate-show";
 import { settingContractsKeys } from "@/features/shared/query-keys";
 import { getSettingContracts } from "@/features/shared/services/get-setting-contracts";
 import { getQueryClient } from "@/lib/react-query/get-query-client";
@@ -21,17 +25,30 @@ export default async function CreatePropertyPage({
 }: CreatePropertyPageProps) {
   const { type, propertyId: propertyIdParam } = await searchParams;
   const propertyType = parsePropertyType(type);
+  const contractType = toPropertyContractType(propertyType);
   const propertyId = parsePropertyId(propertyIdParam);
   const queryClient = getQueryClient();
 
   const [t, , property] = await Promise.all([
     getTranslations("createProperty"),
-    queryClient.prefetchQuery({
-      queryKey: settingContractsKeys.list(),
-      queryFn: () => getSettingContracts(),
-    }),
+    Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: settingContractsKeys.list(),
+        queryFn: () => getSettingContracts(),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: propertyLookupKeys.types(contractType),
+        queryFn: () => getRealEstateTypes(contractType),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: propertyLookupKeys.usages(contractType),
+        queryFn: () => getRealEstateUsages(contractType),
+      }),
+    ]),
+    // `/realstate/show` returns the full property (including secondary deed
+    // documents). `/realstate/units` often only has `image_instrument`.
     propertyId
-      ? getPropertyUnits(propertyId).catch(() => null)
+      ? getRealEstateShow(propertyId).catch(() => null)
       : Promise.resolve(null),
   ]);
 
@@ -54,6 +71,7 @@ export default async function CreatePropertyPage({
       steps: {
         deed: t("stepper.steps.deed"),
         owner: t("stepper.steps.owner"),
+        agent: t("stepper.steps.agent"),
         review: t("stepper.steps.review"),
       },
     },
@@ -112,6 +130,65 @@ export default async function CreatePropertyPage({
         guardiansPoaHint: t("deed.deceased.guardiansPoaHint"),
         clickHere: t("deed.deceased.clickHere"),
         chooseFile: t("deed.deceased.chooseFile"),
+      },
+      propertyDetails: {
+        title: t("deed.propertyDetails.title"),
+        subtitle: t("deed.propertyDetails.subtitle"),
+        propertyType: {
+          label: t("deed.propertyDetails.propertyType.label"),
+          placeholder: t("deed.propertyDetails.propertyType.placeholder"),
+          loading: t("deed.propertyDetails.propertyType.loading"),
+        },
+        propertyUsage: {
+          label: t("deed.propertyDetails.propertyUsage.label"),
+          placeholder: t("deed.propertyDetails.propertyUsage.placeholder"),
+          loading: t("deed.propertyDetails.propertyUsage.loading"),
+        },
+        numberOfFloors: {
+          label: t("deed.propertyDetails.numberOfFloors.label"),
+          placeholder: t("deed.propertyDetails.numberOfFloors.placeholder"),
+        },
+        numberOfUnits: {
+          label: t("deed.propertyDetails.numberOfUnits.label"),
+          placeholder: t("deed.propertyDetails.numberOfUnits.placeholder"),
+        },
+        unitsPerFloor: {
+          label: t("deed.propertyDetails.unitsPerFloor.label"),
+          placeholder: t("deed.propertyDetails.unitsPerFloor.placeholder"),
+        },
+        propertyAge: {
+          label: t("deed.propertyDetails.propertyAge.label"),
+          placeholder: t("deed.propertyDetails.propertyAge.placeholder"),
+        },
+        electricityOwnership: {
+          label: t("deed.propertyDetails.electricityOwnership.label"),
+          placeholder: t("deed.propertyDetails.electricityOwnership.placeholder"),
+        },
+        waterOwnership: {
+          label: t("deed.propertyDetails.waterOwnership.label"),
+          placeholder: t("deed.propertyDetails.waterOwnership.placeholder"),
+        },
+        ownership: {
+          owner: t("deed.propertyDetails.ownership.owner"),
+          tenant: t("deed.propertyDetails.ownership.tenant"),
+        },
+        registryNumber: {
+          label: t("deed.propertyDetails.registryNumber.label"),
+          placeholder: t("deed.propertyDetails.registryNumber.placeholder"),
+        },
+        registryDate: {
+          label: t("deed.propertyDetails.registryDate.label"),
+          day: t("deed.propertyDetails.registryDate.day"),
+          month: t("deed.propertyDetails.registryDate.month"),
+          year: t("deed.propertyDetails.registryDate.year"),
+          dayPlaceholder: t("deed.propertyDetails.registryDate.dayPlaceholder"),
+          monthPlaceholder: t(
+            "deed.propertyDetails.registryDate.monthPlaceholder",
+          ),
+          yearPlaceholder: t(
+            "deed.propertyDetails.registryDate.yearPlaceholder",
+          ),
+        },
       },
       manualEntry: {
         separator: t("deed.manualEntry.separator"),
@@ -248,10 +325,6 @@ export default async function CreatePropertyPage({
         yearPlaceholder: t("owner.birthDate.yearPlaceholder"),
       },
       ownerData: {
-        fullName: {
-          label: t("owner.ownerData.fullName.label"),
-          placeholder: t("owner.ownerData.fullName.placeholder"),
-        },
         idNumber: {
           label: t("owner.ownerData.idNumber.label"),
           placeholder: t("owner.ownerData.idNumber.placeholder"),
@@ -296,6 +369,35 @@ export default async function CreatePropertyPage({
           previewTitle: t("owner.agentData.powerOfAttorney.previewTitle"),
           closePreview: t("owner.agentData.powerOfAttorney.closePreview"),
         },
+      },
+      nazirData: {
+        sectionTitle: t("owner.nazirData.sectionTitle"),
+        sectionDescription: t("owner.nazirData.sectionDescription"),
+        footerNote: t("owner.nazirData.footerNote"),
+        idNumber: {
+          label: t("owner.nazirData.idNumber.label"),
+          placeholder: t("owner.nazirData.idNumber.placeholder"),
+        },
+        birthDateLabel: t("owner.nazirData.birthDateLabel"),
+        phone: {
+          label: t("owner.nazirData.phone.label"),
+          placeholder: t("owner.nazirData.phone.placeholder"),
+        },
+        powerOfAttorney: {
+          label: t("owner.nazirData.powerOfAttorney.label"),
+          clickHere: t("owner.nazirData.powerOfAttorney.clickHere"),
+          chooseFile: t("owner.nazirData.powerOfAttorney.chooseFile"),
+          acceptedFormats: t(
+            "owner.nazirData.powerOfAttorney.acceptedFormats",
+          ),
+          attached: t("owner.nazirData.powerOfAttorney.attached"),
+          preview: t("owner.nazirData.powerOfAttorney.preview"),
+          change: t("owner.nazirData.powerOfAttorney.change"),
+          delete: t("owner.nazirData.powerOfAttorney.delete"),
+          previewTitle: t("owner.nazirData.powerOfAttorney.previewTitle"),
+          closePreview: t("owner.nazirData.powerOfAttorney.closePreview"),
+        },
+        documentHint: t("owner.nazirData.documentHint"),
       },
     },
     review: {
