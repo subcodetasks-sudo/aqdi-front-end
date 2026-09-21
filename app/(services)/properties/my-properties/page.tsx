@@ -24,6 +24,10 @@ export default async function MyPropertiesPage() {
       housing: t("contractTypes.housing"),
       commercial: t("contractTypes.commercial"),
     },
+    pagination: {
+      previous: t("pagination.previous"),
+      next: t("pagination.next"),
+    },
   };
 
   const items: MyPropertyCardData[] = properties.map((property) =>

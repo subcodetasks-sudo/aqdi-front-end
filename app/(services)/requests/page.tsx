@@ -222,6 +222,7 @@ export default async function RequestsPage() {
             "card.contractDialog.fields.electricityMeterFee",
           ),
           waterMeterFee: t("card.contractDialog.fields.waterMeterFee"),
+          paperDeedFee: t("card.contractDialog.fields.paperDeedFee"),
           servicesTotal: t("card.contractDialog.fields.servicesTotal"),
           meterFeesTotal: t("card.contractDialog.fields.meterFeesTotal"),
           docFee: t("card.contractDialog.fields.docFee"),

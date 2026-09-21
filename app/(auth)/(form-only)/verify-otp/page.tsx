@@ -3,9 +3,7 @@ import { getTranslations } from "next-intl/server";
 import AuthBackButton from "@/features/auth/components/auth-back-button";
 import VerifyOtpForm from "@/features/auth/components/verify-otp-form";
 import VerifyOtpHeader from "@/features/auth/components/verify-otp-header";
-import {
-  getVerifyOtpBackHref,
-} from "@/features/auth/utils/build-verify-otp-url";
+import { getVerifyOtpBackHref } from "@/features/auth/utils/build-verify-otp-url";
 import { formatPhoneDisplay } from "@/features/auth/utils/format-phone-display";
 import { repairPhoneFromQueryParam } from "@/features/auth/utils/normalize-saudi-phone";
 
@@ -13,16 +11,16 @@ type VerifyOtpPageProps = {
   searchParams: Promise<{
     phone?: string;
     flow?: string;
+    rememberMe?: string;
+    callbackUrl?: string;
   }>;
 };
 
 export default async function VerifyOtpPage({
   searchParams,
 }: VerifyOtpPageProps) {
-  const [t, { phone: rawPhone, flow }] = await Promise.all([
-    getTranslations("auth.verifyOtp"),
-    searchParams,
-  ]);
+  const [t, { phone: rawPhone, flow, rememberMe, callbackUrl }] =
+    await Promise.all([getTranslations("auth.verifyOtp"), searchParams]);
   const phone = repairPhoneFromQueryParam(rawPhone);
   const displayPhone = formatPhoneDisplay(phone ?? rawPhone ?? t("defaultPhone"));
   const backHref = getVerifyOtpBackHref(flow);
@@ -40,7 +38,12 @@ export default async function VerifyOtpPage({
             instruction={t("instruction")}
             phone={displayPhone}
           />
-          <VerifyOtpForm phone={phone} flow={flow} />
+          <VerifyOtpForm
+            phone={phone}
+            flow={flow}
+            rememberMe={rememberMe === "1"}
+            callbackUrl={callbackUrl}
+          />
         </div>
       </div>
     </>
