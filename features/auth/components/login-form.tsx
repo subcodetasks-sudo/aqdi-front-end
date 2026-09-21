@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowUpLeft, Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
@@ -11,34 +10,28 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import LoginPasswordField from "@/features/auth/components/login-password-field";
 import LoginPhoneField from "@/features/auth/components/login-phone-field";
 import {
   createLoginSchema,
   type LoginFormValues,
 } from "@/features/auth/schemas/login-schema";
-import { loginUser } from "@/features/auth/services/login-user";
-import { useAuthStore } from "@/features/auth/stores/use-auth-store";
-import { getSafeCallbackUrl } from "@/lib/auth/auth-routes";
+import { resendOtp } from "@/features/auth/services/resend-otp";
+import { buildVerifyOtpUrl } from "@/features/auth/utils/build-verify-otp-url";
 
 export default function LoginForm() {
   const t = useTranslations("auth.login");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const setUser = useAuthStore((state) => state.setUser);
 
   const schema = createLoginSchema({
     phoneRequired: t("validation.phoneRequired"),
     phoneInvalid: t("validation.phoneInvalid"),
-    passwordRequired: t("validation.passwordRequired"),
-    passwordMin: t("validation.passwordMin"),
   });
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       phone: "",
-      password: "",
       rememberMe: false,
     },
   });
@@ -46,27 +39,20 @@ export default function LoginForm() {
   const { isSubmitting } = form.formState;
 
   async function onSubmit(values: LoginFormValues) {
-    // Never block login on FCM (permission prompt / SW / getToken can hang).
-    // Attach a token only if permission was already granted and it resolves quickly.
-    const fcmToken = await Promise.race([
-      import("@/features/notifications/services/get-fcm-token")
-        .then(({ getFcmToken }) => getFcmToken({ requestPermission: false }))
-        .catch(() => null),
-      new Promise<null>((resolve) => {
-        window.setTimeout(() => resolve(null), 800);
-      }),
-    ]);
-
-    const response = await loginUser({ ...values, fcmToken });
+    const response = await resendOtp({ phone: values.phone });
 
     if (!response.ok) {
       toast.error(response.error || t("submitError"));
       return;
     }
 
-    setUser(response.user);
     toast.success(response.message || t("submitSuccess"));
-    router.push(getSafeCallbackUrl(searchParams.get("callbackUrl")));
+    router.push(
+      buildVerifyOtpUrl(values.phone, "login", {
+        rememberMe: values.rememberMe,
+        callbackUrl: searchParams.get("callbackUrl"),
+      }),
+    );
   }
 
   return (
@@ -81,45 +67,29 @@ export default function LoginForm() {
         placeholder={t("phonePlaceholder")}
       />
 
-      <LoginPasswordField
+      <Controller
+        name="rememberMe"
         control={form.control}
-        label={t("passwordLabel")}
-        placeholder={t("passwordPlaceholder")}
-        toggleVisibilityLabel={t("togglePasswordVisibility")}
+        render={({ field, fieldState }) => (
+          <Field
+            orientation="horizontal"
+            data-invalid={fieldState.invalid}
+            className="w-auto items-center gap-2"
+          >
+            <Checkbox
+              id="rememberMe"
+              checked={field.value}
+              onCheckedChange={(checked) => field.onChange(checked === true)}
+              aria-invalid={fieldState.invalid}
+              className="data-[state=checked]:bg-brand data-[state=checked]:text- bg-brand-background"
+            />
+            <FieldLabel htmlFor="rememberMe" className="font-normal">
+              {t("rememberMe")}
+            </FieldLabel>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
       />
-
-      <div className="flex items-center justify-between gap-4">
-        <Controller
-          name="rememberMe"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field
-              orientation="horizontal"
-              data-invalid={fieldState.invalid}
-              className="w-auto items-center gap-2"
-            >
-              <Checkbox
-                id="rememberMe"
-                checked={field.value}
-                onCheckedChange={(checked) => field.onChange(checked === true)}
-                aria-invalid={fieldState.invalid}
-                className="data-[state=checked]:bg-brand data-[state=checked]:text- bg-brand-background"
-              />
-              <FieldLabel htmlFor="rememberMe" className="font-normal">
-                {t("rememberMe")}
-              </FieldLabel>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        <Link
-          href="/forgot-password"
-          className="shrink-0 text-sm font-medium text-brand transition-colors hover:text-brand/80"
-        >
-          {t("forgotPassword")}
-        </Link>
-      </div>
 
       <Button
         type="submit"

@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import ProfileDeleteAccountButton from "@/features/auth/components/profile-delete-account-button";
 import ProfileForm from "@/features/auth/components/profile-form";
 import type { AuthUser } from "@/features/auth/types/auth-user";
 
@@ -52,6 +53,10 @@ export default function ProfileEditDialog({
 
         <div className="mt-6">
           <ProfileForm user={user} onSuccess={() => onOpenChange(false)} />
+        </div>
+
+        <div className="mt-6 border-t border-[#ececec] pt-4">
+          <ProfileDeleteAccountButton />
         </div>
       </DialogContent>
     </Dialog>

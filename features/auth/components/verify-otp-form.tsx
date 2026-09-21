@@ -15,23 +15,37 @@ import {
   createVerifyOtpSchema,
   type VerifyOtpFormValues,
 } from "@/features/auth/schemas/verify-otp-schema";
+import { loginUser } from "@/features/auth/services/login-user";
 import { verifyResetPasswordCode } from "@/features/auth/services/verify-reset-password-code";
 import { requestForgotPassword } from "@/features/auth/services/request-forgot-password";
 import { resendOtp } from "@/features/auth/services/resend-otp";
 import { verifyOtp } from "@/features/auth/services/verify-otp";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { buildResetPasswordUrl } from "@/features/auth/utils/build-reset-password-url";
+import type { VerifyOtpFlow } from "@/features/auth/utils/build-verify-otp-url";
+import { setClientAuthTokens } from "@/lib/api/client-token-storage";
+import { getSafeCallbackUrl } from "@/lib/auth/auth-routes";
 import { cn } from "@/lib/utils";
 import AuthOrDivider from "./auth-or-divider";
 
 type VerifyOtpFormProps = {
   phone?: string;
   flow?: string;
+  rememberMe?: boolean;
+  callbackUrl?: string | null;
 };
 
-export default function VerifyOtpForm({ phone, flow }: VerifyOtpFormProps) {
+export default function VerifyOtpForm({
+  phone,
+  flow,
+  rememberMe = false,
+  callbackUrl,
+}: VerifyOtpFormProps) {
   const t = useTranslations("auth.verifyOtp");
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
   const { formatted, isExpired, reset } = useOtpTimer(59);
+  const otpFlow = flow as VerifyOtpFlow | undefined;
 
   const schema = createVerifyOtpSchema({
     otpRequired: t("validation.otpRequired"),
@@ -56,8 +70,37 @@ export default function VerifyOtpForm({ phone, flow }: VerifyOtpFormProps) {
       return;
     }
 
+    if (otpFlow === "login") {
+      const fcmToken = await Promise.race([
+        import("@/features/notifications/services/get-fcm-token")
+          .then(({ getFcmToken }) => getFcmToken({ requestPermission: false }))
+          .catch(() => null),
+        new Promise<null>((resolve) => {
+          window.setTimeout(() => resolve(null), 800);
+        }),
+      ]);
+
+      const response = await loginUser({
+        phone,
+        otpCode: values.otp,
+        rememberMe,
+        fcmToken,
+      });
+
+      if (!response.ok) {
+        toast.error(response.error || t("submitError"));
+        return;
+      }
+
+      setUser(response.user);
+      setClientAuthTokens(response.tokens);
+      toast.success(response.message || t("loginSuccess"));
+      router.push(getSafeCallbackUrl(callbackUrl ?? null));
+      return;
+    }
+
     const response =
-      flow === "forgot-password"
+      otpFlow === "forgot-password"
         ? await verifyResetPasswordCode({
             phone,
             code: values.otp,
@@ -74,7 +117,7 @@ export default function VerifyOtpForm({ phone, flow }: VerifyOtpFormProps) {
 
     toast.success(response.message || t("submitSuccess"));
 
-    if (flow === "forgot-password") {
+    if (otpFlow === "forgot-password") {
       router.push(buildResetPasswordUrl(phone, values.otp));
       return;
     }
@@ -96,7 +139,7 @@ export default function VerifyOtpForm({ phone, flow }: VerifyOtpFormProps) {
 
     try {
       const response =
-        flow === "forgot-password"
+        otpFlow === "forgot-password"
           ? await requestForgotPassword({ phone })
           : await resendOtp({ phone });
 
