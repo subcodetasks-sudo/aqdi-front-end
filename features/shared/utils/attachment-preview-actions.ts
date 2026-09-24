@@ -1,3 +1,5 @@
+import { toProxiedAssetUrl } from "@/features/shared/utils/resolve-asset-url";
+
 export function downloadAttachment(url: string, fileName: string) {
   const link = document.createElement("a");
   link.href = url;
@@ -8,24 +10,45 @@ export function downloadAttachment(url: string, fileName: string) {
   link.remove();
 }
 
+async function downloadFromHref(href: string, fileName: string) {
+  const sameOrigin =
+    href.startsWith("/") &&
+    !href.startsWith("//") &&
+    !href.startsWith("blob:") &&
+    !href.startsWith("data:");
+  const response = await fetch(href, {
+    credentials: sameOrigin ? "same-origin" : "omit",
+  });
+  if (!response.ok) {
+    throw new Error("download failed");
+  }
+
+  const blob = await response.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  downloadAttachment(objectUrl, fileName);
+  URL.revokeObjectURL(objectUrl);
+}
+
 export async function downloadAttachmentRobust(url: string, fileName: string) {
-  try {
-    if (url.startsWith("blob:") || url.startsWith("data:")) {
-      downloadAttachment(url, fileName);
+  if (!url) {
+    return;
+  }
+
+  if (url.startsWith("blob:") || url.startsWith("data:")) {
+    downloadAttachment(url, fileName);
+    return;
+  }
+
+  const proxied = toProxiedAssetUrl(url);
+  const candidates = proxied && proxied !== url ? [proxied, url] : [url];
+
+  for (const href of candidates) {
+    try {
+      await downloadFromHref(href, fileName);
       return;
+    } catch {
+      /* try the next candidate instead of opening a new tab */
     }
-
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("download failed");
-    }
-
-    const blob = await response.blob();
-    const objectUrl = URL.createObjectURL(blob);
-    downloadAttachment(objectUrl, fileName);
-    URL.revokeObjectURL(objectUrl);
-  } catch {
-    window.open(url, "_blank", "noopener,noreferrer");
   }
 }
 
