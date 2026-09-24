@@ -347,7 +347,7 @@ export default function CreateContractTenantStep({
         labels={labels.saveLaterDialog}
         open={saveLaterDialogOpen}
         onOpenChange={setSaveLaterDialogOpen}
-        orderNumber={contractSession?.contractId}
+        orderNumber={contractSession?.uuid}
         isSaving={isSavingDraft}
         onConfirm={() => void handleConfirmSaveLater()}
       />

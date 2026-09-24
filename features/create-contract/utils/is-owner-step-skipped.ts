@@ -9,8 +9,8 @@ type OwnerSkipState = {
 };
 
 /**
- * Owner wizard step is skipped for lease renewal, sublease, and endowment
- * (waqf) deeds — the waqf nazir step replaces owner for endowment.
+ * Owner wizard step is skipped for lease renewal, sublease, and
+ * "صك ملكية والمالك وقف" — the nazir step replaces owner for that deed only.
  */
 export function isOwnerStepSkipped(state: OwnerSkipState) {
   return (

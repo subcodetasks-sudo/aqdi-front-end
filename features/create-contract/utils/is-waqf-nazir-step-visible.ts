@@ -6,7 +6,7 @@ type WaqfNazirStepState = {
   instrumentType?: string | null;
 };
 
-/** Whether the independent waqf-nazir wizard step should appear. */
+/** Independent nazir step — only "صك ملكية والمالك وقف". */
 export function isWaqfNazirStepVisible(state: WaqfNazirStepState) {
   return requiresWaqfOwnerNazir(state);
 }

@@ -9,6 +9,7 @@ import CreateUnitIconInputField from "@/features/create-unit/components/create-u
 import CreateUnitNumberField from "@/features/create-unit/components/create-unit-number-field";
 import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import {
+  hasUnitAdditionalInfo,
   isPositiveNumber,
   isSelectFilled,
   isUnitNumberFilled,
@@ -339,7 +340,7 @@ export default function UnitDataFormFields({
 
       <UnitAdditionalInfoSection
         toggleLabel={labels.additionalInfo.toggle}
-        defaultOpen={false}
+        defaultOpen={hasUnitAdditionalInfo(value)}
       >
         <div className="grid grid-cols-2 gap-3">
           <UnitCountStepper

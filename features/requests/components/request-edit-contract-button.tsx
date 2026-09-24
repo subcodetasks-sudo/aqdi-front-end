@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { getUncompletedContract } from "@/features/create-contract/services/get-uncompleted-contract";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
+import { waitForCreateContractDraftHydration } from "@/features/create-contract/utils/reset-create-contract-draft";
 import type { RequestCardData } from "@/features/requests/types/request";
 import { cn } from "@/lib/utils";
 
@@ -41,14 +42,17 @@ export default function RequestEditContractButton({
     setIsLoading(true);
 
     try {
-      const result = await getUncompletedContract(uuid);
+      const [result] = await Promise.all([
+        getUncompletedContract(uuid),
+        waitForCreateContractDraftHydration(),
+      ]);
 
       if (!result.ok) {
         toast.error(result.error || errorLabel);
         return;
       }
 
-      loadUncompletedContract(result.data);
+      loadUncompletedContract(result.data, uuid);
       router.push(`/create-contract?id=${contractType}`);
     } finally {
       setIsLoading(false);

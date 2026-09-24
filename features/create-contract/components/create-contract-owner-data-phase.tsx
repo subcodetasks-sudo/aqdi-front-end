@@ -25,8 +25,6 @@ type CreateContractOwnerDataPhaseProps = {
   value: OwnerDataState;
   onChange: (value: OwnerDataState) => void;
   showFieldErrors?: boolean;
-  /** Hide when the legal agent was already collected in step 2. */
-  hideHasAgent?: boolean;
 };
 
 export default function CreateContractOwnerDataPhase({
@@ -36,7 +34,6 @@ export default function CreateContractOwnerDataPhase({
   value,
   onChange,
   showFieldErrors = false,
-  hideHasAgent = false,
 }: CreateContractOwnerDataPhaseProps) {
   function updateField<K extends keyof OwnerDataState>(
     field: K,
@@ -106,41 +103,39 @@ export default function CreateContractOwnerDataPhase({
         invalid={birthDateInvalid}
       />
 
-      {!hideHasAgent ? (
-        <label
-          className={cn(
-            "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
-            hasAgentInvalid
-              ? "border-[#e57373] bg-white"
-              : hasAgentChecked
-                ? "border-brand bg-brand-background-green"
-                : "border-[#e8e8e8] bg-white",
-          )}
-        >
-          <span className="min-w-0 space-y-1 text-start">
-            <span
-              className={cn(
-                "block text-sm font-bold",
-                hasAgentInvalid ? "text-[#c62828]" : "text-black",
-              )}
-            >
-              {labels.hasAgent.title}
-            </span>
-            <span className="block text-xs leading-5 text-[#9a9a9a]">
-              {labels.hasAgent.description}
-            </span>
+      <label
+        className={cn(
+          "flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-4",
+          hasAgentInvalid
+            ? "border-[#e57373] bg-white"
+            : hasAgentChecked
+              ? "border-brand bg-brand-background-green"
+              : "border-[#e8e8e8] bg-white",
+        )}
+      >
+        <span className="min-w-0 space-y-1 text-start">
+          <span
+            className={cn(
+              "block text-sm font-bold",
+              hasAgentInvalid ? "text-[#c62828]" : "text-black",
+            )}
+          >
+            {labels.hasAgent.title}
           </span>
-          <Switch
-            dir="ltr"
-            checked={hasAgentChecked}
-            onCheckedChange={(checked) =>
-              updateField("hasAgent", checked ? "yes" : "no")
-            }
-            aria-invalid={hasAgentInvalid}
-            className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
-          />
-        </label>
-      ) : null}
+          <span className="block text-xs leading-5 text-[#9a9a9a]">
+            {labels.hasAgent.description}
+          </span>
+        </span>
+        <Switch
+          dir="ltr"
+          checked={hasAgentChecked}
+          onCheckedChange={(checked) =>
+            updateField("hasAgent", checked ? "yes" : "no")
+          }
+          aria-invalid={hasAgentInvalid}
+          className="h-6 w-11 shrink-0 data-checked:bg-brand data-unchecked:bg-[#d9d9d9]"
+        />
+      </label>
     </div>
   );
 }

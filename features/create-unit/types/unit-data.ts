@@ -77,6 +77,32 @@ export function isUnitNumberFilled(value: string) {
   return value.trim() !== "";
 }
 
+function isAdditionalCountFilled(value: string) {
+  if (value.trim() === "") {
+    return false;
+  }
+
+  const parsed = Number(value.replace(/\D/g, ""));
+  return Number.isFinite(parsed) && parsed > 0;
+}
+
+/** True when the collapsible «معلومات إضافية» block already has user/API data. */
+export function hasUnitAdditionalInfo(unit: UnitDataState) {
+  return (
+    isAdditionalCountFilled(unit.splitAcCount) ||
+    isAdditionalCountFilled(unit.windowAcCount) ||
+    unit.kitchenCabinetsInstalled ||
+    unit.furnished ||
+    unit.furnishingType !== "" ||
+    unit.addElectricityMeter ||
+    unit.electricityMeterNumber.trim() !== "" ||
+    unit.electricityMeterRegistration !== "" ||
+    unit.addWaterMeter ||
+    unit.waterMeterNumber.trim() !== "" ||
+    unit.waterMeterRegistration !== ""
+  );
+}
+
 export function isUnitDataComplete(
   unitData: UnitDataState,
   options?: { requireMeterRegistration?: boolean },

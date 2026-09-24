@@ -12,6 +12,7 @@ import {
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
+import { requiresDeceasedOwnerLegalAgent } from "@/features/create-contract/utils/requires-deceased-owner-legal-agent";
 import { cn } from "@/lib/utils";
 
 type CreateContractStepperProps = {
@@ -77,6 +78,9 @@ export default function CreateContractStepper({
   const instrumentType = useCreateContractDraftStore(
     (state) => state.contractStep1Data?.instrument_type,
   );
+  const contractStep1Data = useCreateContractDraftStore(
+    (state) => state.contractStep1Data,
+  );
   const skippingOwnerStep = useCreateContractDraftStore(
     (state) => state.skippingOwnerStep,
   );
@@ -85,6 +89,15 @@ export default function CreateContractStepper({
   );
   const existingPropertyContext = useCreateContractDraftStore(
     (state) => state.existingPropertyContext,
+  );
+  const deedHeirsPoaFiles = useCreateContractDraftStore(
+    (state) => state.deed.deedHeirsPoaFiles,
+  );
+  const deedInheritanceFiles = useCreateContractDraftStore(
+    (state) => state.deed.deedInheritanceFiles,
+  );
+  const deedOwnerIsDeceased = useCreateContractDraftStore(
+    (state) => state.deed.deedOwnerIsDeceased,
   );
   const isPaymentStep = currentStep === "payment";
   const ownerSkipped = isOwnerStepSkipped({
@@ -95,21 +108,44 @@ export default function CreateContractStepper({
     selectedDeedType,
     instrumentType,
   });
+  const ownerIsDead = requiresDeceasedOwnerLegalAgent({
+    selectedDeedType,
+    instrumentType,
+    instrumentTypeTrans: contractStep1Data?.instrument_type_trans,
+    deedOwnerIsDeceased,
+    requiresDeceasedOwnerLegalAgent:
+      contractStep1Data?.requires_deceased_owner_legal_agent,
+    propertyOwnerIsDeceased: contractStep1Data?.property_owner_is_deceased,
+    hasDeceasedDeedAttachments:
+      deedHeirsPoaFiles.length > 0 ||
+      deedInheritanceFiles.length > 0 ||
+      Boolean(contractStep1Data?.Image_inheritance_certificate) ||
+      Boolean(contractStep1Data?.copy_power_of_attorney_from_heirs_to_agent),
+  });
   const hideDeedAndOwner = existingPropertyContext !== null;
-  const visibleSteps = CREATE_CONTRACT_STEPPER_STEPS.filter((step) => {
+  const visibleSteps = CREATE_CONTRACT_STEPPER_STEPS.flatMap((step) => {
     if (hideDeedAndOwner && (step === "deed" || step === "owner" || step === "waqfNazir")) {
-      return false;
+      return [];
     }
 
     if (step === "waqfNazir" && !waqfNazirVisible) {
-      return false;
+      return [];
     }
 
-    if (step === "owner" && ownerSkipped) {
-      return false;
+    if (step === "owner") {
+      if (ownerSkipped) {
+        return [];
+      }
+
+      // Dead owner: never show المالك. The slot is الوكيل.
+      if (ownerIsDead) {
+        return ["agent"] as const;
+      }
+
+      return [step];
     }
 
-    return true;
+    return [step];
   });
 
   useEffect(() => {
@@ -130,18 +166,20 @@ export default function CreateContractStepper({
     <div className="sticky top-0 z-20 rounded-t-3xl bg-white px-2.5 py-3 sm:px-4 sm:py-4 md:p-5 dark:bg-[#1a2421]">
       <div className="flex w-full flex-nowrap items-center justify-between gap-0.5 py-1 sm:justify-evenly sm:gap-2">
         {visibleSteps.map((step, index) => {
-          const stepIndex = CREATE_CONTRACT_STEPS.indexOf(step);
-          const isSkipped = step === "owner" && ownerSkipped;
+          const wizardStep = step === "agent" ? "owner" : step;
+          const stepIndex = CREATE_CONTRACT_STEPS.indexOf(wizardStep);
+          const isSkipped = wizardStep === "owner" && ownerSkipped;
           const isPassed = stepIndex < currentStepIndex;
           const isCompleted = isPassed && !isSkipped;
           const isActive = stepIndex === currentStepIndex;
-          const isUnlocked = isStepUnlocked(step);
+          const isUnlocked = isStepUnlocked(wizardStep);
           const isIntro = step === "intro";
           const showOwnerStrike =
             isSkipped && (isPassed || skippingOwnerStep);
           const connectorCompleted =
             isActive || isCompleted || (isSkipped && isPassed);
-          const stepLabel = labels.steps[step];
+          const stepLabel =
+            step === "agent" ? labels.steps.agent : labels.steps[wizardStep];
 
           return (
             <Fragment key={step}>
@@ -159,7 +197,7 @@ export default function CreateContractStepper({
                 aria-current={isActive ? "step" : undefined}
                 aria-disabled={isSkipped || !isUnlocked}
                 disabled={isSkipped || !isUnlocked}
-                onClick={() => goToStep(step)}
+                onClick={() => goToStep(wizardStep)}
                 className={
                   isIntro
                     ? cn(

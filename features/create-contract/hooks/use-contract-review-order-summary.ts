@@ -22,7 +22,7 @@ import type {
 } from "@/features/create-contract/types/create-contract-review-order";
 import { isOrganizationTenantStatus } from "@/features/create-contract/types/tenant-step";
 import { resolveContractAssetUrl } from "@/features/create-contract/utils/build-existing-contract-draft";
-import { isDeceasedOwnerContract } from "@/features/create-contract/utils/is-deceased-owner-contract";
+import { requiresDeceasedOwnerLegalAgent } from "@/features/create-contract/utils/requires-deceased-owner-legal-agent";
 import { requiresWaqfOwnerNazir } from "@/features/create-contract/utils/requires-waqf-owner-nazir";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
@@ -293,7 +293,7 @@ export function useContractReviewOrderSummary(
     const empty = labels.emptyValue;
     const isSublease = isSubleaseContract({ selectedDeedType, instrumentType });
     const ownerSkipped = isOwnerStepSkipped({ selectedDeedType, instrumentType });
-    const deceasedOwner = isDeceasedOwnerContract({
+    const deceasedOwner = requiresDeceasedOwnerLegalAgent({
       selectedDeedType,
       instrumentType,
     });
@@ -486,38 +486,40 @@ export function useContractReviewOrderSummary(
     }
 
     if (!ownerSkipped) {
-      sections.push({
-        id: "owner",
-        title:
-          !deceasedOwner && !waqfNazir && ownerData.hasAgent === "yes"
-            ? labels.sections.ownerWithAgent
-            : labels.sections.ownerSelf,
-        editTarget: "owner",
-        fields: [
-          {
-            label: labels.fields.ownerId,
-            value: displayValue(ownerData.idNumber, empty),
-          },
-          {
-            label: labels.fields.ownerPhone,
-            value: displayValue(ownerData.phone, empty),
-          },
-          {
-            label: labels.fields.ownerBirthDate,
-            value: formatBirthDate(
-              ownerData.birthDate,
-              labels.calendar,
-              empty,
-            ),
-          },
-        ],
-      });
+      if (!deceasedOwner) {
+        sections.push({
+          id: "owner",
+          title:
+            !waqfNazir && ownerData.hasAgent === "yes"
+              ? labels.sections.ownerWithAgent
+              : labels.sections.ownerSelf,
+          editTarget: "owner",
+          fields: [
+            {
+              label: labels.fields.ownerId,
+              value: displayValue(ownerData.idNumber, empty),
+            },
+            {
+              label: labels.fields.ownerPhone,
+              value: displayValue(ownerData.phone, empty),
+            },
+            {
+              label: labels.fields.ownerBirthDate,
+              value: formatBirthDate(
+                ownerData.birthDate,
+                labels.calendar,
+                empty,
+              ),
+            },
+          ],
+        });
+      }
 
       if (deceasedOwner || ownerData.hasAgent === "yes") {
         sections.push({
           id: "agent",
           title: labels.sections.agent,
-          editTarget: deceasedOwner ? "nationalAddress" : "owner",
+          editTarget: "owner",
           fields: [
             {
               label: labels.fields.agentId,
@@ -754,8 +756,8 @@ export function useContractReviewOrderSummary(
     });
 
     const orderNumber =
-      contractId != null && String(contractId).trim() !== ""
-        ? String(contractId)
+      contractUuid != null && contractUuid.trim() !== ""
+        ? contractUuid
         : empty;
 
     const contractUuidValue =

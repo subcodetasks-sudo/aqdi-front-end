@@ -1,28 +1,51 @@
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { deedTypeIsDeceasedOwner } from "@/features/create-contract/types/deed-type";
+import { mapInstrumentTypeToDeedType } from "@/features/create-contract/utils/map-instrument-type-to-deed-type";
 
 type LegalAgentRequirementState = {
-  selectedDeedType?: DeedTypeId | "";
+  selectedDeedType?: DeedTypeId | "" | string;
   instrumentType?: string | null;
-  requiresDeceasedOwnerLegalAgent?: boolean | null;
-  propertyOwnerIsDeceased?: boolean | null;
+  instrumentTypeTrans?: string | null;
+  deedOwnerIsDeceased?: boolean;
+  requiresDeceasedOwnerLegalAgent?: boolean | number | null;
+  propertyOwnerIsDeceased?: boolean | number | null;
+  hasDeceasedDeedAttachments?: boolean;
 };
 
+function isTruthyFlag(value: boolean | number | null | undefined) {
+  return value === true || value === 1;
+}
+
+function instrumentLooksDeceased(
+  instrumentType?: string | null,
+  instrumentTypeTrans?: string | null,
+) {
+  if (deedTypeIsDeceasedOwner(instrumentType ?? "")) {
+    return true;
+  }
+
+  if (deedTypeIsDeceasedOwner(mapInstrumentTypeToDeedType(instrumentType))) {
+    return true;
+  }
+
+  const trans = instrumentTypeTrans ?? "";
+  return trans.includes("متوفي") || trans.includes("متوفى");
+}
+
 /**
- * Contract V2 step 2 collects the deceased-owner legal agent when any of these
- * flags/instrument types is set (from step1 / step2 / uncompleted-contract).
+ * For "صك ملكية والمالك متوفي" there is no living owner.
+ * The wizard owner slot is الوكيل الشرعي and we never send property_owner_*.
  */
 export function requiresDeceasedOwnerLegalAgent({
   selectedDeedType,
   instrumentType,
-  requiresDeceasedOwnerLegalAgent,
+  instrumentTypeTrans,
+  deedOwnerIsDeceased = false,
+  requiresDeceasedOwnerLegalAgent: apiRequiresLegalAgent,
   propertyOwnerIsDeceased,
+  hasDeceasedDeedAttachments = false,
 }: LegalAgentRequirementState) {
-  if (requiresDeceasedOwnerLegalAgent === true) {
-    return true;
-  }
-
-  if (propertyOwnerIsDeceased === true) {
+  if (deedOwnerIsDeceased) {
     return true;
   }
 
@@ -30,8 +53,13 @@ export function requiresDeceasedOwnerLegalAgent({
     return true;
   }
 
-  return (
-    instrumentType === "property_ownership_owner_are_deceased" ||
-    instrumentType === "property_ownership_owner_are_deceased_endowment"
-  );
+  if (instrumentLooksDeceased(instrumentType, instrumentTypeTrans)) {
+    return true;
+  }
+
+  if (isTruthyFlag(apiRequiresLegalAgent) || isTruthyFlag(propertyOwnerIsDeceased)) {
+    return true;
+  }
+
+  return hasDeceasedDeedAttachments;
 }

@@ -4,8 +4,9 @@ import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
 import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
 
 /**
- * Legal-agent completeness for contract step 2. Allows an existing POA URL
- * from step1 (`copy_power_of_attorney_from_heirs_to_agent`) instead of a new file.
+ * Legal-agent completeness for the deceased-owner step (replaces owner data).
+ * Allows an existing POA URL from step1 (`copy_power_of_attorney_from_heirs_to_agent`)
+ * instead of a new file.
  */
 export function isLegalAgentDataComplete(
   agentData: AgentDataState,

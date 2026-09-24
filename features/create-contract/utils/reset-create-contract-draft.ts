@@ -2,6 +2,26 @@ import { useCreateContractDraftStore } from "@/features/create-contract/stores/u
 
 let shouldResetDraftOnUnmount = false;
 
+export function waitForCreateContractDraftHydration() {
+  const persistApi = useCreateContractDraftStore.persist;
+
+  if (persistApi.hasHydrated()) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve) => {
+    const unsubscribe = persistApi.onFinishHydration(() => {
+      unsubscribe();
+      resolve();
+    });
+
+    if (persistApi.hasHydrated()) {
+      unsubscribe();
+      resolve();
+    }
+  });
+}
+
 export function scheduleCreateContractDraftResetOnUnmount() {
   shouldResetDraftOnUnmount = true;
 }

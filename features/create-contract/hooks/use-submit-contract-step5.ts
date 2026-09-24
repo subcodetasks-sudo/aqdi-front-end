@@ -37,10 +37,6 @@ export function useSubmitContractStep5() {
       return false;
     }
 
-    if (contractStep5Data && contractStep5Data.step >= 6) {
-      return true;
-    }
-
     setIsSubmitting(true);
 
     try {

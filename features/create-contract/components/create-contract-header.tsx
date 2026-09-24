@@ -223,7 +223,7 @@ export default function CreateContractHeader({
         labels={labels.exitHomeDialog}
         open={exitDialogOpen}
         onOpenChange={setExitDialogOpen}
-        orderNumber={contractId}
+        orderNumber={contractUuid}
         isSaving={isSaving || isPreparingSaveThenExit}
         isExiting={isDeleting}
         onSaveThenExit={() => void handleSaveThenExit()}

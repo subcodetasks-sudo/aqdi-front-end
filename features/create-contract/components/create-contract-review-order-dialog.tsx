@@ -31,6 +31,10 @@ import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import type { CreateContractReviewEditTarget } from "@/features/create-contract/types/create-contract-review-order";
 import { reviewEditTargetToStep } from "@/features/create-contract/types/create-contract-review-order";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
+import {
+  downloadAttachmentRobust,
+  fileNameFromUrl,
+} from "@/features/shared/utils/attachment-preview-actions";
 import { cn } from "@/lib/utils";
 
 type CreateContractReviewOrderDialogProps = {
@@ -61,47 +65,6 @@ type AttachmentPreview = {
   isObjectUrl: boolean;
   kind: "image" | "pdf" | "other";
 };
-
-function fileNameFromUrl(url: string) {
-  try {
-    const path = new URL(url, "https://local.invalid").pathname;
-    const name = path.split("/").filter(Boolean).pop();
-    return name ? decodeURIComponent(name) : "";
-  } catch {
-    return "";
-  }
-}
-
-function downloadAttachment(url: string, fileName: string) {
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName || "attachment";
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-async function downloadAttachmentRobust(url: string, fileName: string) {
-  try {
-    if (url.startsWith("blob:") || url.startsWith("data:")) {
-      downloadAttachment(url, fileName);
-      return;
-    }
-
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("download failed");
-    }
-
-    const blob = await response.blob();
-    const objectUrl = URL.createObjectURL(blob);
-    downloadAttachment(objectUrl, fileName);
-    URL.revokeObjectURL(objectUrl);
-  } catch {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-}
 
 function printAttachment(url: string) {
   const printWindow = window.open(url, "_blank", "noopener,noreferrer");

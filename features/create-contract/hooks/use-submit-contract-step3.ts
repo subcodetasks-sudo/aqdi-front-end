@@ -14,7 +14,7 @@ import type {
 type SubmitContractStep3Input = {
   ownerData: OwnerDataState;
   agentData: AgentDataState;
-  legalAgentAlreadySaved?: boolean;
+  legalAgentOnly?: boolean;
 };
 
 export function useSubmitContractStep3() {
@@ -30,7 +30,7 @@ export function useSubmitContractStep3() {
   async function submitStep3({
     ownerData,
     agentData,
-    legalAgentAlreadySaved = false,
+    legalAgentOnly = false,
   }: SubmitContractStep3Input): Promise<boolean> {
     if (isSubmitting) {
       return false;
@@ -53,7 +53,7 @@ export function useSubmitContractStep3() {
         contractId,
         ownerData,
         agentData,
-        legalAgentAlreadySaved,
+        legalAgentOnly,
       });
 
       if (!result.ok) {

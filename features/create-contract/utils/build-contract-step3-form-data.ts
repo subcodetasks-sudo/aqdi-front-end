@@ -13,10 +13,10 @@ export type ContractStep3FormPayload = {
   ownerData: OwnerDataState;
   agentData: AgentDataState;
   /**
-   * When the deceased-owner legal agent or waqf nazir was already saved in
-   * step 2, do not send `add_legal_agent_of_owner=false` (it would wipe them).
+   * Deceased-owner: persist the legal agent only.
+   * Do not send property_owner_* (the owner is deceased).
    */
-  legalAgentAlreadySaved?: boolean;
+  legalAgentOnly?: boolean;
 };
 
 function appendAgentFields(formData: FormData, agentData: AgentDataState) {
@@ -48,9 +48,16 @@ export function appendContractStep3Fields(
   formData: FormData,
   payload: ContractStep3FormPayload,
 ) {
-  const { ownerData, agentData, legalAgentAlreadySaved = false } = payload;
+  const { ownerData, agentData, legalAgentOnly = false } = payload;
 
   formData.append("id", String(payload.contractId));
+
+  if (legalAgentOnly) {
+    formData.append("add_legal_agent_of_owner", "1");
+    appendAgentFields(formData, agentData);
+    return;
+  }
+
   formData.append("type_dob_property_owner", ownerData.birthDate.calendarType);
 
   formData.append(
@@ -77,18 +84,6 @@ export function appendContractStep3Fields(
   const ownerIban = normalizePropertyOwnerIban(ownerData.iban);
   if (ownerIban) {
     formData.append("property_owner_iban", ownerIban);
-  }
-
-  // Step 2 may already have saved the deceased-owner legal agent. Sending
-  // add_legal_agent_of_owner=false would wipe it — omit the flag, or send
-  // true only when re-sending agent fields.
-  if (legalAgentAlreadySaved) {
-    if (ownerData.hasAgent === "yes") {
-      formData.append("add_legal_agent_of_owner", "1");
-      appendAgentFields(formData, agentData);
-    }
-    // hasAgent !== "yes": omit the flag entirely so step-2 agent is kept.
-    return;
   }
 
   formData.append(

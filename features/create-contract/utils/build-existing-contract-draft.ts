@@ -32,9 +32,19 @@ export function parseContractBirthDate(
     return { ...EMPTY_BIRTH_DATE, calendarType };
   }
 
-  const parts = value.split("-");
+  const parts = value.split(/[-/]/).filter(Boolean);
 
   if (parts.length === 3) {
+    // Backend may send DD-MM-YYYY or YYYY-MM-DD.
+    if (parts[0].length === 4) {
+      return {
+        calendarType,
+        day: parts[2].padStart(2, "0"),
+        month: parts[1].padStart(2, "0"),
+        year: parts[0],
+      };
+    }
+
     return {
       calendarType,
       day: parts[0].padStart(2, "0"),
@@ -46,11 +56,40 @@ export function parseContractBirthDate(
   return { ...EMPTY_BIRTH_DATE, calendarType };
 }
 
+export function parseContractBirthDateParts({
+  day,
+  month,
+  year,
+  combined,
+  calendarType,
+}: {
+  day?: string | number | null;
+  month?: string | number | null;
+  year?: string | number | null;
+  combined?: string | null;
+  calendarType: CalendarType;
+}): BirthDateValue {
+  const parsedDay = day == null ? "" : String(day).replace(/\D/g, "");
+  const parsedMonth = month == null ? "" : String(month).replace(/\D/g, "");
+  const parsedYear = year == null ? "" : String(year).replace(/\D/g, "");
+
+  if (parsedDay && parsedMonth && parsedYear) {
+    return {
+      calendarType,
+      day: parsedDay.padStart(2, "0"),
+      month: parsedMonth.padStart(2, "0"),
+      year: parsedYear,
+    };
+  }
+
+  return parseContractBirthDate(combined, calendarType);
+}
+
 export function formatContractPhoneForForm(phone: string | null) {
   return formatSaudiMobileForForm(phone);
 }
 
-function toOptionalCount(value: string | number | null | undefined) {
+export function toOptionalCount(value: string | number | null | undefined) {
   if (value === null || value === undefined || value === "") {
     return "";
   }
@@ -63,7 +102,7 @@ function toOptionalCount(value: string | number | null | undefined) {
   return String(parsed).padStart(2, "0");
 }
 
-function toStringValue(value: string | number | null | undefined) {
+export function toStringValue(value: string | number | null | undefined) {
   if (value === null || value === undefined) {
     return "";
   }

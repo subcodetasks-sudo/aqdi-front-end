@@ -60,7 +60,16 @@ export function useSubmitContractStep2() {
       return false;
     }
 
-    if (contractStep2Data && contractStep2Data.step >= 3) {
+    const alreadyHasAgentIdentity = Boolean(
+      contractStep2Data?.id_num_of_property_owner_agent,
+    );
+
+    if (
+      contractStep2Data &&
+      contractStep2Data.step >= 3 &&
+      (!legalAgent || alreadyHasAgentIdentity) &&
+      (!waqfNazir || alreadyHasAgentIdentity)
+    ) {
       return true;
     }
 

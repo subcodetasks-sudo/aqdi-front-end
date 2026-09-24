@@ -27,6 +27,9 @@ export function useCreateContractSteps() {
   const existingPropertyContext = useCreateContractDraftStore(
     (state) => state.existingPropertyContext,
   );
+  const deedOwnerIsDeceased = useCreateContractDraftStore(
+    (state) => state.deed.deedOwnerIsDeceased,
+  );
   const goNextStep = useCreateContractDraftStore((state) => state.goNextStep);
   const goBackStep = useCreateContractDraftStore((state) => state.goBackStep);
   const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
@@ -35,6 +38,7 @@ export function useCreateContractSteps() {
     currentStep,
     contractSession,
     selectedDeedType,
+    deedOwnerIsDeceased,
     contractStep1Data,
     contractStep2Data,
     contractStep3Data,

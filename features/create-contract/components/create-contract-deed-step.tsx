@@ -4,7 +4,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import CreateContractAgentDataPhase from "@/features/create-contract/components/create-contract-agent-data-phase";
 import CreateContractDeceasedOwnerSection from "@/features/create-contract/components/create-contract-deceased-owner-section";
 import CreateContractDeedImageUpload from "@/features/create-contract/components/create-contract-deed-image-upload";
 import CreateContractDeedNationalAddress from "@/features/create-contract/components/create-contract-deed-national-address";
@@ -80,9 +79,6 @@ export default function CreateContractDeedStep({
     isWaqfOwner,
     needsLegalAgent,
     needsWaqfNazir,
-    agentData,
-    setAgentData,
-    existingLegalAgentPoaUrl,
     nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles,
@@ -131,7 +127,6 @@ export default function CreateContractDeedStep({
 
   const deedPhase = labels.phases[0];
   const addressPhase = labels.phases[1];
-  const legalAgentLabels = labels.legalAgent;
   const leaseRenewalNotice =
     contractType === "commercial"
       ? labels.leaseRenewal?.noticeCommercial
@@ -154,7 +149,7 @@ export default function CreateContractDeedStep({
     );
   }
 
-  async function submitAddressWithOptionalLegalAgent() {
+  async function submitAddress() {
     if (!nationalAddressMethod) {
       setShowFieldErrors(true);
       toast.error(tIncomplete("incompleteContinue"));
@@ -167,8 +162,6 @@ export default function CreateContractDeedStep({
       photoFiles: nationalAddressPhotoFiles,
       linkUrl: nationalAddressLinkUrl,
       manualAddress: nationalAddressManual,
-      legalAgent: needsLegalAgent ? agentData : undefined,
-      hasExistingLegalAgentPoa: Boolean(existingLegalAgentPoaUrl),
     });
   }
 
@@ -299,12 +292,13 @@ export default function CreateContractDeedStep({
     }
 
     // Endowment: defer step2 (address + nazir identity) to the waqf-nazir step.
-    if (needsWaqfNazir) {
+    // Deceased-owner: defer step2 (address + legal agent) to the الوكيل step.
+    if (needsWaqfNazir || needsLegalAgent) {
       onComplete();
       return;
     }
 
-    const submittedAddress = await submitAddressWithOptionalLegalAgent();
+    const submittedAddress = await submitAddress();
 
     if (!submittedAddress) {
       return;
@@ -370,11 +364,12 @@ export default function CreateContractDeedStep({
     }
 
     // Endowment: address + nazir identity are submitted on the waqf-nazir step.
-    if (needsWaqfNazir) {
+    // Deceased-owner: address + legal agent are submitted on the الوكيل step.
+    if (needsWaqfNazir || needsLegalAgent) {
       return true;
     }
 
-    return submitAddressWithOptionalLegalAgent();
+    return submitAddress();
   }
 
   useEffect(() => {
@@ -648,29 +643,6 @@ export default function CreateContractDeedStep({
                   showFieldErrors={showFieldErrors}
                 />
               ) : null}
-            </div>
-          ) : null}
-
-          {needsLegalAgent ? (
-            <div className="space-y-3 border-t border-dashed border-[#d9d9d9] pt-4">
-              <CreateContractStepPhaseHeader
-                title={legalAgentLabels.title}
-                subtitle={legalAgentLabels.subtitle}
-              />
-
-              <div className="space-y-3 rounded-[24px] bg-white p-3 md:p-4 dark:bg-transparent">
-                <CreateContractAgentDataPhase
-                  labels={legalAgentLabels.agentData}
-                  birthDateLabels={legalAgentLabels.birthDate}
-                  validationLabels={legalAgentLabels.validation.fieldErrors}
-                  value={agentData}
-                  onChange={setAgentData}
-                  showFieldErrors={showFieldErrors}
-                  hideSectionHeader
-                  existingPoaUrl={existingLegalAgentPoaUrl}
-                  documentHint={legalAgentLabels.documentHint}
-                />
-              </div>
             </div>
           ) : null}
         </div>

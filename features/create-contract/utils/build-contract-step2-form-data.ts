@@ -17,7 +17,7 @@ export type SubmitContractStep2Payload = {
   imageAddress?: File;
   addressUrl?: string;
   manualAddress?: ManualNationalAddressData;
-  /** Deceased-owner legal agent — submitted with address in V2 step 2. */
+  /** Deceased-owner legal agent — submitted with owner step 3. */
   legalAgent?: Omit<AgentDataState, "powerOfAttorneyFiles">;
   /** Top-level File so server actions keep the binary. */
   legalAgentPoaFile?: File;
@@ -117,6 +117,7 @@ export function appendContractStep2Fields(
   }
 
   if (payload.legalAgent) {
+    formData.append("add_legal_agent_of_owner", "1");
     appendLegalAgentFields(
       formData,
       payload.legalAgent,
@@ -125,6 +126,7 @@ export function appendContractStep2Fields(
   }
 
   if (payload.waqfNazir) {
+    formData.append("add_legal_agent_of_owner", "1");
     appendWaqfNazirFields(
       formData,
       payload.waqfNazir,

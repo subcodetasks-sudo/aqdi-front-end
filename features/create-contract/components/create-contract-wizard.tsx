@@ -93,11 +93,13 @@ export default function CreateContractWizard({
   }, [currentStep, setActiveStepSaveHandler]);
 
   useEffect(() => {
+    // Hidden waqf-nazir must not trap navigation. Bounce to deed (not owner)
+    // so عودة from المالك/الوكيل is not immediately undone.
     if (currentStep === "waqfNazir" && !waqfNazirVisible) {
       if (ownerSkipped) {
         skipOwnerToTenant();
       } else {
-        setCurrentStep("owner");
+        setCurrentStep("deed");
       }
       return;
     }
@@ -160,6 +162,7 @@ export default function CreateContractWizard({
               {currentStep === "owner" && !ownerSkipped ? (
                 <CreateContractOwnerStep
                   labels={labels.owner}
+                  legalAgentLabels={labels.deed.legalAgent}
                   onBack={goBack}
                   onComplete={goNext}
                 />

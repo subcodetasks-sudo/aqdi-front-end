@@ -12,11 +12,13 @@ import { isLeaseRenewalContract } from "@/features/create-contract/utils/is-leas
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { isSubleaseContract } from "@/features/create-contract/utils/is-sublease-contract";
 import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
+import { requiresDeceasedOwnerLegalAgent } from "@/features/create-contract/utils/requires-deceased-owner-legal-agent";
 
 type ContractStepProgressState = {
   currentStep: CreateContractStep;
   contractSession: ContractSession | null;
   selectedDeedType: DeedTypeId | "";
+  deedOwnerIsDeceased?: boolean;
   contractStep1Data: ContractStep1ApiData | null;
   contractStep2Data: ContractStep2ApiData | null;
   contractStep3Data: ContractStep3ApiData | null;
@@ -29,6 +31,15 @@ function getSkipOwnerProgressState(state: ContractStepProgressState) {
   return {
     selectedDeedType: state.selectedDeedType,
     instrumentType: state.contractStep1Data?.instrument_type,
+    instrumentTypeTrans: state.contractStep1Data?.instrument_type_trans,
+    deedOwnerIsDeceased: state.deedOwnerIsDeceased,
+    requiresDeceasedOwnerLegalAgent:
+      state.contractStep1Data?.requires_deceased_owner_legal_agent,
+    propertyOwnerIsDeceased: state.contractStep1Data?.property_owner_is_deceased,
+    hasDeceasedDeedAttachments: Boolean(
+      state.contractStep1Data?.Image_inheritance_certificate ||
+        state.contractStep1Data?.copy_power_of_attorney_from_heirs_to_agent,
+    ),
   };
 }
 
@@ -41,6 +52,7 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
   const leaseRenewal = isLeaseRenewalContract(skipState);
   const sublease = isSubleaseContract(skipState);
   const waqfNazir = isWaqfNazirStepVisible(skipState);
+  const deceasedLegalAgent = requiresDeceasedOwnerLegalAgent(skipState);
 
   let maxIndex = CREATE_CONTRACT_STEPS.indexOf("deed");
 
@@ -77,6 +89,19 @@ export function getMaxUnlockedContractStepIndex(state: ContractStepProgressState
 
     // After nazir/step2, owner is skipped — unlock tenant.
     if ((state.contractStep2Data?.step ?? 0) >= 3) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("tenant");
+    }
+
+    if ((state.contractStep5Data?.step ?? 0) >= 6) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("finance");
+    }
+  } else if (deceasedLegalAgent) {
+    // After step1, unlock الوكيل (address + legal agent are submitted there).
+    if ((state.contractStep1Data?.step ?? 0) >= 2) {
+      maxIndex = CREATE_CONTRACT_STEPS.indexOf("owner");
+    }
+
+    if ((state.contractStep3Data?.step ?? 0) >= 4) {
       maxIndex = CREATE_CONTRACT_STEPS.indexOf("tenant");
     }
 

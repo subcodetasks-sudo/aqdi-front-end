@@ -66,6 +66,21 @@ export const EMPTY_TENANT_DATA: TenantDataState = {
   organization: EMPTY_ORGANIZATION_TENANT_DATA,
 };
 
+export function createEmptyTenantData(): TenantDataState {
+  return {
+    status: "individual",
+    individual: {
+      ...EMPTY_INDIVIDUAL_TENANT_DATA,
+      birthDate: { ...EMPTY_BIRTH_DATE },
+    },
+    organization: {
+      ...EMPTY_ORGANIZATION_TENANT_DATA,
+      ownerBirthDate: { ...EMPTY_BIRTH_DATE },
+      powerOfAttorneyFiles: [],
+    },
+  };
+}
+
 export function isOrganizationTenantStatus(status: TenantStatusOption | "") {
   return status === "establishment-or-company";
 }

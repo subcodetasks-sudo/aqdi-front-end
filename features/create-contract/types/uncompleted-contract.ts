@@ -102,6 +102,7 @@ export type UncompletedContractStep6 = {
 
 export type UncompletedContractStep4 = {
   id?: number;
+  contract_id?: number;
   uuid?: string;
   tenant_entity?: string | null;
   tenant_id_num?: string | null;
@@ -110,12 +111,27 @@ export type UncompletedContractStep4 = {
   name_tenant?: string | null;
   name?: string | null;
   type_tenant_dob?: string | null;
+  tenant_dob?: string | null;
+  tenant_dob_day?: string | number | null;
+  tenant_dob_month?: string | number | null;
+  tenant_dob_year?: string | number | null;
   tenant_entity_unified_registry_number?: string | null;
   authorization_type?: string | null;
+  id_num_of_property_tenant_agent?: string | null;
+  mobile_of_property_tenant_agent?: string | null;
+  type_dob_tenant_agent?: string | null;
+  dob_of_property_tenant_agent?: string | null;
+  dobof_property_tenant_agent_day?: string | number | null;
+  dobof_property_tenant_agent_month?: string | number | null;
+  dobof_property_tenant_agent_year?: string | number | null;
+  copy_of_the_authorization_or_agency?: string | null;
   step?: number;
 };
 
 export type UncompletedContractUnit = {
+  unit_id?: number | null;
+  id?: number | null;
+  contract_type?: string | null;
   unit_type_id?: number | null;
   unit_type_name?: string | null;
   unit_usage_id?: number | null;
@@ -123,8 +139,23 @@ export type UncompletedContractUnit = {
   unit_number?: string | null;
   unit_area?: number | string | null;
   floor_number?: number | string | null;
+  number_of_rooms?: number | string | null;
+  tootal_rooms?: number | string | null;
+  The_number_of_halls?: number | string | null;
+  The_number_of_kitchens?: number | string | null;
+  The_number_of_toilets?: number | string | null;
+  The_number_of_the_toilet?: number | string | null;
+  window_ac?: number | string | null;
+  split_ac?: number | string | null;
+  kitchen_tank?: boolean | number | null;
+  furnished?: boolean | number | null;
+  type_furnished?: boolean | number | null;
+  electricity_meter?: boolean | number | null;
   electricity_meter_number?: string | null;
+  electricity_meter_ownership?: string | null;
+  water_meter?: boolean | number | null;
   water_meter_number?: string | null;
+  water_meter_ownership?: string | null;
 };
 
 export type UncompletedContractStep5 = {

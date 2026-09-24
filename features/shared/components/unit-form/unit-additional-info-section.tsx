@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,12 @@ export default function UnitAdditionalInfoSection({
   children,
 }: UnitAdditionalInfoSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setOpen(true);
+    }
+  }, [defaultOpen]);
 
   return (
     <div className="overflow-hidden rounded-2xl border-brand/90 border-3 bg-white dark:border-brand-secondary/70">

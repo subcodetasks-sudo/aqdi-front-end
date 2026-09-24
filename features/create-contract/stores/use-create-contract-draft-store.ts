@@ -53,6 +53,7 @@ import {
   type CreateContractStep,
 } from "@/features/create-contract/types/create-contract-step";
 import {
+  createEmptyTenantData,
   EMPTY_TENANT_DATA,
   type TenantDataState,
   type TenantStatusOption,
@@ -85,7 +86,11 @@ import {
   buildAgentDataFromLegalAgentSource,
   buildAgentDataFromStep3,
   buildOwnerDataFromStep3,
+  buildRentedUnitsFromUncompleted,
+  buildTenantDataFromStep4,
   mapBackendStepToWizardStep,
+  resolveTenantPhaseIndex,
+  resolveUncompletedContractUuid,
 } from "@/features/create-contract/utils/build-uncompleted-contract-draft";
 import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
 import { requiresWaqfOwnerNazir } from "@/features/create-contract/utils/requires-waqf-owner-nazir";
@@ -94,6 +99,8 @@ import type { UncompletedContractData } from "@/features/create-contract/types/u
 type DeedDraftState = {
   currentPhaseIndex: number;
   selectedDeedType: DeedTypeId | "";
+  /** Sticky: صك ملكية والمالك متوفي — owner step is replaced by الوكيل. */
+  deedOwnerIsDeceased: boolean;
   deedFiles: File[];
   deedPersistedFiles: PersistedFile[];
   deedFrontFiles: File[];
@@ -213,7 +220,10 @@ type CreateContractDraftStore = {
     session: ExistingPropertyContractSession;
     context: ExistingPropertyContractContext;
   }) => void;
-  loadUncompletedContract: (data: UncompletedContractData) => void;
+  loadUncompletedContract: (
+    data: UncompletedContractData,
+    requestUuid?: string,
+  ) => void;
   resetDraft: () => void;
   hydrateFilesFromPersisted: () => void;
 };
@@ -221,6 +231,7 @@ type CreateContractDraftStore = {
 const INITIAL_DEED: DeedDraftState = {
   currentPhaseIndex: 0,
   selectedDeedType: "",
+  deedOwnerIsDeceased: false,
   deedFiles: [],
   deedPersistedFiles: [],
   deedFrontFiles: [],
@@ -279,6 +290,9 @@ function buildDeedDraftFromProperty(
   return {
     ...INITIAL_DEED,
     selectedDeedType: mapInstrumentTypeToDeedType(property.instrument_type),
+    deedOwnerIsDeceased: deedTypeIsDeceasedOwner(
+      mapInstrumentTypeToDeedType(property.instrument_type),
+    ),
     nationalAddressMethod,
     nationalAddressLinkUrl: addressUrl,
     mapLocation: parseMapLocation(property.latitude, property.longitude),
@@ -311,6 +325,9 @@ function buildDeedDraftFromUncompleted(
   return {
     ...INITIAL_DEED,
     selectedDeedType: mapInstrumentTypeToDeedType(step1?.instrument_type),
+    deedOwnerIsDeceased: deedTypeIsDeceasedOwner(
+      mapInstrumentTypeToDeedType(step1?.instrument_type),
+    ),
     nationalAddressMethod,
     nationalAddressLinkUrl: addressUrl,
     mapLocation: parseMapLocation(
@@ -435,6 +452,50 @@ function buildStep3DataFromUncompleted(
   };
 }
 
+function buildStep4DataFromUncompleted(
+  data: UncompletedContractData,
+): ContractStep4ApiData | null {
+  const step4 = data.step4;
+
+  if (!step4) {
+    return null;
+  }
+
+  return {
+    id: step4.id ?? data.contract_id,
+    contract_id: step4.contract_id ?? data.contract_id,
+    uuid: step4.uuid ?? data.uuid,
+    tenant_entity: step4.tenant_entity ?? null,
+    tenant_id_num: step4.tenant_id_num ?? null,
+    tenant_mobile: step4.tenant_mobile ?? null,
+    type_tenant_dob: step4.type_tenant_dob ?? null,
+    tenant_entity_unified_registry_number:
+      step4.tenant_entity_unified_registry_number ?? null,
+    authorization_type: step4.authorization_type ?? null,
+    step: step4.step ?? (data.step >= 5 ? 5 : data.step),
+  };
+}
+
+function buildStep5DataFromUncompleted(
+  data: UncompletedContractData,
+): ContractStep5ApiData | null {
+  const step5 = data.step5;
+
+  if (!step5) {
+    return null;
+  }
+
+  return {
+    id: step5.id ?? data.contract_id,
+    contract_id: data.contract_id,
+    uuid: step5.uuid ?? data.uuid,
+    unit_type_id: step5.unit_type_id ?? null,
+    unit_usage_id: step5.unit_usage_id ?? null,
+    unit_number: step5.unit_number ?? null,
+    step: step5.step ?? (data.step >= 6 ? 6 : data.step),
+  };
+}
+
 const INITIAL_OWNER: OwnerDraftState = {
   currentPhaseIndex: 0,
   ownerData: EMPTY_OWNER_DATA,
@@ -486,7 +547,7 @@ function createInitialState() {
     owner: { ...INITIAL_OWNER, ownerData: { ...EMPTY_OWNER_DATA }, agentData: { ...EMPTY_AGENT_DATA } },
     tenant: {
       ...INITIAL_TENANT,
-      tenantData: { ...EMPTY_TENANT_DATA, individual: { ...EMPTY_TENANT_DATA.individual }, organization: { ...EMPTY_TENANT_DATA.organization } },
+      tenantData: createEmptyTenantData(),
       rentedUnits: [{ ...EMPTY_RENTED_UNIT_DATA }],
     },
     financeData: createEmptyFinanceData(),
@@ -566,6 +627,9 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             set({ currentStep: "deed", skippingOwnerStep: false });
             return;
           }
+
+          set({ currentStep: "owner", skippingOwnerStep: false });
+          return;
         }
 
         if (state.currentStep === "waqfNazir") {
@@ -573,17 +637,34 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           return;
         }
 
-        if (state.currentStep === "owner" && waqfNazirVisible) {
-          set({ currentStep: "waqfNazir", skippingOwnerStep: false });
+        if (state.currentStep === "owner") {
+          if (waqfNazirVisible) {
+            set({ currentStep: "waqfNazir", skippingOwnerStep: false });
+            return;
+          }
+
+          set({ currentStep: "deed", skippingOwnerStep: false });
           return;
         }
 
-        const index = CREATE_CONTRACT_STEPS.indexOf(state.currentStep);
-        if (index > 0) {
+        let index = CREATE_CONTRACT_STEPS.indexOf(state.currentStep);
+        while (index > 0) {
+          index -= 1;
+          const previousStep = CREATE_CONTRACT_STEPS[index];
+
+          if (previousStep === "waqfNazir" && !waqfNazirVisible) {
+            continue;
+          }
+
+          if (previousStep === "owner" && ownerSkipped) {
+            continue;
+          }
+
           set({
-            currentStep: CREATE_CONTRACT_STEPS[index - 1],
+            currentStep: previousStep,
             skippingOwnerStep: false,
           });
+          return;
         }
       },
       skipOwnerToTenant: () => {
@@ -616,6 +697,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             deed: {
               ...state.deed,
               selectedDeedType: value,
+              deedOwnerIsDeceased: deedTypeIsDeceasedOwner(value),
               deedFiles: clearDeedImage ? [] : state.deed.deedFiles,
               deedPersistedFiles: clearDeedImage
                 ? []
@@ -763,6 +845,8 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             ...state.deed,
             deedInheritanceFiles: files,
             deedInheritancePersistedFiles,
+            deedOwnerIsDeceased:
+              files.length > 0 ? true : state.deed.deedOwnerIsDeceased,
           },
         }));
       },
@@ -773,6 +857,8 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
             ...state.deed,
             deedHeirsPoaFiles: files,
             deedHeirsPoaPersistedFiles,
+            deedOwnerIsDeceased:
+              files.length > 0 ? true : state.deed.deedOwnerIsDeceased,
           },
         }));
       },
@@ -1009,42 +1095,50 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
       },
       setPaymentData: (data) => set({ paymentData: data }),
       setFreshContractSession: (session) =>
-        set((state) => ({
-          contractSession: session,
-          contractStep1Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep1Data
-              : null,
-          contractStep2Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep2Data
-              : null,
-          contractStep3Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep3Data
-              : null,
-          contractStep4Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep4Data
-              : null,
-          contractStep5Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep5Data
-              : null,
-          contractStep6Data:
-            state.contractSession?.contractId === session.contractId
-              ? state.contractStep6Data
-              : null,
-          contractFinancialData:
-            state.contractSession?.contractId === session.contractId
+        set((state) => {
+          const sameContract =
+            state.contractSession?.contractId === session.contractId;
+          const base = createInitialState();
+
+          return {
+            contractSession: session,
+            contractStep1Data: sameContract ? state.contractStep1Data : null,
+            contractStep2Data: sameContract ? state.contractStep2Data : null,
+            contractStep3Data: sameContract ? state.contractStep3Data : null,
+            contractStep4Data: sameContract ? state.contractStep4Data : null,
+            contractStep5Data: sameContract ? state.contractStep5Data : null,
+            contractStep6Data: sameContract ? state.contractStep6Data : null,
+            contractFinancialData: sameContract
               ? state.contractFinancialData
               : null,
-          contractFinanceSummaryData:
-            state.contractSession?.contractId === session.contractId
+            contractFinanceSummaryData: sameContract
               ? state.contractFinanceSummaryData
               : null,
-        })),
-      setContractStep1Data: (data) => set({ contractStep1Data: data }),
+            tenant: sameContract ? state.tenant : base.tenant,
+          };
+        }),
+      setContractStep1Data: (data) =>
+        set((state) => {
+          const mappedDeedType = data
+            ? mapInstrumentTypeToDeedType(data.instrument_type)
+            : "";
+
+          return {
+            contractStep1Data: data,
+            deed: {
+              ...state.deed,
+              selectedDeedType: deedTypeIsDeceasedOwner(state.deed.selectedDeedType)
+                ? state.deed.selectedDeedType
+                : mappedDeedType || state.deed.selectedDeedType,
+              deedOwnerIsDeceased:
+                state.deed.deedOwnerIsDeceased ||
+                deedTypeIsDeceasedOwner(state.deed.selectedDeedType) ||
+                deedTypeIsDeceasedOwner(mappedDeedType) ||
+                Boolean(data?.Image_inheritance_certificate) ||
+                Boolean(data?.copy_power_of_attorney_from_heirs_to_agent),
+            },
+          };
+        }),
       setContractStep2Data: (data) => set({ contractStep2Data: data }),
       setContractStep3Data: (data) => set({ contractStep3Data: data }),
       setContractStep4Data: (data) => set({ contractStep4Data: data }),
@@ -1078,12 +1172,14 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           },
         });
       },
-      loadUncompletedContract: (data) => {
+      loadUncompletedContract: (data, requestUuid) => {
         const base = createInitialState();
         const contractType: PropertyContractType =
           data.step1?.contract_type === "commercial" ? "commercial" : "housing";
         const step3 = data.step3;
         const step6 = data.step6 ?? null;
+        const tenantData = buildTenantDataFromStep4(data.step4);
+        const uuid = resolveUncompletedContractUuid(data, requestUuid);
 
         set({
           ...base,
@@ -1095,13 +1191,21 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           }),
           contractSession: {
             contractId: data.contract_id,
-            uuid: data.uuid,
+            uuid,
             contractType,
             isReal: false,
           },
           contractStep1Data: buildStep1DataFromUncompleted(data),
           contractStep2Data: buildStep2DataFromUncompleted(data),
           contractStep3Data: buildStep3DataFromUncompleted(data),
+          contractStep4Data: buildStep4DataFromUncompleted(data),
+          contractStep5Data: buildStep5DataFromUncompleted(data),
+          tenant: {
+            ...base.tenant,
+            currentPhaseIndex: resolveTenantPhaseIndex(data.step),
+            tenantData,
+            rentedUnits: buildRentedUnitsFromUncompleted(data),
+          },
           contractStep6Data: step6
             ? {
                 id: step6.id ?? data.contract_id,
@@ -1209,6 +1313,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
         deed: {
           currentPhaseIndex: state.deed.currentPhaseIndex,
           selectedDeedType: state.deed.selectedDeedType,
+          deedOwnerIsDeceased: state.deed.deedOwnerIsDeceased,
           deedPersistedFiles: state.deed.deedPersistedFiles,
           deedFrontPersistedFiles: state.deed.deedFrontPersistedFiles,
           deedBackPersistedFiles: state.deed.deedBackPersistedFiles,
@@ -1276,10 +1381,18 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           CreateContractDraftStore["tenant"]["tenantData"]
         >;
 
+        const persistedDeed = (persisted.deed ?? {}) as Partial<DeedDraftState>;
+
         return {
           ...currentState,
           ...persisted,
-          deed: { ...initial.deed, ...(persisted.deed ?? {}) },
+          deed: {
+            ...initial.deed,
+            ...persistedDeed,
+            deedOwnerIsDeceased:
+              persistedDeed.deedOwnerIsDeceased === true ||
+              deedTypeIsDeceasedOwner(persistedDeed.selectedDeedType ?? ""),
+          },
           owner: {
             ...initial.owner,
             ...persistedOwner,

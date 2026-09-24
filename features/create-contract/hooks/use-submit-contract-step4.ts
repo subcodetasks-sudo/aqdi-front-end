@@ -43,10 +43,6 @@ export function useSubmitContractStep4() {
       return false;
     }
 
-    if (contractStep4Data && contractStep4Data.step >= 5) {
-      return true;
-    }
-
     setIsSubmitting(true);
 
     try {

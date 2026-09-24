@@ -33,14 +33,22 @@ export function deedTypeIsAdversePossession(deedType: DeedTypeId | ""): boolean 
 
 // Deceased-owner deed requires three images: the ownership deed, the
 // inheritance certificate, and the heirs' power of attorney to the agent.
-export function deedTypeIsDeceasedOwner(deedType: DeedTypeId | ""): boolean {
-  return deedType === "deceased-owner";
+export function deedTypeIsDeceasedOwner(deedType: DeedTypeId | "" | string): boolean {
+  return (
+    deedType === "deceased-owner" ||
+    deedType === "property_ownership_owner_are_deceased" ||
+    deedType === "property_ownership_owner_are_deceased_endowment"
+  );
 }
 
 // Waqf-owner deed requires the ownership deed, endowment registration
 // certificate, trusteeship deed, and optionally guardians' POA.
-export function deedTypeIsWaqfOwner(deedType: DeedTypeId | ""): boolean {
-  return deedType === "waqf-owner";
+// Only "صك ملكية والمالك وقف" — not محجور عليه, which shares no nazir payload.
+export function deedTypeIsWaqfOwner(deedType: DeedTypeId | "" | string): boolean {
+  return (
+    deedType === "waqf-owner" ||
+    deedType === "property_ownership_owner_is_endowment"
+  );
 }
 
 export function deedTypeIsLeaseRenewal(deedType: DeedTypeId | ""): boolean {
