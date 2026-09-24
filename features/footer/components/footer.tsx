@@ -8,7 +8,6 @@ import FooterSupportColumn from "@/features/footer/components/footer-support-col
 import FooterTopBar from "@/features/footer/components/footer-top-bar";
 import { getAppSettings } from "@/features/settings/services/get-app-settings";
 import {
-  resolveFooterPhone,
   resolveFooterPhoneHref,
   resolveFooterSocialLinks,
 } from "@/features/settings/utils/resolve-footer-contact";
@@ -28,8 +27,11 @@ export default async function Footer() {
   const importantLinks = t.raw("importantLinks.items") as FooterLinkItem[];
   const licenses = t.raw("licenses.items") as FooterLinkItem[];
   const socialLinks = resolveFooterSocialLinks(settings);
-  const phone = resolveFooterPhone(settings, t("support.phone"));
-  const phoneHref = resolveFooterPhoneHref(settings);
+  const phone = t("support.phone");
+  const phoneHref = resolveFooterPhoneHref({
+    ...(settings ?? {}),
+    whatsapp_contact: phone,
+  } as typeof settings);
 
   return (
     <footer className="border-t border-border/60 bg-white py-12 md:py-14">

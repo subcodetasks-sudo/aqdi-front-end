@@ -347,9 +347,18 @@
     "quickLinks": {
       "title": "Quick links",
       "items": [
-        { "label": "About us", "href": "/about" },
-        { "label": "Blog", "href": "https://blogs.aqdi.sa/" },
-        { "label": "FAQ", "href": "/faq" }
+        {
+          "label": "About us",
+          "href": "/about"
+        },
+        {
+          "label": "Blog",
+          "href": "https://blogs.aqdi.sa/"
+        },
+        {
+          "label": "FAQ",
+          "href": "/faq"
+        }
       ]
     },
     "importantLinks": {
@@ -363,21 +372,28 @@
           "label": "Commercial contract documentation",
           "href": "/create-contract?id=commercial"
         },
-        { "label": "Contracts", "href": "/requests" }
+        {
+          "label": "Contracts",
+          "href": "/requests"
+        }
       ]
     },
     "licenses": {
       "title": "Licenses",
       "items": [
-        { "label": "Commercial Register: 7000000001" },
-        { "label": "Tax Number: 7000000006" }
+        {
+          "label": "Commercial Register:  7034480413"
+        },
+        {
+          "label": "Tax Number:  EJAR_00237930"
+        }
       ]
     },
     "support": {
       "title": "Need help?",
-      "phone": "+966 51 001 00 001",
-      "weekdaysHours": "Monday to Friday from 9:00 AM to 6:00 PM",
-      "saturdayHours": "Saturday from 9:00 AM to 2:00 PM",
+      "phone": "0597500014",
+      "weekdaysHours": "Saturday to Thursday from 12:00 PM until 12:00 midnight",
+      "saturdayHours": "Friday from 3:00 PM until 12:00 midnight",
       "email": "info@aqdi.sa"
     },
     "copyright": "All rights reserved Aqadi 2024 ©",
@@ -567,7 +583,11 @@
       },
       "comments": {
         "title": "Comments",
-        "tags": ["#rental", "#contracts", "#law"],
+        "tags": [
+          "#rental",
+          "#contracts",
+          "#law"
+        ],
         "authorImageAlt": "Abdullah profile photo",
         "likeAriaLabel": "Like comment",
         "shareAriaLabel": "Share comment",
@@ -1052,7 +1072,6 @@
     "addProperty": "Add new property",
     "emptyStateTitle": "No saved properties yet",
     "emptyStateDescription": "Add your first property to create contracts on it easily without re-entering data.",
-
     "contractTypes": {
       "housing": "Residential property",
       "commercial": "Commercial property"
@@ -2677,7 +2696,12 @@
         "draft": {
           "title": "Receive the contract draft first, then I'll pay",
           "description": "We send you the contract draft via WhatsApp first",
-          "steps": ["Contract draft", "Your review", "Payment", "Ejar notarization"],
+          "steps": [
+            "Contract draft",
+            "Your review",
+            "Payment",
+            "Ejar notarization"
+          ],
           "note": "Ideal for those who want to review their contract before completing payment."
         },
         "payNow": {
@@ -2685,7 +2709,12 @@
           "description": "Pay then we send you the contract draft via WhatsApp",
           "badge": "2x Faster",
           "discountBadge": "5% off",
-          "steps": ["Payment", "Contract draft", "Your review", "Ejar notarization"],
+          "steps": [
+            "Payment",
+            "Contract draft",
+            "Your review",
+            "Ejar notarization"
+          ],
           "note": "Ideal for those who want to save time. The contract draft is sent via WhatsApp for review before notarization in all cases."
         },
         "selected": {
