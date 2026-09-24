@@ -8,7 +8,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Switch } from "@/components/ui/switch";
-import ContractPaymentMethodFlowDialogs from "@/features/create-contract/components/contract-payment-method-flow-dialogs";
 import CreateContractDiscountCodeField from "@/features/create-contract/components/create-contract-discount-code-field";
 import CreateContractPaymentHero from "@/features/create-contract/components/create-contract-payment-hero";
 import CreateContractPaymentNavigation from "@/features/create-contract/components/create-contract-payment-navigation";
@@ -18,10 +17,10 @@ import CreateContractSaveLaterDialog from "@/features/create-contract/components
 import CreateContractSavePropertyDialog from "@/features/create-contract/components/create-contract-save-property-dialog";
 import { useApplyContractCoupon } from "@/features/create-contract/hooks/use-apply-contract-coupon";
 import { useContractFinanceSummary } from "@/features/create-contract/hooks/use-contract-finance-summary";
-import { useContractPaymentMethodFlow } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useCreateContractPaymentStep } from "@/features/create-contract/hooks/use-create-contract-payment-step";
 import { useSaveContractDraft } from "@/features/create-contract/hooks/use-save-contract-draft";
 import { useSaveProperty } from "@/features/create-contract/hooks/use-save-property";
+import { useStartContractPayment } from "@/features/create-contract/hooks/use-start-contract-payment";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { ContractTypeId } from "@/features/create-contract/types/contract-type";
@@ -83,29 +82,17 @@ export default function CreateContractPaymentStep({
   );
   const contractUuid =
     contractSession?.uuid ?? contractStep1Data?.uuid ?? null;
-  const contractId =
-    contractSession?.contractId ?? contractStep1Data?.contract_id ?? null;
   const { appliedCoupon, isApplying, applyCoupon, clearCouponDraft } =
     useApplyContractCoupon(contractUuid);
   const financeSummaryQuery = useContractFinanceSummary(contractUuid);
   const { submitSaveProperty, isSaving } = useSaveProperty();
   const { saveDraft, isSaving: isSavingDraft } = useSaveContractDraft();
+  const { startPayment, isPaying } = useStartContractPayment();
   const [isPropertyDialogOpen, setIsPropertyDialogOpen] = useState(false);
   const [saveLaterDialogOpen, setSaveLaterDialogOpen] = useState(false);
   const [reviewOrderDialogOpen, setReviewOrderDialogOpen] = useState(false);
   const [legalDocument, setLegalDocument] = useState<LegalDocumentKind | null>(
     null,
-  );
-
-  const paymentFlow = useContractPaymentMethodFlow(
-    contractSession?.contractId,
-    contractSession?.uuid,
-    {
-      methodDialog: labels.methodDialog,
-      draftSuccessDialog: labels.draftSuccessDialog,
-      discountCode: labels.discountCode,
-      payError: labels.navigation.payError,
-    },
   );
 
   const financeData = financeSummaryQuery.data;
@@ -114,29 +101,12 @@ export default function CreateContractPaymentStep({
     : financeData
       ? getContractFinancialPayable(financeData)
       : null;
-  const hasDiscount =
-    Boolean(appliedCoupon) &&
-    typeof appliedCoupon?.discount === "number" &&
-    appliedCoupon.discount > 0;
-  const discountAmount = appliedCoupon?.discount ?? 0;
-  const discountPercent =
-    appliedCoupon && appliedCoupon.totalPriceBeforeCoupon > 0
-      ? Math.round(
-          (appliedCoupon.discount / appliedCoupon.totalPriceBeforeCoupon) * 100,
-        )
-      : 0;
-
-  const selectedMethod = paymentFlow.selectedPaymentMethod;
   const payLabel =
-    selectedMethod === "draft"
-      ? labels.navigation.sendDraft
-      : selectedMethod === "pay-now"
-        ? payableTotal !== null
-          ? withTemplate(labels.navigation.payWithAmount, {
-              amount: formatContractMoneyAmount(payableTotal),
-            })
-          : labels.navigation.pay
-        : labels.navigation.pay;
+    payableTotal !== null
+      ? withTemplate(labels.navigation.payWithAmount, {
+          amount: formatContractMoneyAmount(payableTotal),
+        })
+      : labels.navigation.pay;
 
   function handleSwitchChange(checked: boolean) {
     if (checked) {
@@ -175,7 +145,7 @@ export default function CreateContractPaymentStep({
   }
 
   async function handleConfirmSaveLater() {
-    if (isSavingDraft || paymentFlow.isSubmitting) {
+    if (isSavingDraft || isPaying) {
       return;
     }
 
@@ -210,35 +180,6 @@ export default function CreateContractPaymentStep({
             labels={labels.summary}
             appliedCoupon={appliedCoupon}
           />
-
-          {selectedMethod ? (
-            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#cfe8dd] bg-[#f5fbf8] px-4 py-3 dark:border-[#2f403b] dark:bg-[#16352f]">
-              <div className="min-w-0 space-y-0.5">
-                <p className="text-sm font-extrabold text-brand dark:text-[#7dccc0]">
-                  {selectedMethod === "draft"
-                    ? labels.methodDialog.selected.draft.title
-                    : labels.methodDialog.selected.payNow.title}
-                </p>
-                <p className="text-xs leading-relaxed text-[#4f6b62] dark:text-[#9eb5af]">
-                  {selectedMethod === "draft"
-                    ? labels.methodDialog.selected.draft.description
-                    : hasDiscount
-                      ? withTemplate(labels.methodDialog.selected.payNow.savings, {
-                          percent: discountPercent,
-                          amount: formatContractMoneyAmount(discountAmount),
-                        })
-                      : labels.methodDialog.selected.payNow.description}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={paymentFlow.openMethodDialog}
-                className="shrink-0 text-xs font-bold text-brand underline underline-offset-2 transition-opacity hover:opacity-70 dark:text-[#7dccc0]"
-              >
-                {labels.methodDialog.changeMethod}
-              </button>
-            </div>
-          ) : null}
 
           <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4 dark:border-[#2f403b] dark:bg-[#121a18]">
             <label className="flex w-full cursor-pointer items-center justify-between gap-3">
@@ -303,10 +244,12 @@ export default function CreateContractPaymentStep({
             payLabel={payLabel}
             payingLabel={labels.navigation.paying}
             saveLabel={labels.navigation.save}
-            isPaying={paymentFlow.isSubmitting}
+            isPaying={isPaying}
             isSaving={isSavingDraft}
             onPrevious={onBack}
-            onPay={() => void paymentFlow.handlePrimaryAction()}
+            onPay={() =>
+              void startPayment(contractUuid ?? "", labels.navigation.payError)
+            }
             onSave={() => setSaveLaterDialogOpen(true)}
           />
         </div>
@@ -331,46 +274,11 @@ export default function CreateContractPaymentStep({
         onSave={handleSaveProperty}
       />
 
-      <ContractPaymentMethodFlowDialogs
-        labels={{
-          methodDialog: labels.methodDialog,
-          draftSuccessDialog: labels.draftSuccessDialog,
-          discountCode: labels.discountCode,
-          payError: labels.navigation.payError,
-        }}
-        isMethodDialogOpen={paymentFlow.isMethodDialogOpen}
-        onMethodDialogOpenChange={paymentFlow.setIsMethodDialogOpen}
-        isDraftSuccessDialogOpen={paymentFlow.isDraftSuccessDialogOpen}
-        onDraftSuccessDialogOpenChange={paymentFlow.setIsDraftSuccessDialogOpen}
-        draftOrderUuid={paymentFlow.draftOrderUuid}
-        isSubmitting={paymentFlow.isSubmitting}
-        hasDiscount={hasDiscount}
-        totalPrice={
-          appliedCoupon?.totalPriceBeforeCoupon ??
-          financeSummaryQuery.data?.total_price ??
-          0
-        }
-        discountedPrice={
-          hasDiscount ? appliedCoupon?.totalPriceAfterCoupon ?? null : null
-        }
-        selectedMethod={paymentFlow.selectedPaymentMethod}
-        onSelect={paymentFlow.selectPaymentMethod}
-        payNowExtra={
-          <CreateContractDiscountCodeField
-            labels={labels.discountCode}
-            appliedCoupon={appliedCoupon}
-            isApplying={isApplying}
-            onApply={applyCoupon}
-            onClear={clearCouponDraft}
-          />
-        }
-      />
-
       <CreateContractSaveLaterDialog
         labels={saveLaterDialogLabels}
         open={saveLaterDialogOpen}
         onOpenChange={setSaveLaterDialogOpen}
-        orderNumber={contractId}
+        orderNumber={contractUuid}
         isSaving={isSavingDraft}
         onConfirm={() => void handleConfirmSaveLater()}
       />

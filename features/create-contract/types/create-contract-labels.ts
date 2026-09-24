@@ -199,7 +199,7 @@ export type CreateContractLabels = {
       trusteesPoaHint: string;
     };
     manualEntry: ManualDeedEntryLabels;
-    /** Deceased-owner legal agent collected with address in step 2. */
+    /** Deceased-owner legal agent collected on the owner step (labeled الوكيل). */
     legalAgent: {
       title: string;
       subtitle: string;
@@ -785,7 +785,6 @@ export type CreateContractLabels = {
       previous: string;
       pay: string;
       payWithAmount: string;
-      sendDraft: string;
       paying: string;
       payError: string;
       save: string;
@@ -855,58 +854,6 @@ export type CreateContractLabels = {
       privacyLink: string;
       termsHref: string;
       privacyHref: string;
-    };
-    methodDialog: {
-      title: string;
-      subtitle: string;
-      submitting: string;
-      draft: {
-        title: string;
-        description: string;
-        steps: string[];
-        note: string;
-      };
-      payNow: {
-        title: string;
-        description: string;
-        badge: string;
-        discountBadge: string;
-        steps: string[];
-        note: string;
-      };
-      selected: {
-        draft: {
-          title: string;
-          description: string;
-        };
-        payNow: {
-          title: string;
-          description: string;
-          savings: string;
-        };
-      };
-      footerNote: string;
-      footerNoteTitle: string;
-      afterDiscount: string;
-      total: string;
-      currency: string;
-      close: string;
-      missingContractSession: string;
-      draftError: string;
-      changeMethod: string;
-      confirmPayNow: string;
-    };
-    draftSuccessDialog: {
-      title: string;
-      paymentStatusLabel: string;
-      paymentStatusDescription: string;
-      orderNumberLabel: string;
-      copy: string;
-      copySuccess: string;
-      copyError: string;
-      preparationDescription: string;
-      whatsappCta: string;
-      whatsappHref: string;
     };
   };
   prices: {

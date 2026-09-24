@@ -1,4 +1,3 @@
-import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { RequestIncompleteProgressDialogLabels } from "@/features/requests/components/request-incomplete-progress-dialog";
 import type { RequestReceiveContractDialogLabels } from "@/features/requests/components/request-receive-contract-dialog";
 import type { RequestDetailsDialogLabels } from "@/features/requests/utils/map-contract-to-request-details";
@@ -34,7 +33,9 @@ export type RequestCardLabels = {
   completePayment: string;
   completePaymentWithAmount: string;
   completePaymentLoading: string;
-  paymentFlow: ContractPaymentMethodLabels;
+  paymentFlow: {
+    payError: string;
+  };
   whenReceiveContract: string;
   downloadInvoice: string;
   whatsappLabel: string;

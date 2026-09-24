@@ -6,7 +6,6 @@ import { useState } from "react";
 import RequestReceiveContractDialog, {
   type RequestReceiveContractDialogLabels,
 } from "@/features/requests/components/request-receive-contract-dialog";
-import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import type { RequestActionType } from "@/features/requests/types/request";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +17,9 @@ type RequestReceiveContractButtonProps = {
   completePaymentLabel: string;
   completePaymentWithAmountLabel: string;
   completePaymentLoadingLabel: string;
-  paymentFlowLabels: ContractPaymentMethodLabels;
+  paymentFlowLabels: {
+    payError: string;
+  };
   dialogLabels: RequestReceiveContractDialogLabels;
   className?: string;
 };

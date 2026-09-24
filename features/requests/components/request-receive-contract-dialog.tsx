@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import RequestCompletePaymentButton from "@/features/requests/components/request-complete-payment-button";
-import type { ContractPaymentMethodLabels } from "@/features/create-contract/hooks/use-contract-payment-method-flow";
 import { useContractJourney } from "@/features/requests/hooks/use-contract-journey";
 import type { ContractJourneyStepState } from "@/features/requests/types/contract-journey";
 import type { RequestActionType } from "@/features/requests/types/request";
@@ -41,7 +40,9 @@ type RequestReceiveContractDialogProps = {
   completePaymentLabel: string;
   completePaymentWithAmountLabel: string;
   completePaymentLoadingLabel: string;
-  paymentFlowLabels: ContractPaymentMethodLabels;
+  paymentFlowLabels: {
+    payError: string;
+  };
   labels: RequestReceiveContractDialogLabels;
 };
 
