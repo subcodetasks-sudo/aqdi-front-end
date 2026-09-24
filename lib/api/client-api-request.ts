@@ -10,26 +10,11 @@ import {
   getClientRefreshToken,
   setClientAuthTokens,
 } from "@/lib/api/client-token-storage";
-import { requestClientTokenRefresh } from "@/lib/api/client-refresh-token";
+import { requestTokenRefresh } from "@/lib/api/refresh-token";
+import { isRefreshExcluded } from "@/lib/api/refresh-excluded-endpoints";
 import { getErrorMessage } from "@/lib/api/get-error-message";
 import { isWebsiteClosedResponse } from "@/lib/api/is-website-closed-response";
 import type { ApiResponse } from "@/lib/api/types";
-
-// Public/self-referential endpoints must never trigger the 401 refresh flow —
-// retrying them on 401 would either loop (refresh-token) or misreport an
-// auth failure that isn't one (login/signup/forgot-password).
-const REFRESH_EXCLUDED_ENDPOINTS = [
-  "/auth/login",
-  "/auth/signup",
-  "/auth/refresh-token",
-  "/auth/forgot-password",
-];
-
-function isRefreshExcluded(endpoint: string): boolean {
-  return REFRESH_EXCLUDED_ENDPOINTS.some((excluded) =>
-    endpoint.startsWith(excluded),
-  );
-}
 
 // Module-level so concurrent 401s across callers share one refresh instead of
 // each rotating (and invalidating) the refresh token out from under the others.
@@ -45,7 +30,7 @@ function refreshAccessToken(): Promise<string | null> {
         return null;
       }
 
-      const tokens = await requestClientTokenRefresh(refreshToken);
+      const tokens = await requestTokenRefresh(refreshToken);
 
       if (!tokens) {
         clearClientAuthTokens();

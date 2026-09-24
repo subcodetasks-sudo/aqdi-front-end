@@ -5,27 +5,36 @@ import {
   isGuestOnlyRoute,
   isProtectedRoute,
 } from "@/lib/auth/auth-routes";
-import { AUTH_TOKEN_COOKIE } from "@/lib/api/constants";
+import { syncAuthCookies } from "@/lib/auth/sync-auth-cookies";
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get(AUTH_TOKEN_COOKIE)?.value;
+export async function middleware(request: NextRequest) {
+  const { accessToken, apply } = await syncAuthCookies(request);
   const { pathname } = request.nextUrl;
 
-  if (!token && isProtectedRoute(pathname)) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/login";
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
-  }
+  let response: NextResponse;
 
-  if (token && isGuestOnlyRoute(pathname)) {
+  if (!accessToken && isProtectedRoute(pathname)) {
+    const loginUrl = request.nextUrl.clone();
+    const callbackUrl = `${pathname}${request.nextUrl.search}`;
+    loginUrl.pathname = "/login";
+    loginUrl.search = "";
+    loginUrl.searchParams.set("callbackUrl", callbackUrl);
+    response = NextResponse.redirect(loginUrl);
+  } else if (accessToken && isGuestOnlyRoute(pathname)) {
     const homeUrl = request.nextUrl.clone();
     homeUrl.pathname = "/";
     homeUrl.search = "";
-    return NextResponse.redirect(homeUrl);
+    response = NextResponse.redirect(homeUrl);
+  } else {
+    response = NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
   }
 
-  return NextResponse.next();
+  apply(response);
+  return response;
 }
 
 export const config = {

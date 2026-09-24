@@ -1,6 +1,6 @@
 "use server";
 
-import { clearAuthToken } from "@/actions/auth";
+import { clearAuthToken, getRefreshToken } from "@/actions/auth";
 import { apiRequest } from "@/lib/api/api-request";
 
 type LogoutApiResponse = {
@@ -17,8 +17,10 @@ type LogoutUserPayload = {
 export async function logoutUser(payload: LogoutUserPayload = {}) {
   const body: Record<string, string> = {};
 
-  if (payload.refreshToken) {
-    body.refresh_token = payload.refreshToken;
+  const refreshToken = (await getRefreshToken()) ?? payload.refreshToken;
+
+  if (refreshToken) {
+    body.refresh_token = refreshToken;
   }
 
   if (payload.fcmToken) {

@@ -5,14 +5,31 @@ import "server-only";
 
 import { cookies } from "next/headers";
 
+import type { AuthTokenPayload } from "@/features/auth/types/auth-user";
 import {
+  AUTH_REFRESH_TOKEN_COOKIE,
+  AUTH_REMEMBER_ME_COOKIE,
   AUTH_TOKEN_COOKIE,
-  AUTH_TOKEN_MAX_AGE,
 } from "@/lib/api/constants";
+import {
+  applyAuthCookies,
+  clearAuthCookies,
+  getAuthCookieOptions,
+} from "@/lib/auth/auth-cookies";
 
 export async function getToken(): Promise<string | null> {
   const cookieStore = await cookies();
   return cookieStore.get(AUTH_TOKEN_COOKIE)?.value ?? null;
+}
+
+export async function getRefreshToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get(AUTH_REFRESH_TOKEN_COOKIE)?.value ?? null;
+}
+
+export async function getRememberMe(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return cookieStore.get(AUTH_REMEMBER_ME_COOKIE)?.value === "1";
 }
 
 export async function setAuthToken(
@@ -21,18 +38,20 @@ export async function setAuthToken(
 ): Promise<void> {
   const cookieStore = await cookies();
 
-  cookieStore.set(AUTH_TOKEN_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    ...(rememberMe ? { maxAge: AUTH_TOKEN_MAX_AGE } : {}),
-  });
+  cookieStore.set(AUTH_TOKEN_COOKIE, token, getAuthCookieOptions(rememberMe));
+}
+
+export async function setAuthTokens(
+  tokens: AuthTokenPayload,
+  rememberMe = false,
+): Promise<void> {
+  const cookieStore = await cookies();
+  applyAuthCookies(cookieStore, tokens, rememberMe);
 }
 
 export async function clearAuthToken(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete(AUTH_TOKEN_COOKIE);
+  clearAuthCookies(cookieStore);
 }
 
 export async function isAuthenticated(): Promise<boolean> {

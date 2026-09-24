@@ -1,4 +1,7 @@
 export const AUTH_TOKEN_COOKIE = "access_token";
+export const AUTH_REFRESH_TOKEN_COOKIE = "refresh_token";
+export const AUTH_TOKEN_EXPIRES_AT_COOKIE = "token_expires_at";
+export const AUTH_REMEMBER_ME_COOKIE = "auth_remember";
 
 export const AUTH_TOKEN_MAX_AGE = 60 * 60 * 24 * 30;
 

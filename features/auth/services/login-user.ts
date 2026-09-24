@@ -1,6 +1,6 @@
 "use server";
 
-import { setAuthToken } from "@/actions/auth";
+import { setAuthTokens } from "@/actions/auth";
 import { apiRequest } from "@/lib/api/api-request";
 import type { LoginApiResponse } from "@/features/auth/types/auth-user";
 import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phone";
@@ -33,7 +33,7 @@ export async function loginUser(payload: LoginUserPayload) {
   const { user, login_notification: loginNotification, ...tokens } =
     response.data.data;
 
-  await setAuthToken(tokens.token, payload.rememberMe);
+  await setAuthTokens(tokens, payload.rememberMe);
 
   return {
     ok: true,
