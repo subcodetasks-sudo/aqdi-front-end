@@ -666,9 +666,6 @@
       "phonePlaceholder": "5xxxxxxxx",
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "example@email.com",
-      "passwordLabel": "كلمة المرور",
-      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
-      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
       "submit": "إنشئ حسابك الآن",
       "submitSuccess": "تم إنشاء الحساب بنجاح",
       "submitError": "تعذر إنشاء الحساب، يرجى المحاولة مرة أخرى",
@@ -690,8 +687,6 @@
         "phoneInvalid": "يرجى إدخال رقم جوال سعودي صحيح",
         "emailRequired": "البريد الإلكتروني مطلوب",
         "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
-        "passwordRequired": "كلمة المرور مطلوبة",
-        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
         "termsRequired": "يجب الموافقة على الشروط والأحكام"
       }
     },

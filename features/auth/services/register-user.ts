@@ -6,7 +6,6 @@ import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phon
 type RegisterUserPayload = {
   fullName: string;
   phone: string;
-  password: string;
 };
 
 type RegisterUserApiData = {
@@ -44,7 +43,6 @@ export async function registerUser(payload: RegisterUserPayload) {
     body: JSON.stringify({
       fname: firstName,
       mobile: getSaudiMobileForApi(payload.phone),
-      password: payload.password,
     }),
     cache: "no-store",
   });

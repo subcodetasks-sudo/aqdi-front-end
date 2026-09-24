@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import RegisterNameField from "@/features/auth/components/register-name-field";
-import RegisterPasswordField from "@/features/auth/components/register-password-field";
 import RegisterPhoneField from "@/features/auth/components/register-phone-field";
 import RegisterTermsField from "@/features/auth/components/register-terms-field";
 import { registerUser } from "@/features/auth/services/register-user";
@@ -28,8 +27,6 @@ export default function RegisterForm() {
     fullNameMin: t("validation.fullNameMin"),
     phoneRequired: t("validation.phoneRequired"),
     phoneInvalid: t("validation.phoneInvalid"),
-    passwordRequired: t("validation.passwordRequired"),
-    passwordMin: t("validation.passwordMin"),
     termsRequired: t("validation.termsRequired"),
   });
 
@@ -38,7 +35,6 @@ export default function RegisterForm() {
     defaultValues: {
       fullName: "",
       phone: "",
-      password: "",
       acceptTerms: false,
     },
   });
@@ -72,13 +68,6 @@ export default function RegisterForm() {
         control={form.control}
         label={t("phoneLabel")}
         placeholder={t("phonePlaceholder")}
-      />
-
-      <RegisterPasswordField
-        control={form.control}
-        label={t("passwordLabel")}
-        placeholder={t("passwordPlaceholder")}
-        toggleVisibilityLabel={t("togglePasswordVisibility")}
       />
 
       <RegisterTermsField

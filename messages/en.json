@@ -646,9 +646,6 @@
       "phonePlaceholder": "5xxxxxxxx",
       "emailLabel": "Email address",
       "emailPlaceholder": "example@email.com",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter your password here ...",
-      "togglePasswordVisibility": "Show or hide password",
       "submit": "Create your account now",
       "submitSuccess": "Account created successfully",
       "submitError": "Unable to create your account, please try again",
@@ -670,8 +667,6 @@
         "phoneInvalid": "Please enter a valid Saudi mobile number",
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email address",
-        "passwordRequired": "Password is required",
-        "passwordMin": "Password must be at least 8 characters",
         "termsRequired": "You must accept the terms and conditions"
       }
     },
