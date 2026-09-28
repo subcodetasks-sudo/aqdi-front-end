@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import WebsiteClosedScreen from "@/features/website-status/components/website-closed-screen";
 import { getWebsiteStatus } from "@/features/website-status/services/get-website-status";
 import { getWebsiteClosedView } from "@/features/website-status/utils/get-website-closed-view";
+import FirstVisitAppDialog from "@/features/shared/components/first-visit-app-dialog";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
@@ -85,6 +86,7 @@ export default async function RootLayout({
             <DirectionProvider dir={direction} direction={direction}>
               <NextIntlClientProvider locale={locale} messages={messages}>
                 {children}
+                <FirstVisitAppDialog />
                 <Toaster position="top-center" />
               </NextIntlClientProvider>
             </DirectionProvider>

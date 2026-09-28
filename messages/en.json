@@ -6,6 +6,15 @@
     "aboutTitle": "About us",
     "aboutDescription": "Learn about Aqadi, our vision, mission, and values for documenting electronic rental contracts."
   },
+  "firstVisitAppDialog": {
+    "title": "Document your contracts from your smartphone",
+    "description": "Download the Aqdi app and complete all your rental transactions from anywhere, anytime, with ease and security.",
+    "downloadNow": "Download the app now",
+    "googlePlay": "Download the app from Google Play",
+    "appStore": "Download the app from the App Store",
+    "imageAlt": "Aqdi app for electronic rental contract documentation",
+    "close": "Close"
+  },
   "navbar": {
     "topBar": {
       "aboutUs": "About us",
