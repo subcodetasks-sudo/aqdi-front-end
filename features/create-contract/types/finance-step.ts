@@ -21,7 +21,7 @@ export const MAX_OTHER_CONDITIONS = 50;
 
 export function createEmptyFinanceData(): FinanceDataState {
   return {
-    contractStartDate: getTodayContractStartDate("hijri"),
+    contractStartDate: getTodayContractStartDate("gregorian"),
     contractPeriodId: "",
     isCustomDuration: false,
     customDurationYears: "",
@@ -48,7 +48,7 @@ const LEGACY_PAYMENT_METHOD_TO_TYPE_ID: Record<string, number> = {
 function resolveContractStartDate(
   contractStartDate: BirthDateValue | undefined,
 ): BirthDateValue {
-  const calendarType = contractStartDate?.calendarType ?? "hijri";
+  const calendarType = contractStartDate?.calendarType ?? "gregorian";
 
   if (
     !contractStartDate ||

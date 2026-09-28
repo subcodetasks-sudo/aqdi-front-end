@@ -6,7 +6,9 @@ import type {
   CalendarType,
 } from "@/features/create-contract/types/owner-step";
 import {
+  convertCalendarDateParts,
   convertCalendarDateValue,
+  padCalendarDatePart,
   type CalendarDateValue,
 } from "@/lib/validation/convert-calendar-date";
 import { cn } from "@/lib/utils";
@@ -79,8 +81,24 @@ export default function CreateContractContractStartDateFields({
   const month = value.month.replace(/\D/g, "");
   const year = value.year.replace(/\D/g, "");
   const hasCompleteDate = Boolean(day && month && year);
-  const selectedDateLabel = hasCompleteDate
-    ? `${Number(day)}/${Number(month)}/${year}`
+  const correspondingCalendarType: CalendarType =
+    value.calendarType === "hijri" ? "gregorian" : "hijri";
+  const correspondingDateLabel = hasCompleteDate
+    ? (() => {
+        const converted = convertCalendarDateParts(
+          { day: Number(day), month: Number(month), year: Number(year) },
+          value.calendarType,
+          correspondingCalendarType,
+        );
+
+        if (!converted) {
+          return null;
+        }
+
+        return `${padCalendarDatePart(converted.day)}/${padCalendarDatePart(
+          converted.month,
+        )}/${converted.year}`;
+      })()
     : null;
 
   function updateField<K extends keyof BirthDateValue>(
@@ -164,13 +182,16 @@ export default function CreateContractContractStartDateFields({
         />
       </div>
 
-      {selectedDateLabel ? (
+      {correspondingDateLabel ? (
         <p className="text-xs text-[#9a9a9a]">
-          {value.calendarType === "hijri"
-            ? labels.correspondingHijri.replace("{date}", selectedDateLabel)
+          {correspondingCalendarType === "hijri"
+            ? labels.correspondingHijri.replace(
+                "{date}",
+                correspondingDateLabel,
+              )
             : labels.correspondingGregorian.replace(
                 "{date}",
-                selectedDateLabel,
+                correspondingDateLabel,
               )}
         </p>
       ) : null}

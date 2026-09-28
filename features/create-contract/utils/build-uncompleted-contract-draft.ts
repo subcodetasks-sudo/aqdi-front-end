@@ -149,7 +149,7 @@ export function buildAgentDataFromStep3(
   step3: UncompletedContractStep3,
 ): AgentDataState {
   const calendarType: CalendarType =
-    step3.type_dob_property_owner_agent ?? "gregorian";
+    step3.type_dob_property_owner_agent ?? "hijri";
 
   return {
     ...EMPTY_AGENT_DATA,

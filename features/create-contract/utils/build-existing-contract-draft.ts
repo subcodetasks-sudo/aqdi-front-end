@@ -134,7 +134,7 @@ export function buildContractAgentData(
   property: PropertyWithUnitsApiData,
 ): AgentDataState {
   const calendarType: CalendarType =
-    property.type_dob_property_owner_agent ?? "gregorian";
+    property.type_dob_property_owner_agent ?? "hijri";
 
   return {
     ...EMPTY_AGENT_DATA,
