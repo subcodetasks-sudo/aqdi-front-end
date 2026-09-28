@@ -44,8 +44,11 @@ export default function VerifyOtpForm({
   const t = useTranslations("auth.verifyOtp");
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
-  const { formatted, isExpired, reset } = useOtpTimer(59);
   const otpFlow = flow as VerifyOtpFlow | undefined;
+  const { formatted, isExpired, isReady, reset } = useOtpTimer(
+    300,
+    phone ? `otp-timer:${otpFlow ?? "verify"}:${phone}` : undefined,
+  );
 
   const schema = createVerifyOtpSchema({
     otpRequired: t("validation.otpRequired"),
@@ -189,7 +192,7 @@ export default function VerifyOtpForm({
 
       <div className="flex flex-col items-center gap-3">
         <span className="inline-flex min-w-16 items-center justify-center rounded-full bg-black px-3 py-1 text-sm font-medium text-white">
-          {formatted}
+          {isReady ? formatted : ""}
         </span>
 
         <AuthOrDivider label={t("notReceived")} />
