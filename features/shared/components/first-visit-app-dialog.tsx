@@ -22,11 +22,10 @@ export default function FirstVisitAppDialog() {
   const t = useTranslations("firstVisitAppDialog");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isCreateContractRoute =
-    pathname === "/create-contract" || pathname.startsWith("/create-contract/");
+  const isHomeRoute = pathname === "/";
 
   useEffect(() => {
-    if (isCreateContractRoute) {
+    if (!isHomeRoute) {
       window.setTimeout(() => setOpen(false), 0);
       return;
     }
@@ -47,7 +46,7 @@ export default function FirstVisitAppDialog() {
     } catch {
       window.setTimeout(() => setOpen(true), 0);
     }
-  }, [isCreateContractRoute]);
+  }, [isHomeRoute]);
 
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
@@ -66,7 +65,7 @@ export default function FirstVisitAppDialog() {
 
   return (
     <Dialog
-      open={open && !isCreateContractRoute}
+      open={open && isHomeRoute}
       onOpenChange={handleOpenChange}
     >
       <DialogContent
