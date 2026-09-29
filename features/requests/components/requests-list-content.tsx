@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 
 import RequestsFiltersDialog, {
   type RequestTypeFilter,
+  type RequestTypeFilterOption,
   type RequestsFiltersValue,
 } from "@/features/requests/components/requests-filters-dialog";
 import RequestsGrid from "@/features/requests/components/requests-grid";
@@ -56,11 +57,35 @@ function matchesRequestType(
     return item.isIncompleteDraft;
   }
 
-  if (requestType === "draft-contract") {
-    return !item.paymentSuccessful && item.step === 7;
-  }
+  return item.status === requestType;
+}
 
-  return true;
+function getUnknownStatusOptions(items: RequestCardData[]): RequestTypeFilterOption[] {
+  const knownStatuses: RequestCardData["status"][] = ["completed", "incomplete"];
+
+  const seen = new Map<string, string>();
+
+  items.flatMap((item) => {
+    if (knownStatuses.includes(item.status)) {
+      return [];
+    }
+
+    const statusText = [item.statusName, item.journeyStatusLabel, item.statusCode]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if (statusText.includes("ملغي") || statusText.includes("cancel")) {
+      return [];
+    }
+
+    const label = item.statusName ?? item.journeyStatusLabel ?? item.status;
+    seen.set(item.status, label);
+
+    return [];
+  });
+
+  return Array.from(seen, ([value, label]) => ({ value, label }));
 }
 
 export default function RequestsListContent({
@@ -74,6 +99,11 @@ export default function RequestsListContent({
     contractType: "all",
     requestType: "all",
   });
+
+  const extraRequestTypeOptions = useMemo(
+    () => getUnknownStatusOptions(items),
+    [items],
+  );
 
   const filteredItems = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -137,6 +167,7 @@ export default function RequestsListContent({
         onOpenChange={setFiltersOpen}
         value={filters}
         onApply={setFilters}
+        extraRequestTypeOptions={extraRequestTypeOptions}
         labels={{
           title: labels.filtersDialog.title,
           close: labels.filtersDialog.close,
@@ -145,9 +176,7 @@ export default function RequestsListContent({
           all: labels.filtersDialog.all,
           residential: labels.tabs.residential,
           commercial: labels.tabs.commercial,
-          allTypes: labels.filtersDialog.allTypes,
           completed: labels.filtersDialog.completed,
-          draftContract: labels.filtersDialog.draftContract,
           incomplete: labels.filtersDialog.incomplete,
           cancelled: labels.filtersDialog.cancelled,
           showResults: labels.filtersDialog.showResults,

@@ -836,9 +836,7 @@
       "contractTypeLabel": "نوع العقد",
       "requestTypeLabel": "نوع الطلب",
       "all": "الكل",
-      "allTypes": "كل الأنواع",
       "completed": "طلب مكتمل",
-      "draftContract": "طلب مسودة عقد",
       "incomplete": "مسودة (غير مكتمل)",
       "cancelled": "ملغي",
       "showResults": "عرض النتائج"

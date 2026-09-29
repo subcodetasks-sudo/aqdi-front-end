@@ -71,9 +71,7 @@ export type RequestLabels = {
     contractTypeLabel: string;
     requestTypeLabel: string;
     all: string;
-    allTypes: string;
     completed: string;
-    draftContract: string;
     incomplete: string;
     cancelled: string;
     showResults: string;

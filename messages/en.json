@@ -836,9 +836,7 @@
       "contractTypeLabel": "Contract type",
       "requestTypeLabel": "Request type",
       "all": "All",
-      "allTypes": "All types",
       "completed": "Completed request",
-      "draftContract": "Contract draft request",
       "incomplete": "Draft (incomplete)",
       "cancelled": "Cancelled",
       "showResults": "Show results"

@@ -12,16 +12,16 @@ import {
 import type { RequestUnitTab } from "@/features/requests/types/request";
 import { cn } from "@/lib/utils";
 
-export type RequestTypeFilter =
-  | "all"
-  | "completed"
-  | "draft-contract"
-  | "incomplete"
-  | "cancelled";
+export type RequestTypeFilter = "all" | "completed" | "incomplete" | "cancelled" | string;
 
 export type RequestsFiltersValue = {
   contractType: RequestUnitTab;
   requestType: RequestTypeFilter;
+};
+
+export type RequestTypeFilterOption = {
+  value: RequestTypeFilter;
+  label: string;
 };
 
 export type RequestsFiltersDialogLabels = {
@@ -32,9 +32,7 @@ export type RequestsFiltersDialogLabels = {
   all: string;
   residential: string;
   commercial: string;
-  allTypes: string;
   completed: string;
-  draftContract: string;
   incomplete: string;
   cancelled: string;
   showResults: string;
@@ -46,6 +44,7 @@ type RequestsFiltersDialogProps = {
   labels: RequestsFiltersDialogLabels;
   value: RequestsFiltersValue;
   onApply: (value: RequestsFiltersValue) => void;
+  extraRequestTypeOptions?: RequestTypeFilterOption[];
 };
 
 type FilterPillProps = {
@@ -77,6 +76,7 @@ export default function RequestsFiltersDialog({
   labels,
   value,
   onApply,
+  extraRequestTypeOptions = [],
 }: RequestsFiltersDialogProps) {
   const [draft, setDraft] = useState(value);
   const [syncedProps, setSyncedProps] = useState({ open, value });
@@ -145,20 +145,22 @@ export default function RequestsFiltersDialog({
             <div className="flex flex-wrap gap-2">
               {(
                 [
-                  ["all", labels.allTypes],
-                  ["completed", labels.completed],
-                  ["draft-contract", labels.draftContract],
-                  ["incomplete", labels.incomplete],
-                  ["cancelled", labels.cancelled],
-                ] as const
-              ).map(([type, label]) => (
-                <FilterPill
-                  key={type}
-                  label={label}
-                  selected={draft.requestType === type}
-                  onClick={() => setDraft({ ...draft, requestType: type })}
-                />
-              ))}
+                  { value: "completed", label: labels.completed },
+                  { value: "incomplete", label: labels.incomplete },
+                  { value: "cancelled", label: labels.cancelled },
+                ] as RequestTypeFilterOption[]
+              )
+                .concat(extraRequestTypeOptions)
+                .map((option) => (
+                  <FilterPill
+                    key={option.value}
+                    label={option.label}
+                    selected={draft.requestType === option.value}
+                    onClick={() =>
+                      setDraft({ ...draft, requestType: option.value })
+                    }
+                  />
+                ))}
             </div>
           </section>
         </div>
