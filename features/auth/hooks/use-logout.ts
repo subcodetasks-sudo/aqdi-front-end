@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { logoutUser } from "@/features/auth/services/logout-user";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
-import { useNotificationsInboxStore } from "@/features/notifications/stores/use-notifications-inbox-store";
+import { notificationsKeys } from "@/features/notifications/query-keys";
 import {
   clearClientAuthTokens,
   getClientRefreshToken,
@@ -14,9 +15,7 @@ import {
 export function useLogout() {
   const router = useRouter();
   const clearUser = useAuthStore((state) => state.clearUser);
-  const clearNotifications = useNotificationsInboxStore(
-    (state) => state.clearAll,
-  );
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   async function logout() {
@@ -57,7 +56,7 @@ export function useLogout() {
       await disconnectFcmToken();
       clearUser();
       clearClientAuthTokens();
-      clearNotifications();
+      queryClient.removeQueries({ queryKey: notificationsKeys.all });
       router.push("/login");
 
       return {

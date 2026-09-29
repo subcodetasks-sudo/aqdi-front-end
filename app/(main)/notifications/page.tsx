@@ -21,13 +21,24 @@ export default async function NotificationsPage() {
     subtitle: t("subtitle"),
     emptyTitle: t("emptyTitle"),
     emptyDescription: t("emptyDescription"),
-    clearAll: t("clearAll"),
+    loadError: t("loadError"),
+    markAllRead: t("markAllRead"),
+    markingAllRead: t("markingAllRead"),
     enableTitle: t("enableTitle"),
     enableDescription: t("enableDescription"),
     enableDenied: t("enableDenied"),
     enableUnsupported: t("enableUnsupported"),
     enableAction: t("enableAction"),
     enableLoading: t("enableLoading"),
+    tabs: {
+      all: t("tabs.all"),
+      payment: t("tabs.payment"),
+      general: t("tabs.general"),
+    },
+    pagination: {
+      previous: t("pagination.previous"),
+      next: t("pagination.next"),
+    },
   };
 
   return <NotificationsPageContent labels={labels} />;

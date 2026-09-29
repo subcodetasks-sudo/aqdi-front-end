@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import AppNotificationToaster from "@/features/notifications/components/app-notification-toaster";
-import { useNotificationsInboxStore } from "@/features/notifications/stores/use-notifications-inbox-store";
+import { notificationsKeys } from "@/features/notifications/query-keys";
 import { useContractsLiveStore } from "@/features/requests/stores/use-contracts-live-store";
 
 type ForegroundPayload = {
@@ -32,9 +33,7 @@ export function AppNotificationProvider() {
   const applyFirebasePatch = useContractsLiveStore(
     (state) => state.applyFirebasePatch,
   );
-  const addNotification = useNotificationsInboxStore(
-    (state) => state.addNotification,
-  );
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     let unsubscribe = () => {};
@@ -67,7 +66,7 @@ export function AppNotificationProvider() {
 
       unsubscribe = onForegroundMessage((payload) => {
         const message = parseForegroundMessage(payload);
-        addNotification(message);
+        void queryClient.invalidateQueries({ queryKey: notificationsKeys.all });
 
         const contractPatch = parseContractStatusFirebasePayload(payload);
 
@@ -90,7 +89,7 @@ export function AppNotificationProvider() {
       cancelled = true;
       unsubscribe();
     };
-  }, [addNotification, applyFirebasePatch]);
+  }, [applyFirebasePatch, queryClient]);
 
   return <AppNotificationToaster />;
 }

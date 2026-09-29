@@ -441,13 +441,24 @@
     "subtitle": "Contract status alerts and notifications for your account.",
     "emptyTitle": "No notifications yet",
     "emptyDescription": "When a new notification arrives, it will show up here.",
-    "clearAll": "Clear all",
+    "loadError": "Unable to load notifications. Please try again.",
+    "markAllRead": "Mark all as read",
+    "markingAllRead": "Marking...",
     "enableTitle": "Enable notifications",
     "enableDescription": "Enable browser notifications to get instant alerts when your contracts are updated.",
     "enableDenied": "Notification permission was denied. You can enable it from your browser site settings.",
     "enableUnsupported": "This browser does not support web notifications.",
     "enableAction": "Enable notifications",
-    "enableLoading": "Enabling..."
+    "enableLoading": "Enabling...",
+    "tabs": {
+      "all": "All",
+      "payment": "Payments",
+      "general": "General"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
   },
   "blog": {
     "latest": {

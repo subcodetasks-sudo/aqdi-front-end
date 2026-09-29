@@ -4,11 +4,7 @@ import { forwardRef } from "react";
 import Link from "next/link";
 
 import CustomIcon from "@/features/shared/components/custom-icon";
-import {
-  selectUnreadNotificationsCount,
-  useNotificationsInboxStore,
-} from "@/features/notifications/stores/use-notifications-inbox-store";
-import { usePersistStoreHydrated } from "@/features/shared/hooks/use-persist-store-hydrated";
+import { useNotificationsList } from "@/features/notifications/hooks/use-notifications-list";
 import { cn } from "@/lib/utils";
 
 type NotificationsNavButtonProps = {
@@ -24,11 +20,8 @@ const NotificationsNavButton = forwardRef<
   { label, showLabel = false, className },
   ref,
 ) {
-  const isHydrated = usePersistStoreHydrated(
-    useNotificationsInboxStore.persist,
-  );
-  const unreadCount = useNotificationsInboxStore(selectUnreadNotificationsCount);
-  const visibleUnreadCount = isHydrated ? unreadCount : 0;
+  const { data } = useNotificationsList();
+  const unreadCount = data?.unread_notifications ?? 0;
 
   return (
     <Link
@@ -49,9 +42,9 @@ const NotificationsNavButton = forwardRef<
         className="text-gray-600"
       />
       {showLabel ? <span className="leading-none">{label}</span> : null}
-      {visibleUnreadCount > 0 ? (
+      {unreadCount > 0 ? (
         <span className="absolute -top-1 -end-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
-          {visibleUnreadCount > 99 ? "99+" : visibleUnreadCount}
+          {unreadCount > 99 ? "99+" : unreadCount}
         </span>
       ) : null}
     </Link>
