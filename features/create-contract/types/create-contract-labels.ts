@@ -799,6 +799,7 @@ export type CreateContractLabels = {
       applicationFees: string;
       electricityMeterFee: string;
       waterMeterFee: string;
+      paperDeedFee: string;
       meterFeesTotal: string;
       services: string;
       servicesTotal: string;
@@ -820,6 +821,8 @@ export type CreateContractLabels = {
     savePropertyData: {
       label: string;
       description: string;
+      savedLabel: string;
+      savedName: string;
       dialog: {
         title: string;
         close: string;

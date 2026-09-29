@@ -1,6 +1,12 @@
 import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
 import { getFilledOtherConditions } from "@/features/create-contract/types/finance-step";
-import { buildStep6TenantPayload } from "@/features/create-contract/utils/tenant-role-helpers";
+import type { TenantRole } from "@/features/create-contract/types/tenant-role";
+import {
+  buildStep6TenantPayload,
+  isDailyFineRole,
+  isSecurityDepositRole,
+  readTenantRoleAmount,
+} from "@/features/create-contract/utils/tenant-role-helpers";
 import {
   formatPropertyOwnerDatePart,
   formatPropertyOwnerYear,
@@ -9,11 +15,13 @@ import {
 export type ContractStep6Payload = {
   contractId: number;
   financeData: FinanceDataState;
+  tenantRoles?: TenantRole[];
 };
 
 export function buildContractStep6Body({
   contractId,
   financeData,
+  tenantRoles = [],
 }: ContractStep6Payload) {
   const { contractStartDate } = financeData;
 
@@ -34,6 +42,7 @@ export function buildContractStep6Body({
   const tenantPayload = buildStep6TenantPayload(
     financeData.selectedTenantRoleIds,
     financeData.tenantRoleValues,
+    tenantRoles,
   );
   const otherConditionsList = getFilledOtherConditions(
     financeData.otherConditionsList,
@@ -79,6 +88,23 @@ export function buildContractStep6Body({
 
   if (hasOtherConditions) {
     body.other_conditions_list = otherConditionsList;
+    body.text_additional_terms = otherConditionsList.join("\n");
+  }
+
+  for (const roleId of financeData.selectedTenantRoleIds) {
+    const role = tenantRoles.find((item) => item.id === roleId);
+    const amount = readTenantRoleAmount(financeData.tenantRoleValues, roleId);
+    if (!role || amount == null) {
+      continue;
+    }
+
+    if (isDailyFineRole(role)) {
+      body.daily_fine = amount;
+    }
+
+    if (isSecurityDepositRole(role)) {
+      body.Guarantee_amount = amount;
+    }
   }
 
   return body;

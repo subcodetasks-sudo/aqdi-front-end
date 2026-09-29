@@ -22,6 +22,7 @@ import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf
 import {
   resetCreateContractDraft,
   resetCreateContractDraftIfScheduledOnUnmount,
+  shouldDiscardPersistedContractDraft,
 } from "@/features/create-contract/utils/reset-create-contract-draft";
 import CreateFlowDraftHydrator from "@/features/shared/components/create-flow-draft-hydrator";
 import { usePersistStoreHydrated } from "@/features/shared/hooks/use-persist-store-hydrated";
@@ -29,6 +30,7 @@ import { usePersistStoreHydrated } from "@/features/shared/hooks/use-persist-sto
 type CreateContractWizardProps = {
   labels: CreateContractLabels;
   contractType: ContractTypeId;
+  hasRequestedContractType: boolean;
   isDarkMode?: boolean;
   onToggleDarkMode?: () => void;
 };
@@ -36,10 +38,11 @@ type CreateContractWizardProps = {
 export default function CreateContractWizard({
   labels,
   contractType,
+  hasRequestedContractType,
   isDarkMode = false,
   onToggleDarkMode,
 }: CreateContractWizardProps) {
-  const { currentStep, goNext, goBack, goToStep, setCurrentStep } =
+  const { currentStep, goNext, goBack, setCurrentStep } =
     useCreateContractSteps();
   const { handleStart, isStarting } = useStartFreshContract(contractType);
   const isDraftHydrated = usePersistStoreHydrated(
@@ -47,6 +50,9 @@ export default function CreateContractWizard({
   );
   const hydrateFilesFromPersisted = useCreateContractDraftStore(
     (state) => state.hydrateFilesFromPersisted,
+  );
+  const sessionContractType = useCreateContractDraftStore(
+    (state) => state.contractSession?.contractType ?? null,
   );
   const selectedDeedType = useCreateContractDraftStore(
     (state) => state.deed.selectedDeedType,
@@ -64,10 +70,24 @@ export default function CreateContractWizard({
     contractType === "residential"
       ? labels.pageTitleResidential
       : labels.pageTitleCommercial;
+  const draftMatchesRequest = !shouldDiscardPersistedContractDraft({
+    hasRequestedContractType,
+    contractType,
+    currentStep,
+    sessionContractType,
+  });
 
   const setActiveStepSaveHandler = useCreateContractDraftStore(
     (state) => state.setActiveStepSaveHandler,
   );
+
+  useEffect(() => {
+    if (!isDraftHydrated || draftMatchesRequest) {
+      return;
+    }
+
+    resetCreateContractDraft();
+  }, [draftMatchesRequest, isDraftHydrated]);
 
   useEffect(() => {
     return () => {
@@ -84,15 +104,19 @@ export default function CreateContractWizard({
   // Payment has no step-save validation — clear any leftover handler from a
   // previous step and dismiss validation toasts that linger after continue.
   useEffect(() => {
-    if (currentStep !== "payment") {
+    if (!draftMatchesRequest || currentStep !== "payment") {
       return;
     }
 
     setActiveStepSaveHandler(null);
     toast.dismiss();
-  }, [currentStep, setActiveStepSaveHandler]);
+  }, [currentStep, draftMatchesRequest, setActiveStepSaveHandler]);
 
   useEffect(() => {
+    if (!isDraftHydrated || !draftMatchesRequest) {
+      return;
+    }
+
     // Hidden waqf-nazir must not trap navigation. Bounce to deed (not owner)
     // so عودة from المالك/الوكيل is not immediately undone.
     if (currentStep === "waqfNazir" && !waqfNazirVisible) {
@@ -109,6 +133,8 @@ export default function CreateContractWizard({
     }
   }, [
     currentStep,
+    draftMatchesRequest,
+    isDraftHydrated,
     ownerSkipped,
     waqfNazirVisible,
     skipOwnerToTenant,
@@ -124,11 +150,12 @@ export default function CreateContractWizard({
         labels={labels.header}
         isDarkMode={isDarkMode}
         onToggleDarkMode={onToggleDarkMode ?? (() => undefined)}
+        hideRequest={!isDraftHydrated || !draftMatchesRequest}
       />
 
       <div>
         <div className="overflow-hidden rounded-3xl bg-white shadow-sm dark:border dark:border-[#2f403b] dark:bg-[#1a2421]">
-          {isDraftHydrated ? (
+          {isDraftHydrated && draftMatchesRequest ? (
             <>
               <CreateContractStepper labels={labels.stepper} />
 
@@ -205,7 +232,7 @@ export default function CreateContractWizard({
                   }}
                   contractType={contractType}
                   onBack={goBack}
-                  onEditStep={goToStep}
+                  onEditStep={setCurrentStep}
                 />
               ) : null}
             </>

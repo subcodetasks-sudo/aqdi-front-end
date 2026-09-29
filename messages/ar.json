@@ -2645,6 +2645,7 @@
         "applicationFees": "رسوم التطبيق :",
         "electricityMeterFee": "رسوم عداد الكهرباء :",
         "waterMeterFee": "رسوم عداد المياه :",
+        "paperDeedFee": "رسوم الصك الورقي :",
         "meterFeesTotal": "إجمالي رسوم العدادات :",
         "services": "الخدمات الإضافية :",
         "servicesTotal": "إجمالي الخدمات :",
@@ -2666,6 +2667,8 @@
       "savePropertyData": {
         "label": "هل تود حفظ بيانات العقار؟",
         "description": "حتى تستطيع إنشاء العقود مستقبلاً بسرعة وسهولة",
+        "savedLabel": "تم حفظ بيانات العقار",
+        "savedName": "إسم العقار: '{'propertyName'}'",
         "dialog": {
           "title": "حفظ بيانات العقار",
           "close": "إغلاق",

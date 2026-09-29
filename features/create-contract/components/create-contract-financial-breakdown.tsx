@@ -2,7 +2,10 @@
 
 import type { ReactNode } from "react";
 
-import type { ContractFinancialData } from "@/features/create-contract/types/contract-financial";
+import type {
+  ContractFinancialData,
+  ContractFinancialLine,
+} from "@/features/create-contract/types/contract-financial";
 import { getContractFinancialPayable } from "@/features/create-contract/types/contract-financial";
 import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
@@ -21,6 +24,8 @@ type CreateContractFinancialBreakdownProps = {
   isLoading: boolean;
   appliedCoupon?: AppliedContractCoupon | null;
   sectionTitle?: string;
+  /** Paper ownership deed (صك ملكية ورقي) includes `paper_deed_fee`, even at 0. */
+  showPaperDeedFee?: boolean;
 };
 
 type SummaryRowProps = {
@@ -32,6 +37,57 @@ type SummaryRowProps = {
 
 function hasDisplayAmount(amount: number | null | undefined): amount is number {
   return typeof amount === "number" && Number.isFinite(amount) && amount > 0;
+}
+
+/** Fee rows the API omits from `details[]` when their amount is 0 — always shown here. */
+function getAlwaysVisibleFeeLines(
+  data: ContractFinancialData,
+  labels: FinancialSummaryLabels,
+  presentKeys: Set<string>,
+  showPaperDeedFee: boolean,
+): ContractFinancialLine[] {
+  const rows: Array<{ key: string; label: string; amount: number | null | undefined }> = [
+    {
+      key: "application_fees",
+      label: labels.applicationFees,
+      amount: data.application_fees ?? data.price_details?.application_fees,
+    },
+    {
+      key: "tax",
+      label: labels.vat,
+      amount: data.tax_amount ?? data.price_details?.tax,
+    },
+    {
+      key: "electricity_meter_fee",
+      label: labels.electricityMeterFee,
+      amount: data.electricity_meter_fee ?? data.price_details?.electricity_meter_fee,
+    },
+    {
+      key: "water_meter_fee",
+      label: labels.waterMeterFee,
+      amount: data.water_meter_fee ?? data.price_details?.water_meter_fee,
+    },
+  ];
+
+  if (showPaperDeedFee) {
+    rows.push({
+      key: "paper_deed_fee",
+      label: labels.paperDeedFee,
+      amount: data.paper_deed_fee ?? data.price_details?.paper_deed_fee,
+    });
+  }
+
+  return rows
+    .filter((row) => !presentKeys.has(row.key))
+    .map((row) => ({
+      key: row.key,
+      label: row.label,
+      amount:
+        typeof row.amount === "number" && Number.isFinite(row.amount)
+          ? row.amount
+          : 0,
+      percent: null,
+    }));
 }
 
 function SummaryRow({
@@ -123,6 +179,7 @@ export default function CreateContractFinancialBreakdown({
   isLoading,
   appliedCoupon = null,
   sectionTitle,
+  showPaperDeedFee = false,
 }: CreateContractFinancialBreakdownProps) {
   if (isLoading) {
     return (
@@ -140,7 +197,12 @@ export default function CreateContractFinancialBreakdown({
     return null;
   }
 
-  const lines = getContractFinancialDisplayLines(data);
+  const apiLines = getContractFinancialDisplayLines(data);
+  const presentKeys = new Set(apiLines.map((line) => line.key));
+  const lines = [
+    ...apiLines,
+    ...getAlwaysVisibleFeeLines(data, labels, presentKeys, showPaperDeedFee),
+  ];
   const currency = labels.currency;
   const apiCoupon = hasDisplayAmount(data.coupon) ? data.coupon : null;
   const couponDiscount = appliedCoupon

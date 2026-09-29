@@ -1,7 +1,14 @@
 "use client";
 
+import { useRef } from "react";
+
+import { useSubmitContractStep6 } from "@/features/create-contract/hooks/use-submit-contract-step6";
 import { CREATE_CONTRACT_STEPS } from "@/features/create-contract/types/create-contract-step";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
+import {
+  isFinanceDataComplete,
+  sanitizeFinanceDataForContinue,
+} from "@/features/create-contract/types/finance-step";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import {
   canNavigateToContractStep,
@@ -33,6 +40,8 @@ export function useCreateContractSteps() {
   const goNextStep = useCreateContractDraftStore((state) => state.goNextStep);
   const goBackStep = useCreateContractDraftStore((state) => state.goBackStep);
   const setCurrentStep = useCreateContractDraftStore((state) => state.setCurrentStep);
+  const { submitStep6 } = useSubmitContractStep6();
+  const isNavigatingRef = useRef(false);
 
   const progressState = {
     currentStep,
@@ -50,7 +59,11 @@ export function useCreateContractSteps() {
   const currentStepIndex = CREATE_CONTRACT_STEPS.indexOf(currentStep);
   const maxUnlockedStepIndex = getMaxUnlockedContractStepIndex(progressState);
 
-  function goToStep(step: CreateContractStep) {
+  async function goToStep(step: CreateContractStep) {
+    if (isNavigatingRef.current) {
+      return;
+    }
+
     if (
       existingPropertyContext &&
       (step === "deed" || step === "owner" || step === "waqfNazir")
@@ -62,7 +75,49 @@ export function useCreateContractSteps() {
       return;
     }
 
-    setCurrentStep(step);
+    const fromStep = useCreateContractDraftStore.getState().currentStep;
+    if (step === fromStep) {
+      return;
+    }
+
+    const targetIndex = CREATE_CONTRACT_STEPS.indexOf(step);
+    const fromIndex = CREATE_CONTRACT_STEPS.indexOf(fromStep);
+
+    if (targetIndex < fromIndex) {
+      setCurrentStep(step);
+      return;
+    }
+
+    isNavigatingRef.current = true;
+
+    try {
+      const save = useCreateContractDraftStore.getState().activeStepSaveHandler;
+      if (save) {
+        const saved = await save();
+        if (!saved) {
+          return;
+        }
+      }
+
+      // Leaving finance already posts step 6. Jumping to payment from an
+      // earlier step still has to send the latest fine, guarantee, and terms.
+      if (step === "payment" && fromStep !== "finance") {
+        const financeData = sanitizeFinanceDataForContinue(
+          useCreateContractDraftStore.getState().financeData,
+        );
+
+        if (isFinanceDataComplete(financeData)) {
+          const submitted = await submitStep6({ financeData });
+          if (!submitted) {
+            return;
+          }
+        }
+      }
+
+      setCurrentStep(step);
+    } finally {
+      isNavigatingRef.current = false;
+    }
   }
 
   function isStepUnlocked(step: CreateContractStep) {

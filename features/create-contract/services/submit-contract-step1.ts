@@ -28,6 +28,19 @@ export type SubmitContractStep1Payload = {
   manualDeedEntry?: ManualDeedEntryData;
 };
 
+function serializeFormData(formData: FormData) {
+  const body: Record<string, string | { name: string; size: number; type: string }> = {};
+
+  for (const [key, value] of formData.entries()) {
+    body[key] =
+      value instanceof File
+        ? { name: value.name, size: value.size, type: value.type }
+        : value;
+  }
+
+  return body;
+}
+
 export async function submitContractStep1(payload: SubmitContractStep1Payload) {
   const formData = new FormData();
   formData.append("id", String(payload.contractId));
@@ -89,12 +102,20 @@ export async function submitContractStep1(payload: SubmitContractStep1Payload) {
 
   if (payload.manualDeedEntry) {
     appendManualDeedEntryFields(formData, payload.manualDeedEntry);
+    formData.append(
+      "deed_number",
+      payload.manualDeedEntry.instrumentNumber.trim(),
+    );
   }
+
+  console.log("[contract/step1] request body", serializeFormData(formData));
 
   const response = await apiFormDataRequest<ContractStep1ApiResponse>(
     "/contract/step1",
     formData,
   );
+
+  console.log("[contract/step1] response", response);
 
   if (!response.ok || !response.data?.success || !response.data.data) {
     return {

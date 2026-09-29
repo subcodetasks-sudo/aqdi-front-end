@@ -14,8 +14,48 @@ const DEED_TYPE_TO_INSTRUMENT_TYPE = {
   "lease-renewal": "lease_renewal",
 } as const satisfies Record<DeedTypeId, ContractInstrumentType>;
 
+const ELECTRONIC_JUSTICE_INSTRUMENT_TYPES = new Set<string>([
+  "electronic",
+  "electronic_deed",
+  "electronic_deed_from_the_ministry_of_justice",
+]);
+
 export function mapDeedTypeToInstrumentType(
   deedType: DeedTypeId,
 ): ContractInstrumentType {
   return DEED_TYPE_TO_INSTRUMENT_TYPE[deedType];
+}
+
+export function instrumentTypesMatch(
+  stored: string,
+  selected: string,
+) {
+  if (stored === selected) {
+    return true;
+  }
+
+  return (
+    ELECTRONIC_JUSTICE_INSTRUMENT_TYPES.has(stored) &&
+    ELECTRONIC_JUSTICE_INSTRUMENT_TYPES.has(selected)
+  );
+}
+
+/**
+ * Manual deed number/date is stored only for canonical `electronic`.
+ * File uploads keep the long alias the contract endpoint already accepts.
+ */
+export function resolveContractStep1InstrumentType(
+  deedType: DeedTypeId,
+  hasManualEntry: boolean,
+): ContractInstrumentType {
+  const mapped = mapDeedTypeToInstrumentType(deedType);
+
+  if (
+    hasManualEntry &&
+    mapped === "electronic_deed_from_the_ministry_of_justice"
+  ) {
+    return "electronic";
+  }
+
+  return mapped;
 }

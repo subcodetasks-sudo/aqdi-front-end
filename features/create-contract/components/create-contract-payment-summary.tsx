@@ -5,6 +5,8 @@ import { useContractFinanceSummary } from "@/features/create-contract/hooks/use-
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { AppliedContractCoupon } from "@/features/create-contract/types/contract-coupon";
+import { deedTypeIsPaper } from "@/features/create-contract/types/deed-type";
+import { mapInstrumentTypeToDeedType } from "@/features/create-contract/utils/map-instrument-type-to-deed-type";
 
 type CreateContractPaymentSummaryProps = {
   labels: CreateContractLabels["payment"]["summary"];
@@ -24,6 +26,15 @@ export default function CreateContractPaymentSummary({
   const cachedSummary = useCreateContractDraftStore(
     (state) => state.contractFinanceSummaryData ?? state.contractFinancialData,
   );
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const instrumentType = useCreateContractDraftStore(
+    (state) => state.contractStep1Data?.instrument_type,
+  );
+  const showPaperDeedFee =
+    deedTypeIsPaper(selectedDeedType) ||
+    deedTypeIsPaper(mapInstrumentTypeToDeedType(instrumentType));
   const { data, isLoading } = useContractFinanceSummary(contractUuid);
 
   return (
@@ -33,6 +44,7 @@ export default function CreateContractPaymentSummary({
       isLoading={isLoading && !cachedSummary}
       appliedCoupon={appliedCoupon}
       sectionTitle={labels.sectionTitle}
+      showPaperDeedFee={showPaperDeedFee}
     />
   );
 }

@@ -8,10 +8,12 @@ import { toast } from "sonner";
 import {
   contractFinancialKeys,
   contractFinanceSummaryKeys,
+  contractLocationKeys,
 } from "@/features/create-contract/query-keys";
 import { submitContractStep6 } from "@/features/create-contract/services/submit-contract-step6";
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { FinanceDataState } from "@/features/create-contract/types/finance-step";
+import type { TenantRole } from "@/features/create-contract/types/tenant-role";
 
 type SubmitContractStep6Input = {
   financeData: FinanceDataState;
@@ -51,16 +53,19 @@ export function useSubmitContractStep6() {
       return false;
     }
 
-    if (contractStep6Data && contractStep6Data.step >= 7) {
-      return true;
-    }
-
     setIsSubmitting(true);
 
     try {
+      const tenantRoles =
+        queryClient.getQueryData<TenantRole[]>([
+          ...contractLocationKeys.all,
+          "tenant-roles",
+        ]) ?? [];
+
       const result = await submitContractStep6({
         contractId,
         financeData,
+        tenantRoles,
       });
 
       if (!result.ok) {

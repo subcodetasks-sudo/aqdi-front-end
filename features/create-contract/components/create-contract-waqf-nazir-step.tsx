@@ -29,15 +29,14 @@ export default function CreateContractWaqfNazirStep({
   const {
     agentData,
     setAgentData,
-    existingWaqfNazirDocumentUrl,
-    existingTrusteeshipImageUrl,
-    deedTrusteeshipFiles,
-    deedGuardiansPoaFiles,
     nationalAddressMethod,
     nationalAddressPhotoFiles,
     nationalAddressLinkUrl,
     nationalAddressManual,
   } = useCreateContractDeedStep();
+  const contractStep2Data = useCreateContractDraftStore(
+    (state) => state.contractStep2Data,
+  );
   const { submitStep2, isSubmitting } = useSubmitContractStep2();
   const skipOwnerToTenant = useCreateContractDraftStore(
     (state) => state.skipOwnerToTenant,
@@ -47,14 +46,12 @@ export default function CreateContractWaqfNazirStep({
   );
   const [showFieldErrors, setShowFieldErrors] = useState(false);
 
-  const documentAlreadyAttached =
-    Boolean(existingWaqfNazirDocumentUrl) ||
-    Boolean(existingTrusteeshipImageUrl) ||
-    deedTrusteeshipFiles.length > 0 ||
-    deedGuardiansPoaFiles.length > 0;
+  const nazirDocumentAlreadySaved = Boolean(
+    contractStep2Data?.id_num_of_property_owner_agent,
+  );
 
   const canContinue = isLegalAgentDataComplete(agentData, {
-    hasExistingPoa: documentAlreadyAttached,
+    hasExistingPoa: nazirDocumentAlreadySaved,
   });
 
   async function submitNazirStep2(): Promise<boolean> {
@@ -69,7 +66,7 @@ export default function CreateContractWaqfNazirStep({
       linkUrl: nationalAddressLinkUrl,
       manualAddress: nationalAddressManual,
       waqfNazir: agentData,
-      hasExistingWaqfNazirDocument: documentAlreadyAttached,
+      hasExistingWaqfNazirDocument: nazirDocumentAlreadySaved,
     });
   }
 
@@ -131,10 +128,6 @@ export default function CreateContractWaqfNazirStep({
             onChange={setAgentData}
             showFieldErrors={showFieldErrors}
             hideSectionHeader
-            existingPoaUrl={
-              existingWaqfNazirDocumentUrl ?? existingTrusteeshipImageUrl
-            }
-            documentAlreadyAttached={documentAlreadyAttached}
             documentHint={labels.documentHint}
           />
         </div>

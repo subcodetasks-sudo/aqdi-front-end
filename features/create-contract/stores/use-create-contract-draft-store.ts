@@ -1074,11 +1074,7 @@ export const useCreateContractDraftStore = create<CreateContractDraftStore>()(
           ...current,
           selectedTenantRoleIds,
           addTenantPermissions: selectedTenantRoleIds.length > 0,
-          tenantRoleValues: Object.fromEntries(
-            Object.entries(current.tenantRoleValues).filter(([key]) =>
-              selectedTenantRoleIds.includes(Number(key)),
-            ),
-          ),
+          tenantRoleValues: current.tenantRoleValues,
         }));
       },
       saveOtherConditions: (otherConditionsList) => {

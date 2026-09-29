@@ -12,6 +12,7 @@ import {
 } from "@/features/create-contract/types/national-address";
 import type { AgentDataState } from "@/features/create-contract/types/owner-step";
 import type { ManualNationalAddressData } from "@/features/shared/types/manual-national-address";
+import { resolveSubmittedMapLocation } from "@/features/shared/utils/saudi-region-coordinates";
 
 type SubmitContractStep2Input = {
   addressMethod: NationalAddressMethodId;
@@ -28,7 +29,6 @@ export function useSubmitContractStep2() {
   const t = useTranslations("createContract.deed");
   const contractSession = useCreateContractDraftStore((state) => state.contractSession);
   const contractStep1Data = useCreateContractDraftStore((state) => state.contractStep1Data);
-  const contractStep2Data = useCreateContractDraftStore((state) => state.contractStep2Data);
   const isExistingPropertyContract = useCreateContractDraftStore(
     (state) => state.existingPropertyContext !== null,
   );
@@ -60,19 +60,6 @@ export function useSubmitContractStep2() {
       return false;
     }
 
-    const alreadyHasAgentIdentity = Boolean(
-      contractStep2Data?.id_num_of_property_owner_agent,
-    );
-
-    if (
-      contractStep2Data &&
-      contractStep2Data.step >= 3 &&
-      (!legalAgent || alreadyHasAgentIdentity) &&
-      (!waqfNazir || alreadyHasAgentIdentity)
-    ) {
-      return true;
-    }
-
     // Existing-property contracts already have the national address stored on
     // the backend from /contract/start, so allow continuing without re-uploading
     // a photo when the user hasn't picked a new one.
@@ -88,12 +75,18 @@ export function useSubmitContractStep2() {
 
     setIsSubmitting(true);
 
+    const submittedLocation = resolveSubmittedMapLocation({
+      addressMethod,
+      propertyPlaceId: manualAddress.propertyPlaceId,
+      mapLocation,
+    });
+
     try {
       const result = await submitContractStep2({
         contractId,
         addressMethod,
-        latitude: mapLocation.lat,
-        longitude: mapLocation.lng,
+        latitude: submittedLocation.lat,
+        longitude: submittedLocation.lng,
         imageAddress: addressMethod === "photo" ? photoFiles[0] : undefined,
         addressUrl:
           addressMethod === "link" ? linkUrl.trim() || undefined : undefined,

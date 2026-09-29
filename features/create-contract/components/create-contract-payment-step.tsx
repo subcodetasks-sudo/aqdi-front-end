@@ -1,6 +1,6 @@
 "use client";
 
-import { Lock } from "lucide-react";
+import { Check, Lock } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -95,6 +95,8 @@ export default function CreateContractPaymentStep({
     null,
   );
 
+  const propertySaved =
+    paymentData.savePropertyData && paymentData.propertyName.trim().length > 0;
   const financeData = financeSummaryQuery.data;
   const payableTotal = appliedCoupon
     ? appliedCoupon.totalPriceAfterCoupon
@@ -181,25 +183,41 @@ export default function CreateContractPaymentStep({
             appliedCoupon={appliedCoupon}
           />
 
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4 dark:border-[#2f403b] dark:bg-[#121a18]">
-            <label className="flex w-full cursor-pointer items-center justify-between gap-3">
-              <span className="flex flex-col gap-1">
-                <span className="text-sm font-semibold leading-relaxed text-brand dark:text-[#7dccc0]">
-                  {labels.savePropertyData.label}
+          {propertySaved ? (
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#cfe8e0] bg-[#f3faf7] px-4 py-4 dark:border-[#2f403b] dark:bg-[#16352f]">
+              <span className="flex min-w-0 flex-col gap-1">
+                <span className="inline-flex items-center gap-1.5 text-sm font-semibold leading-relaxed text-brand dark:text-[#7dccc0]">
+                  <Check className="size-4 shrink-0" aria-hidden="true" />
+                  {labels.savePropertyData.savedLabel}
                 </span>
-                <span className="text-xs leading-relaxed text-[#7f7f7f] dark:text-[#9eb5af]">
-                  {labels.savePropertyData.description}
+                <span className="truncate text-xs leading-relaxed text-[#333333] dark:text-white">
+                  {withTemplate(labels.savePropertyData.savedName, {
+                    propertyName: paymentData.propertyName.trim(),
+                  })}
                 </span>
               </span>
-              <Switch
-                dir="ltr"
-                checked={paymentData.savePropertyData}
-                onCheckedChange={handleSwitchChange}
-                disabled={isSaving || paymentData.savePropertyData}
-                className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] disabled:cursor-not-allowed disabled:opacity-100 dark:data-unchecked:bg-[#2f403b]"
-              />
-            </label>
-          </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#e8e8e8] bg-white px-4 py-4 dark:border-[#2f403b] dark:bg-[#121a18]">
+              <label className="flex w-full cursor-pointer items-center justify-between gap-3">
+                <span className="flex flex-col gap-1">
+                  <span className="text-sm font-semibold leading-relaxed text-brand dark:text-[#7dccc0]">
+                    {labels.savePropertyData.label}
+                  </span>
+                  <span className="text-xs leading-relaxed text-[#7f7f7f] dark:text-[#9eb5af]">
+                    {labels.savePropertyData.description}
+                  </span>
+                </span>
+                <Switch
+                  dir="ltr"
+                  checked={paymentData.savePropertyData}
+                  onCheckedChange={handleSwitchChange}
+                  disabled={isSaving}
+                  className="h-6 w-11 shrink-0 data-checked:bg-brand-secondary data-unchecked:bg-[#d9d9d9] disabled:cursor-not-allowed disabled:opacity-100 dark:data-unchecked:bg-[#2f403b]"
+                />
+              </label>
+            </div>
+          )}
 
           <CreateContractDiscountCodeField
             labels={labels.discountCode}

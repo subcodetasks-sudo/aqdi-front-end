@@ -117,9 +117,6 @@ export function useCreateContractDeedStep() {
   const existingGuardiansPoaImageUrl = resolveContractAssetUrl(
     contractStep1Data?.copy_of_guardians_power_of_attorney_for_agent,
   );
-  /** Prefill nazir capacity doc from step1 trusteeship or guardians POA. */
-  const existingWaqfNazirDocumentUrl =
-    existingTrusteeshipImageUrl ?? existingGuardiansPoaImageUrl;
   const existingAddressImageUrl = resolveContractAssetUrl(
     existingPropertyContext?.property.image_address,
   );
@@ -262,7 +259,6 @@ export function useCreateContractDeedStep() {
     needsWaqfNazir,
     agentData,
     setAgentData,
-    existingWaqfNazirDocumentUrl,
     nationalAddressMethod: deed.nationalAddressMethod,
     setNationalAddressMethod,
     nationalAddressPhotoFiles: deed.nationalAddressPhotoFiles,

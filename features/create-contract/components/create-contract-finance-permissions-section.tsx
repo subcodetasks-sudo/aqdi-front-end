@@ -8,7 +8,10 @@ import CreateContractTenantRoleDialog from "@/features/create-contract/component
 import { useTenantRoles } from "@/features/create-contract/hooks/use-tenant-roles";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import type { TenantRole } from "@/features/create-contract/types/tenant-role";
-import { onToggleTenantRole } from "@/features/create-contract/utils/tenant-role-helpers";
+import {
+  isDailyFineRole,
+  onToggleTenantRole,
+} from "@/features/create-contract/utils/tenant-role-helpers";
 import { cn } from "@/lib/utils";
 
 type CreateContractFinancePermissionsSectionProps = {
@@ -134,6 +137,13 @@ export default function CreateContractFinancePermissionsSection({
                         {/^\d+$/.test(savedValue)
                           ? Number(savedValue).toLocaleString("en-US")
                           : savedValue}
+                        {role.input_field_type === "number"
+                          ? ` ${
+                              isDailyFineRole(role)
+                                ? labels.currencyPerDay
+                                : labels.currency
+                            }`
+                          : ""}
                       </span>
                     ) : null}
                   </button>

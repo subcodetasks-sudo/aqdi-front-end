@@ -22,6 +22,12 @@ export async function saveProperty({
   });
 
   if (!response.ok || !response.data?.success) {
+    console.error("[saveProperty] backend rejected save", {
+      status: response.status,
+      data: response.data,
+      error: response.error,
+    });
+
     return {
       ok: false as const,
       error:

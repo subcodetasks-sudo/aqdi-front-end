@@ -7,3 +7,13 @@ export function toPropertyContractType(
 ): PropertyContractType {
   return contractType === "commercial" ? "commercial" : "housing";
 }
+
+export function parseContractTypeId(
+  value: string | undefined,
+): ContractTypeId | null {
+  if (value === "residential" || value === "commercial") {
+    return value;
+  }
+
+  return null;
+}

@@ -31,6 +31,8 @@ import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import type { CreateContractReviewEditTarget } from "@/features/create-contract/types/create-contract-review-order";
 import { reviewEditTargetToStep } from "@/features/create-contract/types/create-contract-review-order";
 import type { CreateContractStep } from "@/features/create-contract/types/create-contract-step";
+import { isOwnerStepSkipped } from "@/features/create-contract/utils/is-owner-step-skipped";
+import { isWaqfNazirStepVisible } from "@/features/create-contract/utils/is-waqf-nazir-step-visible";
 import {
   downloadAttachmentRobust,
   fileNameFromUrl,
@@ -286,6 +288,17 @@ export default function CreateContractReviewOrderDialog({
   const setTenantPhaseIndex = useCreateContractDraftStore(
     (state) => state.setTenantPhaseIndex,
   );
+  const selectedDeedType = useCreateContractDraftStore(
+    (state) => state.deed.selectedDeedType,
+  );
+  const instrumentType = useCreateContractDraftStore(
+    (state) => state.contractStep1Data?.instrument_type,
+  );
+  const ownerSkipped = isOwnerStepSkipped({ selectedDeedType, instrumentType });
+  const waqfNazirVisible = isWaqfNazirStepVisible({
+    selectedDeedType,
+    instrumentType,
+  });
   const [attachmentPreview, setAttachmentPreview] =
     useState<AttachmentPreview | null>(null);
 
@@ -299,6 +312,22 @@ export default function CreateContractReviewOrderDialog({
 
   function closeAttachmentPreview() {
     setAttachmentPreview(null);
+  }
+
+  function resolveEditStep(
+    target: CreateContractReviewEditTarget,
+  ): CreateContractStep {
+    const step = reviewEditTargetToStep(target);
+
+    if (step === "waqfNazir" && !waqfNazirVisible) {
+      return "deed";
+    }
+
+    if (step === "owner" && ownerSkipped) {
+      return waqfNazirVisible ? "waqfNazir" : "tenant";
+    }
+
+    return step;
   }
 
   function handleEdit(target: CreateContractReviewEditTarget) {
@@ -322,8 +351,8 @@ export default function CreateContractReviewOrderDialog({
         break;
     }
 
+    onEditStep(resolveEditStep(target));
     onOpenChange(false);
-    onEditStep(reviewEditTargetToStep(target));
   }
 
   async function handleCopy() {
@@ -382,8 +411,9 @@ export default function CreateContractReviewOrderDialog({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           showCloseButton={false}
-          className="scrollbar-hide max-h-[min(92vh,900px)] gap-0 overflow-y-auto rounded-2xl border-0 bg-white p-4 sm:max-w-xl md:p-5 dark:bg-[#1a2421] dark:text-white"
+          className="flex max-h-[min(92vh,900px)] flex-col gap-0 overflow-hidden rounded-2xl border-0 bg-white p-0 sm:max-w-xl dark:bg-[#1a2421] dark:text-white"
         >
+          <div className="scrollbar-hide min-h-0 flex-1 overflow-y-auto p-4 md:p-5">
           <div className="relative mb-4 flex items-center justify-between">
             <DialogTitle className="flex items-center justify-center gap-2 text-center text-[15px] font-extrabold text-brand md:text-base dark:text-[#7dccc0]">
               <Search className="size-4 shrink-0" aria-hidden="true" />
@@ -478,23 +508,25 @@ export default function CreateContractReviewOrderDialog({
                 return (
                   <section
                     key={section.id}
-                    className="relative overflow-hidden rounded-2xl bg-brand px-4 py-5 text-white shadow-sm dark:bg-[#0f6b5c] dark:shadow-none"
+                    className="rounded-2xl bg-brand px-4 py-5 text-white shadow-sm dark:bg-[#0f6b5c] dark:shadow-none"
                   >
-                    <EditButton
-                      label={labels.edit}
-                      onClick={() => handleEdit(section.editTarget)}
-                      className="absolute inset-e-3 top-3 border-white/20 bg-white/15 text-white hover:bg-white/25 dark:border-white/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
-                    />
-                    <div className="space-y-2 text-start">
-                      <p className="text-sm font-bold opacity-90">
-                        {section.title}
-                      </p>
-                      <p className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                        {amount}
-                      </p>
-                      <p className="text-sm font-medium opacity-90">
-                        {paymentMethod}
-                      </p>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 space-y-2 text-start">
+                        <p className="text-sm font-bold opacity-90">
+                          {section.title}
+                        </p>
+                        <p className="text-2xl font-extrabold tracking-tight md:text-3xl">
+                          {amount}
+                        </p>
+                        <p className="text-sm font-medium opacity-90">
+                          {paymentMethod}
+                        </p>
+                      </div>
+                      <EditButton
+                        label={labels.edit}
+                        onClick={() => handleEdit(section.editTarget)}
+                        className="shrink-0 border-white/20 bg-white/15 text-white hover:bg-white/25 dark:border-white/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
+                      />
                     </div>
                   </section>
                 );
@@ -615,6 +647,7 @@ export default function CreateContractReviewOrderDialog({
           >
             {labels.confirm}
           </button>
+          </div>
         </DialogContent>
       </Dialog>
 

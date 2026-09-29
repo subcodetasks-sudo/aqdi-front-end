@@ -204,7 +204,11 @@ export function sanitizeFinanceDataForContinue(
   );
 
   const selectedTenantRoleIds: number[] = [];
-  const tenantRoleValues: Record<string, string> = {};
+  // Keep amounts for roles that are currently unchecked so toggling them
+  // back on restores the previous value.
+  const tenantRoleValues: Record<string, string> = {
+    ...financeData.tenantRoleValues,
+  };
 
   for (const id of financeData.selectedTenantRoleIds) {
     const key = String(id);
@@ -224,7 +228,6 @@ export function sanitizeFinanceDataForContinue(
     }
 
     selectedTenantRoleIds.push(id);
-    tenantRoleValues[key] = financeData.tenantRoleValues[key] ?? raw;
   }
 
   return {

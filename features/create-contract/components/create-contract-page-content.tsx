@@ -12,11 +12,13 @@ import { cn } from "@/lib/utils";
 type CreateContractPageContentProps = {
   labels: CreateContractLabels;
   contractType: ContractTypeId;
+  hasRequestedContractType: boolean;
 };
 
 export default function CreateContractPageContent({
   labels,
   contractType,
+  hasRequestedContractType,
 }: CreateContractPageContentProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -45,6 +47,7 @@ export default function CreateContractPageContent({
         <CreateContractWizard
           labels={labels}
           contractType={contractType}
+          hasRequestedContractType={hasRequestedContractType}
           isDarkMode={isDarkMode}
           onToggleDarkMode={() => setIsDarkMode((current) => !current)}
         />

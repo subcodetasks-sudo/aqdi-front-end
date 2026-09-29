@@ -2645,6 +2645,7 @@
         "applicationFees": "Application fees:",
         "electricityMeterFee": "Electricity meter fee:",
         "waterMeterFee": "Water meter fee:",
+        "paperDeedFee": "Paper deed fee:",
         "meterFeesTotal": "Total meter fees:",
         "services": "Additional services:",
         "servicesTotal": "Services total:",
@@ -2666,6 +2667,8 @@
       "savePropertyData": {
         "label": "Would you like to save the property data?",
         "description": "So you can create contracts quickly and easily in the future",
+        "savedLabel": "Property data saved",
+        "savedName": "Property name: '{'propertyName'}'",
         "dialog": {
           "title": "Save property data",
           "close": "Close",

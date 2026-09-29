@@ -8,7 +8,10 @@ import { submitContractStep1 } from "@/features/create-contract/services/submit-
 import { useCreateContractDraftStore } from "@/features/create-contract/stores/use-create-contract-draft-store";
 import type { DeedTypeId } from "@/features/create-contract/types/deed-type";
 import { deedTypeIsLeaseRenewal } from "@/features/create-contract/types/deed-type";
-import { mapDeedTypeToInstrumentType } from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
+import {
+  instrumentTypesMatch,
+  resolveContractStep1InstrumentType,
+} from "@/features/create-contract/utils/map-deed-type-to-instrument-type";
 import { isManualDeedEntryComplete } from "@/features/shared/types/manual-deed-entry";
 import type { ManualDeedEntryData } from "@/features/shared/types/manual-deed-entry";
 
@@ -63,11 +66,14 @@ export function useSubmitContractStep1() {
         hasManualEntry,
     );
     const isLeaseRenewal = deedTypeIsLeaseRenewal(selectedDeedType);
-    const instrumentType = mapDeedTypeToInstrumentType(selectedDeedType);
+    const instrumentType = resolveContractStep1InstrumentType(
+      selectedDeedType,
+      hasManualEntry,
+    );
     const minSubmittedStep = isLeaseRenewal ? 4 : 2;
     const isAlreadySubmitted =
-      contractStep1Data &&
-      contractStep1Data.instrument_type === instrumentType &&
+      contractStep1Data != null &&
+      instrumentTypesMatch(contractStep1Data.instrument_type, instrumentType) &&
       contractStep1Data.step >= minSubmittedStep;
 
     if (!hasNewFile) {
@@ -80,10 +86,6 @@ export function useSubmitContractStep1() {
       }
 
       return false;
-    }
-
-    if (isAlreadySubmitted) {
-      return true;
     }
 
     setIsSubmitting(true);

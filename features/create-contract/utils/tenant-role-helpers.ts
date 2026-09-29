@@ -56,7 +56,24 @@ export function getTenantRoleTitle(role: TenantRole) {
 
 export function isDailyFineRole(role: TenantRole) {
   const haystack = `${role.name} ${role.text_of_reason} ${role.icon ?? ""} ${role.input_icon ?? ""}`;
-  return /يوم|clock/i.test(haystack);
+  return /يوم|غرام|clock/i.test(haystack);
+}
+
+export function readTenantRoleAmount(
+  values: Record<string, string>,
+  roleId: number,
+) {
+  const digits = (values[String(roleId)] ?? "").replace(/\D/g, "");
+  if (!digits) {
+    return null;
+  }
+
+  const amount = Number(digits);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return null;
+  }
+
+  return amount;
 }
 
 export function isSecurityDepositRole(role: TenantRole) {
@@ -70,11 +87,10 @@ export function onToggleTenantRole(
   state: TenantRoleSelectionState,
 ): TenantRoleToggleResult {
   if (!checked) {
+    // Keep the entered amount so checking the role again reopens the same value.
     return {
       selectedIds: state.selectedIds.filter((id) => id !== role.id),
-      values: Object.fromEntries(
-        Object.entries(state.values).filter(([key]) => key !== String(role.id)),
-      ),
+      values: state.values,
       openModal: null,
     };
   }
@@ -109,8 +125,11 @@ export function buildStep6TenantPayload(
     const role = byId[id];
 
     if (role) {
-      if (role.has_user_input) {
-        tenant_role_values[key] = values[key] ?? "";
+      if (role.has_user_input || key in values) {
+        const raw = values[key]?.trim() ?? "";
+        if (raw) {
+          tenant_role_values[key] = values[key] ?? "";
+        }
       }
       continue;
     }

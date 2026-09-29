@@ -48,15 +48,20 @@ export function useCreateContractTenantStep() {
   );
   const isLastPhase = currentPhaseIndex === phaseCount - 1;
   const leaseRenewalUnitMode = tenant.leaseRenewalUnitMode ?? "same";
+  const contractType = useCreateContractDraftStore(
+    (state) => state.contractSession?.contractType,
+  );
+  const rentedUnitsComplete = areRentedUnitsComplete(tenant.rentedUnits, {
+    requireRooms: contractType !== "commercial",
+  });
 
   const canContinue = isLeaseRenewal
     ? currentPhaseIndex === 0
       ? isTenantDataComplete(tenant.tenantData)
-      : leaseRenewalUnitMode === "same" ||
-        areRentedUnitsComplete(tenant.rentedUnits)
+      : leaseRenewalUnitMode === "same" || rentedUnitsComplete
     : currentPhaseIndex === 0
       ? isTenantDataComplete(tenant.tenantData)
-      : areRentedUnitsComplete(tenant.rentedUnits);
+      : rentedUnitsComplete;
 
   function updateStatus(status: TenantStatusOption | "") {
     setTenantData(updateContractTenantStatus(tenant.tenantData, status));

@@ -85,6 +85,10 @@ export function parseContractFinancialData(
       ? (record.additional_services as ContractFinancialData["additional_services"])
       : null,
     services_total: toFiniteNumber(record.services_total),
+    application_fees: toFiniteNumber(record.application_fees),
+    electricity_meter_fee: toFiniteNumber(record.electricity_meter_fee),
+    water_meter_fee: toFiniteNumber(record.water_meter_fee),
+    paper_deed_fee: toFiniteNumber(record.paper_deed_fee),
     meter_fees_total: toFiniteNumber(record.meter_fees_total),
     subtotal,
     tax_percent: taxPercent,

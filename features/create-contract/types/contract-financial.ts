@@ -44,6 +44,11 @@ export type ContractFinancialData = {
   /** Do not render in create-contract financial summary. */
   additional_services?: ContractFinancialService[] | null;
   services_total?: number | null;
+  /** Top-level fee fields (API returns these as siblings of price_details, not nested). */
+  application_fees?: number | null;
+  electricity_meter_fee?: number | null;
+  water_meter_fee?: number | null;
+  paper_deed_fee?: number | null;
   meter_fees_total?: number | null;
   subtotal?: number | null;
   tax_percent?: number | null;

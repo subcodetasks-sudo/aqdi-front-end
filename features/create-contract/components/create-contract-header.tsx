@@ -21,6 +21,7 @@ type CreateContractHeaderProps = {
   labels: CreateContractLabels["header"];
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
+  hideRequest?: boolean;
 };
 
 const iconButtonClassName =
@@ -31,20 +32,22 @@ export default function CreateContractHeader({
   labels,
   isDarkMode,
   onToggleDarkMode,
+  hideRequest = false,
 }: CreateContractHeaderProps) {
   const router = useRouter();
   const tDelete = useTranslations("requests.card");
   const { saveDraft, isSaving } = useSaveContractDraft();
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const contractId = useCreateContractDraftStore(
-    (state) =>
-      state.contractSession?.contractId ??
-      state.contractStep1Data?.contract_id ??
-      null,
+  const contractId = useCreateContractDraftStore((state) =>
+    hideRequest
+      ? null
+      : state.contractSession?.contractId ??
+        state.contractStep1Data?.contract_id ??
+        null,
   );
   const contractUuid = useCreateContractDraftStore(
-    (state) => state.contractSession?.uuid ?? null,
+    (state) => (hideRequest ? null : state.contractSession?.uuid ?? null),
   );
   const [isPreparingSaveThenExit, setIsPreparingSaveThenExit] = useState(false);
 
@@ -53,10 +56,8 @@ export default function CreateContractHeader({
       return;
     }
 
-    const text = `${labels.requestPrefix} #${contractUuid}`;
-
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(contractUuid);
       toast.success(labels.copySuccess);
     } catch {
       toast.error(labels.copyError);

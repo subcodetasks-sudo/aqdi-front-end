@@ -12,6 +12,7 @@ import { getPaymentTypes } from "@/features/create-contract/services/get-payment
 import { getServicesPricing } from "@/features/create-contract/services/get-services-pricing";
 import type { CreateContractLabels } from "@/features/create-contract/types/create-contract-labels";
 import {
+  parseContractTypeId,
   toPropertyContractType,
   type ContractTypeId,
 } from "@/features/create-contract/types/contract-type";
@@ -34,8 +35,8 @@ export default async function CreateContractPage({
   searchParams,
 }: CreateContractPageProps) {
   const { id } = await searchParams;
-  const contractType: ContractTypeId =
-    id === "residential" ? "residential" : "commercial";
+  const requestedContractType = parseContractTypeId(id);
+  const contractType: ContractTypeId = requestedContractType ?? "commercial";
 
   const queryClient = getQueryClient();
   const propertyContractType = toPropertyContractType(contractType);
@@ -996,6 +997,7 @@ export default async function CreateContractPage({
         applicationFees: t("payment.summary.applicationFees"),
         electricityMeterFee: t("payment.summary.electricityMeterFee"),
         waterMeterFee: t("payment.summary.waterMeterFee"),
+        paperDeedFee: t("payment.summary.paperDeedFee"),
         meterFeesTotal: t("payment.summary.meterFeesTotal"),
         services: t("payment.summary.services"),
         servicesTotal: t("payment.summary.servicesTotal"),
@@ -1017,6 +1019,8 @@ export default async function CreateContractPage({
       savePropertyData: {
         label: t("payment.savePropertyData.label"),
         description: t("payment.savePropertyData.description"),
+        savedLabel: t("payment.savePropertyData.savedLabel"),
+        savedName: t("payment.savePropertyData.savedName"),
         dialog: {
           title: t("payment.savePropertyData.dialog.title"),
           close: t("payment.savePropertyData.dialog.close"),
@@ -1064,7 +1068,11 @@ export default async function CreateContractPage({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CreateContractPageContent labels={labels} contractType={contractType} />
+      <CreateContractPageContent
+        labels={labels}
+        contractType={contractType}
+        hasRequestedContractType={requestedContractType != null}
+      />
     </HydrationBoundary>
   );
 }
