@@ -10,6 +10,7 @@ import CreateUnitNumberField from "@/features/create-unit/components/create-unit
 import type { UnitLookupOption } from "@/features/create-unit/types/unit-option";
 import {
   hasUnitAdditionalInfo,
+  isCountAtLeast,
   isPositiveNumber,
   isSelectFilled,
   isUnitNumberFilled,
@@ -153,6 +154,7 @@ export default function UnitDataFormFields({
   const kitchensSelected = value.kitchensCount !== "";
   const showHousingOnlyFields =
     !hideHousingOnlyFieldsForCommercial || contractType !== "commercial";
+  const roomsMinimum = contractType === "housing" ? 1 : 0;
   const useCardsSelector =
     contractTypeSelectorVariant === "cards" &&
     Boolean(labels.contractType?.descriptions);
@@ -234,7 +236,13 @@ export default function UnitDataFormFields({
               label={labels.roomsCount.label}
               value={value.roomsCount}
               onChange={(roomsCount) => updateField("roomsCount", roomsCount)}
-              required
+              min={roomsMinimum}
+              required={roomsMinimum > 0}
+              errorMessage={
+                showFieldErrors && !isCountAtLeast(value.roomsCount, roomsMinimum)
+                  ? labels.fieldRequired
+                  : undefined
+              }
             />
             <UnitCountStepper
               label={labels.bathroomsCount.label}

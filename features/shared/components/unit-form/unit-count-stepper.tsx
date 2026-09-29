@@ -1,6 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,7 +11,9 @@ type UnitCountStepperProps = {
   onChange: (value: string) => void;
   hint?: string;
   required?: boolean;
+  min?: number;
   max?: number;
+  errorMessage?: string;
   className?: string;
 };
 
@@ -33,20 +36,39 @@ export default function UnitCountStepper({
   onChange,
   hint,
   required = false,
+  min = 0,
   max = 99,
+  errorMessage,
   className,
 }: UnitCountStepperProps) {
-  const currentCount = parseCount(value);
-  const canDecrease = currentCount > 0;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  const parsedCount = parseCount(value);
+  const floor = Math.max(0, Math.min(min, max));
+  const currentCount = Math.max(floor, parsedCount);
+  const canDecrease = currentCount > floor;
   const canIncrease = currentCount < max;
+  const showInvalid = Boolean(errorMessage);
+
+  useEffect(() => {
+    if (parsedCount >= floor) {
+      return;
+    }
+
+    onChangeRef.current(formatCount(floor));
+  }, [floor, parsedCount]);
 
   function setCount(nextCount: number) {
-    const clamped = Math.min(max, Math.max(0, nextCount));
+    const clamped = Math.min(max, Math.max(floor, nextCount));
     onChange(formatCount(clamped));
   }
 
   return (
-    <div className={cn("space-y-2 text-center", className)}>
+    <div
+      className={cn("space-y-2 text-center", className)}
+      data-field-invalid={showInvalid ? "true" : undefined}
+    >
       <div>
         <p className="text-sm font-bold text-brand">
           {label}
@@ -91,6 +113,10 @@ export default function UnitCountStepper({
           <Plus className="size-4" />
         </button>
       </div>
+
+      {errorMessage ? (
+        <p className="text-xs font-medium text-red-500">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }

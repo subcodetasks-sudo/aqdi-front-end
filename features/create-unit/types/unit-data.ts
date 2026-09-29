@@ -63,6 +63,15 @@ export function isSelectFilled(value: string) {
   return value !== "";
 }
 
+export function isCountAtLeast(value: string, minimum: number) {
+  if (value.trim() === "") {
+    return minimum <= 0;
+  }
+
+  const parsed = Number(value.replace(/\D/g, ""));
+  return Number.isFinite(parsed) && parsed >= minimum;
+}
+
 export function isPositiveNumber(value: string) {
   const normalized = value.replace(/,/g, "").trim();
   if (normalized === "") {
