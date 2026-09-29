@@ -764,13 +764,9 @@
       "fullNameLabel": "الاسم الأول و الاخير",
       "fullNamePlaceholder": "أدخل الاسم الأول و الاخير هنا ...",
       "phoneLabel": "رقم الجوال",
-      "passwordLabel": "كلمة المرور",
-      "passwordPlaceholder": "أدخل كلمة المرور هنا ...",
-      "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور",
       "submit": "حفظ",
       "submitSuccess": "تم حفظ التغييرات بنجاح",
       "submitError": "تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى",
-      "passwordUpdateError": "تم حفظ الاسم، لكن تعذر تحديث كلمة المرور",
       "deleteAccount": "حذف الحساب",
       "deleteDialog": {
         "title": "حذف الحساب",
@@ -783,9 +779,7 @@
       },
       "validation": {
         "fullNameRequired": "الاسم مطلوب",
-        "fullNameMin": "يرجى إدخال الاسم الكامل",
-        "passwordRequired": "كلمة المرور مطلوبة",
-        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+        "fullNameMin": "يرجى إدخال الاسم الكامل"
       }
     }
   },

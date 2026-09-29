@@ -9,13 +9,11 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import ProfileNameField from "@/features/auth/components/profile-name-field";
-import ProfilePasswordField from "@/features/auth/components/profile-password-field";
 import ProfilePhoneField from "@/features/auth/components/profile-phone-field";
 import {
   createProfileSchema,
   type ProfileFormValues,
 } from "@/features/auth/schemas/profile-schema";
-import { updatePassword } from "@/features/auth/services/update-password";
 import { updateProfile } from "@/features/auth/services/update-profile";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import type { AuthUser } from "@/features/auth/types/auth-user";
@@ -32,21 +30,18 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
   const schema = createProfileSchema({
     fullNameRequired: t("validation.fullNameRequired"),
     fullNameMin: t("validation.fullNameMin"),
-    passwordMin: t("validation.passwordMin"),
   });
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       fullName: user.full_name || user.name,
-      password: "",
     },
   });
 
   useEffect(() => {
     form.reset({
       fullName: user.full_name || user.name,
-      password: "",
     });
   }, [user, form]);
 
@@ -60,31 +55,9 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
 
     setUser(profileResponse.user);
 
-    let successMessage = profileResponse.message || t("submitSuccess");
-    const trimmedPassword = values.password?.trim() ?? "";
-
-    if (trimmedPassword) {
-      const passwordResponse = await updatePassword({
-        password: trimmedPassword,
-        passwordConfirmation: trimmedPassword,
-      });
-
-      if (!passwordResponse.ok) {
-        toast.error(passwordResponse.error || t("passwordUpdateError"));
-        form.reset({
-          fullName: profileResponse.user.full_name || profileResponse.user.name,
-          password: "",
-        });
-        return;
-      }
-
-      successMessage = passwordResponse.message || successMessage;
-    }
-
-    toast.success(successMessage);
+    toast.success(profileResponse.message || t("submitSuccess"));
     form.reset({
       fullName: profileResponse.user.full_name || profileResponse.user.name,
-      password: "",
     });
     onSuccess?.();
   }
@@ -105,13 +78,6 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
       />
 
       <ProfilePhoneField label={t("phoneLabel")} value={phoneValue} />
-
-      <ProfilePasswordField
-        control={form.control}
-        label={t("passwordLabel")}
-        placeholder={t("passwordPlaceholder")}
-        toggleVisibilityLabel={t("togglePasswordVisibility")}
-      />
 
       <Button
         type="submit"
