@@ -22,22 +22,24 @@ export function refreshServerAccessToken(): Promise<string | null> {
         return null;
       }
 
-      const tokens = await requestTokenRefresh(refreshToken);
+      const result = await requestTokenRefresh(refreshToken);
 
-      if (!tokens) {
-        await clearAuthToken();
+      if (!result.ok) {
+        if (result.terminal) {
+          await clearAuthToken();
+        }
         return null;
       }
 
       try {
-        await setAuthTokens(tokens, await getRememberMe());
+        await setAuthTokens(result.tokens, await getRememberMe());
       } catch {
         // Server Components cannot persist cookies. The new access token is
         // still returned so this request can retry; middleware is what keeps
         // the next navigation in sync.
       }
 
-      return tokens.token;
+      return result.tokens.token;
     })().finally(() => {
       refreshPromise = null;
     });

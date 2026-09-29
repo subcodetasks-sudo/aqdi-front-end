@@ -50,16 +50,22 @@ export async function syncAuthCookies(request: NextRequest): Promise<{
     (!accessToken || isAccessTokenStale(expiresAt));
 
   if (needsRefresh && refreshToken) {
-    const tokens = await requestTokenRefresh(refreshToken);
+    const result = await requestTokenRefresh(refreshToken);
 
-    if (tokens) {
-      tokensToSet = tokens;
-      accessToken = tokens.token;
-      request.cookies.set(AUTH_TOKEN_COOKIE, tokens.token);
-      request.cookies.set(AUTH_REFRESH_TOKEN_COOKIE, tokens.refresh_token);
-      request.cookies.set(AUTH_TOKEN_EXPIRES_AT_COOKIE, tokens.token_expires_at);
+    if (result.ok) {
+      tokensToSet = result.tokens;
+      accessToken = result.tokens.token;
+      request.cookies.set(AUTH_TOKEN_COOKIE, result.tokens.token);
+      request.cookies.set(AUTH_REFRESH_TOKEN_COOKIE, result.tokens.refresh_token);
+      request.cookies.set(
+        AUTH_TOKEN_EXPIRES_AT_COOKIE,
+        result.tokens.token_expires_at,
+      );
       writeRequestCookieHeader(request);
-    } else {
+    } else if (result.terminal) {
+      // Refresh token was rejected. A network blip must not wipe the session;
+      // a concurrent caller that already rotated this token gets the cached
+      // success above instead of landing here.
       shouldClear = true;
       accessToken = undefined;
       request.cookies.delete(AUTH_TOKEN_COOKIE);

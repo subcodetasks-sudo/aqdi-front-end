@@ -16,29 +16,38 @@ import { getErrorMessage } from "@/lib/api/get-error-message";
 import { isWebsiteClosedResponse } from "@/lib/api/is-website-closed-response";
 import type { ApiResponse } from "@/lib/api/types";
 
+type ClientRefreshResult = {
+  token: string | null;
+  loggedOut: boolean;
+};
+
 // Module-level so concurrent 401s across callers share one refresh instead of
 // each rotating (and invalidating) the refresh token out from under the others.
-let refreshPromise: Promise<string | null> | null = null;
+let refreshPromise: Promise<ClientRefreshResult> | null = null;
 
-function refreshAccessToken(): Promise<string | null> {
+function refreshAccessToken(): Promise<ClientRefreshResult> {
   if (!refreshPromise) {
     refreshPromise = (async () => {
       const refreshToken = getClientRefreshToken();
 
       if (!refreshToken) {
         clearClientAuthTokens();
-        return null;
+        return { token: null, loggedOut: true };
       }
 
-      const tokens = await requestTokenRefresh(refreshToken);
+      const result = await requestTokenRefresh(refreshToken);
 
-      if (!tokens) {
-        clearClientAuthTokens();
-        return null;
+      if (!result.ok) {
+        if (result.terminal) {
+          clearClientAuthTokens();
+          return { token: null, loggedOut: true };
+        }
+
+        return { token: null, loggedOut: false };
       }
 
-      setClientAuthTokens(tokens);
-      return tokens.token;
+      setClientAuthTokens(result.tokens);
+      return { token: result.tokens.token, loggedOut: false };
     })().finally(() => {
       refreshPromise = null;
     });
@@ -109,10 +118,13 @@ export async function clientApiRequest<T>(
   }
 
   if (response.status === 401 && !isRefreshExcluded(endpoint)) {
-    token = await refreshAccessToken();
+    const refreshed = await refreshAccessToken();
+    token = refreshed.token;
 
     if (!token) {
-      redirectToLogin();
+      if (refreshed.loggedOut) {
+        redirectToLogin();
+      }
       return { ok: false, status: 401, error: getErrorMessage(data) };
     }
 
