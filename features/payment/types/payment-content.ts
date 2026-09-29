@@ -3,7 +3,7 @@ export type PaymentContentType = "success" | "failed";
 export type PaymentContentItem = {
   id: number;
   type: PaymentContentType;
-  message: string;
+  message: string | null;
   button_text: string | null;
   button_link: string | null;
   button_text_2: string | null;
@@ -14,7 +14,7 @@ export type PaymentContentApiResponse = {
   message: string;
   code: number;
   success: boolean;
-  data: PaymentContentItem[];
+  data: PaymentContentItem | null;
 };
 
 export type PaymentContentButton = {

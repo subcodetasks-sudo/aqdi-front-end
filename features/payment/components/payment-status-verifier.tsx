@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import PaymentStatusContent from "@/features/payment/components/payment-status-content";
 import {
+  resolveCallbackPaymentUi,
   resolvePaymentStatusUi,
   type PaymentStatusUiState,
 } from "@/features/payment/utils/resolve-payment-status-ui";
@@ -118,6 +119,9 @@ export default function PaymentStatusVerifier({
         const outcome = resolvePaymentStatusUi(payload, {
           completedMessage: labels.completedMessage,
           failedMessage: labels.failedMessage,
+        }, {
+          responseOk: response.ok,
+          callbackStatus: status,
         });
 
         setVerification({
@@ -135,10 +139,10 @@ export default function PaymentStatusVerifier({
 
         setVerification({
           state: "resolved",
-          variant: "error",
-          message: labels.failedMessage,
-          statusData: null,
-          isPaid: false,
+          ...resolveCallbackPaymentUi(status, {
+            completedMessage: labels.completedMessage,
+            failedMessage: labels.failedMessage,
+          }),
         });
       }
     }

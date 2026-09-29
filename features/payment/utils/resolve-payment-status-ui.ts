@@ -58,10 +58,43 @@ export function normalizePaymentStatusData(
   };
 }
 
+export function resolveCallbackPaymentUi(
+  callbackStatus: "success" | "error",
+  labels: PaymentStatusUiLabels,
+): PaymentStatusUiState {
+  const isPaid = callbackStatus === "success";
+
+  return {
+    variant: isPaid ? "success" : "error",
+    message: isPaid ? labels.completedMessage : labels.failedMessage,
+    statusData: null,
+    isPaid,
+  };
+}
+
+function isStatusEndpointFailure(ok: boolean, payload: unknown): boolean {
+  if (!ok || !payload || typeof payload !== "object") {
+    return true;
+  }
+
+  return "exception" in payload;
+}
+
 export function resolvePaymentStatusUi(
   payload: RawPaymentStatusPayload | null,
   labels: PaymentStatusUiLabels,
+  options?: {
+    responseOk?: boolean;
+    callbackStatus?: "success" | "error";
+  },
 ): PaymentStatusUiState {
+  if (
+    options?.callbackStatus &&
+    isStatusEndpointFailure(options.responseOk ?? true, payload)
+  ) {
+    return resolveCallbackPaymentUi(options.callbackStatus, labels);
+  }
+
   const statusData = payload?.data ? normalizePaymentStatusData(payload.data) : null;
   const isPaid = hasSuccessfulPayment(statusData);
 
