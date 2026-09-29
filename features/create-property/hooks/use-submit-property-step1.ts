@@ -21,6 +21,7 @@ import { parsePropertyId } from "@/features/create-property/utils/parse-property
 import { resolveDraftFile } from "@/features/create-property/utils/resolve-draft-file";
 import { resolveUploadFile } from "@/features/create-property/utils/resolve-upload-file";
 import { isPropertyDeedDataComplete } from "@/features/create-property/utils/validate-property-deed-data";
+import { resolveSubmittedMapLocation } from "@/features/shared/utils/saudi-region-coordinates";
 
 type Step1SubmitResult =
   | { ok: true; propertyId: number; message?: string }
@@ -291,6 +292,11 @@ export function useSubmitPropertyStep1(
         };
       }
 
+      const submittedLocation = resolveSubmittedMapLocation({
+        addressMethod,
+        propertyPlaceId: addressManual.propertyPlaceId,
+        mapLocation,
+      });
       const formData = new FormData();
       appendPropertyStep1Fields(formData, {
         propertyId: shouldUpdate ? propertyId ?? undefined : undefined,
@@ -331,8 +337,8 @@ export function useSubmitPropertyStep1(
             ? addressLinkUrl.trim() || undefined
             : undefined,
         manualAddress: addressMethod === "manual" ? addressManual : undefined,
-        latitude: mapLocation.lat,
-        longitude: mapLocation.lng,
+        latitude: submittedLocation.lat,
+        longitude: submittedLocation.lng,
       });
 
       const result = shouldUpdate
