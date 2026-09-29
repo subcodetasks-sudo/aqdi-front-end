@@ -26,7 +26,7 @@ function formatInstrumentHistoryPart(value: string) {
     return "";
   }
 
-  return String(Number(digits));
+  return digits.padStart(2, "0");
 }
 
 export function isManualDeedEntryComplete(value: ManualDeedEntryData) {
@@ -46,18 +46,17 @@ export function appendManualDeedEntryFields(
   formData: FormData,
   value: ManualDeedEntryData,
 ) {
-  formData.append("instrument_number", value.instrumentNumber);
+  const day = formatInstrumentHistoryPart(value.instrumentHistoryDay);
+  const month = formatInstrumentHistoryPart(value.instrumentHistoryMonth);
+  const year = value.instrumentHistoryYear.replace(/\D/g, "");
+
+  formData.append("instrument_number", value.instrumentNumber.trim());
   formData.append("type_instrument_history", value.typeInstrumentHistory);
-  formData.append(
-    "instrument_history_day",
-    formatInstrumentHistoryPart(value.instrumentHistoryDay),
-  );
-  formData.append(
-    "instrument_history_month",
-    formatInstrumentHistoryPart(value.instrumentHistoryMonth),
-  );
-  formData.append(
-    "instrument_history_year",
-    value.instrumentHistoryYear.replace(/\D/g, ""),
-  );
+  formData.append("instrument_history_day", day);
+  formData.append("instrument_history_month", month);
+  formData.append("instrument_history_year", year);
+
+  if (day && month && year) {
+    formData.append("instrument_history", `${day}-${month}-${year}`);
+  }
 }
