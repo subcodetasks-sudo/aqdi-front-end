@@ -416,6 +416,7 @@ export type CreateContractLabels = {
       idNumber: {
         label: string;
         placeholder: string;
+        hint: string;
       };
       phone: {
         label: string;

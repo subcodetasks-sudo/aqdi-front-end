@@ -536,6 +536,7 @@ export default async function CreateContractPage({
         idNumber: {
           label: t("tenant.individualData.idNumber.label"),
           placeholder: t("tenant.individualData.idNumber.placeholder"),
+          hint: t("tenant.individualData.idNumber.hint"),
         },
         phone: {
           label: t("tenant.individualData.phone.label"),

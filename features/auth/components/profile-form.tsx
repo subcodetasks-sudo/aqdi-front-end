@@ -35,13 +35,13 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      fullName: user.full_name || user.name,
+      fullName: user.full_name || user.name || user.fname,
     },
   });
 
   useEffect(() => {
     form.reset({
-      fullName: user.full_name || user.name,
+      fullName: user.full_name || user.name || user.fname,
     });
   }, [user, form]);
 
@@ -57,7 +57,10 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
 
     toast.success(profileResponse.message || t("submitSuccess"));
     form.reset({
-      fullName: profileResponse.user.full_name || profileResponse.user.name,
+      fullName:
+        profileResponse.user.full_name ||
+        profileResponse.user.name ||
+        profileResponse.user.fname,
     });
     onSuccess?.();
   }

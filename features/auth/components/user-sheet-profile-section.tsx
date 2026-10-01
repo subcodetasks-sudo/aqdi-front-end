@@ -20,7 +20,7 @@ export default function UserSheetProfileSection({
   avatarAlt,
   onEditProfile,
 }: UserSheetProfileSectionProps) {
-  const displayName = user.full_name || user.name;
+  const displayName = user.full_name || user.name || user.fname;
   const displayPhone = formatPhoneDisplay(user.mobile || user.phone);
 
   return (

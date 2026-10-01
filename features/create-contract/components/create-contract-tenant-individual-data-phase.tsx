@@ -11,7 +11,10 @@ import type { IndividualTenantData } from "@/features/create-contract/types/tena
 import { isPhoneComplete } from "@/lib/validation/owner-step-validation";
 import { isAdultBirthDateComplete } from "@/lib/validation/birth-date-year-options";
 import { toSaudiMobileInputValue } from "@/lib/validation/format-saudi-mobile-for-form";
-import { isSaudiNationalIdComplete } from "@/lib/validation/saudi-national-id";
+import {
+  isSaudiNationalIdComplete,
+  isSaudiNationalIdPrefixValid,
+} from "@/lib/validation/saudi-national-id";
 
 type CreateContractTenantIndividualDataPhaseProps = {
   labels: CreateContractLabels["tenant"]["individualData"];
@@ -40,12 +43,18 @@ export default function CreateContractTenantIndividualDataPhase({
     });
   }
 
+  const idComplete = isSaudiNationalIdComplete(value.idNumber);
+  const idInvalid =
+    !isSaudiNationalIdPrefixValid(value.idNumber) ||
+    (showFieldErrors && !idComplete);
+
   return (
     <div className="mt-3 space-y-3">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <CreateContractIconInputField
           label={labels.idNumber.label}
           placeholder={labels.idNumber.placeholder}
+          hint={labels.idNumber.hint}
           value={value.idNumber}
           onChange={(idNumber) =>
             updateField("idNumber", idNumber.replace(/\D/g, "").slice(0, 10))
@@ -54,12 +63,8 @@ export default function CreateContractTenantIndividualDataPhase({
           dir="ltr"
           inputMode="numeric"
           maxLength={10}
-          errorMessage={
-            showFieldErrors && !isSaudiNationalIdComplete(value.idNumber)
-              ? t("fieldRequired")
-              : undefined
-          }
-          valid={isSaudiNationalIdComplete(value.idNumber)}
+          invalid={idInvalid}
+          valid={idComplete}
         />
 
         <CreateContractSaudiMobileField

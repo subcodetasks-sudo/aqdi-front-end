@@ -118,14 +118,24 @@ export default function VerifyOtpForm({
       return;
     }
 
-    toast.success(response.message || t("submitSuccess"));
-
     if (otpFlow === "forgot-password") {
+      toast.success(response.message || t("submitSuccess"));
       router.push(buildResetPasswordUrl(phone, values.otp));
       return;
     }
 
-    router.push("hasToken" in response && response.hasToken ? "/" : "/login");
+    // The registration code only confirms the mobile. Sign-in needs a new code.
+    const loginCode = await resendOtp({ phone });
+
+    if (!loginCode.ok) {
+      toast.success(response.message || t("submitSuccess"));
+      toast.error(loginCode.error || t("resendError"));
+      router.push("/login");
+      return;
+    }
+
+    toast.success(loginCode.message || t("loginCodeSent"));
+    router.push(buildVerifyOtpUrl(phone, "login"));
   }
 
   async function handleResend() {

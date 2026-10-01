@@ -719,6 +719,9 @@
       "submit": "تأكيد الرمز",
       "submitSuccess": "تم التحقق من رقم الجوال بنجاح",
       "loginSuccess": "تم تسجيل الدخول بنجاح",
+      "loginTitle": "تسجيل الدخول",
+      "loginInstruction": "أدخل رمز تسجيل الدخول المرسل إلى رقم جوالك،",
+      "loginCodeSent": "تم تأكيد جوالك. أدخل رمز تسجيل الدخول الذي أُرسل إليك",
       "submitError": "تعذر التحقق من الرمز، يرجى المحاولة مرة أخرى",
       "phoneMissing": "رقم الجوال غير موجود، يرجى العودة والمحاولة مرة أخرى",
       "notReceived": "لم تستلم الرمز؟",
@@ -2215,7 +2218,8 @@
       "individualData": {
         "idNumber": {
           "label": "رقم هوية المستأجر",
-          "placeholder": "1xxxxxxxxx"
+          "placeholder": "xxxxxxxxxx",
+          "hint": "10 أرقام، ويبدأ بـ 1 أو 2"
         },
         "phone": {
           "label": "رقم جوال المستأجر",

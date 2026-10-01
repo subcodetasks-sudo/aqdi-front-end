@@ -1,6 +1,7 @@
 "use server";
 
 import { apiRequest } from "@/lib/api/api-request";
+import { WEBSITE_CLIENT_ID } from "@/lib/api/constants";
 import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phone";
 
 type RegisterUserPayload = {
@@ -11,38 +12,24 @@ type RegisterUserPayload = {
 type RegisterUserApiData = {
   id: number;
   fname: string;
-  full_name: string;
   mobile: string;
-  email: string;
-  photo: string;
   verified: boolean;
-  name: string;
-  phone: string;
   status: boolean;
-  created_at: string;
-  date_time: string;
-  properties_count: number;
-  units_count: number;
-  completed_orders_count: number;
-  incomplete_orders_count: number;
-  total_paid_amount: number;
 };
 
 type RegisterUserApiResponse = {
-  message: string;
-  code: number;
+  message?: string;
   success: boolean;
   data?: RegisterUserApiData;
 };
 
 export async function registerUser(payload: RegisterUserPayload) {
-  const firstName = payload.fullName.trim().split(/\s+/)[0] ?? payload.fullName.trim();
-
   const response = await apiRequest<RegisterUserApiResponse>("/auth/signup", {
     method: "POST",
     body: JSON.stringify({
-      fname: firstName,
+      fname: payload.fullName.trim(),
       mobile: getSaudiMobileForApi(payload.phone),
+      platform: WEBSITE_CLIENT_ID,
     }),
     cache: "no-store",
   });

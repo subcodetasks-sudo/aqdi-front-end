@@ -34,8 +34,8 @@ export default async function VerifyOtpPage({
       <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl lg:rounded-[48px] lg:p-8">
         <div className="flex flex-col gap-8">
           <VerifyOtpHeader
-            title={t("title")}
-            instruction={t("instruction")}
+            title={flow === "login" ? t("loginTitle") : t("title")}
+            instruction={flow === "login" ? t("loginInstruction") : t("instruction")}
             phone={displayPhone}
           />
           <VerifyOtpForm

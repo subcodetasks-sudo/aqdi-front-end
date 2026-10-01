@@ -2,7 +2,7 @@
 
 import { setAuthTokens } from "@/actions/auth";
 import { apiRequest } from "@/lib/api/api-request";
-import type { LoginApiResponse } from "@/features/auth/types/auth-user";
+import type { AuthUser, LoginApiResponse } from "@/features/auth/types/auth-user";
 import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phone";
 
 type LoginUserPayload = {
@@ -30,8 +30,15 @@ export async function loginUser(payload: LoginUserPayload) {
     } as const;
   }
 
-  const { user, login_notification: loginNotification, ...tokens } =
+  const { user: apiUser, login_notification: loginNotification, ...tokens } =
     response.data.data;
+
+  const user: AuthUser = {
+    ...apiUser,
+    name: apiUser.name || apiUser.fname,
+    full_name: apiUser.full_name || apiUser.fname,
+    phone: apiUser.phone || apiUser.mobile,
+  };
 
   await setAuthTokens(tokens, payload.rememberMe);
 

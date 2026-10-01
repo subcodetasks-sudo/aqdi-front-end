@@ -1,6 +1,5 @@
 "use server";
 
-import { setAuthToken } from "@/actions/auth";
 import { apiRequest } from "@/lib/api/api-request";
 import { getSaudiMobileForApi } from "@/features/auth/utils/normalize-saudi-phone";
 
@@ -10,13 +9,8 @@ type VerifyOtpPayload = {
 };
 
 type VerifyOtpApiResponse = {
-  message: string;
-  code: number;
+  message?: string;
   success: boolean;
-  data?: {
-    token?: string;
-    access_token?: string;
-  };
 };
 
 export async function verifyOtp(payload: VerifyOtpPayload) {
@@ -36,16 +30,8 @@ export async function verifyOtp(payload: VerifyOtpPayload) {
     } as const;
   }
 
-  const token =
-    response.data.data?.token ?? response.data.data?.access_token ?? null;
-
-  if (token) {
-    await setAuthToken(token);
-  }
-
   return {
     ok: true,
     message: response.data.message,
-    hasToken: Boolean(token),
   } as const;
 }

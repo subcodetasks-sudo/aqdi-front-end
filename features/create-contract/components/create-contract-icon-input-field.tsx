@@ -23,6 +23,7 @@ type CreateContractIconInputFieldProps = {
   dir?: "ltr" | "rtl";
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   maxLength?: number;
+  hint?: string;
   errorMessage?: string;
   invalid?: boolean;
   valid?: boolean;
@@ -38,6 +39,7 @@ export default function CreateContractIconInputField({
   dir,
   inputMode,
   maxLength,
+  hint,
   errorMessage,
   invalid = false,
   valid = false,
@@ -84,6 +86,21 @@ export default function CreateContractIconInputField({
           className={cn("h-auto px-2 text-sm", fieldChromeNestedInputClass)}
         />
       </div>
+
+      {hint ? (
+        <p
+          className={cn(
+            "mt-1.5 text-xs leading-5",
+            showInvalid
+              ? "font-medium text-[#c62828]"
+              : valid
+                ? "font-medium text-brand"
+                : "text-[#9a9a9a]",
+          )}
+        >
+          {hint}
+        </p>
+      ) : null}
 
       {errorMessage ? (
         <p className="mt-1.5 text-xs font-medium text-[#c62828]">{errorMessage}</p>

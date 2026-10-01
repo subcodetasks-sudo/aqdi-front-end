@@ -719,6 +719,9 @@
       "submit": "Confirm code",
       "submitSuccess": "Mobile number verified successfully",
       "loginSuccess": "Signed in successfully",
+      "loginTitle": "Sign in",
+      "loginInstruction": "Enter the sign-in code sent to your mobile number,",
+      "loginCodeSent": "Your mobile is verified. Enter the sign-in code we just sent you",
       "submitError": "Unable to verify the code, please try again",
       "phoneMissing": "Mobile number is missing, please go back and try again",
       "notReceived": "Didn't receive the code?",
@@ -2215,7 +2218,8 @@
       "individualData": {
         "idNumber": {
           "label": "Tenant ID number",
-          "placeholder": "1xxxxxxxxx"
+          "placeholder": "xxxxxxxxxx",
+          "hint": "10 digits, and starts with 1 or 2"
         },
         "phone": {
           "label": "Tenant mobile number",
