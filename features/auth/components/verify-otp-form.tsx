@@ -22,7 +22,10 @@ import { resendOtp } from "@/features/auth/services/resend-otp";
 import { verifyOtp } from "@/features/auth/services/verify-otp";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { buildResetPasswordUrl } from "@/features/auth/utils/build-reset-password-url";
-import type { VerifyOtpFlow } from "@/features/auth/utils/build-verify-otp-url";
+import {
+  buildVerifyOtpUrl,
+  type VerifyOtpFlow,
+} from "@/features/auth/utils/build-verify-otp-url";
 import { setClientAuthTokens } from "@/lib/api/client-token-storage";
 import { getSafeCallbackUrl } from "@/lib/auth/auth-routes";
 import { cn } from "@/lib/utils";

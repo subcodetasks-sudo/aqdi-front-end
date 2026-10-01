@@ -21,7 +21,7 @@ export default function UserSheetProfileSection({
   onEditProfile,
 }: UserSheetProfileSectionProps) {
   const displayName = user.full_name || user.name || user.fname;
-  const displayPhone = formatPhoneDisplay(user.mobile || user.phone);
+  const displayPhone = formatPhoneDisplay(user.mobile || user.phone || "");
 
   return (
     <UserSheetSectionCard title={sectionTitle}>

@@ -65,7 +65,7 @@ export default function ProfileForm({ user, onSuccess }: ProfileFormProps) {
     onSuccess?.();
   }
 
-  const phoneValue = user.mobile || user.phone;
+  const phoneValue = user.mobile || user.phone || "";
   const { isSubmitting } = form.formState;
 
   return (
